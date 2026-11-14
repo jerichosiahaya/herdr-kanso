@@ -10,7 +10,7 @@ import { panelStateRecords } from './storybook-panel-states.mjs';
 import { generateReferences } from "./storybook-references.mjs";
 import { statusTags } from "../stories/kit/status.js";
 
-export const SECTIONS = ['Start', 'Tokens', 'Primitives', 'Compositions', 'Panels', 'Layouts'];
+export const SECTIONS = ['Start', 'Tokens', 'Primitives', 'Compositions', 'Features', 'Panels', 'Layouts'];
 export const slug = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const cleanText = (s = '') => sampleText(referenceText(s)).replace(/; [^;.]+ keeps this component and its states in the shared kit\./g, '.').replace(/\b(?:prototype|board)(?:s|'s)?\b/gi, 'example').replace(/\bdesigners?\b/gi, 'reader').replace(/\bagents?\b/gi, (s) => s[0] === 'A' ? 'Session' : 'session').replace(/\ban? session\b/gi, 'a session').replace(/\bsubtracted\b/gi, 'simplified').replace(/\bremoved facts?\b/gi, 'simplified information').replace(/\bremoved\b/gi, 'cleared').replace(/\(S06 says why\)/g, '(its computer row says why)');
 const read = (file) => JSON.parse(readFileSync(file, 'utf8'));
@@ -74,7 +74,7 @@ export function replaceSource(source, records, root = '.') {
 }
 
 const primitive = {
-  KeyHint: 'Key hint', PillAndAvatar: 'Chip', Switch: 'Switch', Segmented: 'Segmented', Field: 'Field',
+  KeyHint: 'Key hint', PillAndAvatar: 'Chip', Switch: 'Switch', Segmented: 'Tab', Field: 'Field',
   ButtonsFourKinds: 'Button', ButtonsOnALine: 'Button', ActionRows: 'Button', ButtonWithAMark: 'Button', Armed: 'Button',
   FocusRing: 'Button', HoverSelectedPressed: 'Button', Tooltip: 'Tooltip', ChromeAndBarButtons: 'Button',
   Computer: 'Row', Project: 'Row', AgentOneLine: 'Row', AgentTwoLines: 'Row', SubAgent: 'Row', Asleep: 'Row', WorktreeRow: 'Row', DropTarget: 'Row',
@@ -87,10 +87,10 @@ const protoPage = {
   'components-code': 'Primitives/Code', 'components-collapsed-rail': 'Compositions/Rail',
   'components-dialog': 'Primitives/Dialog', 'components-edges-and-minimap': 'Compositions/Edge and Minimap',
   'components-find-in-the-conversation': 'Panels/Find', 'components-header-digest': 'Compositions/Header',
-  'components-log': 'Primitives/Log', 'components-markdown-window': 'Panels/Markdown', 'components-markdown': 'Primitives/Markdown',
+  'components-log': 'Primitives/Code', 'components-markdown-window': 'Panels/Markdown', 'components-markdown': 'Primitives/Markdown',
   'components-menu': 'Primitives/Menu', 'components-new-project': 'Primitives/Dialog', 'components-new-worktree': 'Primitives/Dialog',
   'components-pane-header': 'Compositions/Header', 'components-pane-standing-in': 'Compositions/Bars', 'components-panel-menu': 'Primitives/Menu',
-  'components-pick-list': 'Primitives/Menu', 'components-rename': 'Primitives/Dialog', 'components-settings-tabs': 'Panels/Settings',
+  'components-pick-list': 'Primitives/Row', 'components-rename': 'Primitives/Dialog', 'components-settings-tabs': 'Panels/Settings',
   'components-shipped': 'Panels/Shipped', 'components-simulator-screen': 'Panels/Simulator',
   'components-status-bar-working': 'Compositions/Status bar', 'components-status-bar': 'Compositions/Status bar',
   'components-system-notification': 'Compositions/Notifications', 'components-tab-bar': 'Compositions/Bars', 'components-tab-states': 'Primitives/Tab',
@@ -103,18 +103,18 @@ const protoPage = {
   'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': 'Compositions/Dawn Mode', 'tokens-icons': 'Tokens/Icons', 'tokens-type': 'Tokens/Type',
 };
 const coveragePage = {
-  Arrangements: 'Panels/Arrangements', SaveArrangement: 'Primitives/Dialog', SettingsMenu: 'Primitives/Menu', UpdateNotice: 'Compositions/Notifications', RuntimeNotice: 'Compositions/Notifications',
+  Arrangements: 'Panels/Arrangements', SaveArrangement: 'Primitives/Dialog', SettingsMenu: 'Compositions/Settings menu', UpdateNotice: 'Compositions/Notifications', RuntimeNotice: 'Compositions/Notifications',
   ContainerList: 'Panels/Containers', ContainerRow: 'Panels/Containers', ComposeProject: 'Panels/Containers', ContainerDisk: 'Panels/Containers',
   Practice: 'Panels/Dojo', PracticeFeedback: 'Panels/Dojo', PracticeResult: 'Panels/Dojo', PracticePet: 'Panels/Dojo',
   Memory: 'Panels/Memory', MemoryAgent: 'Panels/Memory', MemoryRecovery: 'Panels/Memory', MemoryHistory: 'Panels/Memory', MemoryChart: 'Primitives/Chart', SystemNotice: 'Compositions/Notifications',
   Help: 'Panels/Help', Guide: 'Panels/Help', KeyboardExplorer: 'Compositions/Keyboard', MarkdownFiles: 'Panels/Markdown', MarkdownReview: 'Panels/Markdown',
-  PaneMenu: 'Primitives/Menu', OpenWith: 'Primitives/Dialog', Files: 'Panels/Files', Preview: 'Panels/Preview', MarkdownEditing: 'Panels/Preview', ConversationFind: 'Panels/Find',
+  PaneMenu: 'Compositions/Pane menu', OpenWith: 'Primitives/Dialog', Files: 'Panels/Files', Preview: 'Panels/Preview', MarkdownEditing: 'Panels/Preview', ConversationFind: 'Panels/Find',
   Images: 'Panels/Images', Ports: 'Panels/Ports', PortHistory: 'Panels/Ports', PullRequest: 'Panels/PR', PullRequestContext: 'Panels/PR', PullRequestList: 'Panels/PR', PullRequestDetails: 'Panels/PR', PullRequestPicker: 'Panels/PR',
   WorktreeVerdict: 'Panels/Worktrees', Worktrees: 'Panels/Worktrees', WorktreeHistory: 'Panels/Worktrees', Shipped: 'Panels/Shipped', Share: 'Panels/Share', VerdictBody: 'Panels/PR', CodeLimits: 'Primitives/Code', HistoryChart: 'Primitives/Chart', ActionNotice: 'Primitives/Toast', ShareCard: 'Panels/Share',
   MultilinePrompt: 'Primitives/Field', Prompt: 'Primitives/Dialog', SendDialog: 'Primitives/Dialog', Pieces: 'Panels/Settings', Bindings: 'Panels/Settings', ReleaseControls: 'Panels/Settings', CreditsLoading: 'Panels/Settings',
   Devices: 'Panels/Simulator', DeviceControls: 'Panels/Simulator', PictureState: 'Panels/Simulator', SleepDialog: 'Primitives/Dialog',
   Sidebar: 'Compositions/Sidebar', SidebarStatus: 'Compositions/Sidebar', SidebarThreads: 'Compositions/Sidebar', SidebarSort: 'Compositions/Sidebar', ProjectGit: 'Compositions/Sidebar',
-  ProjectMenu: 'Primitives/Menu', AgentMenu: 'Primitives/Menu', NewConversation: 'Primitives/Dialog', ProjectCreation: 'Primitives/Dialog', ComputerMenu: 'Primitives/Menu', Asleep: 'Compositions/Sidebar', NeedsQueue: 'Compositions/Sidebar', AwayEvents: 'Compositions/Activity', CreateWorktree: 'Primitives/Dialog',
+  ProjectMenu: 'Compositions/Project menu', AgentMenu: 'Compositions/Agent menu', NewConversation: 'Primitives/Dialog', ProjectCreation: 'Primitives/Dialog', ComputerMenu: 'Compositions/Computer menu', Asleep: 'Compositions/Sidebar', NeedsQueue: 'Compositions/Sidebar', AwayEvents: 'Compositions/Activity', CreateWorktree: 'Primitives/Dialog',
   Spend: 'Panels/Spend', SpendBreakdown: 'Panels/Spend', SpendSettings: 'Panels/Spend', SpendChart: 'Primitives/Chart', StatusStandIn: 'Compositions/Status bar', PaneTools: 'Compositions/Header', StripNavigation: 'Compositions/Bars', Tabs: 'Primitives/Tab', PanelToolbar: 'Compositions/Bars', Notice: 'Primitives/Toast', NoticeStack: 'Primitives/Toast',
 };
 

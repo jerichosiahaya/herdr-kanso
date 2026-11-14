@@ -1970,6 +1970,7 @@
         "kit/Menu/Default"
       ],
       "components": [
+        "Compositions/Right-click menus",
         "Primitives/Menu"
       ],
       "features": [],
@@ -2328,6 +2329,7 @@
         "kit/Menu/Default"
       ],
       "components": [
+        "Compositions/The + menu",
         "Primitives/Menu"
       ],
       "features": [],
@@ -2558,6 +2560,7 @@
         "kit/Menu/Default"
       ],
       "components": [
+        "Compositions/Menus of the bars and headers",
         "Primitives/Menu",
         "Layouts/Context menus"
       ],
@@ -7073,7 +7076,7 @@
       "proposedPredicates": []
     },
     {
-      "page": "Primitives/Save arrangement",
+      "page": "Features/Save arrangement",
       "existing": false,
       "boards": [
         "D7"
@@ -7121,7 +7124,7 @@
       "proposedPredicates": []
     },
     {
-      "page": "Primitives/Settings menu",
+      "page": "Compositions/Settings menu",
       "existing": false,
       "boards": [
         "S19"
@@ -7827,7 +7830,7 @@
       ]
     },
     {
-      "page": "Primitives/Pane menu",
+      "page": "Compositions/Pane menu",
       "existing": false,
       "boards": [
         "B10"
@@ -7854,7 +7857,7 @@
       ]
     },
     {
-      "page": "Primitives/Action notice",
+      "page": "Features/Action notice",
       "existing": false,
       "boards": [
         "B9"
@@ -8808,7 +8811,7 @@
       ]
     },
     {
-      "page": "Primitives/Multiline prompt",
+      "page": "Features/Multiline prompt",
       "existing": false,
       "boards": [],
       "status": "Proposed",
@@ -8826,7 +8829,7 @@
       "proposedPredicates": []
     },
     {
-      "page": "Primitives/Prompt",
+      "page": "Features/Prompt",
       "existing": false,
       "boards": [],
       "status": "Proposed",
@@ -9263,7 +9266,7 @@
       ]
     },
     {
-      "page": "Primitives/Agent menu",
+      "page": "Compositions/Agent menu",
       "existing": false,
       "boards": [
         "S18"
@@ -9362,7 +9365,7 @@
       ]
     },
     {
-      "page": "Primitives/Computer menu",
+      "page": "Compositions/Computer menu",
       "existing": false,
       "boards": [
         "S18"
@@ -9453,7 +9456,7 @@
       ]
     },
     {
-      "page": "Primitives/New worktree",
+      "page": "Features/New worktree",
       "existing": false,
       "boards": [
         "S14"
@@ -9538,7 +9541,7 @@
       ]
     },
     {
-      "page": "Primitives/New conversation",
+      "page": "Features/New conversation",
       "existing": false,
       "boards": [
         "S14"
@@ -9589,7 +9592,7 @@
       ]
     },
     {
-      "page": "Primitives/New project",
+      "page": "Features/New project",
       "existing": false,
       "boards": [
         "S14"
@@ -9720,7 +9723,7 @@
       ]
     },
     {
-      "page": "Primitives/Project menu",
+      "page": "Compositions/Project menu",
       "existing": false,
       "boards": [
         "S18"
@@ -10034,7 +10037,7 @@
       ]
     },
     {
-      "page": "Primitives/Tabs",
+      "page": "Features/Tabs",
       "existing": false,
       "boards": [
         "B1"
@@ -10064,7 +10067,7 @@
       ]
     },
     {
-      "page": "Primitives/Notice",
+      "page": "Features/Notice",
       "existing": false,
       "boards": [
         "B9"
@@ -10093,7 +10096,7 @@
       ]
     },
     {
-      "page": "Primitives/Notice stack",
+      "page": "Features/Notice stack",
       "existing": false,
       "boards": [
         "B9"
@@ -10193,7 +10196,6 @@
       "components": [
         "Primitives/Field",
         "Primitives/Button",
-        "Primitives/Segmented",
         "Primitives/Switch",
         "Primitives/Row",
         "Primitives/Tab",

@@ -5,6 +5,7 @@ import { Canvas, Controls, Markdown, Source } from '@storybook/addon-docs/blocks
 import { content, featuresFor, statesFor } from './catalog.js';
 import { descriptions } from './descriptions.js';
 import { guidelines, sections } from './guidelines.js';
+import { playgrounds } from './playgrounds.js';
 import { promptFor } from './prompt.js';
 import { FEATURE_LABEL, FEATURE_NOTE } from './features.js';
 import { PageStatus } from './PageStatus.jsx';
@@ -12,7 +13,7 @@ import { PageStatus } from './PageStatus.jsx';
 export function ComponentPage({ of, page }) {
   const states = statesFor(page);
   const name = page.split('/')[1];
-  const stated = states.length > 1 && !page.startsWith('Tokens/');
+  const stated = states.length > 1 && !guidelines[page];
   const description = descriptions[name];
   const [copied, setCopied] = useState(false);
   const [query, setQuery] = useState('');
@@ -27,10 +28,11 @@ export function ComponentPage({ of, page }) {
     <PageStatus page={page} />
     <p>{description}</p>
     {referenceFor(page)?.approvedRecords?.length > 0 && <><h2>Approved reference</h2><ReferenceDrawings page={page} /></>}
-    {contexts.length > 0 && <><h2>Usage details</h2>{contexts.map((id) => <p key={id}>{content(id)}</p>)}</>}
+    {contexts.length > 0 && !playgrounds[page] && <><h2>Usage details</h2>{contexts.map((id) => <p key={id}>{content(id)}</p>)}</>}
     {stated && <h2>States</h2>}
     <Canvas of={of.Variants} />
-    {stated && <><Controls of={of.Variants} />
+    {(stated || playgrounds[page]) && <Controls of={of.Variants} />}
+    {stated && <>
     <label className="kanso-docs__filter">Find a state<input className="kanso-field" type="search" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
     <p>{visible.length} of {states.length} variants</p>
     <table><thead><tr><th>Variant</th><th>When shown</th><th>Specification</th></tr></thead>
@@ -41,9 +43,9 @@ export function ComponentPage({ of, page }) {
     </table></>}
     {(sections[page] ?? []).map(([title, text]) => <React.Fragment key={title}><h2>{title}</h2><Markdown>{text}</Markdown></React.Fragment>)}
     {guidelines[page] && <><h2>Design guidelines</h2><ul className="kanso-docs__guidelines">{guidelines[page].map(([principle, rule, detail]) => <li key={rule}><span className="kanso-docs__principle">{principle}</span> <b>{rule}</b> <Markdown options={{ forceInline: true }}>{detail}</Markdown></li>)}</ul></>}
-    {notes.length > 0 && <><h2>Guidelines</h2>{notes.map((id) => <Markdown className="kanso-docs__note" key={id}>{content(id)}</Markdown>)}</>}
+    {notes.length > 0 && !playgrounds[page] && <><h2>Guidelines</h2>{notes.map((id) => <Markdown className="kanso-docs__note" key={id}>{content(id)}</Markdown>)}</>}
     <h2>Prompt for agents</h2>
-    <button className="kanso-button" type="button" onClick={async () => { await navigator.clipboard.writeText(prompt); setCopied(true); }}>{copied ? 'Copied' : 'Copy prompt'}</button>
+    <button className="kanso-button kanso-button--solid" type="button" onClick={async () => { await navigator.clipboard.writeText(prompt); setCopied(true); }}>{copied ? 'Copied' : 'Copy prompt'}</button>
     <Source code={prompt} language="text" />
     {gaps.length > 0 && <><h3>{FEATURE_LABEL}</h3><p>{FEATURE_NOTE}</p><ul>{gaps.map((feature) => <li key={feature.id}>{feature.label}: {content(feature.caption)} <code>{feature.location}</code></li>)}</ul></>}
   </article>;

@@ -52,7 +52,7 @@ export function ReferencePage({ page }) {
     <ReferenceDrawings page={page} />
     {reference.components.length > 0 && <><h2>Components</h2><ul>{reference.components.map((component) => <li key={component}><a href={`./?path=/docs/${component.toLowerCase().replace(/[^a-z0-9]+/g, "-")}--overview`}>{component.split("/")[1]}</a></li>)}</ul></>}
     <h2>Prompt for agents</h2>
-    <button className="kanso-button" type="button" onClick={async () => { await navigator.clipboard.writeText(prompt); setCopied(true); }}>{copied ? "Copied" : "Copy prompt"}</button>
+    <button className="kanso-button kanso-button--solid" type="button" onClick={async () => { await navigator.clipboard.writeText(prompt); setCopied(true); }}>{copied ? "Copied" : "Copy prompt"}</button>
     <Source code={prompt} language="text" />
   </article>;
 }

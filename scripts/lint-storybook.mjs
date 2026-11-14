@@ -32,7 +32,7 @@ export function structureErrors(files, catalog, template) {
   };
   const statePage = /(?:^|[ ,])(?:hover|focus|active|disabled|dimmed|loading|empty|failure|armed|pending|working|at rest|tab states)(?:$|[ ,])/i;
   const titleOf = (path, title) => {
-    if (!SECTIONS.includes(title.split('/')[0]) || title.split('/').length !== 2) errors.push(`${path}: story outside the six sections`);
+    if (!SECTIONS.includes(title.split('/')[0]) || title.split('/').length !== 2) errors.push(`${path}: story outside the sections`);
     if (CODE.test(title)) errors.push(`${path}: code in title ${title}`);
     if (statePage.test(title.split('/')[1] ?? '') && !references.pages.some((reference) => reference.page === title && reference.boards.length)) errors.push(`${path}: state page instead of component`);
     if (titles.has(title)) errors.push(`${path}: duplicate title ${title}`);
@@ -104,7 +104,7 @@ export function lint(root = '.') {
   const [, canvas, docs] = /frame\.className = [^?]+\? '([^']+)' : '([^']+)'/.exec(read('.storybook/preview.js')) ?? [];
   const classes = [
     ['.storybook/preview.js', `${canvas ?? ''} ${docs ?? ''}`.split(/\s+/).filter(Boolean)],
-    ...['stories/proto.css', 'stories/frame.css', '.storybook/preview-head.html'].map((file) => [file, cssSelectors(read(file)).flatMap(selectorClasses)]),
+    ...['stories/primitives.css', 'stories/proto.css', 'stories/frame.css', 'stories/utilities.css', '.storybook/preview-head.html'].map((file) => [file, cssSelectors(read(file)).flatMap(selectorClasses)]),
     ...expand(catalog).filter((record) => record.html !== undefined).map((record) => [record.id, markupClasses(record.html)]),
     ...['stories/start', 'stories/components', 'stories/kit'].flatMap((dir) => readdirSync(join(root, dir)).filter((name) => /\.(mdx|jsx)$/.test(name)).map((name) => [`${dir}/${name}`, markupClasses(read(`${dir}/${name}`))])),
   ];

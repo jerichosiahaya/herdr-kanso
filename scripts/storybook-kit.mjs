@@ -5,7 +5,7 @@ export { elements } from './storybook-markup.mjs';
 export function kitRecords(records) {
   const originals = records.filter((record) => record.html !== undefined && !['kit', 'tokens'].includes(record.source));
   const results = [];
-  const add = (name, label, html, caption) => results.push({ id: `kit/${name}/${label}`, source: 'kit', page: `Primitives/${name}`, label, html: frame(html), caption });
+  const add = (name, label, html, caption) => results.push({ id: `kit/${name}/${label}`, source: 'kit', page: `Primitives/${name === 'Segmented' ? 'Tab' : name}`, label, html: frame(html), caption });
   const first = (className, prefer = 'compositions-controls/') => [...originals.filter((record) => record.id.includes(prefer)), ...originals].flatMap((record) => elements(record.html, className))[0];
   const definitions = [
     ['Button', 'kanso-button', ['Default', 'Hover', 'Focus', 'Active', 'Disabled', 'Dimmed']],
@@ -28,12 +28,12 @@ export function kitRecords(records) {
       add(name, label, html, `${label} appearance of the shared ${name.toLowerCase()}.`);
     }
   }
-  const photo = 'https://avatars.githubusercontent.com/u/9919?s=96';
-  const avatar = (size, inner) => `<span class="kanso-avatar--round${size ? ` kanso-avatar--${size}` : ''}">${inner}</span>`;
+  const photo = 'https://images.placeholders.dev/96x96';
+  const avatar = (size, inner) => `<span class="kanso-avatar kanso-avatar--round${size ? ` kanso-avatar--${size}` : ''}">${inner}</span>`;
   const img = `<img src="${photo}" alt="" loading="lazy" referrerpolicy="no-referrer">`;
   add('Avatar', 'Image', avatar('', img), 'A picture from a URL, local or external, cropped to the circle.');
-  add('Avatar', 'Small', `<span class="kanso-actions">${avatar('small', 'S')}${avatar('small', img)}</span>`, 'Inside a line of text.');
-  add('Avatar', 'Large', `<span class="kanso-actions">${avatar('large', 'S')}${avatar('large', img)}</span>`, 'A card or a header.');
+  add('Avatar', 'Small', `<span class="kanso-actions">${avatar('sm', 'S')}${avatar('sm', img)}</span>`, 'Inside a line of text.');
+  add('Avatar', 'Large', `<span class="kanso-actions">${avatar('lg', 'S')}${avatar('lg', img)}</span>`, 'A card or a header.');
   add('Avatar', 'Image failed', avatar('', `<img src="https://invalid.example/avatar.png" alt="" onerror="this.remove()">S`), 'When the picture cannot load, the initial stays.');
   for (const state of ['working', 'blocked', 'done', 'idle']) {
     const html = first(`kanso-mark--${state}`);
@@ -89,7 +89,7 @@ export function kitRecords(records) {
 const contrastRecord = (tokens) => {
   const surfaces = ['canvas', 'chrome', 'bg', 'raised', 'popover', 'hover', 'selected'];
   const pairs = [...['fg', 'muted', 'dim'].flatMap((text) => surfaces.map((surface) => [text, surface, 4.5])), ...['input', 'focus', 'working', 'blocked', 'done', 'idle'].map((edge) => [edge, 'bg', 3])];
-  const sample = ([fore, surface, min]) => min === 4.5 ? `<span class="kanso-tokens__contrast" style="color:var(--${fore});background:var(--${surface})">Aa</span>` : `<span class="kanso-tokens__contrast" style="box-shadow:inset 0 0 0 1px var(--${fore});background:var(--${surface})"></span>`;
+  const sample = ([fore, surface, min]) => min === 4.5 ? `<span class="kanso-tokens__contrast kanso-text--${fore} kanso-fill--${surface}">Aa</span>` : `<span class="kanso-tokens__contrast kanso-ring--${fore} kanso-fill--${surface}"></span>`;
   const ratio = ([fore, surface]) => THEMES.map((theme) => `<span class="kanso-tokens__value kanso-tokens__value--${theme}">${contrast(colour(tokens, theme, fore), colour(tokens, theme, surface)).toFixed(1)}:1</span>`).join('');
   const html = `<table class="kanso-tokens"><thead><tr><th></th><th>Colour</th><th>On</th><th>Ratio</th><th>Minimum</th></tr></thead><tbody>${pairs.map((pair) => `<tr><td class="kanso-tokens__example">${sample(pair)}</td><td class="kanso-tokens__name">--${pair[0]}</td><td class="kanso-tokens__name">--${pair[1]}</td><td class="kanso-tokens__name">${ratio(pair)}</td><td>${pair[2]}:1</td></tr>`).join('')}</tbody></table>`;
   return { id: 'tokens/Contrast', source: 'tokens', page: 'Tokens/Contrast, light and dark', label: 'Reference', caption: 'Ratios from kanso/tokens.json.', html: frame(html) };
@@ -101,17 +101,18 @@ export function tokenRecords(tokens) {
     if (keys[0] === 'colour') {
       const names = [...new Set(Object.values(tokens.colour).flatMap((values) => values.map((row) => row.name)))];
       const value = (theme, n) => tokens.colour[theme].find((row) => row.name === n);
-      const html = `<table class="kanso-tokens"><thead><tr><th></th><th>Token</th><th>Value</th><th>Use</th></tr></thead><tbody>${names.map((n) => `<tr><td><span class="kanso-tokens__swatch" style="background:var(--${escape(n)})"></span></td><td class="kanso-tokens__name">--${escape(n)}</td><td class="kanso-tokens__name">${Object.keys(tokens.colour).map((theme) => `<span class="kanso-tokens__value kanso-tokens__value--${theme}">${escape(value(theme, n)?.value ?? '')}</span>`).join('')}</td><td>${escape((value('dark', n) ?? value('light', n)).role)}</td></tr>`).join('')}</tbody></table>`;
+      const html = `<table class="kanso-tokens"><thead><tr><th></th><th>Token</th><th>Value</th><th>Use</th></tr></thead><tbody>${names.map((n) => `<tr><td><span class="kanso-tokens__swatch ${n === 'shadow' ? 'kanso-shadow' : `kanso-fill--${escape(n)}`}"></span></td><td class="kanso-tokens__name">--${escape(n)}</td><td class="kanso-tokens__name">${Object.keys(tokens.colour).map((theme) => `<span class="kanso-tokens__value kanso-tokens__value--${theme}">${escape(value(theme, n)?.value ?? '')}</span>`).join('')}</td><td>${escape((value('dark', n) ?? value('light', n)).role)}</td></tr>`).join('')}</tbody></table>`;
       return { id: `tokens/${name}`, source: 'tokens', page: `Tokens/${name}`, label: 'Reference', caption: 'Values and roles from kanso/tokens.json.', html: frame(html) };
     }
     const rows = keys.flatMap((key) => tokens[key].map((row) => ({ ...row, group: key })));
     const sample = ({ group, name: n }) => {
-      const v = `var(--${escape(n)})`;
-      if (group === 'type') return /^k-fw-/.test(n) ? `<span style="font-weight:${v}">Aa Quiet sessions</span>` : /^k-lh-/.test(n) ? `<span class="kanso-tokens__lines" style="line-height:${v}">Two lines<br>of text</span>` : `<span style="font-size:${v}${n === 'k-fs-mono' ? ';font-family:var(--mono)' : ''}">Aa Quiet sessions</span>`;
-      if (group === 'space') return `<span class="kanso-tokens__space" style="inline-size:${v}"></span>`;
-      if (group === 'radius') return `<span class="kanso-tokens__radius" style="border-radius:${v}"></span>`;
-      if (group === 'height' || group === 'switch') return `<span class="kanso-tokens__height" style="${/-w$/.test(n) ? 'inline-size' : 'block-size'}:${v}"></span>`;
-      if (group === 'icon') return `<svg class="kanso-icon" style="inline-size:${v};block-size:${v}" aria-hidden="true"><use href="#lu-bot"/></svg>`;
+      const [, kind, step] = /^k-(\w+)-(.+)$/.exec(n);
+      if (group === 'type') return kind === 'lh' ? `<span class="kanso-tokens__lines kanso-leading--${step}">Two lines<br>of text</span>` : `<span class="kanso-${kind === 'fw' ? 'weight' : 'type'}--${step}">Aa Quiet sessions</span>`;
+      if (group === 'space') return `<span class="kanso-tokens__space kanso-gap--${step}"><i></i><i></i></span>`;
+      if (group === 'radius') return `<span class="kanso-tokens__radius kanso-radius--${step}"></span>`;
+      if (group === 'height') return `<span class="kanso-tokens__height kanso-height--${step}"></span>`;
+      if (group === 'switch') return '<span class="kanso-switch kanso-control--on"><i></i></span>';
+      if (group === 'icon') return `<svg class="kanso-icon kanso-icon--${step}" aria-hidden="true"><use href="#lu-bot"/></svg>`;
       if (group === 'motion') return /^k-(hover|ease)-/.test(n) ? '<span class="kanso-tokens__wash"></span>' : n === 'k-arm-ms' ? '<span class="kanso-tokens__arm"></span>' : n === 'k-skel-ms' ? '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tokens__skeleton"></span>' : n === 'k-spin-ms' ? '<svg class="kanso-mark kanso-mark--working"><use href="#e-work"/></svg>' : '<span class="kanso-text--glint">checkout</span>';
       return '';
     };
