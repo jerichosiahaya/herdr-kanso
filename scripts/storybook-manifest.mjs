@@ -14,12 +14,12 @@ for (const entry of Object.values(index.entries).filter((entry) => entry.type ==
   manifest.docs[doc.id] = doc;
   const reference = referenceFor(doc.title);
   if (prompts[doc.title]) {
-    doc.content = [`# ${doc.title.split("/")[1]}`, "## Prompt for agents", "```text\n" + prompts[doc.title] + "\n```"].join("\n\n");
+    doc.content = [`# ${doc.title.split("/").at(-1)}`, "## Prompt for agents", "```text\n" + prompts[doc.title] + "\n```"].join("\n\n");
     continue;
   }
   if (reference && !reference.existing) {
     doc.content = [
-      `# ${doc.title.split("/")[1]}`, `Status: ${statusFor(doc.title)}`,
+      `# ${doc.title.split("/").at(-1)}`, `Status: ${statusFor(doc.title)}`,
       ...reference.guidelines, "## States", reference.approvedRecords?.length ? "Approved reference drawings; additional states are Proposed." : "Proposed",
       ...(reference.proposedPredicates ?? []).map((predicate) => `Proposed: ${predicate.label} (${predicate.location})`),
       ...referenceStates(doc.title).flatMap((state) => [`### ${reference.approvedRecords?.includes(state.id) ? "" : "Proposed: "}${state.label}`, content(state.caption)]),
@@ -29,11 +29,11 @@ for (const entry of Object.values(index.entries).filter((entry) => entry.type ==
     continue;
   }
   const states = statesFor(doc.title);
-  const description = descriptions[doc.title.split('/')[1]];
+  const description = descriptions[doc.title.split('/').at(-1)];
   const contexts = [...new Set([...states, ...featuresFor(doc.title)].flatMap((state) => state.context === undefined ? [] : [state.context]))].map(content);
   const notes = [...new Set(states.flatMap((state) => state.notes ?? []))].map(content);
   doc.content = [
-    `# ${doc.title.split('/')[1]}`, `Status: ${statusFor(doc.title)}`, description, ...(contexts.length ? ['## Usage details', ...contexts] : []), '## States',
+    `# ${doc.title.split('/').at(-1)}`, `Status: ${statusFor(doc.title)}`, description, ...(contexts.length ? ['## Usage details', ...contexts] : []), '## States',
     ...states.flatMap((state) => [`### ${state.label}`, content(state.caption), ...(state.location ? [`Source: ${state.location}`] : []), ...(state.spec ?? []).map(([label, value]) => `- **${content(label)}**: ${content(value)}`), ...state.coverage.map((feature) => `- ${feature.label}: ${content(feature.caption)} (${feature.location})`)]),
     ...(sections[doc.title] ?? []).flatMap(([title, text]) => [`## ${title}`, text]),
     ...(guidelines[doc.title] ? ['## Design guidelines', ...guidelines[doc.title].map(([principle, rule, detail]) => `- ${principle} **${rule}** ${detail}`)] : []),

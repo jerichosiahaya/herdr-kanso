@@ -51,10 +51,10 @@ export function normalizeFactHomes(html) {
     for (let parent = node.parent; parent; parent = parent.parent) if (predicate(parent)) return true;
     return false;
   };
-  const header = (node) => node.classes.some((name) => /^kanso-header(?:--rest)?$/.test(name));
+  const header = (node) => node.classes.some((name) => /^kanso-pane-header$/.test(name));
   const drops = nodes.filter((node) => {
-    if (node.classes.includes('kanso-header__branch') && inside(node, header)) return true;
-    if (node.classes.includes('kanso-mark') && inside(node, header) && !inside(node, (parent) => parent.classes.includes('kanso-header__segment'))) return true;
+    if (node.classes.includes('kanso-pane-header__branch') && inside(node, header)) return true;
+    if (node.classes.includes('kanso-mark') && inside(node, header) && !inside(node, (parent) => parent.classes.includes('kanso-pane-header__segment'))) return true;
     if (node.classes.includes('kanso-status-bar__item') && /^(?:\d+ of \d+ working|[⌘⌥⇧⌃]+[A-Z↵]+)$/.test(textOf(html.slice(node.open, node.close)))) return true;
     if (node.classes.includes('kanso-status-bar__item') && /href=["']#lu-(?:git-branch|monitor)["']/.test(html.slice(node.open, node.close))) return true;
     return node.classes.includes('kanso-row__directory') && /^(?:Off|Unreachable)$/.test(textOf(html.slice(node.open, node.close))) && inside(node, (parent) => parent.classes.includes('kanso-row--machine'));
@@ -98,7 +98,7 @@ export function normalizeComponent(record) {
   html = html.replace(/font-size:(48|20|15|13\.5|12\.5|11\.5)px/g, (_, size) => `font-size:var(--k-fs-${typeRoles[size]})`);
   html = realSize(html).replace(/(class="kanso-skeleton[^"]*" style="[^"]*?);?height:var\(--k-sp-2\)/g, '$1')
     .replace(/font-size:var\(--k-fs-heading\)/g, 'font-size:var(--k-fs-section)').replace(/(class="kanso-button kanso-button--solid" style="[^"]*?);?height:26px/g, '$1').replace(/ style=""/g, '')
-    .replace(/(kanso-header__segment[^>]*>)<i class="kanso-dot kanso-fill--(done|working|blocked)"><\/i>/g, (_, open, state) => `${open}<svg class="kanso-mark kanso-mark--${state} kanso-icon--inline"><use href="#e-${({ done: 'done', working: 'work', blocked: 'blk' })[state]}"/></svg>`)
+    .replace(/(kanso-pane-header__segment[^>]*>)<i class="kanso-dot kanso-fill--(done|working|blocked)"><\/i>/g, (_, open, state) => `${open}<svg class="kanso-mark kanso-mark--${state} kanso-icon--inline"><use href="#e-${({ done: 'done', working: 'work', blocked: 'blk' })[state]}"/></svg>`)
     .replace(/kanso-review__line kanso-review__line--checked/g, 'kanso-review__line')
     .replace(/(<div class="kanso-review__line"><span class=")kanso-story__theme"/g, '$1kanso-review__key"')
     .replace(/(<div class="kanso-code__line[^"]*"><span class="kanso-code__number">[^<]*<\/span><span class="kanso-code__sign">[^<]*<\/span>)(?!<span class="kanso-code__text">)((?:(?!<\/div>).)*<span class="kanso-code__token(?:(?!<\/div>).)*)<\/div>/g, '$1<span class="kanso-code__text">$2</span></div>');

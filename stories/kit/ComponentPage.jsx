@@ -12,7 +12,7 @@ import { PageStatus } from './PageStatus.jsx';
 
 export function ComponentPage({ of, page }) {
   const states = statesFor(page);
-  const name = page.split('/')[1];
+  const name = page.split('/').at(-1);
   const stated = states.length > 1 && !guidelines[page];
   const description = descriptions[name];
   const [copied, setCopied] = useState(false);

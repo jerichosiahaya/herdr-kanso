@@ -1,5 +1,6 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
+import { dawn as dawnSky, header, toolbar, windowControls } from '../stories/kit/components.js';
 export { elements } from './storybook-markup.mjs';
 
 export function kitRecords(records) {
@@ -16,7 +17,7 @@ export function kitRecords(records) {
     ['Row', 'kanso-row', ['Default', 'Hover', 'Focus', 'Active', 'Dimmed'], 'compositions-panel-pieces/SectionAndRows/'],
     ['Tab', 'kanso-tab', ['Default', 'Hover', 'Focus', 'Active', 'Disabled']],
     ['Menu', 'kanso-menu', ['Default']], ['Dialog', 'kanso-dialog', ['Default']],
-    ['Skeleton', 'kanso-skeleton__list', ['Loading'], 'panels/files/FilesFirstRead/'], ['Drag handle', 'kanso-header__grip', ['Default']], ['Key hint', 'kanso-key', ['Default']],
+    ['Skeleton', 'kanso-skeleton__list', ['Loading'], 'panels/files/FilesFirstRead/'], ['Drag handle', 'kanso-grip', ['Default']], ['Key hint', 'kanso-key', ['Default']],
   ];
   const modifiers = { Hover: 'kanso-control--hover', Focus: 'kanso-control--focus', Active: 'kanso-control--active', Disabled: 'kanso-control--off', Dimmed: 'kanso-control--dim', Failure: 'kanso-field--invalid', On: 'kanso-control--on' };
   for (const [name, className, states, prefer] of definitions) {
@@ -55,16 +56,24 @@ export function kitRecords(records) {
   const pillHeader = headers.find((html) => html.includes('kanso-badge--count'));
   const pill = pillHeader && elements(pillHeader, 'kanso-badge--count')[0];
   for (const [name, variants] of [
-    ['Header', { Open: headers.find((html) => !html.includes('kanso-dawn')) ?? first('kanso-header'), Collapsed: first('kanso-rail__brand') }],
     ['Sidebar', { Open: sidebar, Collapsed: rail, Dawn: sidebar && band ? sidebar.replace(/(<div[^>]*>)/, `$1${band}`) : undefined, 'Dawn Mode pill': sidebar && pill ? sidebar.replace(/(<span class="kanso-window__controls">[^]*?<\/span>)/, `$1${pill}`) : undefined }],
     ['Rail', { Open: sidebar, Collapsed: rail, Dawn: rail && band ? rail.replace(/(<div class="kanso-rail__brand"[^>]*>)/, `$1${band}`) : undefined }],
   ]) for (const [label, html] of Object.entries(variants)) if (html) results.push({ id: `kit/${name}/${label}`, source: 'kit', page: `Compositions/${name}`, label: name === 'Sidebar' && label === 'Dawn' ? 'Dawn Mode artwork' : label, html: frame(html), caption: `${label} navigation arrangement, composed from the shared kit.` });
   const byId = (id) => originals.find((record) => record.id === id)?.html ?? '';
+  add('Window controls', 'Default', windowControls(), 'The three lights, where the system draws them.');
+  add('Dawn', 'Default', dawnSky(), 'The sky of Dawn Mode; the sun rises once on load.');
+  for (const [id, label, html, caption] of [
+    ['kit/Header/Open', 'Expanded', header(), 'The lights; + on the left; sort, search and hide on the right.'],
+    ['kit/Header/Collapsed', 'Collapsed', header({ collapsed: true }), 'The lights; show and + stacked in the rail.'],
+    ['kit/Header/Dawn', 'Expanded, Dawn Mode', header({ dawn: true }), 'The dawn behind the lights and the tools.'],
+    ['kit/Header/Dawn collapsed', 'Collapsed, Dawn Mode', header({ collapsed: true, dawn: true }), 'The dawn behind the lights, centred on the rail.'],
+    ['kit/Toolbar/Row', 'Row', toolbar(), 'Sidebar open: + alone on the left, the rest on the right.'],
+    ['kit/Toolbar/Column', 'Column', toolbar({ column: true }), 'Sidebar collapsed: stacked in the rail.'],
+  ]) if (html) results.push({ id, source: 'kit', page: id.startsWith('kit/Toolbar/') ? 'Compositions/Header/Toolbar' : 'Compositions/Header/Header', label, html: frame(html), caption });
   const choices = elements(byId('proto/components-choosing-the-channel/ChoosingTheChannel/Default'), 'kanso-update');
   const sky = elements(byId('proto/tokens-dawn/TheBand/Default'), 'kanso-dawn--preview')[0];
   const mark = elements(byId('proto/approved-dawn/Reference/12'), 'kanso-settings__piece-choice')[0];
   for (const [label, html, caption, id] of [
-    ['Artwork', dawn, 'Default in Dawn Mode.', 'kit/Header/Dawn'],
     ['Pill', pillHeader, 'Dawn Mode, right of the lights.'],
     ['Hidden / Stable Mode', headers.at(-1), 'No mark. Stable Mode always shows this.'],
     ['Sunrise', sky && `${sky}<button class="kanso-dawn__replay" type="button">Play the sunrise</button>`, 'Once on open and on switch, 2.6 s. Reduced motion shows the last frame.'],

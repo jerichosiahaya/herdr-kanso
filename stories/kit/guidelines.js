@@ -69,6 +69,21 @@ export const guidelines = {
     ["Kansō", "One ring.", "Focus is the kit's ring, 2 px accent outside. Hover moves the edge to muted. Disabled is off."],
     ["Kokō", "Failure is the edge.", "An invalid value turns the edge blocked; the reason is one line under the field, in the tool's words."],
     ["Kansō", "One action inside.", "At most one icon button at the end, such as send. An empty field shows its placeholder in dim. Enter submits a single line; multiline takes new lines. Every field caps its text: 80 characters unless its use needs another limit."],
+    ["Kansō", "Rename in place.", "Inline is 20 high, radius 4, no action, inside the line it renames: a tab, a pane header. One selection everywhere: accent at 30%."],
+  ],
+  "Primitives/Window controls": [
+    ["Seijaku", "The system's lights.", "Three 12 circles, 8 apart, in the input colour. The system draws them; kansō keeps their place free."],
+  ],
+  "Primitives/Dawn": [
+    ["Shizen", "One sky.", "The same colours in dark and light. The sun rises once on load; reduced motion shows the last frame."],
+  ],
+  "Compositions/Header/Toolbar": [
+    ["Kansō", "Icon buttons only.", "Large icon buttons, 8 apart. In a row the first may stand alone on the left; in the rail they stack, 12 apart."],
+    ["Kansō", "Nothing disappears.", "In the rail, the tools that do not fit fold under a caret. Open, they stack below it on a quiet wash; the caret turns up."],
+  ],
+  "Compositions/Header/Header": [
+    ["Seijaku", "Lights, then tools.", "Window controls in 48, the toolbar in 40. Collapsed, the header is the rail's width and the toolbar stacks."],
+    ["Shizen", "Dawn sits behind.", "In Dawn Mode the sky fills the top behind the lights and the tools stay on top."],
   ],
   "Primitives/Key hint": [
     ["Seijaku", "One key look.", "24 high, radius 4, mono 11.5, border edge. Symbols, not words: ⌘ ⌃ ⌥ ⇧ ↵; Esc stays a word. At most 6 characters."],

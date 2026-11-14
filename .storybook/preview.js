@@ -6,6 +6,7 @@ import sprite from '../stories/proto-sprite.svg?raw';
 import '../site/tokens.css';
 import '../stories/proto.css';
 import '../stories/primitives.css';
+import '../stories/compositions.css';
 import '../stories/frame.css';
 import '../stories/utilities.css';
 

@@ -46,11 +46,11 @@ export function ReferencePage({ page }) {
     ...(states.length ? [promptFor(states[0].page, states)] : []),
   ].join("\n\n");
   return <article className="kanso-docs">
-    <h1>{page.split("/")[1]}</h1>
+    <h1>{page.split("/").at(-1)}</h1>
     <PageStatus page={page} />
     {reference.guidelines.map((note, index) => <Markdown key={index}>{note}</Markdown>)}
     <ReferenceDrawings page={page} />
-    {reference.components.length > 0 && <><h2>Components</h2><ul>{reference.components.map((component) => <li key={component}><a href={`./?path=/docs/${component.toLowerCase().replace(/[^a-z0-9]+/g, "-")}--overview`}>{component.split("/")[1]}</a></li>)}</ul></>}
+    {reference.components.length > 0 && <><h2>Components</h2><ul>{reference.components.map((component) => <li key={component}><a href={`./?path=/docs/${component.toLowerCase().replace(/[^a-z0-9]+/g, "-")}--overview`}>{component.split("/").at(-1)}</a></li>)}</ul></>}
     <h2>Prompt for agents</h2>
     <button className="kanso-button kanso-button--solid" type="button" onClick={async () => { await navigator.clipboard.writeText(prompt); setCopied(true); }}>{copied ? "Copied" : "Copy prompt"}</button>
     <Source code={prompt} language="text" />
