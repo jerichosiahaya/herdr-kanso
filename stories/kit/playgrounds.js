@@ -1,6 +1,6 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { avatar, avatarSizes, button, card, code, dawn, dialog, escape, header, input, kinds, levels, mark, markSizes, markdown, marks, menu, metric, row, sides, skeletonOf, skeletonShapes, tabs, thumbnail, toast, toggle, toolbar, tooltip, windowControls } from './components.js';
+import { asleep, avatar, avatarSizes, computerRow, computerStates, dawnMarks, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, viewSwitch, views, button, card, code, dawn, dialog, escape, header, input, kinds, levels, mark, markSizes, markdown, marks, menu, metric, row, sides, skeletonOf, skeletonShapes, tabs, thumbnail, toast, toggle, toolbar, tooltip, windowControls } from './components.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -146,9 +146,97 @@ export const playgrounds = {
     markup: toolbar,
   },
   'Compositions/Header/Header': {
-    args: { collapsed: false, dawn: false },
-    argTypes: { collapsed: { name: 'collapsed', control: { type: 'boolean' } }, dawn: { name: 'Dawn Mode', control: { type: 'boolean' } } },
+    args: { collapsed: false, dawn: false, mark: 'artwork' },
+    argTypes: { collapsed: { name: 'collapsed', control: { type: 'boolean' } }, dawn: { name: 'Dawn Mode', control: { type: 'boolean' } }, mark: { ...select('mark', dawnMarks), if: { arg: 'dawn' } } },
     markup: header,
+  },
+  'Compositions/Sidebar/Session row': {
+    args: { program: 'p-claude', name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: '', status: 'working', depth: 1, current: false, pinned: false, commands: 0, hover: false, focus: false, dimmed: false },
+    argTypes: {
+      program: select('program', ['p-claude', 'p-codex', 'lu-terminal']),
+      name: { name: 'name', control: { type: 'text' } },
+      activity: { name: 'activity', control: { type: 'text' } },
+      time: { name: 'time', control: { type: 'text' } },
+      place: { name: 'project', control: { type: 'text' } },
+      status: select('mark', ['none', 'working', 'blocked', 'done', 'idle']),
+      depth: { name: 'depth', control: { type: 'inline-radio' }, options: [0, 1, 2] },
+      current: { name: 'current', control: { type: 'boolean' } },
+      pinned: { name: 'pinned', control: { type: 'boolean' } },
+      commands: { name: 'commands', control: { type: 'number', min: 0 } },
+      hover: { name: 'hover', control: { type: 'boolean' } },
+      focus: { name: 'focus', control: { type: 'boolean' } },
+      dimmed: { name: 'dimmed', control: { type: 'boolean' } },
+    },
+    markup: (args) => `<div class="kanso-sidebar">${sessionRow(args)}</div>`,
+  },
+  'Compositions/Sidebar/Project row': {
+    args: { name: 'kansō', folder: 'herdr-kanso', branch: 'main', sync: '↓12', open: false, status: 'blocked', count: 0, hover: false, focus: false },
+    argTypes: {
+      name: { name: 'name', control: { type: 'text' } },
+      folder: { name: 'folder', control: { type: 'text' } },
+      branch: { name: 'branch', control: { type: 'text' } },
+      sync: { name: 'sync', control: { type: 'text' } },
+      open: { name: 'open', control: { type: 'boolean' } },
+      count: { name: 'folded count', control: { type: 'number', min: 0 } },
+      status: { ...select('mark', ['blocked', 'working', 'done', 'idle']), if: { arg: 'count' } },
+      hover: { name: 'hover', control: { type: 'boolean' } },
+      focus: { name: 'focus', control: { type: 'boolean' } },
+    },
+    markup: (args) => `<div class="kanso-sidebar">${projectRow(args)}</div>`,
+  },
+  'Compositions/Sidebar/Computer row': {
+    args: { name: 'dark', remote: true, state: 'on', status: 'blocked', count: 0, hover: false, focus: false },
+    argTypes: {
+      name: { name: 'name', control: { type: 'text' } },
+      remote: { name: 'remote', control: { type: 'boolean' } },
+      state: select('state', computerStates),
+      count: { name: 'folded count', control: { type: 'number', min: 0 } },
+      status: { ...select('mark', ['blocked', 'working', 'done', 'idle']), if: { arg: 'count' } },
+      hover: { name: 'hover', control: { type: 'boolean' } },
+      focus: { name: 'focus', control: { type: 'boolean' } },
+    },
+    markup: (args) => `<div class="kanso-sidebar">${computerRow(args)}</div>`,
+  },
+  'Compositions/Sidebar/Asleep': {
+    args: { names: ['site', 'dojo'], open: false },
+    argTypes: { names: { name: 'names', control: { type: 'object' } }, open: { name: 'open', control: { type: 'boolean' } } },
+    markup: (args) => `<div class="kanso-sidebar">${asleep(args)}</div>`,
+  },
+  'Compositions/Sidebar/Section': {
+    args: { title: 'Needs you', status: 'blocked', count: 0 },
+    argTypes: { title: { name: 'title', control: { type: 'text' } }, status: select('mark', ['none', 'blocked']), count: { name: 'count', control: { type: 'number', min: 0 } } },
+    markup: (args) => `<div class="kanso-sidebar">${section(args)}</div>`,
+  },
+  'Compositions/Sidebar/View switch': {
+    args: { view: 'spaces', column: false },
+    argTypes: { view: { name: 'view', control: { type: 'inline-radio' }, options: views.map((item) => item.key) }, column: { name: 'column', control: { type: 'boolean' } } },
+    markup: (args) => `<div class="${args.column ? 'kanso-rail' : 'kanso-sidebar'}">${viewSwitch(args)}</div>`,
+  },
+  'Compositions/Sidebar/Tile': {
+    args: { initial: 'A', tone: 'teal', status: 'blocked', count: 4, open: false },
+    argTypes: {
+      initial: { name: 'initial', control: { type: 'text' } },
+      tone: select('tone', ['teal', 'yellow', 'muted']),
+      status: select('mark', ['none', 'blocked', 'working', 'done', 'idle']),
+      count: { name: 'count', control: { type: 'number', min: 0 } },
+      open: { name: 'open', control: { type: 'boolean' } },
+    },
+    markup: (args) => `<div class="kanso-rail">${tile(args)}</div>`,
+  },
+  'Compositions/Sidebar/Footer': {
+    args: { update: '' },
+    argTypes: { update: { name: 'update', control: { type: 'text' } } },
+    markup: (args) => `<div class="kanso-sidebar">${sidebarFooter(args)}</div>`,
+  },
+  'Compositions/Sidebar/Sidebar': {
+    args: { collapsed: false, dawn: false, view: 'spaces', switcher: true },
+    argTypes: {
+      collapsed: { name: 'collapsed', control: { type: 'boolean' } },
+      dawn: { name: 'Dawn Mode', control: { type: 'boolean' } },
+      switcher: { name: 'view switch', control: { type: 'boolean' } },
+      view: { name: 'view', control: { type: 'inline-radio' }, options: views.map((item) => item.key) },
+    },
+    markup: sidebar,
   },
   'Primitives/Switch': {
     args: { checked: false, label: 'Toggle', disabled: false },

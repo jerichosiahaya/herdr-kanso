@@ -85,6 +85,19 @@ export const guidelines = {
     ["Seijaku", "Lights, then tools.", "Window controls in 48, the toolbar in 40. Collapsed, the header is the rail's width and the toolbar stacks."],
     ["Shizen", "Dawn sits behind.", "In Dawn Mode the sky fills the top behind the lights and the tools stay on top."],
   ],
+  "Compositions/Sidebar/Session row": [
+    ["Kansō", "Two lines only while it matters.", "Working, needs you or an unread message add the activity and its age; finished, idle and terminals keep one line."],
+    ["Kokō", "The mark closes the row.", "Tools, the pin and the command count sit before the mark; under the pointer, pin and ⋯ take the age's place."],
+  ],
+  "Compositions/Sidebar/Project row": [
+    ["Kansō", "Git only on project rows.", "Folder, branch and ↑↓ follow the name in dim; folded, the most urgent mark and how many replace them on the right."],
+  ],
+  "Compositions/Sidebar/Computer row": [
+    ["Kansō", "One button for what is wrong.", "Off shows power, unreachable shows Refresh; connected, its tools show under the pointer only."],
+  ],
+  "Compositions/Sidebar/Sidebar": [
+    ["Kansō", "Built from the pieces above.", "Header, View switch, the rows of the chosen view and Footer. Collapsed, the rail keeps every tool, the views as icons and each row as a tile."],
+  ],
   "Primitives/Key hint": [
     ["Seijaku", "One key look.", "24 high, radius 4, mono 11.5, border edge. Symbols, not words: ⌘ ⌃ ⌥ ⇧ ↵; Esc stays a word. At most 6 characters."],
     ["Kansō", "Beside its action only.", "A key hint sits next to the action it triggers or in its tooltip, never alone."],

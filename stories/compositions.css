@@ -10,8 +10,15 @@
 .kanso-header{position:relative;display:flex;flex-direction:column;flex:none;overflow:hidden;padding:0 var(--k-sp-2) var(--k-sp-1);background:var(--chrome)}
 .kanso-header>:not(.kanso-dawn){position:relative;z-index:1}
 .kanso-header__title{display:flex;align-items:center;height:48px;padding-left:var(--k-sp-1)}
+.kanso-header__pill{margin-left:auto}
 .kanso-header>.kanso-toolbar{height:var(--k-h-header)}
 .kanso-header.kanso-header--collapsed>.kanso-toolbar{height:auto;padding-top:var(--k-sp-hair)}
+
+/* Sidebar: the header, the view switch, the rows of the chosen view and the footer; collapsed, the rail with tiles. */
+.kanso-sidebar>.kanso-header{margin:0 calc(-1 * var(--k-sp-2))}
+.kanso-sidebar__rows>.kanso-sidebar__section{margin-top:0}
+.kanso-rail>.kanso-sidebar__view-switch{align-self:center}
+.kanso-rail>.kanso-sidebar__view-switch>.kanso-tabs{flex-direction:column}
 
 /* Pane header: program, name, digest, toolbar, grip. */
 .kanso-pane-header{display:flex;flex:none;align-items:center;gap:var(--k-sp-2);height:var(--k-h-pane);padding:0 var(--k-sp-2) 0 var(--k-sp-3);box-sizing:border-box;border-radius:var(--k-r-card) var(--k-r-card) 0 0;font-size:var(--k-fs-body);white-space:nowrap}

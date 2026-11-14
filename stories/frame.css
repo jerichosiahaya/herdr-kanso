@@ -54,5 +54,6 @@
 .kanso-story--free > .kanso-panel > .kanso-card:first-child { margin-top: 0; }
 .kanso-story :is(.kanso-story__frame > .kanso-header, .kanso-story__theme.kanso-header) { inline-size: 256px; box-sizing: border-box; border-radius: var(--k-r-card); box-shadow: 0 0 0 1px var(--border); }
 .kanso-story .kanso-story__frame > .kanso-header--collapsed { inline-size: 76px; }
+.kanso-story .kanso-story__frame > .kanso-sidebar { block-size: auto; border-radius: var(--k-r-card); box-shadow: 0 0 0 1px var(--border); }
 .kanso-story__frame > .kanso-toolbar:not(.kanso-toolbar--column) { inline-size: calc(256px - 2 * var(--k-sp-2)); }
 .kanso-story__frame > .kanso-dawn { position: relative; inline-size: 256px; }

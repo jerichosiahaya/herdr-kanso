@@ -77,14 +77,13 @@ const primitive = {
   KeyHint: 'Key hint', PillAndAvatar: 'Chip', Switch: 'Switch', Segmented: 'Tab', Field: 'Field',
   ButtonsFourKinds: 'Button', ButtonsOnALine: 'Button', ActionRows: 'Button', ButtonWithAMark: 'Button', Armed: 'Button',
   FocusRing: 'Button', HoverSelectedPressed: 'Button', Tooltip: 'Tooltip', ChromeAndBarButtons: 'Button',
-  Computer: 'Row', Project: 'Row', AgentOneLine: 'Row', AgentTwoLines: 'Row', SubAgent: 'Row', Asleep: 'Row', WorktreeRow: 'Row', DropTarget: 'Row',
   FileRow: 'Row', PortRow: 'Row', RowActions: 'Row', SettingRow: 'Row', SettingRowWithAValue: 'Row', FindRow: 'Row',
   Card: 'Card', Metric: 'Metric', ThumbnailStrip: 'Thumbnail', SkeletonTwoLines: 'Skeleton', Loading: 'Skeleton',
   Toast: 'Toast', ToastWithItsSource: 'Toast', Snippet: 'Code', Reply: 'Markdown', Picture: 'Thumbnail',
 };
 const protoPage = {
   'components-annotated-picture': 'Panels/Pins', 'components-choosing-the-channel': 'Compositions/Dawn Mode',
-  'components-code': 'Primitives/Code', 'components-collapsed-rail': 'Compositions/Rail',
+  'components-code': 'Primitives/Code', 'components-collapsed-rail': 'Layouts/Sidebar',
   'components-dialog': 'Primitives/Dialog', 'components-edges-and-minimap': 'Compositions/Edge and Minimap',
   'components-find-in-the-conversation': 'Panels/Find', 'components-header-digest': 'Compositions/Pane header',
   'components-log': 'Primitives/Code', 'components-markdown-window': 'Panels/Markdown', 'components-markdown': 'Primitives/Markdown',
@@ -97,8 +96,8 @@ const protoPage = {
   'components-title-and-tools': 'Layouts/Sidebar header', 'components-while-you-were-away': 'Compositions/Activity', 'components-worktree-row-open': 'Primitives/Row',
   'compositions-bars': 'Compositions/Bars', 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
   'compositions-menu-and-dialog': 'Primitives/Dialog', 'compositions-panel-pieces': 'Compositions/Panel shell',
-  'compositions-sidebar-rows': 'Compositions/Sidebar', 'compositions-states': 'Compositions/State patterns',
-  'layouts-sidebar-at-rest': 'Compositions/Sidebar', 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
+  'compositions-sidebar-rows': 'Layouts/Sidebar', 'compositions-states': 'Compositions/State patterns',
+  'layouts-sidebar-at-rest': 'Layouts/Sidebar', 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
   'layouts-window-at-rest': 'Layouts/Window', 'layouts-right-click-any-piece': 'Layouts/Context menus', 'layouts-hjkl-dojo': 'Layouts/Practice',
   'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': 'Compositions/Dawn Mode', 'tokens-icons': 'Tokens/Icons', 'tokens-type': 'Tokens/Type',
 };
@@ -113,8 +112,8 @@ const coveragePage = {
   WorktreeVerdict: 'Panels/Worktrees', Worktrees: 'Panels/Worktrees', WorktreeHistory: 'Panels/Worktrees', Shipped: 'Panels/Shipped', Share: 'Panels/Share', VerdictBody: 'Panels/PR', CodeLimits: 'Primitives/Code', HistoryChart: 'Primitives/Chart', ActionNotice: 'Primitives/Toast', ShareCard: 'Panels/Share',
   MultilinePrompt: 'Primitives/Field', Prompt: 'Primitives/Dialog', SendDialog: 'Primitives/Dialog', Pieces: 'Panels/Settings', Bindings: 'Panels/Settings', ReleaseControls: 'Panels/Settings', CreditsLoading: 'Panels/Settings',
   Devices: 'Panels/Simulator', DeviceControls: 'Panels/Simulator', PictureState: 'Panels/Simulator', SleepDialog: 'Primitives/Dialog',
-  Sidebar: 'Compositions/Sidebar', SidebarStatus: 'Compositions/Sidebar', SidebarThreads: 'Compositions/Sidebar', SidebarSort: 'Compositions/Sidebar', ProjectGit: 'Compositions/Sidebar',
-  ProjectMenu: 'Compositions/Project menu', AgentMenu: 'Compositions/Agent menu', NewConversation: 'Primitives/Dialog', ProjectCreation: 'Primitives/Dialog', ComputerMenu: 'Compositions/Computer menu', Asleep: 'Compositions/Sidebar', NeedsQueue: 'Compositions/Sidebar', AwayEvents: 'Compositions/Activity', CreateWorktree: 'Primitives/Dialog',
+  Sidebar: 'Layouts/Sidebar', SidebarStatus: 'Layouts/Sidebar', SidebarThreads: 'Layouts/Sidebar', SidebarSort: 'Layouts/Sidebar', ProjectGit: 'Layouts/Sidebar',
+  ProjectMenu: 'Compositions/Project menu', AgentMenu: 'Compositions/Agent menu', NewConversation: 'Primitives/Dialog', ProjectCreation: 'Primitives/Dialog', ComputerMenu: 'Compositions/Computer menu', Asleep: 'Layouts/Sidebar', NeedsQueue: 'Layouts/Sidebar', AwayEvents: 'Compositions/Activity', CreateWorktree: 'Primitives/Dialog',
   Spend: 'Panels/Spend', SpendBreakdown: 'Panels/Spend', SpendSettings: 'Panels/Spend', SpendChart: 'Primitives/Chart', StatusStandIn: 'Compositions/Status bar', PaneTools: 'Compositions/Pane header', StripNavigation: 'Compositions/Bars', Tabs: 'Primitives/Tab', PanelToolbar: 'Compositions/Bars', Notice: 'Primitives/Toast', NoticeStack: 'Primitives/Toast',
 };
 

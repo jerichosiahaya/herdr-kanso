@@ -170,6 +170,85 @@ export const toolbar = ({ column = false, open = false } = {}) => column
   ? `<div class="kanso-toolbar kanso-toolbar--column">${tool('lu-panel-left', 'Show sidebar')}${tool('lu-plus', 'New')}${more(open)}</div>`
   : `<div class="kanso-toolbar">${tool('lu-plus', 'New')}<span class="kanso-layout__grow"></span>${tool('lu-arrow-up-down', 'Sort')}${tool('lu-search', 'Search')}${tool('lu-panel-left', 'Hide sidebar')}</div>`;
 
+// Sidebar rows: a leading icon, the name and what follows it, then tools, counts and the mark.
+const leading = (icon) => `<svg class="${icon.startsWith('p-') ? 'kanso-icon--program' : 'kanso-icon'} kanso-row__leading-icon"><use href="#${escape(icon)}"/></svg>`;
+const small = (icon, label) => button({ label, kind: 'icon', size: 'sm', icon });
+const folded = (status, count) => count ? `<span class="kanso-sidebar__count">${mark({ status })}${count}</span>` : '';
+const line = (classes, body) => `<div class="kanso-sidebar__row ${classes.filter(Boolean).join(' ')}" tabindex="0">${body}</div>`;
+const depths = ['', 'kanso-row--depth-one', 'kanso-row--depth-two kanso-row--child'];
+
+export const sessionRow = ({ program = 'p-claude', name, activity = '', time = '', place = '', status = 'working', depth = 1, current = false, pinned = false, commands = 0, hover = false, focus = false, dimmed = false }) => {
+  const label = status === 'working' ? `<span class="kanso-text--glint">${escape(name)}</span>` : escape(name);
+  const text = activity
+    ? `<span class="kanso-sidebar__row-text"><span class="kanso-row__name">${label}</span><span class="kanso-row__activity">${escape(activity)}${time && !hover ? ` <span class="kanso-content__time">· ${escape(time)}</span>` : ''}</span></span>`
+    : `<span class="kanso-row__name">${label}</span>`;
+  const tail = `${place ? `<span class="kanso-row__directory">${escape(place)}</span>` : ''}${hover ? small('lu-pin', 'Pin to the top') + small('lu-ellipsis', 'More') : ''}`
+    + `${pinned && !hover ? '<svg class="kanso-icon"><use href="#lu-pin"/></svg>' : ''}${commands ? `<span class="kanso-row__command-count">${commands}</span>` : ''}${status === 'none' ? '' : mark({ status })}`;
+  const live = status === 'working' || status === 'blocked' || Boolean(activity);
+  return line(['kanso-agent', activity && 'kanso-row--double-line', depths[depth], live && 'kanso-row--live', status === 'blocked' && 'kanso-row--blocked', current && 'kanso-row--current',
+    dimmed && 'kanso-control--dim', hover && 'kanso-control--hover', focus && 'kanso-control--focus'], leading(program) + text + tail);
+};
+
+const gap = '<i class="kanso-content__gap"></i>';
+export const projectRow = ({ name, folder = '', branch = '', sync = '', open = false, status = 'blocked', count = 0, hover = false, focus = false }) => {
+  const task = folder || branch ? `<span class="kanso-row__task">${escape(folder)}${branch ? `${folder ? gap : ''}<svg class="kanso-icon"><use href="#lu-git-branch"/></svg><span class="kanso-content__secondary">${escape(branch)}</span>` : ''}${sync ? `${gap}<span class="kanso-content__secondary">${escape(sync)}</span>` : ''}</span>` : '';
+  const tools = hover ? small('lu-plus', `New agent in ${name}`) + small('lu-ellipsis', 'More') : '';
+  return line(['kanso-project', open && 'kanso-control--on', hover && 'kanso-control--hover', focus && 'kanso-control--focus'], `<span class="kanso-row__name">${escape(name)}</span>${task}<span class="kanso-layout__grow"></span>${tools || folded(status, count)}`);
+};
+
+export const computerStates = ['on', 'off', 'unreachable'];
+export const computerRow = ({ name, remote = true, state = 'on', status = 'blocked', count = 0, hover = false, focus = false }) => {
+  const tools = state === 'off' ? small('lu-power', `Turn ${name} on`)
+    : state === 'unreachable' ? small('lu-refresh-cw', 'Refresh')
+    : hover && remote ? small('lu-power', 'Turn off') + small('lu-plus', `New project on ${name}`) + small('lu-arrow-right-left', 'Sync') : '';
+  return line(['kanso-row--machine', hover && 'kanso-control--hover', focus && 'kanso-control--focus'], `${leading(remote ? 'lu-server' : 'lu-monitor')}<span class="kanso-row__name">${escape(name)}</span><span class="kanso-layout__grow"></span>${tools || folded(status, count)}`);
+};
+
+export const section = ({ title, status = 'none', count = 0 }) => `<div class="kanso-sidebar__section">${status === 'none' ? '' : mark({ status })}<span>${escape(title)}</span>${count ? `<span class="kanso-section__count">${count}</span>` : ''}<span class="kanso-layout__grow"></span></div>`;
+
+export const views = [
+  { key: 'spaces', label: 'Projects', icon: 'lu-folder' },
+  { key: 'agents', label: 'Status', icon: 'lu-activity' },
+  { key: 'threads', label: 'Threads', icon: 'lu-message-square' },
+];
+export const viewSwitch = ({ view = 'spaces', column = false } = {}) => `<div class="kanso-sidebar__view-switch">${tabs({ items: views, value: view, size: column ? 'md' : 'sm', track: true, icon: column, label: !column })}</div>`;
+
+export const sidebarFooter = ({ update = '' } = {}) => `<div class="kanso-sidebar__footer kanso-sidebar__navigation">${update ? '<div class="kanso-sidebar__row kanso-row--interactive kanso-text--fg" tabindex="0"><svg class="kanso-icon kanso-icon--chrome"><use href="#lu-refresh-cw"/></svg><span class="kanso-row__name">' + escape(update) + '</span></div>' : ''}`
+  + ['lu-settings Settings', 'lu-server Add computer'].map((item) => { const [icon, ...label] = item.split(' '); return `<div class="kanso-sidebar__row kanso-row--interactive" tabindex="0"><svg class="kanso-icon kanso-icon--row"><use href="#${icon}"/></svg><span class="kanso-row__name">${label.join(' ')}</span></div>`; }).join('') + '</div>';
+
+export const asleep = ({ names = [], open = false } = {}) => line(['kanso-project'], `<span class="kanso-row__name">Asleep</span>${open ? '' : `<span class="kanso-row__directory">${names.length}</span>`}<span class="kanso-layout__grow"></span>`)
+  + (open ? names.map((name) => line(['kanso-row--depth-one', 'kanso-row--asleep'], `<span class="kanso-row__name">${escape(name)}</span><span class="kanso-layout__grow"></span>${button({ label: 'Wake', kind: 'quiet' })}`)).join('') : '');
+
+export const tile = ({ initial = '', tone = 'teal', status = 'none', count = 0, open = false }) => `<div class="kanso-rail__row"><div class="kanso-rail__tile${open ? ' kanso-control--on' : ''}" tabindex="0">`
+  + `${initial ? `<span class="kanso-content__line kanso-text--host-${tone}">${escape(initial)}</span>` : mark({ status, size: 'lg' })}${count ? `<div class="kanso-content__actions${status === 'blocked' ? ' kanso-text--blocked' : ''}">${initial && status !== 'none' ? mark({ status }) : ''}${count}</div>` : ''}</div></div>`;
+
 // Cells
 
-export const header = ({ collapsed = false, dawn: early = false, open = false } = {}) => `<div class="kanso-header${collapsed ? ' kanso-header--collapsed' : ''}">${early ? dawn() : ''}<div class="kanso-header__title">${windowControls()}</div>${toolbar({ column: collapsed, open })}</div>`;
+export const dawnMarks = ['artwork', 'pill', 'hidden'];
+export const header = ({ collapsed = false, dawn: early = false, mark: shown = 'artwork', open = false } = {}) => `<div class="kanso-header${collapsed ? ' kanso-header--collapsed' : ''}">${early && shown === 'artwork' ? dawn() : ''}`
+  + `<div class="kanso-header__title">${windowControls()}${early && shown === 'pill' && !collapsed ? '<span class="kanso-badge kanso-badge--count kanso-header__pill">Dawn Mode</span>' : ''}</div>${toolbar({ column: collapsed, open })}</div>`;
+
+const group = (...rows) => `<div class="kanso-sidebar__row-group">${rows.join('')}</div>`;
+const lists = {
+  spaces: () => group(computerRow({ name: 'light', remote: false }))
+    + group(projectRow({ name: 'prjct' }), sessionRow({ program: 'lu-terminal', name: 'Orion', status: 'idle' }))
+    + group(projectRow({ name: 'amtelser' }), sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' }))
+    + group(projectRow({ name: 'kansō', folder: 'herdr-kanso', branch: 'main', sync: '↓12', open: true }), sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' }),
+      sessionRow({ name: 'Juno', status: 'idle', depth: 2, current: true }), sessionRow({ program: 'p-codex', name: 'Iris', status: 'done', depth: 2 }))
+    + group(projectRow({ name: 'agile' })) + group(asleep({ names: ['site', 'dojo'] })) + group(computerRow({ name: 'dark', state: 'off' })),
+  agents: () => section({ title: 'Needs you', status: 'blocked' }) + sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', place: 'amtelser', status: 'blocked', depth: 0 })
+    + section({ title: 'Working' }) + sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: 'kansō', depth: 0 })
+    + section({ title: 'Done' }) + sessionRow({ program: 'p-codex', name: 'Iris', place: 'kansō', status: 'done', depth: 0 })
+    + section({ title: 'Idle', count: 2 }) + section({ title: 'Terminals', count: 1 }),
+  threads: () => section({ title: 'Pinned' }) + sessionRow({ name: 'Review boards 01 to 04', activity: 'Reviewing step 01', time: '3m', current: true, depth: 0 })
+    + section({ title: 'kansō' }) + sessionRow({ name: 'Audit the app errors', activity: 'Allow network access?', time: '1m', status: 'blocked', depth: 0 }) + sessionRow({ name: 'Sleep lost call', status: 'done', depth: 0 })
+    + section({ title: 'Snoozed', count: 1 }) + section({ title: 'Settled', count: 4 }),
+};
+const tiles = {
+  spaces: () => tile({ initial: 'A', tone: 'teal', status: 'blocked', count: 4, open: true }) + tile({ initial: 'D', tone: 'yellow', status: 'working', count: 1 }) + tile({ initial: 'B', tone: 'muted', count: 1 }),
+  agents: () => tile({ status: 'blocked', count: 1 }) + tile({ status: 'working', count: 3 }) + tile({ status: 'done', count: 2 }) + tile({ status: 'idle', count: 3 }),
+  threads: () => tile({ status: 'blocked', count: 1 }) + tile({ status: 'working', count: 1 }) + tile({ status: 'done', count: 1 }),
+};
+export const sidebar = ({ collapsed = false, dawn: early = false, view = 'spaces', switcher = true } = {}) => collapsed
+  ? `<aside class="kanso-rail">${header({ collapsed, dawn: early })}${switcher ? viewSwitch({ view, column: true }) : ''}<div class="kanso-rail__list">${tiles[view]()}</div><div class="kanso-rail__footer">${tool('lu-settings', 'Settings')}</div></aside>`
+  : `<aside class="kanso-sidebar">${header({ dawn: early })}${switcher ? viewSwitch({ view }) : ''}<div class="kanso-sidebar__rows">${lists[view]()}</div>${sidebarFooter()}</aside>`;

@@ -1,6 +1,6 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
-import { dawn as dawnSky, header, toolbar, windowControls } from '../stories/kit/components.js';
+import { asleep, computerRow, dawn as dawnSky, header, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, toolbar, viewSwitch, windowControls } from '../stories/kit/components.js';
 export { elements } from './storybook-markup.mjs';
 
 export function kitRecords(records) {
@@ -44,21 +44,9 @@ export function kitRecords(records) {
   if (armed) add('Button', 'Armed', armed, 'A second press within four seconds confirms an irreversible action.');
   const button = first('kanso-button'), working = first('kanso-mark--working');
   if (button && working) add('Button', 'Loading', button.replace(/>[\s\S]*<\/([a-z]+)>$/, ` aria-busy="true">${working}Working…</$1>`), 'The action is waiting for its result.');
-  const asleep = first('kanso-project', 'compositions-sidebar-rows/Asleep/');
-  const machines = '<div class="kanso-sidebar__row-group"><div class="kanso-sidebar__row kanso-row--machine"';
-  const open = first('kanso-sidebar'), at = open?.lastIndexOf(machines) ?? -1;
-  const sidebar = asleep && at > 0 ? `${open.slice(0, at)}<div class="kanso-sidebar__row-group">${asleep}</div>${open.slice(at)}` : open;
-  const rail = first('kanso-rail');
   const headerRecord = originals.find((record) => record.id.includes('layouts-sidebar-header-three-ways/'));
   const headers = headerRecord ? elements(headerRecord.html, 'kanso-sidebar--header-preview') : [];
-  const dawn = headers.find((html) => html.includes('kanso-dawn'));
-  const band = dawn && elements(dawn, 'kanso-dawn')[0];
   const pillHeader = headers.find((html) => html.includes('kanso-badge--count'));
-  const pill = pillHeader && elements(pillHeader, 'kanso-badge--count')[0];
-  for (const [name, variants] of [
-    ['Sidebar', { Open: sidebar, Collapsed: rail, Dawn: sidebar && band ? sidebar.replace(/(<div[^>]*>)/, `$1${band}`) : undefined, 'Dawn Mode pill': sidebar && pill ? sidebar.replace(/(<span class="kanso-window__controls">[^]*?<\/span>)/, `$1${pill}`) : undefined }],
-    ['Rail', { Open: sidebar, Collapsed: rail, Dawn: rail && band ? rail.replace(/(<div class="kanso-rail__brand"[^>]*>)/, `$1${band}`) : undefined }],
-  ]) for (const [label, html] of Object.entries(variants)) if (html) results.push({ id: `kit/${name}/${label}`, source: 'kit', page: `Compositions/${name}`, label: name === 'Sidebar' && label === 'Dawn' ? 'Dawn Mode artwork' : label, html: frame(html), caption: `${label} navigation arrangement, composed from the shared kit.` });
   const byId = (id) => originals.find((record) => record.id === id)?.html ?? '';
   add('Window controls', 'Default', windowControls(), 'The three lights, where the system draws them.');
   add('Dawn', 'Default', dawnSky(), 'The sky of Dawn Mode; the sun rises once on load.');
@@ -66,10 +54,38 @@ export function kitRecords(records) {
     ['kit/Header/Open', 'Expanded', header(), 'The lights; + on the left; sort, search and hide on the right.'],
     ['kit/Header/Collapsed', 'Collapsed', header({ collapsed: true }), 'The lights; show and + stacked in the rail.'],
     ['kit/Header/Dawn', 'Expanded, Dawn Mode', header({ dawn: true }), 'The dawn behind the lights and the tools.'],
+    ['kit/Header/Pill', 'Expanded, Dawn Mode pill', header({ dawn: true, mark: 'pill' }), 'The pill right of the lights, no sky.'],
     ['kit/Header/Dawn collapsed', 'Collapsed, Dawn Mode', header({ collapsed: true, dawn: true }), 'The dawn behind the lights, centred on the rail.'],
     ['kit/Toolbar/Row', 'Row', toolbar(), 'Sidebar open: + alone on the left, the rest on the right.'],
     ['kit/Toolbar/Column', 'Column', toolbar({ column: true }), 'Sidebar collapsed: stacked in the rail.'],
   ]) if (html) results.push({ id, source: 'kit', page: id.startsWith('kit/Toolbar/') ? 'Compositions/Header/Toolbar' : 'Compositions/Header/Header', label, html: frame(html), caption });
+  const inSidebar = (html) => `<div class="kanso-sidebar">${html}</div>`, inRail = (html) => `<div class="kanso-rail">${html}</div>`;
+  for (const [page, label, html, caption, id] of [
+    ['Session row', 'Working', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' })), 'What it is on and for how long.'],
+    ['Session row', 'Needs you', inSidebar(sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' })), 'The question, in foreground.'],
+    ['Session row', 'Finished', inSidebar(sessionRow({ program: 'p-codex', name: 'Iris', status: 'done', current: true })), 'One line, the mark.'],
+    ['Session row', 'Sub-session', inSidebar(sessionRow({ program: 'p-codex', name: 'Juno', status: 'idle', depth: 2 })), 'Under its parent.'],
+    ['Project row', 'At rest', inSidebar(projectRow({ name: 'kansō', folder: 'herdr-kanso', branch: 'main', sync: '↓12' })), 'Name, folder, branch and sync.'],
+    ['Project row', 'Folded', inSidebar(projectRow({ name: 'kansō', folder: 'herdr-kanso', branch: 'main', count: 3 })), 'The most urgent mark and how many.'],
+    ['Computer row', 'This computer', inSidebar(computerRow({ name: 'light', remote: false })), 'This computer first.'],
+    ['Computer row', 'Off', inSidebar(computerRow({ name: 'dark', state: 'off' })), 'A choice, not a failure.'],
+    ['Computer row', 'Unreachable', inSidebar(computerRow({ name: 'devbox', state: 'unreachable' })), 'Refresh as its button.'],
+    ['Asleep', 'Folded', inSidebar(asleep({ names: ['site', 'dojo'] })), 'One folded line, its count.'],
+    ['Asleep', 'Open', inSidebar(asleep({ names: ['site', 'dojo'], open: true })), 'The names dim, Wake at the right.'],
+    ['Section', 'Default', inSidebar(section({ title: 'Needs you', status: 'blocked' })), 'A heading in Status and Threads.'],
+    ['View switch', 'Row', inSidebar(viewSwitch()), 'Sidebar open: the three views by name.'],
+    ['View switch', 'Column', inRail(viewSwitch({ column: true })), 'Sidebar collapsed: the three views as icons.'],
+    ['Tile', 'Project', inRail(tile({ initial: 'A', status: 'blocked', count: 4, open: true })), 'A project in the rail.'],
+    ['Tile', 'Status', inRail(tile({ status: 'working', count: 3 })), 'A state in the rail.'],
+    ['Footer', 'Default', inSidebar(sidebarFooter()), 'Settings and Add computer.'],
+    ['Footer', 'Update', inSidebar(sidebarFooter({ update: 'Update kansō to 3.31.0' })), 'An update adds a row on top.'],
+    ['Sidebar', 'Open', sidebar(), 'Header, views, rows and footer.'],
+    ['Sidebar', 'Collapsed', sidebar({ collapsed: true }), 'The rail.'],
+    ['Sidebar', 'Dawn', sidebar({ dawn: true }), 'Open, in Dawn Mode.'],
+    ['Sidebar', 'Dawn collapsed', sidebar({ collapsed: true, dawn: true }), 'The rail, in Dawn Mode.', 'kit/Rail/Dawn'],
+    ['Sidebar', 'Status', sidebar({ view: 'agents' }), 'Open on Status.', 'kit/Rail/Open'],
+    ['Sidebar', 'Status collapsed', sidebar({ collapsed: true, view: 'agents' }), 'The rail on Status.', 'kit/Rail/Collapsed'],
+  ]) results.push({ id: id ?? `kit/${page}/${label}`, source: 'kit', page: `Compositions/Sidebar/${page}`, label, html: frame(html), caption });
   const choices = elements(byId('proto/components-choosing-the-channel/ChoosingTheChannel/Default'), 'kanso-update');
   const sky = elements(byId('proto/tokens-dawn/TheBand/Default'), 'kanso-dawn--preview')[0];
   const mark = elements(byId('proto/approved-dawn/Reference/12'), 'kanso-settings__piece-choice')[0];

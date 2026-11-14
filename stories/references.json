@@ -924,7 +924,7 @@
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1012,7 +1012,7 @@
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1149,7 +1149,7 @@
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1208,7 +1208,7 @@
         "proto/compositions-sidebar-rows/WorktreeRow/Default"
       ],
       "components": [
-        "Compositions/Sidebar",
+        "Layouts/Sidebar",
         "Primitives/Row"
       ],
       "features": [],
@@ -1274,7 +1274,7 @@
         "proto/compositions-sidebar-rows/SubAgent/Default"
       ],
       "components": [
-        "Compositions/Sidebar",
+        "Layouts/Sidebar",
         "Primitives/Row"
       ],
       "features": [],
@@ -1335,7 +1335,7 @@
         "proto/compositions-sidebar-rows/Computer/Default"
       ],
       "components": [
-        "Compositions/Sidebar",
+        "Layouts/Sidebar",
         "Primitives/Row"
       ],
       "features": [],
@@ -1394,7 +1394,7 @@
         "proto/compositions-sidebar-features/Asleep/Wake selected"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1488,7 +1488,7 @@
         "proto/compositions-sidebar-features/NeedsQueue/Unavailable"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1530,7 +1530,7 @@
         "proto/compositions-sidebar-rows/StatusViewTile/Default"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [
         "coverage/spaces/SidebarStatus"
@@ -1580,7 +1580,7 @@
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [
         "coverage/spaces/SidebarThreads"
@@ -1622,7 +1622,7 @@
         "proto/compositions-sidebar-rows/Find/Default"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1726,7 +1726,7 @@
         "proto/compositions-sidebar-rows/AddComputer/Default"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1809,7 +1809,7 @@
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1892,7 +1892,7 @@
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -2023,7 +2023,7 @@
         "proto/compositions-sidebar-rows/Footer/Default"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -2111,7 +2111,7 @@
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -2153,7 +2153,7 @@
         "kit/Rail/Dawn"
       ],
       "components": [
-        "Compositions/Rail"
+        "Layouts/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -7149,7 +7149,7 @@
         "coverage/chrome/SettingsMenu/Restart armed"
       ],
       "components": [
-        "Compositions/Sidebar",
+        "Layouts/Sidebar",
         "Primitives/Menu"
       ],
       "features": [
@@ -9344,7 +9344,7 @@
         "proto/compositions-sidebar-features/Asleep/Wake selected"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [
         "coverage/spaces/Asleep"
@@ -9526,7 +9526,7 @@
         "proto/compositions-sidebar-features/NeedsQueue/Unavailable"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [
         "coverage/spaces/NeedsQueue"
@@ -9674,7 +9674,7 @@
         "proto/compositions-sidebar-features/ProjectGit/Pulling"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [
         "coverage/spaces/ProjectGit"
@@ -9771,7 +9771,7 @@
       ]
     },
     {
-      "page": "Compositions/Sidebar",
+      "page": "Layouts/Sidebar",
       "existing": true,
       "boards": [
         "S01"
@@ -9796,7 +9796,7 @@
         "proto/compositions-sidebar-features/Sidebar/Unread"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [
         "coverage/spaces/Sidebar"
@@ -9826,7 +9826,7 @@
         "proto/compositions-sidebar-rows/StatusViewTile/Default"
       ],
       "components": [
-        "Compositions/Sidebar"
+        "Layouts/Sidebar"
       ],
       "features": [
         "coverage/spaces/SidebarSort"
@@ -10204,8 +10204,8 @@
         "Primitives/Avatar",
         "Primitives/Mark",
         "Compositions/Header",
-        "Compositions/Sidebar",
-        "Compositions/Rail"
+        "Layouts/Sidebar",
+        "Layouts/Sidebar"
       ],
       "features": [],
       "proposedPredicates": [],
