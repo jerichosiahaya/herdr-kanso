@@ -1,4 +1,5 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
+import { THEMES, colour, contrast } from './tokens.mjs';
 export { elements } from './storybook-markup.mjs';
 
 export function kitRecords(records) {
@@ -85,6 +86,15 @@ export function kitRecords(records) {
   return results;
 }
 
+const contrastRecord = (tokens) => {
+  const surfaces = ['canvas', 'chrome', 'bg', 'raised', 'popover', 'hover', 'selected'];
+  const pairs = [...['fg', 'muted', 'dim'].flatMap((text) => surfaces.map((surface) => [text, surface, 4.5])), ...['input', 'focus', 'working', 'blocked', 'done', 'idle'].map((edge) => [edge, 'bg', 3])];
+  const sample = ([fore, surface, min]) => min === 4.5 ? `<span class="kanso-tokens__contrast" style="color:var(--${fore});background:var(--${surface})">Aa</span>` : `<span class="kanso-tokens__contrast" style="box-shadow:inset 0 0 0 1px var(--${fore});background:var(--${surface})"></span>`;
+  const ratio = ([fore, surface]) => THEMES.map((theme) => `<span class="kanso-tokens__value kanso-tokens__value--${theme}">${contrast(colour(tokens, theme, fore), colour(tokens, theme, surface)).toFixed(1)}:1</span>`).join('');
+  const html = `<table class="kanso-tokens"><thead><tr><th></th><th>Colour</th><th>On</th><th>Ratio</th><th>Minimum</th></tr></thead><tbody>${pairs.map((pair) => `<tr><td class="kanso-tokens__example">${sample(pair)}</td><td class="kanso-tokens__name">--${pair[0]}</td><td class="kanso-tokens__name">--${pair[1]}</td><td class="kanso-tokens__name">${ratio(pair)}</td><td>${pair[2]}:1</td></tr>`).join('')}</tbody></table>`;
+  return { id: 'tokens/Contrast', source: 'tokens', page: 'Tokens/Contrast, light and dark', label: 'Reference', caption: 'Ratios from kanso/tokens.json.', html: frame(html) };
+};
+
 export function tokenRecords(tokens) {
   const groups = { Colour: ['colour'], Type: ['type'], Spacing: ['space', 'height', 'switch'], Radius: ['radius'], Motion: ['motion'], Icons: ['icon'] };
   return Object.entries(groups).map(([name, keys]) => {
@@ -102,10 +112,11 @@ export function tokenRecords(tokens) {
       if (group === 'radius') return `<span class="kanso-tokens__radius" style="border-radius:${v}"></span>`;
       if (group === 'height' || group === 'switch') return `<span class="kanso-tokens__height" style="${/-w$/.test(n) ? 'inline-size' : 'block-size'}:${v}"></span>`;
       if (group === 'icon') return `<svg class="kanso-icon" style="inline-size:${v};block-size:${v}" aria-hidden="true"><use href="#lu-bot"/></svg>`;
+      if (group === 'motion') return /^k-(hover|ease)-/.test(n) ? '<span class="kanso-tokens__wash"></span>' : n === 'k-arm-ms' ? '<span class="kanso-tokens__arm"></span>' : n === 'k-skel-ms' ? '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tokens__skeleton"></span>' : n === 'k-spin-ms' ? '<svg class="kanso-mark kanso-mark--working"><use href="#e-work"/></svg>' : '<span class="kanso-text--glint">checkout</span>';
       return '';
     };
     const role = (text) => text.replace(/:? ?ui\.js [\w.]+/g, '').replace(/ ?\(\d+ merged here\)/g, '').replace(/^4-based$/, 'base step').trim();
     const html = `<table class="kanso-tokens"><thead><tr><th></th><th>Token</th><th>Value</th><th>Use</th></tr></thead><tbody>${rows.map((row) => `<tr><td class="kanso-tokens__example">${sample(row)}</td><td class="kanso-tokens__name">--${escape(row.name)}</td><td class="kanso-tokens__name">${escape(row.value)}</td><td>${escape(role(row.role))}</td></tr>`).join('')}</tbody></table>`;
     return { id: `tokens/${name}`, source: 'tokens', page: `Tokens/${name}`, label: 'Reference', caption: 'Values and roles from kanso/tokens.json.', html: frame(html) };
-  });
+  }).concat(contrastRecord(tokens));
 }

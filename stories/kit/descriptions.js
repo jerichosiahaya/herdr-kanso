@@ -56,6 +56,7 @@ export const descriptions = {
   'Context menus': 'The whole window with the right-click menu of each piece.',
   Practice: 'The keyboard practice game in the full window.',
   Colour: 'The colour roles and washes for both themes.',
+  'Contrast, light and dark': 'Text, edges and marks against every surface, in both themes.',
   Type: 'The type roles with size, weight and line height.',
   Spacing: 'The spacing scale and control dimensions.',
   Radius: 'The corner radius scale.',

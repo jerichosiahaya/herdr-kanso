@@ -8,7 +8,7 @@ import { gapDocument, mergeCoverage } from './storybook-coverage.mjs';
 import { referenceText, sampleText } from './storybook-markup.mjs';
 import { panelStateRecords } from './storybook-panel-states.mjs';
 import { generateReferences } from "./storybook-references.mjs";
-import { statusOf } from "../stories/kit/status.js";
+import { statusTags } from "../stories/kit/status.js";
 
 export const SECTIONS = ['Start', 'Tokens', 'Primitives', 'Compositions', 'Panels', 'Layouts'];
 export const slug = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -165,8 +165,9 @@ export function generate(root = '.') {
   const catalog = pack([...originals, ...kitRecords(originals).map(normalizeComponent), ...(tokens ? tokenRecords(tokens) : [])]);
   writeFileSync(file, serialize(catalog));
   writeFileSync(join(root, 'stories/GAPS.md'), gapDocument(expand(catalog)));
-  const records = expand(catalog), pages = pagesOf(records);
+  const records = expand(catalog);
   const references = existsSync(join(root, 'stories/references.json')) ? read(join(root, 'stories/references.json')).pages : [];
+  const pages = pagesOf(records).filter(([page]) => !references.some((reference) => reference.page === page && !reference.existing));
   const cssFile = join(root, 'stories/proto.css');
   if (existsSync(cssFile)) writeFileSync(cssFile, normalizeCss(readFileSync(cssFile, 'utf8'), { kit: true }));
   const out = join(root, 'stories/components');
@@ -174,7 +175,7 @@ export function generate(root = '.') {
   mkdirSync(out, { recursive: true });
   for (const [page] of pages) {
     const file = slug(page);
-    writeFileSync(join(out, `${file}.stories.js`), `import { componentStory } from '../kit/story.js';\n\nexport default { title: ${JSON.stringify(page)}, tags: [${JSON.stringify(statusOf(page, records, references))}] };\nexport const Variants = componentStory(${JSON.stringify(page)});\n`);
+    writeFileSync(join(out, `${file}.stories.js`), `import { componentStory } from '../kit/story.js';\n\nexport default { title: ${JSON.stringify(page)}, tags: ${JSON.stringify(statusTags(page))} };\nexport const Variants = componentStory(${JSON.stringify(page)});\n`);
     writeFileSync(join(out, `${file}.mdx`), `import { Meta } from '@storybook/addon-docs/blocks';\nimport * as stories from './${file}.stories.js';\nimport { ComponentPage } from '../kit/ComponentPage.jsx';\n\n<Meta of={stories} name="Overview" />\n<ComponentPage of={stories} page=${JSON.stringify(page)} />\n`);
   }
   generateReferences(root, records);

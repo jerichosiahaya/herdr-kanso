@@ -7,7 +7,7 @@ import { explainErrors } from './storybook-components.mjs';
 import { gapDocument, overlapFor } from './storybook-coverage.mjs';
 import { STORYBOOK_CLASSES, cssSelectors, markupClasses, selectorClasses } from './import-proto.mjs';
 import { descriptions } from '../stories/kit/descriptions.js';
-import { STATUSES, statusOf } from '../stories/kit/status.js';
+import { STATUSES, statusTags } from '../stories/kit/status.js';
 import references from "../stories/references.json" with { type: "json" };
 
 const STORY_FILE = /\.stories\.(?:js|jsx|mjs|ts|tsx)$/;
@@ -26,8 +26,9 @@ export function structureErrors(files, catalog, template) {
   const records = expand(catalog);
   const statusErrors = (path, title, tags) => {
     const found = (tags ?? '').match(/"[^"]*"/g)?.map((tag) => JSON.parse(tag)).filter((tag) => STATUSES.includes(tag)) ?? [];
-    if (found.length !== 1) errors.push(`${path}: needs exactly one status tag`);
-    else if (found[0] !== statusOf(title, records, references.pages)) errors.push(`${path}: status ${found[0]} differs from ${statusOf(title, records, references.pages)}`);
+    const wanted = statusTags(title);
+    if (wanted.length && found.length !== 1) errors.push(`${path}: needs exactly one status tag`);
+    else if (found.join() !== wanted.join()) errors.push(`${path}: status ${found.join() || "none"} differs from ${wanted.join() || "none"}`);
   };
   const statePage = /(?:^|[ ,])(?:hover|focus|active|disabled|dimmed|loading|empty|failure|armed|pending|working|at rest|tab states)(?:$|[ ,])/i;
   const titleOf = (path, title) => {

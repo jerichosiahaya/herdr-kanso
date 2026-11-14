@@ -40,8 +40,8 @@ const preview = {
     options: {
       storySort: {
         order: [
-          'Start',
-          'Tokens', ['Colour', 'Type', 'Spacing', 'Radius', 'Motion', 'Icons'],
+          'Start', ['Philosophy', 'About', 'One fact, one home'],
+          'Tokens', ['Colour', 'Contrast, light and dark', 'Type', 'Spacing', 'Radius', 'Motion', 'Icons'],
           'Primitives',
           'Compositions', ['Header', 'Sidebar', 'Rail', 'Status bar', 'Bars', 'Edge and Minimap', 'State patterns'],
           'Panels',

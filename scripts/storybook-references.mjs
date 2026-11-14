@@ -1,7 +1,7 @@
 // Generate named reference pages that reuse the component catalog.
 import { mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { statusOf } from "../stories/kit/status.js";
+import { statusTags } from "../stories/kit/status.js";
 
 export const referenceSlug = (page) => page.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -19,7 +19,7 @@ export function generateReferences(root = ".", records = []) {
   }
   for (const reference of references.pages) {
     if (reference.existing) continue;
-    writeFileSync(join(out, `${referenceSlug(reference.page)}.mdx`), `import { Meta } from '@storybook/addon-docs/blocks';\nimport { ReferencePage } from '../kit/ReferencePage.jsx';\n\n<Meta title=${JSON.stringify(reference.page)} tags={[${JSON.stringify(statusOf(reference.page, records, references.pages))}]} />\n<ReferencePage page=${JSON.stringify(reference.page)} />\n`);
+    writeFileSync(join(out, `${referenceSlug(reference.page)}.mdx`), `import { Meta } from '@storybook/addon-docs/blocks';\nimport { ReferencePage } from '../kit/ReferencePage.jsx';\n\n<Meta title=${JSON.stringify(reference.page)} tags={${JSON.stringify(statusTags(reference.page))}} />\n<ReferencePage page=${JSON.stringify(reference.page)} />\n`);
   }
   return references.pages.filter((reference) => !reference.existing).length;
 }

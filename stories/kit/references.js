@@ -10,5 +10,5 @@ export const referenceStates = (page) => {
   const reference = referenceFor(page);
   if (!reference) return [];
   const wanted = new Set(reference.records);
-  return [...new Set(reference.components)].flatMap(statesFor).filter((state) => wanted.has(state.id));
+  return [...new Set(records.filter((record) => wanted.has(record.id)).map((record) => record.page))].flatMap(statesFor).filter((state) => wanted.has(state.id));
 };

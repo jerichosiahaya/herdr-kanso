@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import { expand } from "../scripts/storybook-catalog.mjs";
 import { lint, storyFiles, structureErrors } from "../scripts/lint-storybook.mjs";
-import { statusOf } from "../stories/kit/status.js";
+import { statusOf, statusTags } from "../stories/kit/status.js";
 
 const read = (file) => readFileSync(new URL(`../${file}`, import.meta.url), "utf8");
 const json = (file) => JSON.parse(read(file));
@@ -59,22 +59,8 @@ test("Drawings use only sprite symbols, and every icon is the exact Lucide shape
   assert.deepEqual([...used].filter((id) => !/^(?:lu|e|p)-/.test(id) && id !== "i-ptr"), []);
 });
 
-test("A page is the old look when any state it shows is the app's current markup, and otherwise ready, in review or a proposal", () => {
-  const drawn = (id, page, source) => ({ id, page, source, html: "<div></div>" });
-  const records = [
-    drawn("a/1", "Panels/Approved", "proto"), drawn("b/1", "Panels/Drawn", "panels"), drawn("c/1", "Panels/Current", "coverage"),
-    drawn("d/1", "Panels/Drawn", "panels"), drawn("e/1", "Panels/Current", "coverage"),
-    drawn("f/1", "Panels/Mixed", "proto"), drawn("f/2", "Panels/Mixed", "coverage"),
-  ];
-  const references = [
-    { page: "Panels/Named", status: "Approved reference", records: ["a/1"], approvedRecords: ["a/1"] },
-    { page: "Panels/New", status: "Proposed", records: ["d/1"] },
-    { page: "Panels/As it is", status: "Proposed", records: ["e/1"] },
-    { page: "Panels/Approved, partly old", status: "Approved reference", records: ["a/1", "f/2"], approvedRecords: ["a/1"] },
-    { page: "Panels/Mixed", existing: true, status: "Approved reference", records: ["f/1"], approvedRecords: ["f/1"] },
-  ];
-  assert.deepEqual(["Panels/Named", "Panels/Approved", "Panels/Drawn", "Panels/New", "Panels/As it is", "Panels/Current", "Panels/Approved, partly old", "Panels/Mixed", "Start/About"].map((page) => statusOf(page, records, references)),
-    ["Ready", "Ready", "In review", "Proposal", "Old look", "Old look", "Old look", "Old look", "Ready"]);
+test("An approved page is ready with no tag, and every other page is in review", () => {
+  assert.deepEqual(["Start/Philosophy", "Panels/Current"].map((page) => [statusOf(page), statusTags(page)]), [["Ready", []], ["In review", ["In review"]]]);
 });
 
 test("A page without its status tag, or with a code in its title, fails the lint", () => {
