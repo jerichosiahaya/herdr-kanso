@@ -360,6 +360,10 @@ export const guidelines = {
   "Primitives/Sentence": [
     ["Kansō", "Words that wrap.", "Under a row or a figure, what it means or what an act would lose; dim by default, muted when it carries the point, toned when it warns."],
   ],
+  "Primitives/Share card": [
+    ["Kansō", "Totals, never names.", "A panel's card says counts, sizes and days; never a repository, a computer or a person."],
+    ["Seijaku", "One card for every panel.", "The heading and its period, the figure and what it means, the counts, a note, then the blocks: a run of bars, a streak or a list; the ensō foot last."],
+  ],
   "Primitives/Chart": [
     ["Kansō", "A shape, not a grid.", "No axes, no gridlines, no legend: the run of bars, a few ticks under it and the figure above it in a metric."],
     ["Kokō", "Colour only where it asks.", "Bars are hairlines in ink; the peak takes the accent, a low the blocked tone, a stacked part the working tone. Filled, few bars share the width and the peak is solid ink."],

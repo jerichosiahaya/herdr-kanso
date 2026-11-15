@@ -17,6 +17,7 @@ export const descriptions = {
   Metric: 'The one number, with label and unit, that explains the current view.',
   Thumbnail: 'A small picture or strip used to pick or preview an image.',
   Picture: 'A picture sized to its panel, with the pins placed over it.',
+  'Share card': 'The image a panel shares: its figure, its counts and its blocks.',
   Excerpt: 'Words someone wrote, a found turn or a comment, with who and when.',
   Band: 'A washed band over a document: what changed and the ways out.',
   Sentence: 'A line of words that wraps, dim or toned, under what it explains.',

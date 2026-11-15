@@ -1,9 +1,9 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence, well } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence, well, shareCard } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
-import { sampleFind, sampleShipped } from './panel-samples.js';
+import { sampleFind, sampleShare, sampleShipped } from './panel-samples.js';
 import { keyLayer, keyLayerMods, sampleShot, sampleScreens, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
@@ -598,6 +598,17 @@ export const statedPages = {
       { label: 'Dim', args: {}, caption: 'Words that wrap under what they explain.' },
       { label: 'Muted', args: { tone: 'muted', text: 'Nothing is lost. Merged branches go too.' }, caption: 'A step closer to the ink.' },
       { label: 'Toned', args: { tone: 'blocked', text: 'Loses 2 uncommitted changes in promo-banner. Merged branches go too.' }, caption: 'What an armed act would lose, in the blocked tone.' },
+    ],
+  },
+  'Primitives/Share card': {
+    args: { card: 'Ports' },
+    markup: ({ card }) => shareCard(sampleShare.cards[card]),
+    states: [
+      { label: 'A figure and its run', args: {}, caption: 'The heading and its period, the figure and what it means, four counts, a note, then one chart.' },
+      { label: 'Six counts', args: { card: 'Memory' }, caption: 'Up to six counts on one line.' },
+      { label: 'A change', args: { card: 'Spend' }, caption: 'The change on last period under the figure.' },
+      { label: 'A subtitle', args: { card: 'Dōjō' }, caption: 'What it is, under the heading; a streak and a list.' },
+      { label: 'Every block', args: { card: 'Shipped' }, caption: 'A smaller figure beside the big one; the streak, the records and the hours.' },
     ],
   },
   'Primitives/Skeleton': {

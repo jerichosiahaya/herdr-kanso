@@ -646,6 +646,10 @@ export const playgrounds = {
     ...statedPages['Primitives/Sentence'],
     argTypes: { text: text('text'), tone: select('tone', ['dim', 'muted', 'blocked', 'working', 'done']) },
   },
+  'Primitives/Share card': {
+    ...statedPages['Primitives/Share card'],
+    argTypes: { card: { name: 'panel', control: { type: 'inline-radio' }, options: ['Ports', 'Memory', 'Spend', 'Dōjō', 'Shipped'] } },
+  },
   'Primitives/Skeleton': {
     ...statedPages['Primitives/Skeleton'],
     argTypes: {
