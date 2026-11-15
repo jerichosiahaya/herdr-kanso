@@ -7,6 +7,7 @@ import { exec, readTextFile, appHome, shared, setShared, notify, layout, run, wr
 import { tryOr, tryOrAsync } from "./pure.js";
 import { pieces, runs, shown, hiddenSet } from "./pieces.js";
 import { channelOf, compareReleases, hostInstall, installedRelease, newestTag, offerRelease, parseRelease } from "./release.js";
+import { alreadyUpdating, checkFailed, installFailed, updateAvailable, updated, upToDate } from "./notices.js";
 export { sameVolume, updateHost, windowsInstallScript, windowsLaunchScript, windowsRecoverScript, newestTag };
 
 export const SOURCE = {
@@ -347,7 +348,7 @@ export class Updater {
     if (!done) return;
     this.setState({ done: null });
     if (done.version !== this.installed) return;
-    if (shown("toast.update", true, pieces(shared))) notify({ title: `kansō updated to ${done.version}`, body: done.notes || undefined, level: "success" });
+    if (shown("toast.update", true, pieces(shared))) notify(updated(done.version, done.notes));
   }
 
   async check(cx, force = false, report = false) {
@@ -361,22 +362,17 @@ export class Updater {
     const r = await tryOrAsync(() => exec("git", ["-c", "core.askPass=true", "-c", "credential.interactive=never", "-c", "http.lowSpeedLimit=1000", "-c", "http.lowSpeedTime=20", "ls-remote", "--tags", "--refs", this.source.remote]));
     if (this.state().looking?.id === id) this.setState({ looking: null });
     if (r?.code !== 0) {
-      if (report) notify({ title: "kansō could not check for updates", body: "GitHub could not be reached.", level: "warning" });
+      if (report) notify(checkFailed());
       return;
     }
     this.setState({ latest: newestTag(r.stdout, this.channel()), checked: Date.now() });
     const v = this.available();
     const have = this.current();
-    if (report && !v) notify({ title: "kansō is up to date", body: `You have ${have}, the newest release.`, level: "success" });
+    if (report && !v) notify(upToDate(have));
     if (report && v && this.state().notified === v) this.setState({ notified: null }); // an explicit check re-notifies for the same version
     if (v && this.state().notified !== v) {
       this.setState({ notified: v });
-      if (report || shown("toast.update", true, pieces(shared))) notify({
-        title: `kansō ${v} is available`,
-        body: `You have ${have}. Click to update; Herdr's own updates stay under Settings.`,
-        action: { name: "kanso-tabs.update" },
-        timeout: 30000,
-      });
+      if (report || shown("toast.update", true, pieces(shared))) notify(updateAvailable(v, have));
     }
   }
 
@@ -502,11 +498,11 @@ export class Updater {
     const told = state === "busy" || state === "already" ? this.elsewhere() : undefined;
     if (state === "ok" && mark.version) {
       if (hostInstall(mark.version)?.want === this.installed) this.setState({ tag: mark.version });
-      notify({ title: `kansō updated to ${mark.version}`, body: mark.notes || undefined, level: "success" });
+      notify(updated(mark.version, mark.notes));
     }
     if (state === "error") {
       this.error = why || "the update failed";
-      notify({ title: "kansō was not updated", body: this.error, level: "error" });
+      notify(installFailed(this.error));
     }
     this.fit();
     cx.notify();
@@ -514,7 +510,7 @@ export class Updater {
   }
 
   elsewhere() {
-    notify({ title: "kansō is already being updated", body: "Another window or the other Update button started it; it finishes on its own.", level: "info" });
+    notify(alreadyUpdating());
     return "busy";
   }
 

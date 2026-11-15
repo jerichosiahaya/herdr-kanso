@@ -97,29 +97,82 @@ test("Clicking one away closes those past their clock too, so none is forgotten 
   assert.deepEqual(up(), []);
 });
 
-test("A failed toast leads with the blocked mark, and the others keep their dot", async () => {
-  const marks = [], dots = [];
-  const node = () => {
+// Draws a toast with a host that records every element and call, so a test reads what is on screen.
+async function drawn(notification) {
+  const calls = [], ran = [], closed = [];
+  const node = (kind, arg) => {
     const el = new Proxy({}, { get(_target, key) {
       if (key === "then") return undefined;
       if (key === "when") return (on, apply) => (on ? apply(el) : el);
-      if (key === "bg") return (value) => { dots.push(value); return el; };
-      return () => el;
+      return (...args) => { calls.push([kind, key, ...args]); return el; };
     } });
+    calls.push([kind, "new", arg]);
     return el;
   };
-  const current = { props: null };
   const { Toast } = await load("kanso-toast/main.js", ["Toast"], {
-    div: node, image: node, h_flex: node, v_flex: node, run: () => {}, shared: () => undefined, setShared: () => {}, closeOverlay: () => {},
-    theme: () => ({ blocked: "blocked", done: "done", popover: "popover", hover: "hover" }), props: () => current.props,
-    mark: (_c, { status, size = "md" }) => { marks.push([status, size]); return node(); },
+    div: () => node("div"), image: (path) => node("image", path), svg: (path) => node("svg", path), h_flex: () => node("row"),
+    Button: { new: (id) => node("button", id) },
+    run: (name, args) => ran.push([name, args]), shared: () => undefined, setShared: () => {}, closeOverlay: (id) => closed.push(id),
+    theme: () => ({ blocked: "red", done: "green", working: "yellow", accent: "blue", muted: "grey", foreground: "white", popover: "ground", hover: "wash" }),
+    props: () => ({ overlay: "o1", ...notification }),
   });
-  current.props = { overlay: "o1", level: "error", title: "Can't reach dark" };
-  new Toast().render();
-  assert.deepEqual(marks, [["blocked", "md"]]);
-  current.props = { overlay: "o2", level: "success", title: "Merged" };
-  dots.length = 0;
-  new Toast().render();
-  assert.deepEqual(marks, [["blocked", "md"]]);
-  assert.ok(dots.includes("done"));
+  const toast = new Toast();
+  toast.render();
+  const has = (kind, key, ...args) => calls.some(([k, c, ...a]) => k === kind && c === key && JSON.stringify(a) === JSON.stringify(args));
+  const click = () => calls.find(([k, c]) => k === "row" && c === "on_click")[2]();
+  return { calls, ran, closed, has, click };
+}
+
+test("A failure leads with the blocked mark, even with an icon, and offers its fix", async () => {
+  const shown = await drawn({ level: "error", title: "kansō was not updated", body: "permission denied", icon: "refresh", action: { name: "kanso-tabs.update", args: { label: "Update" } } });
+  assert.ok(shown.has("div", "bg", "red"), "the blocked mark");
+  assert.ok(!shown.calls.some(([k, c, a]) => k === "svg" && c === "new" && String(a).includes("refresh")), "not the home's icon");
+  assert.ok(shown.has("div", "child", "Update"), "the fix word on a button");
+});
+
+test("A toast with a home's icon draws it in its state's colour: done green, a fact muted", async () => {
+  const done = await drawn({ level: "success", title: "kansō updated to 3.31.0", icon: "refresh" });
+  assert.ok(done.has("svg", "new", "mods/kanso-chrome/icons/refresh.svg"));
+  assert.ok(done.has("svg", "text_color", "green"));
+  const fact = await drawn({ level: "info", title: "kansō is up to date", icon: "refresh" });
+  assert.ok(fact.has("svg", "text_color", "grey"));
+});
+
+test("Without an icon, a success leads with the check and the rest with their level's dot", async () => {
+  const success = await drawn({ level: "success", title: "Merged #142" });
+  assert.ok(success.has("svg", "new", "mods/kanso-chrome/icons/check.svg"));
+  assert.ok(success.has("svg", "text_color", "green"));
+  const warning = await drawn({ level: "warning", title: "Slow" });
+  assert.ok(warning.has("div", "bg", "yellow"));
+  const info = await drawn({ title: "Saved" });
+  assert.ok(info.has("div", "bg", "blue"));
+});
+
+test("Herdr's own toasts keep their picture", async () => {
+  const agent = await drawn({ level: "success", title: "api finished", icon: "/Applications/Claude.app/icon.png" });
+  assert.ok(agent.has("image", "new", "/Applications/Claude.app/icon.png"));
+});
+
+test("A toast says one sentence; the whole title and its detail are its tooltip", async () => {
+  const shown = await drawn({ level: "error", title: "Herdr's mod runtime is out of memory", body: "Panels and bars won't load again until the window restarts." });
+  assert.ok(shown.has("div", "child", "Herdr's mod runtime is out of memory"));
+  assert.ok(!shown.has("div", "child", "Panels and bars won't load again until the window restarts."), "no second line");
+  assert.ok(shown.has("row", "tooltip", "Herdr's mod runtime is out of memory\nPanels and bars won't load again until the window restarts."));
+  const bare = await drawn({ title: "Saved" });
+  assert.ok(bare.has("row", "tooltip", "Saved"));
+  assert.ok(!bare.calls.some(([k]) => k === "button"), "no fix word, no button");
+});
+
+test("A click runs the toast's command without its fix word, and closes it", async () => {
+  const shown = await drawn({ level: "error", title: "Herdr's mod runtime is out of memory", action: { name: "kanso-chrome.restart", args: { label: "Restart" } } });
+  shown.click();
+  assert.deepEqual(clone(shown.ran), [["kanso-chrome.restart", {}]]);
+  assert.deepEqual(shown.closed, ["o1"]);
+  const agent = await drawn({ title: "api finished", action: { name: "agent.focus", args: { terminal: "w1" } } });
+  agent.click();
+  assert.deepEqual(clone(agent.ran), [["agent.focus", { terminal: "w1" }]], "other args go through");
+  const plain = await drawn({ title: "Saved" });
+  plain.click();
+  assert.deepEqual(plain.ran, [], "nothing to run");
+  assert.deepEqual(plain.closed, ["o1"]);
 });

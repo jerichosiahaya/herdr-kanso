@@ -2,17 +2,29 @@
 // Apache-2.0; derived from Herdr's shipped `toast` mod.
 // Herdr stacks every toast it is given, the same one as many times as it is posted: a burst of clicks
 // fills the screen. Here a toast already on screen is not shown again, and the stack keeps the newest few.
-import { View, div, image } from "gpui-kit";
-import { v_flex, h_flex } from "gpui-base";
+import { View, div, image, svg } from "gpui-kit";
+import { h_flex } from "gpui-base";
 import { props, closeOverlay, run, theme, shared, setShared } from "herdr";
 import { sorted, admit, marked, keep } from "./stack.js";
-import { G, tokens } from "./ui.js";
+import { leadOf, tipOf, fixOf, commandOf } from "./toast-model.js";
+import { G, T, ICON_ROW, glyphOf, tokens } from "./ui.js";
 import { mark } from "./ui-mark.js";
+import { button } from "./ui-button.js";
 
 const KEY = "kanso.toasts";
 // This window's mods, as they run now: the top of the file runs once for all their copies.
 const MARK = `${Date.now()}-${Math.random()}`;
-const DOT = { error: "blocked", warning: "working", success: "done", info: "accent" };
+// A failure leads with the blocked mark, the same as on every line that failed.
+const LEADS = {
+  mark: (c) => mark(c, { status: "blocked" }),
+  image: (_c, { icon }) => image(icon).w(ICON_ROW).h(ICON_ROW).flex_none(),
+  glyph: (c, { icon, tone }) => svg(glyphOf(icon)).size(ICON_ROW).flex_none().text_color(c[tone]),
+  dot: (c, { tone }) => div().size(G.sm).rounded_full().flex_none().bg(c[tone]),
+};
+const lead = (c, p) => {
+  const found = leadOf(p);
+  return LEADS[found.kind](c, found);
+};
 
 export default class Toast extends View {
   init(_props, _cx) {
@@ -31,31 +43,28 @@ export default class Toast extends View {
     setShared(KEY, keep(shared(KEY), MARK, showing.filter((s) => s.id !== p.overlay), now));
   }
 
+  act() {
+    const command = commandOf(props() ?? {});
+    if (command) run(command.name, command.args);
+    this.dismiss();
+  }
+
   render(_cx) {
-    const t = theme(), c = tokens(t);
-    const p = props() ?? {};
+    const c = tokens(theme()), p = props() ?? {}, fix = fixOf(p);
     return h_flex()
       .id("toast")
       .size_full()
-      .px(18)
-      .gap(12)
+      .pl(G.md)
+      .pr(G.sm)
+      .gap(G.sm)
       .items_center()
-      .bg(t.popover)
+      .bg(c.popover)
       .cursor_pointer()
-      .hover((s) => s.bg(t.hover))
-      .on_click(() => {
-        if (p.action?.name) run(p.action.name, p.action.args ?? {});
-        this.dismiss();
-      })
-      // A failure carries the blocked mark, the same as on every line that failed.
-      .child(p.icon ? image(p.icon).w(18).h(18).flex_none()
-        : p.level === "error" ? mark(c, { status: "blocked" }) : div().size(G.sm).rounded_full().flex_none().bg(t[DOT[p.level] ?? "accent"]))
-      .child(
-        v_flex()
-          .flex_1()
-          .overflow_hidden()
-          .child(div().truncate().font_semibold().text_size(13).text_color(t.foreground).child(p.title ?? ""))
-          .when(Boolean(p.body), (el) => el.child(div().truncate().text_size(12).text_color(t.muted).child(p.body ?? ""))),
-      );
+      .hover((s) => s.bg(c.subtle))
+      .tooltip(tipOf(p))
+      .on_click(() => this.act())
+      .child(lead(c, p))
+      .child(div().flex_1().min_w(0).truncate().font_semibold().text_size(T.value).text_color(c.text).child(p.title ?? ""))
+      .when(Boolean(fix), (el) => el.child(button("toast-fix", fix, null, c, { kind: "tonal", small: true })));
   }
 }

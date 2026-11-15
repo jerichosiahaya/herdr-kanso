@@ -11,6 +11,7 @@ import { theme, run, props, shared, setShared, updates, agents, home, nextComman
 import { Updater } from "./update.js";
 import { tryOrAsync, afterMount } from "./pure.js";
 import { loadPieces, pieces, shown } from "./pieces.js";
+import { outOfMemory } from "./notices.js";
 
 const basename = (path) => paths.basename(path);
 const SAMPLE_MS = 120_000;
@@ -73,8 +74,7 @@ export default class WorkspaceChrome extends View {
       if (this.warned) return;
       this.warned = true;
       if (!shown("toast.memory", true, pieces(shared))) return;
-      notify({ title: "Herdr's mod runtime is out of memory", level: "error", action: { name: "kanso-chrome.restart" },
-        body: "Panels and bars won't load again until the window restarts. Click to restart it now; your terminals and agents stay in herdr-core." });
+      notify(outOfMemory());
     });
   }
 
