@@ -23,7 +23,7 @@
 .kanso-key--recording{animation:ghost 1.8s ease-in-out infinite alternate}
 
 .kanso-thumbnail{position:relative;display:inline-block;flex:none;width:var(--k-h-header);height:var(--k-h-header);padding:var(--k-sp-hair);box-sizing:border-box;overflow:hidden;border-radius:var(--k-r-sm);background:var(--raised);box-shadow:inset 0 0 0 1px var(--border)}
-.kanso-thumbnail img{display:block;width:100%;height:100%;object-fit:cover;border-radius:var(--k-r-sm)}
+.kanso-thumbnail>:is(img,svg){display:block;width:100%;height:100%;object-fit:cover;border-radius:var(--k-r-sm)}
 .kanso-thumbnail--swatch{box-shadow:none}
 .kanso-thumbnail:is(:focus-visible,.kanso-control--focus){outline:2px solid var(--accent);outline-offset:1px}
 
