@@ -67,10 +67,11 @@
 .kanso-status-bar__popup{position:absolute;bottom:calc(anchor(--kanso-status-item top) + var(--k-sp-1));right:anchor(--kanso-status-item right);z-index:1}
 
 /* Panel: narrow, a page title drops to the section size; stale, all but the header steps down and takes no clicks. */
+.kanso-panel{--kanso-panel-pad:var(--k-sp-4);padding:var(--kanso-panel-pad)}
 .kanso-panel--narrow .kanso-panel-header:not(.kanso-panel-header--bar) .kanso-row__name{font-size:var(--k-fs-section)}
 .kanso-panel--stale>:not(.kanso-panel-header){opacity:var(--k-op-away);pointer-events:none}
 /* Panel header, bar: the name at the name size, flush with the panel's edges over a rule. */
-.kanso-panel-header--bar{margin:calc(-1 * var(--k-sp-4)) calc(-1 * var(--k-sp-4)) var(--k-sp-2);padding-inline:var(--k-sp-2);border-bottom:1px solid var(--border)}
+.kanso-panel-header--bar{margin:calc(-1 * var(--kanso-panel-pad)) calc(-1 * var(--kanso-panel-pad)) var(--k-sp-2);padding-inline:var(--k-sp-2);border-bottom:1px solid var(--border)}
 .kanso-panel-header--bar .kanso-row__name{font-size:var(--k-fs-name)}
 .kanso-panel-header--bar>.kanso-row--title{height:var(--k-h-header);align-content:center}
 .kanso-panel-header--bar .kanso-row--title .kanso-content__primary{height:auto}

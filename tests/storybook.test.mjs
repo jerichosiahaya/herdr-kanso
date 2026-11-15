@@ -204,6 +204,20 @@ test("A panel header needs only its title; what goes before it, under it and aft
   assert.throws(() => panelHeader({ title: "Ports", form: "card" }), { message: "panelHeader: unknown form card" });
 });
 
+test("The sidebar's + names what it adds in each view, and Sort is quiet at its default", async () => {
+  const { addLabels, toolbar, views } = await import("../stories/kit/compositions.js");
+  assert.deepEqual(Object.keys(addLabels), views.map((view) => view.key));
+  for (const [view, label] of Object.entries(addLabels)) assert.match(toolbar({ view }), new RegExp(`title="${label}"`), view);
+  assert.match(toolbar(), /<span class="kanso-toolbar__sort">/);
+  assert.match(toolbar({ sorted: true }), /<span class="kanso-toolbar__sort kanso-toolbar__sort--sorted">/);
+  assert.match(toolbar({ sortMenu: "<i>menu</i>" }), /kanso-button--active[^]*<span class="kanso-toolbar__menu"><i>menu<\/i><\/span>/);
+});
+
+test("A menu can head a group of its items", async () => {
+  const { menu } = await import("../stories/kit/pieces.js");
+  assert.match(menu({ items: [{ label: "Last update" }, { separator: true }, { heading: "Show" }, { label: "Dawn sky" }] }), /kanso-menu__separator"><\/div><div class="kanso-menu__heading">Show<\/div><div class="kanso-menu__item"/);
+});
+
 test("A file opened from a panel keeps the button back to its folder's list before the title", async () => {
   const { statedPages } = await import("../stories/kit/states.js");
   const { args, markup } = statedPages["Compositions/Panel"];
