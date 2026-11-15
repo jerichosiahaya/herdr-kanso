@@ -1,7 +1,7 @@
 // Sample sidebar content for the stories: the rows and tiles of each view, drawn with the compositions.
-import { asleep, computerRow, projectRow, section, sidebar, tile } from './compositions.js';
+import { asleep, computerRow, panelBack, panelClose, panelRefresh, projectRow, section, sidebar, tile } from './compositions.js';
 import { sessionRow } from './session-row.js';
-import { button, menu, stack, statusItem } from './pieces.js';
+import { button, glyph, menu, stack, statusItem } from './pieces.js';
 import keyFile from '../../kanso/keys.json' with { type: 'json' };
 import windowsKeyFile from '../../kanso/keys.windows.json' with { type: 'json' };
 import { LIST_LAYER, describe, layer } from '../../kanso/mods/kanso-help/keymap.js';
@@ -112,4 +112,28 @@ export const samplePanel = {
   ],
   empty: { icon: 'lu-git-fork', text: 'No worktrees' },
   failure: { text: "Can't list worktrees on devbox", source: 'git worktree list: timed out after 30 s', fix: 'Refresh', agent: 'migrate' },
+};
+
+// What real panels put in a header: before the title, nothing, ‹ or the program's mark; after it, the tools each one has.
+const headerTool = (label, icon) => button({ label, kind: 'icon', icon });
+export const samplePanelHeader = {
+  starts: { none: () => [], back: () => [panelBack()], mark: () => [glyph('p-claude')] },
+  tools: {
+    none: () => [],
+    refresh: () => [panelRefresh()],
+    reading: () => [panelRefresh({ reading: true })],
+    'share and refresh': () => [headerTool('Share', 'lu-share'), panelRefresh()],
+    'pin and refresh': () => [headerTool('Stay on this agent', 'lu-pin'), panelRefresh()],
+    document: () => [headerTool('Open with…', 'lu-external-link'), panelRefresh(), panelClose()],
+  },
+};
+
+// The Sort menu of each view, in the app's words: its orders, the current one ticked, then what the sidebar shows.
+const ticked = (label, on) => ({ label, icon: on ? 'lu-check' : undefined });
+const sortShows = [ticked('What each agent is on', true), ticked('While you were away', true), ticked('Projects, Status and Threads', true)];
+const sortMenu = (title, orders, current, extra = []) => menu({ items: [{ heading: title }, ...orders.map((label) => ticked(label, label === current)), ...extra, { separator: true }, { heading: 'Show' }, ...sortShows] });
+export const sampleSortMenus = {
+  spaces: () => sortMenu('Agents, pinned first, then by', ['Last update', 'Needs you first', 'By kind', 'As on screen', 'Your order (drag)'], 'Last update'),
+  agents: () => sortMenu('In each section, by', ['Latest change first', 'Longest in its state', 'Project'], 'Latest change first'),
+  threads: () => sortMenu('Threads, pinned first, then by', ['Your last message', 'When it started'], 'Your last message', [ticked('Grouped by project', false)]),
 };

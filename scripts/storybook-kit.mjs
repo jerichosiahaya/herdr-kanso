@@ -1,8 +1,8 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
-import { asleep, computerRow, header, projectRow, section, sidebarFooter, tile, toolbar, viewSwitch } from '../stories/kit/compositions.js';
+import { asleep, computerRow, header, projectRow, section, sidebarFooter, tile, viewSwitch } from '../stories/kit/compositions.js';
 import { sessionRow } from '../stories/kit/session-row.js';
-import { dawn as dawnSky, stack, windowControls } from '../stories/kit/pieces.js';
+import { dawn as dawnSky, herdrMark, stack, windowControls } from '../stories/kit/pieces.js';
 import { sampleSidebar, sessionTools } from '../stories/kit/samples.js';
 import { statedPages } from '../stories/kit/states.js';
 export { elements } from './storybook-markup.mjs';
@@ -53,15 +53,14 @@ export function kitRecords(records) {
   const pillHeader = headers.find((html) => html.includes('kanso-badge--count'));
   const byId = (id) => originals.find((record) => record.id === id)?.html ?? '';
   add('Window controls', 'Default', windowControls(), 'The three lights, where the system draws them.');
+  add('Herdr mark', 'Default', herdrMark(), 'Herdr’s tile, where the collapsed sidebar starts.');
   add('Dawn', 'Default', dawnSky(), 'The sky of Dawn Mode; the sun rises once on load.');
   for (const [id, label, html, caption] of [
     ['kit/Header/Open', 'Expanded', header(), 'The lights; + on the left; sort, search and hide on the right.'],
-    ['kit/Header/Collapsed', 'Collapsed', header({ collapsed: true }), 'The lights; show and + stacked in the rail.'],
+    ['kit/Header/Collapsed', 'Collapsed', header({ collapsed: true }), 'The lights; + and show stacked in the rail, Sort and Search under a caret.'],
     ['kit/Header/Dawn', 'Expanded, Dawn Mode', header({ dawn: true }), 'The dawn behind the lights and the tools.'],
     ['kit/Header/Dawn collapsed', 'Collapsed, Dawn Mode', header({ collapsed: true, dawn: true }), 'The dawn behind the lights, centred on the rail.'],
-    ['kit/Toolbar/Row', 'Row', toolbar(), 'Sidebar open: + alone on the left, the rest on the right.'],
-    ['kit/Toolbar/Column', 'Column', toolbar({ column: true }), 'Sidebar collapsed: stacked in the rail.'],
-  ]) if (html) results.push({ id, source: 'kit', page: id.startsWith('kit/Toolbar/') ? 'Compositions/Toolbar' : 'Compositions/Header', label, html: frame(html), caption });
+  ]) if (html) results.push({ id, source: 'kit', page: 'Compositions/Header', label, html: frame(html), caption });
   const inSidebar = (html) => stack({ variant: 'sidebar frame' }, html), inRail = (html) => stack({ variant: 'rail frame' }, html);
   for (const [page, label, html, caption, id] of [
     ['Session row', 'Working', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' })), 'What it is on and for how long.'],

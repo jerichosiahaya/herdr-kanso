@@ -1,19 +1,21 @@
 import { localService } from "./platform-host.js";
-import { paths } from "./platform-paths.js";
 import { systemApi } from "./platform-system.js";
 // Derived from the `workspace-chrome` mod shipped with Herdr (Apache-2.0, https://github.com/herdrdev/herdr-app).
 // Modified by 0OZ: brand bar, solid sidebar footer with Settings, Add machine and an account chip.
 // Modified by José Gutiérrez (minimalistic, 0oz design fork): renamed from oz-chrome.
-// Modified by jlopezlira (Kanso, https://github.com/jlopezlira/herdr-kanso): renamed from mn-chrome; sidebar footer as centred squares when collapsed, one icon set (icons/), a title bar of the lights only; an "Update Kanso" row for Kanso's own releases (update.js).
-import { View, div, svg } from "gpui-kit";
-import { h_flex, v_flex } from "gpui-base";
-import { theme, run, props, shared, setShared, updates, agents, home, nextCommand, openOverlay, appHome, notify } from "herdr";
+// Modified by jlopezlira (Kanso, https://github.com/jlopezlira/herdr-kanso): renamed from mn-chrome; sidebar footer as centred squares when collapsed, one icon set (icons/), a title bar of the lights only; an "Update Kanso" row for Kanso's own releases (update.js); Settings opens one menu (footer.js).
+import { View, div } from "gpui-kit";
+import { theme, run, props, shared, setShared, updates, keys, settings, nextCommand, openOverlay, appHome, notify } from "herdr";
 import { Updater } from "./update.js";
 import { tryOrAsync, afterMount } from "./pure.js";
 import { loadPieces, pieces, shown } from "./pieces.js";
 import { outOfMemory } from "./notices.js";
+import { glyphs } from "./marks.js";
+import { tokens } from "./ui.js";
+import { Armed } from "./ui-button.js";
+import { ROW, ITEM, COLLAPSED, footerRows, settingsChord, settingsEntries } from "./footer-model.js";
+import { sidebarFooter } from "./footer.js";
 
-const basename = (path) => paths.basename(path);
 const SAMPLE_MS = 120_000;
 const openSettings = (page = "pieces") => openOverlay({ mod: "kanso-settings", kind: "dialog", width: 860, height: 680, props: { page } });
 
@@ -28,6 +30,8 @@ export default class WorkspaceChrome extends View {
     // The one migration. A later read must not write, or every mod draws again.
     loadPieces(shared, setShared);
     if (!props()?.footer) return;
+    this.armed = new Armed();
+    this.menuOpen = false;
     this.updater = new Updater();
     this.updater.start(cx, { polls: false });
     // Command names stay kanso-tabs.* for keys bound to them before.
@@ -84,41 +88,37 @@ export default class WorkspaceChrome extends View {
     run("app.quit");
   }
 
+  rows() {
+    const update = this.updater?.available() ?? null;
+    const acts = { [ROW.update]: (cx) => this.updater.install(cx), [ROW.machine]: () => run("mod.open", { name: "machine-add" }) };
+    return footerRows({ update, busy: Boolean(this.updater?.busy), machine: shown("footer.machine", true, pieces(shared)) })
+      .map((entry) => ({ ...entry, onClick: acts[entry.key] ?? null }));
+  }
+
+  // Read only while the menu is open: Herdr's waiting update and the key bound to kansō settings.
+  settingsMenu() {
+    const setOpen = (open, cx) => { this.menuOpen = open; cx.notify(); };
+    const acts = {
+      [ITEM.kanso]: (cx) => { setOpen(false, cx); openSettings(); },
+      [ITEM.herdr]: (cx) => { setOpen(false, cx); run("app.settings"); },
+      [ITEM.updateHerdr]: (cx) => this.armed.press(ITEM.updateHerdr, cx, () => run("app.update")),
+    };
+    const chord = this.menuOpen ? settingsChord(keys()) : null;
+    const entries = this.menuOpen ? settingsEntries({ ready: updates().app.ready, hint: chord && glyphs(chord) }) : [];
+    const items = entries.map((entry) => (entry.separator ? entry : { ...entry, armed: this.armed.is(entry.key), onClick: acts[entry.key] }));
+    return { open: this.menuOpen, onOpenChange: setOpen, items };
+  }
+
+  refusal() {
+    const why = this.updater?.available() && !this.updater.busy ? this.updater.refused() : null;
+    return why && { why, retry: (cx) => this.updater.install(cx), font: settings().font_family ?? null };
+  }
+
   render() {
     const t = theme();
-    const collapsed = shared("sidebar.collapsed") === true;
-    if (props()?.footer) {
-      const row = (id, icon, label, action) => h_flex().id(id).relative().h(34).flex_none().items_center().rounded(6)
-        .text_color(t.muted).hover(s => s.bg(t.hover).text_color(t.foreground)).cursor_pointer()
-        .on_click(action).child(svg(icon).size(17).flex_none())
-        .when(collapsed, el => el.w(34).justify_center().tooltip(label))
-        .when(!collapsed, el => el.px(10).gap(10).child(div().flex_1().child(label)));
-      const who = basename(home()) || "me";
-      const n = agents().length;
-      const count = `${n} ${n === 1 ? "agent" : "agents"}`;
-      const avatar = div().size(collapsed ? 28 : 32).flex_none().rounded(6).bg(t.selected).flex().items_center().justify_center()
-        .font_semibold().text_size(13).text_color(t.foreground).child(who[0].toUpperCase());
-      const chip = h_flex().id("account").h(collapsed ? 40 : 48).flex_none().items_center().rounded(6).cursor_pointer()
-        .hover(s => s.bg(t.hover)).on_click(() => run("app.settings")).child(avatar)
-        .when(collapsed, el => el.w(40).justify_center().tooltip(`${who} · ${count}`))
-        .when(!collapsed, el => el.px(8).gap(10).child(v_flex().flex_1().min_w(0)
-          .child(div().truncate().text_size(13).font_medium().text_color(t.foreground).child(who))
-          .child(div().truncate().text_size(11.5).text_color(t.muted).child(count))));
-      const ready = Boolean(updates().app.ready);
-      const kanso = this.updater?.available();
-      const busy = this.updater?.busy;
-      const kansoLabel = busy ? "Updating kansō..." : `Update kansō to ${kanso}`;
-      return v_flex().size_full().bg(t.chrome).px(collapsed ? 0 : 8).pt(8).pb(12).gap(2).text_size(13).justify_end()
-        .when(collapsed, el => el.items_center())
-        .when(Boolean(kanso), el => el.child(row("kanso-update", "mods/kanso-chrome/icons/refresh-cw.svg", kansoLabel,
-          (_e, cx) => this.updater.install(cx))))
-        .child(row("settings", "mods/kanso-chrome/icons/settings.svg", ready ? "Settings · update ready" : "Settings", () => run("app.settings")))
-        // A server, not a second "+": the rail already has one for New space.
-        .when(shown("footer.machine", true, pieces(shared)), el => el.child(row("machine", "mods/kanso-chrome/icons/server.svg", "Add computer", () => run("mod.open", { name: "machine-add" }))))
-        .child(div().h(8).flex_none())
-        .child(chip);
-    }
     // The title bar holds the window's own lights, nothing else.
-    return div().size_full().bg(t.chrome);
+    if (!props()?.footer) return div().size_full().bg(t.chrome);
+    const collapsed = shared(COLLAPSED) === true;
+    return sidebarFooter(tokens(t), { collapsed, rows: this.rows(), settings: this.settingsMenu(), refused: this.refusal() });
   }
 }

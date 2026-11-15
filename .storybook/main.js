@@ -10,7 +10,8 @@ const config = {
     "@storybook/addon-vitest",
     "@storybook/addon-a11y",
     "@storybook/addon-docs",
-    "@storybook/addon-mcp"
+    "@storybook/addon-mcp",
+    "storybook-addon-tag-badges"
   ],
   "framework": "@storybook/html-vite",
   // A regenerated catalog changes the State options, so the preview reloads instead of patching.

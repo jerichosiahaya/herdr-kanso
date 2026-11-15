@@ -26,10 +26,12 @@ the branch's rules.
 
 ### Added
 
+- Settings in the sidebar footer opens one menu: kansō settings, with its key, and Herdr settings. When Herdr has an update waiting, the menu offers it as a third row; the first press arms it and the second restarts Herdr into it. (#241)
 - Cmd+Shift+Up and Cmd+Shift+Down go to the agent above or below in the sidebar, across tabs and projects; Cmd+Shift+Left and Cmd+Shift+Right go back and forward through the agents you visited, as in a browser. On Windows, Ctrl+Shift with the arrows.
 
 ### Changed
 
+- The sidebar footer follows the new design: kansō's update row while one is ready (a beta is named by its build), Settings and Add computer, and in the collapsed sidebar the same as squares. A pressed update turns quiet at once; a refused one keeps its row and shows the tool's words under it, with Update to try again. The account chip is gone; Herdr settings are in the Settings menu. (#241)
 - The status bar says only what is out of sight: the computer while the sidebar is folded or while it can't be reached, with Refresh; who waits and what they ask, with how many more; low memory; and, while agents work, the working mark and how many, which opens Status. The branch moves off the bar to the pane header and the sidebar, the idle and No agents words are gone, and the palette is an icon with its key in the tooltip. (#235)
 - Sidebar sessions are drawn by the same session row as the Storybook. The name glints while the agent works, and a sub-session hangs from its parent by tree guides. The time sits at the end of the first line, and how long it has been on a step follows the activity. Pin, the menu, Settle, Refresh, dragging, double-click to rename and the right-click menu work as before. (#279)
 - The pane header is quieter: focus is its ground alone, an agent waiting for you is its wash and mark without words, the header itself is what you drag, and under the pointer it shows split right, wider or narrower, close and ⋯, which holds pin, sleep, send, open with, split down and zoom. Folder and branch show only where they differ from the project, the pull request has no dot, a narrow pane folds the header in order instead of crowding it, a double-click renames the pane in place, close asks twice while an agent is in the pane, and GitHub not answering says Can't read with Refresh. (#234)
@@ -39,6 +41,7 @@ the branch's rules.
 - Each mod carries only the pieces of the panel kit it uses, so a change to one piece reaches only the mods that draw it. (#276)
 - Storybook draws the keyboard for Mac, Windows and Linux from kansō's own keys; notifications from what happened, where it belongs and where you are, with every notice the app sends today; and the pane header, panel shell, status bar, edges, tab bar and activity from their states, each with every state by name. Dawn Mode's sky keeps its dawn colours in the light theme, and design changes carry a hypothesis written from today's app.
 - The Containers panel asks Docker only what can have changed: the container list every 5 seconds, their details when it changes, images, volumes and disk use once a minute, after an action and when a container appears or goes, and Docker's memory limit and context when the panel opens or comes forward, on Read again, when Docker comes back and when another context is chosen. About a quarter as many processes while it is open. (#263)
+- In Storybook, a panel is only its container and its heading its own piece, a page or a bar with only the title required; the sidebar's tools follow the app, with + named for each view, Sort quiet at its default and its menu per view, and the collapsed sidebar headed by Herdr's mark, with Sort and Search under a caret. Pages in review are marked again in Storybook's sidebar.
 - Draw the missing Worktrees, Preview, Markdown and Simulator feature states in Storybook.
 - Draw the missing Share, Shipped, Containers, Ports, Find, Images and Files states in Storybook.
 - In Storybook, Arrangements without sqlite3 reads "No arrangement yet." with one line saying what to install, Save and Overwrite show how programs are kept, and Images with no agent to send to says so on one line above its actions, as the app does.
@@ -62,6 +65,7 @@ the branch's rules.
 
 ### Fixed
 
+- A long computer name on the status bar trims with an ellipsis instead of keeping its full width.
 - In the collapsed sidebar, a group's state mark and the marks in its menu are drawn at the kit's small and row sizes, 12px and 14px, instead of one pixel smaller. (#277)
 - An agent's state mark in the tab bar, the header strip and beside the sidebar's sleeping conversations is 14px, the size of every other icon in a row, instead of one pixel smaller. (#267)
 - Tab groups match their design: the chosen tab is raised on a track of the lightest text wash with no tint, another tab under the pointer takes a light wash and brightens its label, and quiet buttons use the muted text colour. (#266)
