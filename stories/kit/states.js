@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { avatar, button, card, chip, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { avatar, button, card, chip, code, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -328,6 +328,17 @@ export const statedPages = {
       { label: 'With a picture', args: { picture: 'a picture' }, caption: 'The author’s picture in place of the initial.' },
       { label: 'A long comment', args: { body: 'Should the bucket key include the plan? A customer who upgrades mid-window keeps the old limit until the window rolls over, and support hears about it first.' }, caption: 'The body wraps; the header stays one line.' },
       { label: 'Loading', args: { loading: true }, caption: 'One skeleton in the card’s place and size.' },
+    ],
+  },
+  'Primitives/Code': {
+    args: { text: 'export function bucket(customer) {\n  const plan = planOf(customer);\n  return { plan, tokens: LIMIT[plan] };', kind: 'source', first: 11, line: 12, comment: 0 },
+    markup: (args) => stack({ variant: 'panel' }, code(args)),
+    states: [
+      { label: 'Snippet', args: {}, caption: 'A comment quotes three lines; the one it talks about is lit.' },
+      { label: 'Source', args: { text: 'import { planOf } from \"./plans\";\n\nconst LIMIT = { free: 40, pro: 400 };\nconst REFILL_MS = 2000;\n\nexport function bucket(customer) {\n  const plan = planOf(customer);\n  return { plan, tokens: LIMIT[plan] };\n}', first: 1, line: 7 }, caption: 'A file: dim numbers, keywords, strings and numbers in their colours, the caret line lit.' },
+      { label: 'Diff', args: { text: '@@ -14,3 +14,7 @@ app.post(\"/checkout\", (req, res) => {\n   const customer = req.user.id;\n-  const b = buckets.get(customer);\n+  const b = bucket(customer);\n+  if (b.tokens < 1) {\n+    res.set(\"Retry-After\", retryAfter(b));\n+    return res.status(429).end();\n+  }', kind: 'diff', first: 14, line: 0 }, caption: 'Numbered as git counts: a hunk restarts at its start, a deleted line has no number.' },
+      { label: 'Diff, commenting', args: { text: '@@ -14,3 +14,7 @@ app.post(\"/checkout\", (req, res) => {\n   const customer = req.user.id;\n-  const b = buckets.get(customer);\n+  const b = bucket(customer);\n+  if (b.tokens < 1) {\n+    res.set(\"Retry-After\", retryAfter(b));\n+    return res.status(429).end();\n+  }', kind: 'diff', first: 14, line: 16, comment: 16 }, caption: 'The + in a line’s gutter comments on it.' },
+      { label: 'Log', args: { text: ' FAIL  src/api/limits.test.ts > refills after 2 s\nAssertionError: expected 39 to be 40\n ❯ src/api/limits.test.ts:42:18\n    41|   const b = bucket(\"c1\")\n  > 42|   expect(b.tokens).toBe(40)\n      Tests  1 failed | 47 passed (48)', kind: 'log', first: 1, line: 0 }, caption: 'The tool’s words in order; only failure lines turn blocked.' },
     ],
   },
   'Primitives/Mark': {

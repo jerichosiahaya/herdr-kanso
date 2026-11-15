@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms, paneRightClicks, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, code, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
+import { avatarSizes, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
@@ -69,14 +69,14 @@ export const playgrounds = {
     },
   },
   'Primitives/Code': {
-    args: { text: 'export function bucket(customer) {\n  const plan = planOf(customer);\n  return { plan, tokens: LIMIT[plan] };\n}', kind: 'source', first: 11, line: 12 },
+    ...statedPages['Primitives/Code'],
     argTypes: {
       text: text('Code'),
       kind: select('Kind', ['source', 'diff', 'snippet', 'log']),
       first: { name: 'First line', control: { type: 'number', min: 1 } },
       line: { name: 'Highlighted line', control: { type: 'number', min: 0 } },
+      comment: { name: 'Commenting on line', control: { type: 'number', min: 0 } },
     },
-    markup: (args) => `<div class="kanso-panel">${code(args)}</div>`,
   },
   'Primitives/Dialog': {
     ...statedPages['Primitives/Dialog'],
