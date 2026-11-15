@@ -224,6 +224,10 @@
 .kanso-metric__value{font-size:var(--k-fs-display);font-weight:var(--k-fw-regular);line-height:1;letter-spacing:-.03em;color:var(--fg)}
 .kanso-metric .kanso-metric__unit{font-size:var(--k-fs-meta);color:var(--dim)}
 .kanso-metric--sm{flex:none;margin-top:0;white-space:nowrap}
+.kanso-metric--beside{align-items:center}
+.kanso-metric__beside{display:flex;flex-direction:column;gap:var(--k-sp-1);min-width:0}
+.kanso-metric .kanso-metric__beside .kanso-metric__unit{font-size:var(--k-fs-name);color:var(--fg)}
+.kanso-metric__second{font-size:var(--k-fs-meta);color:var(--dim)}
 .kanso-metric--sm .kanso-metric__value{font-size:var(--k-fs-title)}
 .kanso-panel__facts{display:flex;flex-wrap:wrap;gap:var(--k-sp-2);margin-top:var(--k-sp-2);font-size:var(--k-fs-body);color:var(--muted)}
 

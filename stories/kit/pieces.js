@@ -159,11 +159,13 @@ const menuEntry = (item) => item.separator ? '<div class="kanso-menu__separator"
 export const menu = ({ title, items }) => `<div class="kanso-menu kanso-popover" role="menu">${title ? menuHeading(title) : ''}${(Array.isArray(items) ? items : []).map(menuEntry).join('')}</div>`;
 
 // `size` sm is the value at title size, on one line at row width.
-// `tone` puts the value in a state's ink (low free memory).
-export const metric = ({ value, unit, facts = '', loading = false, size = 'md', tone = '' }) => {
+// `tone` puts the value in a state's ink (low free memory); a `second` line sits under the unit, both beside the value, and takes the tone too.
+export const metric = ({ value, unit, second = '', facts = '', loading = false, size = 'md', tone = '' }) => {
   const piece = (text, element) => `<span class="${element}${loading ? ' kanso-skeleton--shape kanso-skeleton--text' : ''}">${escape(text)}</span>`;
   const list = facts.split('|').map((fact) => fact.trim()).filter(Boolean);
-  return `<div class="kanso-metric${size === 'sm' ? ' kanso-metric--sm' : ''}">${piece(value, `kanso-metric__value${tone ? ` kanso-text--${escape(tone)}` : ''}`)}${unit ? piece(unit, 'kanso-metric__unit') : ''}</div>`
+  const ink = tone ? ` kanso-text--${escape(tone)}` : '';
+  const beside = second ? `<span class="kanso-metric__beside">${piece(unit, 'kanso-metric__unit')}${piece(second, `kanso-metric__second${ink}`)}</span>` : unit ? piece(unit, 'kanso-metric__unit') : '';
+  return `<div class="kanso-metric${size === 'sm' ? ' kanso-metric--sm' : ''}${second ? ' kanso-metric--beside' : ''}">${piece(value, `kanso-metric__value${ink}`)}${beside}</div>`
     + (list.length ? `<div class="kanso-panel__facts">${list.map((fact) => loading ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(fact)}</span>` : `<span>${escape(fact)}</span>`).join('')}</div>` : '');
 };
 

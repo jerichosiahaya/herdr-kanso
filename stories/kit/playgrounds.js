@@ -155,12 +155,13 @@ export const playgrounds = {
     },
   },
   'Primitives/Metric': {
-    args: { value: '31%', unit: 'free of 16 GB · 2.4 GB swap', facts: '14 tasks | $2.94 a task | 9.1M tokens', loading: false, size: 'md', tone: 'none' },
+    args: { value: '31%', unit: 'free of 16 GB · 2.4 GB swap', second: '', facts: '14 tasks | $2.94 a task | 9.1M tokens', loading: false, size: 'md', tone: 'none' },
     argTypes: {
       size: select('size', ['md', 'sm']),
       tone: select('tone', ['none', ...Object.values(levels)]),
       value: text('Value'),
       unit: text('Unit'),
+      second: text('Second line'),
       facts: text('Facts (separated by |)'),
       loading: flag('Loading'),
     },
