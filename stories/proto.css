@@ -177,7 +177,7 @@
     linear-gradient(var(--fg),var(--fg)),linear-gradient(var(--muted),var(--muted));
   background-size:44px 100%,26px 100%,12px 100%,100% 100%}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
-.kanso-status-bar .kanso-state-line{flex:none}
+.kanso-status-bar .kanso-state-line{flex:0 1 auto}
 .kanso-status-bar .kanso-state-line>.kanso-button--tonal{margin-left:var(--k-sp-1)}
 @media (prefers-reduced-motion:reduce){.kanso-text--glint{animation:none;color:var(--muted);background:none}}
 .kanso-state-block{display:grid;grid-template-columns:var(--k-ic-row) minmax(0,1fr);column-gap:var(--k-sp-2);row-gap:var(--k-sp-1);padding:var(--k-sp-3);border-radius:var(--k-r-card);box-shadow:inset 0 0 0 1px var(--blocked);box-sizing:border-box;text-align:left}

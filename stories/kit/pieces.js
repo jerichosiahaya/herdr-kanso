@@ -290,8 +290,8 @@ const inlineIcon = (name) => `<svg class="kanso-icon kanso-icon--inline"><use hr
 export const statusItem = ({ icon = '', mark: status = '', text = '', tone = '', pending = false, open = false } = {}) => `<span class="kanso-status-bar__item${tone ? ` kanso-text--${escape(tone)}` : ''}${pending ? ' kanso-state-line--pending' : ''}${open ? ' kanso-status-bar__item--open' : ''}">`
   + `${status ? mark({ status, size: 'sm' }) : icon ? inlineIcon(icon) : ''}${text === '' || text === null ? '' : `<span>${escape(String(text))}</span>`}${pending ? '<i class="kanso-state-line__pending-dot"></i>' : ''}</span>`;
 
-// The failure pattern on a bar: the blocked mark, our words, one small quiet fix.
-export const failureLine = ({ text, fix, detail = '' }) => `<span class="kanso-state-line"${detail ? ` title="${escape(detail)}"` : ''}>${mark({ status: 'blocked' })}${escape(text)}${button({ label: fix, kind: 'quiet', size: 'sm' })}</span>`;
+// The failure pattern on a bar: the blocked mark, our words that truncate first, one small tonal fix that stays.
+export const failureLine = ({ text, fix, detail = '' }) => `<span class="kanso-state-line"${detail ? ` title="${escape(detail)}"` : ''}>${mark({ status: 'blocked' })}<span class="kanso-text--truncate">${escape(text)}</span>${button({ label: fix, kind: 'tonal', size: 'sm' })}</span>`;
 // The failure pattern in a panel, where the list would start: our words, the source's words, the fix, then Explain.
 export const failureBlock = ({ text, source = '', fix, agent = '' }) => `<div class="kanso-state-block" role="alert">${mark({ status: 'blocked' })}<div class="kanso-state-block__what">${escape(text)}</div>`
   + `${source ? `<div class="kanso-state-block__why" title="${escape(source)}">${escape(source)}</div>` : ''}<div class="kanso-state-block__actions">${button({ label: fix, kind: 'solid' })}${agent ? explainButton({ agent }) : ''}</div></div>`;
