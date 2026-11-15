@@ -328,7 +328,8 @@ export const keyPicked = ({ chord, meaning = null, layer = null, actions = [] })
   + `${list(actions) ? `<div class="kanso-actions">${list(actions)}</div>` : ''}</div>`;
 
 // Pane header pieces: one fact per segment, its parts each in their own tone; `act` opens the fact's home.
-export const headerSegment = ({ parts = [], icon = null, tone = null, title = null, act = false }) => `<span class="kanso-pane-header__segment${act ? ' kanso-pane-header__segment--act' : ''}${tone ? ` kanso-text--${escape(tone)}` : ''}"`
+// An `open` segment anchors the right-click Menu over it.
+export const headerSegment = ({ parts = [], icon = null, tone = null, title = null, act = false, open = false }) => `<span class="kanso-pane-header__segment${act ? ' kanso-pane-header__segment--act' : ''}${open ? ' kanso-pane-header__segment--open' : ''}${tone ? ` kanso-text--${escape(tone)}` : ''}"`
   + `${act ? ' role="button" tabindex="0"' : ''}${title ? ` title="${escape(title)}"` : ''}>${icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(icon)}"/></svg>` : ''}`
   + `${parts.filter(Boolean).map(({ text, tone: ink }) => `<span${ink ? ` class="kanso-text--${escape(ink)}"` : ''}>${escape(text)}</span>`).join('')}</span>`;
 export const paneName = ({ name }) => `<span class="kanso-pane-header__name">${escape(name)}</span>`;

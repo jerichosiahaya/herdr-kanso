@@ -50,6 +50,7 @@
     "avatar": { "storybook": ["round"] },
     "button": { "storybook": ["label"], "app": ["color", "small", "spoken"] },
     "chip": { "storybook": ["pill"] },
+    "headerSegment": { "storybook": ["open"] },
     "input": { "storybook": ["action", "choose", "count", "focus", "lead", "limit", "loading", "multiline", "selected", "text", "tools"], "app": ["iconTip", "onIcon", "spoken"] },
     "keyHint": { "app": ["font"] },
     "needsItem": { "storybook": ["open"], "app": ["onClick", "tip"] },
