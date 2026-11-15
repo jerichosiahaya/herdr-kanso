@@ -78,7 +78,7 @@ const primitive = {
   ButtonsFourKinds: null, ButtonsOnALine: null, ActionRows: null, ButtonWithAMark: null, Armed: null,
   FocusRing: null, HoverSelectedPressed: null, Tooltip: 'Tooltip', ChromeAndBarButtons: null,
   FileRow: 'Row', PortRow: 'Row', RowActions: 'Row', SettingRow: 'Row', SettingRowWithAValue: 'Row', FindRow: 'Row',
-  Card: 'Card', Metric: 'Metric', ThumbnailStrip: 'Thumbnail', SkeletonTwoLines: 'Skeleton', Loading: 'Skeleton',
+  Card: null, Metric: 'Metric', ThumbnailStrip: 'Thumbnail', SkeletonTwoLines: 'Skeleton', Loading: 'Skeleton',
   Toast: 'Toast', ToastWithItsSource: 'Toast', Snippet: 'Code', Reply: 'Markdown', Picture: 'Thumbnail',
 };
 // The panel pieces drawn on their own panel's page.

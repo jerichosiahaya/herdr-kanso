@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms, paneRightClicks, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, button, card, code, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
+import { avatarSizes, code, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
@@ -654,15 +654,14 @@ export const playgrounds = {
     markup: tooltip,
   },
   'Primitives/Card': {
-    args: { author: 'sam', image: '', age: '1h', body: 'Batches of 50, flushed every 2 s.', loading: false },
+    ...statedPages['Primitives/Card'],
     argTypes: {
       author: text('Author'),
-      image: text('Image URL'),
+      picture: select('picture', Object.keys(avatarPictures)),
       age: text('Age'),
       body: text('Body'),
       loading: flag('Loading'),
     },
-    markup: (args) => `<div class="kanso-panel">${card(args)}</div>`,
   },
   ...panelPlaygrounds,
 };
