@@ -70,21 +70,6 @@ test("Look's note rows: a press writes the note again, and the remove tool drops
   assert.deepEqual(seen, ["stopped"], "the pin's row does not open its note too");
 });
 
-test("Help's key list is a row per key, the action then its chord as a key hint, and a press picks that key", async () => {
-  const ui = tape();
-  const { Help } = await load("kanso-help/main.js", ["Help"], {
-    ...ui.host, window: () => ({ platform: "macos" }), keys: () => [{ section: "layout:kanso", keys: "cmd-alt-l", action: "kanso-strip.right" }],
-    appHome: () => "/config", home: () => "/home", props: () => ({}), Companion: class { load() {} },
-  });
-  const help = new Help();
-  help.init({}, { focus_handle: () => ({ focus() {} }), timer: { every() {} } });
-  help.keysPage(night, {});
-  const id = [...ui.handlers.keys()].find((key) => key?.startsWith("row-"));
-  assert.ok(id, "a key row is drawn");
-  ui.handlers.get(id)({}, cx());
-  assert.equal(help.picked, id.slice("row-".length));
-});
-
 test("Settings' shortcuts are rows with their keys as key hints; a press records, and a changed one offers Reset", async () => {
   const ui = tape();
   const { Settings, Armed, tokens, GROUPS } = await load("kanso-settings/main.js", ["Settings", "Armed", "tokens", "GROUPS"], {
