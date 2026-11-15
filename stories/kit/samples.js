@@ -186,6 +186,9 @@ export const sampleEditors = {
 };
 // Open with on a remote folder: each editor as its app's picture or letter; one that cannot open a remote folder only says so.
 export const sampleApps = [{ label: 'Cursor', letter: 'C', tone: 'blue' }, { label: 'Zed', letter: 'Z', tone: 'teal' }, { label: 'Xcode', letter: 'X', tone: 'violet', disabled: true, hint: 'local only' }];
+// A pull request's label picker, and Spend's project chooser: a second line and a fact each.
+export const sampleLabels = [{ label: 'bug', dot: 'blocked', second: 'Something is not working', checked: true }, { label: 'checkout', dot: 'done', second: 'The payments flow', checked: true }, { label: 'enhancement', dot: 'blue', second: 'A new feature or request' }, { label: 'docs', dot: 'violet', second: 'Words, not code' }, { label: 'later', dot: 'dim', second: 'Not this release' }];
+export const sampleChoices = [{ label: 'acme-shop', second: '3 models', hint: '$4.12', checked: true }, { label: 'docs-site', second: '1 model', hint: '$0.80' }, { label: 'reports', second: '2 models', hint: '$1.94' }];
 // Every project, more than a menu shows at once.
 export const sampleProjectRun = ['acme-shop', 'docs-site', 'reports', 'kansō', 'site', 'dojo', 'api', 'mobile'];
 export const sampleTargetsOpened = { file: 'src/session.ts', folder: '~/acme', picture: 'screenshot.png', remote: 'devbox: ~/acme/src/session.ts' };

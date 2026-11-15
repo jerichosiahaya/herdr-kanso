@@ -11,6 +11,8 @@ export const phrase = (...parts) => parts.join(' ');
 export const chord = (join, ...parts) => parts.join(join ?? '');
 
 export const grow = (inner = '') => `<span class="kanso-layout__grow">${inner}</span>`;
+// A colour as a dot: a level, or a label's own colour.
+export const dot = (tone) => `<i class="kanso-dot kanso-fill--${escape(tone)}"></i>`;
 
 // Atoms
 
@@ -106,18 +108,21 @@ export const markdown = ({ source, block, state }) => `<div class="kanso-markdow
 
 // A heading's `mark` sits at its right, the state of what it names; a `failure` item is the failure pattern in the menu's place.
 const menuHeading = (text, status) => `<div class="kanso-menu__heading">${status ? `${grow(escape(text))}${mark({ status, size: 'sm' })}` : escape(text)}</div>`;
-// An item leads with its icon, or an app's picture or letter as a tile; a `disabled` item is dim and does nothing.
+// An item leads with its icon, a colour `dot`, or an app's picture or letter as a tile; a `disabled` item is dim and does nothing.
 const menuLead = (item) => item.picture || item.letter ? avatar({ initial: item.letter ?? '', image: item.picture, size: 'sm', tone: item.tone, round: false })
-  : item.icon ? glyph(item.icon) : '<span class="kanso-menu__spacer"></span>';
+  : item.dot ? `<span class="kanso-menu__spacer">${dot(item.dot)}</span>` : item.icon ? glyph(item.icon) : '<span class="kanso-menu__spacer"></span>';
+// The label, with its `second` line under it; armed, the label takes the hint's room.
+const menuLabel = (label, second) => grow(second ? `<span class="kanso-menu__label">${label}</span><span class="kanso-menu__second">${escape(second)}</span>` : label);
 const menuItem = (item) => {
-  const classes = `kanso-menu__item${item.armed ? ' kanso-action--armed' : item.selected ? ' kanso-control--selected' : ''}${item.disabled ? ' kanso-control--off' : ''}`;
+  const classes = `kanso-menu__item${item.second ? ' kanso-menu__item--two-lines' : ''}${item.armed ? ' kanso-action--armed' : item.selected ? ' kanso-control--selected' : ''}${item.disabled ? ' kanso-control--off' : ''}`;
   const label = item.armed ? `Press again to ${escape(item.verb || String(item.label ?? '').toLowerCase())}` : escape(item.label ?? '');
-  return `<div class="${classes}" role="menuitem" tabindex="${item.disabled ? -1 : 0}"${item.disabled ? ' aria-disabled="true"' : ''}>${menuLead(item)}${grow(label)}`
+  return `<div class="${classes}" role="menuitem" tabindex="${item.disabled ? -1 : 0}"${item.disabled ? ' aria-disabled="true"' : ''}${item.checked === undefined ? '' : ` aria-checked="${item.checked}"`}>${menuLead(item)}${menuLabel(label, item.second)}`
     + (item.badge ? `<span class="kanso-menu__badge">${escape(item.badge)}</span>` : '')
-    + (item.hint ? `<span class="kanso-menu__hint">${escape(item.hint)}</span>` : '') + (item.mark ? mark({ status: item.mark }) : '') + '</div>';
+    + (item.hint && !item.armed ? `<span class="kanso-menu__hint">${escape(item.hint)}</span>` : '') + (item.mark ? mark({ status: item.mark }) : '') + (item.checked ? glyph('lu-check') : '') + '</div>';
 };
-// A `scroll` run shows `rows` items, the rest scroll inside the menu.
+// A `scroll` run shows `rows` items, the rest scroll inside the menu; a `field` finds in it.
 const menuEntry = (item) => item.separator ? '<div class="kanso-menu__separator"></div>'
+  : item.field ? `<div class="kanso-menu__field">${input({ label: item.field, icon: 'lu-search' })}</div>`
   : item.failure ? failureBlock(item.failure)
   : item.heading ? menuHeading(item.heading, item.mark)
   : item.scroll ? `<div class="kanso-menu__scroll" style="--k-rows:${Number(item.rows ?? 4)}">${item.scroll.map(menuEntry).join('')}</div>`
@@ -193,7 +198,7 @@ export const thumbnail = ({ image, label, selected, loading }) => `<span class="
 export const levels = { error: 'blocked', warning: 'working', success: 'done', info: 'accent' };
 const lead = (level) => level === 'error' ? mark({ status: 'blocked' })
   : level === 'success' ? glyph('lu-check', levels.success)
-  : `<i class="kanso-toast__dot kanso-fill--${levels[level]}"></i>`;
+  : dot(levels[level]);
 // `mark` stands in for the level's mark; `tone` colours an icon apart from the level; `detail` is the tool's words, in the tooltip.
 export const toast = ({ level = 'info', icon = 'none', title, body, action, explain, mark: status, tone, detail }) => {
   const fix = action ? button({ label: action, kind: 'tonal', size: 'sm' }) : '';

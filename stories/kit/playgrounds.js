@@ -138,6 +138,8 @@ export const playgrounds = {
       title: text('title'),
       values: flag('items with values'),
       apps: { ...flag('apps with their pictures'), if: { arg: 'values', truthy: false } },
+      picker: { ...flag('a picker with a field'), if: { arg: 'values', truthy: false } },
+      choices: { ...flag('choices on two lines'), if: { arg: 'values', truthy: false } },
       headings: { ...flag('groups with headings'), if: { arg: 'values', truthy: false } },
       run: flag('a run that scrolls'),
       keys: { ...flag('keyboard on an item'), if: { arg: 'values', truthy: false } },

@@ -3,7 +3,7 @@ import { addComputer, agentMenu, paneMenu, computerMenu, projectMenu, settingsMe
 import { dialog, emptyState, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
 import { panelPages } from './panel-states.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleProjectRun, sampleArrangements, sampleAsleep, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
@@ -150,9 +150,10 @@ const lookedItems = (on) => menuItems.map((item, at) => Object.entries(itemLooks
 const grouped = (items) => [{ heading: 'This worktree' }, ...items.slice(0, 2), { separator: true }, { heading: 'Show' }, ...items.slice(3)];
 const menuRefusal = { text: "Can't read this worktree", source: 'fatal: not a git repository', fix: 'Refresh', agent: sampleAgent };
 const runOf = (items) => [...items.slice(0, 2), { separator: true }, { heading: 'Move to project' }, { scroll: sampleProjectRun.map((label) => ({ label, icon: 'lu-folder' })), rows: 4 }];
-const menuOf = ({ title, values, apps, headings, run, reading, refused, titleMark, ...on }) => {
+const pickerOf = () => [{ field: 'Find a label' }, { scroll: sampleLabels, rows: 4 }];
+const menuOf = ({ title, values, apps, picker, choices, headings, run, reading, refused, titleMark, ...on }) => {
   const actions = lookedItems(on);
-  const listed = values ? sampleSnooze.map(([label, hint]) => ({ label, hint })) : apps ? sampleApps : headings ? grouped(actions) : actions;
+  const listed = values ? sampleSnooze.map(([label, hint]) => ({ label, hint })) : apps ? sampleApps : picker ? pickerOf() : choices ? sampleChoices : headings ? grouped(actions) : actions;
   const items = run ? runOf(listed) : listed;
   const read = reading ? [{ loading: true }, { loading: true }, ...items.slice(2)] : items;
   const body = refused ? [{ failure: menuRefusal }, ...read.slice(2)] : read;
@@ -230,7 +231,7 @@ export const statedPages = {
     ],
   },
   'Primitives/Menu': {
-    args: { title: 'src/api/checkout.ts', values: false, apps: false, headings: false, run: false, keys: false, armed: false, badge: false, mark: false, titleMark: 'none', reading: false, refused: false },
+    args: { title: 'src/api/checkout.ts', values: false, apps: false, picker: false, choices: false, headings: false, run: false, keys: false, armed: false, badge: false, mark: false, titleMark: 'none', reading: false, refused: false },
     markup: menuOf,
     states: [
       { label: 'At rest', args: {}, caption: 'A title, items with their icons, a rule between groups.' },
@@ -239,6 +240,8 @@ export const statedPages = {
       { label: 'Values', args: { title: 'Snooze checkout', values: true }, caption: 'Each item with the value it gives.' },
       { label: 'Headings', args: { headings: true }, caption: 'A dim heading names a group.' },
       { label: 'A run that scrolls', args: { run: true }, caption: 'A long run shows four, the rest scroll inside the menu.' },
+      { label: 'A picker', args: { title: 'Labels', picker: true }, caption: 'A field finds in the list; each item toggles with a check, its colour and its second line.' },
+      { label: 'Two lines', args: { title: 'Project', choices: true }, caption: 'Each choice with its second line and its fact; the chosen one checked.' },
       { label: 'Pictures', args: { title: 'Open with · devbox: ~/acme', apps: true }, caption: 'Each app as its own picture or letter; one that cannot do it here is dim and says why.' },
       { label: 'A badge', args: { badge: true }, caption: 'How many, on the item they belong to.' },
       { label: 'A mark', args: { mark: true }, caption: 'The state of the thing the item opens.' },

@@ -304,6 +304,7 @@ export const guidelines = {
     ["Seijaku", "One menu.", "252 wide, radius 8, popover ground. Items 30 with icon 14, the key hint or value dim at the right, the heading dim, a rule between groups."],
     ["Shizen", "Read in place.", "An item still being read breathes as a skeleton in its place; the rest of the menu is there at once."],
     ["Seijaku", "A long run scrolls in place.", "Past four items a run scrolls inside the menu; the items around it stay. An app leads with its own picture or letter; one that cannot act here is dim, says why at the right and does nothing."],
+    ["Seijaku", "A picker is still a menu.", "A field on top finds in the list; an item toggles with a check at the right, may lead with its colour and carry a second line, dim. A choice with a fact keeps it at the right."],
     ["Kansō", "Only actions for the item in focus.", "Every right-click, + and panel menu is this menu with its own items; none draws its own."],
     ["Kansō", "Armed for what cannot be undone.", "The item fills with accent and reads \"Press again to …\" for 4 s."],
     ["Kokō", "A refusal stays in the menu.", "What the menu could not read is the failure pattern in its place: our words, the tool's words, the fix, Explain; the items that need nothing stay. The title's Mark says the state of what the menu is about."],
