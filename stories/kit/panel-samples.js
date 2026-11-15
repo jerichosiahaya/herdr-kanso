@@ -473,3 +473,69 @@ export const samplePullPages = {
   labels: [{ name: 'api', dot: 'blue' }, { name: 'rate-limit', dot: 'violet' }, { name: 'bug', second: 'Something isn’t working', dot: 'blocked' }, { name: 'docs', dot: 'working' }],
   notes: { first: 'First 100 of 132', none: 'Nobody with access matches', offline: 'GitHub not answering. 2 changes wait.', noLabels: 'This repository has no labels', truncated: 'More people have access than are listed here' },
 };
+
+// Worktrees: 2.4 GB in 9 worktrees over acme-shop, relay and one left behind; promo-banner holds uncommitted work.
+// `verdict` is the row's fact, toned when something is wrong; `reason` is what removing it does; `kind` picks its verbs.
+const tree = (name, size, verdict, extra = {}) => ({ name, size, verdict, path: `~/.kanso/worktrees/acme-shop/${name}`, ...extra });
+const kept = (text) => ({ text });
+const loses = (text) => ({ text, tone: 'blocked' });
+const worktreeVerdicts = {
+  changes: tree('promo-banner', '380 MB', loses('2 uncommitted changes'), { age: '6d', reason: loses('Loses src/web/Banner.tsx and src/web/promo.css, not committed.') }),
+  open: tree('acme-shop-cart', '310 MB', { text: 'In a tab: cart-ui', tone: 'working' }, { kind: 'open', branch: 'cart-retry', age: 'today', tab: 'cart-ui', path: '~/acme-shop-cart' }),
+  broken: tree('checkout-spike', '96 MB', { text: 'Its link to acme-shop is broken', tone: 'working' }, { kind: 'broken' }),
+  merged: tree('rate-limit-v1', '412 MB', kept('Merged'), { age: '3d', reason: kept('Nothing is lost. Branch rate-limit-v1 goes too: its work is in develop.') }),
+  unmerged: tree('old-cart', '290 MB', kept('Not merged, 3 commits stay on its branch'), { age: '12d', reason: kept('Nothing is lost. Branch old-cart stays with its 3 commits.') }),
+  detached: tree('a82f9c1', '180 MB', kept('Detached, its commits are on branches'), { age: '9d', reason: kept('Nothing is lost.') }),
+  lost: tree('a17e0d4', '210 MB', loses('2 commits only here'), { age: '4d', reason: loses('Loses 2 commits no branch has.') }),
+  locked: tree('release-2-4', '520 MB', kept('Locked'), { kind: 'held', branch: 'release/2.4', reason: kept('Run git worktree unlock to remove it.') }),
+  recent: tree('search-facets', '240 MB', { text: 'In use today', tone: 'working' }, { age: 'today', reason: kept('Nothing is lost. Branch search-facets stays. Clean up and Remove all leave it alone.') }),
+  checking: tree('cart-retry-2', '300 MB', kept('Checking'), { kind: 'held', reason: kept('As the last scan saw it. Checking it again before it can be removed.') }),
+  missing: tree('feat-banner', '', kept('Folder gone'), { kind: 'record', reason: kept('Its folder is already gone; only git’s record of it is removed.') }),
+  replaced: tree('docs-v2', '', kept('Folder reused'), { kind: 'record', reason: kept('Its folder is now a repository of its own and stays as it is; only the old worktree record is removed.') }),
+  orphan: tree('billing-tax', '640 MB', kept('Its repository moved or was deleted'), { path: '~/.kanso/worktrees/billing/billing-tax', reason: loses('The folder is deleted. Its repository moved or was deleted, so git cannot say what is in it.') }),
+};
+const repo = (name, size, rows, extra = {}) => ({ name, size, rows, ...extra });
+const { open, changes, merged, unmerged, orphan } = worktreeVerdicts;
+const relayHotfix = { ...merged, name: 'relay-hotfix', size: '120 MB', age: '9d', reason: kept('Nothing is lost. Branch relay-hotfix goes too: its work is in main.') };
+export const sampleWorktrees = {
+  verdicts: worktreeVerdicts,
+  total: { value: '2.4 GB', unit: 'in 9 worktrees', narrow: 'in 9' },
+  plan: { count: 3, size: '1.1 GB', names: 'rate-limit-v1, relay-hotfix and one more. Merged branches go too.' },
+  space: ['Scanned 14:02', '3 can go, 1.1 GB', '1 needs a look, 380 MB', '1 in use, 310 MB', '1 left behind, 640 MB'],
+  repos: [
+    repo('acme-shop', '1.6 GB', [open, changes, merged, unmerged], { more: 2, all: 3, losses: loses('Loses 2 uncommitted changes in promo-banner. Merged branches go too.') }),
+    repo('relay', '120 MB', [relayHotfix], { losses: kept('Nothing is lost. Merged branches go too.') }),
+  ],
+  left: repo('Left behind', '640 MB', [orphan], { prune: 'Prune 2 records of folders already gone' }),
+  many: [repo('billing', '210 MB', [{ ...merged, name: 'tax-rates-v2', size: '210 MB' }]), repo('search', '96 MB', [{ ...unmerged, name: 'fuzzy-old', size: '96 MB' }])],
+  hidden: 3,
+  relay: repo('relay', '320 MB', [relayHotfix, { ...relayHotfix, name: 'relay-batch-old', size: '200 MB' }], { all: 2, losses: kept('Nothing is lost. Merged branches go too.') }),
+  freed: {
+    fold: { name: 'Freed since 2 Oct', meta: '12.4 GB' },
+    ranges: [{ key: 'freed', label: 'Freed' }, { key: 'held', label: 'On disk' }],
+    most: 'best 3.1 GB · Oct 28',
+    bars: [0, 0.1, 0, 0, 0.4, 0, 0.05, 0, 0, 0.2, 0, 0, 0, 0.6, 0, 0, 0.1, 0, 0, 0, 0.3, 1, 0, 0, 0.15, 0, 0, 0.25, 0, 0.05],
+    peak: 21,
+    ticks: ['Oct 15', 'Today'],
+    summary: ['31 removed', '12 branches deleted', '4 leftovers', '1.2 GB outside kansō'],
+  },
+  held: { most: 'most 3.4 GB · Nov 2', bars: [0.5, 0.52, 0.55, 0.6, 0.62, 0.7, 0.68, 0.75, 0.8, 0.85, 1, 0.9, 0.7, 0.72, 0.74, 0.7, 0.68, 0.71, 0.73, 0.75, 0.7, 0.72, 0.74, 0.7, 0.68, 0.7, 0.72, 0.71, 0.7, 0.71], peak: 10 },
+  never: { fold: { name: 'Freed', meta: null }, summary: ['Nothing freed yet'] },
+  phases: { first: 'Reading 14 repositories', checking: 'Checking 12 of 40', cleaning: 'Removing 2 of 3' },
+  failure: { text: 'Can’t list worktrees', source: 'git worktree list: timed out after 30 s', fix: 'Refresh', agent: 'checkout' },
+  refused: { text: 'Couldn’t remove old-cart', source: 'git: ‘old-cart’ contains modified or untracked files, use --force to delete it', fix: 'Remove', agent: 'checkout' },
+  several: { text: '2 not removed', source: 'feat-banner: It is a worktree again; refresh', fix: 'Refresh', agent: 'checkout' },
+  repair: { text: 'Can’t repair checkout-spike', source: 'git still can’t read it', fix: 'Repair the link', agent: 'checkout' },
+  unread: { text: 'Can’t read the history', source: 'SQLITE_READONLY: attempt to write a readonly database', fix: 'Refresh', agent: 'checkout' },
+  noSqlite: { text: 'Can’t keep the history', source: 'sqlite3 not found: install it to keep what was freed', fix: 'Refresh', agent: 'checkout' },
+  stayed: 'old-cart changed since you looked, so it stays. Its row shows it as it is now.',
+  creating: { project: 'acme-shop', branch: 'rate-limit-v2', place: '~/.kanso/worktrees/acme-shop/rate-limit-v2', agent: 'checkout' },
+  remote: { scope: 'Read 13:52 · devbox unreachable · next try 14:04', total: { value: '5.1 GB', unit: 'in 6 worktrees' }, plan: { count: 2, size: '2.2 GB' }, repos: [repo('acme-shop', '3.4 GB', [])] },
+};
+// The worktree notices, on screen as toasts.
+const worktreeNotice = (state, text, detail) => ({ state, home: 'worktrees', text, detail });
+export const sampleWorktreeNotices = {
+  Freed: worktreeNotice('done', 'Freed 1.1 GB', '3 removed, 12.4 GB freed so far'),
+  Repaired: worktreeNotice('done', 'Repaired checkout-spike', 'It is linked to its repository again.'),
+  'No agent': worktreeNotice('failed', 'Could not start the agent', 'no agent is installed'),
+};

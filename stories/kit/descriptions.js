@@ -68,7 +68,7 @@ export const descriptions = {
   Files: 'The current pane’s changed files and repository tree.',
   Preview: 'A file from Files beside the pane: text as code, Markdown formatted, pictures with their pins; an edit waits for Save.',
   PR: 'Pull requests with checks, reviews, diffs and conversation.',
-  Worktrees: 'Repository checkouts to open, create, repair or remove.',
+  Worktrees: 'What the worktrees take with Clean up, each repository a heading with its rows; a row speaks when something is wrong, and says what removing it does when picked.',
   Shipped: 'Contribution totals for a chosen period, with a share card.',
   Ports: 'What listens on a port, the ones with no pane first, each one a press from stopping; History behind a fold.',
   Containers: 'What Docker costs on one line, each project and its containers a line each, their words on the picked one; Disk behind it.',

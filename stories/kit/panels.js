@@ -1,6 +1,6 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, chip, explainButton } from './kit.js';
-import { channelSettings, keyboardExplorer, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
+import { band, bars, button, chord, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, chip, explainButton, sentence } from './kit.js';
+import { channelSettings, keyboardExplorer, newWorktree, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
 export const settingsPages = [{ key: 'pieces', label: 'What shows' }, { key: 'keys', label: 'Keys' }, { key: 'news', label: 'What’s new' }, { key: 'credits', label: 'Credits' }];
@@ -106,12 +106,16 @@ const filesPanel = ({ view = 'changed', repository = true, scope = null, stale =
   tools: [repository ? tabs({ items: fileViews, value: view, size: 'sm' }) : null, panelRefresh({ reading: body.reading || stale })],
 }) }, filesBody({ view: repository ? view : 'all', ...body }));
 // A right-clicked row's menu opens beside the panel.
-export const files = ({ menu: path = null, ...props }) => (path ? stack({ variant: 'columns' }, filesPanel(props), fileMenu(path)) : filesPanel(props));
+export const files = ({ menu: path = null, ...props }) => withBeside(filesPanel(props), path ? fileMenu(path) : null);
 
 // Share: a panel's header menu; its title says what leaves.
 const shareTargets = ['Post to X', 'Post to LinkedIn', 'Post to Bluesky'];
 export const shareMenu = ({ leaves }) => menu({ title: leaves, items: [...shareTargets.map((label) => ({ label })), { separator: true }, { label: 'Save image' }] });
 const shareButton = () => button({ label: 'Share', kind: 'icon', icon: 'lu-share' });
+// What opens beside a panel: its Share menu, a notice, a dialog.
+const withBeside = (drawn, beside) => (beside ? stack({ variant: 'columns' }, drawn, beside) : drawn);
+// The first read is the skeleton; a refusal is the Failure block in its place.
+const waiting = ({ reading, failure }, count = 3) => (failure ? failureBlock(failure) : reading ? skeletonOf({ shape: 'list row', count }) : null);
 
 // Ports: one line per server, no pane first; the picked one shows its command, folder and age, and its words.
 const stopVerb = ({ armed, stopping }) => (stopping ? { label: 'Stopping…', disabled: true } : { label: 'Stop', armed, verb: 'stop' });
@@ -128,7 +132,8 @@ const serverRow = ({ picked, refused, narrow, armed, stopping, reach }) => (item
   }), open && refused ? failureBlock(refused) : null);
 };
 const noPaneHeading = ({ count, hover, armed }) => row({ name: 'No pane', heading: true, action: hover ? { label: phrase('Stop', count), kind: 'quiet', armed, verb: 'stop every one' } : null });
-const historyFold = (open) => row({ name: 'History', level: 0, open });
+// `fold` names it where a panel says what it holds, with its meta.
+const historyFold = (open, fold = {}) => row({ name: 'History', level: 0, open, ...fold });
 const historyRow = ({ name, ports, when, ran, peak, how }) => row({ name, meta: peak, second: facts(ports, when, ran, how) });
 const historyLists = (lists, each) => {
   const shown = lists.filter(({ rows }) => rows.length);
@@ -138,12 +143,13 @@ const historyLists = (lists, each) => {
     first.rows.map(each), first.more ? button({ label: phrase('Show', first.more, 'more'), kind: 'quiet', size: 'sm' }) : null);
 };
 const guardLine = (said) => setting({ label: said, control: button({ label: 'Turn on the guard', kind: 'quiet', size: 'sm' }) });
-// `each` draws one row of the lists; Ports' rows are servers that ran.
-const history = ({ open = false, ranges, range, most, summary, guard = null, lists = [], each = historyRow, ...chart }) => (open
-  ? list(historyFold(true), guard ? guardLine(guard) : null, guard && !chart.bars ? null : list(
-    stack({ variant: 'line' }, tabs({ items: ranges, value: range ?? ranges[0].key, size: 'sm' }), row({ name: most, dimmed: true })),
-    bars(chart), summary.length ? row({ name: facts(...summary), dimmed: true }) : null, historyLists(lists, each)))
-  : historyFold(false));
+const historyChart = ({ ranges, range, most, summary, lists, each, ...chart }) => list(
+  stack({ variant: 'line' }, tabs({ items: ranges, value: range ?? ranges[0].key, size: 'sm' }), row({ name: most, dimmed: true })),
+  bars(chart), summary.length ? row({ name: facts(...summary), dimmed: true }) : null, historyLists(lists, each));
+// `each` draws one row of the lists; Ports' rows are servers that ran. A history still read or refused says so under the fold.
+const history = ({ open = false, fold = {}, guard = null, reading = false, failure = null, lists = [], each = historyRow, ...chart }) => (open
+  ? list(historyFold(true, fold), guard ? guardLine(guard) : null, waiting({ reading, failure }) ?? (guard && !chart.bars ? null : historyChart({ lists, each, ...chart })))
+  : historyFold(false, fold));
 const portsBody = ({ servers, picked = null, refused = null, armed = false, stopping = false, heading = {}, reach = true, look, reading = false, failure = null, unattributed = null, history: past }) => {
   if (failure) return failureBlock(failure);
   if (reading) return skeletonOf({ shape: 'list row', count: 3 });
@@ -158,7 +164,7 @@ const portsBody = ({ servers, picked = null, refused = null, armed = false, stop
 const portsPanel = ({ scope = null, stale = false, look = 'panel', ...body }) => panel({ look, stale, header: panelHeader({
   title: 'Ports', second: scope, tools: [shareButton(), panelRefresh({ reading: body.reading || stale })],
 }) }, portsBody({ look, ...body, reach: !stale }));
-export const ports = ({ share = false, ...props }) => (share ? stack({ variant: 'columns' }, portsPanel(props), shareMenu({ leaves: 'Counts and sizes only' })) : portsPanel(props));
+export const ports = ({ share = false, ...props }) => withBeside(portsPanel(props), share ? shareMenu({ leaves: 'Counts and sizes only' }) : null);
 
 // A document, in the Markdown window or Preview: its name over its folder and what it says, its tools, then what changed on disk or a refused write over its text.
 const documentTools = {
@@ -323,10 +329,7 @@ const memoryBody = ({ free, herdr, helpers = null, sessions = [], more = 0, bulk
 const memoryPanel = ({ scope = null, look = 'panel', title = 'Memory', ...body }) => panel({ look, stale: Boolean(body.stale), header: panelHeader({
   title, second: scope ?? body.stale, tools: [shareButton(), panelRefresh({ reading: body.reading })],
 }) }, memoryBody(body));
-export const memory = ({ share = false, notice: said = null, ...props }) => {
-  const beside = share ? shareMenu({ leaves: 'Counts and sizes only' }) : said ? notice(said) : null;
-  return beside ? stack({ variant: 'columns' }, memoryPanel(props), beside) : memoryPanel(props);
-};
+export const memory = ({ share = false, notice: said = null, ...props }) => withBeside(memoryPanel(props), share ? shareMenu({ leaves: 'Counts and sizes only' }) : said ? notice(said) : null);
 
 // Spend: each plan's multiple, then the period's number, then where it went; the period switch, the facts and the list's views come with the pointer.
 const planLine = ({ value, name, said, tone }) => metric({ value, unit: name, second: said, tone });
@@ -373,18 +376,14 @@ const spendSettings = ({ sources = null, absent, owned, edit = null, added = nul
   unsaved ? failureBlock(unsaved) : null, quiet({ label: 'Add plan' }),
   heading('Prices'), row({ name: prices.list, second: prices.rule, action: { label: 'Open prices.json', kind: 'quiet' } }),
   heading('Updates'), row({ name: updates.name, second: updates.said }));
-const spendWait = ({ reading, failure }) => (failure ? failureBlock(failure) : reading ? skeletonOf({ shape: 'list row', count: 5 }) : null);
 const spendBodies = { home: homeBody, detail: detailBody, task: taskBody, settings: spendSettings };
 const settingsTool = () => button({ label: 'Settings', kind: 'icon', icon: 'lu-settings' });
 const spendTools = ({ page, reading }) => [page === 'home' ? shareButton() : null, page === 'settings' ? null : settingsTool(), panelRefresh({ reading })];
 // `page` is home, a detail, a task or Spend's settings; `title` and `second` head it; `empty` is a period with nothing in it.
 const spendPanel = ({ page = 'home', title = 'Spend', second = null, look = 'panel', reading = false, failure = null, empty = null, ...body }) => panel({ look, header: panelHeader({
   title, second, start: page === 'home' ? [] : [panelBack('Back')], tools: spendTools({ page, reading }),
-}) }, spendWait({ reading, failure }) ?? (empty ? emptyState(empty) : spendBodies[page](body)));
-export const spend = ({ share = false, choosing = null, ...props }) => {
-  const beside = share ? shareMenu({ leaves: 'Totals and days only' }) : choosing ? menu({ items: choosing }) : null;
-  return beside ? stack({ variant: 'columns' }, spendPanel(props), beside) : spendPanel(props);
-};
+}) }, waiting({ reading, failure }, 5) ?? (empty ? emptyState(empty) : spendBodies[page](body)));
+export const spend = ({ share = false, choosing = null, ...props }) => withBeside(spendPanel(props), share ? shareMenu({ leaves: 'Totals and days only' }) : choosing ? menu({ items: choosing }) : null);
 
 // Preview: a file opened from Files beside the pane; text as numbered code, Markdown formatted, a picture fitted; an edit waits for Save.
 // A file's text, or in its place the skeleton, the refused read or the empty state.
@@ -501,3 +500,50 @@ const pinMarks = (pins = []) => pins.flatMap(({ n, at, region, text, writing }) 
 const pinRow = ({ n, text, writing }) => row({ start: [pin({ n, pending: !text })], name: text || 'No note yet', dimmed: !text, hover: Boolean(writing), tools: writing ? [button({ label: 'Remove', kind: 'icon', icon: 'lu-x' })] : [] });
 const pinSend = ({ agent, sent = null, refused = null }) => sent ? dimLine(sent) : refused ? failureBlock(refused) : line(button({ label: phrase('Send to', agent), size: 'sm' }), keyHint({ text: '⌘↩', faint: true }));
 const pinNotes = ({ pins, send }) => list(pins.map(pinRow), pinSend(send));
+
+// Worktrees: what they take on one line with Clean up, then each repository with its rows; a row's fact comes when something is wrong, its words when picked.
+const worktreeVerbs = {
+  go: ({ tab }) => ({ label: phrase('Go to', tab) }),
+  open: () => ({ label: 'Open in a new tab' }),
+  explain: ({ tab }, { agent }) => ({ agent: tab ?? agent }),
+  repair: (item, { busy }) => ({ label: busy ? 'Repairing…' : 'Repair the link', disabled: busy }),
+  remove: (item, { busy, armed }) => ({ label: busy ? 'Removing…' : 'Remove', armed, verb: 'remove', disabled: busy }),
+};
+// Open in a tab, held by git or still checked, broken, or only a record: each has its own verbs.
+const verbsByKind = { open: ['go', 'explain'], held: ['open', 'explain'], broken: ['repair', 'open'], record: ['remove'], removable: ['open', 'explain', 'remove'] };
+const worktreeFacts = ({ verdict, age }, { open, busy }) => (busy ? [{ text: 'Removing…' }] : open || verdict.tone ? [verdict, age] : null);
+const worktreeRow = ({ picked, armed, busy, refused, agent, reach }) => eachPicked(picked, (item, open) => {
+  const working = item.name === busy;
+  return list(row({
+    name: item.name, detail: item.branch, meta: item.size, current: open, pending: working,
+    second: worktreeFacts(item, { open, busy: working && item.kind !== 'broken' }), reason: open && !refused ? item.reason : null, path: open && !refused ? item.path : null,
+    verbs: open && !refused ? verbsByKind[item.kind ?? 'removable'].map((key) => worktreeVerbs[key](item, { agent, armed, busy: working })).map((verb) => ({ ...verb, disabled: verb.disabled || !reach })) : [],
+  }), open && refused ? failureBlock(refused) : null);
+});
+// A repository: its heading with its size, its rows, then Show more, Prune and Remove all; Remove all armed says what goes.
+const groupVerbs = ({ more = 0, all = 0, prune = null }, armed) => stack({ variant: 'line' },
+  more ? quiet({ label: phrase('Show', more, 'more') }) : null, prune ? quiet({ label: prune }) : null,
+  all > 1 ? quiet({ label: phrase('Remove all', all), armed, verb: phrase('remove', all) }) : null);
+const repoBlock = ({ armed, each }) => (group) => list(heading(group.name, { meta: group.size }), group.rows.map(each),
+  groupVerbs(group, group.name === armed), group.name === armed ? sentence(group.losses) : null);
+const cleanUp = ({ count, size }, { armed, cleaning, ready }) => button({ label: cleaning ? 'Removing…' : phrase('Clean up', count, '·', size), size: 'sm', armed, verb: phrase('remove', count), disabled: cleaning || !ready });
+// The number, its facts with the pointer on it; Clean up waits for the scan, armed it names what goes; Explain only when one needs a look.
+const worktreeHero = ({ total, plan = null, review = true, armed = null, cleaning = false, ready = true, pointer = false, space = [], agent, look }) => list(
+  metric({ value: total.value, unit: look === 'narrow' ? total.narrow : total.unit }), pointer ? sentence({ text: facts(...space) }) : null,
+  stack({ variant: 'line' }, plan ? cleanUp(plan, { armed: armed === 'all', cleaning, ready }) : null, review && armed !== 'all' ? explainButton({ agent, size: 'sm' }) : null),
+  armed === 'all' ? sentence({ text: plan.names }) : null);
+const worktreesBody = ({ reading = false, failure = null, repos = [], many = [], hidden = 0, left = null, freed = null, stayed = null, note = null, armed = null, picked = null, busy = null, refused = null, agent = 'checkout', reach = true, ...hero }) => {
+  const wait = waiting({ reading, failure });
+  if (wait) return wait;
+  if (!repos.length && !left) return emptyState({ icon: 'lu-git-fork', text: 'No worktrees besides your checkouts' });
+  const block = repoBlock({ armed, each: worktreeRow({ picked, armed: armed === 'row', busy, refused, agent, reach }) });
+  return list(worktreeHero({ ...hero, armed, agent, ready: hero.ready !== false && reach }), stayed ? row({ name: stayed, dimmed: true }) : null, note ? failureBlock(note) : null,
+    [...repos, ...many].map(block), hidden ? quiet({ label: phrase('Show', hidden, 'more repositories') }) : null, left ? block(left) : null, freed ? history(freed) : null);
+};
+const newWorktreeTool = () => button({ label: 'New worktree', kind: 'icon', icon: 'lu-plus' });
+// `phase` is how far a scan is, `scope` the remote computer's stale line; `creating` opens the New worktree dialog beside it.
+const worktreesPanel = ({ phase = null, scope = null, stale = false, look = 'panel', ...body }) => panel({ look, stale, header: panelHeader({
+  title: 'Worktrees', second: scope ?? phase, tools: [newWorktreeTool(), shareButton(), panelRefresh({ reading: Boolean(phase) || stale })],
+}) }, worktreesBody({ look, reach: !stale, ...body }));
+export const worktrees = ({ share = false, notice: said = null, creating = null, ...props }) => withBeside(worktreesPanel(props),
+  share ? shareMenu({ leaves: 'Totals only' }) : said ? notice(said) : creating ? newWorktree(creating) : null);

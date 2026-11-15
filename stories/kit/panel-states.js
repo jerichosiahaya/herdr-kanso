@@ -1,8 +1,11 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer, sampleShot } from './samples.js';
-import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls } from './panel-samples.js';
+
+// A notice's state: the panel at rest with the notice beside it.
+const noticesOf = (notices, draw) => Object.fromEntries(Object.entries(notices).map(([name, said]) => [phrase('Notice:', name), [draw({ notice: said }), 'On screen a toast; away, the computer’s notification with the same words.']]));
 
 // Settings: each page with its samples, then each state as what changes on it.
 const shows = (extra) => ({ page: 'pieces', hidden: sampleHidden, areas: sampleAreas, ...extra });
@@ -178,7 +181,6 @@ const held = (extra) => ({ free, herdr, helpers, sessions, rules, ...extra });
 const docs = (extra) => held({ picked: 'docs', ...extra });
 const low = { ...free, value: '8%', low: true };
 const recalled = (extra = {}) => held({ history: { open: true, ...sampleMemory.history, ...extra } });
-const noticed = Object.fromEntries(Object.entries(sampleMemoryNotices).map(([name, said]) => [phrase('Notice:', name), [held({ notice: said }), 'On screen a toast; away, the computer’s notification with the same words.']]));
 export const memoryViews = {
   'At rest: guard on, one session past the limit, one needing you': [held({}), 'Free memory on one line; Herdr, the hung helpers and each session a line; Guard on and History fold at the foot.'],
   'Pointer on the number': [held({ free: { ...free, hover: true }, bulk }), 'Swap joins the number; Recycle every idle one, Only the heavy ones and Close the unused come under it.'],
@@ -211,7 +213,7 @@ export const memoryViews = {
   'Windows: the working set': [held({ title: 'Memory · working set' }), 'On Windows the guard reads the working set; the title says so.'],
   'On another computer': [{ ...sampleMemory.remote, rules, scope: sampleMemory.remote.computer }, 'The focused project’s computer, read by its own guard.'],
   'Narrow, 300': [docs({ look: 'narrow' }), 'The words wrap.'],
-  ...noticed,
+  ...noticesOf(sampleMemoryNotices, held),
 };
 // Spend: November, two plans, $41.20 today over three projects; each state is what the pointer, a period, a row or a read changes.
 const { month, plans, periods, today, lists, choices, history: chart } = sampleSpend;
@@ -267,6 +269,58 @@ export const spendViews = {
   'Narrow, 300': [home({ look: 'narrow' }), 'The plans and the number stay; the rows truncate.'],
 };
 
+// Worktrees: 2.4 GB in 9 worktrees; each state is what a scan, a pick, an armed verb or the history changes.
+const { verdicts: treeVerdicts, freed: freedDays, held: heldDays } = sampleWorktrees;
+const atRest = (extra) => ({ total: sampleWorktrees.total, plan: sampleWorktrees.plan, space: sampleWorktrees.space, repos: sampleWorktrees.repos, left: sampleWorktrees.left, freed: { fold: freedDays.fold }, ...extra });
+// One verdict picked, first in acme-shop; a folder left behind is picked where it is.
+const [acme, ...otherRepos] = sampleWorktrees.repos;
+const leading = (item) => ({ repos: [{ ...acme, rows: [item, ...acme.rows.filter(({ name }) => name !== item.name).slice(0, 3)] }, ...otherRepos] });
+const picking = (key, extra = {}) => atRest({ ...(key === 'orphan' ? {} : leading(treeVerdicts[key])), picked: treeVerdicts[key].name, ...extra });
+const freedOpen = (extra = {}) => atRest({ freed: { open: true, ...freedDays, ...extra } });
+const heldOpen = { range: 'held', ...heldDays };
+export const worktreesViews = {
+  'At rest: 2.4 GB in 9 worktrees': [atRest({}), 'The number with Clean up and Explain; each repository a heading with its size; a row’s fact only when something is wrong; Left behind; Freed at the foot.'],
+  'Pointer on the number': [atRest({ pointer: true }), 'When it was scanned and where the space is: what can go, what needs a look, what is in use, what was left behind.'],
+  'A row picked, Remove armed': [picking('changes', { armed: 'row' }), 'Its facts, what removing it loses, its folder, its verbs; Remove asks again.'],
+  'In a tab: go to it instead': [picking('open'), 'Open in Herdr: Go to its tab, and Explain to the agent there; no Remove.'],
+  'Its repository moved: repair': [picking('broken'), 'git can’t read it: Repair the link first.'],
+  'Repairing the link': [picking('broken', { busy: treeVerdicts.broken.name }), 'The verb says so and waits.'],
+  'The repair refused': [picking('broken', { refused: sampleWorktrees.repair }), 'git’s words under the row, Repair the link again, and Explain.'],
+  'Merged: its branch goes too': [picking('merged'), 'Nothing is lost; the merged branch goes with it.'],
+  'Not merged: its branch stays': [picking('unmerged'), 'Nothing is lost; the branch keeps its commits.'],
+  'Detached: its commits are on branches': [picking('detached'), 'Nothing is lost.'],
+  'Commits only here': [picking('lost'), 'At rest its fact in blocked ink; picked, what is lost.'],
+  'Locked': [picking('locked'), 'Locked by git: how to unlock it; no Remove.'],
+  'In use today': [picking('recent'), 'At rest its fact in working ink; Clean up and Remove all leave it alone.'],
+  'Still checking': [picking('checking'), 'As the last scan saw it; Remove waits for the check.'],
+  'Folder gone: only the record': [picking('missing'), 'Only git’s record goes.'],
+  'Folder reused: only the record': [picking('replaced'), 'Its folder stays as it is; only the record goes.'],
+  'Left behind: its repository moved': [picking('orphan'), 'Git cannot say what it holds: deleting it loses whatever is there.'],
+  'Removing one': [atRest({ busy: 'old-cart' }), 'The row breathes and says so.'],
+  'A removal refused': [picking('unmerged', { refused: sampleWorktrees.refused }), 'git’s words under the row, Remove again, and Explain.'],
+  'Changed since you looked: it stays': [atRest({ stayed: sampleWorktrees.stayed }), 'Checked again right before it goes; one quiet line says why it stayed.'],
+  'Clean up armed': [atRest({ armed: 'all' }), 'It asks again and names what goes.'],
+  'Cleaning up: 2 of 3': [atRest({ phase: sampleWorktrees.phases.cleaning, cleaning: true }), 'The header says how far; Clean up waits.'],
+  'Some not removed': [atRest({ note: sampleWorktrees.several }), 'How many stayed and the first one’s words.'],
+  'Remove all in a group, armed': [atRest({ armed: acme.name }), 'It asks again and says what is lost.'],
+  'Nothing lost: the line says so': [atRest({ repos: [sampleWorktrees.relay], armed: sampleWorktrees.relay.name }), 'The same line, saying nothing is lost.'],
+  'More than eight repositories': [atRest({ many: sampleWorktrees.many, hidden: sampleWorktrees.hidden }), 'The eight that take the most, then Show 3 more repositories.'],
+  'First scan': [{ phase: sampleWorktrees.phases.first, reading: true }, 'The skeleton, with how far the scan is.'],
+  'Checking again, the last scan kept': [atRest({ phase: sampleWorktrees.phases.checking, ready: false }), 'What the last scan kept shows at once; Clean up waits for the check.'],
+  None: [{}, 'No worktrees besides your checkouts.'],
+  'The scan failed': [{ failure: sampleWorktrees.failure }, 'git’s words, Refresh, and Explain.'],
+  'On another computer, then unreachable': [{ ...sampleWorktrees.remote, review: false, stale: true }, 'The last read stays, stepped down, with when it tries again.'],
+  'Narrow, 300': [atRest({ look: 'narrow' }), 'The unit shortens; the rows stay.'],
+  'Freed, open': [freedOpen(), 'A bar a day with the best one, then what was removed, deleted and cleared, and what went outside the panel.'],
+  'On disk each day': [freedOpen(heldOpen), 'What the worktrees held each day a scan ran.'],
+  'Nothing freed yet': [freedOpen({ ...heldOpen, ...sampleWorktrees.never }), 'What they hold each day, and one quiet line.'],
+  'History loading': [freedOpen({ reading: true }), 'The list stays; only the history waits.'],
+  'History can’t be read': [freedOpen({ failure: sampleWorktrees.unread }), 'The store’s words under the fold; the list stays.'],
+  'No sqlite3': [freedOpen({ failure: sampleWorktrees.noSqlite }), 'What to install; the list stays.'],
+  'Share from the header': [atRest({ share: true }), 'Totals only leave.'],
+  'New worktree from here': [atRest({ creating: sampleWorktrees.creating }), 'The New worktree dialog, on the repository picked.'],
+  ...noticesOf(sampleWorktreeNotices, atRest),
+};
 // Preview: limits.ts as Files opens it, then limits.md; each state is what an edit, a save or a read changes.
 const { code, edit, markdown: note, log, binary, gone, shot, pictured, huge, pins } = samplePreview;
 const shownShot = (state, extra = {}) => ({ file: shot.file, folder: shot.folder, tools: ['open with'], shot: { image: sampleShot, state, action: `Load ${shot.size}` }, ...extra });
@@ -421,6 +475,6 @@ export const pullsViews = {
   'No text diff': [pageOf('file', samplePullPages.picture), 'A picture or a binary file says so.'],
   'Full log: a page': [pageOf('log', samplePullPages.log, { agent: samplePull.agent }), 'The whole log, failures in their tone, and Explain.'],
 };
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls] };
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

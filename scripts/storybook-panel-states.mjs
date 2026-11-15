@@ -21,9 +21,7 @@ const swap = (html, from, to) => {
   if (!html.includes(from)) throw new Error(`Drawing changed, cannot find: ${from.slice(0, 80)}`);
   return html.replace(from, () => to);
 };
-const metric = (value, unit) => `<div class="kanso-metric"><span class="kanso-metric__value">${value}</span><span class="kanso-metric__unit">${unit}</span></div>`;
 const frame = (title, scope, body, tools = '', window = false) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame ${window ? 'kanso-story--free' : 'kanso-panel kanso-panel--fit'}">${panel({ look: window ? 'window' : 'panel', header: panelHeader({ title, form: window ? 'bar' : 'page', start: window && title !== 'Markdown' ? [panelBack()] : [], second: scope, tools: [tools, panelRefresh(), panelClose()] }) }, body)}</div></div>`;
-const chart = (title, values, unit) => section(title) + `<div class="kanso-chart" role="img" aria-label="${title}: ${values.join(', ')} ${unit}, November 1 through today">${values.map((v, i) => `<i${v === Math.max(...values) ? ' class="kanso-chart__bar--peak"' : ''} style="height:calc(var(--k-sp-1) * ${v || 0.25})" title="Nov ${i + 1} · ${v} ${unit}"></i>`).join('')}</div><div class="kanso-chart__axis"><span>Nov 1</span><span>Today</span></div>`;
 
 export function panelStateRecords(records) {
   const drawings = [], find = (part) => records.find((r) => r.id.includes(part) && r.html)?.html;
@@ -65,36 +63,7 @@ export function panelStateRecords(records) {
   const code = '<div class="kanso-code kanso-code--source"><span class="kanso-row__name">1</span>const LIMIT = { free: 40, pro: 400 };\n<span class="kanso-row__name">2</span>const REFILL_MS = 1000;</div>';
   const md = (body, scope = '~/acme-shop/docs', tools = '') => frame('plan.md', scope, body, tool('code', 'Source') + tools, true);
   const preview = (body, scope = '~/acme-shop/docs', tools = '', title = 'limits.md') => frame(title, scope, body, tool('code', 'Source') + tool('external-link', 'Open with…') + tools);
-  const worktrees = (body) => frame('Worktrees', 'This computer', body, tool('plus', 'New worktree') + tool('share', 'Share'));
   const sim = (body, scope = 'This computer') => frame('Simulator', scope, body, tool('smartphone', 'Devices'));
-  const wt = (component, state, body, behavior) => add('Worktrees', component, state, worktrees(body), behavior);
-  const details = [
-    ['Detached', 'Detached, its commits are on branches', 'Nothing is lost.', true],
-    ['Locked', 'Locked', 'Locked: run git worktree unlock to remove it.', false],
-    ['Lost', '2 commits only here', 'Loses 2 commits no branch has.', true],
-    ['Merged', 'Merged', 'Nothing is lost. Branch feat/checkout goes too: its work is in develop.', true],
-    ['Missing', 'Folder gone', "Its folder is already gone; only git’s record of it is removed.", true],
-    ['Orphan', 'Its repository moved or was deleted', 'The folder is deleted. Git cannot say what is in it.', true],
-    ['Recent', 'In use today', 'Nothing is lost. Branch feat/checkout stays. Clean up and Remove all leave this worktree alone.', true],
-    ['Replaced', 'Folder reused', 'Its folder is now a repository of its own and stays as it is; only the old worktree record is removed.', true],
-    ['Unmerged', 'Not merged, 3 commits stay on its branch', 'Nothing is lost. Branch feat/checkout stays with its 3 commits.', true],
-  ];
-  for (const [state, verdict, consequence, removable] of details) {
-    const missing = ['Missing', 'Replaced'].includes(state);
-    wt('Worktree Verdict', state, section(state === 'Orphan' ? 'Left behind' : 'acme-shop') + row(state === 'Detached' || state === 'Lost' ? 'a82f9c1' : 'feat/checkout', missing ? '0 KB' : '380 MB', true) + `<div class="kanso-worktree__details"><div class="kanso-worktree__reason">${verdict}</div>${note(consequence)}<div class="kanso-worktree__path">~/.kanso/worktrees/acme-shop/checkout</div>${actions(...(missing ? [] : [button('Open in a new tab'), button('Explain it')]), ...(removable ? [button(missing ? 'Prune 1 record' : 'Remove')] : []))}</div>`, `${verdict}. ${consequence}`);
-  }
-  wt('Worktrees', 'Removing', section('acme-shop') + row('feat/checkout', '380 MB') + note(pending('Removing…')) + actions(button('Remove', 'quiet', true), button('Clean up', 'quiet', true)), 'The selected removal is pending; other destructive controls wait.');
-  wt('Worktrees', 'Notice', metric('380 MB', 'freed') + `<div class="kanso-toast kanso-popover"><span class="kanso-content__text">Removed 1 worktree and 1 merged branch</span></div>` + row('feat/search', '240 MB'), 'Completed cleanup leaves the remaining worktrees visible.');
-  wt('Worktrees', 'History failed', metric('2.4 GB', 'in 9 worktrees') + section('Freed') + failure('Can’t read cleanup history', 'SQLITE_READONLY: database is read only') + row('feat/checkout', '380 MB'), 'A history failure keeps the current scan and offers Refresh.');
-  wt('Worktree History', 'sqlite3 missing', metric('2.4 GB', 'in 9 worktrees') + section('Freed') + blocked("Can't read the history", 'Install sqlite3 to keep the history of your worktrees.') + row('feat/checkout', '380 MB'), 'Without sqlite3 the scan still shows; only the history says what to install.');
-  const freed = metric('1.8 GB', 'of disk freed') + note('1.2 GB here, 600 MB removed outside the panel since a scan saw them.') + row('Worktrees removed', '8') + row('Merged branches deleted', '5') + row('Leftovers cleared', '3');
-  wt('Worktree History', 'Freed', section('Freed · since Nov 1') + freed + chart('Freed each day', [0, 3, 0, 6, 2, 0, 8, 1, 0, 4, 0, 2], '100 MB'), 'Totals separate removals here from those outside the panel and count worktrees, merged branches and leftovers.');
-  wt('Worktree History', 'History loading', metric('2.4 GB', 'in 9 worktrees') + section('Freed') + bones() + row('feat/checkout', '380 MB'), 'The current scan remains while only the history section loads.');
-  wt('Worktree History', 'No history', metric('0 KB', 'of disk freed') + empty('git-fork', 'Nothing freed yet') + chart('In worktrees each day', [2, 2, 4, 4, 6, 6, 6, 6, 6, 6, 6, 6], '400 MB'), 'Nothing freed yet; retained scans still show disk held over time.');
-  wt('Worktree History', 'Disk split', section('Where the space is') + metric('2.4 GB', 'in 9 worktrees') + row('Can go, losing nothing · 3', '1.2 GB · 50%') + row('Need a look · 2', '480 MB · 20%') + row('In use or open · 2', '480 MB · 20%') + row('Left behind · 1', '120 MB · 5%') + row('Still checking · 1', '120 MB · 5%'), 'Disk usage includes counts, sizes and percentages for every verdict group.');
-  wt('Worktree History', 'Repository split', section('The repositories that take the most') + row('acme-shop · 6 worktrees', '1.6 GB') + row('infra · 2 worktrees', '680 MB') + row('Left behind · 1 folder', '120 MB'), 'Repositories are ordered by disk held, with leftover folders kept separately.');
-  wt('History Chart', 'Disk freed', metric('1.8 GB', 'freed since Nov 1') + chart('Freed each day', [0, 3, 0, 6, 2, 0, 8, 1, 0, 4, 0, 2], '100 MB'), 'Each day has a size tooltip; the peak is highlighted, and zero days remain visible.');
-  wt('History Chart', 'Disk held', metric('2.4 GB', 'in worktrees today') + chart('In worktrees each day', [4, 5, 5, 7, 6, 8, 6, 6, 7, 6, 6, 6], '400 MB'), 'Retained scans show disk held independently of cleanup totals.');
 
   add('Preview', 'Preview', 'Loading', preview(bones(), '~/acme-shop/src/api', '', 'limits.ts'), 'The file header stays while its text loads.');
   add('Preview', 'Preview', 'Read failed', preview(failure('Can’t read limits.ts', 'EACCES: permission denied, open limits.ts'), '~/acme-shop/src/api', '', 'limits.ts'), 'Read failure offers Refresh and the source error.');

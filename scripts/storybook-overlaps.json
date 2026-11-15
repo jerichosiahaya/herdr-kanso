@@ -327,47 +327,47 @@
   "panel/WorktreeVerdict": {
     "page": "Panels/Worktrees",
     "states": {
-      "Changes": "panels/worktrees/WorktreesARowPickedRemoveArmed/Default",
-      "Broken": "panels/worktrees/WorktreesItsRepositoryMovedRepair/Default",
-      "Open": "panels/worktrees/WorktreesInATabGoToItInstead/Default",
-      "Checking": "panels/worktrees/WorktreesCheckingAgainTheLastScanKept/Default",
-      "Detached": "panels/worktrees/FeatureWorktreeVerdict/Detached",
-      "Locked": "panels/worktrees/FeatureWorktreeVerdict/Locked",
-      "Lost": "panels/worktrees/FeatureWorktreeVerdict/Lost",
-      "Merged": "panels/worktrees/FeatureWorktreeVerdict/Merged",
-      "Missing": "panels/worktrees/FeatureWorktreeVerdict/Missing",
-      "Orphan": "panels/worktrees/FeatureWorktreeVerdict/Orphan",
-      "Recent": "panels/worktrees/FeatureWorktreeVerdict/Recent",
-      "Replaced": "panels/worktrees/FeatureWorktreeVerdict/Replaced",
-      "Unmerged": "panels/worktrees/FeatureWorktreeVerdict/Unmerged"
+      "Changes": "kit/Panels/Worktrees/A row picked, Remove armed",
+      "Broken": "kit/Panels/Worktrees/Its repository moved: repair",
+      "Open": "kit/Panels/Worktrees/In a tab: go to it instead",
+      "Checking": "kit/Panels/Worktrees/Still checking",
+      "Detached": "kit/Panels/Worktrees/Detached: its commits are on branches",
+      "Locked": "kit/Panels/Worktrees/Locked",
+      "Lost": "kit/Panels/Worktrees/Commits only here",
+      "Merged": "kit/Panels/Worktrees/Merged: its branch goes too",
+      "Missing": "kit/Panels/Worktrees/Folder gone: only the record",
+      "Orphan": "kit/Panels/Worktrees/Left behind: its repository moved",
+      "Recent": "kit/Panels/Worktrees/In use today",
+      "Replaced": "kit/Panels/Worktrees/Folder reused: only the record",
+      "Unmerged": "kit/Panels/Worktrees/Not merged: its branch stays"
     }
   },
   "panel/Worktrees": {
     "page": "Panels/Worktrees",
     "states": {
-      "Loading": "panels/worktrees/WorktreesFirstScan/Default",
-      "Scanning": "panels/worktrees/WorktreesCheckingAgainTheLastScanKept/Default",
-      "Empty": "panels/worktrees/WorktreesNone/Default",
-      "Scan failed": "panels/worktrees/WorktreesTheScanFailed/Default",
-      "Remove armed": "panels/worktrees/WorktreesARowPickedRemoveArmed/Default",
-      "Remove failed": "panels/worktrees/WorktreesARemovalRefused/Default",
-      "Clean up armed": "panels/worktrees/WorktreesCleanUpArmed/Default",
-      "Group actions": "panels/worktrees/WorktreesRemoveAllInAGroupArmed/Default",
-      "Needs review": "panels/worktrees/WorktreesARowPickedRemoveArmed/Default",
-      "Remote stale": "panels/worktrees/WorktreesOnAnotherComputerThenUnreachable/Default",
-      "History failed": "panels/worktrees/FeatureWorktrees/History failed",
-      "Notice": "panels/worktrees/FeatureWorktrees/Notice",
-      "Removing": "panels/worktrees/FeatureWorktrees/Removing"
+      "Loading": "kit/Panels/Worktrees/First scan",
+      "Scanning": "kit/Panels/Worktrees/Checking again, the last scan kept",
+      "Empty": "kit/Panels/Worktrees/None",
+      "Scan failed": "kit/Panels/Worktrees/The scan failed",
+      "Remove armed": "kit/Panels/Worktrees/A row picked, Remove armed",
+      "Remove failed": "kit/Panels/Worktrees/A removal refused",
+      "Clean up armed": "kit/Panels/Worktrees/Clean up armed",
+      "Group actions": "kit/Panels/Worktrees/Remove all in a group, armed",
+      "Needs review": "kit/Panels/Worktrees/At rest: 2.4 GB in 9 worktrees",
+      "Remote stale": "kit/Panels/Worktrees/On another computer, then unreachable",
+      "History failed": "kit/Panels/Worktrees/History can’t be read",
+      "Notice": "kit/Panels/Worktrees/Notice: Freed",
+      "Removing": "kit/Panels/Worktrees/Removing one"
     }
   },
   "panel/WorktreeHistory": {
     "page": "Panels/Worktrees",
     "states": {
-      "Disk split": "panels/worktrees/FeatureWorktreeHistory/Disk split",
-      "Freed": "panels/worktrees/FeatureWorktreeHistory/Freed",
-      "History loading": "panels/worktrees/FeatureWorktreeHistory/History loading",
-      "No history": "panels/worktrees/FeatureWorktreeHistory/No history",
-      "Repository split": "panels/worktrees/FeatureWorktreeHistory/Repository split"
+      "Disk split": "kit/Panels/Worktrees/Pointer on the number",
+      "Freed": "kit/Panels/Worktrees/Freed, open",
+      "History loading": "kit/Panels/Worktrees/History loading",
+      "No history": "kit/Panels/Worktrees/Nothing freed yet",
+      "Repository split": "kit/Panels/Worktrees/At rest: 2.4 GB in 9 worktrees"
     }
   },
   "panel/Shipped": {
@@ -669,13 +669,13 @@
   "panel/HistoryChart/Disk freed": {
     "page": "Panels/Worktrees",
     "states": {
-      "Disk freed": "panels/worktrees/FeatureHistoryChart/Disk freed"
+      "Disk freed": "kit/Panels/Worktrees/Freed, open"
     }
   },
   "panel/HistoryChart/Disk held": {
     "page": "Panels/Worktrees",
     "states": {
-      "Disk held": "panels/worktrees/FeatureHistoryChart/Disk held"
+      "Disk held": "kit/Panels/Worktrees/On disk each day"
     }
   },
   "panel/HistoryChart/Shipping hours": {
