@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms, paneRightClicks, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls, dragHandleStates } from './pieces.js';
+import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls, dragHandleStates } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
@@ -570,7 +570,7 @@ export const playgrounds = {
     markup: toggle,
   },
   'Primitives/Row': {
-    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', detailTone: 'none', meta: '+14 −3', mark: 'none', second: '', heading: false, title: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false },
+    ...statedPages['Primitives/Row'],
     argTypes: {
       icon: select('icon', icons.concat(['p-claude', 'p-codex'])),
       name: text('name'),
@@ -588,7 +588,6 @@ export const playgrounds = {
       ...pick('hover', 'focus', 'dimmed'),
       pending: flag('pending'),
     },
-    markup: ({ tools, detail, detailTone, ...args }) => `<div class="kanso-panel">${row({ ...args, detail: detailTone === 'none' ? detail : { text: detail, tone: detailTone }, actions: tools ? [{ icon: 'lu-pin', label: 'Pin' }, { icon: 'lu-ellipsis', label: 'More' }] : [] })}</div>`,
   },
   'Primitives/Skeleton': {
     args: { shape: 'row', count: 3 },

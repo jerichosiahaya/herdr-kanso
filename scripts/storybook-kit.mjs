@@ -1,7 +1,7 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
 import { computerRow, projectRow, sessionRow, tile, viewSwitch } from '../stories/kit/compositions.js';
-import { row, windowControls } from '../stories/kit/pieces.js';
+import { windowControls } from '../stories/kit/pieces.js';
 import { statedPages } from '../stories/kit/states.js';
 import { inRail, inSidebar } from '../stories/kit/frames.js';
 export { elements } from './storybook-markup.mjs';
@@ -18,11 +18,10 @@ export function kitRecords(records) {
   const definitions = [
     ['Segmented', 'kanso-segmented', ['Default', 'Hover', 'Focus', 'Disabled']],
     ['Switch', 'kanso-switch', ['Default', 'On', 'Hover', 'Focus', 'Active', 'Disabled']],
-    ['Row', 'kanso-row', ['Default', 'Hover', 'Focus', 'Active', 'Dimmed'], 'compositions-panel-pieces/SectionAndRows/'],
     ['Tab', 'kanso-tab', ['Default', 'Hover', 'Focus', 'Active', 'Disabled']],
     ['Skeleton', 'kanso-skeleton__list', ['Loading'], 'panels/files/FilesFirstRead/']
   ];
-  const modifiers = { Hover: 'kanso-control--hover', Focus: 'kanso-control--focus', Active: 'kanso-control--active', Disabled: 'kanso-control--off', Dimmed: 'kanso-control--dim', On: 'kanso-control--on' };
+  const modifiers = { Hover: 'kanso-control--hover', Focus: 'kanso-control--focus', Active: 'kanso-control--active', Disabled: 'kanso-control--off', On: 'kanso-control--on' };
   for (const [name, className, states, prefer] of definitions) {
     const source = first(className, prefer);
     if (!source) continue;
@@ -34,7 +33,6 @@ export function kitRecords(records) {
   }
   const byId = (id) => originals.find((record) => record.id === id)?.html ?? '';
   add('Window controls', 'Default', windowControls(), 'The three lights, where the system draws them.');
-  add('Row', 'Toned fact', row({ icon: 'lu-container', name: 'postgres', detail: { text: 'unhealthy', tone: 'blocked' }, meta: '412 MB' }), 'A fact that is a verdict leads with its dot and takes its tone: a container’s health, a worktree’s verdict, a PR’s state, a port’s owner.');
   for (const [page, label, html, caption, id] of [
     ['Session row', 'Working', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' })), 'What it is on and for how long.'],
     ['Session row', 'Needs you', inSidebar(sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' })), 'The question, in foreground.'],
