@@ -1208,7 +1208,9 @@
         "Layouts/Sidebar",
         "Primitives/Row"
       ],
-      "features": [],
+      "features": [
+        "coverage/spaces/ProjectGit"
+      ],
       "approvedRecords": [
         "proto/approved-sidebar-project/Reference/1",
         "proto/approved-sidebar-project/Reference/2",
@@ -1230,7 +1232,28 @@
         "proto/approved-sidebar-project/Reference/18"
       ],
       "sourceHash": "e82bb38e557a2f13874e2d5b2d4bee2163f391710d5dc49cd5678cb243bf2516",
-      "proposedPredicates": []
+      "proposedPredicates": [
+        {
+          "id": "coverage/spaces/ProjectGit/Ahead",
+          "label": "Project Git · Ahead",
+          "location": "kanso/mods/kanso-spaces/sidebar-rows.js:13"
+        },
+        {
+          "id": "coverage/spaces/ProjectGit/Behind",
+          "label": "Project Git · Behind",
+          "location": "kanso/mods/kanso-spaces/sidebar-rows.js:13"
+        },
+        {
+          "id": "coverage/spaces/ProjectGit/Pull refused",
+          "label": "Project Git · Pull refused",
+          "location": "kanso/mods/kanso-spaces/sidebar-rows.js:13"
+        },
+        {
+          "id": "coverage/spaces/ProjectGit/Pulling",
+          "label": "Project Git · Pulling",
+          "location": "kanso/mods/kanso-spaces/sidebar-rows.js:13"
+        }
+      ]
     },
     {
       "page": "Compositions/Agent rows",
@@ -1392,7 +1415,9 @@
       "components": [
         "Layouts/Sidebar"
       ],
-      "features": [],
+      "features": [
+        "coverage/spaces/Asleep"
+      ],
       "approvedRecords": [
         "proto/approved-sidebar-asleep/Reference/1",
         "proto/approved-sidebar-asleep/Reference/2",
@@ -1486,7 +1511,9 @@
       "components": [
         "Layouts/Sidebar"
       ],
-      "features": [],
+      "features": [
+        "coverage/spaces/NeedsQueue"
+      ],
       "approvedRecords": [
         "proto/approved-sidebar-needs/Reference/1",
         "proto/approved-sidebar-needs/Reference/2",
@@ -1784,7 +1811,9 @@
       "components": [
         "Layouts/Sidebar"
       ],
-      "features": [],
+      "features": [
+        "coverage/spaces/SidebarSort"
+      ],
       "approvedRecords": [
         "proto/approved-sidebar-keys/Reference/1",
         "proto/approved-sidebar-keys/Reference/2",
@@ -2110,7 +2139,9 @@
         "Compositions/Bars",
         "Primitives/Tab"
       ],
-      "features": [],
+      "features": [
+        "coverage/tabs/Tabs"
+      ],
       "approvedRecords": [
         "proto/approved-bars-tabs/Reference/1"
       ],
@@ -2155,7 +2186,9 @@
       "components": [
         "Compositions/Bars"
       ],
-      "features": [],
+      "features": [
+        "coverage/tabs/PanelToolbar"
+      ],
       "approvedRecords": [
         "proto/approved-bars-panels/Reference/1"
       ],
@@ -2268,7 +2301,9 @@
       "components": [
         "Compositions/Header"
       ],
-      "features": [],
+      "features": [
+        "coverage/strip/PaneTools"
+      ],
       "approvedRecords": [
         "proto/approved-bars-header/Reference/1"
       ],
@@ -2382,7 +2417,9 @@
       "components": [
         "Panels/Find"
       ],
-      "features": [],
+      "features": [
+        "coverage/panel/ConversationFind"
+      ],
       "approvedRecords": [
         "proto/approved-bars-find/Reference/1"
       ],
@@ -2484,7 +2521,9 @@
       "components": [
         "Compositions/Status bar"
       ],
-      "features": [],
+      "features": [
+        "coverage/status/StatusStandIn"
+      ],
       "approvedRecords": [
         "proto/approved-bars-status/Reference/1"
       ],
@@ -2584,12 +2623,24 @@
         "Compositions/Notifications",
         "Primitives/Toast"
       ],
-      "features": [],
+      "features": [
+        "coverage/chrome/RuntimeNotice",
+        "coverage/panel/ActionNotice",
+        "coverage/spaces/ActionNotice",
+        "coverage/toast/Notice",
+        "coverage/toast/NoticeStack"
+      ],
       "approvedRecords": [
         "proto/approved-bars-toasts/Reference/1"
       ],
       "sourceHash": "f571a93a693e7b72ffe33721a21bb6715ded4d415640fe335f5031fe15bbf135",
-      "proposedPredicates": []
+      "proposedPredicates": [
+        {
+          "id": "coverage/spaces/ActionNotice/5 · fatal: Not possible to fast-forward, aborting.",
+          "label": "Action Notice · 5 · fatal: Not possible to fast-forward, aborting.",
+          "location": "kanso/mods/kanso-spaces/sidebar-rows.js:51"
+        }
+      ]
     },
     {
       "page": "Compositions/One panel skeleton",
@@ -3019,7 +3070,9 @@
       "components": [
         "Panels/Share"
       ],
-      "features": [],
+      "features": [
+        "coverage/panel/ShareCard"
+      ],
       "approvedRecords": [
         "proto/approved-panels-b-share/Reference/1"
       ],
@@ -3481,7 +3534,9 @@
       "components": [
         "Panels/Preview"
       ],
-      "features": [],
+      "features": [
+        "coverage/panel/CodeLimits"
+      ],
       "approvedRecords": [
         "proto/approved-panels-a-preview-text/Reference/1"
       ],
@@ -3553,7 +3608,9 @@
       "components": [
         "Panels/Preview"
       ],
-      "features": [],
+      "features": [
+        "coverage/panel/MarkdownEditing"
+      ],
       "approvedRecords": [
         "proto/approved-panels-a-preview-md/Reference/1",
         "proto/approved-panels-a-preview-md/Reference/2",
@@ -3561,7 +3618,78 @@
         "proto/approved-panels-a-preview-md/Reference/4"
       ],
       "sourceHash": "d7e14d197149683c128592a0e60a15445e9277a76c54a8cbd5e1def9883e2f81",
-      "proposedPredicates": []
+      "proposedPredicates": [
+        {
+          "id": "coverage/panel/MarkdownEditing/Append",
+          "label": "Markdown Editing · Append",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Block editing",
+          "label": "Markdown Editing · Block editing",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Conflict",
+          "label": "Markdown Editing · Conflict",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Editing",
+          "label": "Markdown Editing · Editing",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Image deferred",
+          "label": "Markdown Editing · Image deferred",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Image failed",
+          "label": "Markdown Editing · Image failed",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Image loading",
+          "label": "Markdown Editing · Image loading",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Loading",
+          "label": "Markdown Editing · Loading",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Read",
+          "label": "Markdown Editing · Read",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Save failed",
+          "label": "Markdown Editing · Save failed",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Saving",
+          "label": "Markdown Editing · Saving",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Source",
+          "label": "Markdown Editing · Source",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Stale",
+          "label": "Markdown Editing · Stale",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        },
+        {
+          "id": "coverage/panel/MarkdownEditing/Table editing",
+          "label": "Markdown Editing · Table editing",
+          "location": "kanso/mods/kanso-panel/doc.js:323"
+        }
+      ]
     },
     {
       "page": "Panels/Preview: pictures, and the Load step",
@@ -4050,7 +4178,9 @@
       "components": [
         "Panels/PR"
       ],
-      "features": [],
+      "features": [
+        "coverage/panel/PullRequestList"
+      ],
       "approvedRecords": [
         "proto/approved-panels-a-pr-list/Reference/1",
         "proto/approved-panels-a-pr-list/Reference/2",
@@ -4197,7 +4327,11 @@
       "components": [
         "Panels/PR"
       ],
-      "features": [],
+      "features": [
+        "coverage/panel/PullRequest",
+        "coverage/panel/PullRequestContext",
+        "coverage/panel/VerdictBody"
+      ],
       "approvedRecords": [
         "proto/approved-panels-a-pr-open/Reference/1",
         "proto/approved-panels-a-pr-open/Reference/2",
@@ -4205,7 +4339,203 @@
         "proto/approved-panels-a-pr-open/Reference/4"
       ],
       "sourceHash": "4e71a712a82642cb69cb62c8d59df7b99b3ff71948a96ff494930b972ed76c4e",
-      "proposedPredicates": []
+      "proposedPredicates": [
+        {
+          "id": "coverage/panel/PullRequest/Agent blocked",
+          "label": "Pull Request · Session blocked",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Behind base",
+          "label": "Pull Request · Behind base",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Changes requested",
+          "label": "Pull Request · Changes requested",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Closed",
+          "label": "Pull Request · Closed",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Conflicts",
+          "label": "Pull Request · Conflicts",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Draft",
+          "label": "Pull Request · Draft",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Failed log",
+          "label": "Pull Request · Failed log",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Merge armed",
+          "label": "Pull Request · Merge armed",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Merged",
+          "label": "Pull Request · Merged",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Merging",
+          "label": "Pull Request · Merging",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/No agent",
+          "label": "Pull Request · No session",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Ready",
+          "label": "Pull Request · Ready",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Review required",
+          "label": "Pull Request · Review required",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Running checks",
+          "label": "Pull Request · Running checks",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Send preview",
+          "label": "Pull Request · Send preview",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Stale",
+          "label": "Pull Request · Stale",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Unknown checks",
+          "label": "Pull Request · Unknown checks",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequest/Write failed",
+          "label": "Pull Request · Write failed",
+          "location": "kanso/mods/kanso-panel/pr-view.js:143"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/Behind GitHub",
+          "label": "Pull Request Context · Behind GitHub",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/CLI absent",
+          "label": "Pull Request Context · CLI absent",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/Create pending",
+          "label": "Pull Request Context · Create pending",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/Default branch",
+          "label": "Pull Request Context · Default branch",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/Detached",
+          "label": "Pull Request Context · Detached",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/Loading",
+          "label": "Pull Request Context · Loading",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/No pull request",
+          "label": "Pull Request Context · No pull request",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/No remote",
+          "label": "Pull Request Context · No remote",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/No repository",
+          "label": "Pull Request Context · No repository",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/Rate limited",
+          "label": "Pull Request Context · Rate limited",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/Read failed",
+          "label": "Pull Request Context · Read failed",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/Sign in",
+          "label": "Pull Request Context · Sign in",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/Unpushed",
+          "label": "Pull Request Context · Unpushed",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/PullRequestContext/Unsupported remote",
+          "label": "Pull Request Context · Unsupported remote",
+          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
+        },
+        {
+          "id": "coverage/panel/VerdictBody/Checks",
+          "label": "Verdict Body · Checks",
+          "location": "kanso/mods/kanso-panel/pr-body.js:64"
+        },
+        {
+          "id": "coverage/panel/VerdictBody/Comment",
+          "label": "Verdict Body · Comment",
+          "location": "kanso/mods/kanso-panel/pr-body.js:64"
+        },
+        {
+          "id": "coverage/panel/VerdictBody/Commits",
+          "label": "Verdict Body · Commits",
+          "location": "kanso/mods/kanso-panel/pr-body.js:64"
+        },
+        {
+          "id": "coverage/panel/VerdictBody/Log",
+          "label": "Verdict Body · Log",
+          "location": "kanso/mods/kanso-panel/pr-body.js:64"
+        },
+        {
+          "id": "coverage/panel/VerdictBody/No body",
+          "label": "Verdict Body · No body",
+          "location": "kanso/mods/kanso-panel/pr-body.js:64"
+        },
+        {
+          "id": "coverage/panel/VerdictBody/Note",
+          "label": "Verdict Body · Note",
+          "location": "kanso/mods/kanso-panel/pr-body.js:64"
+        },
+        {
+          "id": "coverage/panel/VerdictBody/Running",
+          "label": "Verdict Body · Running",
+          "location": "kanso/mods/kanso-panel/pr-body.js:64"
+        }
+      ]
     },
     {
       "page": "Panels/A pull request: sending, writing, elsewhere",
@@ -4482,7 +4812,9 @@
       "components": [
         "Panels/PR"
       ],
-      "features": [],
+      "features": [
+        "coverage/panel/PullRequestPicker"
+      ],
       "approvedRecords": [
         "proto/approved-panels-a-pr-details/Reference/1"
       ],
@@ -5102,7 +5434,9 @@
         "Panels/Worktrees"
       ],
       "features": [
-        "coverage/panel/Worktrees"
+        "coverage/panel/Worktrees",
+        "coverage/panel/WorktreeHistory",
+        "coverage/panel/WorktreeVerdict"
       ],
       "approvedRecords": [
         "proto/approved-panels-a-worktrees/Reference/1",
@@ -5247,7 +5581,8 @@
         "Panels/Ports"
       ],
       "features": [
-        "coverage/panel/Ports"
+        "coverage/panel/Ports",
+        "coverage/panel/PortHistory"
       ],
       "approvedRecords": [
         "proto/approved-panels-b-ports/Reference/1"
@@ -5353,7 +5688,12 @@
       "components": [
         "Panels/Containers"
       ],
-      "features": [],
+      "features": [
+        "coverage/containers/ComposeProject",
+        "coverage/containers/ContainerDisk",
+        "coverage/containers/ContainerList",
+        "coverage/containers/ContainerRow"
+      ],
       "approvedRecords": [
         "proto/approved-panels-b-containers/Reference/1"
       ],
@@ -5480,7 +5820,11 @@
         "Panels/Memory"
       ],
       "features": [
-        "coverage/guard/Memory"
+        "coverage/guard/Memory",
+        "coverage/guard/MemoryAgent",
+        "coverage/guard/MemoryChart",
+        "coverage/guard/MemoryHistory",
+        "coverage/guard/MemoryRecovery"
       ],
       "approvedRecords": [
         "proto/approved-panels-b-memory/Reference/1"
@@ -5634,7 +5978,9 @@
         "Panels/Spend"
       ],
       "features": [
-        "coverage/spend/Spend"
+        "coverage/spend/Spend",
+        "coverage/spend/SpendBreakdown",
+        "coverage/spend/SpendSettings"
       ],
       "approvedRecords": [
         "proto/approved-panels-b-spend/Reference/1"
@@ -5873,12 +6219,127 @@
       "components": [
         "Panels/Simulator"
       ],
-      "features": [],
+      "features": [
+        "coverage/sim/DeviceControls",
+        "coverage/sim/Devices",
+        "coverage/sim/PictureState"
+      ],
       "approvedRecords": [
         "proto/approved-panels-b-sim/Reference/1"
       ],
       "sourceHash": "9ee98933205337d000d356744bb1c38c2033a2ad536b9a69f1b31748c68bcf1d",
-      "proposedPredicates": []
+      "proposedPredicates": [
+        {
+          "id": "coverage/sim/DeviceControls/Acting",
+          "label": "Device Controls · Acting",
+          "location": "kanso/mods/kanso-sim/main.js:229"
+        },
+        {
+          "id": "coverage/sim/DeviceControls/Android device",
+          "label": "Device Controls · Android device",
+          "location": "kanso/mods/kanso-sim/main.js:229"
+        },
+        {
+          "id": "coverage/sim/DeviceControls/Android emulator",
+          "label": "Device Controls · Android emulator",
+          "location": "kanso/mods/kanso-sim/main.js:229"
+        },
+        {
+          "id": "coverage/sim/DeviceControls/Command failed",
+          "label": "Device Controls · Command failed",
+          "location": "kanso/mods/kanso-sim/main.js:229"
+        },
+        {
+          "id": "coverage/sim/DeviceControls/iOS",
+          "label": "Device Controls · iOS",
+          "location": "kanso/mods/kanso-sim/main.js:229"
+        },
+        {
+          "id": "coverage/sim/DeviceControls/URL invalid",
+          "label": "Device Controls · URL invalid",
+          "location": "kanso/mods/kanso-sim/main.js:229"
+        },
+        {
+          "id": "coverage/sim/Devices/Booted",
+          "label": "Devices · Booted",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/Devices/Empty",
+          "label": "Devices · Empty",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/Devices/Emulator binary missing",
+          "label": "Devices · Emulator binary missing",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/Devices/Loading",
+          "label": "Devices · Loading",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/Devices/Off",
+          "label": "Devices · Off",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/Devices/Offline",
+          "label": "Devices · Offline",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/Devices/Read failed",
+          "label": "Devices · Read failed",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/Devices/Remote project",
+          "label": "Devices · Remote project",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/Devices/Start timed out",
+          "label": "Devices · Start timed out",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/Devices/Starting",
+          "label": "Devices · Starting",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/Devices/Unauthorized",
+          "label": "Devices · Unauthorized",
+          "location": "kanso/mods/kanso-sim/main.js:269"
+        },
+        {
+          "id": "coverage/sim/PictureState/First frame",
+          "label": "Picture State · First frame",
+          "location": "kanso/mods/kanso-sim/main.js:248"
+        },
+        {
+          "id": "coverage/sim/PictureState/Key focus",
+          "label": "Picture State · Key focus",
+          "location": "kanso/mods/kanso-sim/main.js:248"
+        },
+        {
+          "id": "coverage/sim/PictureState/No picture",
+          "label": "Picture State · No picture",
+          "location": "kanso/mods/kanso-sim/main.js:248"
+        },
+        {
+          "id": "coverage/sim/PictureState/Stale frame",
+          "label": "Picture State · Stale frame",
+          "location": "kanso/mods/kanso-sim/main.js:248"
+        },
+        {
+          "id": "coverage/sim/PictureState/Touch",
+          "label": "Picture State · Touch",
+          "location": "kanso/mods/kanso-sim/main.js:248"
+        }
+      ]
     },
     {
       "page": "Panels/Simulator, subtracted",
@@ -6124,7 +6585,9 @@
       "components": [
         "Panels/Settings"
       ],
-      "features": [],
+      "features": [
+        "coverage/settings/Pieces"
+      ],
       "approvedRecords": [
         "proto/approved-dialogs-pieces/Reference/1",
         "proto/approved-dialogs-pieces/Reference/2",
@@ -6144,7 +6607,53 @@
         "proto/approved-dialogs-pieces/Reference/16"
       ],
       "sourceHash": "d739059e7e4693ca3d34f94ef81818e93056075d917723806ed21639eb304614",
-      "proposedPredicates": []
+      "proposedPredicates": [
+        {
+          "id": "coverage/settings/Pieces/Background",
+          "label": "Pieces · Background",
+          "location": "kanso/mods/kanso-settings/main.js:226"
+        },
+        {
+          "id": "coverage/settings/Pieces/Changed",
+          "label": "Pieces · Changed",
+          "location": "kanso/mods/kanso-settings/main.js:226"
+        },
+        {
+          "id": "coverage/settings/Pieces/Custom panel",
+          "label": "Pieces · Custom panel",
+          "location": "kanso/mods/kanso-settings/main.js:226"
+        },
+        {
+          "id": "coverage/settings/Pieces/No matches",
+          "label": "Pieces · No matches",
+          "location": "kanso/mods/kanso-settings/main.js:226"
+        },
+        {
+          "id": "coverage/settings/Pieces/Notifications",
+          "label": "Pieces · Notifications",
+          "location": "kanso/mods/kanso-settings/main.js:226"
+        },
+        {
+          "id": "coverage/settings/Pieces/Pane header",
+          "label": "Pieces · Pane header",
+          "location": "kanso/mods/kanso-settings/main.js:226"
+        },
+        {
+          "id": "coverage/settings/Pieces/Sidebar",
+          "label": "Pieces · Sidebar",
+          "location": "kanso/mods/kanso-settings/main.js:226"
+        },
+        {
+          "id": "coverage/settings/Pieces/Status bar",
+          "label": "Pieces · Status bar",
+          "location": "kanso/mods/kanso-settings/main.js:226"
+        },
+        {
+          "id": "coverage/settings/Pieces/Tab bar and panels",
+          "label": "Pieces · Tab bar and panels",
+          "location": "kanso/mods/kanso-settings/main.js:226"
+        }
+      ]
     },
     {
       "page": "Panels/Settings · Keys, with Help's keyboard",
@@ -6188,7 +6697,10 @@
         "Compositions/Keyboard",
         "Panels/Settings"
       ],
-      "features": [],
+      "features": [
+        "coverage/help/KeyboardExplorer",
+        "coverage/settings/Bindings"
+      ],
       "approvedRecords": [
         "proto/approved-dialogs-keys/Reference/1",
         "proto/approved-dialogs-keys/Reference/2"
@@ -6239,7 +6751,9 @@
       "components": [
         "Panels/Settings"
       ],
-      "features": [],
+      "features": [
+        "coverage/settings/ReleaseControls"
+      ],
       "approvedRecords": [
         "proto/approved-dialogs-news/Reference/1",
         "proto/approved-dialogs-news/Reference/2",
@@ -6281,7 +6795,9 @@
       "components": [
         "Panels/Settings"
       ],
-      "features": [],
+      "features": [
+        "coverage/settings/CreditsLoading"
+      ],
       "approvedRecords": [
         "proto/approved-dialogs-credits/Reference/1",
         "proto/approved-dialogs-credits/Reference/2",
@@ -6362,7 +6878,10 @@
       "components": [
         "Panels/Markdown"
       ],
-      "features": [],
+      "features": [
+        "coverage/markdown-panel/MarkdownFiles",
+        "coverage/markdown-panel/MarkdownReview"
+      ],
       "approvedRecords": [
         "proto/approved-dialogs-markdown/Reference/1",
         "proto/approved-dialogs-markdown/Reference/2"
@@ -6430,7 +6949,9 @@
         "Panels/Dojo",
         "Layouts/Practice"
       ],
-      "features": [],
+      "features": [
+        "coverage/dojo/Practice"
+      ],
       "approvedRecords": [
         "proto/approved-dojo-round/Reference/1",
         "proto/approved-dojo-round/Reference/2",
@@ -6500,7 +7021,10 @@
       "components": [
         "Panels/Dojo"
       ],
-      "features": [],
+      "features": [
+        "coverage/dojo/PracticePet",
+        "coverage/dojo/PracticeResult"
+      ],
       "approvedRecords": [
         "proto/approved-dojo-end/Reference/1",
         "proto/approved-dojo-end/Reference/2",
@@ -6568,23 +7092,6 @@
         "proto/approved-dojo-light/Reference/2"
       ],
       "sourceHash": "0dbe479b8828d3672349adae25ea72cfdd0697784d8df60ce8b83f441a7f1d43",
-      "proposedPredicates": []
-    },
-    {
-      "page": "Compositions/Runtime notice",
-      "existing": false,
-      "boards": [],
-      "status": "Proposed",
-      "guidelines": [],
-      "records": [
-        "coverage/chrome/RuntimeNotice/Out of memory"
-      ],
-      "components": [
-        "Compositions/Notifications"
-      ],
-      "features": [
-        "coverage/chrome/RuntimeNotice"
-      ],
       "proposedPredicates": []
     },
     {
@@ -6738,157 +7245,6 @@
       ]
     },
     {
-      "page": "Panels/Compose project",
-      "existing": false,
-      "boards": [
-        "Q2"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-containers/Reference/1",
-        "panels/containers/ContainersRestOneExitedTwoRunningOneProjectNotStarted/Default",
-        "panels/containers/ContainersDownAndQuitArmedARemovalRefusedOnItsRowNotInAProject/Default",
-        "panels/containers/ContainersEmptyWithAStackAProjectCanBringUp/Default"
-      ],
-      "components": [
-        "Panels/Containers"
-      ],
-      "features": [
-        "coverage/containers/ComposeProject"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-containers/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Container disk",
-      "existing": false,
-      "boards": [
-        "Q2"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-containers/Reference/1",
-        "panels/containers/ContainersDiskOpenPullAnImagesRunFormVolumesBuildCache/Default",
-        "panels/containers/ContainerDiskInvalidname/Default",
-        "panels/containers/ContainerDiskInvalidport/Default",
-        "panels/containers/ContainerDiskPrunearmed/Default",
-        "panels/containers/ContainersDownAndQuitArmedARemovalRefusedOnItsRowNotInAProject/Default"
-      ],
-      "components": [
-        "Panels/Containers"
-      ],
-      "features": [
-        "coverage/containers/ContainerDisk"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-containers/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Container list",
-      "existing": false,
-      "boards": [
-        "Q2"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-containers/Reference/1",
-        "panels/containers/ContainersDownAndQuitArmedARemovalRefusedOnItsRowNotInAProject/Default",
-        "panels/containers/ContainersDockerNotRunning/Default",
-        "panels/containers/ContainersEmptyWithAStackAProjectCanBringUp/Default",
-        "panels/containers/ContainersFirstRead/Default",
-        "panels/containers/ContainersAReadFailed/Default",
-        "panels/containers/ContainersDockerOnAnotherMachineAContext/Default",
-        "panels/containers/ContainersAtRestNow/Default",
-        "panels/containers/ContainersStartingDocker/Default",
-        "panels/containers/ContainerListToolabsent/Default"
-      ],
-      "components": [
-        "Panels/Containers"
-      ],
-      "features": [
-        "coverage/containers/ContainerList"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-containers/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Container row",
-      "existing": false,
-      "boards": [
-        "Q2"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-containers/Reference/1",
-        "panels/containers/ContainersRunningSelectedDetailsOpen/Default",
-        "panels/containers/ContainerRowDetailsabsent/Default",
-        "panels/containers/ContainersDownAndQuitArmedARemovalRefusedOnItsRowNotInAProject/Default",
-        "panels/containers/ContainerRowPending/Default",
-        "panels/containers/ContainersRestOneExitedTwoRunningOneProjectNotStarted/Default"
-      ],
-      "components": [
-        "Panels/Containers"
-      ],
-      "features": [
-        "coverage/containers/ContainerRow"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-containers/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/hjkl dōjō",
-      "existing": false,
-      "boards": [
-        "D11a"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dojo-round/Reference/1",
-        "proto/approved-dojo-round/Reference/2",
-        "proto/approved-dojo-round/Reference/3",
-        "proto/approved-dojo-round/Reference/4",
-        "proto/approved-dojo-round/Reference/5",
-        "proto/approved-dojo-round/Reference/6",
-        "coverage/dojo/Practice/1 · h l",
-        "coverage/dojo/Practice/2 · j k",
-        "coverage/dojo/Practice/3 · h j k l",
-        "coverage/dojo/Practice/4 · 0 $ gg G",
-        "coverage/dojo/Practice/5 · Counts",
-        "coverage/dojo/Practice/6 · w b e",
-        "coverage/dojo/Practice/7 · f t",
-        "coverage/dojo/Practice/8 · 0 ^ $",
-        "coverage/dojo/Practice/9 · All of it"
-      ],
-      "components": [
-        "Panels/Dojo"
-      ],
-      "features": [
-        "coverage/dojo/Practice"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dojo-round/Reference/1",
-        "proto/approved-dojo-round/Reference/2",
-        "proto/approved-dojo-round/Reference/3",
-        "proto/approved-dojo-round/Reference/4",
-        "proto/approved-dojo-round/Reference/5",
-        "proto/approved-dojo-round/Reference/6"
-      ]
-    },
-    {
       "page": "Panels/Practice feedback",
       "existing": false,
       "boards": [
@@ -6929,194 +7285,6 @@
         "proto/approved-dojo-round/Reference/4",
         "proto/approved-dojo-round/Reference/5",
         "proto/approved-dojo-round/Reference/6"
-      ]
-    },
-    {
-      "page": "Panels/Practice companion",
-      "existing": false,
-      "boards": [
-        "D11b"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dojo-end/Reference/1",
-        "proto/approved-dojo-end/Reference/2",
-        "proto/approved-dojo-end/Reference/3",
-        "proto/approved-dojo-end/Reference/4",
-        "proto/approved-dojo-end/Reference/5",
-        "proto/approved-dojo-end/Reference/6",
-        "proto/approved-dojo-end/Reference/7",
-        "coverage/dojo/PracticePet/Calm",
-        "coverage/dojo/PracticePet/Chooser",
-        "coverage/dojo/PracticePet/Failed",
-        "coverage/dojo/PracticePet/Glad",
-        "coverage/dojo/PracticePet/Loading",
-        "coverage/dojo/PracticePet/Selected",
-        "coverage/dojo/PracticePet/Sleep",
-        "coverage/dojo/PracticePet/Sweat"
-      ],
-      "components": [
-        "Panels/Dojo"
-      ],
-      "features": [
-        "coverage/dojo/PracticePet"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dojo-end/Reference/1",
-        "proto/approved-dojo-end/Reference/2",
-        "proto/approved-dojo-end/Reference/3",
-        "proto/approved-dojo-end/Reference/4",
-        "proto/approved-dojo-end/Reference/5",
-        "proto/approved-dojo-end/Reference/6",
-        "proto/approved-dojo-end/Reference/7"
-      ]
-    },
-    {
-      "page": "Panels/Practice result",
-      "existing": false,
-      "boards": [
-        "D11b"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dojo-end/Reference/1",
-        "proto/approved-dojo-end/Reference/2",
-        "proto/approved-dojo-end/Reference/3",
-        "proto/approved-dojo-end/Reference/4",
-        "proto/approved-dojo-end/Reference/5",
-        "proto/approved-dojo-end/Reference/6",
-        "proto/approved-dojo-end/Reference/7",
-        "coverage/dojo/PracticeResult/Completed",
-        "coverage/dojo/PracticeResult/New best",
-        "coverage/dojo/PracticeResult/Save failed",
-        "coverage/dojo/PracticeResult/Stopped"
-      ],
-      "components": [
-        "Panels/Dojo"
-      ],
-      "features": [
-        "coverage/dojo/PracticeResult"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dojo-end/Reference/1",
-        "proto/approved-dojo-end/Reference/2",
-        "proto/approved-dojo-end/Reference/3",
-        "proto/approved-dojo-end/Reference/4",
-        "proto/approved-dojo-end/Reference/5",
-        "proto/approved-dojo-end/Reference/6",
-        "proto/approved-dojo-end/Reference/7"
-      ]
-    },
-    {
-      "page": "Panels/Memory agent",
-      "existing": false,
-      "boards": [
-        "Q3"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-memory/Reference/1",
-        "panels/memory/MemoryAgent/Cannot recycle",
-        "panels/memory/MemoryAgent/Close armed",
-        "panels/memory/MemoryOnlyTheAgentYouAreOnIsIdleNoBulkRecycle/Default",
-        "panels/memory/MemoryRestGuardOnOneAgentNeedsYouOnePastTheLimit/Default",
-        "panels/memory/MemoryAgent/More",
-        "panels/memory/MemoryAgent/No agents",
-        "panels/memory/MemoryRecycle3IdleTwoConfirmedOnePending/Default",
-        "panels/memory/MemoryRecycledOneRefusedOnItsRowAnAgentArmed/Default",
-        "panels/memory/MemoryAgent/Working"
-      ],
-      "components": [
-        "Panels/Memory"
-      ],
-      "features": [
-        "coverage/guard/MemoryAgent"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-memory/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Memory chart",
-      "existing": false,
-      "boards": [
-        "Q3"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-memory/Reference/1",
-        "panels/memory/MemoryChart/Empty",
-        "panels/memory/MemoryHistoryOpenFreeOverTimeThenWhatTheGuardDid/Default",
-        "panels/memory/MemoryChart/Process spark"
-      ],
-      "components": [
-        "Panels/Memory"
-      ],
-      "features": [
-        "coverage/guard/MemoryChart"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-memory/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Memory history",
-      "existing": false,
-      "boards": [
-        "Q3"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-memory/Reference/1",
-        "panels/memory/MemoryHistoryOpenFreeOverTimeThenWhatTheGuardDid/Default",
-        "panels/memory/MemoryHistory/Share"
-      ],
-      "components": [
-        "Panels/Memory"
-      ],
-      "features": [
-        "coverage/guard/MemoryHistory"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-memory/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Memory recovery",
-      "existing": false,
-      "boards": [
-        "Q3"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-memory/Reference/1",
-        "panels/memory/MemoryRecycledOneRefusedOnItsRowAnAgentArmed/Default",
-        "panels/memory/MemoryRecycle3IdleTwoConfirmedOnePending/Default",
-        "panels/memory/MemoryOnlyTheAgentYouAreOnIsIdleNoBulkRecycle/Default",
-        "panels/memory/MemoryRecovery/Hung helpers",
-        "panels/memory/MemoryRecovery/Recovery failed",
-        "panels/memory/MemoryRecovery/Restart window"
-      ],
-      "components": [
-        "Panels/Memory"
-      ],
-      "features": [
-        "coverage/guard/MemoryRecovery"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-memory/Reference/1"
       ]
     },
     {
@@ -7204,96 +7372,6 @@
       ]
     },
     {
-      "page": "Compositions/Keyboard explorer",
-      "existing": false,
-      "boards": [
-        "D3"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dialogs-keys/Reference/1",
-        "proto/approved-dialogs-keys/Reference/2",
-        "coverage/help/KeyboardExplorer/Combined modifiers",
-        "coverage/help/KeyboardExplorer/Lists",
-        "coverage/help/KeyboardExplorer/Modifier layer",
-        "coverage/help/KeyboardExplorer/Physical press",
-        "coverage/help/KeyboardExplorer/Picked key",
-        "coverage/help/KeyboardExplorer/Unbound"
-      ],
-      "components": [
-        "Compositions/Keyboard"
-      ],
-      "features": [
-        "coverage/help/KeyboardExplorer"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dialogs-keys/Reference/1",
-        "proto/approved-dialogs-keys/Reference/2"
-      ]
-    },
-    {
-      "page": "Panels/Markdown files",
-      "existing": false,
-      "boards": [
-        "D10"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dialogs-markdown/Reference/1",
-        "proto/approved-dialogs-markdown/Reference/2",
-        "panels/markdown/FeatureMarkdownFiles/Empty",
-        "proto/components-markdown-window/MarkdownWindow/Default",
-        "panels/markdown/FeatureMarkdownFiles/Keyboard",
-        "panels/markdown/FeatureMarkdownFiles/Loading",
-        "panels/markdown/FeatureMarkdownFiles/Recent",
-        "panels/markdown/FeatureMarkdownFiles/Remote",
-        "panels/markdown/FeatureMarkdownFiles/Review waiting"
-      ],
-      "components": [
-        "Panels/Markdown"
-      ],
-      "features": [
-        "coverage/markdown-panel/MarkdownFiles"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dialogs-markdown/Reference/1",
-        "proto/approved-dialogs-markdown/Reference/2"
-      ]
-    },
-    {
-      "page": "Panels/Markdown review",
-      "existing": false,
-      "boards": [
-        "D10"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dialogs-markdown/Reference/1",
-        "proto/approved-dialogs-markdown/Reference/2",
-        "panels/markdown/FeatureMarkdownReview/Another review",
-        "panels/markdown/FeatureMarkdownReview/Marker failed",
-        "panels/markdown/FeatureMarkdownReview/Review",
-        "panels/markdown/FeatureMarkdownReview/Save failed",
-        "panels/markdown/FeatureMarkdownReview/Saving"
-      ],
-      "components": [
-        "Panels/Markdown"
-      ],
-      "features": [
-        "coverage/markdown-panel/MarkdownReview"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dialogs-markdown/Reference/1",
-        "proto/approved-dialogs-markdown/Reference/2"
-      ]
-    },
-    {
       "page": "Compositions/Pane menu",
       "existing": false,
       "boards": [
@@ -7321,95 +7399,6 @@
       ]
     },
     {
-      "page": "Features/Action notice",
-      "existing": false,
-      "boards": [
-        "B9"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-bars-toasts/Reference/1",
-        "coverage/panel/ActionNotice/1 · Merged #142",
-        "coverage/panel/ActionNotice/2 · Review requested from reviewer",
-        "coverage/panel/ActionNotice/3 · Could not ask reviewer for a review",
-        "coverage/panel/ActionNotice/4 · New record: commits in a day",
-        "coverage/panel/ActionNotice/5 · Repaired feat/checkout",
-        "coverage/panel/ActionNotice/6 · Freed 824 MB",
-        "coverage/panel/ActionNotice/7 · Freed 824 MB",
-        "coverage/panel/ActionNotice/8 · Could not start the agent",
-        "coverage/spaces/ActionNotice/1 · acme is already one of your projects",
-        "coverage/spaces/ActionNotice/2 · The folder was not changed",
-        "coverage/spaces/ActionNotice/3 · feat/checkout already had a worktree",
-        "coverage/spaces/ActionNotice/4 · Sync devbox was not changed",
-        "coverage/spaces/ActionNotice/5 · fatal: Not possible to fast-forward, aborting."
-      ],
-      "components": [
-        "Compositions/Notifications",
-        "Primitives/Toast"
-      ],
-      "features": [
-        "coverage/panel/ActionNotice",
-        "coverage/spaces/ActionNotice"
-      ],
-      "proposedPredicates": [
-        {
-          "id": "coverage/spaces/ActionNotice/5 · fatal: Not possible to fast-forward, aborting.",
-          "label": "Action Notice · 5 · fatal: Not possible to fast-forward, aborting.",
-          "location": "kanso/mods/kanso-spaces/sidebar-rows.js:51"
-        }
-      ],
-      "approvedRecords": [
-        "proto/approved-bars-toasts/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Code limits",
-      "existing": false,
-      "boards": [],
-      "status": "Proposed",
-      "guidelines": [],
-      "records": [
-        "panels/preview/FeatureCodeLimits/Truncated code",
-        "panels/preview/FeatureCodeLimits/Truncated markdown"
-      ],
-      "components": [
-        "Panels/Preview"
-      ],
-      "features": [
-        "coverage/panel/CodeLimits"
-      ],
-      "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Conversation find",
-      "existing": false,
-      "boards": [
-        "B7"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-bars-find/Reference/1",
-        "panels/find/ConversationFindEmptyquery/Default",
-        "proto/components-find-in-the-conversation/FindInTheConversation/Default",
-        "panels/find/ConversationFindLoading/Default",
-        "panels/find/ConversationFindNomatches/Default",
-        "panels/find/ConversationFindStale/Default",
-        "panels/find/ConversationFindUnavailable/Default"
-      ],
-      "components": [
-        "Panels/Find"
-      ],
-      "features": [
-        "coverage/panel/ConversationFind"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-bars-find/Reference/1"
-      ]
-    },
-    {
       "page": "Panels/History chart",
       "existing": false,
       "boards": [],
@@ -7431,144 +7420,6 @@
         "coverage/panel/HistoryChart"
       ],
       "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Markdown editing",
-      "existing": false,
-      "boards": [
-        "P04"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-a-preview-md/Reference/1",
-        "proto/approved-panels-a-preview-md/Reference/2",
-        "proto/approved-panels-a-preview-md/Reference/3",
-        "proto/approved-panels-a-preview-md/Reference/4",
-        "panels/preview/FeatureMarkdownEditing/Append",
-        "panels/preview/PreviewMarkdownAClickEditsThatBlock/Default",
-        "panels/preview/PreviewTextChangedOnDiskWhileEdited/Default",
-        "panels/preview/PreviewPicturesOnAnotherComputerOver2MBLoad/Default",
-        "panels/preview/FeatureMarkdownEditing/Image failed",
-        "panels/preview/PreviewPicturesLoading/Default",
-        "panels/preview/FeatureMarkdownEditing/Loading",
-        "panels/preview/PreviewMarkdownFormatted/Default",
-        "panels/preview/FeatureMarkdownEditing/Save failed",
-        "panels/preview/FeatureMarkdownEditing/Saving",
-        "panels/preview/PreviewMarkdownSource/Default",
-        "panels/preview/FeatureMarkdownEditing/Stale",
-        "panels/preview/PreviewMarkdownATableCellByCell/Default"
-      ],
-      "components": [
-        "Panels/Preview"
-      ],
-      "features": [
-        "coverage/panel/MarkdownEditing"
-      ],
-      "proposedPredicates": [
-        {
-          "id": "coverage/panel/MarkdownEditing/Append",
-          "label": "Markdown Editing · Append",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Block editing",
-          "label": "Markdown Editing · Block editing",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Conflict",
-          "label": "Markdown Editing · Conflict",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Editing",
-          "label": "Markdown Editing · Editing",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Image deferred",
-          "label": "Markdown Editing · Image deferred",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Image failed",
-          "label": "Markdown Editing · Image failed",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Image loading",
-          "label": "Markdown Editing · Image loading",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Loading",
-          "label": "Markdown Editing · Loading",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Read",
-          "label": "Markdown Editing · Read",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Save failed",
-          "label": "Markdown Editing · Save failed",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Saving",
-          "label": "Markdown Editing · Saving",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Source",
-          "label": "Markdown Editing · Source",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Stale",
-          "label": "Markdown Editing · Stale",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        },
-        {
-          "id": "coverage/panel/MarkdownEditing/Table editing",
-          "label": "Markdown Editing · Table editing",
-          "location": "kanso/mods/kanso-panel/doc.js:323"
-        }
-      ],
-      "approvedRecords": [
-        "proto/approved-panels-a-preview-md/Reference/1",
-        "proto/approved-panels-a-preview-md/Reference/2",
-        "proto/approved-panels-a-preview-md/Reference/3",
-        "proto/approved-panels-a-preview-md/Reference/4"
-      ]
-    },
-    {
-      "page": "Panels/Port history",
-      "existing": false,
-      "boards": [
-        "Q1"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-ports/Reference/1",
-        "panels/ports/PortsHistoryOpenShareFromTheHeader/Default",
-        "panels/ports/PortHistoryGuardoff/Default",
-        "panels/ports/PortHistoryHistorystopped/Default",
-        "panels/ports/PortHistoryUnreadable/Default"
-      ],
-      "components": [
-        "Panels/Ports"
-      ],
-      "features": [
-        "coverage/panel/PortHistory"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-ports/Reference/1"
-      ]
     },
     {
       "page": "Panels/Preview",
@@ -7662,256 +7513,6 @@
       ],
       "approvedRecords": [
         "proto/approved-panels-a-preview-text/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Pull request",
-      "existing": false,
-      "boards": [
-        "P07"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-a-pr-open/Reference/1",
-        "proto/approved-panels-a-pr-open/Reference/2",
-        "proto/approved-panels-a-pr-open/Reference/3",
-        "proto/approved-panels-a-pr-open/Reference/4",
-        "panels/pr/PRActionsItsAgentWaitsOnYou/Default",
-        "panels/pr/PRVerdictBehindItsBaseTheCommitsItLacks/Default",
-        "panels/pr/PullRequestChangesrequested/Default",
-        "panels/pr/PullRequestClosed/Default",
-        "panels/pr/PRVerdictConflictsTheFiles/Default",
-        "panels/pr/PRVerdictDraftTheAuthorsChoiceNotAFault/Default",
-        "panels/pr/PRActionsFullLogAPageReadAlready/Default",
-        "panels/pr/PullRequestMergearmed/Default",
-        "panels/pr/PRListItsPullRequestWasMerged/Default",
-        "panels/pr/PRActionsMerging/Default",
-        "panels/pr/PullRequestNoagent/Default",
-        "panels/pr/PRAtRestNow/Default",
-        "panels/pr/PRVerdictReviewRequiredWhoWasAsked/Default",
-        "panels/pr/PRVerdictChecksRunningAWaitNothingToExplain/Default",
-        "panels/pr/PullRequestSendpreview/Default",
-        "panels/pr/PRActionsThatComputerUnreachable/Default",
-        "panels/pr/PRVerdictGitHubStillDecidingNothingMore/Default",
-        "panels/pr/PRActionsMergeRefused/Default"
-      ],
-      "components": [
-        "Panels/PR"
-      ],
-      "features": [
-        "coverage/panel/PullRequest"
-      ],
-      "proposedPredicates": [
-        {
-          "id": "coverage/panel/PullRequest/Agent blocked",
-          "label": "Pull Request · Session blocked",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Behind base",
-          "label": "Pull Request · Behind base",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Changes requested",
-          "label": "Pull Request · Changes requested",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Closed",
-          "label": "Pull Request · Closed",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Conflicts",
-          "label": "Pull Request · Conflicts",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Draft",
-          "label": "Pull Request · Draft",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Failed log",
-          "label": "Pull Request · Failed log",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Merge armed",
-          "label": "Pull Request · Merge armed",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Merged",
-          "label": "Pull Request · Merged",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Merging",
-          "label": "Pull Request · Merging",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/No agent",
-          "label": "Pull Request · No session",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Ready",
-          "label": "Pull Request · Ready",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Review required",
-          "label": "Pull Request · Review required",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Running checks",
-          "label": "Pull Request · Running checks",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Send preview",
-          "label": "Pull Request · Send preview",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Stale",
-          "label": "Pull Request · Stale",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Unknown checks",
-          "label": "Pull Request · Unknown checks",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        },
-        {
-          "id": "coverage/panel/PullRequest/Write failed",
-          "label": "Pull Request · Write failed",
-          "location": "kanso/mods/kanso-panel/pr-view.js:143"
-        }
-      ],
-      "approvedRecords": [
-        "proto/approved-panels-a-pr-open/Reference/1",
-        "proto/approved-panels-a-pr-open/Reference/2",
-        "proto/approved-panels-a-pr-open/Reference/3",
-        "proto/approved-panels-a-pr-open/Reference/4"
-      ]
-    },
-    {
-      "page": "Panels/Pull request context",
-      "existing": false,
-      "boards": [
-        "P07"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-a-pr-open/Reference/1",
-        "proto/approved-panels-a-pr-open/Reference/2",
-        "proto/approved-panels-a-pr-open/Reference/3",
-        "proto/approved-panels-a-pr-open/Reference/4",
-        "panels/pr/PullRequestContextBehindGitHub/Default",
-        "panels/pr/PRListGitHubCLINotInstalled/Default",
-        "panels/pr/PRListCreateAPullRequestInThePanel/Default",
-        "panels/pr/PRListTheDefaultBranchNoBranchRow/Default",
-        "panels/pr/PullRequestContextDetached/Default",
-        "panels/pr/PRListFirstRead/Default",
-        "panels/pr/PRListABranchWithNoPullRequestItsRowComesFirst/Default",
-        "panels/pr/PullRequestContextNoremote/Default",
-        "panels/pr/PRListThePaneInFrontIsNotInGitTheListIsThePanel/Default",
-        "panels/pr/PRListRateLimited/Default",
-        "panels/pr/PRListGitHubNotAnswering/Default",
-        "panels/pr/PRListNotSignedInToGitHub/Default",
-        "panels/pr/PullRequestContextUnpushed/Default",
-        "panels/pr/PullRequestContextUnsupportedremote/Default"
-      ],
-      "components": [
-        "Panels/PR"
-      ],
-      "features": [
-        "coverage/panel/PullRequestContext"
-      ],
-      "proposedPredicates": [
-        {
-          "id": "coverage/panel/PullRequestContext/Behind GitHub",
-          "label": "Pull Request Context · Behind GitHub",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/CLI absent",
-          "label": "Pull Request Context · CLI absent",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/Create pending",
-          "label": "Pull Request Context · Create pending",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/Default branch",
-          "label": "Pull Request Context · Default branch",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/Detached",
-          "label": "Pull Request Context · Detached",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/Loading",
-          "label": "Pull Request Context · Loading",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/No pull request",
-          "label": "Pull Request Context · No pull request",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/No remote",
-          "label": "Pull Request Context · No remote",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/No repository",
-          "label": "Pull Request Context · No repository",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/Rate limited",
-          "label": "Pull Request Context · Rate limited",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/Read failed",
-          "label": "Pull Request Context · Read failed",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/Sign in",
-          "label": "Pull Request Context · Sign in",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/Unpushed",
-          "label": "Pull Request Context · Unpushed",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        },
-        {
-          "id": "coverage/panel/PullRequestContext/Unsupported remote",
-          "label": "Pull Request Context · Unsupported remote",
-          "location": "kanso/mods/kanso-panel/pr-verdict.js:242"
-        }
-      ],
-      "approvedRecords": [
-        "proto/approved-panels-a-pr-open/Reference/1",
-        "proto/approved-panels-a-pr-open/Reference/2",
-        "proto/approved-panels-a-pr-open/Reference/3",
-        "proto/approved-panels-a-pr-open/Reference/4"
       ]
     },
     {
@@ -8009,80 +7610,6 @@
       ]
     },
     {
-      "page": "Panels/Pull request list",
-      "existing": false,
-      "boards": [
-        "P06"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-a-pr-list/Reference/1",
-        "proto/approved-panels-a-pr-list/Reference/2",
-        "proto/approved-panels-a-pr-list/Reference/3",
-        "proto/approved-panels-a-pr-list/Reference/4",
-        "proto/approved-panels-a-pr-list/Reference/5",
-        "proto/approved-panels-a-pr-list/Reference/6",
-        "proto/approved-panels-a-pr-list/Reference/7",
-        "proto/approved-panels-a-pr-list/Reference/8",
-        "panels/pr/PullRequestListClosed/Default",
-        "panels/pr/PRListAskedOfYouOpenedFromTheList/Default",
-        "panels/pr/PullRequestListLoadingclosed/Default",
-        "panels/pr/PullRequestListMore/Default",
-        "panels/pr/PullRequestListNothingclosed/Default",
-        "panels/pr/PRListNothingOpenAnywhere/Default",
-        "panels/pr/PRListThePaneInFrontIsNotInGitTheListIsThePanel/Default",
-        "panels/pr/PullRequestListPersistfailed/Default"
-      ],
-      "components": [
-        "Panels/PR"
-      ],
-      "features": [
-        "coverage/panel/PullRequestList"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-a-pr-list/Reference/1",
-        "proto/approved-panels-a-pr-list/Reference/2",
-        "proto/approved-panels-a-pr-list/Reference/3",
-        "proto/approved-panels-a-pr-list/Reference/4",
-        "proto/approved-panels-a-pr-list/Reference/5",
-        "proto/approved-panels-a-pr-list/Reference/6",
-        "proto/approved-panels-a-pr-list/Reference/7",
-        "proto/approved-panels-a-pr-list/Reference/8"
-      ]
-    },
-    {
-      "page": "Panels/Pull request picker",
-      "existing": false,
-      "boards": [
-        "P09"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-a-pr-details/Reference/1",
-        "panels/pr/PullRequestPickerAssignees/Default",
-        "panels/pr/PullRequestPickerEmpty/Default",
-        "panels/pr/PRDetailsOneRefusedTheOthersUntouched/Default",
-        "panels/pr/PRDetailsLabelsStraightFromTheLocalStore/Default",
-        "panels/pr/PRDetailsTheVeryFirstOpenTheSkeletonOnceEver/Default",
-        "panels/pr/PRDetailsNoMatchOffline/Default",
-        "panels/pr/PRDetailsReviewersThreeClicksNoWaiting/Default",
-        "panels/pr/PullRequestPickerTruncated/Default"
-      ],
-      "components": [
-        "Panels/PR"
-      ],
-      "features": [
-        "coverage/panel/PullRequestPicker"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-a-pr-details/Reference/1"
-      ]
-    },
-    {
       "page": "Panels/Share",
       "existing": true,
       "boards": [
@@ -8111,170 +7638,6 @@
       ]
     },
     {
-      "page": "Panels/Share card",
-      "existing": false,
-      "boards": [
-        "Q7"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-share/Reference/1",
-        "panels/share/ShareCardDj/Default",
-        "panels/share/ShareCardMemory/Default",
-        "panels/share/ShareCardPorts/Default",
-        "panels/share/ShareCardShipped/Default",
-        "panels/share/ShareCardSpend/Default"
-      ],
-      "components": [
-        "Panels/Share"
-      ],
-      "features": [
-        "coverage/panel/ShareCard"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-share/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Verdict body",
-      "existing": false,
-      "boards": [
-        "P07"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-a-pr-open/Reference/1",
-        "proto/approved-panels-a-pr-open/Reference/2",
-        "proto/approved-panels-a-pr-open/Reference/3",
-        "proto/approved-panels-a-pr-open/Reference/4",
-        "panels/pr/PRVerdictReviewRequiredWhoWasAsked/Default",
-        "panels/pr/PRConversationTheConversationInViewUnderTheVerdict/Default",
-        "panels/pr/PRVerdictBehindItsBaseTheCommitsItLacks/Default",
-        "panels/pr/PRActionsFullLogAPageReadAlready/Default",
-        "panels/pr/VerdictBodyNobody/Default",
-        "panels/pr/VerdictBodyNote/Default",
-        "panels/pr/PRVerdictChecksRunningAWaitNothingToExplain/Default"
-      ],
-      "components": [
-        "Panels/PR"
-      ],
-      "features": [
-        "coverage/panel/VerdictBody"
-      ],
-      "proposedPredicates": [
-        {
-          "id": "coverage/panel/VerdictBody/Checks",
-          "label": "Verdict Body · Checks",
-          "location": "kanso/mods/kanso-panel/pr-body.js:64"
-        },
-        {
-          "id": "coverage/panel/VerdictBody/Comment",
-          "label": "Verdict Body · Comment",
-          "location": "kanso/mods/kanso-panel/pr-body.js:64"
-        },
-        {
-          "id": "coverage/panel/VerdictBody/Commits",
-          "label": "Verdict Body · Commits",
-          "location": "kanso/mods/kanso-panel/pr-body.js:64"
-        },
-        {
-          "id": "coverage/panel/VerdictBody/Log",
-          "label": "Verdict Body · Log",
-          "location": "kanso/mods/kanso-panel/pr-body.js:64"
-        },
-        {
-          "id": "coverage/panel/VerdictBody/No body",
-          "label": "Verdict Body · No body",
-          "location": "kanso/mods/kanso-panel/pr-body.js:64"
-        },
-        {
-          "id": "coverage/panel/VerdictBody/Note",
-          "label": "Verdict Body · Note",
-          "location": "kanso/mods/kanso-panel/pr-body.js:64"
-        },
-        {
-          "id": "coverage/panel/VerdictBody/Running",
-          "label": "Verdict Body · Running",
-          "location": "kanso/mods/kanso-panel/pr-body.js:64"
-        }
-      ],
-      "approvedRecords": [
-        "proto/approved-panels-a-pr-open/Reference/1",
-        "proto/approved-panels-a-pr-open/Reference/2",
-        "proto/approved-panels-a-pr-open/Reference/3",
-        "proto/approved-panels-a-pr-open/Reference/4"
-      ]
-    },
-    {
-      "page": "Panels/Worktree history",
-      "existing": false,
-      "boards": [],
-      "status": "Proposed",
-      "guidelines": [],
-      "records": [
-        "panels/worktrees/FeatureWorktreeHistory/Disk split",
-        "panels/worktrees/FeatureWorktreeHistory/Freed",
-        "panels/worktrees/FeatureWorktreeHistory/History loading",
-        "panels/worktrees/FeatureWorktreeHistory/No history",
-        "panels/worktrees/FeatureWorktreeHistory/Repository split"
-      ],
-      "components": [
-        "Panels/Worktrees"
-      ],
-      "features": [
-        "coverage/panel/WorktreeHistory"
-      ],
-      "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Worktree verdict",
-      "existing": false,
-      "boards": [
-        "P13"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-a-worktrees/Reference/1",
-        "proto/approved-panels-a-worktrees/Reference/2",
-        "proto/approved-panels-a-worktrees/Reference/3",
-        "proto/approved-panels-a-worktrees/Reference/4",
-        "proto/approved-panels-a-worktrees/Reference/5",
-        "proto/approved-panels-a-worktrees/Reference/6",
-        "panels/worktrees/WorktreesItsRepositoryMovedRepair/Default",
-        "panels/worktrees/WorktreesARowPickedRemoveArmed/Default",
-        "panels/worktrees/WorktreesCheckingAgainTheLastScanKept/Default",
-        "panels/worktrees/FeatureWorktreeVerdict/Detached",
-        "panels/worktrees/FeatureWorktreeVerdict/Locked",
-        "panels/worktrees/FeatureWorktreeVerdict/Lost",
-        "panels/worktrees/FeatureWorktreeVerdict/Merged",
-        "panels/worktrees/FeatureWorktreeVerdict/Missing",
-        "panels/worktrees/WorktreesInATabGoToItInstead/Default",
-        "panels/worktrees/FeatureWorktreeVerdict/Orphan",
-        "panels/worktrees/FeatureWorktreeVerdict/Recent",
-        "panels/worktrees/FeatureWorktreeVerdict/Replaced",
-        "panels/worktrees/FeatureWorktreeVerdict/Unmerged"
-      ],
-      "components": [
-        "Panels/Worktrees"
-      ],
-      "features": [
-        "coverage/panel/WorktreeVerdict"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-a-worktrees/Reference/1",
-        "proto/approved-panels-a-worktrees/Reference/2",
-        "proto/approved-panels-a-worktrees/Reference/3",
-        "proto/approved-panels-a-worktrees/Reference/4",
-        "proto/approved-panels-a-worktrees/Reference/5",
-        "proto/approved-panels-a-worktrees/Reference/6"
-      ]
-    },
-    {
       "page": "Features/Multiline prompt",
       "existing": false,
       "boards": [],
@@ -8291,472 +7654,6 @@
         "coverage/prompt-editor/MultilinePrompt"
       ],
       "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Keys",
-      "existing": false,
-      "boards": [
-        "D3"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dialogs-keys/Reference/1",
-        "proto/approved-dialogs-keys/Reference/2",
-        "panels/settings/Bindings/Capture",
-        "panels/settings/Bindings/Changed",
-        "panels/settings/Bindings/Conflict armed",
-        "panels/settings/Bindings/Family capture",
-        "panels/settings/Bindings/Invalid family",
-        "panels/settings/Bindings/Memory, while its panel has the keyboard",
-        "proto/components-settings-tabs/Keys/Default",
-        "panels/settings/Bindings/Preview, while it has the keyboard",
-        "panels/settings/Bindings/Spend, while its panel has the keyboard",
-        "panels/settings/Bindings/Unbound",
-        "panels/settings/Bindings/Write failed"
-      ],
-      "components": [
-        "Compositions/Keyboard",
-        "Panels/Settings"
-      ],
-      "features": [
-        "coverage/settings/Bindings"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dialogs-keys/Reference/1",
-        "proto/approved-dialogs-keys/Reference/2"
-      ]
-    },
-    {
-      "page": "Panels/Credits",
-      "existing": false,
-      "boards": [
-        "D5"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dialogs-credits/Reference/1",
-        "proto/approved-dialogs-credits/Reference/2",
-        "proto/approved-dialogs-credits/Reference/3",
-        "panels/settings/CreditsLoading/Avatars pending",
-        "panels/settings/CreditsLoading/Avatars unavailable"
-      ],
-      "components": [
-        "Panels/Settings"
-      ],
-      "features": [
-        "coverage/settings/CreditsLoading"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dialogs-credits/Reference/1",
-        "proto/approved-dialogs-credits/Reference/2",
-        "proto/approved-dialogs-credits/Reference/3"
-      ]
-    },
-    {
-      "page": "Panels/What shows",
-      "existing": false,
-      "boards": [
-        "D2"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dialogs-pieces/Reference/1",
-        "proto/approved-dialogs-pieces/Reference/2",
-        "proto/approved-dialogs-pieces/Reference/3",
-        "proto/approved-dialogs-pieces/Reference/4",
-        "proto/approved-dialogs-pieces/Reference/5",
-        "proto/approved-dialogs-pieces/Reference/6",
-        "proto/approved-dialogs-pieces/Reference/7",
-        "proto/approved-dialogs-pieces/Reference/8",
-        "proto/approved-dialogs-pieces/Reference/9",
-        "proto/approved-dialogs-pieces/Reference/10",
-        "proto/approved-dialogs-pieces/Reference/11",
-        "proto/approved-dialogs-pieces/Reference/12",
-        "proto/approved-dialogs-pieces/Reference/13",
-        "proto/approved-dialogs-pieces/Reference/14",
-        "proto/approved-dialogs-pieces/Reference/15",
-        "proto/approved-dialogs-pieces/Reference/16",
-        "proto/components-settings-tabs/SettingsWhatShows/Default",
-        "panels/settings/Pieces/Changed",
-        "panels/settings/Pieces/Custom panel",
-        "panels/settings/Pieces/No matches"
-      ],
-      "components": [
-        "Panels/Settings"
-      ],
-      "features": [
-        "coverage/settings/Pieces"
-      ],
-      "proposedPredicates": [
-        {
-          "id": "coverage/settings/Pieces/Background",
-          "label": "Pieces · Background",
-          "location": "kanso/mods/kanso-settings/main.js:226"
-        },
-        {
-          "id": "coverage/settings/Pieces/Changed",
-          "label": "Pieces · Changed",
-          "location": "kanso/mods/kanso-settings/main.js:226"
-        },
-        {
-          "id": "coverage/settings/Pieces/Custom panel",
-          "label": "Pieces · Custom panel",
-          "location": "kanso/mods/kanso-settings/main.js:226"
-        },
-        {
-          "id": "coverage/settings/Pieces/No matches",
-          "label": "Pieces · No matches",
-          "location": "kanso/mods/kanso-settings/main.js:226"
-        },
-        {
-          "id": "coverage/settings/Pieces/Notifications",
-          "label": "Pieces · Notifications",
-          "location": "kanso/mods/kanso-settings/main.js:226"
-        },
-        {
-          "id": "coverage/settings/Pieces/Pane header",
-          "label": "Pieces · Pane header",
-          "location": "kanso/mods/kanso-settings/main.js:226"
-        },
-        {
-          "id": "coverage/settings/Pieces/Sidebar",
-          "label": "Pieces · Sidebar",
-          "location": "kanso/mods/kanso-settings/main.js:226"
-        },
-        {
-          "id": "coverage/settings/Pieces/Status bar",
-          "label": "Pieces · Status bar",
-          "location": "kanso/mods/kanso-settings/main.js:226"
-        },
-        {
-          "id": "coverage/settings/Pieces/Tab bar and panels",
-          "label": "Pieces · Tab bar and panels",
-          "location": "kanso/mods/kanso-settings/main.js:226"
-        }
-      ],
-      "approvedRecords": [
-        "proto/approved-dialogs-pieces/Reference/1",
-        "proto/approved-dialogs-pieces/Reference/2",
-        "proto/approved-dialogs-pieces/Reference/3",
-        "proto/approved-dialogs-pieces/Reference/4",
-        "proto/approved-dialogs-pieces/Reference/5",
-        "proto/approved-dialogs-pieces/Reference/6",
-        "proto/approved-dialogs-pieces/Reference/7",
-        "proto/approved-dialogs-pieces/Reference/8",
-        "proto/approved-dialogs-pieces/Reference/9",
-        "proto/approved-dialogs-pieces/Reference/10",
-        "proto/approved-dialogs-pieces/Reference/11",
-        "proto/approved-dialogs-pieces/Reference/12",
-        "proto/approved-dialogs-pieces/Reference/13",
-        "proto/approved-dialogs-pieces/Reference/14",
-        "proto/approved-dialogs-pieces/Reference/15",
-        "proto/approved-dialogs-pieces/Reference/16"
-      ]
-    },
-    {
-      "page": "Panels/Release channel",
-      "existing": false,
-      "boards": [
-        "D4"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dialogs-news/Reference/1",
-        "proto/approved-dialogs-news/Reference/2",
-        "proto/approved-dialogs-news/Reference/3",
-        "proto/approved-dialogs-news/Reference/4",
-        "proto/approved-dialogs-news/Reference/5",
-        "proto/approved-dialogs-news/Reference/6",
-        "proto/approved-dialogs-news/Reference/7",
-        "proto/approved-dialogs-news/Reference/8",
-        "proto/approved-dialogs-news/Reference/9",
-        "proto/approved-dialogs-news/Reference/10",
-        "proto/approved-dialogs-news/Reference/11",
-        "panels/settings/ReleaseControls/Cached",
-        "panels/settings/ReleaseControls/Checking",
-        "panels/settings/ReleaseControls/Checks off",
-        "panels/settings/ReleaseControls/Current",
-        "panels/settings/ReleaseControls/Early",
-        "panels/settings/ReleaseControls/Installing",
-        "panels/settings/ReleaseControls/Loading",
-        "panels/settings/ReleaseControls/Read failed",
-        "panels/settings/ReleaseControls/Stable",
-        "panels/settings/ReleaseControls/Update ready"
-      ],
-      "components": [
-        "Panels/Settings"
-      ],
-      "features": [
-        "coverage/settings/ReleaseControls"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dialogs-news/Reference/1",
-        "proto/approved-dialogs-news/Reference/2",
-        "proto/approved-dialogs-news/Reference/3",
-        "proto/approved-dialogs-news/Reference/4",
-        "proto/approved-dialogs-news/Reference/5",
-        "proto/approved-dialogs-news/Reference/6",
-        "proto/approved-dialogs-news/Reference/7",
-        "proto/approved-dialogs-news/Reference/8",
-        "proto/approved-dialogs-news/Reference/9",
-        "proto/approved-dialogs-news/Reference/10",
-        "proto/approved-dialogs-news/Reference/11"
-      ]
-    },
-    {
-      "page": "Panels/Device controls",
-      "existing": false,
-      "boards": [
-        "Q6"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-sim/Reference/1",
-        "panels/simulator/FeatureDeviceControls/Acting",
-        "panels/simulator/SimulatorAndroidTouchKeysTheDevicesButtons/Default",
-        "panels/simulator/SimulatorError/Default",
-        "panels/simulator/SimulatorIOSThePicture/Default",
-        "panels/simulator/FeatureDeviceControls/URL invalid"
-      ],
-      "components": [
-        "Panels/Simulator"
-      ],
-      "features": [
-        "coverage/sim/DeviceControls"
-      ],
-      "proposedPredicates": [
-        {
-          "id": "coverage/sim/DeviceControls/Acting",
-          "label": "Device Controls · Acting",
-          "location": "kanso/mods/kanso-sim/main.js:229"
-        },
-        {
-          "id": "coverage/sim/DeviceControls/Android device",
-          "label": "Device Controls · Android device",
-          "location": "kanso/mods/kanso-sim/main.js:229"
-        },
-        {
-          "id": "coverage/sim/DeviceControls/Android emulator",
-          "label": "Device Controls · Android emulator",
-          "location": "kanso/mods/kanso-sim/main.js:229"
-        },
-        {
-          "id": "coverage/sim/DeviceControls/Command failed",
-          "label": "Device Controls · Command failed",
-          "location": "kanso/mods/kanso-sim/main.js:229"
-        },
-        {
-          "id": "coverage/sim/DeviceControls/iOS",
-          "label": "Device Controls · iOS",
-          "location": "kanso/mods/kanso-sim/main.js:229"
-        },
-        {
-          "id": "coverage/sim/DeviceControls/URL invalid",
-          "label": "Device Controls · URL invalid",
-          "location": "kanso/mods/kanso-sim/main.js:229"
-        }
-      ],
-      "approvedRecords": [
-        "proto/approved-panels-b-sim/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Devices",
-      "existing": false,
-      "boards": [
-        "Q6"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-sim/Reference/1",
-        "panels/simulator/SimulatorDevicesTheListReplacesTheScreen/Default",
-        "panels/simulator/FeatureDevices/Empty",
-        "panels/simulator/FeatureDevices/Emulator binary missing",
-        "panels/simulator/SimulatorFirstRead/Default",
-        "panels/simulator/SimulatorOff/Default",
-        "panels/simulator/FeatureDevices/Offline",
-        "panels/simulator/SimulatorError/Default",
-        "panels/simulator/FeatureDevices/Remote project",
-        "panels/simulator/FeatureDevices/Start timed out",
-        "panels/simulator/SimulatorBooting/Default",
-        "panels/simulator/FeatureDevices/Unauthorized"
-      ],
-      "components": [
-        "Panels/Simulator"
-      ],
-      "features": [
-        "coverage/sim/Devices"
-      ],
-      "proposedPredicates": [
-        {
-          "id": "coverage/sim/Devices/Booted",
-          "label": "Devices · Booted",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        },
-        {
-          "id": "coverage/sim/Devices/Empty",
-          "label": "Devices · Empty",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        },
-        {
-          "id": "coverage/sim/Devices/Emulator binary missing",
-          "label": "Devices · Emulator binary missing",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        },
-        {
-          "id": "coverage/sim/Devices/Loading",
-          "label": "Devices · Loading",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        },
-        {
-          "id": "coverage/sim/Devices/Off",
-          "label": "Devices · Off",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        },
-        {
-          "id": "coverage/sim/Devices/Offline",
-          "label": "Devices · Offline",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        },
-        {
-          "id": "coverage/sim/Devices/Read failed",
-          "label": "Devices · Read failed",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        },
-        {
-          "id": "coverage/sim/Devices/Remote project",
-          "label": "Devices · Remote project",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        },
-        {
-          "id": "coverage/sim/Devices/Start timed out",
-          "label": "Devices · Start timed out",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        },
-        {
-          "id": "coverage/sim/Devices/Starting",
-          "label": "Devices · Starting",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        },
-        {
-          "id": "coverage/sim/Devices/Unauthorized",
-          "label": "Devices · Unauthorized",
-          "location": "kanso/mods/kanso-sim/main.js:269"
-        }
-      ],
-      "approvedRecords": [
-        "proto/approved-panels-b-sim/Reference/1"
-      ]
-    },
-    {
-      "page": "Panels/Picture state",
-      "existing": false,
-      "boards": [
-        "Q6"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-sim/Reference/1",
-        "panels/simulator/SimulatorFirstRead/Default",
-        "panels/simulator/FeaturePictureState/Key focus",
-        "panels/simulator/FeaturePictureState/No picture",
-        "panels/simulator/SimulatorThePictureStalled/Default",
-        "panels/simulator/SimulatorAndroidTouchKeysTheDevicesButtons/Default"
-      ],
-      "components": [
-        "Panels/Simulator"
-      ],
-      "features": [
-        "coverage/sim/PictureState"
-      ],
-      "proposedPredicates": [
-        {
-          "id": "coverage/sim/PictureState/First frame",
-          "label": "Picture State · First frame",
-          "location": "kanso/mods/kanso-sim/main.js:248"
-        },
-        {
-          "id": "coverage/sim/PictureState/Key focus",
-          "label": "Picture State · Key focus",
-          "location": "kanso/mods/kanso-sim/main.js:248"
-        },
-        {
-          "id": "coverage/sim/PictureState/No picture",
-          "label": "Picture State · No picture",
-          "location": "kanso/mods/kanso-sim/main.js:248"
-        },
-        {
-          "id": "coverage/sim/PictureState/Stale frame",
-          "label": "Picture State · Stale frame",
-          "location": "kanso/mods/kanso-sim/main.js:248"
-        },
-        {
-          "id": "coverage/sim/PictureState/Touch",
-          "label": "Picture State · Touch",
-          "location": "kanso/mods/kanso-sim/main.js:248"
-        }
-      ],
-      "approvedRecords": [
-        "proto/approved-panels-b-sim/Reference/1"
-      ]
-    },
-    {
-      "page": "Compositions/Asleep",
-      "existing": false,
-      "boards": [
-        "S07"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-sidebar-asleep/Reference/1",
-        "proto/approved-sidebar-asleep/Reference/2",
-        "proto/approved-sidebar-asleep/Reference/3",
-        "proto/approved-sidebar-asleep/Reference/4",
-        "proto/approved-sidebar-asleep/Reference/5",
-        "proto/approved-sidebar-asleep/Reference/6",
-        "proto/approved-sidebar-asleep/Reference/7",
-        "proto/approved-sidebar-asleep/Reference/8",
-        "proto/approved-sidebar-asleep/Reference/9",
-        "proto/approved-sidebar-asleep/Reference/10",
-        "proto/approved-sidebar-asleep/Reference/11",
-        "proto/compositions-sidebar-features/Asleep/Asleep menu",
-        "proto/compositions-sidebar-features/Asleep/Forget armed",
-        "proto/compositions-sidebar-features/Asleep/Rail popup",
-        "proto/compositions-sidebar-features/Asleep/Sleep stuck",
-        "proto/compositions-sidebar-features/Asleep/Wake pending",
-        "proto/compositions-sidebar-features/Asleep/Wake selected"
-      ],
-      "components": [
-        "Layouts/Sidebar"
-      ],
-      "features": [
-        "coverage/spaces/Asleep"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-sidebar-asleep/Reference/1",
-        "proto/approved-sidebar-asleep/Reference/2",
-        "proto/approved-sidebar-asleep/Reference/3",
-        "proto/approved-sidebar-asleep/Reference/4",
-        "proto/approved-sidebar-asleep/Reference/5",
-        "proto/approved-sidebar-asleep/Reference/6",
-        "proto/approved-sidebar-asleep/Reference/7",
-        "proto/approved-sidebar-asleep/Reference/8",
-        "proto/approved-sidebar-asleep/Reference/9",
-        "proto/approved-sidebar-asleep/Reference/10",
-        "proto/approved-sidebar-asleep/Reference/11"
-      ]
     },
     {
       "page": "Compositions/Computer menu",
@@ -8850,121 +7747,6 @@
       ]
     },
     {
-      "page": "Compositions/Needs you",
-      "existing": false,
-      "boards": [
-        "S09"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-sidebar-needs/Reference/1",
-        "proto/approved-sidebar-needs/Reference/2",
-        "proto/approved-sidebar-needs/Reference/3",
-        "proto/approved-sidebar-needs/Reference/4",
-        "proto/approved-sidebar-needs/Reference/5",
-        "proto/compositions-sidebar-features/NeedsQueue/Empty",
-        "proto/compositions-sidebar-features/NeedsQueue/Loading",
-        "proto/compositions-sidebar-features/NeedsQueue/Queue",
-        "proto/compositions-sidebar-features/NeedsQueue/Unavailable"
-      ],
-      "components": [
-        "Layouts/Sidebar"
-      ],
-      "features": [
-        "coverage/spaces/NeedsQueue"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-sidebar-needs/Reference/1",
-        "proto/approved-sidebar-needs/Reference/2",
-        "proto/approved-sidebar-needs/Reference/3",
-        "proto/approved-sidebar-needs/Reference/4",
-        "proto/approved-sidebar-needs/Reference/5"
-      ]
-    },
-    {
-      "page": "Compositions/Project sync",
-      "existing": false,
-      "boards": [
-        "S04"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-sidebar-project/Reference/1",
-        "proto/approved-sidebar-project/Reference/2",
-        "proto/approved-sidebar-project/Reference/3",
-        "proto/approved-sidebar-project/Reference/4",
-        "proto/approved-sidebar-project/Reference/5",
-        "proto/approved-sidebar-project/Reference/6",
-        "proto/approved-sidebar-project/Reference/7",
-        "proto/approved-sidebar-project/Reference/8",
-        "proto/approved-sidebar-project/Reference/9",
-        "proto/approved-sidebar-project/Reference/10",
-        "proto/approved-sidebar-project/Reference/11",
-        "proto/approved-sidebar-project/Reference/12",
-        "proto/approved-sidebar-project/Reference/13",
-        "proto/approved-sidebar-project/Reference/14",
-        "proto/approved-sidebar-project/Reference/15",
-        "proto/approved-sidebar-project/Reference/16",
-        "proto/approved-sidebar-project/Reference/17",
-        "proto/approved-sidebar-project/Reference/18",
-        "proto/compositions-sidebar-features/ProjectGit/Ahead",
-        "proto/compositions-sidebar-features/ProjectGit/Behind",
-        "proto/compositions-sidebar-features/ProjectGit/Pull refused",
-        "proto/compositions-sidebar-features/ProjectGit/Pulling"
-      ],
-      "components": [
-        "Layouts/Sidebar"
-      ],
-      "features": [
-        "coverage/spaces/ProjectGit"
-      ],
-      "proposedPredicates": [
-        {
-          "id": "coverage/spaces/ProjectGit/Ahead",
-          "label": "Project Git · Ahead",
-          "location": "kanso/mods/kanso-spaces/sidebar-rows.js:13"
-        },
-        {
-          "id": "coverage/spaces/ProjectGit/Behind",
-          "label": "Project Git · Behind",
-          "location": "kanso/mods/kanso-spaces/sidebar-rows.js:13"
-        },
-        {
-          "id": "coverage/spaces/ProjectGit/Pull refused",
-          "label": "Project Git · Pull refused",
-          "location": "kanso/mods/kanso-spaces/sidebar-rows.js:13"
-        },
-        {
-          "id": "coverage/spaces/ProjectGit/Pulling",
-          "label": "Project Git · Pulling",
-          "location": "kanso/mods/kanso-spaces/sidebar-rows.js:13"
-        }
-      ],
-      "approvedRecords": [
-        "proto/approved-sidebar-project/Reference/1",
-        "proto/approved-sidebar-project/Reference/2",
-        "proto/approved-sidebar-project/Reference/3",
-        "proto/approved-sidebar-project/Reference/4",
-        "proto/approved-sidebar-project/Reference/5",
-        "proto/approved-sidebar-project/Reference/6",
-        "proto/approved-sidebar-project/Reference/7",
-        "proto/approved-sidebar-project/Reference/8",
-        "proto/approved-sidebar-project/Reference/9",
-        "proto/approved-sidebar-project/Reference/10",
-        "proto/approved-sidebar-project/Reference/11",
-        "proto/approved-sidebar-project/Reference/12",
-        "proto/approved-sidebar-project/Reference/13",
-        "proto/approved-sidebar-project/Reference/14",
-        "proto/approved-sidebar-project/Reference/15",
-        "proto/approved-sidebar-project/Reference/16",
-        "proto/approved-sidebar-project/Reference/17",
-        "proto/approved-sidebar-project/Reference/18"
-      ]
-    },
-    {
       "page": "Compositions/Project menu",
       "existing": false,
       "boards": [
@@ -9050,70 +7832,6 @@
       ]
     },
     {
-      "page": "Compositions/Sidebar sort",
-      "existing": false,
-      "boards": [
-        "S17"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-sidebar-keys/Reference/1",
-        "proto/approved-sidebar-keys/Reference/2",
-        "proto/approved-sidebar-keys/Reference/3",
-        "proto/approved-sidebar-keys/Reference/4",
-        "proto/approved-sidebar-keys/Reference/5",
-        "proto/approved-sidebar-keys/Reference/6",
-        "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default",
-        "proto/compositions-sidebar-rows/StatusViewTile/Default"
-      ],
-      "components": [
-        "Layouts/Sidebar"
-      ],
-      "features": [
-        "coverage/spaces/SidebarSort"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-sidebar-keys/Reference/1",
-        "proto/approved-sidebar-keys/Reference/2",
-        "proto/approved-sidebar-keys/Reference/3",
-        "proto/approved-sidebar-keys/Reference/4",
-        "proto/approved-sidebar-keys/Reference/5",
-        "proto/approved-sidebar-keys/Reference/6"
-      ]
-    },
-    {
-      "page": "Panels/Spend breakdown",
-      "existing": false,
-      "boards": [
-        "Q4"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-spend/Reference/1",
-        "panels/spend/SpendBreakdownModeldetail/Default",
-        "panels/spend/SpendBreakdownModels/Default",
-        "panels/spend/SpendBreakdownMore/Default",
-        "panels/spend/SpendAProjectOpenedFromItsRow/Default",
-        "panels/spend/SpendBreakdownProjects/Default",
-        "panels/spend/SpendBreakdownSessions/Default",
-        "panels/spend/SpendATaskOpenedFromItsRow/Default",
-        "panels/spend/SpendBreakdownTasks/Default"
-      ],
-      "components": [
-        "Panels/Spend"
-      ],
-      "features": [
-        "coverage/spend/SpendBreakdown"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-spend/Reference/1"
-      ]
-    },
-    {
       "page": "Panels/Spend history",
       "existing": false,
       "boards": [],
@@ -9131,95 +7849,6 @@
         "coverage/spend/SpendChart"
       ],
       "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Spend settings",
-      "existing": false,
-      "boards": [
-        "Q4"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-panels-b-spend/Reference/1",
-        "panels/spend/SpendSettingsPlanadded/Default",
-        "panels/spend/SpendSettingsPlaninvalid/Default",
-        "panels/spend/SpendAPlanCorrectedInPlace/Default",
-        "panels/spend/SpendSettingsPlans/Default",
-        "panels/spend/SpendSettingsPrices/Default",
-        "panels/spend/SpendSettingsSettingsfailed/Default",
-        "panels/spend/SpendSettingsShare/Default",
-        "panels/spend/SpendSettingsSourcesAndPlansDetected/Default",
-        "panels/spend/SpendSettingsSourcesloading/Default",
-        "panels/spend/SpendSettingsSourcespending/Default",
-        "panels/spend/SpendSettingsUpdatepolicy/Default"
-      ],
-      "components": [
-        "Panels/Spend"
-      ],
-      "features": [
-        "coverage/spend/SpendSettings"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-panels-b-spend/Reference/1"
-      ]
-    },
-    {
-      "page": "Compositions/Status stand-ins",
-      "existing": false,
-      "boards": [
-        "B8"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-bars-status/Reference/1",
-        "coverage/status/StatusStandIn/Low memory",
-        "coverage/status/StatusStandIn/Offscreen waiting",
-        "coverage/status/StatusStandIn/Quiet",
-        "coverage/status/StatusStandIn/Several waiting",
-        "coverage/status/StatusStandIn/Visible home"
-      ],
-      "components": [
-        "Compositions/Status bar"
-      ],
-      "features": [
-        "coverage/status/StatusStandIn"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-bars-status/Reference/1"
-      ]
-    },
-    {
-      "page": "Compositions/Pane tools",
-      "existing": false,
-      "boards": [
-        "B4"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-bars-header/Reference/1",
-        "coverage/strip/PaneTools/Close armed",
-        "coverage/strip/PaneTools/Hover",
-        "coverage/strip/PaneTools/Keyboard",
-        "coverage/strip/PaneTools/No project",
-        "coverage/strip/PaneTools/Pinned",
-        "coverage/strip/PaneTools/Terminal",
-        "coverage/strip/PaneTools/Working"
-      ],
-      "components": [
-        "Compositions/Header"
-      ],
-      "features": [
-        "coverage/strip/PaneTools"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-bars-header/Reference/1"
-      ]
     },
     {
       "page": "Compositions/Strip navigation",
@@ -9248,120 +7877,6 @@
       "proposedPredicates": [],
       "approvedRecords": [
         "proto/approved-bars-edges/Reference/1"
-      ]
-    },
-    {
-      "page": "Compositions/Panel toolbar",
-      "existing": false,
-      "boards": [
-        "B2"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-bars-panels/Reference/1",
-        "coverage/tabs/PanelToolbar/Available",
-        "coverage/tabs/PanelToolbar/Capability absent",
-        "coverage/tabs/PanelToolbar/Custom panel",
-        "coverage/tabs/PanelToolbar/Opened",
-        "coverage/tabs/PanelToolbar/Reordering",
-        "coverage/tabs/PanelToolbar/Settings"
-      ],
-      "components": [
-        "Compositions/Bars"
-      ],
-      "features": [
-        "coverage/tabs/PanelToolbar"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-bars-panels/Reference/1"
-      ]
-    },
-    {
-      "page": "Features/Tabs",
-      "existing": false,
-      "boards": [
-        "B1"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-bars-tabs/Reference/1",
-        "coverage/tabs/Tabs/Close",
-        "coverage/tabs/Tabs/Context menu",
-        "coverage/tabs/Tabs/Inactive",
-        "coverage/tabs/Tabs/Reorder",
-        "coverage/tabs/Tabs/Selected",
-        "coverage/tabs/Tabs/Unmeasured",
-        "coverage/tabs/Tabs/Zoomed"
-      ],
-      "components": [
-        "Compositions/Bars",
-        "Primitives/Tab"
-      ],
-      "features": [
-        "coverage/tabs/Tabs"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-bars-tabs/Reference/1"
-      ]
-    },
-    {
-      "page": "Features/Notice",
-      "existing": false,
-      "boards": [
-        "B9"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-bars-toasts/Reference/1",
-        "coverage/toast/Notice/Failure",
-        "coverage/toast/Notice/Information",
-        "coverage/toast/Notice/Long source",
-        "coverage/toast/Notice/Success",
-        "coverage/toast/Notice/Warning",
-        "coverage/toast/Notice/With action"
-      ],
-      "components": [
-        "Compositions/Notifications",
-        "Primitives/Toast"
-      ],
-      "features": [
-        "coverage/toast/Notice"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-bars-toasts/Reference/1"
-      ]
-    },
-    {
-      "page": "Features/Notice stack",
-      "existing": false,
-      "boards": [
-        "B9"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-bars-toasts/Reference/1",
-        "coverage/toast/NoticeStack/Different actions",
-        "coverage/toast/NoticeStack/Duplicate coalesced",
-        "coverage/toast/NoticeStack/Expired",
-        "coverage/toast/NoticeStack/Three notices"
-      ],
-      "components": [
-        "Compositions/Notifications",
-        "Primitives/Toast"
-      ],
-      "features": [
-        "coverage/toast/NoticeStack"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-bars-toasts/Reference/1"
       ]
     },
     {
