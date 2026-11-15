@@ -102,7 +102,7 @@ export const markdown = ({ source, block, state }) => `<div class="kanso-markdow
 }).join('')}</div>`;
 
 // A heading's `mark` sits at its right, the state of what it names; a `failure` item is the failure pattern in the menu's place.
-const menuHeading = (text, status) => `<div class="kanso-menu__heading">${grow(escape(text))}${status ? mark({ status, size: 'sm' }) : ''}</div>`;
+const menuHeading = (text, status) => `<div class="kanso-menu__heading">${status ? `${grow(escape(text))}${mark({ status, size: 'sm' })}` : escape(text)}</div>`;
 export const menu = ({ title, items }) => {
   const rows = (Array.isArray(items) ? items : []).map((item) => {
     if (item.separator) return '<div class="kanso-menu__separator"></div>';
