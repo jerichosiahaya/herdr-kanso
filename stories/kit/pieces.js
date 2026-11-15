@@ -363,6 +363,7 @@ export const stacks = {
   'rail list': { block: 'kanso-rail__list' },
   'rail tile': { block: 'kanso-rail__tile', focusable: true },
   'rail footer': { block: 'kanso-rail__footer' },
+  'rail menu': { block: 'kanso-rail__menu' },
   'sidebar frame': { block: 'kanso-sidebar' },
   'rail frame': { block: 'kanso-rail' },
   'status bar': { block: 'kanso-status-bar', states: ['grid'] },

@@ -25,6 +25,10 @@
 .kanso-rail:has(.kanso-sidebar__view-menu){overflow:visible}
 .kanso-rail .kanso-sidebar__view-switch{position:relative}
 .kanso-sidebar__view-menu{position:absolute;top:0;left:calc(anchor(--kanso-rail right) + var(--k-sp-1));z-index:1}
+.kanso-rail:has(.kanso-rail__menu){overflow:visible}
+.kanso-rail__tile:has(+ .kanso-rail__menu){anchor-name:--kanso-rail-tile}
+.kanso-rail__menu{height:0}
+.kanso-rail__menu>.kanso-menu{position:absolute;top:anchor(--kanso-rail-tile top);left:calc(100% + var(--k-sp-1));z-index:1}
 .kanso-sidebar__row-menu{position:relative;height:0;z-index:1}
 .kanso-sidebar__row-menu>.kanso-menu{position:absolute;top:var(--k-sp-1);right:0}
 
