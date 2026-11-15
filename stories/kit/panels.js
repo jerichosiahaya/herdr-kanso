@@ -1,5 +1,5 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, dialog, facts, markdown, menu, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
+import { band, bars, button, chord, dialog, facts, mark, markdown, menu, metric, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
 import { channelSettings, keyboardExplorer, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
@@ -179,3 +179,85 @@ const markdownFiles = ({ groups = [], picked = null, reading = false, empty = nu
 };
 export const markdownWindow = ({ stale = false, ...props }) => panel({ look: 'window', stale, header: markdownHeader(props) },
   props.file ? documentBody(props) : markdownFiles(props));
+
+// Containers: Docker's cost on one line, then each project with its containers; a row's words come with the pointer.
+const quiet = (verb) => button({ kind: 'quiet', size: 'sm', ...verb });
+const quitLabel = (stops) => (stops ? phrase('Quit Docker', chord(null, '(', phrase('stops', stops), ')')) : 'Quit Docker');
+const cost = ({ held, limit, disk, stops, hover = false, armed = false }) => list(
+  stack({ variant: 'line' }, metric({ value: held, unit: 'held', size: 'sm' }), quiet({ label: disk })),
+  hover ? row({ name: phrase('Can grow to', limit), dimmed: true, action: { label: quitLabel(stops), kind: 'quiet', armed, verb: 'quit Docker' } }) : null);
+const healthMarks = { failed: 'blocked', stopped: 'idle' };
+const healthVerbs = {
+  running: ({ web }) => [web ? { label: 'Open' } : null, { label: 'Logs' }, { label: 'Shell' }, { label: 'Restart' }, { label: 'Stop' }],
+  failed: () => [{ label: 'Logs', kind: 'solid' }, { label: 'Start' }],
+  stopped: () => [{ label: 'Start' }, { label: 'Logs' }],
+};
+const containerVerbs = (item, { details, armed, pending, local }) => [
+  ...healthVerbs[item.health]({ web: item.web && local }), { label: details ? 'Less' : 'Details' },
+  item.health === 'running' ? null : { label: 'Remove', armed, verb: 'remove' },
+].filter(Boolean).map((verb) => ({ ...verb, disabled: pending }));
+const detailRows = (said) => (said.length ? said.map(([name, value]) => row({ name, detail: value, depth: 1 })) : row({ name: 'No details from Docker', depth: 1, dimmed: true }));
+const containerRow = ({ picked, details, said = [], armed, pending, refused, narrow, local }) => (item) => {
+  const open = item.name === picked;
+  const status = healthMarks[item.health];
+  return list(row({
+    name: item.name, meta: item.meta, late: item.health === 'failed', current: open, pending: open && pending,
+    start: status ? [mark({ status, size: 'sm' })] : [],
+    second: open ? facts(narrow ? null : item.image, item.ports, item.age) : null,
+    verbs: open ? containerVerbs(item, { details, armed, pending, local }) : [],
+  }), open && details ? detailRows(said) : null, open && refused ? failureBlock(refused) : null);
+};
+const bulkVerbs = (containers) => {
+  const running = containers.filter(({ health }) => health === 'running').length;
+  return [running > 1 ? { label: 'Stop all' } : null, containers.length - running > 1 ? { label: 'Start all' } : null];
+};
+const projectVerbs = ({ containers }, armed) => [
+  { label: containers.length ? 'Up again' : 'Up' }, { label: 'Rebuild' },
+  containers.length ? { label: 'Down', armed, verb: 'take it down' } : null, ...bulkVerbs(containers),
+].filter(Boolean);
+const projectBlock = ({ hover, down, each }) => (project) => {
+  const pointed = project.name === hover || project.name === down;
+  return list(row({
+    name: project.name, heading: true, hover: pointed, detail: pointed ? project.compose : null, meta: pointed ? null : project.count,
+    verbs: pointed ? projectVerbs(project, project.name === down) : [],
+  }), project.containers.map(each));
+};
+const looseBlock = (loose, each) => (loose.length ? list(row({ name: 'Not in a project', heading: true, dimmed: true }), loose.map(each)) : null);
+
+// Disk: the pull field, then images, volumes and the build cache, each with what removing gives back.
+const runForm = ({ name, port, field = null, source = null, image: picked }) => list(stack({ variant: 'line' },
+  input({ label: 'Name', text: name, focus: field === 'name', error: field === 'name' }),
+  input({ label: 'Port', text: port, focus: field === 'port', error: field === 'port' }),
+  source ? null : button({ label: 'Run', size: 'sm' })), source ? failureBlock({ text: phrase('Could not run', picked), source, fix: 'Run' }) : null);
+const imageRow = ({ picked, run, armed }) => (item) => {
+  const open = item.name === picked;
+  return list(row({
+    name: item.name, meta: item.size, dimmed: item.unused, current: open, second: open ? item.users : null,
+    verbs: open ? [{ label: run ? 'Cancel' : 'Run…' }, item.unused ? { label: 'Remove', armed, verb: 'remove' } : null].filter(Boolean) : [],
+  }), open && run ? runForm({ ...run, image: item.name }) : null);
+};
+const disk = ({ summary, pull, spare, images, volumes, unusedVolumes, cache, picked = null, run = null, armed = null }) => list(
+  row({ name: 'Disk', level: 0, open: true, meta: summary }),
+  input({ label: 'Image to pull', text: pull, action: 'Pull' }),
+  row({ name: 'Images', heading: true, action: { label: phrase('Remove unused ·', spare), kind: 'quiet', armed: armed === 'images', verb: 'remove them' } }),
+  images.map(imageRow({ picked, run, armed: armed === 'image' })),
+  row({ name: 'Volumes', heading: true, action: { label: phrase('Remove', unusedVolumes, 'unused'), kind: 'quiet', armed: armed === 'volumes', verb: 'delete their data for good' } }),
+  volumes.map(({ name, users }) => row({ name, meta: users, dimmed: users === 'unused' })),
+  row({ name: 'Build cache', heading: true, action: { label: phrase('Clear', cache), kind: 'quiet', armed: armed === 'cache', verb: 'clear' } }));
+
+const dockerDown = ({ unopened }) => (unopened ? failureBlock(unopened) : emptyState({ icon: 'lu-container', text: 'Docker isn’t running', action: 'Open Docker' }));
+const containersBody = ({ projects = [], loose = [], cost: held = null, hover = null, down = null, disk: opened = null, docker = 'running', unopened = null, reading = false, failure = null, unattributed = null, look, local = true, ...picks }) => {
+  if (failure) return failureBlock(failure);
+  if (docker === 'down') return dockerDown({ unopened });
+  if (docker === 'starting') return list(row({ name: 'Starting Docker…', dimmed: true }), skeletonOf({ shape: 'list row', count: 3 }));
+  if (reading) return skeletonOf({ shape: 'list row', count: 3 });
+  if (opened) return disk(opened);
+  const each = containerRow({ ...picks, local, narrow: look === 'narrow' });
+  return list(held ? cost(held) : null, unattributed ? setting(unattributed) : null,
+    projects.length || loose.length ? null : emptyState({ icon: 'lu-container', text: 'No containers' }),
+    projects.map(projectBlock({ hover, down, each })), looseBlock(loose, each));
+};
+// `scope` is the remote computer or the Docker context, or the stale line; a context's containers are not this computer's, so nothing opens in its browser.
+export const containers = ({ scope = null, stale = false, look = 'panel', context = false, ...body }) => panel({ look, stale, header: panelHeader({
+  title: 'Containers', second: scope, tools: [panelRefresh({ reading: body.reading || body.docker === 'starting' || stale })],
+}) }, containersBody({ look, ...body, local: !context && !stale }));

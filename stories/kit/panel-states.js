@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { conversationFind, files, markdownWindow, ports, settings } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, ports, settings } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer } from './samples.js';
-import { sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
 
 // Settings: each page with its samples, then each state as what changes on it.
 const shows = (extra) => ({ page: 'pieces', hidden: sampleHidden, areas: sampleAreas, ...extra });
@@ -134,6 +134,44 @@ export const markdownViews = {
   'Another computer, not answering': [openFile(sampleMarkdown.runbook, { said: ['Read 14:02', 'devbox not answering'], stale: true }), 'The last read stays, stepped down, with when it was read.'],
   'Too large to edit': [openFile(sampleMarkdown.events, { said: ['612 KB, read only'], tools: ['refresh'] }), 'Past 400,000 characters it reads only.'],
 };
+// Containers: Docker's cost, acme-shop and docs-site, buildkit in no project; each state is what the pointer, an armed press or a read changes.
+const { cost, projects, loose, details: said } = sampleContainers;
+const docked = (extra) => ({ cost, projects, loose, ...extra });
+const diskOpen = (extra = {}) => docked({ disk: { ...sampleDisk, ...extra } });
+const running = (extra) => docked({ picked: 'mailpit', said, ...extra });
+const { remote: elsewhere } = sampleContainers;
+export const containersViews = {
+  'At rest: one exited, two running, one project not started': [docked({}), 'Docker’s cost on one line; each project with its count; a running row has no dot, a failed one says how it ended.'],
+  'Pointer on acme-shop': [docked({ hover: 'acme-shop' }), 'compose.yaml takes the count’s place; Up again, Rebuild and Down come under the name, and Stop all when more than one runs.'],
+  'Pointer on the cost': [docked({ cost: { ...cost, hover: true } }), 'Can grow to, and Quit Docker with what it stops.'],
+  'A running container picked': [running({}), 'Image, port and age, then Open, Logs, Shell, Restart, Stop and Details.'],
+  'Details open': [running({ details: true }), 'Details fold inside the row.'],
+  'No details from Docker': [running({ details: true, said: [] }), 'Docker gave nothing to fold open.'],
+  'An exited container picked': [docked({ picked: 'api-db' }), 'Logs first, then Start, Details and Remove.'],
+  'Working on a container': [running({ pending: true }), 'The breathing dot until Docker answers; its words wait.'],
+  'Down armed': [docked({ down: 'acme-shop' }), 'Down asks again before it takes the project down.'],
+  'Quit armed': [docked({ cost: { ...cost, hover: true, armed: true } }), 'Quit asks again, and says how many it stops.'],
+  'A removal refused, on its row': [docked({ picked: 'api-db', refused: sampleContainers.refused }), 'Docker’s own words, Remove again, and Explain to the agent.'],
+  'Not in a project, Remove armed': [docked({ picked: 'buildkit', armed: true }), 'A container no compose file names sits under its own dim heading.'],
+  'Empty, with a stack a project can bring up': [docked({ projects: projects.slice(1), loose: [] }), 'Nothing runs; a project’s compose file offers Up.'],
+  'No containers': [docked({ projects: [], loose: [] }), 'Nothing runs and no compose file is found; Pull is in Disk.'],
+  'Disk open': [diskOpen(), 'The pull field, then images, volumes and the build cache, each with what it gives back.'],
+  'Run an image': [diskOpen({ picked: sampleDisk.run.image, run: sampleDisk.run }), 'Run… opens the name and the port under the image.'],
+  'Run, a name refused': [diskOpen({ picked: sampleDisk.run.image, run: { ...sampleDisk.run, ...sampleDisk.invalid.name } }), 'The field is marked and the rule says why.'],
+  'Run, a port refused': [diskOpen({ picked: sampleDisk.run.image, run: { ...sampleDisk.run, ...sampleDisk.invalid.port } }), 'The field is marked and the rule says why.'],
+  'Remove an unused image, armed': [diskOpen({ picked: 'node:20-bookworm', armed: 'image' }), 'It asks again before it removes the image.'],
+  'Remove unused volumes, armed': [diskOpen({ armed: 'volumes' }), 'It says their data goes for good, and asks again.'],
+  'Docker not running': [{ docker: 'down' }, 'The empty state and Open Docker.'],
+  'Docker could not be opened': [{ docker: 'down', unopened: sampleContainers.unopened }, 'Open Docker failed: its words, and Open Docker again.'],
+  'Starting Docker': [{ docker: 'starting' }, 'Open Docker was pressed; the skeleton until it answers.'],
+  'First read': [{ reading: true }, 'The skeleton, once; later reads keep the rows and spin Refresh.'],
+  'A read failed': [{ failure: sampleContainers.failure }, 'Docker’s own words, Refresh, and Explain to the agent.'],
+  'Docker on another machine (a context)': [{ loose: sampleContainers.context.loose, scope: sampleContainers.context.name, context: true, picked: 'pg-primary' }, 'The context’s name is the scope; its containers are not this computer’s, so there is no cost and no Open.'],
+  'On another computer': [{ ...elsewhere, scope: elsewhere.computer }, 'The focused project’s computer reads its own docker; its name is the scope.'],
+  'Another computer, unreachable': [{ ...elsewhere, scope: 'Read 14:02 · devbox unreachable · next try 14:07', stale: true }, 'The last read stays, stepped down, with when it was read and the next try.'],
+  'Memory not attributed': [docked({ unattributed: sampleContainers.unattributed }), 'On Windows the VM’s memory cannot be read yet: it says so.'],
+  'Narrow, 300': [running({ look: 'narrow' }), 'The image hides; the words wrap.'],
+};
 const stated = (views, draw) => ({
   args: { view: Object.keys(views)[0] },
   markup: ({ view }) => draw(views[view][0]),
@@ -141,6 +179,6 @@ const stated = (views, draw) => ({
 });
 const control = (views) => ({ view: { name: 'what it shows', control: { type: 'select' }, options: Object.keys(views) } });
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow] };
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

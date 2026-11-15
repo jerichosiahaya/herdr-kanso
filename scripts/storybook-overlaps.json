@@ -2,50 +2,49 @@
   "containers/ContainerList": {
     "page": "Panels/Containers",
     "states": {
-      "Running": "panels/containers/ContainersAtRestNow/Default",
-      "Loading": "panels/containers/ContainersFirstRead/Default",
-      "Empty": "panels/containers/ContainersEmptyWithAStackAProjectCanBringUp/Default",
-      "Daemon off": "panels/containers/ContainersDockerNotRunning/Default",
-      "Starting Docker": "panels/containers/ContainersStartingDocker/Default",
-      "Read failed": "panels/containers/ContainersAReadFailed/Default",
-      "Remote": "panels/containers/ContainersDockerOnAnotherMachineAContext/Default",
-      "Action failed": "panels/containers/ContainersDownAndQuitArmedARemovalRefusedOnItsRowNotInAProject/Default",
-      "Tool absent": "panels/containers/ContainerListToolabsent/Default"
+      "Running": "kit/Panels/Containers/At rest: one exited, two running, one project not started",
+      "Loading": "kit/Panels/Containers/First read",
+      "Empty": "kit/Panels/Containers/No containers",
+      "Daemon off": "kit/Panels/Containers/Docker not running",
+      "Starting Docker": "kit/Panels/Containers/Starting Docker",
+      "Read failed": "kit/Panels/Containers/A read failed",
+      "Remote": "kit/Panels/Containers/Docker on another machine (a context)",
+      "Action failed": "kit/Panels/Containers/A removal refused, on its row"
     }
   },
   "containers/ContainerRow": {
     "page": "Panels/Containers",
     "states": {
-      "Running selected": "panels/containers/ContainersRunningSelectedDetailsOpen/Default",
-      "Stopped": "panels/containers/ContainersRestOneExitedTwoRunningOneProjectNotStarted/Default",
-      "Failed": "panels/containers/ContainersDownAndQuitArmedARemovalRefusedOnItsRowNotInAProject/Default",
-      "Remove armed": "panels/containers/ContainersDownAndQuitArmedARemovalRefusedOnItsRowNotInAProject/Default",
-      "Details": "panels/containers/ContainersRunningSelectedDetailsOpen/Default",
-      "Pending": "panels/containers/ContainerRowPending/Default",
-      "Details absent": "panels/containers/ContainerRowDetailsabsent/Default"
+      "Running selected": "kit/Panels/Containers/A running container picked",
+      "Stopped": "kit/Panels/Containers/Not in a project, Remove armed",
+      "Failed": "kit/Panels/Containers/An exited container picked",
+      "Remove armed": "kit/Panels/Containers/Not in a project, Remove armed",
+      "Details": "kit/Panels/Containers/Details open",
+      "Pending": "kit/Panels/Containers/Working on a container",
+      "Details absent": "kit/Panels/Containers/No details from Docker"
     }
   },
   "containers/ComposeProject": {
     "page": "Panels/Containers",
     "states": {
-      "Not started": "panels/containers/ContainersEmptyWithAStackAProjectCanBringUp/Default",
-      "Running": "panels/containers/ContainersRestOneExitedTwoRunningOneProjectNotStarted/Default",
-      "Down armed": "panels/containers/ContainersDownAndQuitArmedARemovalRefusedOnItsRowNotInAProject/Default",
-      "Bulk controls": "panels/containers/ContainersRestOneExitedTwoRunningOneProjectNotStarted/Default"
+      "Not started": "kit/Panels/Containers/Empty, with a stack a project can bring up",
+      "Running": "kit/Panels/Containers/Pointer on acme-shop",
+      "Down armed": "kit/Panels/Containers/Down armed",
+      "Bulk controls": "kit/Panels/Containers/Pointer on acme-shop"
     }
   },
   "containers/ContainerDisk": {
     "page": "Panels/Containers",
     "states": {
-      "Images": "panels/containers/ContainersDiskOpenPullAnImagesRunFormVolumesBuildCache/Default",
-      "Unused image": "panels/containers/ContainersDiskOpenPullAnImagesRunFormVolumesBuildCache/Default",
-      "Run image": "panels/containers/ContainersDiskOpenPullAnImagesRunFormVolumesBuildCache/Default",
-      "Volumes": "panels/containers/ContainersDiskOpenPullAnImagesRunFormVolumesBuildCache/Default",
-      "Cache": "panels/containers/ContainersDiskOpenPullAnImagesRunFormVolumesBuildCache/Default",
-      "Quit armed": "panels/containers/ContainersDownAndQuitArmedARemovalRefusedOnItsRowNotInAProject/Default",
-      "Invalid name": "panels/containers/ContainerDiskInvalidname/Default",
-      "Invalid port": "panels/containers/ContainerDiskInvalidport/Default",
-      "Prune armed": "panels/containers/ContainerDiskPrunearmed/Default"
+      "Images": "kit/Panels/Containers/Disk open",
+      "Unused image": "kit/Panels/Containers/Remove an unused image, armed",
+      "Run image": "kit/Panels/Containers/Run an image",
+      "Volumes": "kit/Panels/Containers/Disk open",
+      "Cache": "kit/Panels/Containers/Disk open",
+      "Quit armed": "kit/Panels/Containers/Quit armed",
+      "Invalid name": "kit/Panels/Containers/Run, a name refused",
+      "Invalid port": "kit/Panels/Containers/Run, a port refused",
+      "Prune armed": "kit/Panels/Containers/Remove unused volumes, armed"
     }
   },
   "guard/Memory": {

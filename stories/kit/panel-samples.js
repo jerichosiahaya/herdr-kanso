@@ -173,3 +173,41 @@ Deliveries retry 5 times with backoff 1, 2, 4, 8, 16 s. A 410 stops them.` },
     save: { text: 'Couldn’t save plan.md', source: 'EACCES: permission denied, write plan.md', fix: 'Save', agent: 'cart-ui' },
   },
 };
+
+// Containers: Docker's cost on this computer, acme-shop's compose project with one exited, a stack not started, one container in no project.
+const container = (name, health, meta, image, ports, age, web = false) => ({ name, health, meta, image, ports, age, web });
+export const sampleContainers = {
+  cost: { held: '2.1 GB', limit: '7.8 GB', disk: '4.2 GB on disk', stops: 2 },
+  projects: [
+    { name: 'acme-shop', compose: 'compose.yaml', count: '2 of 3 up', containers: [
+      container('api-db', 'failed', 'exited 1 · 3 min', 'postgres:16', ':5432', null),
+      container('mailpit', 'running', '31 MB', 'axllent/mailpit', ':8025', 'up 2 h', true),
+      container('redis', 'running', '9 MB', 'redis:7-alpine', ':6379', 'up 2 h')] },
+    { name: 'docs-site', compose: 'compose.yaml', count: 'not started', containers: [] },
+  ],
+  loose: [container('buildkit', 'stopped', 'stopped · 2 d', 'moby/buildkit:v0.13', null, null)],
+  details: [['Ports', '8025 → 8025/tcp, 1025 → 1025/tcp'], ['Mounts', 'mailpit-data → /data'], ['Networks', 'acme-shop_default'], ['Restarts', 'unless-stopped'], ['Compose', 'compose.yaml · mailpit'], ['Id', '3f9c1a7e20b4']],
+  context: { name: 'prod-db', loose: [container('pg-primary', 'running', '1.9 GB', 'postgres:16', ':5432', 'up 9 d'), container('pgbouncer', 'running', '22 MB', 'edoburu/pgbouncer', ':6432', 'up 9 d')] },
+  remote: { computer: 'devbox', cost: { held: '3.0 GB', limit: '8 GB', disk: '6.1 GB on disk', stops: 2 }, projects: [{ name: 'relay', compose: 'compose.yaml', count: '2 of 2 up', containers: [
+    container('db', 'running', '212 MB', 'postgres:16', ':5432', 'up 1 d'), container('queue', 'running', '48 MB', 'redis:7-alpine', ':6379', 'up 1 d')] }] },
+  refused: { text: 'Couldn’t remove api-db', source: 'Error response from daemon: cannot remove container "api-db": container is restarting, stop the container before removing', fix: 'Remove', agent: 'checkout' },
+  failure: { text: 'Can’t reach Docker', source: 'docker ps: permission denied while trying to connect to /var/run/docker.sock', fix: 'Refresh', agent: 'checkout' },
+  unopened: { text: 'Docker could not be opened from here', source: 'open -a Docker: Unable to find application named Docker', fix: 'Open Docker' },
+  unattributed: { label: 'Docker’s memory cannot be attributed', note: 'Docker VM memory attribution requires a Herdr API on Windows.' },
+};
+// Containers · Disk: the images, the volumes and the build cache, each with what it would give back.
+const image = (name, size, users, unused = false) => ({ name, size, users, unused });
+export const sampleDisk = {
+  summary: '9 images 4.2 GB · 1.6 GB unused',
+  pull: 'postgres:17',
+  spare: '1.6 GB',
+  images: [image('postgres:16', '438 MB', 'acme-shop · api-db'), image('node:20-bookworm', '1.1 GB', 'unused · 3 weeks', true), image('axllent/mailpit', '31 MB', 'acme-shop · mailpit')],
+  run: { image: 'node:20-bookworm', name: 'web', port: '8080:80' },
+  invalid: {
+    name: { field: 'name', name: '/web', source: 'Name: letters, digits, _ . or -, starting with a letter or digit.' },
+    port: { field: 'port', port: 'http', source: 'Port: a number, or host:container like 8080:80.' },
+  },
+  volumes: [{ name: 'mailpit-data', users: 'acme-shop · mailpit' }, { name: 'pg-old', users: 'unused' }, { name: 'cache-old', users: 'unused' }],
+  unusedVolumes: 2,
+  cache: '860 MB',
+};

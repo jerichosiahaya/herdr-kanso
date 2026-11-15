@@ -71,7 +71,7 @@ export const descriptions = {
   Worktrees: 'Repository checkouts to open, create, repair or remove.',
   Shipped: 'Contribution totals for a chosen period, with a share card.',
   Ports: 'What listens on a port, the ones with no pane first, each one a press from stopping; History behind a fold.',
-  Containers: 'Docker projects, containers and disk use, where Docker is installed.',
+  Containers: 'What Docker costs on one line, each project and its containers a line each, their words on the picked one; Disk behind it.',
   Memory: 'Free memory, per-session use and the memory guard on supported computers.',
   Spend: 'Plan value and session cost for the selected period.',
   Images: 'Pictures from the conversation with pinned notes to send to an agent.',
