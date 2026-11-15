@@ -25,10 +25,11 @@ const inkOf = (c, { on, disabled, armed }) => {
   return on ? c.text : c.muted;
 };
 
-// The press stays on the ×: the tab under it is not chosen.
-const closeGlyph = (id, ink, c, onClose) => div().id(`${id}-close`).flex_none().text_color(ink).hover((s) => s.text_color(c.text))
-  .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
-  .on_click((_e, cx) => { cx.stop_propagation(); onClose(cx); })
+// The press stays on the ×: the tab under it is not chosen. A tab that is off draws its × and does nothing.
+const closeGlyph = (id, ink, c, onClose, disabled) => div().id(`${id}-close`).flex_none().text_color(ink)
+  .when(!disabled, (el) => el.hover((s) => s.text_color(c.text))
+    .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
+    .on_click((_e, cx) => { cx.stop_propagation(); onClose(cx); }))
   .child(svg(`${ICONS}close.svg`).size(ICON_ROW));
 
 const nameOf = (id, item, c, nameWidth) => (item.editing
@@ -64,7 +65,7 @@ export function tabItem(id, item, c, { on = false, disabled = false, collapsed =
     .when(Boolean(item.pending), (el) => el.child(pendingDot(`${id}-pending`, c)))
     .when(Boolean(item.mark) && !collapsed, (el) => el.child(mark(c, { status: item.mark })))
     .when(Boolean(item.dot) && !on, (el) => el.child(collapsed ? dot.absolute().top(G.hair).right(G.hair) : dot))
-    .when(on && Boolean(onClose) && !item.editing && !collapsed, (el) => el.child(closeGlyph(id, armed ? ink : c.dim, c, onClose)));
+    .when(on && Boolean(onClose) && !item.editing && !collapsed, (el) => el.child(closeGlyph(id, armed ? ink : c.dim, c, onClose, disabled)));
 }
 
 /** Where a dragged tab lands: the accent bar between two tabs. */

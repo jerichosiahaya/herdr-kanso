@@ -400,7 +400,8 @@ export default class Tabs extends View {
 
   // What the tab draws now: its mark, the press that arms it, the rename in place or waiting, the hold while it is dragged.
   tabLook(tab) {
-    const armed = this.armed.is(closeKey(tab));
+    // Armed only while its × is there to press again: the chosen tab.
+    const armed = tab.active && this.armed.is(closeKey(tab));
     const waiting = this.renamed?.id === tab.id;
     return {
       key: tab.id, label: waiting ? this.renamed.name : tab.name, mark: tabMark(tab), armed, pending: waiting,
@@ -415,7 +416,7 @@ export default class Tabs extends View {
     const target = this.dropAt === tab.id && from >= 0 && from !== to;
     const item = tabItem(`tab-${tab.id}`, this.tabLook(tab), c, {
       on: tab.active, disabled: !connected, size: "md", track: false, index, count, fill: !glide, nameWidth: W.tabLabel,
-      onChange: () => run("tab.select", { id: tab.id }),
+      onChange: () => { this.armed.clear(); run("tab.select", { id: tab.id }); },
       onClose: openTabs.length > 1 ? (cx) => this.closeTab(tab, ps, cx) : null,
       onPress: (e, cx) => this.pressTab(tab, e, cx),
     });
@@ -449,7 +450,7 @@ export default class Tabs extends View {
     if (state === "connecting") return area.children(Array.from({ length: Math.max(openTabs.length, 1) }, (_, i) => tabSkeleton(`tab-skeleton-${i}`, c, i)));
     const connected = state === "connected";
     const room = this.barW.area ? this.barW.area - tools.length * (H.icon + G.sm) : 0;
-    const { shown, folded } = foldTabs({ widths: openTabs.map((tab) => this.tabW[tab.id]), chosen: openTabs.findIndex((tab) => tab.active), room, gap: G.hair, more: this.barW.more ?? 0 });
+    const { shown, folded } = foldTabs({ widths: openTabs.map((tab) => this.tabW[tab.id]), chosen: openTabs.findIndex((tab) => tab.active), room, gap: G.hair, more: (this.barW.more ?? 0) + G.sm });
     const drawn = shown.map((i) => openTabs[i]);
     const pill = pillAt(drawn.map((tab) => this.tabW[tab.id]), drawn.findIndex((tab) => tab.active), G.hair);
     const group = h_flex().flex_none().min_w(0).gap(G.hair).items_center().relative()

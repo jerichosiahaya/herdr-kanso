@@ -14,21 +14,22 @@ const TABS = [
   { id: "t3", index: 3, name: "tests", active: false, status: "done" },
 ];
 
-// One bar, drawn by the real view against a fake Herdr.
+// One bar, drawn by the real view against a fake Herdr; `space.tabs` is what Herdr reports now.
 async function bar({ tabs = TABS, machine = null, computers = [], panes = [], fails = null } = {}) {
-  const store = {}, ran = [], toasts = [];
+  const store = {}, ran = [], toasts = [], opened = [];
+  const space = { id: "s1", active: true, machine, tabs: clone(tabs) };
   const host = {
     ...gpuiHost(), Popover: { new: (id) => chain(id) },
     InputState: { new: ({ value }) => ({ on() {}, focus() {}, value: () => value, set_selected_range() {}, release() {} }) },
-    theme: () => night, spaces: () => [{ id: "s1", active: true, machine, tabs }], panes: () => panes, machines: () => computers,
+    theme: () => night, spaces: () => [space], panes: () => panes, machines: () => computers,
     layout: () => null, home: () => "/home/me", shared: (key) => store[key] ?? null, setShared: (key, value) => { store[key] = value; },
-    run: (cmd, args) => { if (cmd === fails) throw new Error("refused"); ran.push([cmd, args]); }, notify: (note) => { toasts.push(note); }, openOverlay: () => {},
+    run: (cmd, args) => { if (cmd === fails) throw new Error("refused"); ran.push([cmd, args]); }, notify: (note) => { toasts.push(note); }, openOverlay: (spec) => { opened.push(spec); },
   };
   const { Tabs, tokens, W } = await load("kanso-tabs/main.js", ["Tabs", "tokens", "W"], host);
   const { PENDING } = await load("kanso-tabs/ui-state.js", ["PENDING"], gpuiHost());
   const view = new Tabs();
   const cx = { stop_propagation() {}, notify() {}, timer: { after() {} } };
-  return { view, cx, ran, toasts, c: tokens(night), W, PENDING };
+  return { view, cx, ran, toasts, opened, space, c: tokens(night), W, PENDING };
 }
 
 const calls = (el, name) => el.calls.filter((call) => call[0] === name);
@@ -166,11 +167,9 @@ test("Double-click renames in place; the new name draws at 80% with a breathing 
   assert.equal(arg(waiting, "opacity"), b.PENDING);
   assert.ok(texts(waiting).includes("api-limits"));
   assert.ok(byTag(waiting, "tab-t1-pending"), "the breathing dot");
-  TABS[0].name = "api-limits";
-  try {
-    const settled = tab(b.view.render(b.cx), "t1");
-    assert.equal(calls(settled, "opacity").length, 0, "confirmed: both go");
-  } finally { TABS[0].name = "checkout"; }
+  b.space.tabs = b.space.tabs.map((one) => (one.id === "t1" ? { ...one, name: "api-limits" } : one));
+  const settled = tab(b.view.render(b.cx), "t1");
+  assert.equal(calls(settled, "opacity").length, 0, "confirmed: both go");
 });
 
 test("Escape restores the name, and a refused rename gives the old name back with a toast", async () => {
@@ -224,16 +223,45 @@ test("Connecting draws one breathing skeleton per known tab; unreachable steps t
 
 test("A right-click opens the tab's menu and the wheel still moves one tab", async () => {
   const b = await bar();
-  const opened = [];
-  b.view.render(b.cx);
-  const { Tabs } = await load("kanso-tabs/main.js", ["Tabs"], {
-    ...gpuiHost(), Popover: { new: (id) => chain(id) }, theme: () => night, spaces: () => [{ id: "s1", active: true, machine: null, tabs: TABS }],
-    panes: () => [], layout: () => null, shared: () => null, setShared: () => {}, openOverlay: (spec) => { opened.push(spec); }, run: (cmd) => { opened.push(cmd); },
-  });
-  const view = new Tabs();
-  const root = view.render(b.cx);
-  pressOf(tab(root, "t2"), "right")(press, b.cx);
-  assert.deepEqual(clone(opened[0].props), { tab: "tab", target: { id: "t2", space: "s1" } });
-  view.wheel({ delta_lines: { y: 1 } });
-  assert.equal(opened.at(-1), "tab.prev");
+  pressOf(tab(b.view.render(b.cx), "t2"), "right")(press, b.cx);
+  assert.deepEqual(clone(b.opened[0].props), { tab: "tab", target: { id: "t2", space: "s1" } });
+  b.view.wheel({ delta_lines: { y: 1 } });
+  assert.equal(b.ran.at(-1)[0], "tab.prev");
+});
+
+test("An armed close leaves with its x: choosing another tab, here or by a key, draws the first tab at rest", async () => {
+  const b = await bar({ panes: [{ tab: "t1", program: { agent: true } }] });
+  handler(byTag(b.view.render(b.cx), "tab-t1-close"), "on_click")({}, b.cx);
+  assert.equal(arg(tab(b.view.render(b.cx), "t1"), "bg"), b.c.accent, "armed");
+  handler(tab(b.view.render(b.cx), "t2"), "on_click")({}, b.cx);
+  assert.equal(b.view.armed.is("close-t1"), false, "a click on another tab disarms");
+  handler(byTag(b.view.render(b.cx), "tab-t1-close"), "on_click")({}, b.cx);
+  b.space.tabs = b.space.tabs.map((one) => ({ ...one, active: one.id === "t2" }));
+  const away = tab(b.view.render(b.cx), "t1");
+  assert.equal(calls(away, "bg").length, 0, "chosen elsewhere by a key: no accent left behind");
+  assert.equal(arg(away, "tooltip"), undefined);
+});
+
+test("On an unreachable computer the x is drawn but a press closes nothing", async () => {
+  const b = await bar({ machine: "devbox", computers: [{ name: "devbox", layout: "unavailable" }] });
+  const close = byTag(b.view.render(b.cx), "tab-t1-close");
+  assert.ok(close, "drawn, as the Storybook draws it");
+  assert.equal(calls(close, "on_click").length, 0);
+  assert.equal(calls(close, "hover").length, 0);
+  assert.deepEqual(b.ran, []);
+});
+
+test("Folded tabs, +N with its gap, new tab and Arrange fit the bar's width", async () => {
+  const b = await bar();
+  for (const id of ["t1", "t2", "t3"]) b.view.tabW[id] = 100;
+  b.view.barW.more = 30;
+  const tools = 2 * (26 + 8);
+  for (const area of [306, 308, 340, 420]) {
+    b.view.barW.area = area;
+    const root = b.view.render(b.cx);
+    const shown = ["t1", "t2", "t3"].filter((id) => tab(root, id));
+    const folded = 3 - shown.length;
+    const used = shown.length * 100 + (shown.length - 1) * 2 + (folded ? 8 + 30 : 0) + tools;
+    assert.ok(used <= area, `${area}: ${used} drawn`);
+  }
 });
