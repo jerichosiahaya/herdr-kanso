@@ -258,6 +258,10 @@ export const needsItem = ({ name, question = '', more = 0 }) => `<span class="ka
 export const stepper = ({ value = 2, open = false, hover = false } = {}) => `<span class="kanso-status-bar__item kanso-status-bar__stepper${open ? ' kanso-status-bar__item--open' : ''}${hover ? ' kanso-control--hover' : ''}">${button({ label: 'Fewer panes per view ⌘⇧−', kind: 'icon', size: 'sm', icon: 'lu-minus' })}`
   + `<span class="kanso-status-bar__value" title="${Number(value)} per view · scroll to change, click to even out">${Number(value)}</span>${button({ label: 'More panes per view ⌘⇧=', kind: 'icon', size: 'sm', icon: 'lu-plus' })}</span>`;
 
+// A terminal's output: each line a list of parts, a part plain words or { text, tone }.
+const termPart = (part) => typeof part === 'string' ? escape(part) : `<span class="kanso-text--${escape(part.tone)}">${escape(part.text)}</span>`;
+export const terminal = ({ lines = [] }) => `<div class="kanso-terminal">${lines.map((line) => [].concat(line).map(termPart).join('')).join('\n')}</div>`;
+
 export const tabSkeleton = () => '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tab-bar__skeleton"></span>';
 
 // One layout piece for the wrappers that only place other pieces; each variant keeps its own class and states.
@@ -304,6 +308,13 @@ export const stacks = {
   'pane tools': { block: 'kanso-pane-header__tools', tag: 'span' },
   'pane more': { block: 'kanso-pane-header__more', tag: 'span' },
   'pane menu': { block: 'kanso-pane-header__menu', tag: 'span' },
+  window: { block: 'kanso-window', states: ['rest'] },
+  'window workspace': { block: 'kanso-window__workspace' },
+  'window panes': { block: 'kanso-window__panes' },
+  pane: { block: 'kanso-pane', states: ['focus', 'drop-preview'] },
+  'pane body': { block: 'kanso-pane__body' },
+  'pane placeholder': { block: 'kanso-pane__placeholder' },
+  'pane drop ruler': { block: 'kanso-pane__drop-ruler' },
   panel: { block: 'kanso-panel', states: ['narrow', 'window', 'stale'] },
   'panel header': { block: 'kanso-panel-header', states: ['bar'] },
 };
