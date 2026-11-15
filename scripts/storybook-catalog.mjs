@@ -98,7 +98,7 @@ const protoPage = {
   'components-title-and-tools': null, 'components-while-you-were-away': 'Compositions/Activity', 'components-worktree-row-open': 'Primitives/Row',
   'compositions-bars': 'Layouts/Pane', 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
   'compositions-menu-and-dialog': null, 'compositions-panel-pieces': 'Compositions/Panel',
-  'compositions-sidebar-rows': 'Layouts/Sidebar', 'compositions-states': 'Compositions/State patterns',
+  'compositions-sidebar-rows': 'Layouts/Sidebar', 'compositions-states': null,
   'layouts-sidebar-at-rest': null, 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
   'layouts-window-at-rest': null, 'layouts-right-click-any-piece': null, 'layouts-hjkl-dojo': null,
   'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': 'Compositions/Dawn Mode', 'tokens-icons': 'Tokens/Icons', 'tokens-type': 'Tokens/Type',
@@ -123,7 +123,7 @@ const coveragePage = {
 
 export function pageFor(source, file, key) {
   const base = file.replace(/\.(json|stories\.js)$/, '');
-  if (source === 'panels') return ({ skeleton: 'Compositions/Panel', availability: 'Compositions/State patterns' })[base] ?? `Panels/${base === 'pr' ? 'PR' : base[0].toUpperCase() + base.slice(1)}`;
+  if (source === 'panels') return ({ skeleton: 'Compositions/Panel', availability: 'Panels/No tool, no panel' })[base] ?? `Panels/${base === 'pr' ? 'PR' : base[0].toUpperCase() + base.slice(1)}`;
   if (source === 'coverage') {
     if (!coveragePage[key]) throw new Error(`Missing component route: ${file}:${key}`);
     return coveragePage[key];
@@ -153,7 +153,8 @@ export function recordsFrom(source, file, data, notes = []) {
 
 export function pagesOf(records) {
   const pages = new Map();
-  for (const record of records) {
+  // A Start page is written by hand; its drawing is read from the catalog by id.
+  for (const record of records.filter(({ page }) => !page.startsWith(`${SECTIONS[0]}/`))) {
     if (!SECTIONS.slice(1).some((section) => record.page.startsWith(section + '/'))) throw new Error(`Invalid page: ${record.page}`);
     if (!pages.has(record.page)) pages.set(record.page, []);
     pages.get(record.page).push(record);

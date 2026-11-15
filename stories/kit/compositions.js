@@ -154,9 +154,6 @@ export const stepperMenu = () => menu({ title: 'Panes per view', items: [{ icon:
 export const paletteDoor = () => button({ label: 'Command palette ⌘⇧P', kind: 'icon', size: 'sm', icon: 'lu-command' });
 export const layoutPaused = () => failureLine({ text: 'Layout paused', fix: 'Resume', detail: 'layout write refused 3 times' });
 
-// A failing row's right-click Menu: the source's words, the fixes, Explain, then the piece lines.
-export const failureMenu = ({ source, fixes = [], agent = null }) => menu({ title: source, items: [...fixes.map((label) => ({ label })), ...(agent ? [{ icon: 'lu-bot', label: phrase('Explain to', agent) }] : []), ...pieceLines] });
-
 // While you were away: what nothing in view says, four rows then +N more; nothing new takes no space.
 const awayRow = (hover, focus) => ({ icon: lead, tone = null, subject, fact: what, detail = null, age }, index) => row({ icon: lead, tone, name: subject, detail: what, second: detail, meta: age, hover: index === hover, focus: index === focus });
 export const activity = ({ events = [], max = 4, hover = -1, focus = -1 } = {}) => events.length ? stack({ variant: 'away' },

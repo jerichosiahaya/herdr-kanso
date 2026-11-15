@@ -1,12 +1,11 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { dialog, emptyState, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal } from './pieces.js';
-import { atWidth, inBar } from './frames.js';
+import { addComputer, agentMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
+import { dialog, emptyState, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { atWidth, captioned, inBar, inSettings, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
-const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
 
 const question = 'Run pnpm add react-countdown@2.3?';
 export const needsShown = { none: null, question: needsItem({ name: 'cart-ui', question, more: 1 }), folded: needsItem({ name: 'cart-ui', more: 1 }) };
@@ -212,6 +211,25 @@ const windowLayout = ({ collapsed, menu, panel: open }) => stack({ variant: 'win
     stack({ variant: 'window panes' }, windowPane(sampleWindow.pane), open ? panelStory(panelArgs) : null),
     statusBar(statusParts({ ...statusArgs, needs: 'none' }))));
 
+// Each state pattern on the pieces that carry it, one surface after another.
+const unreachable = { name: 'dark', state: 'unreachable' };
+const refused = { text: "Can't reach dark", source: 'ssh: connect to host dark port 22: Operation timed out', fix: 'Refresh' };
+const statePlaces = {
+  failure: ({ open }) => [
+    captioned('Status bar', inBar(520, { left: [computerItem(unreachable)] })),
+    captioned('Sidebar', inSlice(computerRow(unreachable), open ? computerMenu({ ...unreachable, failure: refused, agent: sampleAgent }) : null)),
+    captioned('Panel', panel({}, failureBlock({ text: "Can't list worktrees on dark", source: 'git worktree list: timed out after 30 s', fix: 'Refresh', agent: sampleAgent }))),
+    captioned('Toast', toast({ level: 'error', title: "Couldn't pull checkout", action: 'Retry' })),
+  ],
+  empty: () => [captioned('Panel', panel({}, emptyState({ icon: 'lu-git-pull-request', text: 'No pull requests on this branch', action: 'Create' })))],
+  pending: () => [
+    captioned('Status bar', inBar(520, { left: [computerItem({ name: 'devbox', state: 'pending' })] })),
+    captioned('Sidebar', inSlice(row({ name: 'acme-shop', heading: true, detail: [{ icon: 'lu-git-branch', text: 'main' }, '↓0'], pending: true }))),
+    captioned('Panel', panel({}, row({ name: 'Approved, with 2 line comments', meta: 'now', pending: true }))),
+  ],
+  loading: () => [captioned('Sidebar', inSlice(skeletonOf({ shape: 'row', count: 3 }))), captioned('Panel', panel({}, skeletonOf({ shape: 'list row', count: 3 })))],
+};
+
 export const statedPages = {
   'Primitives/Dialog': {
     args: { title: 'Rename checkout', scope: '', body: 'a field', notes: 'none', secondary: '', primary: 'Rename', state: 'default', loading: false },
@@ -275,6 +293,17 @@ export const statedPages = {
       { label: 'Sign in', args: { state: 'sign in' }, caption: 'ssh asks for a sign-in: here, or the command to copy.' },
       { label: 'Power refused', args: { state: 'off', refused: 'power' }, caption: 'Turning it on was refused: the failure block leads, Turn on is its fix.' },
       { label: 'Sync refused', args: { refused: 'sync' }, caption: 'Sync was refused and stays as it was: the failure block leads, Sync is its fix.' },
+    ],
+  },
+  'Compositions/State patterns': {
+    args: { state: 'failure', menu: false },
+    markup: ({ state, menu: open }) => list(statePlaces[state]({ open })),
+    states: [
+      { label: 'Failure', args: {}, caption: 'A read or an act was refused: each surface says what in our words, then the fix.' },
+      { label: 'Failure, right-click', args: { menu: true }, caption: "On a sidebar row, the source's words, the other fixes and Explain wait in its right-click Menu." },
+      { label: 'Empty', args: { state: 'empty' }, caption: 'Nothing to show: one sentence and at most one action.' },
+      { label: 'Pending', args: { state: 'pending' }, caption: 'An act was sent: the new state is drawn at once and breathes until it is confirmed.' },
+      { label: 'Loading', args: { state: 'loading' }, caption: 'The first read: the shape of the rows that will come.' },
     ],
   },
   'Compositions/Project menu': {
@@ -551,12 +580,12 @@ export const statedPages = {
   },
   'Compositions/Keyboard/Picked key': {
     args: { os: 'mac', ...layerDefaults, key: 'h' },
-    markup: ({ os, key, ...args }) => settingsSlice(pickedKey({ os, layer: keyLayer(os, args[`${os}Layer`]), picked: key })),
+    markup: ({ os, key, ...args }) => inSettings(pickedKey({ os, layer: keyLayer(os, args[`${os}Layer`]), picked: key })),
     states: [{ label: 'Default', args: {}, caption: 'What the picked key does here, and its act.' }],
   },
   'Compositions/Keyboard/Shortcut row': {
     args: { name: 'Pin the pane', chords: '⌥⌘P', state: 'rest', hover: false },
-    markup: ({ chords, ...args }) => settingsSlice(shortcutRow({ ...args, chords: chords.split(',').map((chord) => chord.trim()).filter(Boolean),
+    markup: ({ chords, ...args }) => inSettings(shortcutRow({ ...args, chords: chords.split(',').map((chord) => chord.trim()).filter(Boolean),
       taken: { chord: '⌥⌘J', name: 'Pane below' }, source: 'keys.json: EACCES: permission denied', agent: 'checkout' })),
     states: [{ label: 'Rest', args: {}, caption: 'One action and its keys.' }],
   },

@@ -582,9 +582,7 @@
       "records": [
         "proto/approved-philosophy/Reference/1"
       ],
-      "components": [
-        "Compositions/State patterns"
-      ],
+      "components": [],
       "features": [],
       "approvedRecords": [
         "proto/approved-philosophy/Reference/1"
@@ -667,16 +665,9 @@
         "proto/approved-state-pattern/Reference/29",
         "panels/availability/AvailabilityALinuxBoxWithNoneOfThemContainersMemoryAndSimulatorAreNotThere/Default",
         "panels/availability/AvailabilityAMacWithDockerXcodeAndTheGuard/Default",
-        "panels/availability/AvailabilitySettingsPiecesOnThatBoxTheRowsAreAbsentToo/Default",
-        "proto/compositions-states/Empty/Default",
-        "proto/compositions-states/FailureBlock/Default",
-        "proto/compositions-states/FailureOnALine/Default",
-        "proto/compositions-states/Pending/Default",
-        "proto/compositions-states/ThePatternEverywhere/Default"
+        "panels/availability/AvailabilitySettingsPiecesOnThatBoxTheRowsAreAbsentToo/Default"
       ],
-      "components": [
-        "Compositions/State patterns"
-      ],
+      "components": [],
       "features": [],
       "approvedRecords": [
         "proto/approved-state-pattern/Reference/1",
@@ -770,9 +761,7 @@
       "records": [
         "proto/approved-ledger/Reference/1"
       ],
-      "components": [
-        "Compositions/State patterns"
-      ],
+      "components": [],
       "features": [],
       "approvedRecords": [
         "proto/approved-ledger/Reference/1"
@@ -3100,16 +3089,9 @@
         "proto/approved-panels-b-tools/Reference/1",
         "panels/availability/AvailabilityALinuxBoxWithNoneOfThemContainersMemoryAndSimulatorAreNotThere/Default",
         "panels/availability/AvailabilityAMacWithDockerXcodeAndTheGuard/Default",
-        "panels/availability/AvailabilitySettingsPiecesOnThatBoxTheRowsAreAbsentToo/Default",
-        "proto/compositions-states/Empty/Default",
-        "proto/compositions-states/FailureBlock/Default",
-        "proto/compositions-states/FailureOnALine/Default",
-        "proto/compositions-states/Pending/Default",
-        "proto/compositions-states/ThePatternEverywhere/Default"
+        "panels/availability/AvailabilitySettingsPiecesOnThatBoxTheRowsAreAbsentToo/Default"
       ],
-      "components": [
-        "Compositions/State patterns"
-      ],
+      "components": [],
       "features": [],
       "approvedRecords": [
         "proto/approved-panels-b-tools/Reference/1"

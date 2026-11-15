@@ -89,7 +89,7 @@ export function importApproved(file, root = ".") {
     const reference = references.pages.find((page) => page.page === board.page);
     const extracted = approvedDrawings(master, board);
     // A layout composes its pieces, so a board drawn for a layout keeps its drawings on its own page.
-    const owner = reference.components[0]?.startsWith("Layouts/") ? board.page : reference.components[0] ?? "Compositions/State patterns";
+    const owner = reference.components[0]?.startsWith("Layouts/") ? board.page : reference.components[0] ?? board.page;
     const ids = extracted.drawings.map((drawing, index) => {
       const id = `proto/approved-${board.anchor}/Reference/${index + 1}`;
       const linked = renameMarkup(drawing.source).replace(/<a\b([^>]*?)href="#([^"]+)"([^>]*)>/g, (match, before, anchor, after) => {

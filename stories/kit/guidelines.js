@@ -259,7 +259,7 @@ export const guidelines = {
     ["Kokō", "A click opens the thing and drops the row.", "× dismisses all. Right-click: Dismiss these, then the piece lines; Hide this is the sidebar's While you were away switch."],
   ],
   "Compositions/State patterns": [
-    ["Kansō", "One drawing per state, in the same words at every size.", "Failure, empty, pending and loading are each one composition of the kit, used by every surface; a surface never draws its own."],
+    ["Kansō", "One drawing per state, in the same words at every size.", "Failure, empty, pending and loading are states of the pieces that carry them, never a drawing of their own: Failure line, Failure block, a Menu's failure item and an error Toast; Empty state; a pending Row or Status item; Skeleton. This page only puts them side by side; the example they come from is State pattern, designed."],
     ["Kokō", "Failure says what, then the fix.", "Bars (status bar, pane header): mark, our words, the fix as a small quiet Button. Panel: the block where the list would start, the source's words in mono under ours, the fix solid, then Explain to the agent, named. Sidebar: the fix on the row; the source's words, the other fixes and Explain in its right-click Menu. Toast: mark, our words, the fix at the end; no Explain."],
     ["Seijaku", "Blocked colour only on the edge and the mark.", "Our words stay foreground, the source's words muted."],
     ["Kansō", "Empty is one sentence.", "Centred: the view's icon dim, one sentence muted, at most one tonal Button."],
