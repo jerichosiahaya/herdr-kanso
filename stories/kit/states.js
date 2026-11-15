@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { dialog, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { avatar, dialog, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inSettings, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -237,7 +237,23 @@ const statePlaces = {
   loading: () => [captioned('Sidebar', inSlice(skeletonOf({ shape: 'row', count: 3 }))), captioned('Panel', panel({}, skeletonOf({ shape: 'list row', count: 3 })))],
 };
 
+// What an avatar is given to show: nothing but its initial, a picture, or a picture that cannot load.
+export const avatarPictures = { none: '', 'a picture': 'https://images.placeholders.dev/96x96', 'one that cannot load': 'https://invalid.example/avatar.png' };
+
 export const statedPages = {
+  'Primitives/Avatar': {
+    args: { initial: 'S', picture: 'none', size: 'md', tone: '', round: true },
+    markup: ({ picture, ...args }) => avatar({ ...args, image: avatarPictures[picture] }),
+    states: [
+      { label: 'Initial', args: {}, caption: 'The initial is the avatar.' },
+      { label: 'Picture', args: { picture: 'a picture' }, caption: 'A picture from a URL, local or external, cropped to the circle.' },
+      { label: 'Picture failed', args: { picture: 'one that cannot load' }, caption: 'When the picture cannot load, the initial stays.' },
+      { label: 'Small', args: { size: 'sm' }, caption: 'Inside a line of text.' },
+      { label: 'Large', args: { size: 'lg' }, caption: 'On a card or a header.' },
+      { label: 'A computer', args: { initial: 'D', tone: 'teal' }, caption: 'A computer’s initial in its own colour, in the rail.' },
+      { label: 'Tile', args: { initial: 'Z', round: false, size: 'sm' }, caption: 'An app’s picture or letter, square, in a menu.' },
+    ],
+  },
   'Primitives/Dialog': {
     args: { title: 'Rename checkout', scope: '', body: 'a field', notes: 'none', secondary: '', primary: 'Rename', state: 'default', loading: false },
     markup: ({ body, notes, scope, secondary, primary, ...args }) => dialog({ ...args, scope: scope || null, body: dialogBodies[body](args), notes: dialogNotes[notes], secondary: secondary || null, primary: primary || null }),

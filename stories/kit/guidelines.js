@@ -368,6 +368,7 @@ export const guidelines = {
   "Primitives/Avatar": [
     ["Kokō", "The initial is the avatar.", "A picture from a URL, local or external, is cropped to the circle. When it cannot load, the initial stays."],
     ["Seijaku", "Three sizes.", "sm inside a line of text, md by default, lg on a card or a header."],
+    ["Fukinsei", "Round names someone, square names something.", "A person or a computer is a circle; an app's picture or letter is a square tile, as in Open with. A computer's initial takes its own colour."],
   ],
   ...panelGuidelines,
 };

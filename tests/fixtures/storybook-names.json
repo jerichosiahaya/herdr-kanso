@@ -720,7 +720,7 @@
     "coverage/toast/NoticeStack/Duplicate coalesced",
     "coverage/toast/NoticeStack/Expired",
     "coverage/toast/NoticeStack/Three notices",
-    "kit/Avatar/Default",
+    "kit/Primitives/Avatar/Initial",
     "kit/Button/Active",
     "kit/Button/Armed",
     "kit/Button/Default",
