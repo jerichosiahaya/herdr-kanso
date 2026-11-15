@@ -150,3 +150,12 @@ export const sampleTargets = [
   { name: 'i18n', project: 'docs-site' },
 ];
 export const sampleMessage = 'Review the changes on branch limits-docs in ~/acme-shop-docs. Its pull request is #141.';
+// The arrangements of acme-shop and one from another project, as the approved board names them.
+export const sampleArrangements = [{ name: 'web and api' }, { name: 'review pair' }, { name: 'i18n', from: 'docs-site' }];
+// The checkout tab's panes as Save this tab captures them.
+export const sampleCapture = [
+  { icon: 'p-claude', name: 'checkout', detail: 'claude --model opus', second: 'new conversation' },
+  { icon: 'p-codex', name: 'docs', detail: 'codex', second: 'new conversation' },
+  { icon: 'lu-terminal', name: 'web', detail: 'pnpm dev' },
+  { icon: 'lu-terminal', name: 'zsh', detail: '~/acme-shop' },
+];

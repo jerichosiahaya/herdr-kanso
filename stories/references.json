@@ -521,7 +521,7 @@
       "code": "D7",
       "title": "Arrangements",
       "anchor": "dialogs-arrange",
-      "page": "Panels/Arrangements"
+      "page": null
     },
     {
       "code": "D8",
@@ -6328,47 +6328,6 @@
         "proto/approved-dialogs-help/Reference/3"
       ],
       "sourceHash": "a97670cd041fb778699a1f4de0b5fd3faab7c0f0d7d19feb5ce5405e53d56d01",
-      "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Arrangements",
-      "existing": true,
-      "boards": [
-        "D7"
-      ],
-      "status": "Approved reference",
-      "guidelines": [
-        "The dialog shell. One line per arrangement, no icon. A row from another project names it at the right. Panes in the tooltip.",
-        "Overwrite and Delete on the selected row. Enter opens. Delete arms in accent.",
-        "Save shows the tab's shape (columns at their widths, each pane's program and command). An agent says \"new conversation\".",
-        "Typing a used name turns the primary into \"Overwrite \u003cname>\", which takes a second press.",
-        "Opening is pending on its row and the tab appears. A refused delete shows the tool's words under the row, then Delete and Explain to \u003cagent>.",
-        "Empty: \"No arrangement\" and the primary.",
-        "Remote: none to read (local store). Opening remotely starts each pane there (one hc call per pane)."
-      ],
-      "records": [
-        "proto/approved-dialogs-arrange/Reference/1",
-        "proto/approved-dialogs-arrange/Reference/2",
-        "coverage/arrange/Arrangements/Delete armed",
-        "coverage/arrange/Arrangements/Delete failed",
-        "coverage/arrange/Arrangements/Empty",
-        "coverage/arrange/Arrangements/Keyboard",
-        "coverage/arrange/Arrangements/Loading",
-        "coverage/arrange/Arrangements/Opening",
-        "coverage/arrange/Arrangements/Read failed",
-        "coverage/arrange/Arrangements/Saved"
-      ],
-      "components": [
-        "Panels/Arrangements"
-      ],
-      "features": [
-        "coverage/arrange/Arrangements"
-      ],
-      "approvedRecords": [
-        "proto/approved-dialogs-arrange/Reference/1",
-        "proto/approved-dialogs-arrange/Reference/2"
-      ],
-      "sourceHash": "23ce8360741848c69265c5eb00fc32dee4d6f1c33f5c4d9b9297a362368acc8f",
       "proposedPredicates": []
     },
     {

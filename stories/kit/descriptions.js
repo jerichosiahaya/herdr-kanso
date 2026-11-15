@@ -22,6 +22,7 @@ export const descriptions = {
   Toast: 'A short notice shown only while the fact’s own home is out of view, with at most one action.',
   Header: 'The top of the sidebar: the window’s lights and the toolbar, open or collapsed.',
   'Add computer dialog': 'Another computer for your agents: a host from your ssh config, or one you type.',
+  'Arrangements dialog': 'The tab layouts kept for a project: open one, overwrite it, or save this tab.',
   'Prompt dialog': 'One question and one field: a new name, a note.',
   'New project dialog': 'A folder becomes a project; its name follows the folder.',
   'New worktree dialog': 'A branch in its own folder, next to the project.',

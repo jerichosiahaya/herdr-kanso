@@ -115,6 +115,25 @@ export const sendDialog = ({ agents = [], find = null, empty = null, message, to
   primary: to && !failure ? to : null, state: sending ? 'loading' : message ? 'default' : 'disabled',
 });
 
+// Arrangements: each saved one a Row, another project's with that project as its fact; the chosen one shows Overwrite and Delete.
+const arrangementRow = ({ name, from = null, chosen = false, armed = false, opening = false, focus = false }) => row({
+  name, meta: opening ? 'Opening…' : from, current: chosen, focus, pending: opening,
+  tools: chosen && !opening ? [button({ label: 'Overwrite', kind: 'quiet', size: 'sm' }), button({ label: 'Delete', kind: 'quiet', size: 'sm', armed, verb: 'delete' })] : [],
+});
+export const arrangements = ({ project, saved = [], reading = false, empty = null, failure = null, note = null, agent }) => dialog({
+  title: 'Arrangements', scope: phrase('Opens in', project),
+  body: list(reading ? skeletonOf({ shape: 'row', count: 3 }) : null, empty ? emptyState({ icon: 'lu-layers', text: empty }) : saved.map(arrangementRow), refusal(failure, agent)),
+  notes: note ? [{ text: note, tone: 'error' }] : [],
+  primary: reading || failure ? null : 'Save this tab', kind: 'tonal',
+});
+// Save this tab: the name, then each pane as it will come back, its program and the command it started with.
+export const saveArrangement = ({ title, scope, name, panes = [], reading = false, armed = false, failure = null, agent }) => dialog({
+  title, scope,
+  body: list(input({ text: name, label: 'Name', focus: true }), reading ? skeletonOf({ shape: 'row', count: 2 }) : panes.map(row), refusal(failure, agent)),
+  notes: reading ? [] : [{ text: "Each program is kept with the flags you started it with. A resumed session's id is left out, so each agent starts fresh." }],
+  secondary: 'Back', primary: failure ? null : armed ? 'Overwrite' : 'Save', state: reading ? 'disabled' : armed ? 'armed' : 'default',
+});
+
 // Sleep: what stops and what will not come back the same, in one line; one press.
 export const sleepDialog = ({ title, facts: lines = [], rows = [], reading = false, step = 'ready', action = 'Sleep', failure = null, agent }) => dialog({
   title,

@@ -1,7 +1,6 @@
 // Compose retained panel features from the shared kit.
 import { elements, frame as free } from './storybook-markup.mjs';
 import { panel, panelBack, panelClose, panelHeader, panelRefresh } from '../stories/kit/compositions.js';
-import { dialog, failureBlock, input, list as join, skeletonOf } from '../stories/kit/pieces.js';
 
 const esc = (s) => s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
 const icon = (name) => `<svg class="kanso-icon" aria-hidden="true"><use href="#lu-${name}"/></svg>`;
@@ -45,25 +44,6 @@ export function panelStateRecords(records) {
     ]) add('Spend', 'Spend History', state, history([...values, ...Array(30 - values.length).fill(0)], task), `Proposed. Sample ${task ? 'task' : 'period'} history retains daily bars, zero days, peak value and cost/token tooltips from the current app.`);
   }
   const put = (page, component, state, html, behavior, anatomy) => drawings.push({ id: `panels/${page.split('/')[1].toLowerCase()}/Feature${component.replaceAll(' ', '')}/${state}`, source: 'panels', page, label: `${component} · ${state}`, caption: behavior, html, spec: [['Anatomy', anatomy], ['Values', 'Shared kit tokens, single-line rows with ellipsis, contextual controls.'], ['States', state], ['Behaviour', behavior], ['Principle', 'Kansō']] });
-  const arranged = find('proto/approved-dialogs-arrange/Reference/1');
-  if (arranged) {
-    const shell = (options) => free(dialog({ scope: 'Opens in acme-shop', secondary: 'Close', primary: 'Save this tab', ...options }));
-    const arrangement = (name, from = '', selected = false) => `<div class="kanso-row${selected ? ' kanso-row--selected' : ''}"><span>${name}</span><span class="kanso-layout__grow"></span>${from ? `<span class="kanso-row__meta">from ${from}</span>` : ''}${selected ? button('Overwrite') + button('Delete') : ''}</div>`;
-    const group = (text) => `<div class="kanso-dialog__group">${text}</div>`;
-    const list = (...rows) => `<div class="kanso-dialog__list">${rows.join('')}</div>`;
-    const anatomy = 'The dialog shell: heading, scope, list and actions.';
-    put('Panels/Arrangements', 'Arrangements', 'This project and other projects', shell({ title: 'Arrangements', kind: 'tonal', body: list(group('This project'), arrangement('web and api', '', true), arrangement('review pair'), group('Other projects, opened here'), arrangement('i18n', 'docs-site'), arrangement('release', 'infra')) }), 'Arrangements saved in other projects follow this project’s, under their own heading; each names the project it came from and opens here.', anatomy);
-    put('Panels/Arrangements', 'Arrangements', 'Only other projects', shell({ title: 'Arrangements', kind: 'tonal', body: list(group('From other projects, opened here'), arrangement('i18n', 'docs-site', true), arrangement('release', 'infra')) }), 'With none saved in this project, the list is the other projects’ arrangements, opened here.', anatomy);
-    put('Panels/Arrangements', 'Arrangements', 'sqlite3 missing', shell({ title: 'Arrangements', body: empty('layers', 'No arrangement yet.'), notes: [{ text: 'Install sqlite3 to keep arrangements.', tone: 'error' }] }), 'Without sqlite3 nothing can be read or kept; one line under the list says what to install.', anatomy);
-    const shape = elements(arranged, 'kanso-arrangement')[0];
-    const kept = { text: "Each program is kept with the flags you started it with. A resumed session's id is left out, so each agent starts fresh." };
-    const named = (text) => input({ text, label: 'Name', focus: true });
-    const save = (options) => shell({ title: 'Save this tab', scope: 'An arrangement for acme-shop', secondary: 'Back', primary: 'Save', ...options });
-    put('Panels/Arrangements', 'Save Arrangement', 'Save header', save({ body: join(named('checkout and docs'), shape), notes: [kept] }), 'Save this tab names the project the arrangement is for.', anatomy);
-    put('Panels/Arrangements', 'Save Arrangement', 'Overwrite header', save({ title: 'Overwrite web and api', scope: 'With this tab as it is now', body: join(named('web and api'), shape), notes: [kept, { text: 'This replaces the arrangement named web and api.', tone: 'muted' }], primary: 'Overwrite', state: 'armed' }), 'Overwrite on a row opens the save with that arrangement named in the heading; the tab as it is now replaces it.', anatomy);
-    put('Panels/Arrangements', 'Save Arrangement', 'Capture loading', save({ body: join(named('web and api'), skeletonOf({ shape: 'row', count: 2 })), state: 'disabled' }), 'The panes and their commands are being read.', anatomy);
-    put('Panels/Arrangements', 'Save Arrangement', 'Save failed', save({ body: join(named('web and api'), shape, failureBlock({ text: 'Not saved', source: 'SQLITE_FULL: database or disk is full', fix: 'Save', agent: 'checkout' })), primary: null }), 'The store refused the write; the tab stays as it was.', anatomy);
-  }
   const toast = (mark, text, fix = '') => free(`<div class="kanso-toast kanso-popover">${mark}<span class="kanso-content__text" title="${esc(text)}">${text}</span>${fix}</div>`);
   const done = '<svg class="kanso-icon kanso-icon--row" aria-hidden="true"><use href="#lu-check"/></svg>';
   const failed = '<svg class="kanso-mark kanso-mark--blocked" aria-hidden="true"><use href="#e-blk"/></svg>';

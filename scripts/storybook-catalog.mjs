@@ -104,7 +104,7 @@ const protoPage = {
   'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': 'Compositions/Dawn Mode', 'tokens-icons': 'Tokens/Icons', 'tokens-type': 'Tokens/Type',
 };
 const coveragePage = {
-  Arrangements: 'Panels/Arrangements', SaveArrangement: 'Panels/Arrangements', SettingsMenu: 'Compositions/Settings menu', UpdateNotice: 'Compositions/Notifications', RuntimeNotice: 'Compositions/Notifications',
+  Arrangements: 'Compositions/Arrangements dialog', SaveArrangement: 'Compositions/Arrangements dialog', SettingsMenu: 'Compositions/Settings menu', UpdateNotice: 'Compositions/Notifications', RuntimeNotice: 'Compositions/Notifications',
   ContainerList: 'Panels/Containers', ContainerRow: 'Panels/Containers', ComposeProject: 'Panels/Containers', ContainerDisk: 'Panels/Containers',
   Practice: 'Panels/Dojo', PracticeFeedback: 'Panels/Dojo', PracticeResult: 'Panels/Dojo', PracticePet: 'Panels/Dojo',
   Memory: 'Panels/Memory', MemoryAgent: 'Panels/Memory', MemoryRecovery: 'Panels/Memory', MemoryHistory: 'Panels/Memory', MemoryChart: 'Primitives/Chart', SystemNotice: 'Compositions/Notifications',

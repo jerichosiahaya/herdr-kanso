@@ -759,12 +759,25 @@
     }
   },
   "arrange/SaveArrangement": {
-    "page": "Panels/Arrangements",
+    "page": "Compositions/Arrangements dialog",
     "states": {
-      "Save": "panels/arrangements/FeatureSaveArrangement/Save header",
-      "Overwrite": "panels/arrangements/FeatureSaveArrangement/Overwrite header",
-      "Capture loading": "panels/arrangements/FeatureSaveArrangement/Capture loading",
-      "Save failed": "panels/arrangements/FeatureSaveArrangement/Save failed"
+      "Save": "kit/Arrangements dialog/Save this tab",
+      "Overwrite": "kit/Arrangements dialog/Overwrite",
+      "Capture loading": "kit/Arrangements dialog/Capture reading",
+      "Save failed": "kit/Arrangements dialog/Save refused"
+    }
+  },
+  "arrange/Arrangements": {
+    "page": "Compositions/Arrangements dialog",
+    "states": {
+      "Delete armed": "kit/Arrangements dialog/Delete armed",
+      "Delete failed": "kit/Arrangements dialog/Delete refused",
+      "Empty": "kit/Arrangements dialog/None yet",
+      "Keyboard": "kit/Arrangements dialog/Keyboard",
+      "Loading": "kit/Arrangements dialog/Reading",
+      "Opening": "kit/Arrangements dialog/Opening",
+      "Read failed": "kit/Arrangements dialog/Read refused",
+      "Saved": "kit/Arrangements dialog/Saved"
     }
   }
 }

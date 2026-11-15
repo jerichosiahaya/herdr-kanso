@@ -85,6 +85,10 @@ export const guidelines = {
     ["Seijaku", "Optimistic.", "Add reads Added at once with the done mark; a refusal clears it and puts the failure block under that host: ssh's words, Sign in or Add, and Explain to the agent."],
     ["Kokō", "Only what is needed.", "A Mac, once added, says it asks before agents read Documents, with Open the setting on it. No hosts in the config: the server icon dim and one line; the field is the action."],
   ],
+  "Compositions/Arrangements dialog": [
+    ["Kansō", "A use of Dialog.", "Each arrangement a Row; one from another project shows that project as its fact. The chosen Row shows Overwrite and Delete; Delete asks twice. Save this tab is the one primary, tonal."],
+    ["Kokō", "Save names it and shows what comes back.", "The name, then each pane as a Row: its program, the command it started with. Overwrite on a row opens the same save, named in the title, and asks twice."],
+  ],
   "Compositions/Prompt dialog": [
     ["Kansō", "A use of Dialog.", "The title names the thing, the Field opens selected, the primary is the command's word. An emptied field shows what it falls back to."],
   ],

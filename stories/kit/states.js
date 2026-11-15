@@ -1,8 +1,8 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
 import { dialog, emptyState, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleArrangements, sampleCapture, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
@@ -109,6 +109,30 @@ const sleepCaptions = {
   'conversation not found': 'Its conversation is gone.', 'cannot resume': 'The program cannot resume.', 'nothing to resume': 'Nothing here keeps a conversation.',
   'already awake': 'The row is no longer asleep.',
 };
+// What the Arrangements list shows: the saved ones with the first chosen, or the one state that replaces them.
+const chooseFirst = (look = {}) => sampleArrangements.map((item, index) => (index ? item : { ...item, chosen: true, ...look }));
+export const arrangementViews = {
+  'saved': { saved: chooseFirst() },
+  'delete armed': { saved: chooseFirst({ armed: true }) },
+  'delete refused': { saved: chooseFirst(), failure: { text: 'Not removed', source: 'SQLITE_READONLY: database is read only', fix: 'Delete' } },
+  opening: { saved: chooseFirst({ opening: true }) },
+  keyboard: { saved: sampleArrangements.map((item, index) => (index === 1 ? { ...item, focus: true } : item)) },
+  reading: { reading: true },
+  'none yet': { empty: 'No arrangement yet' },
+  'read refused': { failure: { text: "Can't read arrangements", source: 'SQLITE_BUSY: database is locked', fix: 'Refresh' } },
+  'no sqlite3': { empty: 'No arrangement yet', note: 'Install sqlite3 to keep arrangements.' },
+  'save this tab': { save: {} },
+  overwrite: { save: { title: 'Overwrite web and api', scope: 'With this tab as it is now', name: 'web and api', armed: true } },
+  'capture reading': { save: { reading: true } },
+  'save refused': { save: { failure: { text: 'Not saved', source: 'SQLITE_FULL: database or disk is full', fix: 'Save' } } },
+};
+const arrangementCaptions = {
+  'saved': 'The chosen one shows Overwrite and Delete; another project’s shows that project.', 'delete armed': 'Delete asks twice within 4 s.',
+  'delete refused': 'The store refused: its words, Delete again.', opening: 'The chosen one opens in this project.', keyboard: 'The list has the keyboard.',
+  reading: 'Before the store answers.', 'none yet': 'Nothing saved anywhere.', 'read refused': 'The store did not answer.', 'no sqlite3': 'Nothing can be kept without sqlite3.',
+  'save this tab': 'The name, then each pane as it will come back.', overwrite: 'Overwrite on a row: the save names it and asks twice.',
+  'capture reading': 'The panes and their commands are being read.', 'save refused': 'The store refused the write; the tab stays as it was.',
+};
 const worktreePlace = { here: '~/.kanso/worktrees/kansō-app-audit', devbox: 'devbox · ~/.kanso/worktrees/kansō-app-audit' };
 
 export const statedPages = {
@@ -128,6 +152,15 @@ export const statedPages = {
       { label: 'No footer', args: { title: 'Sleep acme-shop', body: 'nothing', notes: 'nothing to do', primary: '' }, caption: 'Nothing to press: Esc or a click outside closes it.' },
       { label: 'Loading', args: { loading: true }, caption: 'Each piece as its own skeleton until the content arrives.' },
     ],
+  },
+  'Compositions/Arrangements dialog': {
+    args: { view: 'saved' },
+    markup: ({ view }) => {
+      const { save, ...list } = arrangementViews[view];
+      return save ? saveArrangement({ title: 'Save this tab', scope: 'An arrangement for acme-shop', name: 'checkout and docs', panes: sampleCapture, agent: sampleAgent, ...save })
+        : arrangements({ project: 'acme-shop', agent: sampleAgent, ...list });
+    },
+    states: Object.keys(arrangementViews).map((view) => ({ label: view[0].toUpperCase() + view.slice(1), args: { view }, caption: arrangementCaptions[view] })),
   },
   'Compositions/Prompt dialog': {
     args: { title: 'Rename checkout', scope: '', text: 'checkout', fallback: 'claude', action: 'Rename' },
