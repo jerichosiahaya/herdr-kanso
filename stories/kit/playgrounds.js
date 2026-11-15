@@ -80,11 +80,12 @@ export const playgrounds = {
     markup: ({ state }) => `<svg class="kanso-icon kanso-icon--row kanso-grip${state === 'default' ? '' : ' kanso-text--fg'}"><title>Hold and drag onto another pane to move this one there</title><use href="#lu-grip-vertical"/></svg>`,
   },
   'Primitives/Field': {
-    args: { text: '', label: 'Comment', icon: 'lu-send', error: false, disabled: false, multiline: false, inline: false, selected: false, loading: false, limit: 80 },
+    args: { text: '', label: 'Comment', icon: 'lu-send', action: '', error: false, disabled: false, multiline: false, inline: false, selected: false, loading: false, limit: 80 },
     argTypes: {
       text: { name: 'text', control: { type: 'text' } },
       label: { name: 'label', control: { type: 'text' } },
       icon: select('icon', icons),
+      action: { name: 'word action', control: { type: 'text' }, description: 'Replaces the icon; shown once something is typed' },
       error: { name: 'error', control: { type: 'boolean' } },
       disabled: { name: 'disabled', control: { type: 'boolean' } },
       multiline: { name: 'multiline', control: { type: 'boolean' } },

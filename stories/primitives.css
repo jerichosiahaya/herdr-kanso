@@ -148,7 +148,8 @@
 .kanso-control--selected.kanso-control--selected{outline:2px solid var(--accent);outline-offset:1px;color:var(--fg)}
 
 .kanso-field{display:flex;align-items:center;gap:var(--k-sp-2);min-height:var(--k-h-control);height:auto;padding:0 var(--k-sp-1) 0 var(--k-sp-3);box-sizing:border-box;border-radius:var(--k-r-control);background:var(--canvas);box-shadow:inset 0 0 0 1px var(--input);font-size:var(--k-fs-body);line-height:var(--k-lh-body);color:var(--muted);cursor:text}
-.kanso-field:not(:has(.kanso-button--icon)){padding-right:var(--k-sp-3)}
+.kanso-field:not(:has(.kanso-button)){padding-right:var(--k-sp-3)}
+.kanso-field .kanso-button--sm{margin-left:auto}
 .kanso-field .kanso-button--icon{width:var(--k-h-compact);height:var(--k-h-compact);margin-left:auto}
 .kanso-field:is(:hover,.kanso-control--hover){box-shadow:inset 0 0 0 1px var(--muted)}
 .kanso-field.kanso-control--focus,.kanso-field:has(.kanso-field__editor:focus){box-shadow:inset 0 0 0 1px var(--input);color:var(--fg);outline:2px solid var(--accent);outline-offset:1px}

@@ -70,7 +70,7 @@ export const guidelines = {
     ["Seijaku", "One field.", "Input edge, canvas ground, radius 6, 30 minimum height. Multiline is two rows tall and grows with its text."],
     ["Kansō", "One ring.", "Focus is the kit's ring, 2 px accent outside. Hover moves the edge to muted. Disabled is off."],
     ["Kokō", "Failure is the edge.", "An invalid value turns the edge blocked; the reason is one line under the field, in the tool's words."],
-    ["Kansō", "One action inside.", "At most one icon button at the end, such as send. An empty field shows its placeholder in dim. Enter submits a single line; multiline takes new lines. Every field caps its text: 80 characters unless its use needs another limit."],
+    ["Kansō", "One action inside.", "At most one action at the end: an icon button such as send, or a word such as Add, a small tonal Button shown once something is typed. An empty field shows its placeholder in dim. Enter submits a single line; multiline takes new lines. Every field caps its text: 80 characters unless its use needs another limit."],
     ["Kansō", "Rename in place.", "Inline is 20 high, radius 4, no action, inside the line it renames: a tab, a pane header. One selection everywhere: accent at 30%."],
   ],
   "Primitives/Window controls": [

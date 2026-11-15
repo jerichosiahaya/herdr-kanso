@@ -76,14 +76,17 @@ export const dialog = ({ title, scope, value, placeholder, body = '', loading, n
     + (primary ? `<div class="kanso-dialog__footer">${secondary ? action(secondary, 'default', 'quiet') : ''}${action(primary, state, kind)}</div>` : '') + '</div>';
 };
 
-export const input = ({ text: value, label: placeholder, icon, error, disabled, multiline, inline: rename, selected, loading, limit }) => {
+export const input = ({ text: value, label: placeholder, icon, action = '', error, disabled, multiline, inline: rename, selected, loading, limit }) => {
   const editable = !disabled && !loading;
   const enter = multiline ? '' : ` onkeydown="if (event.key === 'Enter') event.preventDefault()"`;
   const cap = ` onbeforeinput="if (event.inputType.startsWith('insert') && this.innerText.length >= ${limit}) event.preventDefault()"`;
   const text = `<div class="kanso-field__editor" role="textbox" aria-label="${escape(placeholder)}" aria-multiline="${multiline}" contenteditable="${editable}"${editable ? ' tabindex="0"' : ''}${enter}${cap}>${selected ? `<span class="kanso-field__selection">${escape(value.slice(0, limit))}</span>` : escape(value.slice(0, limit))}</div>`;
-  const action = icon === 'none' || rename ? '' : `<span class="kanso-button kanso-button--icon" tabindex="0"><svg class="kanso-icon kanso-icon--row"><use href="#${icon}"/></svg></span>`;
+  const iconTool = icon === 'none' ? '' : `<span class="kanso-button kanso-button--icon" tabindex="0"><svg class="kanso-icon kanso-icon--row"><use href="#${icon}"/></svg></span>`;
+  // A word action shows only once something is typed.
+  const wordTool = value ? button({ label: action, kind: 'tonal', size: 'sm' }) : '';
+  const tool = rename ? '' : action ? wordTool : iconTool;
   const classes = `kanso-field${multiline ? ' kanso-field--multiline' : ''}${rename ? ' kanso-field--inline' : ''}${loading ? ' kanso-skeleton--shape' : `${error ? ' kanso-field--invalid' : ''}${disabled ? ' kanso-control--off' : ''}`}`;
-  return `<div class="${classes}"${disabled ? ' aria-disabled="true"' : ''}>${text}${action}</div>`;
+  return `<div class="${classes}"${disabled ? ' aria-disabled="true"' : ''}>${text}${tool}</div>`;
 };
 
 const inline = (text) => escape(text).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
