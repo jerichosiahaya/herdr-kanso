@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, sampleShot, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -425,6 +425,29 @@ export const statedPages = {
       { label: 'Title', args: { icon: 'none', name: 'Files', detail: '', meta: '', title: true, second: 'acme-shop · main' }, caption: 'A panel’s heading: the name at title size, its scope under it.' },
       { label: 'Hero', args: { icon: 'none', name: 'Rate limit checkout per customer and per plan', detail: '', meta: '', hero: true, second: { text: 'test / unit failed', tone: 'blocked' } }, caption: 'A page’s subject, wrapping at section size, its verdict under it.' },
       { label: 'Indented', args: { depth: 1 }, caption: 'One step in, under its parent.' },
+    ],
+  },
+  'Primitives/Switch': {
+    args: { checked: false, label: 'Toggle', disabled: false, hover: false, focus: false, pressed: false },
+    markup: toggle,
+    states: [
+      { label: 'Off', args: {}, caption: 'Raised with the input edge.' },
+      { label: 'On', args: { checked: true }, caption: 'Solid; the knob is the only part that moves.' },
+      { label: 'Hover', args: { hover: true }, caption: 'Under the pointer.' },
+      { label: 'Focus', args: { focus: true }, caption: 'The one ring.' },
+      { label: 'Pressed', args: { pressed: true }, caption: 'Held down.' },
+      { label: 'Disabled', args: { disabled: true }, caption: 'Nothing to switch yet.' },
+    ],
+  },
+  'Primitives/Skeleton': {
+    args: { shape: 'row', count: 3 },
+    markup: (args) => stack({ variant: 'panel' }, skeletonOf(args)),
+    states: [
+      { label: 'Rows', args: {}, caption: 'Bars in the shape of the rows to come, one soft light.' },
+      { label: 'Two-line rows', args: { shape: 'two lines' }, caption: 'Rows with a second line.' },
+      { label: 'List rows', args: { shape: 'list row' }, caption: 'A name and its meta.' },
+      { label: 'Lines', args: { shape: 'line', count: 4 }, caption: 'Text to come.' },
+      { label: 'Header', args: { shape: 'header' }, caption: 'A panel’s heading and its tool.' },
     ],
   },
   'Primitives/Mark': {

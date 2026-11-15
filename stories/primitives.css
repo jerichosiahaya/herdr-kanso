@@ -429,3 +429,5 @@
 .kanso-row--hero:is(:hover,.kanso-control--hover){background:none}
 .kanso-excerpt>.kanso-code{margin-block:var(--k-sp-1)}
 .kanso-row.kanso-row--hero{height:auto}
+.kanso-skeleton__list>.kanso-row--two-lines{padding-block:var(--k-sp-2)}
+.kanso-skeleton__list>.kanso-row--two-lines>.kanso-content__secondary{padding-left:calc(var(--k-ic-row) + var(--k-sp-2))}

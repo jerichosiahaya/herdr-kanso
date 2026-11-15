@@ -74,11 +74,11 @@ export function replaceSource(source, records, root = '.') {
 }
 
 const primitive = {
-  KeyHint: null, PillAndAvatar: null, Switch: 'Switch', Segmented: 'Tab', Field: null,
+  KeyHint: null, PillAndAvatar: null, Switch: null, Segmented: 'Tab', Field: null,
   ButtonsFourKinds: null, ButtonsOnALine: null, ActionRows: null, ButtonWithAMark: null, Armed: null,
   FocusRing: null, HoverSelectedPressed: null, Tooltip: 'Tooltip', ChromeAndBarButtons: null,
   FileRow: null, PortRow: null, RowActions: null, SettingRow: null, SettingRowWithAValue: null, FindRow: null,
-  Card: null, Metric: null, ThumbnailStrip: 'Thumbnail', SkeletonTwoLines: 'Skeleton', Loading: 'Skeleton',
+  Card: null, Metric: null, ThumbnailStrip: 'Thumbnail', SkeletonTwoLines: null, Loading: null,
   Toast: 'Toast', ToastWithItsSource: 'Toast', Snippet: null, Reply: null, Picture: 'Thumbnail',
 };
 // The panel pieces drawn on their own panel's page.

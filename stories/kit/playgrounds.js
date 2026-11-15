@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms, paneRightClicks, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls, dragHandleStates } from './pieces.js';
+import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, rowDepths, sides, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, tooltip, windowControls, dragHandleStates } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
@@ -561,13 +561,14 @@ export const playgrounds = {
     argTypes: { moment: { name: 'moment', control: { type: 'inline-radio' }, options: Object.keys(paneMoments) } },
   },
   'Primitives/Switch': {
-    args: { checked: false, label: 'Toggle', disabled: false },
+    ...statedPages['Primitives/Switch'],
     argTypes: {
       checked: flag('checked'),
       label: text('label'),
       disabled: flag('disabled'),
+      ...pick('hover', 'focus'),
+      pressed: flag('pressed'),
     },
-    markup: toggle,
   },
   'Primitives/Row': {
     ...statedPages['Primitives/Row'],
@@ -590,12 +591,11 @@ export const playgrounds = {
     },
   },
   'Primitives/Skeleton': {
-    args: { shape: 'row', count: 3 },
+    ...statedPages['Primitives/Skeleton'],
     argTypes: {
       shape: select('shape', Object.keys(skeletonShapes)),
       count: { name: 'count', control: { type: 'range', min: 1, max: 6 }, if: { arg: 'shape', neq: 'header' } },
     },
-    markup: (args) => `<div class="kanso-panel">${skeletonOf(args)}</div>`,
   },
   'Primitives/Tab': {
     args: {

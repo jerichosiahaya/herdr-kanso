@@ -17,11 +17,9 @@ export function kitRecords(records) {
   const first = (className, prefer = 'compositions-controls/') => [...originals.filter((record) => record.id.includes(prefer)), ...originals].flatMap((record) => elements(record.html, className))[0];
   const definitions = [
     ['Segmented', 'kanso-segmented', ['Default', 'Hover', 'Focus', 'Disabled']],
-    ['Switch', 'kanso-switch', ['Default', 'On', 'Hover', 'Focus', 'Active', 'Disabled']],
     ['Tab', 'kanso-tab', ['Default', 'Hover', 'Focus', 'Active', 'Disabled']],
-    ['Skeleton', 'kanso-skeleton__list', ['Loading'], 'panels/files/FilesFirstRead/']
   ];
-  const modifiers = { Hover: 'kanso-control--hover', Focus: 'kanso-control--focus', Active: 'kanso-control--active', Disabled: 'kanso-control--off', On: 'kanso-control--on' };
+  const modifiers = { Hover: 'kanso-control--hover', Focus: 'kanso-control--focus', Active: 'kanso-control--active', Disabled: 'kanso-control--off' };
   for (const [name, className, states, prefer] of definitions) {
     const source = first(className, prefer);
     if (!source) continue;

@@ -17,8 +17,10 @@ export const dot = (tone) => `<i class="kanso-dot kanso-fill--${escape(tone)}"><
 // Atoms
 
 export const kinds = { solid: 'kanso-button--solid', tonal: 'kanso-button--tonal', quiet: 'kanso-button--quiet kanso-text--fg', icon: 'kanso-button--icon' };
+// A control's drawn live state: under the pointer, focused, or held down.
+const liveStates = ({ hover, focus, pressed }) => [hover && 'kanso-control--hover', focus && 'kanso-control--focus', pressed && 'kanso-control--active'].filter(Boolean);
 export const button = ({ label, kind = 'solid', size = 'md', icon = 'none', disabled = false, verb = '', armed = false, active = false, spin = false, hover = false, focus = false, pressed = false }) => {
-  const live = [hover && 'kanso-control--hover', focus && 'kanso-control--focus', pressed && 'kanso-control--active'];
+  const live = liveStates({ hover, focus, pressed });
   const classes = ['kanso-button', kinds[kind], size === 'md' ? '' : `kanso-button--${size}`, disabled ? 'kanso-control--off' : '', armed ? 'kanso-action kanso-action--armed' : '', active ? 'kanso-button--active' : '', spin ? 'kanso-button--spinning' : '', ...live].filter(Boolean).join(' ');
   const lead = icon === 'none' ? (spin ? mark({ status: 'working', size: 'sm' }) : '') : iconSvg(icon, 'control');
   const text = kind === 'icon' ? '' : escape(label);
@@ -205,7 +207,7 @@ export const metric = ({ value, unit, small = '', second = '', facts = '', loadi
 const iconSvg = (icon, size, tone = '') => `<svg class="${tone ? `kanso-text--${escape(tone)} ` : ''}${icon.startsWith('p-') ? 'kanso-icon--program' : size === 'row' ? 'kanso-icon kanso-icon--row' : 'kanso-icon'}"><use href="#${escape(icon)}"/></svg>`;
 export const glyph = (icon, tone = '') => iconSvg(icon, 'row', tone);
 const flip = "if (this.getAttribute('aria-disabled')) return; this.setAttribute('aria-checked', this.classList.toggle('kanso-control--on'))";
-export const toggle = ({ checked, label, disabled }) => `<span class="kanso-switch${checked ? ' kanso-control--on' : ''}${disabled ? ' kanso-control--off' : ''}" role="switch" aria-checked="${checked}" aria-label="${escape(label)}" tabindex="0"${disabled ? ' aria-disabled="true"' : ''} onclick="${flip}" onkeydown="if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); this.click(); }"><i></i></span>`;
+export const toggle = ({ checked, label, disabled, hover = false, focus = false, pressed = false }) => `<span class="${['kanso-switch', checked && 'kanso-control--on', disabled && 'kanso-control--off', ...liveStates({ hover, focus, pressed })].filter(Boolean).join(' ')}" role="switch" aria-checked="${checked}" aria-label="${escape(label)}" tabindex="0"${disabled ? ' aria-disabled="true"' : ''} onclick="${flip}" onkeydown="if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); this.click(); }"><i></i></span>`;
 // The lines that end every piece's right-click Menu.
 export const pieceLines = [{ separator: true }, { icon: 'lu-check', label: 'Only when needed' }, { icon: 'lu-eye-off', label: 'Hide this' }, { icon: 'lu-sliders-vertical', label: 'Settings for this…' }];
 export const marks = { working: 'e-work', blocked: 'e-blk', done: 'e-done', idle: 'e-idle', asleep: 'lu-moon' };
@@ -260,6 +262,7 @@ export const skeletonShapes = {
   'list row': () => shapeRow(bar('line'), grow(), bar('meta')),
   header: () => `<div class="kanso-panel__header">${bar('title')}${grow()}${bar('control')}</div>`,
   line: () => shapeRow(bar('line')),
+  'two lines': () => `<div class="kanso-row kanso-row--two-lines"><div class="kanso-content__primary">${bar('icon')}${bar('line')}</div><div class="kanso-content__secondary">${bar('meta')}</div></div>`,
 };
 export const skeletonOf = ({ shape, count }) => `<div class="kanso-skeleton__list kanso-skeleton--breathing" role="status" aria-label="Loading">${Array.from({ length: shape === 'header' ? 1 : count }, (_, i) => skeletonShapes[shape](i)).join('')}</div>`;
 
