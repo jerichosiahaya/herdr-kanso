@@ -14,7 +14,7 @@ import { button } from "./ui-button.js";
 const KEY = "kanso.toasts";
 // This window's mods, as they run now: the top of the file runs once for all their copies.
 const MARK = `${Date.now()}-${Math.random()}`;
-// A failure leads with the blocked mark, the same as on every line that failed.
+// One drawing for each lead leadOf names.
 const LEADS = {
   mark: (c) => mark(c, { status: "blocked" }),
   image: (_c, { icon }) => image(icon).w(ICON_ROW).h(ICON_ROW).flex_none(),
@@ -65,6 +65,6 @@ export default class Toast extends View {
       .on_click(() => this.act())
       .child(lead(c, p))
       .child(div().flex_1().min_w(0).truncate().font_semibold().text_size(T.value).text_color(c.text).child(p.title ?? ""))
-      .when(Boolean(fix), (el) => el.child(button("toast-fix", fix, null, c, { kind: "tonal", small: true })));
+      .when(Boolean(fix), (el) => el.child(button("toast-fix", fix, (cx) => { cx.stop_propagation(); this.act(); }, c, { kind: "tonal", small: true })));
   }
 }

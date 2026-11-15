@@ -4,18 +4,20 @@
 const DOT = { warning: "working", info: "accent" };
 const TONE = { success: "done", warning: "working", info: "muted" };
 const CHECK = "check";
+// A name in kanso-chrome's icons; anything else (a path on any system) is Herdr's own picture.
+const KIT_NAME = /^[a-z0-9-]+$/;
 
 /** mark: the blocked mark; image: Herdr's own picture; glyph: a kit icon in `tone`; dot: a dot in `tone`. */
 export const leadOf = ({ level, icon } = {}) => {
   if (level === "error") return { kind: "mark" };
-  if (icon?.includes("/")) return { kind: "image", icon };
+  if (icon && !KIT_NAME.test(icon)) return { kind: "image", icon };
   if (icon) return { kind: "glyph", icon, tone: TONE[level] ?? TONE.info };
   if (level === "success") return { kind: "glyph", icon: CHECK, tone: TONE.success };
   return { kind: "dot", tone: DOT[level] ?? DOT.info };
 };
 
-/** The whole title and its detail, for when the one line is cut. */
-export const tipOf = ({ title, body } = {}) => [title, body].filter(Boolean).join("\n");
+/** The detail; without one, the title, for when its one line is cut. */
+export const tipOf = ({ title, body } = {}) => body || title || "";
 
 /** The word on the fix, carried in the action's args by whoever posts it. */
 export const fixOf = ({ action } = {}) => action?.args?.label ?? null;

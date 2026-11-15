@@ -367,12 +367,11 @@ export class Updater {
     }
     this.setState({ latest: newestTag(r.stdout, this.channel()), checked: Date.now() });
     const v = this.available();
-    const have = this.current();
-    if (report && !v) notify(upToDate(have));
+    if (report && !v) notify(upToDate());
     if (report && v && this.state().notified === v) this.setState({ notified: null }); // an explicit check re-notifies for the same version
     if (v && this.state().notified !== v) {
       this.setState({ notified: v });
-      if (report || shown("toast.update", true, pieces(shared))) notify(updateAvailable(v, have));
+      if (report || shown("toast.update", true, pieces(shared))) notify(updateAvailable(v));
     }
   }
 

@@ -110,7 +110,7 @@ export default class WorkspaceChrome extends View {
       const kansoLabel = busy ? "Updating kansō..." : `Update kansō to ${kanso}`;
       return v_flex().size_full().bg(t.chrome).px(collapsed ? 0 : 8).pt(8).pb(12).gap(2).text_size(13).justify_end()
         .when(collapsed, el => el.items_center())
-        .when(Boolean(kanso), el => el.child(row("kanso-update", "mods/kanso-chrome/icons/refresh.svg", kansoLabel,
+        .when(Boolean(kanso), el => el.child(row("kanso-update", "mods/kanso-chrome/icons/refresh-cw.svg", kansoLabel,
           (_e, cx) => this.updater.install(cx))))
         .child(row("settings", "mods/kanso-chrome/icons/settings.svg", ready ? "Settings · update ready" : "Settings", () => run("app.settings")))
         // A server, not a second "+": the rail already has one for New space.

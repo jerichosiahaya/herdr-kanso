@@ -30,7 +30,7 @@ the branch's rules.
 
 ### Changed
 
-- Toasts say one sentence and keep the rest for their tooltip; they lead with the icon of what they are about in the colour of its state, a failure always with the blocked mark, and end with the word for their fix. The update and out of memory notices follow: Update, Refresh and Restart act from the toast. (#237)
+- Toasts say one sentence, with any detail in their tooltip; they lead with the icon of what they are about in the colour of its state, a failure always with the blocked mark, and end with the word for their fix. The update and out of memory notices follow: Update, Refresh and Restart act from the toast, and the update's icon is the same in the toast and the sidebar. (#237)
 - Each mod carries only the pieces of the panel kit it uses, so a change to one piece reaches only the mods that draw it. (#276)
 - The Containers panel asks Docker only what can have changed: the container list every 5 seconds, their details when it changes, images, volumes and disk use once a minute, after an action and when a container appears or goes, and Docker's memory limit and context when the panel opens or comes forward, on Read again, when Docker comes back and when another context is chosen. About a quarter as many processes while it is open. (#263)
 - Draw the missing Worktrees, Preview, Markdown and Simulator feature states in Storybook.
