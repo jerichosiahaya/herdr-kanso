@@ -864,11 +864,7 @@
         "proto/approved-dawn/Reference/9",
         "proto/approved-dawn/Reference/10",
         "proto/approved-dawn/Reference/11",
-        "proto/approved-dawn/Reference/12",
-        "proto/tokens-dawn/TheBand/Default",
-        "kit/Sidebar/Open",
-        "kit/Sidebar/Collapsed",
-        "kit/Sidebar/Dawn"
+        "proto/approved-dawn/Reference/12"
       ],
       "components": [
         "Compositions/Sidebar"
@@ -908,11 +904,7 @@
       ],
       "records": [
         "proto/approved-sidebar-rest/Reference/1",
-        "proto/approved-sidebar-rest/Reference/2",
-        "proto/tokens-dawn/TheBand/Default",
-        "kit/Sidebar/Open",
-        "kit/Sidebar/Collapsed",
-        "kit/Sidebar/Dawn"
+        "proto/approved-sidebar-rest/Reference/2"
       ],
       "components": [
         "Compositions/Sidebar"
@@ -1002,11 +994,7 @@
         "proto/approved-sidebar-switch/Reference/4",
         "proto/approved-sidebar-switch/Reference/5",
         "proto/approved-sidebar-switch/Reference/6",
-        "proto/approved-sidebar-switch/Reference/7",
-        "proto/tokens-dawn/TheBand/Default",
-        "kit/Sidebar/Open",
-        "kit/Sidebar/Collapsed",
-        "kit/Sidebar/Dawn"
+        "proto/approved-sidebar-switch/Reference/7"
       ],
       "components": [
         "Compositions/Sidebar"
@@ -1506,11 +1494,7 @@
         "proto/approved-sidebar-dnd/Reference/2",
         "proto/approved-sidebar-dnd/Reference/3",
         "proto/approved-sidebar-dnd/Reference/4",
-        "proto/approved-sidebar-dnd/Reference/5",
-        "proto/tokens-dawn/TheBand/Default",
-        "kit/Sidebar/Open",
-        "kit/Sidebar/Collapsed",
-        "kit/Sidebar/Dawn"
+        "proto/approved-sidebar-dnd/Reference/5"
       ],
       "components": [
         "Compositions/Sidebar"
@@ -1545,11 +1529,7 @@
         "proto/approved-sidebar-keys/Reference/3",
         "proto/approved-sidebar-keys/Reference/4",
         "proto/approved-sidebar-keys/Reference/5",
-        "proto/approved-sidebar-keys/Reference/6",
-        "proto/tokens-dawn/TheBand/Default",
-        "kit/Sidebar/Open",
-        "kit/Sidebar/Collapsed",
-        "kit/Sidebar/Dawn"
+        "proto/approved-sidebar-keys/Reference/6"
       ],
       "components": [
         "Compositions/Sidebar"
@@ -1688,11 +1668,7 @@
         "proto/approved-sidebar-edges/Reference/1",
         "proto/approved-sidebar-edges/Reference/2",
         "proto/approved-sidebar-edges/Reference/3",
-        "proto/approved-sidebar-edges/Reference/4",
-        "proto/tokens-dawn/TheBand/Default",
-        "kit/Sidebar/Open",
-        "kit/Sidebar/Collapsed",
-        "kit/Sidebar/Dawn"
+        "proto/approved-sidebar-edges/Reference/4"
       ],
       "components": [
         "Compositions/Sidebar"
