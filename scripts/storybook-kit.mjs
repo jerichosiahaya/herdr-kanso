@@ -1,8 +1,9 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
-import { asleep, computerRow, header, projectRow, section, sessionRow, sidebarFooter, tile, viewSwitch } from '../stories/kit/compositions.js';
-import { dawn as dawnSky, input, stack, windowControls } from '../stories/kit/pieces.js';
+import { asleep, computerRow, header, projectRow, section, sessionRow, tile, viewSwitch } from '../stories/kit/compositions.js';
+import { dawn as dawnSky, input, windowControls } from '../stories/kit/pieces.js';
 import { statedPages } from '../stories/kit/states.js';
+import { inRail, inSidebar } from '../stories/kit/frames.js';
 export { elements } from './storybook-markup.mjs';
 
 // Each named state of a stated page, drawn from its preset; `id` keeps a state's earlier name.
@@ -50,7 +51,6 @@ export function kitRecords(records) {
     ['kit/Header/Dawn', 'Expanded, Dawn Mode', header({ dawn: true }), 'The dawn behind the lights and the tools.'],
     ['kit/Header/Dawn collapsed', 'Collapsed, Dawn Mode', header({ collapsed: true, dawn: true }), 'The dawn behind the lights, centred on the rail.'],
   ]) if (html) results.push({ id, source: 'kit', page: 'Compositions/Header', label, html: frame(html), caption });
-  const inSidebar = (html) => stack({ variant: 'sidebar frame' }, html), inRail = (html) => stack({ variant: 'rail frame' }, html);
   for (const [page, label, html, caption, id] of [
     ['Session row', 'Working', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' })), 'What it is on and for how long.'],
     ['Session row', 'Needs you', inSidebar(sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' })), 'The question, in foreground.'],
@@ -68,8 +68,6 @@ export function kitRecords(records) {
     ['View switch', 'Column', inRail(viewSwitch({ column: true })), 'Sidebar collapsed: the three views as icons.'],
     ['Tile', 'Project', inRail(tile({ initial: 'A', status: 'blocked', count: 4, open: true })), 'A project in the rail.'],
     ['Tile', 'Status', inRail(tile({ status: 'working', count: 3 })), 'A state in the rail.'],
-    ['Footer', 'Default', inSidebar(sidebarFooter()), 'Settings.'],
-    ['Footer', 'Update', inSidebar(sidebarFooter({ update: 'Update kansō to 3.31.0' })), 'An update adds a row on top.'],
   ]) results.push({ id: id ?? `kit/${page}/${label}`, source: 'kit', page: page === 'Sidebar' ? 'Compositions/Sidebar' : `Compositions/Sidebar/${page}`, label, html: frame(html), caption });
   results.push(...statedRecords());
   const choices = elements(byId('proto/components-choosing-the-channel/ChoosingTheChannel/Default'), 'kanso-update');

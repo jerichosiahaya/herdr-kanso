@@ -389,8 +389,8 @@ export const statedPages = {
       return list(open ? settingsMenu() : null, collapsed ? inRail(footer) : inSidebar(footer));
     },
     states: [
-      { label: 'At rest', args: {}, caption: 'Settings alone, the same in Stable Mode and Dawn Mode.' },
-      { label: 'A kansō update', args: { update: 'kansō' }, caption: 'One row above Settings, in foreground.' },
+      { label: 'At rest', args: {}, id: 'kit/Footer/Default', caption: 'Settings alone, the same in Stable Mode and Dawn Mode.' },
+      { label: 'A kansō update', args: { update: 'kansō' }, id: 'kit/Footer/Update', caption: 'One row above Settings, in foreground.' },
       { label: 'A Dawn Mode build', args: { update: 'Dawn Mode build' }, caption: 'The row names the build.' },
       { label: 'Updating', args: { update: 'kansō', moment: 'updating' }, caption: 'Marked at once, quiet until it lands.' },
       { label: 'Update refused', args: { update: 'kansō', moment: 'refused' }, caption: "The row unchanged, the tool's words under it." },
