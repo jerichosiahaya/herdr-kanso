@@ -78,7 +78,7 @@ export const input = ({ text: value = '', label: placeholder, icon = 'none', act
   const enter = multiline ? '' : ` onkeydown="if (event.key === 'Enter') event.preventDefault()"`;
   const cap = ` onbeforeinput="if (event.inputType.startsWith('insert') && this.innerText.length >= ${limit}) event.preventDefault()"`;
   const text = `<div class="kanso-field__editor" role="textbox" aria-label="${escape(placeholder)}" aria-multiline="${multiline}" contenteditable="${editable}"${editable ? ' tabindex="0"' : ''}${enter}${cap}>${selected ? `<span class="kanso-field__selection">${escape(value.slice(0, limit))}</span>` : escape(value.slice(0, limit))}</div>`;
-  const iconTool = icon === 'none' ? '' : `<span class="kanso-button kanso-button--icon" tabindex="0"><svg class="kanso-icon kanso-icon--row"><use href="#${icon}"/></svg></span>`;
+  const iconTool = icon === 'none' ? '' : button({ label: placeholder, kind: 'icon', icon });
   // A word action shows once something is typed, or always when a chooser fills the field.
   const wordTool = value || choose ? button({ label: action, kind: 'tonal', size: 'sm' }) : '';
   const tool = rename ? '' : action ? wordTool : iconTool;
@@ -156,11 +156,13 @@ export const row = ({ icon = 'none', tone = '', name, detail, meta, chip: count,
 };
 
 const bar = (shape) => `<span class="kanso-skeleton kanso-skeleton--${shape}"></span>`;
+// A Row's silhouette, as the app's skeleton draws it: the bars in a row's box.
+const shapeRow = (...bars) => `<div class="kanso-row">${list(bars)}</div>`;
 export const skeletonShapes = {
-  row: () => `<div class="kanso-row">${bar('icon')}${bar('line')}${grow()}</div>`,
-  'list row': () => `<div class="kanso-row">${bar('line')}${grow()}${bar('meta')}</div>`,
+  row: () => shapeRow(bar('icon'), bar('line'), grow()),
+  'list row': () => shapeRow(bar('line'), grow(), bar('meta')),
   header: () => `<div class="kanso-panel__header">${bar('title')}${grow()}${bar('control')}</div>`,
-  line: () => `<div class="kanso-row">${bar('line')}</div>`,
+  line: () => shapeRow(bar('line')),
 };
 export const skeletonOf = ({ shape, count }) => `<div class="kanso-skeleton__list kanso-skeleton--breathing" role="status" aria-label="Loading">${Array.from({ length: shape === 'header' ? 1 : count }, (_, i) => skeletonShapes[shape](i)).join('')}</div>`;
 
@@ -180,8 +182,8 @@ export const tabs = ({ items, value, size, track, disabled, icon, label: named }
 export const thumbnail = ({ image, label, selected, loading }) => `<span class="kanso-thumbnail${selected ? ' kanso-control--selected' : ''}${loading ? ' kanso-skeleton--shape' : ''}" role="button" aria-pressed="${selected}" aria-label="${escape(label)}" title="${escape(label)}" tabindex="0">${image && !loading ? `<img src="${escape(image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>`;
 
 export const levels = { error: 'blocked', warning: 'working', success: 'done', info: 'accent' };
-const lead = (level) => level === 'error' ? '<svg class="kanso-mark kanso-mark--blocked" aria-hidden="true"><use href="#e-blk"/></svg>'
-  : level === 'success' ? '<svg class="kanso-icon kanso-icon--row kanso-text--done" aria-hidden="true"><use href="#lu-check"/></svg>'
+const lead = (level) => level === 'error' ? mark({ status: 'blocked' })
+  : level === 'success' ? glyph('lu-check', levels.success)
   : `<i class="kanso-toast__dot kanso-fill--${levels[level]}"></i>`;
 // `mark` stands in for the level's mark; `tone` colours an icon apart from the level; `detail` is the tool's words, in the tooltip.
 export const toast = ({ level = 'info', icon = 'none', title, body, action, explain, mark: status, tone, detail }) => {
@@ -197,8 +199,9 @@ export const explainButton = ({ agent, size = 'md' }) => button({ label: `Explai
 
 export const sides = ['auto', 'top', 'bottom', 'left', 'right'];
 // Auto takes the side with the most room around the control, measured when it opens.
-const place = "const tip = this.nextElementSibling, box = this.getBoundingClientRect(), room = { top: box.top, bottom: innerHeight - box.bottom, left: box.left, right: innerWidth - box.right }; const side = Object.keys(room).reduce((a, b) => room[b] > room[a] ? b : a); tip.className = tip.className.replace(/kanso-tooltip--(top|bottom|left|right)/, 'kanso-tooltip--' + side)";
-export const tooltip = ({ text, detail, key, icon, open, side }) => `<span class="kanso-tooltip__trigger"><span class="kanso-button kanso-button--icon" tabindex="0" aria-label="${escape(text)}"${side === 'auto' ? ` onmouseenter="${place}" onfocus="${place}"` : ''}><svg class="kanso-icon"><use href="#${icon}"/></svg></span>`
+const place = "const tip = this.lastElementChild, box = this.firstElementChild.getBoundingClientRect(), room = { top: box.top, bottom: innerHeight - box.bottom, left: box.left, right: innerWidth - box.right }; const side = Object.keys(room).reduce((a, b) => room[b] > room[a] ? b : a); tip.className = tip.className.replace(/kanso-tooltip--(top|bottom|left|right)/, 'kanso-tooltip--' + side)";
+// The drawn tip takes the system title's place on its trigger.
+export const tooltip = ({ text, detail, key, icon, open, side }) => `<span class="kanso-tooltip__trigger"${side === 'auto' ? ` onmouseenter="${place}" onfocusin="${place}"` : ''}>${button({ label: text, kind: 'icon', icon }).replace(' title=', ' aria-label=')}`
   + `<span class="kanso-tooltip kanso-popover kanso-tooltip--${side === 'auto' ? 'bottom' : side}${open ? ' kanso-tooltip--open' : ''}" role="tooltip">${escape(text)}${key ? ` <span>${escape(key)}</span>` : ''}${detail ? ` <span>· ${escape(detail)}</span>` : ''}</span></span>`;
 
 // A setting: its label, its control at the right, and an optional note under both with one quiet link.
