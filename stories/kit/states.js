@@ -62,7 +62,7 @@ export const statedPages = {
     args: { title: samplePanel.title, scope: samplePanel.scope, state: 'ready', look: 'panel', content: 'rows', last: 'rest' },
     markup: ({ title, scope, state, look, content, last }) => {
       const { reading = false, stale = false, scope: read = scope, body } = panelReads[state];
-      return panelShell({ title, scope: read, look, stale, tools: [look === 'window' ? panelBack() : null, samplePanel.tool(), panelRefresh({ reading })] }, body(panelContents[content](last)));
+      return panelShell({ title, scope: read, look, stale, back: look === 'window' ? panelBack() : null, tools: [samplePanel.tool(), panelRefresh({ reading })] }, body(panelContents[content](last)));
     },
     states: [
       { label: 'At rest', args: {}, caption: 'The read is fresh.' },

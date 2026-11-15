@@ -196,10 +196,10 @@ test("The panel shell is a frame: its title row over the body it is given, each 
   assert.throws(() => panelShell({ title: "Ports", look: "wide" }), { message: "panelShell: unknown look wide" });
 });
 
-test("A file opened from a panel keeps the button back to its folder's list among the heading's tools", async () => {
+test("A file opened from a panel keeps the button back to its folder's list before the title", async () => {
   const { statedPages } = await import("../stories/kit/states.js");
   const { args, markup } = statedPages["Compositions/Panel shell"];
-  const back = /<span class="kanso-button kanso-button--icon" tabindex="0" title="Markdown in this folder"><svg[^>]*><use href="#lu-chevron-left"/;
+  const back = /kanso-content__primary"><span class="kanso-button kanso-button--icon" tabindex="0" title="Markdown in this folder"><svg[^>]*><use href="#lu-chevron-left"\/><\/svg><\/span><span class="kanso-row__name">/;
   assert.match(markup({ ...args, look: "window" }), back);
   assert.doesNotMatch(markup(args), back);
 });

@@ -107,12 +107,12 @@ export const tabBar = ({ items = [], value = null, folded = [], overflow = false
   return stack({ variant: 'tab bar' }, tabList, more, tools, grow(), stack({ variant: 'tab bar doors' }, right, system));
 };
 
-// Panel shell: a frame of two slots, the Row in its title form (the title, its tools, the scope under it), then the body it is given.
+// Panel shell: a frame of two slots, the Row in its title form (back before the title, its tools, the scope under it), then the body it is given.
 // Each look is a width; stale steps the body down.
 export const panelLooks = ['panel', 'narrow', 'window'];
-export const panelShell = ({ title, scope = null, icon = 'none', tools = [], look = 'panel', stale = false }, ...body) => {
+export const panelShell = ({ title, scope = null, icon = 'none', back = null, tools = [], look = 'panel', stale = false }, ...body) => {
   if (!panelLooks.includes(look)) throw new Error(phrase('panelShell: unknown look', look));
-  return stack({ variant: 'panel', narrow: look === 'narrow', window: look === 'window', stale }, row({ icon, name: title, title: true, second: scope, tools }), body);
+  return stack({ variant: 'panel', narrow: look === 'narrow', window: look === 'window', stale }, row({ icon, start: back, name: title, title: true, second: scope, tools }), body);
 };
 // The tools every panel ends with: Refresh, spinning while it reads, and Close where the panel closes.
 export const panelRefresh = ({ reading = false } = {}) => button({ label: 'Refresh', kind: 'icon', icon: 'lu-refresh-cw', spin: reading });
