@@ -1,7 +1,7 @@
 // The row: one named item with its facts, mark and tools, in every state its Storybook story shows.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { load, chain, gpuiHost, numberArguments } from "./helpers.mjs";
+import { load, chain, gpuiHost, numberArguments, svgsOf as svgs } from "./helpers.mjs";
 import { marks, rowDepths } from "../stories/kit/pieces.js";
 
 const host = () => ({ ...gpuiHost(), svg: (path) => { const el = chain("svg"); el.calls.push(["svg", path]); return el; } });
@@ -24,7 +24,6 @@ const styled = (el, name) => {
 };
 const all = (el) => [el, ...el.kids.flatMap(all)];
 const byTag = (el, tag) => all(el).find((kid) => kid.tag === tag);
-const svgs = (el) => all(el).flatMap((kid) => calls(kid, "svg").map((call) => call[1]));
 const texts = (el) => all(el).flatMap((kid) => calls(kid, "child").map((call) => call[1]).filter((value) => typeof value === "string"));
 const line = (el) => all(el).find((kid) => kid.tag === "h_flex" && kid !== el);
 

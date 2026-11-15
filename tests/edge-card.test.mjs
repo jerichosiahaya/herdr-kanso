@@ -1,7 +1,7 @@
 // The card over an edge: the panes beyond it as the kit's Menu, each with its agent's mark, a press brings one into view.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { load, chain, gpuiHost } from "./helpers.mjs";
+import { load, chain, gpuiHost, svgsOf as svgs } from "./helpers.mjs";
 
 const night = { foreground: "#d8d4cb", background: "#1b1b19", hover: "#232321", selected: "#2b2b28", accent: "#da627d", dim: "#6b6862", muted: "#949086", chrome: "#141413" };
 const program = (name, icon, tint) => ({ agent: true, shell: false, name, icon, tint });
@@ -48,7 +48,6 @@ test("A pane's agent mark shows only while it works, waits or is done, and its p
   const { view } = await edge();
   const card = cardOf(view.render());
   const items = all(card).filter((el) => /^edge-menu-\d+$/.test(el.tag));
-  const svgs = (el) => all(el).flatMap((kid) => calls(kid, "svg").map((call) => call[1]));
   assert.ok(svgs(items[0]).includes("mods/kanso-chrome/icons/claude.svg"), "a tinted program's icon");
   assert.ok(svgs(items[0]).some((path) => /working/.test(path)), "working shows its mark");
   assert.equal(svgs(items[1]).some((path) => /enso-idle/.test(path)), false, "idle shows none");

@@ -7,6 +7,7 @@ import { modifierLabels, guideSections } from "./guide.js";
 import { theme, appHome, home, props, closeOverlay, keys, openOverlay, run } from "herdr";
 import { G, tokens } from "./ui.js";
 import { button, quietLink } from "./ui-button.js";
+import { row } from "./ui-row.js";
 import { segmented } from "./ui-tab.js";
 import { glyphs } from "./marks.js";
 import { TICK_MS, Companion } from "./pets.js";
@@ -121,13 +122,11 @@ export default class Help extends View {
         .child(div().min_w(64).text_size(17).font_semibold().text_color(chosen ? c.text : c.dim).child(chosen ? chordOf(chosen) : glyphs([...this.mods, this.picked].join("-"))))
         .child(div().flex_1().text_size(13.5).text_color(chosen ? c.text : c.dim)
           .child(chosen ? describe(chosen.action) : "Nothing on this key here. Press a key, or pick one.")))
-      .child(v_flex().gap(2)
-        .children(list.map(([key, d]) => h_flex().id(`row-${key}`).h(26).px(10).gap(G.md).items_center().rounded(6).cursor_pointer()
-          .when(key === this.picked, (el) => el.bg(c.selected))
-          .hover((s) => s.bg(c.subtle))
-          .on_click((_e, cx) => { this.picked = key; cx.notify(); })
-          .child(div().w(84).flex_none().text_size(12.5).font_medium().text_color(c.text).child(chordOf(d)))
-          .child(div().flex_1().truncate().text_size(12.5).text_color(c.muted).child(describe(d.action))))));
+      .child(v_flex()
+        .children(list.map(([key, d]) => row(`row-${key}`, c, {
+          name: describe(d.action), keys: [{ text: chordOf(d) }], current: key === this.picked,
+          onClick: (cx) => { this.picked = key; cx.notify(); },
+        }))));
   }
 
   enterDojo() {
