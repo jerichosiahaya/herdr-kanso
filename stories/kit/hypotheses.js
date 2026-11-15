@@ -19,6 +19,13 @@ export const hypotheses = {
       wrong: 'someone never reaches the list layer, or misses how many keys a layer has.',
     },
   ],
+  'Compositions/Keyboard/Shortcut row': [
+    {
+      change: 'Capture says Esc keeps · ⌫ removes inside the row, not on a line under it; a taken chord asks with an Armed Take it instead of a yellow line.',
+      believe: 'the row being changed is where the eye is, and a line that appears under it pushes every row below; the Armed button is the kit\'s one way to ask twice.',
+      wrong: 'someone presses a taken chord and does not notice it was not applied, or does not know how to leave capture.',
+    },
+  ],
   'Compositions/Status bar': [
     {
       change: 'Panes per view shows its number at rest, − and + on hover.',

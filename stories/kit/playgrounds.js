@@ -1,11 +1,9 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, keyboard, keyboardExplorer, pickedKey, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, asleep, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, pickedKey, shortcutRow, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycap, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, needsItem, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, statusItem, stepper, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
-import { keyboardRows, keyLayer, keyLayerNames, sampleSidebar, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, sampleSidebar, statusMenus, statusPanels } from './samples.js';
 
-const keyNames = keyboardRows.flat().map(({ key }) => key).filter((key, at, all) => all.indexOf(key) === at);
-const pickable = keyNames.filter((key) => !['ctrl', 'alt', 'shift', 'cmd'].includes(key));
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -14,6 +12,11 @@ const inSidebar = (markup) => stack({ variant: 'sidebar frame' }, markup), inRai
 const select = (name, options) => ({ name, control: { type: 'select' }, options });
 const inBar = (width, parts) => `<div class="kanso-story__bar" style="width:${width}px">${statusBar(parts)}</div>`;
 
+// One layer control per computer, each labelled the way that computer writes its modifiers.
+const pickable = keyNames().filter((key) => !['ctrl', 'alt', 'shift', 'cmd'].includes(key));
+const layerArgs = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, { name: 'layer', control: { type: 'select', labels: Object.fromEntries(keyLayerMods[os].map((mods) => [mods, mods === 'lists' ? 'Lists' : heldChord({ os, held: mods.split(' ') })])) }, options: keyLayerMods[os], if: { arg: 'os', eq: os } }]));
+const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
+const osArg = { name: 'computer', control: { type: 'inline-radio' }, options: keyboardSystems };
 
 export const playgrounds = {
   'Primitives/Button': {
@@ -173,28 +176,32 @@ export const playgrounds = {
     args: { label: 'H', units: 1, state: 'kanso', hover: false },
     argTypes: {
       label: { name: 'label', control: { type: 'text', maxLength: 3 } },
-      units: { name: 'width in keys', control: { type: 'inline-radio' }, options: [...new Set(keyboardRows.flat().map(({ units }) => units))].sort((a, b) => a - b) },
+      units: { name: 'width in keys', control: { type: 'inline-radio' }, options: [...new Set(Object.values(keyboards).flatMap(({ rows }) => rows.flat().map(([, units = 1]) => units)))].sort((a, b) => a - b) },
       state: select('state', keycapStates),
       hover: { name: 'hover', control: { type: 'boolean' } },
     },
     markup: (args) => stack({ variant: 'keyboard' }, stack({ variant: 'keyboard row' }, keycap(args))),
   },
   'Compositions/Keyboard/Picked key': {
-    args: { layer: '⌥⌘', key: 'h' },
+    args: { os: 'mac', ...layerDefaults, key: 'h' },
+    argTypes: { os: osArg, ...layerArgs, key: select('key', pickable) },
+    markup: ({ os, key, ...args }) => `<div class="kanso-story__slice kanso-story__settings">${pickedKey({ os, layer: keyLayer(os, args[`${os}Layer`]), picked: key })}</div>`,
+  },
+  'Compositions/Keyboard/Shortcut row': {
+    args: { name: 'Pin the pane', chords: '⌥⌘P', state: 'rest', hover: false },
     argTypes: {
-      layer: select('layer', keyLayerNames),
-      key: select('key', pickable),
+      name: { name: 'does', control: { type: 'text' } },
+      chords: { name: 'chords, comma between', control: { type: 'text' } },
+      state: select('state', shortcutRowStates),
+      hover: { name: 'hover', control: { type: 'boolean' } },
     },
-    markup: ({ layer, key }) => `<div class="kanso-story__slice kanso-story__settings">${pickedKey({ layer: keyLayer(layer), picked: key })}</div>`,
+    markup: ({ chords, ...args }) => `<div class="kanso-story__slice kanso-story__settings">${shortcutRow({ ...args, chords: chords.split(',').map((chord) => chord.trim()).filter(Boolean),
+      taken: { chord: '⌥⌘J', name: 'Pane below' }, source: 'keys.json: EACCES: permission denied', agent: 'checkout' })}</div>`,
   },
   'Compositions/Keyboard': {
-    args: { layer: '⌥⌘', key: 'h', hover: 'none' },
-    argTypes: {
-      layer: select('layer', keyLayerNames),
-      key: select('picked', pickable),
-      hover: select('hover', ['none', ...keyNames]),
-    },
-    markup: ({ layer, key, hover }) => keyboardExplorer({ rows: keyboardRows, layer: keyLayer(layer), picked: key, hover }),
+    args: { os: 'mac', ...layerDefaults, key: 'h', hover: 'none' },
+    argTypes: { os: osArg, ...layerArgs, key: select('picked', pickable), hover: select('hover', ['none', ...keyNames()]) },
+    markup: ({ os, key, hover, ...args }) => keyboardExplorer({ os, layer: keyLayer(os, args[`${os}Layer`]), picked: key, hover }),
   },
   'Compositions/Sidebar/Session row': {
     args: { program: 'p-claude', name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: '', status: 'working', depth: 1, current: false, pinned: false, commands: 0, hover: false, focus: false, dimmed: false },

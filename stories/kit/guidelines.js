@@ -143,11 +143,18 @@ export const guidelines = {
   "Compositions/Keyboard": [
     ["Kansō", "One layer at a time.", "The map shows the keys of the held modifiers. Holding or clicking a modifier picks the layer; pressing a key picks it. Lists, in the picked key, opens the layer of every list and menu."],
     ["Seijaku", "Built from the kit.", "Rows of Keys on the canvas ground, the Picked key beside them. A key is a row tall; a wider key spans its units and the gaps between them."],
-    ["Shizen", "The keys come from the app.", "The rows are the app's keyboard and the meanings its own words, so the map never says what the app does not do."],
+    ["Shizen", "Built for the computer in use.", "The composition draws the keyboard of the computer it is given: its rows, its key names and how it writes a chord. The meanings are the app's own words."],
+    ["Seijaku", "Each computer its own keyboard.", "Mac: glyphs, ⌥⌘H, the ⌥⌘ layer first. Windows: a PC keyboard, Ctrl Win Alt, chords as Alt+L, the Alt layer first, from its own keys file. Linux: the PC keyboard and Super."],
   ],
   "Compositions/Keyboard/Key": [
     ["Kansō", "Shown by what it does here.", "Free: faint. Herdr's key: quieter. kansō's key: ink. A held modifier: outlined. The picked key: solid."],
     ["Shizen", "Hover outlines it in the accent.", "Click picks it; on a modifier, click holds or lets go."],
+  ],
+  "Compositions/Keyboard/Shortcut row": [
+    ["Kansō", "What it does, then its keys.", "A Row with the action's words and a Key hint per chord; a family is one row (⌃⇧1–9), a pair shares one. A row with no key shows No key, faint."],
+    ["Kokō", "Change on the row.", "A click captures: the hint breathes in the accent and the row says Esc keeps · ⌫ removes. Nothing else moves."],
+    ["Kokō", "A taken chord asks twice.", "The second line says which action has it; Take it is Armed for 4 s, Esc keeps yours."],
+    ["Shizen", "Reset only when changed.", "A changed row shows Reset beside its keys. A refused write shows the failure pattern under the row: Change, then Explain."],
   ],
   "Compositions/Keyboard/Picked key": [
     ["Kansō", "The chord, then what it does.", "20 for the chord, 12.5 for its meaning; a free key says Nothing, muted. The layer line under it: the modifiers and their count, Herdr's key, or the list keys."],

@@ -1,5 +1,5 @@
 // The kit's compositions: each one only calls pieces with its own props and draws no markup.
-import { avatar, button, chip, dawn, setting, toggle, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, windowControls } from './pieces.js';
+import { avatar, button, chip, chord, dawn, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, windowControls } from './pieces.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
 const more = (open) => stack({ variant: 'toolbar group', open }, tool(open ? 'lu-chevron-up' : 'lu-chevron-down', open ? 'Fewer tools' : 'More tools'), open ? [tool('lu-arrow-up-down', 'Sort'), tool('lu-search', 'Search')] : null);
@@ -128,14 +128,56 @@ export const sidebar = ({ collapsed = false, dawn: early = false, art = true, vi
 export const statusBar = ({ left = [], middle = null, right = [], popup = null } = {}) => stack({ variant: 'status bar', grid: true },
   stack({ variant: 'status bar left' }, left), stack({ variant: 'status bar middle' }, middle), stack({ variant: 'status bar right' }, right), popup ? stack({ variant: 'status bar popup' }, popup) : null);
 
+// Keyboards by computer: the rows, each key's width in keys, and what each key is called; a chord joins its parts with join.
+const modifierKeys = ['ctrl', 'alt', 'shift', 'cmd'];
+const macRows = [
+  [['\u0060'], ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7'], ['8'], ['9'], ['0'], ['-'], ['='], ['backspace', 1.6]],
+  [['tab', 1.6], ['q'], ['w'], ['e'], ['r'], ['t'], ['y'], ['u'], ['i'], ['o'], ['p'], ['['], [']'], ['\\']],
+  [['capslock', 1.9], ['a'], ['s'], ['d'], ['f'], ['g'], ['h'], ['j'], ['k'], ['l'], [';'], ["'"], ['enter', 1.7]],
+  [['shift', 2.4], ['z'], ['x'], ['c'], ['v'], ['b'], ['n'], ['m'], [','], ['.'], ['/'], ['shift', 2.2]],
+  [['ctrl', 1.3], ['alt', 1.3], ['cmd', 1.6], ['space', 5.3], ['cmd', 1.6], ['alt', 1.3], ['left'], ['up'], ['down'], ['right']],
+];
+const pcRows = [...macRows.slice(0, 4), [['ctrl', 1.3], ['cmd', 1.3], ['alt', 1.6], ['space', 5.3], ['alt', 1.6], ['ctrl', 1.3], ['left'], ['up'], ['down'], ['right']]];
+const arrows = { space: null, left: '←', right: '→', up: '↑', down: '↓' };
+const pcCaps = { ...arrows, backspace: 'Back', tab: 'Tab', capslock: 'Caps', enter: 'Enter', escape: 'Esc', shift: 'Shift', ctrl: 'Ctrl', alt: 'Alt' };
+export const keyboards = {
+  mac: { rows: macRows, caps: { ...arrows, backspace: '⌫', tab: '⇥', capslock: '⇪', enter: '↩', escape: 'esc', shift: '⇧', ctrl: '⌃', alt: '⌥', cmd: '⌘' }, join: null },
+  windows: { rows: pcRows, caps: { ...pcCaps, cmd: 'Win' }, join: '+' },
+  linux: { rows: pcRows, caps: { ...pcCaps, cmd: 'Super' }, join: '+' },
+};
+export const keyboardSystems = Object.keys(keyboards);
+const named = (os, key) => Object.hasOwn(keyboards[os].caps, key);
+const capOf = (os, key) => named(os, key) ? keyboards[os].caps[key] : key.toUpperCase();
+export const keyNames = (os = 'mac') => [...new Set(keyboards[os].rows.flat().map(([key]) => key))];
+export const heldChord = ({ os = 'mac', held = [] }) => chord(keyboards[os].join, ...modifierKeys.filter((mod) => held.includes(mod)).map((mod) => capOf(os, mod)));
+
 // Keyboard: the map of one layer. Holding or clicking a modifier picks the layer; a kansō key has ink, a Herdr key is quieter.
 const keyState = { kanso: 'kanso', list: 'kanso', herdr: 'herdr', free: 'free' };
 const keyAct = { kanso: 'Change', herdr: 'Herdr settings', free: 'Give it an action' };
-export const keyboard = ({ rows = [], layer, picked = null, hover = null }) => stack({ variant: 'keyboard' },
-  rows.map((line) => stack({ variant: 'keyboard row' }, line.map(({ key, units, label }) => keycap({ label, units, hover: key === hover,
+export const keyboard = ({ os = 'mac', layer, picked = null, hover = null }) => stack({ variant: 'keyboard' },
+  keyboards[os].rows.map((line) => stack({ variant: 'keyboard row' }, line.map(([key, units = 1]) => keycap({ label: capOf(os, key), units, hover: key === hover,
     state: layer.held.includes(key) ? 'held' : key === picked ? 'picked' : keyState[layer.keys[key]?.kind] ?? 'free' })))));
 // The picked key: what it does here, or Nothing, with its one act; Lists opens the layer of every list and menu.
-export const pickedKey = ({ layer, picked }) => keyPicked({ chord: layer.keys[picked].chord, meaning: layer.keys[picked].does,
-  layer: layer.keys[picked].kind === 'herdr' ? 'Herdr\'s key' : layer.name,
-  actions: layer.lists ? [] : [button({ label: keyAct[layer.keys[picked].kind], kind: 'quiet' }), button({ label: 'Lists', kind: 'quiet' })] });
-export const keyboardExplorer = ({ rows = [], layer, picked, hover = null }) => stack({ variant: 'keyboard layout' }, keyboard({ rows, layer, picked, hover }), pickedKey({ layer, picked }));
+const pickedChord = ({ os, layer, picked }) => layer.keys[picked]?.chord
+  ? phrase(...layer.keys[picked].chord.map((part) => named(os, part) ? keyboards[os].caps[part] : part))
+  : chord(keyboards[os].join, ...modifierKeys.filter((mod) => layer.held.includes(mod)).map((mod) => capOf(os, mod)), capOf(os, picked));
+const layerLine = ({ os, layer }) => layer.lists ? layer.name
+  : phrase(heldChord({ os, held: layer.held }), '·', Object.keys(layer.keys).length, Object.keys(layer.keys).length === 1 ? 'key' : 'keys');
+export const pickedKey = ({ os = 'mac', layer, picked }) => keyPicked({ chord: pickedChord({ os, layer, picked }), meaning: layer.keys[picked]?.does ?? null,
+  layer: layer.keys[picked]?.kind === 'herdr' ? 'Herdr\'s key' : layerLine({ os, layer }),
+  actions: layer.lists ? [] : [button({ label: keyAct[layer.keys[picked]?.kind ?? 'free'], kind: 'quiet' }), button({ label: 'Lists', kind: 'quiet' })] });
+export const keyboardExplorer = ({ os = 'mac', layer, picked, hover = null }) => stack({ variant: 'keyboard layout' }, keyboard({ os, layer, picked, hover }), pickedKey({ os, layer, picked }));
+
+// Shortcut row: what a key does and its chords. A click captures on the row; Reset brings back what kansō ships.
+export const shortcutRowStates = ['rest', 'selected', 'changed', 'unbound', 'capture', 'taken', 'failed'];
+const shortcutKeys = ({ chords, state, taken }) => ({
+  unbound: [{ text: 'No key', faint: true }],
+  capture: chords.length ? chords.map((text) => ({ text, recording: true })) : [{ text: 'New key', recording: true }],
+  taken: [{ text: taken.chord, recording: true }],
+}[state] ?? chords.map((text) => ({ text })));
+export const shortcutRow = ({ name, chords = [], state = 'rest', taken = null, hover = false, source = null, agent = null }) => list(
+  row({ name, hover, current: ['selected', 'capture', 'taken'].includes(state), keys: shortcutKeys({ chords, state, taken }),
+    meta: state === 'capture' ? 'Esc keeps · ⌫ removes' : null,
+    second: state === 'taken' ? phrase(taken.chord, 'already does', taken.name, '· Esc keeps yours') : null,
+    action: { changed: { label: 'Reset', kind: 'quiet' }, taken: { label: 'Take it', kind: 'quiet', armed: true, verb: 'take it' } }[state] ?? null }),
+  state === 'failed' ? failureBlock({ text: phrase('Couldn\'t save', chords[0], 'for', name), source, fix: 'Change', agent }) : null);

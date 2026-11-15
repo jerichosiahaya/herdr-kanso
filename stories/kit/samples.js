@@ -2,7 +2,8 @@
 import { asleep, computerRow, projectRow, section, sessionRow, sidebar, tile } from './compositions.js';
 import { menu, stack, statusItem } from './pieces.js';
 import keyFile from '../../kanso/keys.json' with { type: 'json' };
-import { CAP, LIST_LAYER, MODIFIERS, ROWS, describe, layer } from '../../kanso/mods/kanso-help/keymap.js';
+import windowsKeyFile from '../../kanso/keys.windows.json' with { type: 'json' };
+import { LIST_LAYER, describe, layer } from '../../kanso/mods/kanso-help/keymap.js';
 
 const group = (...rows) => stack({ variant: 'row group' }, ...rows);
 export const sampleRows = {
@@ -49,21 +50,18 @@ export const statusPanels = ({ open = '' } = {}) => [
   statusItem({ icon: 'lu-git-pull-request', text: 2, open: open === 'reviews' }),
 ];
 
-// The Keyboard's sample: the app's Mac rows and kansō's own keys.json; of Herdr's keys, only the two the stories name.
-const bindings = [...Object.entries(keyFile).flatMap(([section, keys]) => Object.entries(keys).map(([chord, action]) => ({ section, keys: chord, action }))),
-  { section: 'global', keys: 'cmd-t', action: 'tab.new' }, { section: 'global', keys: 'cmd-k', action: 'app.palette' }];
-const capOf = (key) => CAP[key] ?? key.toUpperCase();
-export const keyboardRows = ROWS.map((line) => line.map(([key, units = 1]) => ({ key, units, label: capOf(key) })));
-export const keyLayerNames = ['⌥⌘', '⌘', '⌥⇧⌘', '⇧⌘', '⌃⇧', 'Lists'];
-export const keyLayer = (name = '⌥⌘') => {
-  const lists = name === 'Lists';
-  const mods = lists ? [] : MODIFIERS.filter((mod) => name.includes(CAP[mod]));
-  const found = lists ? LIST_LAYER : layer(bindings, mods);
-  const held = mods.map(capOf).join('');
-  const chordOf = (key, chord) => lists ? chord.split(' ').map((part) => CAP[part] ?? part).join(' ') : `${held}${capOf(key)}`;
-  const keys = Object.fromEntries(keyboardRows.flat().filter(({ key }) => !MODIFIERS.includes(key)).map(({ key }) => {
-    const does = found.get(key);
-    return [key, { kind: !does ? 'free' : lists ? 'list' : does.section === 'global' ? 'herdr' : 'kanso', does: does ? describe(does.action) : null, chord: chordOf(key, does?.chord ?? key) }];
-  }));
-  return { held: mods, lists, name: lists ? 'Every list and menu · j k gg G Enter /' : `${held} · ${found.size} ${found.size === 1 ? 'key' : 'keys'}`, keys };
+// The Keyboard's sample layers: kansō's own keys file for each computer, read by the app's keymap; of Herdr's keys, only the two the stories name.
+const bindingsOf = (file, herdr = []) => [...Object.entries(file).flatMap(([section, keys]) => Object.entries(keys).map(([chord, action]) => ({ section, keys: chord, action }))), ...herdr];
+const keyFiles = {
+  mac: bindingsOf(keyFile, [{ section: 'global', keys: 'cmd-t', action: 'tab.new' }, { section: 'global', keys: 'cmd-k', action: 'app.palette' }]),
+  windows: bindingsOf(windowsKeyFile),
+  linux: bindingsOf(keyFile),
+};
+export const keyLayerMods = { mac: ['alt cmd', 'cmd', 'alt shift cmd', 'shift cmd', 'ctrl shift', 'lists'], windows: ['alt', 'alt shift', 'ctrl shift', 'ctrl', 'lists'], linux: ['alt cmd', 'cmd', 'alt shift cmd', 'shift cmd', 'ctrl shift', 'lists'] };
+export const keyLayer = (os = 'mac', mods = 'alt cmd') => {
+  const lists = mods === 'lists';
+  const held = lists ? [] : mods.split(' ');
+  const found = lists ? LIST_LAYER : layer(keyFiles[os], held);
+  const keys = Object.fromEntries([...found].map(([key, does]) => [key, { kind: lists ? 'list' : does.section === 'global' ? 'herdr' : 'kanso', does: describe(does.action), ...(lists ? { chord: does.chord.split(' ') } : {}) }]));
+  return { held, lists, name: lists ? 'Every list and menu · j k gg G Enter /' : null, keys };
 };

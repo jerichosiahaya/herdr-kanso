@@ -50,6 +50,7 @@ export const descriptions = {
   Notifications: 'Update and system notices for events outside their normal surface.',
   Keyboard: 'A keyboard map for viewing and changing shortcuts.',
   Key: 'One key of the keyboard map, shown by what it does in the layer.',
+  'Shortcut row': 'One action and its keys, changed on the row itself.',
   'Picked key': 'The picked key: its chord, what it does, its layer and its one act.',
   Files: 'The current pane’s changed files and repository tree.',
   Preview: 'A file reader for text, Markdown and pictures beside the current pane.',

@@ -126,3 +126,12 @@ test("A page without its status tag, or with a code in its title, fails the lint
   const coded = { ...files, "stories/start/extra.mdx": '<Meta title="Start/S12 notes" tags={["Ready"]} />\n\n## Prompt for agents\n\n```text\nRead.\n```\n' };
   assert.ok(structureErrors(coded, catalog, template).includes("stories/start/extra.mdx: code in title Start/S12 notes"));
 });
+
+test("The kit's Mac keyboard matches the app's Help, and every keyboard has the same keys", async () => {
+  const { keyboards } = await import("../stories/kit/compositions.js");
+  const { ROWS, CAP } = await import("../kanso/mods/kanso-help/keymap.js");
+  assert.deepEqual(keyboards.mac.rows, ROWS);
+  for (const [key, name] of Object.entries(CAP)) assert.equal(keyboards.mac.caps[key] ?? "", name, key);
+  const keysOf = (rows) => [...new Set(rows.flat().map(([key]) => key))].toSorted();
+  for (const os of ["windows", "linux"]) assert.deepEqual(keysOf(keyboards[os].rows), keysOf(ROWS), os);
+});

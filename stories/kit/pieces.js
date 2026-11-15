@@ -7,6 +7,8 @@ export const list = (...children) => children.flat(Infinity).filter((child) => c
 
 // A label made of words and values, such as a name inside an action's title.
 export const phrase = (...parts) => parts.join(' ');
+// A chord: its keys' names joined as the computer writes them, ⌥⌘H or Alt+L.
+export const chord = (join, ...parts) => parts.join(join ?? '');
 
 export const grow = (inner = '') => `<span class="kanso-layout__grow">${inner}</span>`;
 
@@ -128,14 +130,14 @@ export const chip = ({ label, quiet = false, pill = false, tone = '' }) => `<spa
 const fact = (part) => typeof part === 'string' ? `<span>${escape(part)}</span>` : `${part.icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(part.icon)}"/></svg>` : ''}<span>${escape(part.text)}</span>`;
 const rowTool = (action) => button({ kind: 'icon', size: 'sm', ...action });
 export const rowDepths = [0, 1, 2];
-// `actions` show on hover or focus and take the meta's place; `action` is always shown.
-export const row = ({ icon = 'none', tone = '', name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action }) => {
+// `actions` show on hover or focus and take the meta's place; `action` is always shown; `keys` are the row's key hints, last.
+export const row = ({ icon = 'none', tone = '', name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action, keys = [] }) => {
   const lead = icon === 'none' ? '' : tone ? glyph(icon).replace('class="', `class="kanso-text--${escape(tone)} `) : glyph(icon);
   const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;
   const facts = [].concat(detail ?? []).filter(Boolean);
   const tail = `${facts.length ? `<span class="kanso-row__detail">${facts.map(fact).join('')}</span>` : ''}${grow()}`
     + `${meta ? `<span class="kanso-row__meta">${escape(meta)}</span>` : ''}${flag ? `<span class="kanso-row__flag">${glyph(flag)}</span>` : ''}`
-    + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}`
+    + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}${keys.map(keyHint).join('')}`
     + `${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${!status || status === 'none' ? '' : mark({ status })}`;
   const states = [second && 'kanso-row--two-lines', heading && 'kanso-row--heading', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
     dimmed && 'kanso-control--dim', pending && 'kanso-state-line--pending', hover && 'kanso-control--hover', focus && 'kanso-control--focus'].filter(Boolean).map((name) => ` ${name}`).join('');
@@ -197,7 +199,7 @@ export const keyHint = ({ text, faint = false, recording = false }) => `<span cl
 // One key of the keyboard map; `units` is its width in keys.
 const keycapClass = { free: '', herdr: ' kanso-keyboard__key--available', kanso: ' kanso-keyboard__key--bound', held: ' kanso-control--held', picked: ' kanso-control--on' };
 export const keycapStates = Object.keys(keycapClass);
-export const keycap = ({ label, units = 1, state = 'free', hover = false }) => `<span class="kanso-keyboard__key${keycapClass[state]}${hover ? ' kanso-control--hover' : ''}" role="button" tabindex="0"${units === 1 ? '' : ` style="--k-units:${Number(units)}"`}>${escape(label)}</span>`;
+export const keycap = ({ label, units = 1, state = 'free', hover = false }) => `<span class="kanso-keyboard__key${keycapClass[state]}${hover ? ' kanso-control--hover' : ''}" role="button" tabindex="0"${units === 1 ? '' : ` style="--k-units:${Number(units)}"`}>${escape(label ?? '')}</span>`;
 
 // The picked key: its chord, what it does or Nothing, its layer, then the acts on it.
 export const keyPicked = ({ chord, meaning = null, layer = null, actions = [] }) => `<div class="kanso-keyboard__selection"><span class="kanso-keyboard__chord">${escape(chord)}</span>`
