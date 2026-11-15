@@ -97,14 +97,14 @@ test("Heading, current, selected, focus, dimmed and pending are each one state o
   assert.ok(all(pending).some((kid) => calls(kid, "id").some((call) => call[1] === "r-pending")), "the pending dot breathes beside it");
 });
 
-test("Two lines put the second fact under the name in the meta size, dim, and let the row grow", async () => {
-  const { row, tokens, G, T } = await kit();
+test("Two lines put the second fact under the name in the meta size, dim, in the two-line row's height, which a list can add up", async () => {
+  const { row, tokens, G, H, T } = await kit();
   const c = tokens(night);
   const el = row("r", c, { name: "Atlas", second: "Reviewing step 01", meta: "3m" });
-  assert.equal(calls(el, "h").length, 0);
-  assert.equal(one(el, "py") + G.hair, G.sm);
+  assert.equal(one(el, "h"), H.two);
+  assert.equal(calls(el, "py").length, 0);
   const body = byTag(el, "v_flex");
-  assert.equal(one(body, "gap"), G.sm);
+  assert.equal(one(body, "gap"), G.xs);
   const second = body.kids.at(-1);
   assert.equal(one(second, "text_size"), T.body);
   assert.equal(one(second, "text_color"), c.dim);
