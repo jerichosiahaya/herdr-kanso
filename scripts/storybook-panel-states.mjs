@@ -1,6 +1,6 @@
 // Compose retained panel features from the shared kit.
 import { elements, frame as free } from './storybook-markup.mjs';
-import { panelBack, panelClose, panelRefresh, panelShell } from '../stories/kit/compositions.js';
+import { panel, panelBack, panelClose, panelHeader, panelRefresh } from '../stories/kit/compositions.js';
 
 const esc = (s) => s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
 const icon = (name) => `<svg class="kanso-icon" aria-hidden="true"><use href="#lu-${name}"/></svg>`;
@@ -21,7 +21,7 @@ const swap = (html, from, to) => {
   return html.replace(from, () => to);
 };
 const metric = (value, unit) => `<div class="kanso-metric"><span class="kanso-metric__value">${value}</span><span class="kanso-metric__unit">${unit}</span></div>`;
-const frame = (title, scope, body, tools = '', window = false) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame ${window ? 'kanso-story--free' : 'kanso-panel kanso-panel--fit'}">${panelShell({ title, scope, back: window && title !== 'Markdown' ? panelBack() : null, tools: [tools, panelRefresh(), panelClose()], look: window ? 'window' : 'panel' }, body)}</div></div>`;
+const frame = (title, scope, body, tools = '', window = false) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame ${window ? 'kanso-story--free' : 'kanso-panel kanso-panel--fit'}">${panel({ look: window ? 'window' : 'panel', header: panelHeader({ title, form: window ? 'bar' : 'page', start: window && title !== 'Markdown' ? [panelBack()] : [], second: scope, tools: [tools, panelRefresh(), panelClose()] }) }, body)}</div></div>`;
 const chart = (title, values, unit) => section(title) + `<div class="kanso-chart" role="img" aria-label="${title}: ${values.join(', ')} ${unit}, November 1 through today">${values.map((v, i) => `<i${v === Math.max(...values) ? ' class="kanso-chart__bar--peak"' : ''} style="height:calc(var(--k-sp-1) * ${v || 0.25})" title="Nov ${i + 1} · ${v} ${unit}"></i>`).join('')}</div><div class="kanso-chart__axis"><span>Nov 1</span><span>Today</span></div>`;
 
 export function panelStateRecords(records) {

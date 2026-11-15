@@ -97,7 +97,7 @@ const protoPage = {
   'components-system-notification': 'Compositions/Notifications', 'components-tab-bar': 'Compositions/Tab bar', 'components-tab-states': 'Primitives/Tab',
   'components-title-and-tools': 'Layouts/Sidebar header', 'components-while-you-were-away': 'Compositions/Activity', 'components-worktree-row-open': 'Primitives/Row',
   'compositions-bars': 'Layouts/Pane', 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
-  'compositions-menu-and-dialog': 'Primitives/Dialog', 'compositions-panel-pieces': 'Compositions/Panel shell',
+  'compositions-menu-and-dialog': 'Primitives/Dialog', 'compositions-panel-pieces': 'Compositions/Panel',
   'compositions-sidebar-rows': 'Layouts/Sidebar', 'compositions-states': 'Compositions/State patterns',
   'layouts-sidebar-at-rest': 'Layouts/Sidebar', 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
   'layouts-window-at-rest': 'Layouts/Window', 'layouts-right-click-any-piece': 'Layouts/Context menus', 'layouts-hjkl-dojo': 'Layouts/Practice',
@@ -121,7 +121,7 @@ const coveragePage = {
 
 export function pageFor(source, file, key) {
   const base = file.replace(/\.(json|stories\.js)$/, '');
-  if (source === 'panels') return ({ skeleton: 'Compositions/Panel shell', availability: 'Compositions/State patterns' })[base] ?? `Panels/${base === 'pr' ? 'PR' : base[0].toUpperCase() + base.slice(1)}`;
+  if (source === 'panels') return ({ skeleton: 'Compositions/Panel', availability: 'Compositions/State patterns' })[base] ?? `Panels/${base === 'pr' ? 'PR' : base[0].toUpperCase() + base.slice(1)}`;
   if (source === 'coverage') {
     if (!coveragePage[key]) throw new Error(`Missing component route: ${file}:${key}`);
     return coveragePage[key];

@@ -80,8 +80,9 @@ export const guidelines = {
     ["Shizen", "One sky.", "The same colours in dark and light. The sun rises once on load; reduced motion shows the last frame."],
   ],
   "Compositions/Toolbar": [
-    ["Kansō", "Icon buttons only.", "Large icon buttons, 8 apart. In a row the first may stand alone on the left; in the rail they stack, 12 apart."],
-    ["Kansō", "Nothing disappears.", "In the rail, the tools that do not fit fold under a caret. Open, they stack below it on a quiet wash; the caret turns up."],
+    ["Kansō", "Icon buttons only.", "Large icon buttons, 4 apart: + alone on the left, then Sort, Search and Hide sidebar on the right. + says what it adds: Add project on Projects, New conversation on Status and Threads."],
+    ["Seijaku", "Sort says when it is not the default.", "At its default order Sort is dim; any other order draws it like the other tools. A click opens its menu under it: the view's orders with the current one ticked, then what the sidebar shows."],
+    ["Kansō", "Collapsed, the bar contracts.", "It is not the row turned on its side: + and Show sidebar stay, 8 apart, and Sort and Search fold under a caret. Open, they stack below it on a quiet wash; the caret turns up."],
   ],
   "Compositions/Header": [
     ["Seijaku", "Lights, then tools.", "Window controls in 48, the toolbar in 40. Collapsed, the header is the rail's width and the toolbar stacks."],
@@ -157,12 +158,17 @@ export const guidelines = {
     ["Kansō", "A terminal is a pane too.", "A pane with no agent shows the terminal icon and its command, or Terminal when it has no project, with no digest. Focus moved by the keyboard adds the accent ring around the header."],
     ["Kansō", "Narrow, it folds in order.", "Folder, branch, the tools into ⋯ (close stays), commits, files, the verdict word, the pull request, then close; the name truncates last. The program and the mark never fold; a folded fact stays in the pull request's tooltip."],
   ],
-  "Compositions/Panel shell": [
-    ["Seijaku", "One heading for every panel.", "Title 20, 15 under 340; at most two context icons, Refresh last, its tooltip says when it was read. A page inside a panel puts ‹ before its title. The scope line under it says what the panel looks at."],
+  "Compositions/Panel": [
+    ["Kansō", "Only the container.", "A width, the stale state, the header it is given and the body. It adds nothing of its own: each panel brings its header and its tools."],
     ["Fukinsei", "The period, then the number.", "The segmented control with a two-button stepper at its right; a past period adds Now. Under 340 the stepper moves to the number's line."],
     ["Kansō", "A section says one fact.", "Its title, then at its right one dim fact or one quiet link, such as Clean up 1. Never a count of the rows below. More rows wait behind a quiet Show 4 more."],
     ["Shizen", "One row for every list.", "The name truncates, the value sits at the right, the second line is dim, a mark goes first. Selected shows its actions: at most one primary, the rest quiet, a removal arms."],
-    ["Yūgen", "Every read has a state.", "First read: the skeleton shaped like the rows. Empty: one line. Failed: the tool's words with Refresh. Stale: when it was read takes the scope's place, the body steps down to 55% and takes no clicks."],
+    ["Yūgen", "Every read has a state.", "First read: the skeleton shaped like the rows. Empty: one line. Failed: the tool's words with Refresh. Stale: when it was read takes the second line's place, everything but the header steps down to 55% and takes no clicks."],
+  ],
+  "Compositions/Panel/Header": [
+    ["Kansō", "Only the title is required.", "Before it, ‹ when the panel opened it from a row, or the mark of what it looks at. Under it, the second line only when it says something. After it, only the tools this panel has."],
+    ["Seijaku", "Two forms, two jobs.", "Page heads a dashboard: title 20, 15 under 340, no rule. Bar heads a file or a tool: the name at 13.5 over a rule, flush with the panel's edges."],
+    ["Kokō", "Tools by need.", "Refresh where the panel reads, last but Close, its tooltip says when it was read, turning while it reads. Share where there is something to share. Close only where the panel closes itself."],
   ],
   "Compositions/Keyboard": [
     ["Kansō", "One layer at a time.", "The map shows the keys of the held modifiers. Holding or clicking a modifier picks the layer; pressing a key picks it. Lists, in the picked key, opens the layer of every list and menu."],

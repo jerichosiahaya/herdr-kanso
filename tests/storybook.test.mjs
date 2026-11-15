@@ -185,20 +185,28 @@ test("Every hypothesis fills the whole template, and each job names where it goe
   }
 });
 
-test("The panel shell is a frame: its title row over the body it is given, each look a width, stale stepping the body down", async () => {
-  const { panelLooks, panelShell } = await import("../stories/kit/compositions.js");
-  const html = panelShell({ title: "Ports", scope: "This computer", tools: ["<i>tool</i>"] }, "<p>body</p>");
-  assert.match(html, /^<div class="kanso-panel"><div class="kanso-row kanso-row--two-lines kanso-row--title"/);
-  assert.match(html, /kanso-row__name">Ports<[^]*<i>tool<\/i>[^]*This computer[^]*<p>body<\/p><\/div>$/);
-  assert.doesNotMatch(panelShell({ title: "Ports" }), /kanso-content__secondary/);
-  for (const look of panelLooks) assert.match(panelShell({ title: "Ports", look }), look === "panel" ? /^<div class="kanso-panel">/ : new RegExp(`kanso-panel--${look}`), look);
-  assert.match(panelShell({ title: "Ports", stale: true }, "<p>body</p>"), /^<div class="kanso-panel kanso-panel--stale">/);
-  assert.throws(() => panelShell({ title: "Ports", look: "wide" }), { message: "panelShell: unknown look wide" });
+test("A panel is only a container: the header it is given over the body, each look a width, stale stepping down all but the header", async () => {
+  const { panel, panelHeader, panelLooks } = await import("../stories/kit/compositions.js");
+  assert.equal(panel({}, "<p>body</p>"), '<div class="kanso-panel"><p>body</p></div>');
+  assert.match(panel({ header: panelHeader({ title: "Ports" }) }, "<p>body</p>"), /^<div class="kanso-panel"><div class="kanso-panel-header">[^]*<\/div><p>body<\/p><\/div>$/);
+  for (const look of panelLooks) assert.match(panel({ look }), look === "panel" ? /^<div class="kanso-panel">/ : new RegExp(`kanso-panel--${look}`), look);
+  assert.match(panel({ stale: true }, "<p>body</p>"), /^<div class="kanso-panel kanso-panel--stale">/);
+  assert.throws(() => panel({ look: "wide" }), { message: "panel: unknown look wide" });
+});
+
+test("A panel header needs only its title; what goes before it, under it and after it is that panel's own", async () => {
+  const { panelHeader, panelHeaderForms } = await import("../stories/kit/compositions.js");
+  const bare = panelHeader({ title: "Files" });
+  assert.match(bare, /^<div class="kanso-panel-header"><div class="kanso-row kanso-row--title" tabindex="0"><span class="kanso-row__name">Files<\/span><span class="kanso-layout__grow"><\/span><\/div><\/div>$/);
+  const full = panelHeader({ title: "limits.md", form: "bar", start: ["<i>back</i>"], second: "~/acme-shop/docs", tools: ["<i>tool</i>"] });
+  assert.match(full, /^<div class="kanso-panel-header kanso-panel-header--bar">[^]*<i>back<\/i><span class="kanso-row__name">limits\.md<[^]*<i>tool<\/i>[^]*~\/acme-shop\/docs/);
+  assert.deepEqual(panelHeaderForms, ["page", "bar"]);
+  assert.throws(() => panelHeader({ title: "Ports", form: "card" }), { message: "panelHeader: unknown form card" });
 });
 
 test("A file opened from a panel keeps the button back to its folder's list before the title", async () => {
   const { statedPages } = await import("../stories/kit/states.js");
-  const { args, markup } = statedPages["Compositions/Panel shell"];
+  const { args, markup } = statedPages["Compositions/Panel"];
   const back = /kanso-content__primary"><span class="kanso-button kanso-button--icon" tabindex="0" title="Markdown in this folder"><svg[^>]*><use href="#lu-chevron-left"\/><\/svg><\/span><span class="kanso-row__name">/;
   assert.match(markup({ ...args, look: "window" }), back);
   assert.doesNotMatch(markup(args), back);
@@ -206,7 +214,7 @@ test("A file opened from a panel keeps the button back to its folder's list befo
 
 test("Every read of the sample panel draws its own state pattern where the list would start", async () => {
   const { panelReads, statedPages } = await import("../stories/kit/states.js");
-  const { args, markup } = statedPages["Compositions/Panel shell"];
+  const { args, markup } = statedPages["Compositions/Panel"];
   const marks = { loading: /kanso-skeleton__list/, empty: /kanso-state-empty/, failed: /kanso-state-block/, stale: /kanso-panel--stale/ };
   for (const state of Object.keys(panelReads)) {
     const html = markup({ ...args, state });

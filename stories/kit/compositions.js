@@ -2,10 +2,20 @@
 import { avatar, button, chip, chord, dawn, diffText, facts, headerSegment, input, paneName, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './pieces.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
-const more = (open) => stack({ variant: 'toolbar group', open }, tool(open ? 'lu-chevron-up' : 'lu-chevron-down', open ? 'Fewer tools' : 'More tools'), open ? [tool('lu-arrow-up-down', 'Sort'), tool('lu-search', 'Search')] : null);
-export const toolbar = ({ column = false, open = false } = {}) => column
-  ? stack({ variant: 'toolbar', column }, tool('lu-panel-left', 'Show sidebar'), tool('lu-plus', 'New'), more(open))
-  : stack({ variant: 'toolbar' }, tool('lu-plus', 'New'), grow(), tool('lu-arrow-up-down', 'Sort'), tool('lu-search', 'Search'), tool('lu-panel-left', 'Hide sidebar'));
+// + names what it adds in the view on show.
+export const addLabels = { spaces: 'Add project', agents: 'New conversation', threads: 'New conversation' };
+// Sort is quieter at its default; open, its menu hangs under it.
+const sortTool = ({ sorted, menu: open }) => stack({ variant: 'toolbar sort', sorted },
+  button({ label: 'Sort', kind: 'icon', size: 'lg', icon: 'lu-arrow-up-down', active: Boolean(open) }), open ? stack({ variant: 'toolbar menu' }, open) : null);
+// Collapsed, the bar contracts: + and Show sidebar stay, Sort and Search fold under a caret.
+const more = (open, sort) => stack({ variant: 'toolbar group', open }, tool(open ? 'lu-chevron-up' : 'lu-chevron-down', open ? 'Fewer tools' : 'More tools'), open ? [sortTool(sort), tool('lu-search', 'Search')] : null);
+export const toolbar = ({ view = 'spaces', column = false, open = false, sorted = false, sortMenu = null } = {}) => {
+  const add = tool('lu-plus', addLabels[view]);
+  const sort = { sorted, menu: sortMenu };
+  return column
+    ? stack({ variant: 'toolbar', column }, add, tool('lu-panel-left', 'Show sidebar'), more(open, sort))
+    : stack({ variant: 'toolbar' }, add, grow(), sortTool(sort), tool('lu-search', 'Search'), tool('lu-panel-left', 'Hide sidebar'));
+};
 
 // Sidebar compositions: each one is the Row, Tab, Menu, Avatar, Mark, Chip or Button in its own configuration.
 const icon = (name, label) => ({ icon: name, label });
@@ -107,14 +117,19 @@ export const tabBar = ({ items = [], value = null, folded = [], overflow = false
   return stack({ variant: 'tab bar' }, tabList, more, tools, grow(), stack({ variant: 'tab bar doors' }, right, system));
 };
 
-// Panel shell: a frame of two slots, the Row in its title form (back before the title, its tools, the scope under it), then the body it is given.
-// Each look is a width; stale steps the body down.
+// Panel: only the container. Each look is a width; stale steps down all but the header; the header comes drawn, or none.
 export const panelLooks = ['panel', 'narrow', 'window'];
-export const panelShell = ({ title, scope = null, back = null, tools = [], look = 'panel', stale = false }, ...body) => {
-  if (!panelLooks.includes(look)) throw new Error(phrase('panelShell: unknown look', look));
-  return stack({ variant: 'panel', narrow: look === 'narrow', window: look === 'window', stale }, row({ start: back, name: title, title: true, second: scope, tools }), body);
+export const panel = ({ look = 'panel', stale = false, header = null } = {}, ...body) => {
+  if (!panelLooks.includes(look)) throw new Error(phrase('panel: unknown look', look));
+  return stack({ variant: 'panel', narrow: look === 'narrow', window: look === 'window', stale }, header, body);
 };
-// The tools every panel ends with: Refresh, spinning while it reads, and Close where the panel closes.
+// Panel header: the Row in its title form, only the title required. A page heads a dashboard; a bar heads a document or a tool, compact over a rule.
+export const panelHeaderForms = ['page', 'bar'];
+export const panelHeader = ({ title, form = 'page', start = [], second = null, tools = [] }) => {
+  if (!panelHeaderForms.includes(form)) throw new Error(phrase('panelHeader: unknown form', form));
+  return stack({ variant: 'panel header', bar: form === 'bar' }, row({ start, name: title, title: true, second, tools }));
+};
+// The tools a panel may end with: Refresh, spinning while it reads, and Close where the panel closes.
 export const panelRefresh = ({ reading = false } = {}) => button({ label: 'Refresh', kind: 'icon', icon: 'lu-refresh-cw', spin: reading });
 export const panelClose = () => button({ label: 'Close', kind: 'icon', icon: 'lu-x' });
 // A file opened from a panel goes back to its folder's list.
@@ -123,9 +138,9 @@ export const panelBack = () => button({ label: 'Markdown in this folder', kind: 
 // Cells
 
 // Dawn Mode: the pill always says the mode at the right of the open header; the sky behind the lights is optional. Stable Mode shows nothing.
-export const header = ({ collapsed = false, dawn: early = false, art = true, open = false } = {}) => stack({ variant: 'header', collapsed },
+export const header = ({ collapsed = false, dawn: early = false, art = true, open = false, view = 'spaces' } = {}) => stack({ variant: 'header', collapsed },
   early && art ? dawn() : null, stack({ variant: 'header title' }, windowControls(), early && !collapsed ? chip({ label: 'Dawn Mode', pill: true }) : null),
-  toolbar({ column: collapsed, open }));
+  toolbar({ view, column: collapsed, open }));
 
 // The channel in Settings · Updates: one press switches; Dawn Mode says it can break, and the sky can be turned off.
 export const channels = [{ key: 'stable', label: 'Stable Mode' }, { key: 'dawn', label: 'Dawn Mode' }];
@@ -136,8 +151,8 @@ export const channelSettings = ({ channel = 'stable', art = true } = {}) => list
 
 // The rows and tiles of the current view come in drawn; the sidebar only places them.
 export const sidebar = ({ collapsed = false, dawn: early = false, art = true, view = 'spaces', switcher = true, menu: open = false, rows = [], tiles = [], away = null } = {}) => collapsed
-  ? stack({ variant: 'rail' }, header({ collapsed, dawn: early, art }), switcher ? viewSwitch({ view, column: true, open }) : null, stack({ variant: 'rail list' }, tiles), stack({ variant: 'rail footer' }, tool('lu-settings', 'Settings')))
-  : stack({ variant: 'sidebar' }, header({ dawn: early, art }), switcher ? viewSwitch({ view }) : null, stack({ variant: 'rows' }, rows), away, sidebarFooter());
+  ? stack({ variant: 'rail' }, header({ collapsed, dawn: early, art, view }), switcher ? viewSwitch({ view, column: true, open }) : null, stack({ variant: 'rail list' }, tiles), stack({ variant: 'rail footer' }, tool('lu-settings', 'Settings')))
+  : stack({ variant: 'sidebar' }, header({ dawn: early, art, view }), switcher ? viewSwitch({ view }) : null, stack({ variant: 'rows' }, rows), away, sidebarFooter());
 
 // Two halves around the fixed slot of panes per view; each half folds its own items.
 export const statusBar = ({ left = [], middle = null, right = [], popup = null } = {}) => stack({ variant: 'status bar', grid: true },

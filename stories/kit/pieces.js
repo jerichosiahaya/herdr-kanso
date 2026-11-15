@@ -100,6 +100,7 @@ export const markdown = ({ source, block, state }) => `<div class="kanso-markdow
 export const menu = ({ title, items }) => {
   const rows = (Array.isArray(items) ? items : []).map((item) => {
     if (item.separator) return '<div class="kanso-menu__separator"></div>';
+    if (item.heading) return `<div class="kanso-menu__heading">${escape(item.heading)}</div>`;
     const lead = item.icon ? glyph(item.icon) : '<span class="kanso-menu__spacer"></span>';
     const classes = `kanso-menu__item${item.armed ? ' kanso-action--armed' : item.selected ? ' kanso-control--selected' : ''}`;
     const label = item.armed ? `Press again to ${escape(item.verb || String(item.label ?? '').toLowerCase())}` : escape(item.label ?? '');
@@ -252,6 +253,8 @@ export const tabSkeleton = () => '<span class="kanso-skeleton kanso-skeleton--br
 export const stacks = {
   toolbar: { block: 'kanso-toolbar', states: ['column'] },
   'toolbar group': { block: 'kanso-toolbar__group', states: ['open'] },
+  'toolbar sort': { block: 'kanso-toolbar__sort', tag: 'span', states: ['sorted'] },
+  'toolbar menu': { block: 'kanso-toolbar__menu', tag: 'span' },
   header: { block: 'kanso-header', states: ['collapsed'] },
   'header title': { block: 'kanso-header__title' },
   sidebar: { block: 'kanso-sidebar', tag: 'aside' },
@@ -290,6 +293,7 @@ export const stacks = {
   'pane more': { block: 'kanso-pane-header__more', tag: 'span' },
   'pane menu': { block: 'kanso-pane-header__menu', tag: 'span' },
   panel: { block: 'kanso-panel', states: ['narrow', 'window', 'stale'] },
+  'panel header': { block: 'kanso-panel-header', states: ['bar'] },
 };
 export const stack = ({ variant, on = false, ...flags }, ...children) => {
   if (!Object.hasOwn(stacks, variant)) throw new Error(`stack: unknown variant "${variant}"`);

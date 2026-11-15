@@ -1,8 +1,12 @@
 /* One rule set per composition, smallest first: each one is built from primitives and the compositions above it. */
 
-/* Toolbar: icon buttons in a row; stacked in the rail, where a caret opens the tools that do not fit. */
-.kanso-toolbar{display:flex;flex:none;align-items:center;gap:var(--k-sp-2);color:var(--muted)}
-.kanso-toolbar.kanso-toolbar--column{flex-direction:column;gap:var(--k-sp-3)}
+/* Toolbar: icon buttons in a row; collapsed, a column where a caret holds Sort and Search; Sort is dim at its default. */
+.kanso-toolbar{display:flex;flex:none;align-items:center;gap:var(--k-sp-1);color:var(--muted)}
+.kanso-toolbar.kanso-toolbar--column{flex-direction:column;gap:var(--k-sp-2)}
+.kanso-toolbar__sort{position:relative;display:flex}
+.kanso-toolbar__sort:not(.kanso-toolbar__sort--sorted)>.kanso-button:not(.kanso-button--active){color:var(--dim)}
+.kanso-toolbar__menu{position:absolute;top:calc(100% + var(--k-sp-1));left:0;z-index:1}
+.kanso-toolbar--column .kanso-toolbar__menu{top:0;left:calc(100% + var(--k-sp-1))}
 .kanso-toolbar__group{display:flex;flex-direction:column;align-items:center;gap:var(--k-sp-1);border-radius:var(--k-r-card)}
 .kanso-toolbar__group.kanso-toolbar__group--open{background:var(--w4)}
 
@@ -62,9 +66,14 @@
 .kanso-status-bar__item.kanso-status-bar__item--open{anchor-name:--kanso-status-item;margin:0 calc(-1 * var(--k-sp-1));padding:var(--k-sp-hair) var(--k-sp-1);border-radius:var(--k-r-sm);background:var(--w12)}
 .kanso-status-bar__popup{position:absolute;bottom:calc(anchor(--kanso-status-item top) + var(--k-sp-1));right:anchor(--kanso-status-item right);z-index:1}
 
-/* Panel shell: narrow, the title drops to the section size; stale, the body under the heading steps down and takes no clicks. */
-.kanso-panel--narrow .kanso-row--title .kanso-row__name{font-size:var(--k-fs-section)}
-.kanso-panel--stale>:not(:first-child){opacity:var(--k-op-away);pointer-events:none}
+/* Panel: narrow, a page title drops to the section size; stale, all but the header steps down and takes no clicks. */
+.kanso-panel--narrow .kanso-panel-header:not(.kanso-panel-header--bar) .kanso-row__name{font-size:var(--k-fs-section)}
+.kanso-panel--stale>:not(.kanso-panel-header){opacity:var(--k-op-away);pointer-events:none}
+/* Panel header, bar: the name at the name size, flush with the panel's edges over a rule. */
+.kanso-panel-header--bar{margin:calc(-1 * var(--k-sp-4)) calc(-1 * var(--k-sp-4)) var(--k-sp-2);padding-inline:var(--k-sp-2);border-bottom:1px solid var(--border)}
+.kanso-panel-header--bar .kanso-row__name{font-size:var(--k-fs-name)}
+.kanso-panel-header--bar>.kanso-row--title{height:var(--k-h-header);align-content:center}
+.kanso-panel-header--bar .kanso-row--title .kanso-content__primary{height:auto}
 
 /* Tab bar: the project's tabs, + and Arrange, then the panel doors; 48 tall, nothing filled at rest. */
 .kanso-tab-bar{position:relative;display:flex;align-items:center;gap:var(--k-sp-2);height:var(--k-h-tab-bar);padding:0 var(--k-sp-3);box-sizing:border-box}

@@ -2728,23 +2728,23 @@
       ],
       "records": [
         "proto/approved-skeleton/Reference/1",
-        "kit/Panel shell/Failed",
-        "kit/Panel shell/Empty",
-        "kit/Panel shell/Loading",
-        "kit/Panel shell/Period and the number",
-        "kit/Panel shell/Narrow",
-        "kit/Panel shell/Selected, removal armed",
-        "kit/Panel shell/Stale",
-        "kit/Panel shell/One-line rows",
-        "kit/Panel shell/At rest",
+        "kit/Panel/Failed",
+        "kit/Panel/Empty",
+        "kit/Panel/Loading",
+        "kit/Panel/Period and the number",
+        "kit/Panel/Narrow",
+        "kit/Panel/Selected, removal armed",
+        "kit/Panel/Stale",
+        "kit/Panel/One-line rows",
+        "kit/Panel/At rest",
         "proto/compositions-panel-pieces/HeroAndVerdict/Default",
         "proto/compositions-panel-pieces/InATab/Default",
         "proto/compositions-panel-pieces/MemoryMetricAndChart/Default",
         "proto/compositions-panel-pieces/PlanAndSpend/Default",
-        "kit/Panel shell/Window"
+        "kit/Panel/Window"
       ],
       "components": [
-        "Compositions/Panel shell"
+        "Compositions/Panel"
       ],
       "features": [],
       "approvedRecords": [
@@ -3081,23 +3081,23 @@
       ],
       "records": [
         "proto/approved-subtract/Reference/1",
-        "kit/Panel shell/Failed",
-        "kit/Panel shell/Empty",
-        "kit/Panel shell/Loading",
-        "kit/Panel shell/Period and the number",
-        "kit/Panel shell/Narrow",
-        "kit/Panel shell/Selected, removal armed",
-        "kit/Panel shell/Stale",
-        "kit/Panel shell/One-line rows",
-        "kit/Panel shell/At rest",
+        "kit/Panel/Failed",
+        "kit/Panel/Empty",
+        "kit/Panel/Loading",
+        "kit/Panel/Period and the number",
+        "kit/Panel/Narrow",
+        "kit/Panel/Selected, removal armed",
+        "kit/Panel/Stale",
+        "kit/Panel/One-line rows",
+        "kit/Panel/At rest",
         "proto/compositions-panel-pieces/HeroAndVerdict/Default",
         "proto/compositions-panel-pieces/InATab/Default",
         "proto/compositions-panel-pieces/MemoryMetricAndChart/Default",
         "proto/compositions-panel-pieces/PlanAndSpend/Default",
-        "kit/Panel shell/Window"
+        "kit/Panel/Window"
       ],
       "components": [
-        "Compositions/Panel shell"
+        "Compositions/Panel"
       ],
       "features": [],
       "approvedRecords": [
