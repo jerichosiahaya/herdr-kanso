@@ -1,7 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { conversationFind, files, ports, settings } from './panels.js';
+import { conversationFind, files, markdownWindow, ports, settings } from './panels.js';
+import { phrase } from './kit.js';
 import { keyLayer } from './samples.js';
-import { sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
+import { sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
 
 // Settings: each page with its samples, then each state as what changes on it.
 const shows = (extra) => ({ page: 'pieces', hidden: sampleHidden, areas: sampleAreas, ...extra });
@@ -106,6 +107,33 @@ export const portsViews = {
   'A read failed': [served({ failure: samplePorts.failure }), 'lsof’s own words, Refresh, and Explain to the agent.'],
   'Narrow, 300': [served({ look: 'narrow', picked: ':6006' }), 'The command folds away; Open in the browser becomes Open.'],
 };
+// Markdown: plan.md as cart-ui wrote it; each state is what the pointer, an edit, a review or a read changes.
+const openFile = ({ file, folder, source }, { doc = {}, ...extra } = {}) => ({ file, folder, ...extra, doc: { source, ...doc } });
+const plan = (extra) => openFile(sampleMarkdown.plan, extra);
+const waits = phrase(sampleMarkdown.agent, 'waits for your review');
+const listing = (extra) => ({ folder: '~/acme-shop', ...extra });
+const [waiting, , folder] = sampleMarkdown.groups;
+export const markdownViews = {
+  'A document': [plan({}), 'The file formatted, its folder under the name; at rest only Close.'],
+  'Pointer over the header and a block': [plan({ tools: ['source', 'refresh'], doc: { block: 3, state: 'hover' } }), 'Source and Refresh come with the pointer; the block under it is washed.'],
+  Source: [plan({ tools: ['source', 'refresh'], doc: { view: 'source' } }), 'The whole file as text, edited and saved the same way; Formatted goes back.'],
+  'Editing a block': [plan({ said: ['Saving…'], doc: { block: 2, state: 'editing' } }), 'A double-click edits that block alone; what you type saves as you go.'],
+  'Editing a table': [openFile(sampleMarkdown.limits, { said: ['Edited'], doc: { block: 2, state: 'editing', cell: [1, 2] } }), 'A table opens as its cells, with Add row, Add column and Done under it.'],
+  'Changed on disk while edited': [plan({ said: ['Edited'], band: { text: 'Changed on disk at 14:06', actions: [{ label: 'Overwrite' }, { label: 'Reload', kind: 'quiet' }] } }), 'Nothing is written until you choose: yours over it, or the file’s.'],
+  'After Overwrite': [plan({ band: { text: 'Saved over the 14:06 text', actions: [{ label: 'Undo', kind: 'quiet' }] } }), 'Undo, on that line, until the next change.'],
+  "Couldn’t save": [plan({ said: [waits, 'Edited'], tools: ['done'], failure: sampleMarkdown.failures.save }), 'The write was refused: its words, Save again, and Explain to the agent.'],
+  'Review: an agent waits': [plan({ said: [waits, 'Edited'], tools: ['done'] }), 'md-review waits on this file: Done is the one primary, and tells the agent.'],
+  'Another review waits': [plan({ said: [waits], tools: ['done'], also: 'release.md also waits for your review' }), 'Done shows the next review waiting, or closes.'],
+  'Done could not tell the agent': [plan({ said: [waits], failure: sampleMarkdown.failures.told }), 'Done stays; a second press tries again.'],
+  'No file: the list': [listing({ groups: sampleMarkdown.groups }), 'Reviews waiting first, then what this terminal mentioned, then the folder’s own.'],
+  'The folder only': [listing({ groups: [folder] }), 'Nothing waits and the terminal named nothing: the folder’s files, no headings.'],
+  'Keyboard on a row': [listing({ groups: [waiting, folder], picked: 'CHANGELOG.md' }), 'j and k move, Enter opens.'],
+  Looking: [listing({ reading: true }), 'The skeleton while it looks.'],
+  Empty: [{ folder: '~/infra', empty: 'No Markdown in ~/infra' }, 'The folder holds no Markdown.'],
+  'On another computer': [listing({ folder: 'devbox: ~/acme-shop', groups: [folder] }), 'The list and the file come from that computer, read again every 3 s.'],
+  'Another computer, not answering': [openFile(sampleMarkdown.runbook, { said: ['Read 14:02', 'devbox not answering'], stale: true }), 'The last read stays, stepped down, with when it was read.'],
+  'Too large to edit': [openFile(sampleMarkdown.events, { said: ['612 KB, read only'], tools: ['refresh'] }), 'Past 400,000 characters it reads only.'],
+};
 const stated = (views, draw) => ({
   args: { view: Object.keys(views)[0] },
   markup: ({ view }) => draw(views[view][0]),
@@ -113,6 +141,6 @@ const stated = (views, draw) => ({
 });
 const control = (views) => ({ view: { name: 'what it shows', control: { type: 'select' }, options: Object.keys(views) } });
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports] };
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

@@ -133,3 +133,43 @@ export const samplePortHistory = {
   ],
   said: { off: 'No history', bad: 'History unreadable', stale: 'History stopped at 14:02' },
 };
+
+// Markdown: the plan an agent wrote in acme-shop, and the folder's Markdown around it.
+export const sampleMarkdown = {
+  plan: { file: 'plan.md', folder: '~/acme-shop/docs', source: `# Rate limit checkout per customer
+
+Each customer gets a bucket of 40 requests that refills one token every 2 s. A request over the limit gets 429 and \`wait_s\`, the seconds until the next token.
+
+- Keep the bucket in Redis, keyed by customer id
+- Read the limit from \`plans.limits\`
+- Log the first 429 per customer per hour
+
+## Tests
+
+\`\`\`
+pnpm test src/api/limits.test.ts
+\`\`\`` },
+  limits: { file: 'limits.md', folder: '~/acme-shop-docs/docs', source: `## Limits by plan
+
+| Plan | Requests | Refill |
+|---|---|---|
+| Free | 40 | 2 s |
+| Team | 200 | 0.5 s |` },
+  runbook: { file: 'runbook.md', folder: '~/billing', source: `# Webhook retries
+
+Deliveries retry 5 times with backoff 1, 2, 4, 8, 16 s. A 410 stops them.` },
+  events: { file: 'events.md', folder: '~/acme-shop/logs', source: `## Events, 2026-11-10
+
+- 09:14 checkout · 429 for cus_8812
+- 09:15 checkout · 429 for cus_8812` },
+  agent: 'cart-ui',
+  groups: [
+    ['Waiting for your review', [['plan.md', 'cart-ui · docs']]],
+    ['From this terminal', [['limits.md', '~/acme-shop-docs/docs'], ['notes.md', 'scratchpad']]],
+    ['In this folder', [['README.md'], ['CHANGELOG.md'], ['plan.md', 'docs']]],
+  ],
+  failures: {
+    told: { text: 'cart-ui was not told', source: 'md-review: data/markdown-review-done/48213: Permission denied', fix: 'Done', agent: 'cart-ui' },
+    save: { text: 'Couldn’t save plan.md', source: 'EACCES: permission denied, write plan.md', fix: 'Save', agent: 'cart-ui' },
+  },
+};

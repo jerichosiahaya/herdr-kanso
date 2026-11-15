@@ -1038,7 +1038,6 @@
     "proto/components-edges-and-minimap/MinimapSlot/Default",
     "proto/components-header-digest/HeaderDigest/Default",
     "proto/components-log/Log/Default",
-    "proto/components-markdown-window/MarkdownWindow/Default",
     "proto/components-markdown/Markdown/Default",
     "proto/components-pane-header/PaneHeader/Default",
     "proto/components-pick-list/PickList/Default",

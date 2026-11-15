@@ -75,6 +75,7 @@ export const descriptions = {
   Memory: 'Free memory, per-session use and the memory guard on supported computers.',
   Spend: 'Plan value and session cost for the selected period.',
   Images: 'Pictures from the conversation with pinned notes to send to an agent.',
+  'Panels/Markdown': 'Markdown in a window over any layout, edited where you read it; a review waits on Done.',
   Pins: 'Numbered notes anchored to a point or region of a picture or device screen.',
   Simulator: 'Connected devices, their screens and controls, where the platform tools exist.',
   Share: 'The share menu and card for a panel’s result.',

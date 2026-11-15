@@ -6211,19 +6211,7 @@
       ],
       "records": [
         "proto/approved-dialogs-markdown/Reference/1",
-        "proto/approved-dialogs-markdown/Reference/2",
-        "panels/markdown/FeatureMarkdownFiles/Empty",
-        "proto/components-markdown-window/MarkdownWindow/Default",
-        "panels/markdown/FeatureMarkdownFiles/Keyboard",
-        "panels/markdown/FeatureMarkdownFiles/Loading",
-        "panels/markdown/FeatureMarkdownFiles/Recent",
-        "panels/markdown/FeatureMarkdownFiles/Remote",
-        "panels/markdown/FeatureMarkdownFiles/Review waiting",
-        "panels/markdown/FeatureMarkdownReview/Another review",
-        "panels/markdown/FeatureMarkdownReview/Marker failed",
-        "panels/markdown/FeatureMarkdownReview/Review",
-        "panels/markdown/FeatureMarkdownReview/Save failed",
-        "panels/markdown/FeatureMarkdownReview/Saving"
+        "proto/approved-dialogs-markdown/Reference/2"
       ],
       "components": [
         "Panels/Markdown"

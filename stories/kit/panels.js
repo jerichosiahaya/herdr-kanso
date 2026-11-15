@@ -1,6 +1,6 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { bars, button, chord, dialog, facts, menu, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
-import { channelSettings, keyboardExplorer, panel, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
+import { band, bars, button, chord, dialog, facts, markdown, menu, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
+import { channelSettings, keyboardExplorer, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
 export const settingsPages = [{ key: 'pieces', label: 'What shows' }, { key: 'keys', label: 'Keys' }, { key: 'news', label: 'What’s new' }, { key: 'credits', label: 'Credits' }];
@@ -157,3 +157,25 @@ const portsPanel = ({ scope = null, stale = false, look = 'panel', ...body }) =>
   title: 'Ports', second: scope, tools: [shareButton(), panelRefresh({ reading: body.reading || stale })],
 }) }, portsBody({ look, ...body, reach: !stale }));
 export const ports = ({ share = false, ...props }) => (share ? stack({ variant: 'columns' }, portsPanel(props), shareMenu({ leaves: 'Counts and sizes only' })) : portsPanel(props));
+
+// Markdown: a window over the layout; a file is its document, none is the folder's Markdown.
+const documentTools = {
+  source: ({ view }) => button({ label: view === 'source' ? 'Formatted' : 'Source', kind: 'icon', icon: 'lu-code', active: view === 'source' }),
+  refresh: () => panelRefresh(),
+  done: () => button({ label: 'Done', size: 'sm' }),
+};
+const markdownHeader = ({ file, folder, said = [], tools = [], doc = {}, reading = false }) => (file
+  ? panelHeader({ title: file, start: [panelBack()], second: facts(folder, ...said), tools: [...tools.map((tool) => documentTools[tool](doc)), panelClose()] })
+  : panelHeader({ title: 'Markdown', second: folder, tools: [panelRefresh({ reading }), panelClose()] }));
+const documentBody = ({ doc, band: changed = null, failure = null, also = null }) => list(
+  changed ? band(changed) : null, failure ? failureBlock(failure) : null, markdown(doc), also ? row({ name: also, dimmed: true }) : null);
+// Headings only when more than the folder's own files are listed.
+const markdownFile = (picked) => ([name, where = null]) => row({ name, icon: 'lu-file', meta: where, current: name === picked });
+const markdownFiles = ({ groups = [], picked = null, reading = false, empty = null }) => {
+  if (reading) return skeletonOf({ shape: 'list row', count: 3 });
+  if (empty) return emptyState({ icon: 'lu-file', text: empty });
+  const shown = groups.filter(([, files]) => files.length);
+  return shown.map(([name, files]) => list(shown.length > 1 ? heading(name) : null, files.map(markdownFile(picked))));
+};
+export const markdownWindow = ({ stale = false, ...props }) => panel({ look: 'window', stale, header: markdownHeader(props) },
+  props.file ? documentBody(props) : markdownFiles(props));

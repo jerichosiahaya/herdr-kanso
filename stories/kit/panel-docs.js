@@ -1,6 +1,13 @@
 // The panels' design guidelines and hypotheses, on the same templates as every page.
 
 export const panelGuidelines = {
+  'Panels/Markdown': [
+    ['Kansō', 'The document, and Close.', 'A window over any layout, 560 wide. The file’s name over its folder, then the document formatted; at rest the header holds only Close. Source and Refresh come with the pointer; Back returns to the folder’s Markdown.'],
+    ['Shizen', 'Edit where you read.', 'A double-click edits that block alone, a table as its cells with Add row, Add column and Done. What you type saves as you go; the folder line says Edited, Saving… or Saved. Source edits the whole file the same way.'],
+    ['Kokō', 'The file and you never overwrite each other.', 'A change on disk while yours is unsaved is a band over the document: Overwrite, or Reload. After Overwrite the band offers Undo. Nothing is written until you choose.'],
+    ['Kokō', 'A review has one primary.', 'While md-review waits on the file, the folder line names the agent and Done is the one solid button: it saves, tells the agent and shows the next review waiting. If the agent could not be told, the Failure block keeps Done for a second try, with Explain to the agent.'],
+    ['Seijaku', 'With no file, the folder’s Markdown.', 'Reviews waiting first, then what this terminal mentioned, then the folder’s own; headings only when more than one group shows. Looking is the skeleton, none is the empty state. On another computer the folder names it; out of reach, the last read stays stepped down.'],
+  ],
   'Panels/Ports': [
     ['Kansō', 'One line per server.', 'Port, what runs it in one word or its pane’s name, and size. No pane first, under its own heading; the servers in a pane follow, each named by its pane. No scope line: only a remote computer’s name, or the stale line.'],
     ['Kokō', 'The picked row says the rest.', 'On hover or selection: command, folder and age, then its words. With no pane, Stop is the one primary; in a pane, Go to its pane comes first and all three are quiet. Under 340 the command folds away and Open in the browser becomes Open.'],
@@ -35,6 +42,41 @@ export const panelGuidelines = {
 };
 
 export const panelHypotheses = {
+  'Panels/Markdown': [
+    {
+      change: 'The conflict bar becomes a band that says when the file changed, with Overwrite and Reload, and Undo after Overwrite.',
+      today: 'a bar in blocked ink, The file changed on disk while you edited it., with Keep mine and Take the file’s; nothing after the choice.',
+      why: 'a plain choice between two texts.',
+      question: 'when an agent rewrites the plan while someone edits it, what do they need before choosing?',
+      believe: 'when it changed tells them which text is newer, and Undo lets them take back an Overwrite that dropped the agent’s change.',
+      jobs: [['keep mine', 'Overwrite'], ['take the file’s', 'Reload'], ['know when it changed', 'the band’s time'], ['take back an overwrite', 'Undo, on the same band']],
+      wrong: 'someone presses Undo expecting their edit back, or misses the band.',
+      try: 'Dawn Mode first.',
+      back: 'the blocked bar with Keep mine and Take the file’s returns, and Undo goes.',
+    },
+    {
+      change: 'Source and Read again come with the pointer, and Done is the one solid button.',
+      today: 'the header always shows the saving state, Source, Read again and Close; Done is a small tonal button.',
+      why: 'every tool in reach at once.',
+      question: 'what does someone do in this window other than read and edit the text?',
+      believe: 'the text is the visit; Source and Read again are rare and reached by the pointer, and a waiting review has one thing left to do, Done.',
+      jobs: [['the whole file as text', 'Source, on the pointer'], ['read it again', 'Refresh, on the pointer'], ['finish the review', 'Done'], ['the saving state', 'the folder line']],
+      wrong: 'someone looks for Source with the pointer elsewhere, or misses Done.',
+      try: 'Dawn Mode first.',
+      back: 'the header shows Source and Read again at rest and Done is tonal again.',
+    },
+    {
+      change: 'An agent that could not be told is the Failure block, and looking and none are the skeleton and the empty state.',
+      today: 'one blocked line under the header, md-review was not told: …; Looking for Markdown… and No Markdown files in this folder. Cmd-click a .md path in a terminal to read it here. as text.',
+      why: 'a quiet line where nothing more can be done.',
+      question: 'when the agent was not told, what does someone do next?',
+      believe: 'Done again and Explain to the agent let them recover in one press; the skeleton and the empty state are drawn the same way in every panel.',
+      jobs: [['know the agent was not told', 'the Failure block and its words'], ['try again', 'Done'], ['ask the agent', 'Explain to the agent'], ['open a .md from a terminal', 'Cmd-click, as today, said in the guide']],
+      wrong: 'someone no longer finds out that Cmd-click opens a path here.',
+      try: 'Dawn Mode first.',
+      back: 'the blocked line and the two sentences return.',
+    },
+  ],
   'Panels/Ports': [
     {
       change: 'A row is one line, and the facts and actions come with the pointer.',

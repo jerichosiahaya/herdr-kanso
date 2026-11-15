@@ -567,23 +567,23 @@
   "markdown-panel/MarkdownFiles": {
     "page": "Panels/Markdown",
     "states": {
-      "Folder": "proto/components-markdown-window/MarkdownWindow/Default",
-      "Empty": "panels/markdown/FeatureMarkdownFiles/Empty",
-      "Keyboard": "panels/markdown/FeatureMarkdownFiles/Keyboard",
-      "Loading": "panels/markdown/FeatureMarkdownFiles/Loading",
-      "Recent": "panels/markdown/FeatureMarkdownFiles/Recent",
-      "Remote": "panels/markdown/FeatureMarkdownFiles/Remote",
-      "Review waiting": "panels/markdown/FeatureMarkdownFiles/Review waiting"
+      "Folder": "kit/Panels/Markdown/The folder only",
+      "Empty": "kit/Panels/Markdown/Empty",
+      "Keyboard": "kit/Panels/Markdown/Keyboard on a row",
+      "Loading": "kit/Panels/Markdown/Looking",
+      "Recent": "kit/Panels/Markdown/No file: the list",
+      "Remote": "kit/Panels/Markdown/On another computer",
+      "Review waiting": "kit/Panels/Markdown/No file: the list"
     }
   },
   "markdown-panel/MarkdownReview": {
     "page": "Panels/Markdown",
     "states": {
-      "Another review": "panels/markdown/FeatureMarkdownReview/Another review",
-      "Marker failed": "panels/markdown/FeatureMarkdownReview/Marker failed",
-      "Review": "panels/markdown/FeatureMarkdownReview/Review",
-      "Save failed": "panels/markdown/FeatureMarkdownReview/Save failed",
-      "Saving": "panels/markdown/FeatureMarkdownReview/Saving"
+      "Another review": "kit/Panels/Markdown/Another review waits",
+      "Marker failed": "kit/Panels/Markdown/Done could not tell the agent",
+      "Review": "kit/Panels/Markdown/Review: an agent waits",
+      "Save failed": "kit/Panels/Markdown/Couldn’t save",
+      "Saving": "kit/Panels/Markdown/Editing a block"
     }
   },
   "spaces/Sidebar": {
