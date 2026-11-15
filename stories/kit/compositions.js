@@ -162,6 +162,9 @@ export const computerItem = ({ name, remote = true, state = 'on', folded = false
   ? failureLine({ text: phrase("Can't reach", name), fix: 'Refresh', detail: phrase('ssh: connect to host', name, 'port 22: Operation timed out') })
   : statusItem({ icon: remote ? 'lu-server' : 'lu-monitor', text: folded ? null : name, pending: state === 'pending' });
 
+// A piece's right-click Menu: its own acts, then the piece lines; a piece shown only when it has something drops Only when needed.
+const pieceLinesFor = (needed) => pieceLines.filter(({ label }) => needed || label !== 'Only when needed');
+export const pieceMenu = ({ title, items = [], needed = true }) => menu({ title, items: [...items, ...pieceLinesFor(needed)].filter((item, index) => index > 0 || !item.separator) });
 export const stepperMenu = () => menu({ title: 'Panes per view', items: [{ icon: 'lu-move-horizontal', label: 'Even out', hint: '⌘⇧0' }, ...pieceLines] });
 // The command palette's only pointer door; its key is in the tooltip.
 export const paletteDoor = () => button({ label: 'Command palette ⌘⇧P', kind: 'icon', size: 'sm', icon: 'lu-command' });

@@ -188,6 +188,7 @@ export const guidelines = {
     ["Kokō", "Unreachable says so, with Refresh.", "Also only while its row is out of sight: the row already says it. A click reconnects; pending draws at 80% with a breathing dot."],
     ["Kokō", "Needs you stands in for the waiting row.", "Only while that row is out of view: mark, name, question and +1 for the others out of view, in the same words and cut as the row. A click is ⌘J; hover lights its pane on the edge."],
     ["Kansō", "Its name and +1 never fold.", "The question gives way first when the bar narrows."],
+    ["Seijaku", "Right-click is the piece's Menu.", "Its one act, then Only when needed, Hide this and Settings for this…; an item shown only when it has something drops Only when needed."],
   ],
   "Compositions/Status bar": [
     ["Seijaku", "Two halves around panes per view.", "26 tall, 12 inside, 16 between items. Panes per view keeps the fixed 180 slot; each half folds within its own width. Layout paused takes the slot while the strip is stopped."],

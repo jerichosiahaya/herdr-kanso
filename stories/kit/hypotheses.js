@@ -2,6 +2,19 @@
 // Today rests on the running app; every job gets a new home or the hypothesis stops; with no signal yet it is unproven.
 import { panelHypotheses } from './panel-docs.js';
 export const hypotheses = {
+  'Compositions/Status bar/Item': [
+    {
+      change: 'Right-clicking an item opens its Menu: its one act, then the piece lines.',
+      today: 'a click acts and nothing happens on right-click; hiding an item or making it show only when needed is done in kansō settings.',
+      why: 'someone who wants an item gone, or quieter, has to find it in Settings.',
+      question: 'why leave the bar to change one item of it?',
+      believe: 'the piece lines where the item is cut the trips to Settings, and the click keeps its act.',
+      jobs: [['act', 'a click, as today, or the first item'], ['hide or quiet it', 'Hide this, Only when needed'], ['the rest', 'Settings for this…']],
+      wrong: 'nobody right-clicks an item in a month of Dawn Mode.',
+      try: 'Dawn Mode first.',
+      back: 'right-click does nothing, as today.',
+    },
+  ],
   'Compositions/Toolbar': [
     {
       change: 'Sort and Search come to the collapsed sidebar, under a caret.',

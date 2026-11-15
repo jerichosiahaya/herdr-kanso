@@ -482,6 +482,7 @@ export const playgrounds = {
       state: { ...select('computer', computerItemStates), if: { arg: 'item', eq: 'Computer' } },
       folded: { ...flag('folded'), if: { arg: 'item', neq: 'Servers, containers, reviews' } },
       more: { name: 'more waiting', control: { type: 'number', min: 0 }, if: { arg: 'item', eq: 'Needs you' } },
+      menu: { ...flag('right-click'), if: { arg: 'item', neq: 'Servers, containers, reviews' } },
     },
   },
   'Compositions/Status bar': {

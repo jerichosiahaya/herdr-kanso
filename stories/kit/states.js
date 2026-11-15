@@ -1,5 +1,5 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, sidebarFooter, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
 import { avatar, chip, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
@@ -17,6 +17,16 @@ export const statusItems = {
   'Needs you': ({ folded, more }) => ({ right: [needsItem({ name: 'cart-ui', question: folded ? '' : question, more })] }),
   Memory: ({ folded }) => ({ right: [memoryShown[folded ? 'folded' : 'word']] }),
   'Servers, containers, reviews': () => ({ right: statusPanels() }),
+  'Working count': () => ({ right: [statusItem({ mark: 'working', text: 3 })] }),
+  'Command palette': () => ({ right: [paletteDoor()] }),
+};
+// Each item's right-click Menu, as board B10 draws it.
+const statusItemMenus = {
+  Computer: () => pieceMenu({ title: 'devbox', items: [{ icon: 'lu-refresh-cw', label: 'Refresh' }] }),
+  'Needs you': () => pieceMenu({ title: 'Needs you', items: [{ label: 'Go to cart-ui', hint: '⌘J', mark: 'blocked' }] }),
+  Memory: () => pieceMenu({ title: 'Memory low', items: [{ icon: 'lu-memory-stick', label: 'Open Memory' }], needed: false }),
+  'Working count': () => pieceMenu({ title: 'Agents at work', items: [{ label: 'Show them', hint: '⌃⌥S', mark: 'working' }] }),
+  'Command palette': () => pieceMenu({ title: 'Command palette key', needed: false }),
 };
 
 // The status bar's halves for its controls; the page frames them at a width, the window places them as they are.
@@ -29,11 +39,8 @@ const statusParts = ({ computer, paused, stepper: middle, needs, memory, panels,
     popup: menuOpen ? stepperMenu() : panels && open !== 'none' ? statusMenus[open]() : '',
   };
 };
-const statusStory = ({ width, ...args }) => {
-  const parts = statusParts(args);
-  const bar = inBar(width, parts);
-  return parts.popup ? `<div class="kanso-story__popup-room">${bar}</div>` : bar;
-};
+const withPopup = (width, parts) => parts.popup ? `<div class="kanso-story__popup-room">${inBar(width, parts)}</div>` : inBar(width, parts);
+const statusStory = ({ width, ...args }) => withPopup(width, statusParts(args));
 const statusArgs = { width: 1040, computer: 'none', paused: false, stepper: 'rest', needs: 'question', memory: 'none', panels: false, open: 'none' };
 
 const tabItems = (value) => [{ key: 'checkout', label: 'checkout' }, { key: 'cart-ui', label: 'cart-ui', mark: value === 'cart-ui' ? '' : 'blocked' }, { key: 'tests', label: 'tests' }];
@@ -591,8 +598,8 @@ export const statedPages = {
     ],
   },
   'Compositions/Status bar/Item': {
-    args: { item: 'Computer', state: 'on', folded: false, more: 1 },
-    markup: ({ item, ...args }) => inBar(760, statusItems[item](args)),
+    args: { item: 'Computer', state: 'on', folded: false, more: 1, menu: false },
+    markup: ({ item, menu: open, ...args }) => withPopup(760, { ...statusItems[item](args), popup: open ? statusItemMenus[item]?.() : null }),
     states: [
       { label: 'Computer', args: {}, caption: 'Only while its sidebar row is out of sight.' },
       { label: 'Computer folded', args: { folded: true }, caption: 'The computer becomes its icon.' },
@@ -604,6 +611,13 @@ export const statedPages = {
       { label: 'Memory', args: { item: 'Memory' }, caption: 'This computer is low on memory.' },
       { label: 'Memory folded', args: { item: 'Memory', folded: true }, caption: 'Memory loses its word last.' },
       { label: 'Servers, containers and reviews', args: { item: 'Servers, containers, reviews' }, caption: 'Each its icon and how many need a look.' },
+      { label: 'Working count', args: { item: 'Working count' }, caption: 'The working mark and how many; a click opens Status.' },
+      { label: 'Command palette', args: { item: 'Command palette' }, caption: 'The key to the palette, last on the right.' },
+      { label: 'Computer, right-click', args: { menu: true }, caption: 'Refresh, then the piece lines.' },
+      { label: 'Needs you, right-click', args: { item: 'Needs you', menu: true }, caption: 'Go to the pane, then the piece lines.' },
+      { label: 'Memory, right-click', args: { item: 'Memory', menu: true }, caption: 'Open Memory, Hide this and Settings: it shows only when low.' },
+      { label: 'Working count, right-click', args: { item: 'Working count', menu: true }, caption: 'Show them, then the piece lines.' },
+      { label: 'Command palette, right-click', args: { item: 'Command palette', menu: true }, caption: 'Hide this and Settings only.' },
     ],
   },
   'Compositions/Status bar': {
