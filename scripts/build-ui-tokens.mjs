@@ -22,7 +22,7 @@ const PICK = {
 // Durations in milliseconds.
 const TIMING = { SPIN: "k-spin-ms", GLINT_MS: "k-glint-ms", GLINT_STAGGER: "k-glint-stagger", DOTS_MS: "k-dots-ms" };
 // Shares of full strength, from 0 to 1.
-const SHARES = { away: "k-op-away", held: "k-op-held", blockedWash: "k-wash-blocked", glintFaint: "k-op-glint-faint", glintMid: "k-op-glint-mid" };
+const SHARES = { away: "k-op-away", held: "k-op-held", blockedWash: "k-wash-blocked", blockedRow: "k-wash-blocked-row", glintFaint: "k-op-glint-faint", glintMid: "k-op-glint-mid" };
 
 const reader = (unit) => (tokens) => {
   const all = Object.entries(tokens).filter(([group]) => group !== "colour").flatMap(([, list]) => list);

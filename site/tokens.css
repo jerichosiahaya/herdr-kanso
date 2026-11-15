@@ -64,6 +64,7 @@
   --k-op-held: .4;
   --k-op-glint-faint: .35;
   --k-op-glint-mid: .6;
+  --k-wash-blocked-row: 8%;
   --k-wash-blocked: 40%;
   --k-w-pane-name: 256px;
   --k-w-pane-segment: 224px;

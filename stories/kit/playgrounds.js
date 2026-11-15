@@ -251,7 +251,7 @@ export const playgrounds = {
     markup: ({ os, key, hover, ...args }) => keyboardExplorer({ os, layer: keyLayer(os, args[`${os}Layer`]), picked: key, hover }),
   },
   'Compositions/Sidebar/Session row': {
-    args: { program: 'p-claude', name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: '', status: 'working', depth: 1, current: false, pinned: false, commands: 0, hover: false, focus: false, dimmed: false },
+    args: { program: 'p-claude', name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: '', status: 'working', depth: 1, current: false, pinned: false, commands: 0, hover: false, focus: false, dimmed: false, step: '', stuck: false, pinnable: true, settle: false, refresh: false, drop: 'none', guide: 'none' },
     argTypes: {
       program: select('program', ['p-claude', 'p-codex', 'lu-terminal']),
       name: { name: 'name', control: { type: 'text' } },
@@ -266,8 +266,16 @@ export const playgrounds = {
       hover: { name: 'hover', control: { type: 'boolean' } },
       focus: { name: 'focus', control: { type: 'boolean' } },
       dimmed: { name: 'dimmed', control: { type: 'boolean' } },
+      step: { name: 'step time (proposed)', control: { type: 'text' } },
+      stuck: { name: 'stuck (proposed)', control: { type: 'boolean' } },
+      pinnable: { name: 'pin tool (proposed)', control: { type: 'boolean' } },
+      settle: { name: 'Settle tool (proposed)', control: { type: 'boolean' } },
+      refresh: { name: 'Refresh (proposed)', control: { type: 'boolean' } },
+      drop: select('drop line (proposed)', ['none', 'before', 'after']),
+      guide: select('guide (proposed)', ['none', 'tee', 'end', 'pass']),
     },
-    markup: (args) => inSidebar(sessionRow(args)),
+    markup: ({ step, stuck, settle, drop, guide, ...args }) => inSidebar(sessionRow({ ...args, step: step ? { time: step, stuck } : null, tools: settle ? [{ icon: 'lu-check', label: 'Settle' }] : [],
+      drop: drop === 'none' ? null : drop, guides: guide === 'none' ? [] : [guide], commandsTip: args.commands ? 'npm test · 2m' : null, placeTip: args.place ? args.place : null })),
   },
   'Compositions/Sidebar/Project row': {
     args: { name: 'kansō', folder: 'herdr-kanso', branch: 'main', sync: '↓12', open: false, status: 'blocked', count: 0, hover: false, focus: false },
@@ -471,7 +479,7 @@ export const playgrounds = {
     markup: toggle,
   },
   'Primitives/Row': {
-    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', meta: '+14 −3', mark: 'none', second: '', heading: false, title: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false },
+    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', meta: '+14 −3', mark: 'none', second: '', heading: false, title: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false, drop: 'none', wash: 'none', guide: 'none' },
     argTypes: {
       icon: select('icon', icons.concat(['p-claude', 'p-codex'])),
       name: { name: 'name', control: { type: 'text' } },
@@ -489,8 +497,12 @@ export const playgrounds = {
       focus: { name: 'focus', control: { type: 'boolean' } },
       dimmed: { name: 'dimmed', control: { type: 'boolean' } },
       pending: { name: 'pending', control: { type: 'boolean' } },
+      drop: select('drop line (proposed)', ['none', 'before', 'after']),
+      wash: select('wash (proposed)', ['none', 'blocked']),
+      guide: select('guide at depth 2 (proposed)', ['none', 'tee', 'end', 'pass']),
     },
-    markup: ({ tools, ...args }) => `<div class="kanso-panel">${row({ ...args, actions: tools ? [{ icon: 'lu-pin', label: 'Pin' }, { icon: 'lu-ellipsis', label: 'More' }] : [] })}</div>`,
+    markup: ({ tools, drop, wash, guide, ...args }) => `<div class="kanso-panel">${row({ ...args, drop: drop === 'none' ? null : drop, wash: wash === 'none' ? null : wash, guides: guide === 'none' ? [] : [guide],
+      actions: tools ? [{ icon: 'lu-pin', label: 'Pin' }, { icon: 'lu-ellipsis', label: 'More' }] : [] })}</div>`,
   },
   'Primitives/Skeleton': {
     args: { shape: 'row', count: 3 },

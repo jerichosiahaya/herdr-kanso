@@ -11,9 +11,13 @@ export const ICON = 15;
 export const ICON_ROW = 14;
 export const ICON_INLINE = 12;
 export const DRAG_START = 4;
+export const GLINT = { run: 240, wide: 44, mid: 26, narrow: 12 };
 export const SWITCH = { w: 28, h: 16, knob: 12 };
 export const SPIN = 900;
-export const OPACITY = { away: 0.55, held: 0.4, blockedWash: 0.4 };
+export const GLINT_MS = 2200;
+export const GLINT_STAGGER = 160;
+export const DOTS_MS = 380;
+export const OPACITY = { away: 0.55, held: 0.4, blockedWash: 0.4, glintFaint: 0.35, glintMid: 0.6 };
 export const WASHES = { dark: { w4: 0.04, w7: 0.07, w12: 0.12, w14: 0.14 }, light: { w4: 0.05, w7: 0.095, w12: 0.18, w14: 0.21 } };
 // End of the generated sizes.
 export const EASE = { duration: 180, easing: "ease-out" };
