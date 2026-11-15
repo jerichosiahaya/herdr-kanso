@@ -134,6 +134,12 @@ export const guidelines = {
     ["Kokō", "Panes per view without the buttons.", "The wheel over the number changes it, a click evens out; the tooltip says both."],
     ["Fukinsei", "Fold order, right half.", "Memory to \"8% free\", then servers, containers and reviews give way, then the question. Left: the computer becomes its icon."],
   ],
+  "Compositions/Dawn Mode": [
+    ["Kokō", "Two modes, named everywhere.", "Stable Mode and Dawn Mode. Dawn Mode gets builds first; Stable Mode shows nothing."],
+    ["Kokō", "The pill always says it.", "In the open header, a Chip saying Dawn Mode at the right of the title row, always the night of the sky with light words, in dark and light; it cannot be hidden. The Dawn sky behind the lights is on by default and can be turned off. Collapsed, the rail is too narrow for the pill; the sky stays."],
+    ["Shizen", "The sun rises once.", "When the window opens in Dawn Mode or on switching to it, 2.6 s, then still. Reduced motion shows the last frame. Every copy plays together."],
+    ["Kokō", "One press switches.", "Settings · Updates: Stable Mode or Dawn Mode as Tabs on a track. Dawn Mode says it can break, with Star on GitHub; the Dawn sky switch follows."],
+  ],
   "Compositions/Activity": [
     ["Kansō", "Only what nothing in view says.", "A merge, an approval, a red check out of view, an agent that slept or could not, an agent whose pane is gone. Nothing new takes no space."],
     ["Seijaku", "Docked at the foot of the list.", "A raised card 12 above the footer; no row moves when it comes or goes."],

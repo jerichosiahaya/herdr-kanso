@@ -63,4 +63,5 @@
 .kanso-story__strip--end { justify-content: flex-end; }
 .kanso-story__slice { inline-size: 256px; padding: var(--k-sp-2); box-sizing: border-box; border-radius: var(--k-r-card); background: var(--chrome); box-shadow: 0 0 0 1px var(--border); }
 .kanso-story__slice > .kanso-menu { margin-top: var(--k-sp-1); }
+.kanso-story__slice.kanso-story__settings { inline-size: 420px; padding-inline: var(--k-sp-4); background: var(--bg); }
 .kanso-story__frame > .kanso-panel.kanso-story__panel { inline-size: 420px; block-size: auto; }

@@ -15,7 +15,8 @@
 .kanso-avatar--lg{width:var(--k-h-row);height:var(--k-h-row);font-size:var(--k-fs-name)}
 
 .kanso-badge{display:flex;align-items:center;height:var(--k-h-compact);padding:0 var(--k-sp-2);margin-right:0;border-radius:var(--k-r-control);background:var(--w7);font-size:var(--k-fs-meta);color:var(--fg);white-space:nowrap}
-.kanso-badge--count{display:inline-flex;height:var(--k-h-badge);margin-left:var(--k-sp-2);border-radius:var(--k-r-full);background:color-mix(in srgb,var(--dawn-sun) 22%,transparent);font-weight:var(--k-fw-medium)}
+:is(.kanso-badge--count,.kanso-badge--pill){display:inline-flex;height:var(--k-h-badge);margin-left:var(--k-sp-2);border-radius:var(--k-r-full);background:color-mix(in srgb,var(--dawn-sun) 22%,transparent);font-weight:var(--k-fw-medium)}
+.kanso-badge--pill{background:var(--dawn-top);color:var(--dawn-star)}
 .kanso-badge.kanso-badge--quiet{height:auto;padding:0;background:none;color:var(--dim)}
 
 .kanso-key{display:inline-flex;align-items:center;height:var(--k-h-compact);padding:0 var(--k-sp-2);border-radius:var(--k-r-sm);box-shadow:inset 0 0 0 1px var(--border);font:var(--k-fs-meta) var(--mono);letter-spacing:.1em;color:var(--muted)}
@@ -280,3 +281,9 @@
 .kanso-skeleton--shape>*{visibility:hidden}
 .kanso-window-controls{display:flex;gap:var(--k-sp-2)}
 .kanso-window-controls>i{width:var(--k-ic-inline);height:var(--k-ic-inline);border-radius:50%;background:var(--input)}
+
+/* Setting: label left, control right, the note under both. */
+.kanso-setting{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:var(--k-sp-3);row-gap:var(--k-sp-1);padding-block:var(--k-sp-2)}
+.kanso-setting__label{font-size:var(--k-fs-body);color:var(--fg)}
+.kanso-setting__note{grid-column:1/-1;font-size:var(--k-fs-meta);line-height:var(--k-lh-line);color:var(--dim)}
+.kanso-setting__note>.kanso-button{display:inline-flex;vertical-align:baseline}

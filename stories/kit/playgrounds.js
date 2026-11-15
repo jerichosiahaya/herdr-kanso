@@ -1,6 +1,6 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, asleep, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, kinds, levels, mark, markdown, marks, markSizes, menu, metric, needsItem, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, statusItem, stepper, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { sampleSidebar, statusMenus, statusPanels } from './samples.js';
 
@@ -151,9 +151,20 @@ export const playgrounds = {
     markup: toolbar,
   },
   'Compositions/Header': {
-    args: { collapsed: false, dawn: false },
-    argTypes: { collapsed: { name: 'collapsed', control: { type: 'boolean' } }, dawn: { name: 'Dawn Mode', control: { type: 'boolean' } } },
+    args: { collapsed: false, dawn: false, art: true },
+    argTypes: { collapsed: { name: 'collapsed', control: { type: 'boolean' } }, dawn: { name: 'Dawn Mode', control: { type: 'boolean' } },
+      art: { name: 'Dawn sky', control: { type: 'boolean' }, if: { arg: 'dawn' } } },
     markup: header,
+  },
+  'Compositions/Dawn Mode': {
+    args: { channel: 'dawn', art: true, collapsed: false },
+    argTypes: {
+      channel: { name: 'channel', control: { type: 'inline-radio' }, options: channels.map((item) => item.key) },
+      art: { name: 'Dawn sky', control: { type: 'boolean' }, if: { arg: 'channel', eq: 'dawn' } },
+      collapsed: { name: 'collapsed', control: { type: 'boolean' } },
+    },
+    markup: ({ channel, art, collapsed }) => `<p class="kanso-story__caption">Sidebar header</p>${header({ collapsed, dawn: channel === 'dawn', art })}`
+      + `<p class="kanso-story__caption">Settings · Updates</p><div class="kanso-story__slice kanso-story__settings">${channelSettings({ channel, art })}</div>`,
   },
   'Compositions/Sidebar/Session row': {
     args: { program: 'p-claude', name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: '', status: 'working', depth: 1, current: false, pinned: false, commands: 0, hover: false, focus: false, dimmed: false },
@@ -234,10 +245,11 @@ export const playgrounds = {
     markup: (args) => inSidebar(sidebarFooter(args)),
   },
   'Compositions/Sidebar': {
-    args: { collapsed: false, dawn: false, view: 'spaces', switcher: true, menu: false },
+    args: { collapsed: false, dawn: false, art: true, view: 'spaces', switcher: true, menu: false },
     argTypes: {
       collapsed: { name: 'collapsed', control: { type: 'boolean' } },
       dawn: { name: 'Dawn Mode', control: { type: 'boolean' } },
+      art: { name: 'Dawn sky', control: { type: 'boolean' }, if: { arg: 'dawn' } },
       switcher: { name: 'view switch', control: { type: 'boolean' } },
       view: { name: 'view', control: { type: 'inline-radio' }, options: views.map((item) => item.key) },
       menu: { name: 'views menu', control: { type: 'boolean' }, if: { arg: 'collapsed' } },

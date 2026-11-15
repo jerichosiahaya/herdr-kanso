@@ -1,5 +1,5 @@
 // The kit's compositions: each one only calls pieces with its own props and draws no markup.
-import { avatar, button, chip, dawn, failureLine, glyph, grow, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, windowControls } from './pieces.js';
+import { avatar, button, chip, dawn, setting, toggle, failureLine, glyph, grow, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, windowControls } from './pieces.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
 const more = (open) => stack({ variant: 'toolbar group', open }, tool(open ? 'lu-chevron-up' : 'lu-chevron-down', open ? 'Fewer tools' : 'More tools'), open ? [tool('lu-arrow-up-down', 'Sort'), tool('lu-search', 'Search')] : null);
@@ -107,13 +107,22 @@ export const tabBar = ({ items = [], value = null, folded = [], overflow = false
 
 // Cells
 
-export const header = ({ collapsed = false, dawn: early = false, open = false } = {}) => stack({ variant: 'header', collapsed },
-  early ? dawn() : null, stack({ variant: 'header title' }, windowControls()), toolbar({ column: collapsed, open }));
+// Dawn Mode: the pill always says the mode at the right of the open header; the sky behind the lights is optional. Stable Mode shows nothing.
+export const header = ({ collapsed = false, dawn: early = false, art = true, open = false } = {}) => stack({ variant: 'header', collapsed },
+  early && art ? dawn() : null, stack({ variant: 'header title' }, windowControls(), early && !collapsed ? chip({ label: 'Dawn Mode', pill: true }) : null),
+  toolbar({ column: collapsed, open }));
+
+// The channel in Settings · Updates: one press switches; Dawn Mode says it can break, and the sky can be turned off.
+export const channels = [{ key: 'stable', label: 'Stable Mode' }, { key: 'dawn', label: 'Dawn Mode' }];
+export const channelSettings = ({ channel = 'stable', art = true } = {}) => list(
+  setting({ label: 'Updates', control: tabs({ items: channels, value: channel, size: 'sm', track: true, label: true }), note: channel === 'dawn' ? 'Dawn Mode gets changes first. It can break.' : null,
+    link: channel === 'dawn' ? button({ label: 'Star on GitHub', kind: 'quiet', size: 'sm' }) : null }),
+  channel === 'dawn' ? setting({ label: 'Dawn sky', control: toggle({ checked: art, label: 'Dawn sky' }) }) : null);
 
 // The rows and tiles of the current view come in drawn; the sidebar only places them.
-export const sidebar = ({ collapsed = false, dawn: early = false, view = 'spaces', switcher = true, menu: open = false, rows = [], tiles = [], away = null } = {}) => collapsed
-  ? stack({ variant: 'rail' }, header({ collapsed, dawn: early }), switcher ? viewSwitch({ view, column: true, open }) : null, stack({ variant: 'rail list' }, tiles), stack({ variant: 'rail footer' }, tool('lu-settings', 'Settings')))
-  : stack({ variant: 'sidebar' }, header({ dawn: early }), switcher ? viewSwitch({ view }) : null, stack({ variant: 'rows' }, rows), away, sidebarFooter());
+export const sidebar = ({ collapsed = false, dawn: early = false, art = true, view = 'spaces', switcher = true, menu: open = false, rows = [], tiles = [], away = null } = {}) => collapsed
+  ? stack({ variant: 'rail' }, header({ collapsed, dawn: early, art }), switcher ? viewSwitch({ view, column: true, open }) : null, stack({ variant: 'rail list' }, tiles), stack({ variant: 'rail footer' }, tool('lu-settings', 'Settings')))
+  : stack({ variant: 'sidebar' }, header({ dawn: early, art }), switcher ? viewSwitch({ view }) : null, stack({ variant: 'rows' }, rows), away, sidebarFooter());
 
 // Two halves around the fixed slot of panes per view; each half folds its own items.
 export const statusBar = ({ left = [], middle = null, right = [], popup = null } = {}) => stack({ variant: 'status bar', grid: true },

@@ -10,6 +10,7 @@
 .kanso-header{position:relative;display:flex;flex-direction:column;flex:none;overflow:hidden;padding:0 var(--k-sp-2) var(--k-sp-1);background:var(--chrome)}
 .kanso-header>:not(.kanso-dawn){position:relative;z-index:1}
 .kanso-header__title{display:flex;align-items:center;height:48px;padding-left:var(--k-sp-1)}
+.kanso-header__title>.kanso-badge--pill{position:relative;margin-left:auto}
 .kanso-header>.kanso-toolbar{height:var(--k-h-header)}
 .kanso-header.kanso-header--collapsed>.kanso-toolbar{height:auto;padding-top:var(--k-sp-hair)}
 
