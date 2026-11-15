@@ -143,3 +143,10 @@ export const sampleSortMenus = {
   agents: () => sortMenu('In each section, by', ['Latest change first', 'Longest in its state', 'Project'], 'Latest change first'),
   threads: () => sortMenu('Threads, pinned first, then by', ['Your last message', 'When it started'], 'Your last message', [ticked('Grouped by project', false)]),
 };
+// The agents Send can reach, as the approved board names them.
+export const sampleTargets = [
+  { name: 'tests', project: 'acme-shop', status: 'done' },
+  { name: 'checkout', project: 'acme-shop' },
+  { name: 'i18n', project: 'docs-site' },
+];
+export const sampleMessage = 'Review the changes on branch limits-docs in ~/acme-shop-docs. Its pull request is #141.';

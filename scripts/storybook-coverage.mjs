@@ -7,8 +7,9 @@ export function overlapFor(record) {
   return plans[[file, component, ...state].join('/')] ?? plans[`${file}/${component}`];
 }
 
-export function mergeCoverage(records) {
-  const byId = new Map(records.map((record) => [record.id, record]));
+// `designs` are drawings made after this merge, such as the kit's named states, that a plan may point at.
+export function mergeCoverage(records, designs = []) {
+  const byId = new Map([...records, ...designs].map((record) => [record.id, record]));
   return records.map((record) => {
     const plan = overlapFor(record);
     if (!plan) return record;

@@ -1,8 +1,8 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
-import { emptyState, failureBlock, keycap, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
+import { addComputer, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { dialog, emptyState, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleHosts, sampleSortMenus, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
@@ -57,7 +57,140 @@ export const panelReads = {
   stale: { stale: true, scope: samplePanel.read, body: (content) => content },
 };
 
+// Dialog: what its body holds and the notes under it, each a sample of what a use puts there.
+export const dialogBodies = {
+  'a field': ({ loading }) => input({ text: 'checkout', label: 'Name', focus: !loading, selected: !loading, loading }),
+  'a list': ({ loading }) => (loading ? skeletonOf({ shape: 'row', count: sampleTargets.length }) : list(sampleTargets.map(({ name, project }) => row({ icon: 'p-claude', name, detail: project })))),
+  nothing: () => '',
+};
+export const dialogNotes = {
+  none: [], 'a fact': [{ text: 'npm run dev stops now' }], 'nothing to do': [{ text: 'Nothing here keeps a conversation to wake on', tone: 'muted' }],
+  'a refusal': [{ text: 'A name needs a letter', tone: 'error' }],
+};
+
+// Each worktree refusal in git's words, with the fix that ends it.
+export const worktreeRefusals = {
+  none: null,
+  'already checked out': { text: 'app-audit is already checked out', source: "fatal: 'app-audit' is already checked out at '~/Apps/herdr/herdr-kanso-cart'", fix: 'Open it' },
+  'not a branch name': { text: 'Not a valid branch name', source: "fatal: 'cart retry' is not a valid branch name", fix: 'Create' },
+};
+export const projectRefusals = {
+  none: null,
+  'already a project': { text: 'kansō is already a project', fix: 'Go to it' },
+  'write refused': { text: "Couldn't create kansō", source: 'database is locked', fix: 'Create' },
+};
+// Who Send can reach: the sample agents, more than fit (Find shows), or none.
+export const sendReach = {
+  'a few agents': { agents: sampleTargets },
+  'more than six': { agents: sampleTargets, find: '' },
+  'no match': { find: 'missing', empty: 'No agent or project by that name' },
+  'all wait for you': { empty: 'No agent can take a message' },
+  'no other agent': { empty: 'No other agent is running' },
+};
+// What Sleep is asked to put away, and how far it got.
+export const sleepCases = {
+  'a project': { title: 'Sleep acme-shop', facts: ['vite on web starts fresh on Wake'], action: 'Sleep 3 tabs' },
+  'a tab': { title: 'Sleep this tab', facts: ['npm run dev stops now'] },
+  'one agent': { title: 'Sleep checkout' },
+  reading: { title: 'Sleep acme-shop', reading: true, action: 'Sleep 3 tabs' },
+  'going to sleep': { title: 'Sleep acme-shop', step: 'working', action: 'Going to sleep' },
+  waking: { title: 'Wake checkout', step: 'working', action: 'Waking…' },
+  'did not exit': { title: 'Sleep acme-shop', failure: { text: 'checkout did not exit', fix: 'Undo' } },
+  'needs you first': { title: 'Sleep acme-shop', rows: [{ icon: 'p-claude', name: 'checkout', detail: 'needs you first', mark: 'blocked' }], action: null },
+  'conversation not found': { title: 'Sleep acme-shop', failure: { text: "Can't sleep checkout", source: "checkout's conversation was not found", fix: 'Sleep' } },
+  'cannot resume': { title: 'Sleep this agent', facts: ['Only a resumable agent can sleep on its own'], action: null },
+  'nothing to resume': { title: 'Sleep acme-shop', facts: ['Nothing here keeps a conversation to wake on'], action: null },
+  'already awake': { title: 'Wake', facts: ['That is no longer asleep'], action: null },
+};
+const sleepCaptions = {
+  'a project': 'Only what will not come back the same is said.', 'a tab': 'One tab and what stops with it.', 'one agent': 'One agent.',
+  reading: 'Its conversations are being checked.', 'going to sleep': 'The processes are exiting.', waking: 'A sleeping row comes back.',
+  'did not exit': 'A step failed; Undo puts back what slept.', 'needs you first': 'An agent waits on a question.',
+  'conversation not found': 'Its conversation is gone.', 'cannot resume': 'The program cannot resume.', 'nothing to resume': 'Nothing here keeps a conversation.',
+  'already awake': 'The row is no longer asleep.',
+};
+const worktreePlace = { here: '~/.kanso/worktrees/kansō-app-audit', devbox: 'devbox · ~/.kanso/worktrees/kansō-app-audit' };
+
 export const statedPages = {
+  'Primitives/Dialog': {
+    args: { title: 'Rename checkout', scope: '', body: 'a field', notes: 'none', secondary: '', primary: 'Rename', state: 'default', loading: false },
+    markup: ({ body, notes, scope, secondary, primary, ...args }) => dialog({ ...args, scope: scope || null, body: dialogBodies[body](args), notes: dialogNotes[notes], secondary: secondary || null, primary: primary || null }),
+    states: [
+      { label: 'At rest', args: {}, caption: 'A title, what it asks, one primary.' },
+      { label: 'With a scope', args: { title: 'Rename project', scope: '~/acme' }, caption: 'A fact under the title says where.' },
+      { label: 'Cancel and the primary', args: { title: 'New project', secondary: 'Cancel', primary: 'Create' }, caption: 'Cancel before the primary, only where leaving drops what was typed.' },
+      { label: 'Nothing to do yet', args: { state: 'disabled' }, caption: 'The primary is off until the dialog has what it needs.' },
+      { label: 'Working', args: { state: 'loading' }, caption: 'After the press, the primary carries the request.' },
+      { label: 'Armed', args: { title: 'Overwrite web and api', primary: 'Overwrite', state: 'armed' }, caption: 'An irreversible primary asks for a second press within 4 s.' },
+      { label: 'A list', args: { title: 'Send to an agent', body: 'a list', primary: 'Send to tests' }, caption: 'The body holds Rows.' },
+      { label: 'A note', args: { title: 'Sleep this tab', body: 'nothing', notes: 'a fact', primary: 'Sleep' }, caption: 'A fact under the body, dim.' },
+      { label: 'A refusal', args: { notes: 'a refusal' }, caption: 'The reason in blocked under the body.' },
+      { label: 'No footer', args: { title: 'Sleep acme-shop', body: 'nothing', notes: 'nothing to do', primary: '' }, caption: 'Nothing to press: Esc or a click outside closes it.' },
+      { label: 'Loading', args: { loading: true }, caption: 'Each piece as its own skeleton until the content arrives.' },
+    ],
+  },
+  'Compositions/Prompt dialog': {
+    args: { title: 'Rename checkout', scope: '', text: 'checkout', fallback: 'claude', action: 'Rename' },
+    markup: ({ scope, ...args }) => promptDialog({ ...args, scope: scope || null }),
+    states: [
+      { label: 'Rename', args: {}, caption: 'Opened with the name selected.' },
+      { label: 'With a scope', args: { title: 'Rename project', scope: '~/acme', text: 'acme' }, caption: 'A command gives where it acts.' },
+      { label: 'Emptied', args: { text: '' }, caption: 'An emptied name shows what it falls back to.' },
+      { label: 'Its own word', args: { title: 'Pin 1', text: 'Move this below the title', fallback: 'Note', action: 'Add' }, caption: 'The asking command names the primary.' },
+    ],
+  },
+  'Compositions/New project dialog': {
+    args: { folder: '', name: '', refusal: 'none', created: false },
+    markup: ({ refusal, created, ...args }) => created
+      ? stack({ variant: 'sidebar frame' }, row({ name: args.name, heading: true, pending: true }))
+      : newProject({ ...args, failure: projectRefusals[refusal], agent: sampleAgent }),
+    states: [
+      { label: 'No folder yet', args: {}, caption: 'Create waits for a folder.' },
+      { label: 'Folder chosen', args: { folder: '~/Apps/herdr/herdr-kanso', name: 'kansō' }, caption: 'The name follows the folder.' },
+      { label: 'Already a project', args: { folder: '~/Apps/herdr/herdr-kanso', name: 'kansō', refusal: 'already a project' }, caption: 'The folder is one of your projects.' },
+      { label: 'Write refused', args: { folder: '~/Apps/herdr/herdr-kanso', name: 'kansō', refusal: 'write refused' }, caption: 'The store refused it: its words and Create again.' },
+      { label: 'Created', args: { name: 'kansō', created: true }, caption: 'The dialog closes; the row is there at once, quiet until written.' },
+    ],
+  },
+  'Compositions/New worktree dialog': {
+    args: { project: 'kansō', branch: 'app-audit', computer: 'here', exists: false, making: false, refusal: 'none' },
+    markup: ({ computer, exists, refusal, ...args }) => newWorktree({ ...args, place: exists ? phrase('Uses the existing branch', args.branch) : worktreePlace[computer], failure: worktreeRefusals[refusal], agent: sampleAgent }),
+    states: [
+      { label: 'New branch', args: {}, caption: 'Where it will live, as a fact.' },
+      { label: 'Existing branch', args: { exists: true }, caption: 'The branch exists: the worktree checks it out.' },
+      { label: 'On devbox', args: { computer: 'devbox' }, caption: 'The project is on another computer.' },
+      { label: 'Making', args: { making: true }, caption: 'git is making it.' },
+      { label: 'Already checked out', args: { refusal: 'already checked out' }, caption: 'The branch has a worktree: Open it.' },
+      { label: 'git refused', args: { branch: 'cart retry', refusal: 'not a branch name' }, caption: "git's words and Create again." },
+    ],
+  },
+  'Compositions/Send dialog': {
+    args: { reach: 'a few agents', chosen: 'tests', message: sampleMessage, unreachable: false, sending: false, refused: false },
+    markup: ({ reach, chosen, unreachable, refused, ...args }) => {
+      const { agents = [], ...rest } = sendReach[reach];
+      const marked = agents.map((item, index) => ({ ...item, chosen: chosen === item.name || chosen === item.project, unreachable: unreachable && index === agents.length - 1 }));
+      const count = marked.filter((item) => item.chosen).length;
+      return sendDialog({ ...args, ...rest, agents: marked, to: count > 1 ? phrase('Send to', count, 'in', chosen) : count ? phrase('Send to', chosen) : null,
+        failure: refused ? { text: 'Not sent', source: 'terminal no longer exists', fix: 'Send' } : null, agent: sampleAgent });
+    },
+    states: [
+      { label: 'Ready', args: {}, caption: 'An agent chosen and a message.' },
+      { label: 'A project chosen', args: { chosen: 'acme-shop' }, caption: 'The project word chooses every agent in it.' },
+      { label: 'Find', args: { reach: 'more than six' }, caption: 'More than six agents: Find goes first.' },
+      { label: 'No match', args: { reach: 'no match' }, caption: 'Nothing by that name.' },
+      { label: 'No message', args: { message: '' }, caption: 'Send waits for words.' },
+      { label: 'Sending', args: { sending: true }, caption: 'Delivery is under way.' },
+      { label: 'Refused', args: { refused: true }, caption: 'Not delivered; the message stays.' },
+      { label: 'A computer unreachable', args: { unreachable: true }, caption: 'Its agents step down.' },
+      { label: 'All wait for you', args: { reach: 'all wait for you' }, caption: 'Every other agent waits on a question.' },
+      { label: 'No other agent', args: { reach: 'no other agent' }, caption: 'Nobody else is running.' },
+    ],
+  },
+  'Compositions/Sleep dialog': {
+    args: { situation: 'a project' },
+    markup: ({ situation }) => sleepDialog({ agent: sampleAgent, ...sleepCases[situation] }),
+    states: Object.keys(sleepCases).map((situation) => ({ label: situation[0].toUpperCase() + situation.slice(1), args: { situation }, caption: sleepCaptions[situation] })),
+  },
   'Compositions/Add computer dialog': {
     args: { config: true, added: false, typed: '' },
     markup: ({ config, added, typed }) => addComputer({

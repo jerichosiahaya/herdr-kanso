@@ -3,7 +3,7 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { normalizeComponent } from './storybook-components.mjs';
 import { normalizeCss } from './storybook-css.mjs';
-import { kitRecords, tokenRecords } from './storybook-kit.mjs';
+import { kitRecords, statedRecords, tokenRecords } from './storybook-kit.mjs';
 import { gapDocument, mergeCoverage } from './storybook-coverage.mjs';
 import { referenceText, sampleText } from './storybook-markup.mjs';
 import { panelStateRecords } from './storybook-panel-states.mjs';
@@ -86,36 +86,36 @@ const panelPiece = { HeroAndVerdict: 'Panels/PR', InATab: 'Panels/Worktrees', Me
 const protoPage = {
   'components-annotated-picture': 'Panels/Pins', 'components-choosing-the-channel': 'Compositions/Dawn Mode',
   'components-code': 'Primitives/Code', 'components-collapsed-rail': 'Layouts/Sidebar',
-  'components-dialog': 'Primitives/Dialog', 'components-edges-and-minimap': 'Compositions/Edges',
+  'components-dialog': null, 'components-edges-and-minimap': 'Compositions/Edges',
   'components-find-in-the-conversation': 'Panels/Find', 'components-header-digest': 'Compositions/Pane header',
   'components-log': 'Primitives/Code', 'components-markdown-window': 'Panels/Markdown', 'components-markdown': 'Primitives/Markdown',
-  'components-menu': 'Primitives/Menu', 'components-new-project': 'Primitives/Dialog', 'components-new-worktree': 'Primitives/Dialog',
+  'components-menu': 'Primitives/Menu', 'components-new-project': null, 'components-new-worktree': null,
   'components-pane-header': 'Compositions/Pane header', 'components-pane-standing-in': 'Layouts/Pane', 'components-panel-menu': 'Primitives/Menu',
-  'components-pick-list': 'Primitives/Row', 'components-rename': 'Primitives/Dialog', 'components-settings-tabs': 'Panels/Settings',
+  'components-pick-list': 'Primitives/Row', 'components-rename': null, 'components-settings-tabs': 'Panels/Settings',
   'components-shipped': 'Panels/Shipped', 'components-simulator-screen': 'Panels/Simulator',
   'components-status-bar-working': 'Compositions/Status bar', 'components-status-bar': 'Compositions/Status bar',
   'components-system-notification': 'Compositions/Notifications', 'components-tab-bar': 'Compositions/Tab bar', 'components-tab-states': 'Primitives/Tab',
   'components-title-and-tools': 'Layouts/Sidebar header', 'components-while-you-were-away': 'Compositions/Activity', 'components-worktree-row-open': 'Primitives/Row',
   'compositions-bars': 'Layouts/Pane', 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
-  'compositions-menu-and-dialog': 'Primitives/Dialog', 'compositions-panel-pieces': 'Compositions/Panel',
+  'compositions-menu-and-dialog': null, 'compositions-panel-pieces': 'Compositions/Panel',
   'compositions-sidebar-rows': 'Layouts/Sidebar', 'compositions-states': 'Compositions/State patterns',
   'layouts-sidebar-at-rest': 'Layouts/Sidebar', 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
   'layouts-window-at-rest': 'Layouts/Window', 'layouts-right-click-any-piece': 'Layouts/Context menus', 'layouts-hjkl-dojo': 'Layouts/Practice',
   'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': 'Compositions/Dawn Mode', 'tokens-icons': 'Tokens/Icons', 'tokens-type': 'Tokens/Type',
 };
 const coveragePage = {
-  Arrangements: 'Panels/Arrangements', SaveArrangement: 'Primitives/Dialog', SettingsMenu: 'Compositions/Settings menu', UpdateNotice: 'Compositions/Notifications', RuntimeNotice: 'Compositions/Notifications',
+  Arrangements: 'Panels/Arrangements', SaveArrangement: 'Panels/Arrangements', SettingsMenu: 'Compositions/Settings menu', UpdateNotice: 'Compositions/Notifications', RuntimeNotice: 'Compositions/Notifications',
   ContainerList: 'Panels/Containers', ContainerRow: 'Panels/Containers', ComposeProject: 'Panels/Containers', ContainerDisk: 'Panels/Containers',
   Practice: 'Panels/Dojo', PracticeFeedback: 'Panels/Dojo', PracticeResult: 'Panels/Dojo', PracticePet: 'Panels/Dojo',
   Memory: 'Panels/Memory', MemoryAgent: 'Panels/Memory', MemoryRecovery: 'Panels/Memory', MemoryHistory: 'Panels/Memory', MemoryChart: 'Primitives/Chart', SystemNotice: 'Compositions/Notifications',
   Help: 'Panels/Help', Guide: 'Panels/Help', KeyboardExplorer: 'Compositions/Keyboard', MarkdownFiles: 'Panels/Markdown', MarkdownReview: 'Panels/Markdown',
-  PaneMenu: 'Compositions/Pane menu', OpenWith: 'Primitives/Dialog', Files: 'Panels/Files', Preview: 'Panels/Preview', MarkdownEditing: 'Panels/Preview', ConversationFind: 'Panels/Find',
+  PaneMenu: 'Compositions/Pane menu', OpenWith: 'Primitives/Menu', Files: 'Panels/Files', Preview: 'Panels/Preview', MarkdownEditing: 'Panels/Preview', ConversationFind: 'Panels/Find',
   Images: 'Panels/Images', Ports: 'Panels/Ports', PortHistory: 'Panels/Ports', PullRequest: 'Panels/PR', PullRequestContext: 'Panels/PR', PullRequestList: 'Panels/PR', PullRequestDetails: 'Panels/PR', PullRequestPicker: 'Panels/PR',
   WorktreeVerdict: 'Panels/Worktrees', Worktrees: 'Panels/Worktrees', WorktreeHistory: 'Panels/Worktrees', Shipped: 'Panels/Shipped', Share: 'Panels/Share', VerdictBody: 'Panels/PR', CodeLimits: 'Primitives/Code', HistoryChart: 'Primitives/Chart', ActionNotice: 'Primitives/Toast', ShareCard: 'Panels/Share',
-  MultilinePrompt: 'Primitives/Field', Prompt: 'Primitives/Dialog', SendDialog: 'Primitives/Dialog', Pieces: 'Panels/Settings', Bindings: 'Panels/Settings', ReleaseControls: 'Panels/Settings', CreditsLoading: 'Panels/Settings',
-  Devices: 'Panels/Simulator', DeviceControls: 'Panels/Simulator', PictureState: 'Panels/Simulator', SleepDialog: 'Primitives/Dialog',
+  MultilinePrompt: 'Primitives/Field', Prompt: 'Compositions/Prompt dialog', SendDialog: 'Compositions/Send dialog', Pieces: 'Panels/Settings', Bindings: 'Panels/Settings', ReleaseControls: 'Panels/Settings', CreditsLoading: 'Panels/Settings',
+  Devices: 'Panels/Simulator', DeviceControls: 'Panels/Simulator', PictureState: 'Panels/Simulator', SleepDialog: 'Compositions/Sleep dialog',
   Sidebar: 'Layouts/Sidebar', SidebarStatus: 'Layouts/Sidebar', SidebarThreads: 'Layouts/Sidebar', SidebarSort: 'Layouts/Sidebar', ProjectGit: 'Layouts/Sidebar',
-  ProjectMenu: 'Compositions/Project menu', AgentMenu: 'Compositions/Agent menu', NewConversation: 'Primitives/Dialog', ProjectCreation: 'Primitives/Dialog', ComputerMenu: 'Compositions/Computer menu', Asleep: 'Layouts/Sidebar', NeedsQueue: 'Layouts/Sidebar', AwayEvents: 'Compositions/Activity', CreateWorktree: 'Primitives/Dialog',
+  ProjectMenu: 'Compositions/Project menu', AgentMenu: 'Compositions/Agent menu', NewConversation: 'Primitives/Menu', ProjectCreation: 'Compositions/New project dialog', ComputerMenu: 'Compositions/Computer menu', Asleep: 'Layouts/Sidebar', NeedsQueue: 'Layouts/Sidebar', AwayEvents: 'Compositions/Activity', CreateWorktree: 'Compositions/New worktree dialog',
   Spend: 'Panels/Spend', SpendBreakdown: 'Panels/Spend', SpendSettings: 'Panels/Spend', SpendChart: 'Primitives/Chart', StatusStandIn: 'Compositions/Status bar', PaneTools: 'Compositions/Pane header', StripNavigation: 'Compositions/Edges', Tabs: 'Primitives/Tab', PanelToolbar: 'Compositions/Tab bar', Notice: 'Primitives/Toast', NoticeStack: 'Primitives/Toast',
 };
 
@@ -129,6 +129,7 @@ export function pageFor(source, file, key) {
   if (source === 'proto') {
     if (primitive[key] && /compositions-/.test(base)) return `Primitives/${primitive[key]}`;
     if (base === 'compositions-panel-pieces' && panelPiece[key]) return panelPiece[key];
+    if (protoPage[base] === null) return null;
     if (!protoPage[base]) {
       if (base.startsWith('components-')) return `Primitives/${base.slice(11).replace(/-/g, ' ').replace(/^./, (s) => s.toUpperCase())}`;
       throw new Error(`Missing component route: ${file}:${key}`);
@@ -138,8 +139,9 @@ export function pageFor(source, file, key) {
   throw new Error(`Unknown story source: ${source}`);
 }
 
+// A prototype source routed to null is a copy of a kit composition and is not imported.
 export function recordsFrom(source, file, data, notes = []) {
-  return Object.entries(data).flatMap(([key, story]) => Object.entries(story.variants ?? { Default: story }).map(([state, variant]) => ({
+  return Object.entries(data).filter(([key]) => pageFor(source, file, key) !== null).flatMap(([key, story]) => Object.entries(story.variants ?? { Default: story }).map(([state, variant]) => ({
     id: `${source}/${file.replace(/\.json$/, '')}/${key}/${state}`, source, page: pageFor(source, file, key),
     label: cleanText([story.name ?? story.title ?? key.replace(/([a-z])([A-Z])/g, '$1 $2'), ...(story.variants ? [state] : [])].join(' · ')),
     caption: variant.when ?? story.caption ?? '', ...(story.variants && story.caption ? { context: story.caption } : {}), html: variant.html, ...(variant.spec ? { spec: variant.spec } : {}),
@@ -161,7 +163,7 @@ export function generate(root = '.') {
   const file = join(root, 'stories/catalog.json');
   const retained = expand(read(file)).filter((record) => !['kit', 'tokens'].includes(record.source));
   const drawings = panelStateRecords(retained), regenerated = new Set(drawings.map((record) => record.id));
-  const originals = mergeCoverage([...retained.filter((record) => !regenerated.has(record.id)), ...drawings].map((record) => record.html === undefined ? record : normalizeComponent(record)));
+  const originals = mergeCoverage([...retained.filter((record) => !regenerated.has(record.id)), ...drawings].map((record) => record.html === undefined ? record : normalizeComponent(record)), statedRecords());
   const tokenFile = join(root, 'kanso/tokens.json');
   const tokens = existsSync(tokenFile) ? read(tokenFile) : null;
   const catalog = pack([...originals, ...kitRecords(originals).map(normalizeComponent), ...(tokens ? tokenRecords(tokens) : [])]);

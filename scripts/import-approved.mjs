@@ -84,14 +84,15 @@ export function importApproved(file, root = ".") {
   if (approved.size !== 94 || references.boards.length !== 94 || references.boards.some((board) => !approved.has(board.code))) throw new Error("Approved reference inventory differs from the control table");
   const retained = expand(JSON.parse(readFileSync(`${root}/stories/catalog.json`, "utf8"))).filter((record) => record.source === "proto" && !record.approvedBoard);
   const records = [], evidence = [];
-  for (const board of references.boards) {
+  // A board with no page is retired: its drawings are copies of a kit composition and are not imported.
+  for (const board of references.boards.filter((item) => item.page !== null)) {
     const reference = references.pages.find((page) => page.page === board.page);
     const extracted = approvedDrawings(master, board);
     const owner = reference.components[0] ?? "Compositions/State patterns";
     const ids = extracted.drawings.map((drawing, index) => {
       const id = `proto/approved-${board.anchor}/Reference/${index + 1}`;
       const linked = renameMarkup(drawing.source).replace(/<a\b([^>]*?)href="#([^"]+)"([^>]*)>/g, (match, before, anchor, after) => {
-        const target = references.boards.find((item) => item.anchor === anchor);
+        const target = references.boards.find((item) => item.anchor === anchor && item.page !== null);
         const slug = target?.page.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
         return target ? `<a class="kanso-reference__link"${before}href="./?path=/docs/${slug}--${target.page.startsWith("Start/") || !references.pages.find((item) => item.page === target.page)?.existing ? "docs" : "overview"}"${after}>` : match;
       });

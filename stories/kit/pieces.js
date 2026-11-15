@@ -62,30 +62,27 @@ export const code = ({ text, kind, first, line }) => {
 
 const shape = (markup) => markup.replace(' kanso-text--fg', '').replace(/class="([^"]*)"/, 'class="$1 kanso-skeleton--shape"');
 const words = (text, skeleton) => skeleton ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(text)}</span>` : escape(text);
-// A dialog asks for a name when it has a value or a placeholder; body goes under it, notes above the note; the footer only when it has an action.
-export const dialog = ({ title, scope, value, placeholder, body = '', loading, notes = [], note, tone, primary, kind = 'solid', state, secondary }) => {
+// A dialog: its title, an optional scope, the body its use composes, notes, then Cancel before the one primary.
+export const dialog = ({ title, scope, body = '', notes = [], primary, kind = 'solid', state = 'default', secondary, loading = false }) => {
   const action = (label, look, emphasis) => (loading ? shape : String)(button({ label, kind: emphasis, ...(loading ? {} : { disabled: look === 'disabled', spin: look === 'loading', armed: look === 'armed' }) }));
-  const field = value ? `${escape(value)}<span class="kanso-caret"></span>` : `<span class="kanso-caret"></span><span class="kanso-dialog__placeholder">${escape(placeholder)}</span>`;
-  const asks = value || placeholder;
-  const lines = [...notes, ...(note ? [{ text: note, tone }] : [])];
-  return `<div class="kanso-dialog kanso-popover"><div class="kanso-dialog__header"><span class="kanso-dialog__title">${words(title, loading)}</span></div>`
+  const footer = primary || secondary ? `<div class="kanso-dialog__footer">${secondary ? action(secondary, 'default', 'quiet') : ''}${primary ? action(primary, state, kind) : ''}</div>` : '';
+  return `<div class="kanso-dialog kanso-popover" role="dialog"><div class="kanso-dialog__header"><span class="kanso-dialog__title">${words(title, loading)}</span></div>`
     + (scope ? `<div class="kanso-dialog__scope">${words(scope, loading)}</div>` : '')
-    + (asks ? `<div class="kanso-field${loading ? ' kanso-skeleton--shape' : ' kanso-control--focus'} kanso-dialog__section" tabindex="0">${field}</div>` : '')
-    + body
-    + lines.map(({ text, tone: look = 'dim' }) => `<div class="kanso-dialog__note${look === 'dim' ? '' : ` kanso-dialog__note--${look}`}">${words(text, loading)}</div>`).join('')
-    + (primary ? `<div class="kanso-dialog__footer">${secondary ? action(secondary, 'default', 'quiet') : ''}${action(primary, state, kind)}</div>` : '') + '</div>';
+    + (body ? `<div class="kanso-dialog__body">${body}</div>` : '')
+    + notes.map(({ text, tone: look = 'dim' }) => `<div class="kanso-dialog__note${look === 'dim' ? '' : ` kanso-dialog__note--${look}`}">${words(text, loading)}</div>`).join('')
+    + footer + '</div>';
 };
 
-export const input = ({ text: value, label: placeholder, icon, action = '', error, disabled, multiline, inline: rename, selected, loading, limit }) => {
-  const editable = !disabled && !loading;
+export const input = ({ text: value = '', label: placeholder, icon = 'none', action = '', choose = false, focus = false, error, disabled, multiline, inline: rename, selected, loading, limit = 80 }) => {
+  const editable = !disabled && !loading && !choose;
   const enter = multiline ? '' : ` onkeydown="if (event.key === 'Enter') event.preventDefault()"`;
   const cap = ` onbeforeinput="if (event.inputType.startsWith('insert') && this.innerText.length >= ${limit}) event.preventDefault()"`;
   const text = `<div class="kanso-field__editor" role="textbox" aria-label="${escape(placeholder)}" aria-multiline="${multiline}" contenteditable="${editable}"${editable ? ' tabindex="0"' : ''}${enter}${cap}>${selected ? `<span class="kanso-field__selection">${escape(value.slice(0, limit))}</span>` : escape(value.slice(0, limit))}</div>`;
   const iconTool = icon === 'none' ? '' : `<span class="kanso-button kanso-button--icon" tabindex="0"><svg class="kanso-icon kanso-icon--row"><use href="#${icon}"/></svg></span>`;
-  // A word action shows only once something is typed.
-  const wordTool = value ? button({ label: action, kind: 'tonal', size: 'sm' }) : '';
+  // A word action shows once something is typed, or always when a chooser fills the field.
+  const wordTool = value || choose ? button({ label: action, kind: 'tonal', size: 'sm' }) : '';
   const tool = rename ? '' : action ? wordTool : iconTool;
-  const classes = `kanso-field${multiline ? ' kanso-field--multiline' : ''}${rename ? ' kanso-field--inline' : ''}${loading ? ' kanso-skeleton--shape' : `${error ? ' kanso-field--invalid' : ''}${disabled ? ' kanso-control--off' : ''}`}`;
+  const classes = `kanso-field${multiline ? ' kanso-field--multiline' : ''}${rename ? ' kanso-field--inline' : ''}${loading ? ' kanso-skeleton--shape' : `${error ? ' kanso-field--invalid' : ''}${disabled ? ' kanso-control--off' : ''}${focus ? ' kanso-control--focus' : ''}`}`;
   return `<div class="${classes}"${disabled ? ' aria-disabled="true"' : ''}>${text}${tool}</div>`;
 };
 

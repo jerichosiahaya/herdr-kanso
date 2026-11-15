@@ -131,13 +131,13 @@
       "code": "S14",
       "title": "New project, new conversation, new worktree",
       "anchor": "sidebar-new",
-      "page": "Compositions/New project, new conversation, new worktree"
+      "page": null
     },
     {
       "code": "S15",
       "title": "Add computer",
       "anchor": "sidebar-addcomputer",
-      "page": "Compositions/Add computer"
+      "page": null
     },
     {
       "code": "S16",
@@ -509,13 +509,13 @@
       "code": "D1",
       "title": "One dialog skeleton",
       "anchor": "dialogs-skeleton",
-      "page": "Panels/One dialog skeleton"
+      "page": null
     },
     {
       "code": "D6",
       "title": "Sleep",
       "anchor": "dialogs-sleep",
-      "page": "Panels/Sleep"
+      "page": null
     },
     {
       "code": "D7",
@@ -527,13 +527,13 @@
       "code": "D8",
       "title": "Send to an agent",
       "anchor": "dialogs-send",
-      "page": "Panels/Send to an agent"
+      "page": null
     },
     {
       "code": "D9",
       "title": "Open with",
       "anchor": "dialogs-openwith",
-      "page": "Panels/Open with"
+      "page": null
     },
     {
       "code": "D10",
@@ -545,7 +545,7 @@
       "code": "D15",
       "title": "Dialogs at rest, subtracted",
       "anchor": "dialogs-rest",
-      "page": "Panels/Dialogs at rest, subtracted"
+      "page": null
     },
     {
       "code": "D11a",
@@ -913,7 +913,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/AddComputer/Default",
         "proto/compositions-sidebar-rows/DawnBand/Default",
         "proto/compositions-sidebar-rows/Find/Default",
         "proto/compositions-sidebar-rows/Footer/Default",
@@ -1001,7 +1000,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/AddComputer/Default",
         "proto/compositions-sidebar-rows/DawnBand/Default",
         "proto/compositions-sidebar-rows/Find/Default",
         "proto/compositions-sidebar-rows/Footer/Default",
@@ -1138,7 +1136,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/AddComputer/Default",
         "proto/compositions-sidebar-rows/DawnBand/Default",
         "proto/compositions-sidebar-rows/Find/Default",
         "proto/compositions-sidebar-rows/Footer/Default",
@@ -1331,7 +1328,6 @@
         "proto/approved-sidebar-computer/Reference/14",
         "proto/approved-sidebar-computer/Reference/15",
         "proto/approved-sidebar-computer/Reference/16",
-        "proto/compositions-sidebar-rows/AddComputer/Default",
         "proto/compositions-sidebar-rows/Computer/Default"
       ],
       "components": [
@@ -1636,110 +1632,6 @@
       "proposedPredicates": []
     },
     {
-      "page": "Compositions/New project, new conversation, new worktree",
-      "existing": false,
-      "boards": [
-        "S14"
-      ],
-      "status": "Approved reference",
-      "guidelines": [
-        "Every start ends in \"New in kansō\": agents installed on that computer with their marks, the last used marked, then Terminal, then In a new worktree…. While agents load, skeleton rows breathe and Terminal is ready; none found is one dim line naming the computer.",
-        "Dialogs: 24 inside, title 15 semibold, labels 12.5 muted, fields 30, footer at the right 8 apart: Cancel quiet, the action solid. Esc closes.",
-        "Create is disabled until there is a folder; the name follows the folder until typed. Pressed, the dialog closes and the row appears at once with the breathing dot.",
-        "A refused write keeps the dialog with the failure block under the fields: the tool's words, Create, Explain to \u003cagent>; the footer keeps Cancel. \"Already a project\" and \"already checked out\" offer Go to it, Open it.",
-        "The worktree's folder shows in mono before creating; git's refusal uses the same block.",
-        "Cost: one command in that computer's shell when the menu opens."
-      ],
-      "records": [
-        "proto/approved-sidebar-new/Reference/1",
-        "proto/approved-sidebar-new/Reference/2",
-        "proto/approved-sidebar-new/Reference/3",
-        "proto/approved-sidebar-new/Reference/4",
-        "proto/approved-sidebar-new/Reference/5",
-        "proto/approved-sidebar-new/Reference/6",
-        "proto/approved-sidebar-new/Reference/7",
-        "proto/approved-sidebar-new/Reference/8",
-        "proto/approved-sidebar-new/Reference/9",
-        "proto/approved-sidebar-new/Reference/10",
-        "proto/approved-sidebar-new/Reference/11",
-        "proto/approved-sidebar-new/Reference/12",
-        "proto/approved-sidebar-new/Reference/13",
-        "coverage/spaces/CreateWorktree/Existing branch",
-        "coverage/spaces/CreateWorktree/Failed",
-        "coverage/spaces/CreateWorktree/Making",
-        "coverage/spaces/CreateWorktree/New branch",
-        "coverage/spaces/CreateWorktree/Remote",
-        "coverage/spaces/NewConversation/Loading programs",
-        "coverage/spaces/NewConversation/No programs",
-        "coverage/spaces/NewConversation/Probe failed",
-        "coverage/spaces/NewConversation/Programs",
-        "coverage/spaces/NewConversation/Project picker",
-        "coverage/spaces/ProjectCreation/Already project",
-        "coverage/spaces/ProjectCreation/Choose folder",
-        "coverage/spaces/ProjectCreation/Create failed",
-        "coverage/spaces/ProjectCreation/Creating",
-        "proto/components-new-project/NewProject/Default",
-        "proto/components-new-worktree/NewWorktree/Default"
-      ],
-      "components": [
-        "Primitives/Dialog"
-      ],
-      "features": [],
-      "approvedRecords": [
-        "proto/approved-sidebar-new/Reference/1",
-        "proto/approved-sidebar-new/Reference/2",
-        "proto/approved-sidebar-new/Reference/3",
-        "proto/approved-sidebar-new/Reference/4",
-        "proto/approved-sidebar-new/Reference/5",
-        "proto/approved-sidebar-new/Reference/6",
-        "proto/approved-sidebar-new/Reference/7",
-        "proto/approved-sidebar-new/Reference/8",
-        "proto/approved-sidebar-new/Reference/9",
-        "proto/approved-sidebar-new/Reference/10",
-        "proto/approved-sidebar-new/Reference/11",
-        "proto/approved-sidebar-new/Reference/12",
-        "proto/approved-sidebar-new/Reference/13"
-      ],
-      "sourceHash": "6ccf89cabb20c33f9e43229ceb931a40d3b236cd5b366b2465ab48e9abb28560",
-      "proposedPredicates": []
-    },
-    {
-      "page": "Compositions/Add computer",
-      "existing": false,
-      "boards": [
-        "S15"
-      ],
-      "status": "Approved reference",
-      "guidelines": [
-        "kansō's dialog, opened from + → Add computer… and a computer's menu. It runs hc machine add. The word is computer, never machine.",
-        "Hosts from ~/.ssh/config as rows of 32: server icon, name, ssh target in mono dim, Add as a small tonal button. A typed user@host goes in the field below; Enter adds.",
-        "Add shows Added at once with the done mark. A refusal clears it and puts the failure block under that host: ssh's words, the fitting action (Sign in, or Add) and Explain to \u003cagent>.",
-        "After a Mac is added it says it will ask before agents read Documents, with a button to that setting. No hosts: one sentence; the field is the action.",
-        "Cost: the ssh config is local; each Add is one ssh connection."
-      ],
-      "records": [
-        "proto/approved-sidebar-addcomputer/Reference/1",
-        "proto/approved-sidebar-addcomputer/Reference/2",
-        "proto/approved-sidebar-addcomputer/Reference/3",
-        "proto/approved-sidebar-addcomputer/Reference/4",
-        "proto/approved-sidebar-addcomputer/Reference/5",
-        "proto/compositions-sidebar-rows/AddComputer/Default"
-      ],
-      "components": [
-        "Layouts/Sidebar"
-      ],
-      "features": [],
-      "approvedRecords": [
-        "proto/approved-sidebar-addcomputer/Reference/1",
-        "proto/approved-sidebar-addcomputer/Reference/2",
-        "proto/approved-sidebar-addcomputer/Reference/3",
-        "proto/approved-sidebar-addcomputer/Reference/4",
-        "proto/approved-sidebar-addcomputer/Reference/5"
-      ],
-      "sourceHash": "46464077a133d23ebb72c552f043f4f8e34634a4b95b7b96aa87550aac20e3ab",
-      "proposedPredicates": []
-    },
-    {
       "page": "Compositions/Drag and drop",
       "existing": false,
       "boards": [
@@ -1798,7 +1690,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/AddComputer/Default",
         "proto/compositions-sidebar-rows/DawnBand/Default",
         "proto/compositions-sidebar-rows/Find/Default",
         "proto/compositions-sidebar-rows/Footer/Default",
@@ -1881,7 +1772,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/AddComputer/Default",
         "proto/compositions-sidebar-rows/DawnBand/Default",
         "proto/compositions-sidebar-rows/Find/Default",
         "proto/compositions-sidebar-rows/Footer/Default",
@@ -2100,7 +1990,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/AddComputer/Default",
         "proto/compositions-sidebar-rows/DawnBand/Default",
         "proto/compositions-sidebar-rows/Find/Default",
         "proto/compositions-sidebar-rows/Footer/Default",
@@ -6442,142 +6331,6 @@
       "proposedPredicates": []
     },
     {
-      "page": "Panels/One dialog skeleton",
-      "existing": false,
-      "boards": [
-        "D1"
-      ],
-      "status": "Approved reference",
-      "guidelines": [
-        "Popover, radius 8, padding 24, 480 wide (popups 340). Title 15 semibold naming the thing (Rename \u003cname>). Optional scope line, 11.5 dim. No paragraph, no label over a lone field.",
-        "Footer right-aligned: at most one solid primary (30, radius 6) and quiet links. Esc and a click outside close; if a click outside cannot close, Cancel returns as a quiet link.",
-        "24 inside on all four sides; panels keep 16. No fixed height: it ends 24 under its last line. Settings scrolls only past 680.",
-        "A focused field wears the focus ring. Armed: \"Press again to …\", accent, 4 s.",
-        "First read: skeleton. Pending: on its row, 80% with the breathing dot. Failure: the source's words in blocked (two lines, full text in the tooltip), then the retry (Refresh, or the action's name) and Explain to \u003cagent>. Empty: one dim sentence, one action at most. Classes: pax-fail, pax-empty, pax-skl, pax-ck pend.",
-        "Rename: the placeholder is the program's own name (claude).",
-        "The Pin note is kanso-prompt with lines: 4.",
-        "Remote: one hc label on the terminal's computer, or one shared write."
-      ],
-      "records": [
-        "proto/approved-dialogs-skeleton/Reference/1",
-        "proto/approved-dialogs-skeleton/Reference/2",
-        "coverage/arrange/SaveArrangement/Capture loading",
-        "coverage/arrange/SaveArrangement/Overwrite",
-        "coverage/arrange/SaveArrangement/Save",
-        "coverage/arrange/SaveArrangement/Save failed",
-        "coverage/open-with/OpenWith/Detection failed",
-        "coverage/open-with/OpenWith/File",
-        "coverage/open-with/OpenWith/Folder",
-        "coverage/open-with/OpenWith/Image",
-        "coverage/open-with/OpenWith/Keyboard",
-        "coverage/open-with/OpenWith/Looking",
-        "coverage/open-with/OpenWith/No editor",
-        "coverage/open-with/OpenWith/Open failed",
-        "coverage/open-with/OpenWith/Remote",
-        "coverage/prompt/Prompt/Custom action",
-        "coverage/prompt/Prompt/Empty fallback",
-        "coverage/prompt/Prompt/Hint",
-        "coverage/send/SendDialog/Blocked targets",
-        "coverage/send/SendDialog/Empty message",
-        "coverage/send/SendDialog/No agents",
-        "coverage/send/SendDialog/No matches",
-        "coverage/send/SendDialog/Project selected",
-        "coverage/send/SendDialog/Ready",
-        "coverage/send/SendDialog/Refused",
-        "coverage/send/SendDialog/Search",
-        "coverage/send/SendDialog/Sending",
-        "coverage/send/SendDialog/Unavailable target",
-        "coverage/sleep/SleepDialog/Agent",
-        "coverage/sleep/SleepDialog/Already awake",
-        "coverage/sleep/SleepDialog/Blocked",
-        "coverage/sleep/SleepDialog/Conversation absent",
-        "coverage/sleep/SleepDialog/Not resumable",
-        "coverage/sleep/SleepDialog/Nothing resumable",
-        "coverage/sleep/SleepDialog/Project",
-        "coverage/sleep/SleepDialog/Reading",
-        "coverage/sleep/SleepDialog/Sleep failed",
-        "coverage/sleep/SleepDialog/Sleeping",
-        "coverage/sleep/SleepDialog/Tab",
-        "coverage/sleep/SleepDialog/Waking",
-        "coverage/spaces/CreateWorktree/Existing branch",
-        "coverage/spaces/CreateWorktree/Failed",
-        "coverage/spaces/CreateWorktree/Making",
-        "coverage/spaces/CreateWorktree/New branch",
-        "coverage/spaces/CreateWorktree/Remote",
-        "coverage/spaces/NewConversation/Loading programs",
-        "coverage/spaces/NewConversation/No programs",
-        "coverage/spaces/NewConversation/Probe failed",
-        "coverage/spaces/NewConversation/Programs",
-        "coverage/spaces/NewConversation/Project picker",
-        "coverage/spaces/ProjectCreation/Already project",
-        "coverage/spaces/ProjectCreation/Choose folder",
-        "coverage/spaces/ProjectCreation/Create failed",
-        "coverage/spaces/ProjectCreation/Creating",
-        "proto/components-dialog/Dialog/Default",
-        "proto/components-new-project/NewProject/Default",
-        "proto/components-new-worktree/NewWorktree/Default",
-        "proto/components-rename/Rename/Default",
-        "proto/compositions-menu-and-dialog/Arrangement/Default",
-        "proto/compositions-menu-and-dialog/Sleep/Default",
-        "proto/compositions-menu-and-dialog/SourceLine/Default",
-        "kit/Dialog/Default"
-      ],
-      "components": [
-        "Primitives/Dialog"
-      ],
-      "features": [],
-      "approvedRecords": [
-        "proto/approved-dialogs-skeleton/Reference/1",
-        "proto/approved-dialogs-skeleton/Reference/2"
-      ],
-      "sourceHash": "9b8e9ff0190bebf3384595949332616251e9dfa92c33e3b65d921e18192555b3",
-      "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Sleep",
-      "existing": false,
-      "boards": [
-        "D6"
-      ],
-      "status": "Approved reference",
-      "guidelines": [
-        "Sleep an agent or tab is one press: the moon on the focused finished pane, or the tab's menu. The tab leaves, a toast offers Undo for 8 s, and the row enters Asleep breathing.",
-        "Sleep a project opens a dialog only when something will not come back as it was, and says only that: \"vite on web starts fresh on Wake\". Otherwise it sleeps at once. The primary counts: Sleep 3 tabs. A remote computer is named in the title.",
-        "A blocker is the row's fact (\"working\" with its mark) and one blocked line. The dialog re-reads every 3 s; when the agent stops, it sleeps.",
-        "No Asleep dialog; states live on the group's rows: Going to sleep and Waking (pending, moon breathes, word dim), stuck (failure on the row with Undo, no Explain), asleep (Wake, Enter wakes), unreachable (dim, no Wake). Wake all and Forget are in the row's menu; Forget arms in accent.",
-        "Stuck sentences from sleepwork.js: \"\u003cagent> did not exit\", \"\u003cagent>'s prompt could not be cleared\", \"\u003cagent>'s conversation was not found\". The toast uses the same words with Undo, only when the group is off screen.",
-        "Folded group: the count, plus \"· 1 stuck\" in blocked. Open: no count.",
-        "Remote: one session file per agent on that computer, once, then every 3 s only while blocked."
-      ],
-      "records": [
-        "proto/approved-dialogs-sleep/Reference/1",
-        "coverage/sleep/SleepDialog/Agent",
-        "coverage/sleep/SleepDialog/Already awake",
-        "coverage/sleep/SleepDialog/Blocked",
-        "coverage/sleep/SleepDialog/Conversation absent",
-        "coverage/sleep/SleepDialog/Not resumable",
-        "coverage/sleep/SleepDialog/Nothing resumable",
-        "coverage/sleep/SleepDialog/Project",
-        "coverage/sleep/SleepDialog/Reading",
-        "coverage/sleep/SleepDialog/Sleep failed",
-        "coverage/sleep/SleepDialog/Sleeping",
-        "coverage/sleep/SleepDialog/Tab",
-        "coverage/sleep/SleepDialog/Waking",
-        "proto/compositions-menu-and-dialog/Sleep/Default"
-      ],
-      "components": [
-        "Primitives/Dialog"
-      ],
-      "features": [
-        "coverage/sleep/SleepDialog"
-      ],
-      "approvedRecords": [
-        "proto/approved-dialogs-sleep/Reference/1"
-      ],
-      "sourceHash": "955d29249fd2db7e394dde5040acd96e22cf8813aadff0864dfe29dabed7b216",
-      "proposedPredicates": []
-    },
-    {
       "page": "Panels/Arrangements",
       "existing": true,
       "boards": [
@@ -6616,91 +6369,6 @@
         "proto/approved-dialogs-arrange/Reference/2"
       ],
       "sourceHash": "23ce8360741848c69265c5eb00fc32dee4d6f1c33f5c4d9b9297a362368acc8f",
-      "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Send to an agent",
-      "existing": false,
-      "boards": [
-        "D8"
-      ],
-      "status": "Approved reference",
-      "guidelines": [
-        "The dialog shell. No scope line, no To or Message labels. Find shows with more than six agents.",
-        "A row: agent name, its project as one dim word, its ensō. The branch on hover.",
-        "An agent that needs you is not offered.",
-        "A press on a project word selects every agent there. The primary names the target: Send to \u003cagent>, Send to 2 in \u003cproject>.",
-        "Esc closes.",
-        "Remote: the dim word says it (\"relay · devbox\"). Unreachable rows dim, say so, and are not targets.",
-        "Sending is pending on the target row; the dialog closes when hc confirms. Refused: hc's words under that row; the draft stays.",
-        "With no target or an empty message there is no Send.",
-        "Remote: no reads. One hc send per target on that agent's computer."
-      ],
-      "records": [
-        "proto/approved-dialogs-send/Reference/1",
-        "proto/approved-dialogs-send/Reference/2",
-        "coverage/send/SendDialog/Blocked targets",
-        "coverage/send/SendDialog/Empty message",
-        "coverage/send/SendDialog/No agents",
-        "coverage/send/SendDialog/No matches",
-        "coverage/send/SendDialog/Project selected",
-        "coverage/send/SendDialog/Ready",
-        "coverage/send/SendDialog/Refused",
-        "coverage/send/SendDialog/Search",
-        "coverage/send/SendDialog/Sending",
-        "coverage/send/SendDialog/Unavailable target"
-      ],
-      "components": [
-        "Primitives/Dialog"
-      ],
-      "features": [
-        "coverage/send/SendDialog"
-      ],
-      "approvedRecords": [
-        "proto/approved-dialogs-send/Reference/1",
-        "proto/approved-dialogs-send/Reference/2"
-      ],
-      "sourceHash": "2a6aa8dd6ef0c3264650c118c5c8f2857301ef207500aefabc7a4ebbdce6d4ba",
-      "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Open with",
-      "existing": false,
-      "boards": [
-        "D9"
-      ],
-      "status": "Approved reference",
-      "guidelines": [
-        "Popup on the dialog shell: title 15 semibold, the path as scope (computer first when remote), rows 32 with the editor name only. Number keys 1 to 9 show once the keyboard moves in the list.",
-        "A terminal editor says \"in a split\" on hover. An editor that cannot open remotely is not drawn there.",
-        "No rule under the header, no Esc corner, no coloured letter tiles.",
-        "Looking: skeleton. None: one dim sentence. Failure: the probe's words, then Refresh; no Explain.",
-        "Remote: none. Editors are found locally once and cached in open-with.found; on another computer the editor opens over its own SSH."
-      ],
-      "records": [
-        "proto/approved-dialogs-openwith/Reference/1",
-        "proto/approved-dialogs-openwith/Reference/2",
-        "coverage/open-with/OpenWith/Detection failed",
-        "coverage/open-with/OpenWith/File",
-        "coverage/open-with/OpenWith/Folder",
-        "coverage/open-with/OpenWith/Image",
-        "coverage/open-with/OpenWith/Keyboard",
-        "coverage/open-with/OpenWith/Looking",
-        "coverage/open-with/OpenWith/No editor",
-        "coverage/open-with/OpenWith/Open failed",
-        "coverage/open-with/OpenWith/Remote"
-      ],
-      "components": [
-        "Primitives/Dialog"
-      ],
-      "features": [
-        "coverage/open-with/OpenWith"
-      ],
-      "approvedRecords": [
-        "proto/approved-dialogs-openwith/Reference/1",
-        "proto/approved-dialogs-openwith/Reference/2"
-      ],
-      "sourceHash": "d056a66d518726977e3e569adde47c6bdfcd1d36afa634436ca065747ba86e1a",
       "proposedPredicates": []
     },
     {
@@ -6747,132 +6415,6 @@
         "proto/approved-dialogs-markdown/Reference/2"
       ],
       "sourceHash": "ed345d863a86132f67c0ec7de9ca29308a3bb1308af93549da604f037be0f781",
-      "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Dialogs at rest, subtracted",
-      "existing": false,
-      "boards": [
-        "D15"
-      ],
-      "status": "Approved reference",
-      "guidelines": [
-        "At rest a dialog shows what you came for and what you would miss; the rest appears on hover, keyboard focus, change or need. Failure, armed and blocked stay as loud.",
-        "Colour only for the solid primary, a focused field's accent, an agent's ensō, and working on what will not come back.",
-        "kansō settings has no header link to Herdr settings. Keys folds its list into eight group lines under the keyboard. What's new has no version line or Refresh.",
-        "Sleep a project says only what will not come back. Send lists only agents that can take the text. Arrangements, Open with and Credits have no row icons."
-      ],
-      "records": [
-        "proto/approved-dialogs-rest/Reference/1",
-        "proto/approved-dialogs-rest/Reference/2",
-        "proto/approved-dialogs-rest/Reference/3",
-        "proto/approved-dialogs-rest/Reference/4",
-        "proto/approved-dialogs-rest/Reference/5",
-        "proto/approved-dialogs-rest/Reference/6",
-        "proto/approved-dialogs-rest/Reference/7",
-        "proto/approved-dialogs-rest/Reference/8",
-        "proto/approved-dialogs-rest/Reference/9",
-        "proto/approved-dialogs-rest/Reference/10",
-        "proto/approved-dialogs-rest/Reference/11",
-        "proto/approved-dialogs-rest/Reference/12",
-        "proto/approved-dialogs-rest/Reference/13",
-        "proto/approved-dialogs-rest/Reference/14",
-        "proto/approved-dialogs-rest/Reference/15",
-        "proto/approved-dialogs-rest/Reference/16",
-        "proto/approved-dialogs-rest/Reference/17",
-        "proto/approved-dialogs-rest/Reference/18",
-        "proto/approved-dialogs-rest/Reference/19",
-        "proto/approved-dialogs-rest/Reference/20",
-        "proto/approved-dialogs-rest/Reference/21",
-        "coverage/arrange/SaveArrangement/Capture loading",
-        "coverage/arrange/SaveArrangement/Overwrite",
-        "coverage/arrange/SaveArrangement/Save",
-        "coverage/arrange/SaveArrangement/Save failed",
-        "coverage/open-with/OpenWith/Detection failed",
-        "coverage/open-with/OpenWith/File",
-        "coverage/open-with/OpenWith/Folder",
-        "coverage/open-with/OpenWith/Image",
-        "coverage/open-with/OpenWith/Keyboard",
-        "coverage/open-with/OpenWith/Looking",
-        "coverage/open-with/OpenWith/No editor",
-        "coverage/open-with/OpenWith/Open failed",
-        "coverage/open-with/OpenWith/Remote",
-        "coverage/prompt/Prompt/Custom action",
-        "coverage/prompt/Prompt/Empty fallback",
-        "coverage/prompt/Prompt/Hint",
-        "coverage/send/SendDialog/Blocked targets",
-        "coverage/send/SendDialog/Empty message",
-        "coverage/send/SendDialog/No agents",
-        "coverage/send/SendDialog/No matches",
-        "coverage/send/SendDialog/Project selected",
-        "coverage/send/SendDialog/Ready",
-        "coverage/send/SendDialog/Refused",
-        "coverage/send/SendDialog/Search",
-        "coverage/send/SendDialog/Sending",
-        "coverage/send/SendDialog/Unavailable target",
-        "coverage/sleep/SleepDialog/Agent",
-        "coverage/sleep/SleepDialog/Already awake",
-        "coverage/sleep/SleepDialog/Blocked",
-        "coverage/sleep/SleepDialog/Conversation absent",
-        "coverage/sleep/SleepDialog/Not resumable",
-        "coverage/sleep/SleepDialog/Nothing resumable",
-        "coverage/sleep/SleepDialog/Project",
-        "coverage/sleep/SleepDialog/Reading",
-        "coverage/sleep/SleepDialog/Sleep failed",
-        "coverage/sleep/SleepDialog/Sleeping",
-        "coverage/sleep/SleepDialog/Tab",
-        "coverage/sleep/SleepDialog/Waking",
-        "coverage/spaces/CreateWorktree/Existing branch",
-        "coverage/spaces/CreateWorktree/Failed",
-        "coverage/spaces/CreateWorktree/Making",
-        "coverage/spaces/CreateWorktree/New branch",
-        "coverage/spaces/CreateWorktree/Remote",
-        "coverage/spaces/NewConversation/Loading programs",
-        "coverage/spaces/NewConversation/No programs",
-        "coverage/spaces/NewConversation/Probe failed",
-        "coverage/spaces/NewConversation/Programs",
-        "coverage/spaces/NewConversation/Project picker",
-        "coverage/spaces/ProjectCreation/Already project",
-        "coverage/spaces/ProjectCreation/Choose folder",
-        "coverage/spaces/ProjectCreation/Create failed",
-        "coverage/spaces/ProjectCreation/Creating",
-        "proto/components-dialog/Dialog/Default",
-        "proto/components-new-project/NewProject/Default",
-        "proto/components-new-worktree/NewWorktree/Default",
-        "proto/components-rename/Rename/Default",
-        "proto/compositions-menu-and-dialog/Arrangement/Default",
-        "proto/compositions-menu-and-dialog/Sleep/Default",
-        "proto/compositions-menu-and-dialog/SourceLine/Default",
-        "kit/Dialog/Default"
-      ],
-      "components": [
-        "Primitives/Dialog"
-      ],
-      "features": [],
-      "approvedRecords": [
-        "proto/approved-dialogs-rest/Reference/1",
-        "proto/approved-dialogs-rest/Reference/2",
-        "proto/approved-dialogs-rest/Reference/3",
-        "proto/approved-dialogs-rest/Reference/4",
-        "proto/approved-dialogs-rest/Reference/5",
-        "proto/approved-dialogs-rest/Reference/6",
-        "proto/approved-dialogs-rest/Reference/7",
-        "proto/approved-dialogs-rest/Reference/8",
-        "proto/approved-dialogs-rest/Reference/9",
-        "proto/approved-dialogs-rest/Reference/10",
-        "proto/approved-dialogs-rest/Reference/11",
-        "proto/approved-dialogs-rest/Reference/12",
-        "proto/approved-dialogs-rest/Reference/13",
-        "proto/approved-dialogs-rest/Reference/14",
-        "proto/approved-dialogs-rest/Reference/15",
-        "proto/approved-dialogs-rest/Reference/16",
-        "proto/approved-dialogs-rest/Reference/17",
-        "proto/approved-dialogs-rest/Reference/18",
-        "proto/approved-dialogs-rest/Reference/19",
-        "proto/approved-dialogs-rest/Reference/20",
-        "proto/approved-dialogs-rest/Reference/21"
-      ],
-      "sourceHash": "85905e0477eaa62500bcb5c10dc0b90d4cf82b8d3a9f24df66b64c996acecb5e",
       "proposedPredicates": []
     },
     {
@@ -7074,37 +6616,6 @@
       ],
       "sourceHash": "0dbe479b8828d3672349adae25ea72cfdd0697784d8df60ce8b83f441a7f1d43",
       "proposedPredicates": []
-    },
-    {
-      "page": "Features/Save arrangement",
-      "existing": false,
-      "boards": [
-        "D7"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dialogs-arrange/Reference/1",
-        "proto/approved-dialogs-arrange/Reference/2",
-        "coverage/arrange/SaveArrangement/Capture loading",
-        "coverage/arrange/SaveArrangement/Overwrite",
-        "coverage/arrange/SaveArrangement/Save",
-        "coverage/arrange/SaveArrangement/Save failed",
-        "panels/dialog/FeatureSaveArrangement/Save header",
-        "panels/dialog/FeatureSaveArrangement/Overwrite header"
-      ],
-      "components": [
-        "Panels/Arrangements",
-        "Primitives/Dialog"
-      ],
-      "features": [
-        "coverage/arrange/SaveArrangement"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dialogs-arrange/Reference/1",
-        "proto/approved-dialogs-arrange/Reference/2"
-      ]
     },
     {
       "page": "Compositions/Runtime notice",
@@ -8829,25 +8340,6 @@
       "proposedPredicates": []
     },
     {
-      "page": "Features/Prompt",
-      "existing": false,
-      "boards": [],
-      "status": "Proposed",
-      "guidelines": [],
-      "records": [
-        "coverage/prompt/Prompt/Custom action",
-        "coverage/prompt/Prompt/Empty fallback",
-        "coverage/prompt/Prompt/Hint"
-      ],
-      "components": [
-        "Primitives/Dialog"
-      ],
-      "features": [
-        "coverage/prompt/Prompt"
-      ],
-      "proposedPredicates": []
-    },
-    {
       "page": "Panels/Keys",
       "existing": false,
       "boards": [
@@ -9456,57 +8948,6 @@
       ]
     },
     {
-      "page": "Features/New worktree",
-      "existing": false,
-      "boards": [
-        "S14"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-sidebar-new/Reference/1",
-        "proto/approved-sidebar-new/Reference/2",
-        "proto/approved-sidebar-new/Reference/3",
-        "proto/approved-sidebar-new/Reference/4",
-        "proto/approved-sidebar-new/Reference/5",
-        "proto/approved-sidebar-new/Reference/6",
-        "proto/approved-sidebar-new/Reference/7",
-        "proto/approved-sidebar-new/Reference/8",
-        "proto/approved-sidebar-new/Reference/9",
-        "proto/approved-sidebar-new/Reference/10",
-        "proto/approved-sidebar-new/Reference/11",
-        "proto/approved-sidebar-new/Reference/12",
-        "proto/approved-sidebar-new/Reference/13",
-        "coverage/spaces/CreateWorktree/Existing branch",
-        "coverage/spaces/CreateWorktree/Failed",
-        "coverage/spaces/CreateWorktree/Making",
-        "coverage/spaces/CreateWorktree/New branch",
-        "coverage/spaces/CreateWorktree/Remote"
-      ],
-      "components": [
-        "Primitives/Dialog"
-      ],
-      "features": [
-        "coverage/spaces/CreateWorktree"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-sidebar-new/Reference/1",
-        "proto/approved-sidebar-new/Reference/2",
-        "proto/approved-sidebar-new/Reference/3",
-        "proto/approved-sidebar-new/Reference/4",
-        "proto/approved-sidebar-new/Reference/5",
-        "proto/approved-sidebar-new/Reference/6",
-        "proto/approved-sidebar-new/Reference/7",
-        "proto/approved-sidebar-new/Reference/8",
-        "proto/approved-sidebar-new/Reference/9",
-        "proto/approved-sidebar-new/Reference/10",
-        "proto/approved-sidebar-new/Reference/11",
-        "proto/approved-sidebar-new/Reference/12",
-        "proto/approved-sidebar-new/Reference/13"
-      ]
-    },
-    {
       "page": "Compositions/Needs you",
       "existing": false,
       "boards": [
@@ -9538,107 +8979,6 @@
         "proto/approved-sidebar-needs/Reference/3",
         "proto/approved-sidebar-needs/Reference/4",
         "proto/approved-sidebar-needs/Reference/5"
-      ]
-    },
-    {
-      "page": "Features/New conversation",
-      "existing": false,
-      "boards": [
-        "S14"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-sidebar-new/Reference/1",
-        "proto/approved-sidebar-new/Reference/2",
-        "proto/approved-sidebar-new/Reference/3",
-        "proto/approved-sidebar-new/Reference/4",
-        "proto/approved-sidebar-new/Reference/5",
-        "proto/approved-sidebar-new/Reference/6",
-        "proto/approved-sidebar-new/Reference/7",
-        "proto/approved-sidebar-new/Reference/8",
-        "proto/approved-sidebar-new/Reference/9",
-        "proto/approved-sidebar-new/Reference/10",
-        "proto/approved-sidebar-new/Reference/11",
-        "proto/approved-sidebar-new/Reference/12",
-        "proto/approved-sidebar-new/Reference/13",
-        "coverage/spaces/NewConversation/Loading programs",
-        "coverage/spaces/NewConversation/No programs",
-        "coverage/spaces/NewConversation/Probe failed",
-        "coverage/spaces/NewConversation/Programs",
-        "coverage/spaces/NewConversation/Project picker"
-      ],
-      "components": [
-        "Primitives/Dialog"
-      ],
-      "features": [
-        "coverage/spaces/NewConversation"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-sidebar-new/Reference/1",
-        "proto/approved-sidebar-new/Reference/2",
-        "proto/approved-sidebar-new/Reference/3",
-        "proto/approved-sidebar-new/Reference/4",
-        "proto/approved-sidebar-new/Reference/5",
-        "proto/approved-sidebar-new/Reference/6",
-        "proto/approved-sidebar-new/Reference/7",
-        "proto/approved-sidebar-new/Reference/8",
-        "proto/approved-sidebar-new/Reference/9",
-        "proto/approved-sidebar-new/Reference/10",
-        "proto/approved-sidebar-new/Reference/11",
-        "proto/approved-sidebar-new/Reference/12",
-        "proto/approved-sidebar-new/Reference/13"
-      ]
-    },
-    {
-      "page": "Features/New project",
-      "existing": false,
-      "boards": [
-        "S14"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-sidebar-new/Reference/1",
-        "proto/approved-sidebar-new/Reference/2",
-        "proto/approved-sidebar-new/Reference/3",
-        "proto/approved-sidebar-new/Reference/4",
-        "proto/approved-sidebar-new/Reference/5",
-        "proto/approved-sidebar-new/Reference/6",
-        "proto/approved-sidebar-new/Reference/7",
-        "proto/approved-sidebar-new/Reference/8",
-        "proto/approved-sidebar-new/Reference/9",
-        "proto/approved-sidebar-new/Reference/10",
-        "proto/approved-sidebar-new/Reference/11",
-        "proto/approved-sidebar-new/Reference/12",
-        "proto/approved-sidebar-new/Reference/13",
-        "coverage/spaces/ProjectCreation/Already project",
-        "coverage/spaces/ProjectCreation/Choose folder",
-        "coverage/spaces/ProjectCreation/Create failed",
-        "coverage/spaces/ProjectCreation/Creating"
-      ],
-      "components": [
-        "Primitives/Dialog"
-      ],
-      "features": [
-        "coverage/spaces/ProjectCreation"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-sidebar-new/Reference/1",
-        "proto/approved-sidebar-new/Reference/2",
-        "proto/approved-sidebar-new/Reference/3",
-        "proto/approved-sidebar-new/Reference/4",
-        "proto/approved-sidebar-new/Reference/5",
-        "proto/approved-sidebar-new/Reference/6",
-        "proto/approved-sidebar-new/Reference/7",
-        "proto/approved-sidebar-new/Reference/8",
-        "proto/approved-sidebar-new/Reference/9",
-        "proto/approved-sidebar-new/Reference/10",
-        "proto/approved-sidebar-new/Reference/11",
-        "proto/approved-sidebar-new/Reference/12",
-        "proto/approved-sidebar-new/Reference/13"
       ]
     },
     {
@@ -10172,7 +9512,7 @@
         "kit/Tab/Active",
         "kit/Tab/Disabled",
         "kit/Menu/Default",
-        "kit/Dialog/Default",
+        "kit/Primitives/Dialog/At rest",
         "kit/Avatar/Image",
         "kit/Avatar/Small",
         "kit/Avatar/Large",

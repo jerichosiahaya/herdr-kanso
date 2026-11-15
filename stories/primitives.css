@@ -281,6 +281,7 @@
 .kanso-dialog__note.kanso-dialog__note--muted{color:var(--muted)}
 .kanso-dialog__note .kanso-button--quiet{margin-left:auto}
 .kanso-dialog__section{margin-top:var(--k-sp-4)}
+.kanso-dialog__body{display:flex;flex-direction:column;gap:var(--k-sp-1);margin-top:var(--k-sp-3)}
 .kanso-dialog__subsection{margin-top:var(--k-sp-2)}
 
 .kanso-skeleton--shape.kanso-skeleton--shape{color:transparent;background-color:var(--border);box-shadow:none;pointer-events:none}

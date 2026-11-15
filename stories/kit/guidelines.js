@@ -57,7 +57,8 @@ export const guidelines = {
   "Primitives/Dialog": [
     ["Seijaku", "One shell for every dialog.", "Popover, radius 8, padding 24 on all four sides, 480 wide (popups 340). No fixed height: it ends 24 under its last line."],
     ["Seijaku", "The title names the thing.", "15 semibold: Rename checkout, not \"Rename terminal\". An optional scope line, 11.5 dim, that is a fact. No paragraph, no label over a lone field."],
-    ["Yūgen", "Footer right-aligned.", "At most one solid primary and quiet links. Esc and a click outside close."],
+    ["Yūgen", "Footer right-aligned.", "At most one solid primary; Cancel, quiet, before it only where leaving drops what was typed. Cancel, Esc and a click outside all close without acting. No primary, no footer."],
+    ["Kansō", "A use brings only its body.", "Every dialog is this piece with its own title, body and words: Rows, Fields, the failure block. A dialog never draws its own frame, footer or field."],
     ["Kansō", "Colour only on focus.", "A focused field wears the kit's focus ring, the only colour a dialog adds. An emptied field shows what it falls back to as its placeholder."],
     ["Shizen", "Content loading is a skeleton in place.", "Each piece is drawn as its own skeleton, in the same place and size; nothing moves when the content arrives. When the content is too dynamic to draw piece by piece, the whole component is one skeleton."],
     ["Shizen", "A request is the button's state.", "Pressing the action shows its own loading; failure is the source's words in blocked under the field."],
@@ -83,6 +84,23 @@ export const guidelines = {
     ["Kansō", "A Dialog of Rows, nothing new.", "The hosts of ~/.ssh/config as Rows: server icon, name, the ssh target as its fact, Add as a small tonal Button. Under them, a Field for user@host whose Add shows once something is typed; Enter adds. The word is computer, never machine."],
     ["Seijaku", "Optimistic.", "Add reads Added at once with the done mark; a refusal clears it and puts the failure block under that host: ssh's words, Sign in or Add, and Explain to the agent."],
     ["Kokō", "Only what is needed.", "A Mac, once added, says it asks before agents read Documents, with Open the setting on it. No hosts in the config: the server icon dim and one line; the field is the action."],
+  ],
+  "Compositions/Prompt dialog": [
+    ["Kansō", "A use of Dialog.", "The title names the thing, the Field opens selected, the primary is the command's word. An emptied field shows what it falls back to."],
+  ],
+  "Compositions/New project dialog": [
+    ["Kansō", "A use of Dialog.", "Folder is a Field a chooser fills, with Choose… or Change…; Name follows it until typed. Create stays off until a folder is chosen."],
+    ["Seijaku", "Optimistic.", "Create closes the dialog and the row is there at once, quiet until written. A refusal is the failure block with its fix; the footer keeps Cancel."],
+  ],
+  "Compositions/New worktree dialog": [
+    ["Kansō", "A use of Dialog.", "One Field for the branch; where the worktree will live is a dim fact under it. git's refusal is the failure block with its fix."],
+  ],
+  "Compositions/Send dialog": [
+    ["Kansō", "A use of Dialog.", "The agents as Rows, the chosen one on the selected ground; the message in a multiline Field; the primary names who receives it. Over six agents, Find goes first."],
+    ["Kokō", "Nobody to send to is one line.", "No match, all waiting, or no other agent: the empty state in place of the rows."],
+  ],
+  "Compositions/Sleep dialog": [
+    ["Kansō", "A use of Dialog.", "Only what will not come back the same is said, one line each; the primary says how much sleeps. Where nothing can sleep, one line and no footer."],
   ],
   "Compositions/Toolbar": [
     ["Kansō", "Icon buttons only.", "Large icon buttons, 4 apart: + alone on the left, then Sort, Search and Hide sidebar on the right. + says what it adds: Add project on Projects, New conversation on Status and Threads."],

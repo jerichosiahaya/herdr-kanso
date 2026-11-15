@@ -1,5 +1,5 @@
 // The kit's compositions: each one only calls pieces with its own props and draws no markup.
-import { avatar, button, chip, chord, dawn, dialog, diffText, emptyState, facts, headerSegment, input, paneName, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './kit.js';
+import { avatar, button, chip, chord, dawn, dialog, diffText, emptyState, facts, headerSegment, input, paneName, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, skeletonOf, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './kit.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
 // + names what it adds in the view on show.
@@ -72,10 +72,55 @@ const hostRow = ({ name, target, state = 'ready', words, mac = false, agent }) =
   row({ icon: 'lu-server', name, detail: target, mark: state === 'added' ? 'done' : 'none', meta: state === 'added' ? 'Added' : null, action: state === 'ready' ? { label: 'Add', kind: 'tonal' } : null }),
   hostFix[state] ? hostFailure({ name, state, words, agent }) : null,
   mac && state === 'added' ? row({ name: phrase(name, 'asks before agents read Documents'), depth: 1, dimmed: true, action: { label: phrase('Open the setting on', name), kind: 'tonal' } }) : null);
+// A field a dialog names: its label as a heading Row, then the Field.
+const labelled = (label, field) => [row({ name: label, heading: true }), input(field)];
 export const addComputer = ({ hosts = [], typed, agent }) => dialog({
   title: 'Add computer',
   body: list(hosts.length ? [row({ name: 'From ~/.ssh/config', heading: true }), hosts.map((host) => hostRow({ ...host, agent }))] : emptyState({ icon: 'lu-server', text: '~/.ssh/config lists no hosts' }),
-    row({ name: 'Or how ssh reaches it', heading: true }), input({ text: typed, label: 'user@host', action: 'Add' })),
+    labelled('Or how ssh reaches it', { text: typed, label: 'user@host', action: 'Add' })),
+});
+
+// One question, one field: a rename, a note; an emptied field shows what it falls back to.
+export const promptDialog = ({ title, scope = null, text, fallback, action }) => dialog({
+  title, scope, body: input({ text, label: fallback, focus: true, selected: Boolean(text) }), primary: action,
+});
+
+// A refusal sits under the fields with its fix; the footer keeps Cancel only.
+const refusal = (failure, agent) => (failure ? failureBlock({ ...failure, agent }) : null);
+export const newProject = ({ folder, name, failure = null, agent }) => dialog({
+  title: 'New project',
+  body: list(labelled('Folder', { text: folder, label: 'None chosen', action: folder ? 'Change…' : 'Choose…', choose: true }),
+    labelled('Name', { text: name, label: "Its folder's name", focus: !failure }), refusal(failure, agent)),
+  secondary: 'Cancel', primary: failure ? null : 'Create', state: folder ? 'default' : 'disabled',
+});
+
+export const newWorktree = ({ project, branch, place = null, making = false, failure = null, agent }) => dialog({
+  title: phrase('New worktree in', project),
+  body: list(labelled('Branch', { text: branch, label: 'Branch name', focus: !failure, error: Boolean(failure) }), refusal(failure, agent)),
+  notes: place && !failure ? [{ text: place }] : [],
+  secondary: 'Cancel', primary: failure ? null : 'Create', state: making ? 'loading' : branch ? 'default' : 'disabled',
+});
+
+// A message is a paragraph, not a name: it takes more than a field's usual 80.
+export const messageLimit = 2000;
+// Send: the agents that can take a message, the one chosen on the selected ground, then the message.
+const target = ({ name, project, status = 'working', chosen = false, unreachable = false }) => row({
+  icon: 'p-claude', name, detail: project, current: chosen, dimmed: unreachable, meta: unreachable ? 'Unreachable' : null, mark: unreachable ? 'none' : status,
+});
+export const sendDialog = ({ agents = [], find = null, empty = null, message, to = null, sending = false, failure = null, agent }) => dialog({
+  title: 'Send to an agent',
+  body: list(find === null ? null : input({ text: find, label: 'Find an agent or a project', icon: 'lu-search', focus: true }),
+    empty ? emptyState({ text: empty }) : agents.map(target),
+    input({ text: message, label: 'Message', multiline: true, focus: find === null, limit: messageLimit }), refusal(failure, agent)),
+  primary: to && !failure ? to : null, state: sending ? 'loading' : message ? 'default' : 'disabled',
+});
+
+// Sleep: what stops and what will not come back the same, in one line; one press.
+export const sleepDialog = ({ title, facts: lines = [], rows = [], reading = false, step = 'ready', action = 'Sleep', failure = null, agent }) => dialog({
+  title,
+  body: list(reading ? skeletonOf({ shape: 'row', count: 1 }) : null, rows.map(row), refusal(failure, agent)),
+  notes: lines.map((text) => ({ text, tone: 'muted' })),
+  primary: action && !failure ? action : null, state: reading ? 'disabled' : step === 'working' ? 'loading' : 'default',
 });
 
 // Status bar compositions: a computer stands in for its sidebar row; the rest are the bar's Menus and Buttons.

@@ -698,5 +698,73 @@
     "states": {
       "Shipped days": "panels/shipped/HistoryChartShipped daysShippeddays/Default"
     }
+  },
+  "prompt/Prompt": {
+    "page": "Compositions/Prompt dialog",
+    "states": {
+      "Custom action": "kit/Prompt dialog/Its own word",
+      "Empty fallback": "kit/Prompt dialog/Emptied",
+      "Hint": "kit/Prompt dialog/With a scope"
+    }
+  },
+  "send/SendDialog": {
+    "page": "Compositions/Send dialog",
+    "states": {
+      "Blocked targets": "kit/Send dialog/All wait for you",
+      "Empty message": "kit/Send dialog/No message",
+      "No agents": "kit/Send dialog/No other agent",
+      "No matches": "kit/Send dialog/No match",
+      "Project selected": "kit/Send dialog/A project chosen",
+      "Ready": "kit/Send dialog/Ready",
+      "Refused": "kit/Send dialog/Refused",
+      "Search": "kit/Send dialog/Find",
+      "Sending": "kit/Send dialog/Sending",
+      "Unavailable target": "kit/Send dialog/A computer unreachable"
+    }
+  },
+  "sleep/SleepDialog": {
+    "page": "Compositions/Sleep dialog",
+    "states": {
+      "Agent": "kit/Sleep dialog/One agent",
+      "Already awake": "kit/Sleep dialog/Already awake",
+      "Blocked": "kit/Sleep dialog/Needs you first",
+      "Conversation absent": "kit/Sleep dialog/Conversation not found",
+      "Not resumable": "kit/Sleep dialog/Cannot resume",
+      "Nothing resumable": "kit/Sleep dialog/Nothing to resume",
+      "Project": "kit/Sleep dialog/A project",
+      "Reading": "kit/Sleep dialog/Reading",
+      "Sleep failed": "kit/Sleep dialog/Did not exit",
+      "Sleeping": "kit/Sleep dialog/Going to sleep",
+      "Tab": "kit/Sleep dialog/A tab",
+      "Waking": "kit/Sleep dialog/Waking"
+    }
+  },
+  "spaces/CreateWorktree": {
+    "page": "Compositions/New worktree dialog",
+    "states": {
+      "Existing branch": "kit/New worktree dialog/Existing branch",
+      "Failed": "kit/New worktree dialog/git refused",
+      "Making": "kit/New worktree dialog/Making",
+      "New branch": "kit/New worktree dialog/New branch",
+      "Remote": "kit/New worktree dialog/On devbox"
+    }
+  },
+  "spaces/ProjectCreation": {
+    "page": "Compositions/New project dialog",
+    "states": {
+      "Already project": "kit/New project dialog/Already a project",
+      "Choose folder": "kit/New project dialog/No folder yet",
+      "Create failed": "kit/New project dialog/Write refused",
+      "Creating": "kit/New project dialog/Created"
+    }
+  },
+  "arrange/SaveArrangement": {
+    "page": "Panels/Arrangements",
+    "states": {
+      "Save": "panels/arrangements/FeatureSaveArrangement/Save header",
+      "Overwrite": "panels/arrangements/FeatureSaveArrangement/Overwrite header",
+      "Capture loading": "panels/arrangements/FeatureSaveArrangement/Capture loading",
+      "Save failed": "panels/arrangements/FeatureSaveArrangement/Save failed"
+    }
   }
 }

@@ -3,7 +3,7 @@ import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, inBar } from './frames.js';
-import { edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, statedPages, stepperShown, tabActs } from './states.js';
+import { dialogBodies, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, projectRefusals, sendReach, sleepCases, statedPages, stepperShown, tabActs, worktreeRefusals } from './states.js';
 import { appNotices, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
@@ -59,20 +59,17 @@ export const playgrounds = {
     markup: (args) => `<div class="kanso-panel">${code(args)}</div>`,
   },
   'Primitives/Dialog': {
-    args: { title: 'Rename checkout', scope: '', value: 'checkout', placeholder: 'Name', loading: false, note: '', tone: 'dim', primary: 'Rename', state: 'default', secondary: 'Cancel' },
+    ...statedPages['Primitives/Dialog'],
     argTypes: {
-      title: { name: 'Title', control: { type: 'text' } },
-      scope: { name: 'Scope', control: { type: 'text' } },
-      value: { name: 'Value', control: { type: 'text' } },
-      placeholder: { name: 'Placeholder', control: { type: 'text' } },
-      loading: { name: 'Content loading', control: { type: 'boolean' } },
-      note: { name: 'Note', control: { type: 'text' } },
-      tone: select('Note tone', ['dim', 'muted', 'error']),
-      primary: { name: 'Primary', control: { type: 'text' } },
-      state: { ...select('Primary state', ['default', 'disabled', 'loading', 'armed']), if: { arg: 'loading', truthy: false } },
-      secondary: { name: 'Secondary', control: { type: 'text' } },
+      title: { name: 'title', control: { type: 'text' } },
+      scope: { name: 'scope', control: { type: 'text' } },
+      body: { name: 'body', control: { type: 'inline-radio' }, options: Object.keys(dialogBodies) },
+      notes: { name: 'under the body', control: { type: 'inline-radio' }, options: Object.keys(dialogNotes) },
+      secondary: { name: 'Cancel', control: { type: 'text' } },
+      primary: { name: 'primary', control: { type: 'text' } },
+      state: { ...select('primary state', ['default', 'disabled', 'loading', 'armed']), if: { arg: 'loading', truthy: false } },
+      loading: { name: 'content loading', control: { type: 'boolean' } },
     },
-    markup: dialog,
   },
   'Primitives/Drag handle': {
     args: { state: 'default' },
@@ -80,12 +77,14 @@ export const playgrounds = {
     markup: ({ state }) => `<svg class="kanso-icon kanso-icon--row kanso-grip${state === 'default' ? '' : ' kanso-text--fg'}"><title>Hold and drag onto another pane to move this one there</title><use href="#lu-grip-vertical"/></svg>`,
   },
   'Primitives/Field': {
-    args: { text: '', label: 'Comment', icon: 'lu-send', action: '', error: false, disabled: false, multiline: false, inline: false, selected: false, loading: false, limit: 80 },
+    args: { text: '', label: 'Comment', icon: 'lu-send', action: '', choose: false, focus: false, error: false, disabled: false, multiline: false, inline: false, selected: false, loading: false, limit: 80 },
     argTypes: {
       text: { name: 'text', control: { type: 'text' } },
       label: { name: 'label', control: { type: 'text' } },
       icon: select('icon', icons),
       action: { name: 'word action', control: { type: 'text' }, description: 'Replaces the icon; shown once something is typed' },
+      choose: { name: 'filled by a chooser', control: { type: 'boolean' }, description: 'Not typed: its word always shows' },
+      focus: { name: 'focus', control: { type: 'boolean' } },
       error: { name: 'error', control: { type: 'boolean' } },
       disabled: { name: 'disabled', control: { type: 'boolean' } },
       multiline: { name: 'multiline', control: { type: 'boolean' } },
@@ -158,6 +157,50 @@ export const playgrounds = {
       added: { name: 'after Add', control: { type: 'boolean' }, if: { arg: 'config' } },
       typed: { name: 'typed', control: { type: 'text' } },
     },
+  },
+  'Compositions/Prompt dialog': {
+    ...statedPages['Compositions/Prompt dialog'],
+    argTypes: {
+      title: { name: 'title', control: { type: 'text' } },
+      scope: { name: 'where', control: { type: 'text' } },
+      text: { name: 'typed', control: { type: 'text' } },
+      fallback: { name: 'falls back to', control: { type: 'text' } },
+      action: { name: 'primary', control: { type: 'text' } },
+    },
+  },
+  'Compositions/New project dialog': {
+    ...statedPages['Compositions/New project dialog'],
+    argTypes: {
+      folder: { name: 'folder', control: { type: 'text' } },
+      name: { name: 'name', control: { type: 'text' } },
+      refusal: { name: 'refused', control: { type: 'inline-radio' }, options: Object.keys(projectRefusals) },
+      created: { name: 'after Create', control: { type: 'boolean' } },
+    },
+  },
+  'Compositions/New worktree dialog': {
+    ...statedPages['Compositions/New worktree dialog'],
+    argTypes: {
+      branch: { name: 'branch', control: { type: 'text' } },
+      computer: { name: 'computer', control: { type: 'inline-radio' }, options: ['here', 'devbox'] },
+      exists: { name: 'branch exists', control: { type: 'boolean' } },
+      making: { name: 'making', control: { type: 'boolean' } },
+      refusal: { name: 'git refused', control: { type: 'inline-radio' }, options: Object.keys(worktreeRefusals) },
+    },
+  },
+  'Compositions/Send dialog': {
+    ...statedPages['Compositions/Send dialog'],
+    argTypes: {
+      reach: { name: 'who it can reach', control: { type: 'inline-radio' }, options: Object.keys(sendReach) },
+      chosen: { name: 'chosen', control: { type: 'inline-radio' }, options: ['tests', 'acme-shop'] },
+      message: { name: 'message', control: { type: 'text' } },
+      unreachable: { name: 'a computer unreachable', control: { type: 'boolean' } },
+      sending: { name: 'sending', control: { type: 'boolean' } },
+      refused: { name: 'refused', control: { type: 'boolean' } },
+    },
+  },
+  'Compositions/Sleep dialog': {
+    ...statedPages['Compositions/Sleep dialog'],
+    argTypes: { situation: { name: 'situation', control: { type: 'select' }, options: Object.keys(sleepCases) } },
   },
   'Compositions/Toolbar': {
     ...statedPages['Compositions/Toolbar'],
