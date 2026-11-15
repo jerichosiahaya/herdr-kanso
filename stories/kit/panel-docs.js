@@ -253,6 +253,17 @@ export const panelHypotheses = {
       try: 'Dawn Mode first.',
       back: 'the dim lines return.',
     },
+    {
+      change: 'A picture in Preview takes the same pins as Images: a click drops a numbered pin, a drag rings a region, the note is typed beside it, and Send to the agent sends the list.',
+      today: 'Preview shows a picture with nothing to press on it; pins live only in Images, on the agent’s pictures.',
+      why: 'Preview opens any file from Files, and only Images knew who to send to.',
+      question: 'do people open a screenshot from Files to tell the agent what is wrong with it?',
+      believe: 'a picture is opened to point at something in it; the pin, one component, says where and the agent in front gets it.',
+      jobs: [['point at a spot', 'a click: a numbered pin'], ['point at an area', 'a drag: a region'], ['say what is wrong', 'the note beside it'], ['tell the agent', 'Send to the agent, or ⌘↩'], ['drop a pin', 'its × in the list']],
+      wrong: 'pins dropped by a click meant to do something else, or nobody sends from Preview.',
+      try: 'Dawn Mode first.',
+      back: 'a picture in Preview has no pins again; Images keeps them.',
+    },
   ],
   'Panels/PR': [
     {

@@ -1,5 +1,5 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, dialog, facts, mark, markdown, menu, metric, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, chip, explainButton } from './kit.js';
+import { band, bars, button, chord, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, chip, explainButton } from './kit.js';
 import { channelSettings, keyboardExplorer, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
@@ -394,8 +394,8 @@ const textOr = ({ reading = false, failure = null, empty = null }, shown) => {
   if (empty) return emptyState(empty);
   return shown();
 };
-const previewContent = ({ doc, shot, text }) => (doc ? markdown(doc) : shot ? picture(shot) : code(text));
-const previewBody = ({ doc = null, shot = null, text = null, cut = null, reading, failure, empty, ...props }) => textOr({ reading, failure, empty }, () => documentBody(props, previewContent({ doc, shot, text }), dimLine(cut)));
+const previewContent = ({ doc, shot, text, pins }) => (doc ? markdown(doc) : shot ? picture({ ...shot, pins: pinMarks(pins) }) : code(text));
+const previewBody = ({ doc = null, shot = null, text = null, cut = null, pins = [], send = null, reading, failure, empty, ...props }) => textOr({ reading, failure, empty }, () => documentBody(props, previewContent({ doc, shot, text, pins }), dimLine(cut), send ? pinNotes({ pins, send }) : null));
 export const preview = ({ look = 'panel', stale = false, ...props }) => panel({ look, stale, header: documentHeader({ back: 'Files', ...props }) }, previewBody(props));
 
 // Pull requests: what waits on you, then each project's open ones; one opens on its verdict, and its files, a check's log and a new one are pages of the panel.
@@ -495,3 +495,9 @@ const pullContent = {
 const pullPanel = ({ page = 'list', look = 'panel', stale = false, ...props }) => panel({ look, stale, header: pullPages[page](props) }, pullContent[page](props));
 // A picker hangs beside the panel: find, the people or labels with a check, one refused in place.
 export const pulls = ({ picker = null, ...props }) => (picker ? stack({ variant: 'columns' }, pullPanel(props), menu(picker)) : pullPanel(props));
+
+// Pins: a numbered pin on a spot or ringing a region, its note typed beside it; the list repeats them, and one press sends it to the agent.
+const pinMarks = (pins = []) => pins.flatMap(({ n, at, region, text, writing }) => [pin({ n, at, region, pending: !text }), writing ? note({ text, at: writing, typing: true }) : null]);
+const pinRow = ({ n, text, writing }) => row({ start: [pin({ n, pending: !text })], name: text || 'No note yet', dimmed: !text, hover: Boolean(writing), tools: writing ? [button({ label: 'Remove', kind: 'icon', icon: 'lu-x' })] : [] });
+const pinSend = ({ agent, sent = null, refused = null }) => sent ? dimLine(sent) : refused ? failureBlock(refused) : line(button({ label: phrase('Send to', agent), size: 'sm' }), keyHint({ text: '⌘↩', faint: true }));
+const pinNotes = ({ pins, send }) => list(pins.map(pinRow), pinSend(send));

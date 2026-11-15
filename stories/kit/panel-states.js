@@ -268,7 +268,7 @@ export const spendViews = {
 };
 
 // Preview: limits.ts as Files opens it, then limits.md; each state is what an edit, a save or a read changes.
-const { code, edit, markdown: note, log, binary, gone, shot, pictured, huge } = samplePreview;
+const { code, edit, markdown: note, log, binary, gone, shot, pictured, huge, pins } = samplePreview;
 const shownShot = (state, extra = {}) => ({ file: shot.file, folder: shot.folder, tools: ['open with'], shot: { image: sampleShot, state, action: `Load ${shot.size}` }, ...extra });
 const away = (folder) => `devbox · ${folder}`;
 const notePicture = (state) => shownNote({ folder: away(note.folder), doc: { source: pictured, shot: { image: sampleShot, state, size: shot.size } } });
@@ -297,6 +297,8 @@ export const previewViews = {
   'Another computer, over 2 MB: Load': [shownShot('held', { folder: away(shot.folder) }), 'Nothing is brought over until Load, with its size.'],
   'Picture loading': [shownShot('loading', { folder: away(shot.folder), tools: ['refresh', 'open with'] }), 'The picture’s shape breathes; Refresh spins.'],
   'Over 20 MB': [{ ...huge, folder: away(huge.folder), tools: ['open with'], empty: { icon: 'lu-file', text: 'Over 20 MB: too large to bring over', action: 'Open with…' } }, 'Too large to bring over: Open with… another app.'],
+  'Pins: click, drag, type': [shownShot('shown', { pins, send: { agent: samplePull.agent } }), 'Proposed: a click drops a numbered pin, a drag rings a region, the note is typed beside it; Send to the agent, or ⌘↩.'],
+  'Pins sent': [shownShot('shown', { pins: pins.map(({ writing, ...placed }) => placed), send: { sent: samplePull.sent } }), 'Proposed: the list was the message; the pins stay with when it went.'],
   'A picture that can’t be shown': [shownShot('shown', { failure: samplePreview.failures.picture }), 'The refused picture: its words, Refresh, and Explain to the agent.'],
   'Markdown, formatted': [shownNote(), 'Markdown formatted; Source shows the file as text.'],
   'Markdown, a click edits that block': [shownNote({ tools: ['save', 'discard', 'source', 'open with'], doc: { block: 2, state: 'editing' } }), 'A click edits that block alone; a click below the last adds one.'],

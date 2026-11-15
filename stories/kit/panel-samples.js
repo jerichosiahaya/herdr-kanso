@@ -359,6 +359,7 @@ An empty bucket answers \`429\` with \`Retry-After\` in seconds.` },
 The countdown comes from \`Retry-After\`.`,
   shot: { file: 'checkout-429.png', folder: 'docs/shots', size: '4.2 MB' },
   huge: { file: 'walkthrough.gif', folder: 'docs/shots' },
+  pins: [{ n: 1, at: [56, 41], text: '429 should be the reason, not the code' }, { n: 2, region: [30, 58, 34, 7], text: 'Say “2 seconds”', writing: [33, 68] }],
   binary: { file: 'limiter.wasm', folder: 'build' },
   gone: { file: 'limits.old.ts', folder: 'src/api' },
   failures: {
