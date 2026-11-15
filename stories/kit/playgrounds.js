@@ -625,6 +625,27 @@ export const playgrounds = {
       share: { name: 'share', control: { type: 'range', min: 0, max: 1, step: 0.01 }, if: { arg: 'kind', eq: 'meter' } },
     },
   },
+  'Primitives/Excerpt': {
+    ...statedPages['Primitives/Excerpt'],
+    argTypes: {
+      who: text('who'),
+      when: text('when'),
+      where: text('where'),
+      text: text('text'),
+      query: text('query'),
+      current: flag('current'),
+      pending: flag('pending'),
+      depth: { name: 'depth', control: { type: 'inline-radio' }, options: [0, 1] },
+    },
+  },
+  'Primitives/Band': {
+    ...statedPages['Primitives/Band'],
+    argTypes: { text: text('text') },
+  },
+  'Primitives/Sentence': {
+    ...statedPages['Primitives/Sentence'],
+    argTypes: { text: text('text'), tone: select('tone', ['dim', 'muted', 'blocked', 'working', 'done']) },
+  },
   'Primitives/Skeleton': {
     ...statedPages['Primitives/Skeleton'],
     argTypes: {

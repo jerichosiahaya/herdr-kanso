@@ -349,6 +349,17 @@ export const guidelines = {
     ["Kokō", "A point or a region.", "A pin sits on the point it names or rings a region; the same pin leads its row in the list of notes."],
     ["Shizen", "The note opens where you pinned.", "Beside the pin on the popover ground with the accent edge; its words, or its placeholder, and the caret while typing."],
   ],
+  "Primitives/Excerpt": [
+    ["Kokō", "Words someone wrote.", "A found turn or a comment: who, where and when small on top, the words at body size; a found query is marked."],
+    ["Shizen", "The current one is washed.", "Hover is the hover wash; the one shown takes the selected wash. A reply steps in under what it answers."],
+    ["Kansō", "Code only where it is about code.", "A comment on a line quotes those lines between who and the words."],
+  ],
+  "Primitives/Band": [
+    ["Kokō", "What changed, then what to do.", "A washed band over a document says what happened and when, with the one or two ways out as buttons; after the choice, Undo."],
+  ],
+  "Primitives/Sentence": [
+    ["Kansō", "Words that wrap.", "Under a row or a figure, what it means or what an act would lose; dim by default, muted when it carries the point, toned when it warns."],
+  ],
   "Primitives/Chart": [
     ["Kansō", "A shape, not a grid.", "No axes, no gridlines, no legend: the run of bars, a few ticks under it and the figure above it in a metric."],
     ["Kokō", "Colour only where it asks.", "Bars are hairlines in ink; the peak takes the accent, a low the blocked tone, a stacked part the working tone. Filled, few bars share the width and the peak is solid ink."],

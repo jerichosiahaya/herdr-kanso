@@ -1,9 +1,9 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
-import { sampleShipped } from './panel-samples.js';
+import { sampleFind, sampleShipped } from './panel-samples.js';
 import { keyLayer, keyLayerMods, sampleShot, sampleScreens, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
@@ -267,6 +267,9 @@ const paneDigestOf = ({ files, commits, pr, github }) => ({ files, add: files * 
   pr: pr === 'none' ? null : { number: '#142', verdict: pr, tone: verdictTones[pr] ?? 'blocked' }, failure: github ? null : 'gh: HTTP 502: Bad Gateway (https://api.github.com/graphql)' });
 const panePlace = ({ elsewhere, reach }) => elsewhere ? { folder: reach === 'here' ? 'checkout-v2' : '~/checkout-v2', branch: 'limits-table' } : null;
 
+// A comment's three lines of code, with the one it talks about lit; a found turn from the conversation.
+const sampleSnippet = { text: 'export function bucket(customer) {\n  const plan = planOf(customer);\n  return { plan, tokens: LIMIT[plan] };', kind: 'source', first: 11, line: 12, comment: 0 };
+const [, foundHit] = sampleFind.days[0][1];
 // The three charts one page draws: bars over a run, a meter's share, days in weeks.
 const charts = { bars, meter, heatmap };
 const { rhythm: shipRhythm } = sampleShipped;
@@ -338,7 +341,7 @@ export const statedPages = {
     ],
   },
   'Primitives/Code': {
-    args: { text: 'export function bucket(customer) {\n  const plan = planOf(customer);\n  return { plan, tokens: LIMIT[plan] };', kind: 'source', first: 11, line: 12, comment: 0 },
+    args: sampleSnippet,
     markup: (args) => stack({ variant: 'panel' }, code(args)),
     states: [
       { label: 'Snippet', args: {}, caption: 'A comment quotes three lines; the one it talks about is lit.' },
@@ -563,6 +566,36 @@ export const statedPages = {
       { label: 'Values', args: { filled: true, bars: [0.4, 0.7, 1, 0.55], labels: ['$12', '$21', '$30', '$16'], ticks: ['Mon', 'Tue', 'Wed', 'Thu'], peak: 2 }, caption: 'Each value over its bar.' },
       { label: 'Meter', args: { kind: 'meter' }, caption: 'A thin track and its filled share.' },
       { label: 'Days', args: { kind: 'heatmap' }, caption: 'Days in week columns, five levels from none to most.' },
+    ],
+  },
+  'Primitives/Excerpt': {
+    args: { ...foundHit, where: '', query: sampleFind.query, lead: '', snippet: '', current: false, pending: false, depth: 0 },
+    markup: (args) => stack({ variant: 'panel' }, excerpt(args)),
+    states: [
+      { label: 'Found', args: {}, caption: 'Who and when small on top, the words at body size with the query marked.' },
+      { label: 'Current', args: { current: true }, caption: 'The one shown in the conversation, washed.' },
+      { label: 'A comment', args: { query: '', where: 'src/api/limits.ts:12' }, caption: 'Its path after who, mono.' },
+      { label: 'With its code', args: { query: '', where: 'src/api/limits.ts:12', snippet: code(sampleSnippet) }, caption: 'The lines it talks about between who and the words.' },
+      { label: 'Pending', args: { query: '', pending: true }, caption: 'Sent, until GitHub has it.' },
+      { label: 'A reply', args: { query: '', depth: 1 }, caption: 'One step in, under what it answers.' },
+      { label: 'Opened', args: { query: sampleFind.query, text: sampleFind.turn, lead: button({ label: 'Back', kind: 'icon', icon: 'lu-chevron-left' }) }, caption: 'The whole turn, Back before who.' },
+    ],
+  },
+  'Primitives/Band': {
+    args: { text: 'Changed on disk at 14:06', actions: [{ label: 'Overwrite' }, { label: 'Reload', kind: 'quiet' }] },
+    markup: (args) => stack({ variant: 'panel' }, band(args)),
+    states: [
+      { label: 'Changed', args: {}, caption: 'What changed and when, over the document, and the two ways out.' },
+      { label: 'Undo', args: { text: 'Overwrote the file at 14:07', actions: [{ label: 'Undo', kind: 'quiet' }] }, caption: 'After the choice, one way back.' },
+    ],
+  },
+  'Primitives/Sentence': {
+    args: { text: 'rate-limit-v1, relay-hotfix and one more. Merged branches go too.', tone: 'dim' },
+    markup: (args) => stack({ variant: 'panel' }, sentence(args)),
+    states: [
+      { label: 'Dim', args: {}, caption: 'Words that wrap under what they explain.' },
+      { label: 'Muted', args: { tone: 'muted', text: 'Nothing is lost. Merged branches go too.' }, caption: 'A step closer to the ink.' },
+      { label: 'Toned', args: { tone: 'blocked', text: 'Loses 2 uncommitted changes in promo-banner. Merged branches go too.' }, caption: 'What an armed act would lose, in the blocked tone.' },
     ],
   },
   'Primitives/Skeleton': {
