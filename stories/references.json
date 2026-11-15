@@ -125,7 +125,7 @@
       "code": "S13",
       "title": "Find",
       "anchor": "sidebar-find",
-      "page": "Panels/Find"
+      "page": "Compositions/Find"
     },
     {
       "code": "S14",
@@ -1453,8 +1453,8 @@
       "proposedPredicates": []
     },
     {
-      "page": "Panels/Find",
-      "existing": true,
+      "page": "Compositions/Find",
+      "existing": false,
       "boards": [
         "S13"
       ],
