@@ -1,6 +1,6 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
-import { asleep, computerRow, dawn as dawnSky, header, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, toolbar, viewSwitch, windowControls } from '../stories/kit/components.js';
+import { asleep, computerItem, computerRow, dawn as dawnSky, header, minimap, needsItem, projectRow, section, sessionRow, sidebar, sidebarFooter, statusBar, statusItem, statusMenus, statusPanels, stepper, tile, toolbar, viewSwitch, windowControls } from '../stories/kit/components.js';
 export { elements } from './storybook-markup.mjs';
 
 export function kitRecords(records) {
@@ -86,6 +86,36 @@ export function kitRecords(records) {
     ['Sidebar', 'Status collapsed', sidebar({ collapsed: true, view: 'agents' }), 'The rail on Status.', 'kit/Rail/Collapsed'],
     ['Sidebar', 'Views menu', sidebar({ collapsed: true, menu: true }), 'The rail: its one view button opens Projects, Status and Threads.'],
   ]) results.push({ id: id ?? `kit/${page}/${label}`, source: 'kit', page: page === 'Sidebar' ? 'Compositions/Sidebar' : `Compositions/Sidebar/${page}`, label, html: frame(html), caption });
+  const inBar = (width, parts) => `<div class="kanso-story__bar" style="width:${width}px">${statusBar(parts)}</div>`;
+  const columns = minimap({ columns: [{ width: 15, partial: true }, { current: true }, {}] }) + stepper({ value: 2 });
+  const waiting = needsItem({ name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?', more: 1 });
+  const memory = (word) => statusItem({ text: word ? 'Memory 8% free' : '8% free', tone: 'blocked' });
+  const [ports, containers, reviews] = statusPanels();
+  const opened = (open) => `<div class="kanso-story__popup-room">${inBar(520, { right: statusPanels({ open }), popup: statusMenus[open]() })}</div>`;
+  for (const [page, label, html, caption] of [
+    ['Item', 'Memory', inBar(520, { right: [memory(true)] }), 'This computer is low on memory.'],
+    ['Item', 'Memory folded', inBar(520, { right: [memory(false)] }), 'Memory loses its word last.'],
+    ['Item', 'Servers, containers and reviews', inBar(520, { right: [ports, containers, reviews] }), 'Each its icon and how many need a look; gone while its panel is open.'],
+    ['Item', 'Servers open', opened('servers'), 'The server with no pane: open, copy, stop.'],
+    ['Item', 'Containers open', opened('containers'), 'The stopped container: start, logs, remove.'],
+    ['Item', 'Reviews open', opened('reviews'), 'Each pull request waiting for you; a click opens it in PR.'],
+    ['Computer item', 'Out of sight', inBar(520, { left: [computerItem({ name: 'devbox' })] }), 'Only while its sidebar row is out of sight.'],
+    ['Computer item', 'Folded', inBar(520, { left: [computerItem({ name: 'devbox', folded: true })] }), 'The computer becomes its icon.'],
+    ['Computer item', 'Unreachable', inBar(520, { left: [computerItem({ name: 'devbox', state: 'unreachable' })] }), 'While its row is out of sight; Refresh reconnects.'],
+    ['Computer item', 'Reconnecting', inBar(520, { left: [computerItem({ name: 'devbox', state: 'pending' })] }), 'At 80% with a breathing dot.'],
+    ['Needs you item', 'One', inBar(760, { right: [needsItem({ name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?' })] }), 'Mark, name and question, as the row says them. Click: ⌘J.'],
+    ['Needs you item', 'Several', inBar(760, { right: [waiting] }), 'How many more wait out of view.'],
+    ['Needs you item', 'Folded', inBar(520, { right: [needsItem({ name: 'cart-ui', more: 1 })] }), 'The question goes; the name and +1 never fold.'],
+    ['Status bar', 'At rest', inBar(1040, {}), 'Everything in view: nothing to say.'],
+    ['Status bar', 'Column out of view', inBar(1040, { middle: columns }), 'The minimap and panes per view, in the fixed slot.'],
+    ['Status bar', 'Sidebar folded', inBar(1040, { left: [computerItem({ name: 'devbox' })] }), 'The focused project is on devbox.'],
+    ['Status bar', 'Unreachable', inBar(1040, { left: [computerItem({ name: 'devbox', state: 'unreachable' })] }), "devbox can't be reached and its row is out of sight."],
+    ['Status bar', 'Needs you', inBar(1040, { right: [waiting] }), 'While the waiting row is out of view.'],
+    ['Status bar', 'Everything, 1200', inBar(1200, { middle: columns, right: [waiting, memory(true), ports, containers, reviews] }), 'Every item at once.'],
+    ['Status bar', 'Everything, 1040', inBar(1040, { middle: columns, right: [waiting, memory(false), ports, containers, reviews] }), 'The question shrinks; Memory loses its word.'],
+    ['Status bar', 'Everything, 760', inBar(760, { middle: columns, right: [waiting, memory(false)] }), 'Servers, containers and reviews give way.'],
+    ['Status bar', 'Everything, 520', inBar(520, { middle: minimap({ columns: [{ width: 15, current: true }, { width: 15 }] }) + stepper({ value: 2 }), right: [needsItem({ name: 'cart-ui', more: 1 }), memory(false)] }), 'The question is gone.'],
+  ]) results.push({ id: `kit/Status bar/${page === 'Status bar' ? '' : `${page}/`}${label}`, source: 'kit', page: page === 'Status bar' ? 'Compositions/Status bar' : `Compositions/Status bar/${page}`, label, html: frame(html), caption });
   const choices = elements(byId('proto/components-choosing-the-channel/ChoosingTheChannel/Default'), 'kanso-update');
   const sky = elements(byId('proto/tokens-dawn/TheBand/Default'), 'kanso-dawn--preview')[0];
   const mark = elements(byId('proto/approved-dawn/Reference/12'), 'kanso-settings__piece-choice')[0];

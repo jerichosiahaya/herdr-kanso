@@ -3,7 +3,7 @@
 @keyframes ghost{from{opacity:.5}to{opacity:1}}
 @keyframes dgx-blink{50%{opacity:0}}
 
-:is(.kanso-row,.kanso-button,.kanso-tabs__tab,.kanso-switch,.kanso-switch i,.kanso-field,.kanso-menu__item,.kanso-thumbnail,.kanso-rail__tile){transition:all 320ms cubic-bezier(.4,0,.2,1) 100ms}
+:is(.kanso-row,.kanso-button,.kanso-tabs__tab,.kanso-switch,.kanso-switch i,.kanso-field,.kanso-menu__item,.kanso-thumbnail,.kanso-rail__tile){transition:all var(--k-hover-ms) var(--k-hover-ease) var(--k-hover-delay)}
 @media (prefers-reduced-motion:reduce){:is(.kanso-row,.kanso-button,.kanso-tabs__tab,.kanso-switch,.kanso-switch i,.kanso-field,.kanso-menu__item,.kanso-thumbnail,.kanso-rail__tile),.kanso-row__actions,.kanso-row__meta,.kanso-row__flag{transition:none}}
 
 .kanso-caret{display:inline-block;flex:none;width:1px;height:14px;vertical-align:-2px;background:var(--fg);animation:dgx-blink 1.06s steps(1) infinite}
@@ -128,8 +128,8 @@
 .kanso-row__detail>span:not(:last-child){margin-right:var(--k-sp-1)}
 .kanso-row__flag{display:flex;color:var(--dim)}
 /* Tools take no line height, so hover changes colour and content, never the row's size. */
-.kanso-row__actions{display:none;align-items:center;align-self:center;gap:var(--k-sp-hair);margin-block:calc(-1 * var(--k-sp-1));transition:opacity 320ms cubic-bezier(.4,0,.2,1) 100ms,display 0s allow-discrete 100ms}
-.kanso-row__meta,.kanso-row__flag{transition:display 0s allow-discrete 100ms}
+.kanso-row__actions{display:none;align-items:center;align-self:center;gap:var(--k-sp-hair);margin-block:calc(-1 * var(--k-sp-1));transition:opacity var(--k-hover-ms) var(--k-hover-ease) var(--k-hover-delay),display 0s allow-discrete var(--k-hover-delay)}
+.kanso-row__meta,.kanso-row__flag{transition:display 0s allow-discrete var(--k-hover-delay)}
 .kanso-row:is(:hover,:focus-within,.kanso-control--hover,.kanso-control--focus) .kanso-row__actions{display:flex}
 @starting-style{.kanso-row:is(:hover,:focus-within,.kanso-control--hover,.kanso-control--focus) .kanso-row__actions{opacity:0}}
 .kanso-row:is(:hover,:focus-within,.kanso-control--hover,.kanso-control--focus) :is(.kanso-row__meta,.kanso-row__flag):has(~ .kanso-row__actions){display:none}

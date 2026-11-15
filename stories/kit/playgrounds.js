@@ -1,11 +1,12 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { asleep, avatar, avatarSizes, chip, rowDepths, computerRow, computerStates, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, viewSwitch, views, button, card, code, dawn, dialog, escape, header, input, kinds, levels, mark, markSizes, markdown, marks, menu, metric, row, sides, skeletonOf, skeletonShapes, tabs, thumbnail, toast, toggle, toolbar, tooltip, windowControls } from './components.js';
+import { asleep, avatar, avatarSizes, chip, rowDepths, computerItem, computerItemStates, computerRow, computerStates, minimap, needsItem, statusBar, statusItem, statusMenus, statusPanels, stepper, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, viewSwitch, views, button, card, code, dawn, dialog, escape, header, input, kinds, levels, mark, markSizes, markdown, marks, menu, metric, row, sides, skeletonOf, skeletonShapes, tabs, thumbnail, toast, toggle, toolbar, tooltip, windowControls } from './components.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
 
 const select = (name, options) => ({ name, control: { type: 'select' }, options });
+const inBar = (width, parts) => `<div class="kanso-story__bar" style="width:${width}px">${statusBar(parts)}</div>`;
 
 
 export const playgrounds = {
@@ -239,6 +240,54 @@ export const playgrounds = {
       menu: { name: 'views menu', control: { type: 'boolean' }, if: { arg: 'collapsed' } },
     },
     markup: sidebar,
+  },
+  'Compositions/Status bar/Item': {
+    args: { icon: 'lu-container', mark: 'none', text: '1', tone: 'blocked', pending: false },
+    argTypes: {
+      icon: select('icon', icons),
+      mark: select('mark', ['none', 'working', 'blocked', 'done', 'idle']),
+      text: { name: 'text', control: { type: 'text' } },
+      tone: select('tone', ['', 'working', 'blocked', 'done']),
+      pending: { name: 'pending', control: { type: 'boolean' } },
+    },
+    markup: ({ icon, mark: status, ...args }) => inBar(520, { right: [statusItem({ ...args, icon: icon === 'none' ? '' : icon, mark: status === 'none' ? '' : status })] }),
+  },
+  'Compositions/Status bar/Computer item': {
+    args: { name: 'devbox', remote: true, state: 'on', folded: false },
+    argTypes: {
+      name: { name: 'name', control: { type: 'text' } },
+      remote: { name: 'remote', control: { type: 'boolean' } },
+      state: select('state', computerItemStates),
+      folded: { name: 'folded', control: { type: 'boolean' } },
+    },
+    markup: (args) => inBar(520, { left: [computerItem(args)] }),
+  },
+  'Compositions/Status bar/Needs you item': {
+    args: { name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?', more: 1 },
+    argTypes: {
+      name: { name: 'name', control: { type: 'text' } },
+      question: { name: 'question', control: { type: 'text' } },
+      more: { name: 'more waiting', control: { type: 'number', min: 0 } },
+    },
+    markup: (args) => inBar(760, { right: [needsItem(args)] }),
+  },
+  'Compositions/Status bar': {
+    args: { width: 1040, computer: false, minimap: true, needs: true, memory: false, panels: false, open: 'none' },
+    argTypes: {
+      width: { name: 'width', control: { type: 'inline-radio' }, options: [1200, 1040, 760, 520] },
+      computer: { name: 'computer', control: { type: 'boolean' } },
+      minimap: { name: 'minimap', control: { type: 'boolean' } },
+      needs: { name: 'needs you', control: { type: 'boolean' } },
+      memory: { name: 'memory low', control: { type: 'boolean' } },
+      panels: { name: 'servers, containers, reviews', control: { type: 'boolean' } },
+      open: { ...select('open', ['none', ...Object.keys(statusMenus)]), if: { arg: 'panels' } },
+    },
+    markup: ({ width, computer, minimap: columns, needs, memory, panels, open }) => (panels && open !== 'none' ? (html) => `<div class="kanso-story__popup-room">${html}</div>` : String)(inBar(width, {
+      left: computer ? [computerItem({ name: 'devbox' })] : [],
+      middle: columns ? minimap({ columns: [{ width: 15, partial: true }, { current: true }, {}] }) + stepper({ value: 2 }) : '',
+      right: [needs && needsItem({ name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?', more: 1 }), memory && statusItem({ text: 'Memory 8% free', tone: 'blocked' }), ...(panels ? statusPanels({ open }) : [])].filter(Boolean),
+      popup: panels && open !== 'none' ? statusMenus[open]() : '',
+    })),
   },
   'Primitives/Switch': {
     args: { checked: false, label: 'Toggle', disabled: false },

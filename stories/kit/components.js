@@ -224,6 +224,45 @@ export const sidebarFooter = ({ update = '' } = {}) => `<div class="kanso-sideba
 export const tile = ({ initial = '', tone = 'teal', status = 'none', count = 0, open = false }) => `<div class="kanso-rail__tile${open ? ' kanso-control--on' : ''}" tabindex="0">`
   + `${initial ? avatar({ initial, tone, size: 'md' }) : mark({ status, size: 'lg' })}${count ? chip({ label: count, quiet: true, tone: status === 'blocked' ? 'blocked' : '' }) : ''}</div>`;
 
+// Status bar compositions: each item is a Mark or an icon with its words, in the bar's meta size.
+const inlineIcon = (name) => `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(name)}"/></svg>`;
+export const statusItem = ({ icon = '', mark: status = '', text = '', tone = '', pending = false, open = false } = {}) => `<span class="kanso-status-bar__item${tone ? ` kanso-text--${escape(tone)}` : ''}${pending ? ' kanso-state-line--pending' : ''}${open ? ' kanso-status-bar__item--open' : ''}">`
+  + `${status ? mark({ status, size: 'sm' }) : icon ? inlineIcon(icon) : ''}${text === '' ? '' : `<span>${escape(String(text))}</span>`}${pending ? '<i class="kanso-state-line__pending-dot"></i>' : ''}</span>`;
+
+export const computerItemStates = ['on', 'unreachable', 'pending'];
+// Unreachable is said in words with Refresh; folded, the name gives way to its icon.
+export const computerItem = ({ name, remote = true, state = 'on', folded = false }) => state === 'unreachable'
+  ? `<span class="kanso-state-line" title="ssh: connect to host ${escape(name)} port 22: Operation timed out">${mark({ status: 'blocked' })}Can't reach ${escape(name)}${button({ label: 'Refresh', kind: 'tonal', size: 'sm' })}</span>`
+  : statusItem({ icon: remote ? 'lu-server' : 'lu-monitor', text: folded ? '' : name, pending: state === 'pending' });
+
+export const needsItem = ({ name, question = '', more = 0 }) => `<span class="kanso-status-bar__item kanso-status-bar__needs">${mark({ status: 'blocked', size: 'sm' })}<span class="kanso-status-bar__name">${escape(name)}</span>`
+  + `${question ? `<span class="kanso-status-bar__question">${escape(question)}</span>` : ''}${more ? `<span class="kanso-status-bar__more">+${more}</span>` : ''}</span>`;
+
+// One bar per column; the current one in foreground, one partly out of view outlined.
+export const minimap = ({ columns = [] } = {}) => `<span class="kanso-minimap">${columns.map(({ width = 24, current = false, partial = false }) => {
+  const tone = current ? 'kanso-content__summary' : partial ? 'kanso-control__outline' : '';
+  return `<i${tone ? ` class="${tone}"` : ''} style="width:${Number(width)}px"></i>`;
+}).join('')}</span>`;
+
+// Each panel item opens the bar's Menu: what it holds, its actions, the act that ends it, then the piece line.
+const hide = [{ separator: true }, { icon: 'lu-eye-off', label: 'Hide this' }];
+export const statusMenus = {
+  servers: () => menu({ title: ':5173 vite · no pane', items: [{ icon: 'lu-external-link', label: 'Open in the browser' }, { icon: 'lu-copy', label: 'Copy localhost:5173' },
+    { separator: true }, { icon: 'lu-square', label: 'Stop' }, { separator: true }, { icon: 'lu-plug', label: 'Open Ports' }, ...hide.slice(1)] }),
+  containers: () => menu({ title: 'cart-db · exited 1', items: [{ icon: 'lu-power', label: 'Start' }, { icon: 'lu-terminal', label: 'Logs' },
+    { separator: true }, { icon: 'lu-x', label: 'Remove' }, { separator: true }, { icon: 'lu-container', label: 'Open Containers' }, ...hide.slice(1)] }),
+  reviews: () => menu({ title: '2 reviews requested', items: [{ icon: 'lu-git-pull-request', label: '#142 Checkout auth flow', hint: 'acme-shop' },
+    { icon: 'lu-git-pull-request', label: '#87 Locale files', hint: 'docs-site' }, ...hide] }),
+};
+export const statusPanels = ({ open = '' } = {}) => [
+  statusItem({ icon: 'lu-plug', tone: 'working', text: 1, open: open === 'servers' }),
+  statusItem({ icon: 'lu-container', tone: 'blocked', text: 1, open: open === 'containers' }),
+  statusItem({ icon: 'lu-git-pull-request', text: 2, open: open === 'reviews' }),
+];
+
+// Panes per view; its keys are in the tooltips.
+export const stepper = ({ value = 2 } = {}) => `<span class="kanso-status-bar__stepper">${button({ label: 'Fewer panes per view ⌘⇧−', kind: 'icon', size: 'sm', icon: 'lu-minus' })}`
+  + `<span class="kanso-status-bar__value">${Number(value)}</span>${button({ label: 'More panes per view ⌘⇧=', kind: 'icon', size: 'sm', icon: 'lu-plus' })}</span>`;
 
 // Cells
 
@@ -254,3 +293,7 @@ const tiles = {
 export const sidebar = ({ collapsed = false, dawn: early = false, view = 'spaces', switcher = true, menu: open = false } = {}) => collapsed
   ? `<aside class="kanso-rail">${header({ collapsed, dawn: early })}${switcher ? viewSwitch({ view, column: true, open }) : ''}<div class="kanso-rail__list">${tiles[view]()}</div><div class="kanso-rail__footer">${tool('lu-settings', 'Settings')}</div></aside>`
   : `<aside class="kanso-sidebar">${header({ dawn: early })}${switcher ? viewSwitch({ view }) : ''}<div class="kanso-sidebar__rows">${lists[view]()}</div>${sidebarFooter()}</aside>`;
+
+// Two halves around the fixed minimap slot; each half folds its own items.
+export const statusBar = ({ left = [], middle = '', right = [], popup = '' } = {}) => `<div class="kanso-status-bar kanso-status-bar--grid"><div class="kanso-status-bar__left">${left.join('')}</div>`
+  + `<div class="kanso-status-bar__middle">${middle}</div><div class="kanso-status-bar__right">${right.join('')}</div>${popup ? `<div class="kanso-status-bar__popup">${popup}</div>` : ''}</div>`;
