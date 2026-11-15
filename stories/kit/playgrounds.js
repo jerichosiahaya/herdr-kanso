@@ -155,15 +155,16 @@ export const playgrounds = {
     },
   },
   'Primitives/Metric': {
-    args: { value: '31%', unit: 'free of 16 GB · 2.4 GB swap', facts: '14 tasks | $2.94 a task | 9.1M tokens', loading: false, size: 'md' },
+    args: { value: '31%', unit: 'free of 16 GB · 2.4 GB swap', facts: '14 tasks | $2.94 a task | 9.1M tokens', loading: false, size: 'md', tone: 'none' },
     argTypes: {
       size: select('size', ['md', 'sm']),
+      tone: select('tone', ['none', ...Object.values(levels)]),
       value: text('Value'),
       unit: text('Unit'),
       facts: text('Facts (separated by |)'),
       loading: flag('Loading'),
     },
-    markup: (args) => `<div class="kanso-panel">${metric(args)}</div>`,
+    markup: ({ tone, ...args }) => `<div class="kanso-panel">${metric({ ...args, tone: tone === 'none' ? '' : tone })}</div>`,
   },
   'Primitives/Window controls': { args: {}, argTypes: {}, markup: windowControls },
   'Primitives/Dawn': { args: {}, argTypes: {}, markup: () => dawn() },

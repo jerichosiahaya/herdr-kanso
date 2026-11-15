@@ -159,10 +159,11 @@ const menuEntry = (item) => item.separator ? '<div class="kanso-menu__separator"
 export const menu = ({ title, items }) => `<div class="kanso-menu kanso-popover" role="menu">${title ? menuHeading(title) : ''}${(Array.isArray(items) ? items : []).map(menuEntry).join('')}</div>`;
 
 // `size` sm is the value at title size, on one line at row width.
-export const metric = ({ value, unit, facts = '', loading = false, size = 'md' }) => {
+// `tone` puts the value in a state's ink (low free memory).
+export const metric = ({ value, unit, facts = '', loading = false, size = 'md', tone = '' }) => {
   const piece = (text, element) => `<span class="${element}${loading ? ' kanso-skeleton--shape kanso-skeleton--text' : ''}">${escape(text)}</span>`;
   const list = facts.split('|').map((fact) => fact.trim()).filter(Boolean);
-  return `<div class="kanso-metric${size === 'sm' ? ' kanso-metric--sm' : ''}">${piece(value, 'kanso-metric__value')}${unit ? piece(unit, 'kanso-metric__unit') : ''}</div>`
+  return `<div class="kanso-metric${size === 'sm' ? ' kanso-metric--sm' : ''}">${piece(value, `kanso-metric__value${tone ? ` kanso-text--${escape(tone)}` : ''}`)}${unit ? piece(unit, 'kanso-metric__unit') : ''}</div>`
     + (list.length ? `<div class="kanso-panel__facts">${list.map((fact) => loading ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(fact)}</span>` : `<span>${escape(fact)}</span>`).join('')}</div>` : '');
 };
 
@@ -190,14 +191,15 @@ const fold = (open) => `<span class="kanso-row__fold">${open === undefined ? '' 
 const rowVerb = (verb) => button({ kind: 'quiet', size: 'sm', ...verb });
 // `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
 // The title form is a panel's heading: the name at title size, the second line its scope.
-// `verbs` are a line of quiet word actions under it; `strong` puts the name in ink (unread, new); `late` puts the meta in blocked ink.
+// `verbs` are a line of quiet word actions under it; `strong` puts the name in ink (unread, new); `meta` may be { text, tone }; `late` is its blocked tone.
 export const row = ({ icon = 'none', tone = '', letter, level, open, name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, title, depth = 0, glint, strong, late, selected, current, dimmed, pending, hover, focus, actions = [], action, verbs = [], start = [], tools = [], keys = [] }) => {
   const slot = letter ? fileLetter(letter) : icon === 'none' ? '' : glyph(icon, tone);
   const lead = `${list(start)}${level === undefined ? '' : fold(open)}${slot}`;
   const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;
   const facts = [].concat(detail ?? []).filter(Boolean);
+  const metaFact = meta && { ...(typeof meta === 'object' ? meta : { text: meta }), ...(late && { tone: 'blocked' }) };
   const tail = `${facts.length ? `<span class="kanso-row__detail">${facts.map(fact).join('')}</span>` : ''}${grow()}`
-    + `${meta ? `<span class="kanso-row__meta${late ? ' kanso-row__meta--late' : ''}">${escape(meta)}</span>` : ''}${flag ? `<span class="kanso-row__flag">${glyph(flag)}</span>` : ''}`
+    + `${metaFact ? `<span class="kanso-row__meta${metaFact.tone ? ` kanso-text--${escape(metaFact.tone)}` : ''}">${escape(metaFact.text)}</span>` : ''}${flag ? `<span class="kanso-row__flag">${glyph(flag)}</span>` : ''}`
     + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}${list(tools)}${keys.map(keyHint).join('')}`
     + `${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${!status || status === 'none' ? '' : mark({ status })}`;
   const twoLines = Boolean(second) || verbs.length > 0;
