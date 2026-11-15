@@ -1,6 +1,8 @@
 // Sample sidebar content for the stories: the rows and tiles of each view, drawn with the compositions.
 import { asleep, computerRow, projectRow, section, sessionRow, sidebar, tile } from './compositions.js';
 import { menu, stack, statusItem } from './pieces.js';
+import keyFile from '../../kanso/keys.json' with { type: 'json' };
+import { CAP, LIST_LAYER, MODIFIERS, ROWS, describe, layer } from '../../kanso/mods/kanso-help/keymap.js';
 
 const group = (...rows) => stack({ variant: 'row group' }, ...rows);
 export const sampleRows = {
@@ -46,3 +48,22 @@ export const statusPanels = ({ open = '' } = {}) => [
   statusItem({ icon: 'lu-container', tone: 'blocked', text: 1, open: open === 'containers' }),
   statusItem({ icon: 'lu-git-pull-request', text: 2, open: open === 'reviews' }),
 ];
+
+// The Keyboard's sample: the app's Mac rows and kansō's own keys.json; of Herdr's keys, only the two the stories name.
+const bindings = [...Object.entries(keyFile).flatMap(([section, keys]) => Object.entries(keys).map(([chord, action]) => ({ section, keys: chord, action }))),
+  { section: 'global', keys: 'cmd-t', action: 'tab.new' }, { section: 'global', keys: 'cmd-k', action: 'app.palette' }];
+const capOf = (key) => CAP[key] ?? key.toUpperCase();
+export const keyboardRows = ROWS.map((line) => line.map(([key, units = 1]) => ({ key, units, label: capOf(key) })));
+export const keyLayerNames = ['⌥⌘', '⌘', '⌥⇧⌘', '⇧⌘', '⌃⇧', 'Lists'];
+export const keyLayer = (name = '⌥⌘') => {
+  const lists = name === 'Lists';
+  const mods = lists ? [] : MODIFIERS.filter((mod) => name.includes(CAP[mod]));
+  const found = lists ? LIST_LAYER : layer(bindings, mods);
+  const held = mods.map(capOf).join('');
+  const chordOf = (key, chord) => lists ? chord.split(' ').map((part) => CAP[part] ?? part).join(' ') : `${held}${capOf(key)}`;
+  const keys = Object.fromEntries(keyboardRows.flat().filter(({ key }) => !MODIFIERS.includes(key)).map(({ key }) => {
+    const does = found.get(key);
+    return [key, { kind: !does ? 'free' : lists ? 'list' : does.section === 'global' ? 'herdr' : 'kanso', does: does ? describe(does.action) : null, chord: chordOf(key, does?.chord ?? key) }];
+  }));
+  return { held: mods, lists, name: lists ? 'Every list and menu · j k gg G Enter /' : `${held} · ${found.size} ${found.size === 1 ? 'key' : 'keys'}`, keys };
+};

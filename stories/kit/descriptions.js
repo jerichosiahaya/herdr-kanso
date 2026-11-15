@@ -49,6 +49,8 @@ export const descriptions = {
   Find: 'Search in the current conversation with results and context.',
   Notifications: 'Update and system notices for events outside their normal surface.',
   Keyboard: 'A keyboard map for viewing and changing shortcuts.',
+  Key: 'One key of the keyboard map, shown by what it does in the layer.',
+  'Picked key': 'The picked key: its chord, what it does, its layer and its one act.',
   Files: 'The current pane’s changed files and repository tree.',
   Preview: 'A file reader for text, Markdown and pictures beside the current pane.',
   PR: 'Pull requests with checks, reviews, diffs and conversation.',

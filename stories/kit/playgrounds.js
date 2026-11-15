@@ -1,8 +1,11 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, kinds, levels, mark, markdown, marks, markSizes, menu, metric, needsItem, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, statusItem, stepper, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
-import { sampleSidebar, statusMenus, statusPanels } from './samples.js';
+import { activity, activityMenu, asleep, keyboard, keyboardExplorer, pickedKey, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycap, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, needsItem, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, statusItem, stepper, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
+import { keyboardRows, keyLayer, keyLayerNames, sampleSidebar, statusMenus, statusPanels } from './samples.js';
+
+const keyNames = keyboardRows.flat().map(({ key }) => key).filter((key, at, all) => all.indexOf(key) === at);
+const pickable = keyNames.filter((key) => !['ctrl', 'alt', 'shift', 'cmd'].includes(key));
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -97,7 +100,7 @@ export const playgrounds = {
       faint: { name: 'faint', control: { type: 'boolean' } },
       recording: { name: 'recording', control: { type: 'boolean' } },
     },
-    markup: ({ text, faint, recording }) => `<span class="kanso-key${faint ? ' kanso-text--dim' : ''}${recording ? ' kanso-key--recording kanso-ring--accent kanso-text--accent' : ''}">${escape(text.slice(0, 6))}</span>`,
+    markup: ({ text, faint, recording }) => keyHint({ text: text.slice(0, 6), faint, recording }),
   },
   'Primitives/Mark': {
     args: { status: 'working', size: 'md' },
@@ -165,6 +168,33 @@ export const playgrounds = {
     },
     markup: ({ channel, art, collapsed }) => `<p class="kanso-story__caption">Sidebar header</p>${header({ collapsed, dawn: channel === 'dawn', art })}`
       + `<p class="kanso-story__caption">Settings · Updates</p><div class="kanso-story__slice kanso-story__settings">${channelSettings({ channel, art })}</div>`,
+  },
+  'Compositions/Keyboard/Key': {
+    args: { label: 'H', units: 1, state: 'kanso', hover: false },
+    argTypes: {
+      label: { name: 'label', control: { type: 'text', maxLength: 3 } },
+      units: { name: 'width in keys', control: { type: 'inline-radio' }, options: [...new Set(keyboardRows.flat().map(({ units }) => units))].sort((a, b) => a - b) },
+      state: select('state', keycapStates),
+      hover: { name: 'hover', control: { type: 'boolean' } },
+    },
+    markup: (args) => stack({ variant: 'keyboard' }, stack({ variant: 'keyboard row' }, keycap(args))),
+  },
+  'Compositions/Keyboard/Picked key': {
+    args: { layer: '⌥⌘', key: 'h' },
+    argTypes: {
+      layer: select('layer', keyLayerNames),
+      key: select('key', pickable),
+    },
+    markup: ({ layer, key }) => `<div class="kanso-story__slice kanso-story__settings">${pickedKey({ layer: keyLayer(layer), picked: key })}</div>`,
+  },
+  'Compositions/Keyboard': {
+    args: { layer: '⌥⌘', key: 'h', hover: 'none' },
+    argTypes: {
+      layer: select('layer', keyLayerNames),
+      key: select('picked', pickable),
+      hover: select('hover', ['none', ...keyNames]),
+    },
+    markup: ({ layer, key, hover }) => keyboardExplorer({ rows: keyboardRows, layer: keyLayer(layer), picked: key, hover }),
   },
   'Compositions/Sidebar/Session row': {
     args: { program: 'p-claude', name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: '', status: 'working', depth: 1, current: false, pinned: false, commands: 0, hover: false, focus: false, dimmed: false },

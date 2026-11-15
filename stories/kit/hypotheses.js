@@ -7,6 +7,18 @@ export const hypotheses = {
       wrong: 'with more than four columns, someone needs to know which column they are on and cannot tell from the edges; reaches for the wheel and finds nowhere to turn it; needs more clicks or ⌘J to reach a far pane than today; or a user asks for the minimap back.',
     },
   ],
+  'Compositions/Keyboard': [
+    {
+      change: 'No row of modifier chips: the modifier keys on the map pick the layer.',
+      believe: 'the modifier is where the eye already is when reading the map; four chips above it are a second copy of four keys, and holding the real modifier still works.',
+      wrong: 'someone cannot find how to see another layer, or clicks a modifier key and does not expect it to stay held.',
+    },
+    {
+      change: 'Lists and the layer count move from the chip row to the picked key.',
+      believe: 'the count belongs to the layer being read, and the list keys are learned once, so their door is needed only beside the key in hand.',
+      wrong: 'someone never reaches the list layer, or misses how many keys a layer has.',
+    },
+  ],
   'Compositions/Status bar': [
     {
       change: 'Panes per view shows its number at rest, − and + on hover.',

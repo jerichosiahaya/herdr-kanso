@@ -140,6 +140,19 @@ export const guidelines = {
     ["Shizen", "The sun rises once.", "When the window opens in Dawn Mode or on switching to it, 2.6 s, then still. Reduced motion shows the last frame. Every copy plays together."],
     ["Kokō", "One press switches.", "Settings · Updates: Stable Mode or Dawn Mode as Tabs on a track. Dawn Mode says it can break, with Star on GitHub; the Dawn sky switch follows."],
   ],
+  "Compositions/Keyboard": [
+    ["Kansō", "One layer at a time.", "The map shows the keys of the held modifiers. Holding or clicking a modifier picks the layer; pressing a key picks it. Lists, in the picked key, opens the layer of every list and menu."],
+    ["Seijaku", "Built from the kit.", "Rows of Keys on the canvas ground, the Picked key beside them. A key is a row tall; a wider key spans its units and the gaps between them."],
+    ["Shizen", "The keys come from the app.", "The rows are the app's keyboard and the meanings its own words, so the map never says what the app does not do."],
+  ],
+  "Compositions/Keyboard/Key": [
+    ["Kansō", "Shown by what it does here.", "Free: faint. Herdr's key: quieter. kansō's key: ink. A held modifier: outlined. The picked key: solid."],
+    ["Shizen", "Hover outlines it in the accent.", "Click picks it; on a modifier, click holds or lets go."],
+  ],
+  "Compositions/Keyboard/Picked key": [
+    ["Kansō", "The chord, then what it does.", "20 for the chord, 12.5 for its meaning; a free key says Nothing, muted. The layer line under it: the modifiers and their count, Herdr's key, or the list keys."],
+    ["Kokō", "One act.", "kansō's key: Change. Herdr's key: Herdr settings. A free key: Give it an action. The list keys are fixed and have none."],
+  ],
   "Compositions/Activity": [
     ["Kansō", "Only what nothing in view says.", "A merge, an approval, a red check out of view, an agent that slept or could not, an agent whose pane is gone. Nothing new takes no space."],
     ["Seijaku", "Docked at the foot of the list.", "A raised card 12 above the footer; no row moves when it comes or goes."],

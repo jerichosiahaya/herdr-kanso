@@ -191,6 +191,19 @@ export const tooltip = ({ text, detail, key, icon, open, side }) => `<span class
 export const setting = ({ label, control, note, link }) => `<div class="kanso-setting"><span class="kanso-setting__label">${escape(label)}</span>${control ?? ''}`
   + `${note || link ? `<div class="kanso-setting__note">${note ? escape(note) : ''}${link ? ` ${link}` : ''}</div>` : ''}</div>`;
 
+// A key hint: the chord beside the action it runs; faint when it says nothing now, recording while a key is captured.
+export const keyHint = ({ text, faint = false, recording = false }) => `<span class="kanso-key${faint ? ' kanso-text--dim' : ''}${recording ? ' kanso-key--recording kanso-ring--accent kanso-text--accent' : ''}">${escape(text)}</span>`;
+
+// One key of the keyboard map; `units` is its width in keys.
+const keycapClass = { free: '', herdr: ' kanso-keyboard__key--available', kanso: ' kanso-keyboard__key--bound', held: ' kanso-control--held', picked: ' kanso-control--on' };
+export const keycapStates = Object.keys(keycapClass);
+export const keycap = ({ label, units = 1, state = 'free', hover = false }) => `<span class="kanso-keyboard__key${keycapClass[state]}${hover ? ' kanso-control--hover' : ''}" role="button" tabindex="0"${units === 1 ? '' : ` style="--k-units:${Number(units)}"`}>${escape(label)}</span>`;
+
+// The picked key: its chord, what it does or Nothing, its layer, then the acts on it.
+export const keyPicked = ({ chord, meaning = null, layer = null, actions = [] }) => `<div class="kanso-keyboard__selection"><span class="kanso-keyboard__chord">${escape(chord)}</span>`
+  + `<span class="kanso-keyboard__meaning${meaning ? '' : ' kanso-text--muted'}">${escape(meaning ?? 'Nothing')}</span>${layer ? `<span class="kanso-keyboard__layer">${escape(layer)}</span>` : ''}`
+  + `${list(actions) ? `<div class="kanso-actions">${list(actions)}</div>` : ''}</div>`;
+
 // A count of what is folded away, such as +3.
 export const plus = (count) => `+${count}`;
 
@@ -249,6 +262,9 @@ export const stacks = {
   'tab bar menu': { block: 'kanso-tab-bar__menu', tag: 'span' },
   'tab bar doors': { block: 'kanso-tab-bar__doors', tag: 'span' },
   away: { block: 'kanso-away', tag: 'section' },
+  keyboard: { block: 'kanso-keyboard' },
+  'keyboard row': { block: 'kanso-keyboard__row' },
+  'keyboard layout': { block: 'kanso-keyboard__layout' },
 };
 export const stack = ({ variant, on = false, ...flags }, ...children) => {
   if (!Object.hasOwn(stacks, variant)) throw new Error(`stack: unknown variant "${variant}"`);

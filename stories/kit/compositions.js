@@ -1,5 +1,5 @@
 // The kit's compositions: each one only calls pieces with its own props and draws no markup.
-import { avatar, button, chip, dawn, setting, toggle, failureLine, glyph, grow, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, windowControls } from './pieces.js';
+import { avatar, button, chip, dawn, setting, toggle, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, windowControls } from './pieces.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
 const more = (open) => stack({ variant: 'toolbar group', open }, tool(open ? 'lu-chevron-up' : 'lu-chevron-down', open ? 'Fewer tools' : 'More tools'), open ? [tool('lu-arrow-up-down', 'Sort'), tool('lu-search', 'Search')] : null);
@@ -127,3 +127,15 @@ export const sidebar = ({ collapsed = false, dawn: early = false, art = true, vi
 // Two halves around the fixed slot of panes per view; each half folds its own items.
 export const statusBar = ({ left = [], middle = null, right = [], popup = null } = {}) => stack({ variant: 'status bar', grid: true },
   stack({ variant: 'status bar left' }, left), stack({ variant: 'status bar middle' }, middle), stack({ variant: 'status bar right' }, right), popup ? stack({ variant: 'status bar popup' }, popup) : null);
+
+// Keyboard: the map of one layer. Holding or clicking a modifier picks the layer; a kansō key has ink, a Herdr key is quieter.
+const keyState = { kanso: 'kanso', list: 'kanso', herdr: 'herdr', free: 'free' };
+const keyAct = { kanso: 'Change', herdr: 'Herdr settings', free: 'Give it an action' };
+export const keyboard = ({ rows = [], layer, picked = null, hover = null }) => stack({ variant: 'keyboard' },
+  rows.map((line) => stack({ variant: 'keyboard row' }, line.map(({ key, units, label }) => keycap({ label, units, hover: key === hover,
+    state: layer.held.includes(key) ? 'held' : key === picked ? 'picked' : keyState[layer.keys[key]?.kind] ?? 'free' })))));
+// The picked key: what it does here, or Nothing, with its one act; Lists opens the layer of every list and menu.
+export const pickedKey = ({ layer, picked }) => keyPicked({ chord: layer.keys[picked].chord, meaning: layer.keys[picked].does,
+  layer: layer.keys[picked].kind === 'herdr' ? 'Herdr\'s key' : layer.name,
+  actions: layer.lists ? [] : [button({ label: keyAct[layer.keys[picked].kind], kind: 'quiet' }), button({ label: 'Lists', kind: 'quiet' })] });
+export const keyboardExplorer = ({ rows = [], layer, picked, hover = null }) => stack({ variant: 'keyboard layout' }, keyboard({ rows, layer, picked, hover }), pickedKey({ layer, picked }));
