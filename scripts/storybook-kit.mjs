@@ -13,22 +13,7 @@ export const statedRecords = () => Object.entries(statedPages).flatMap(([page, {
 export function kitRecords(records) {
   const originals = records.filter((record) => record.html !== undefined && !['kit', 'tokens'].includes(record.source));
   const results = [];
-  const add = (name, label, html, caption) => results.push({ id: `kit/${name}/${label}`, source: 'kit', page: `Primitives/${name === 'Segmented' ? 'Tab' : name}`, label, html: frame(html), caption });
-  const first = (className, prefer = 'compositions-controls/') => [...originals.filter((record) => record.id.includes(prefer)), ...originals].flatMap((record) => elements(record.html, className))[0];
-  const definitions = [
-    ['Segmented', 'kanso-segmented', ['Default', 'Hover', 'Focus', 'Disabled']],
-    ['Tab', 'kanso-tab', ['Default', 'Hover', 'Focus', 'Active', 'Disabled']],
-  ];
-  const modifiers = { Hover: 'kanso-control--hover', Focus: 'kanso-control--focus', Active: 'kanso-control--active', Disabled: 'kanso-control--off' };
-  for (const [name, className, states, prefer] of definitions) {
-    const source = first(className, prefer);
-    if (!source) continue;
-    for (const label of states) {
-      const modifier = modifiers[label];
-      const html = modifier ? source.replace(/class="([^"]*)"/, (_, classes) => `class="${classes} ${modifier}"${label === 'Disabled' ? ' aria-disabled="true"' : ''}`) : source;
-      add(name, label, html, `${label} appearance of the shared ${name.toLowerCase()}.`);
-    }
-  }
+  const add = (name, label, html, caption) => results.push({ id: `kit/${name}/${label}`, source: 'kit', page: `Primitives/${name}`, label, html: frame(html), caption });
   const byId = (id) => originals.find((record) => record.id === id)?.html ?? '';
   add('Window controls', 'Default', windowControls(), 'The three lights, where the system draws them.');
   for (const [page, label, html, caption, id] of [

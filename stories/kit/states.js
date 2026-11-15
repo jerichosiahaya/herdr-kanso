@@ -1,5 +1,5 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
 import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
@@ -54,6 +54,9 @@ export const tabActs = {
   'long name': ([first, second, third]) => [first, second, { ...third, label: 'retry-after-header-for-cart-and-checkout' }],
 };
 const foldedTabs = ['perf', 'web', 'e2e', 'storybook', 'seed-data'];
+// The sidebar's views with one changed tab; a tab bar's tabs after an act, each closable.
+const viewTabs = (change) => views.map((item, index) => index === 1 ? { ...item, ...change } : item);
+const barTabs = (act) => tabActs[act](tabItems('checkout')).map((item) => ({ closable: true, ...item }));
 export const tabMenus = { none: null, open: (name) => tabMenu({ name, agents: 2 }), 'close armed': (name) => tabMenu({ name, agents: 2, armed: true }) };
 
 const edgeColumns = (panes, stacked) => stacked && panes.length > 1 ? [panes.slice(0, 2), ...panes.slice(2).map((pane) => [pane])] : panes.map((pane) => [pane]);
@@ -437,6 +440,26 @@ export const statedPages = {
       { label: 'Focus', args: { focus: true }, caption: 'The one ring.' },
       { label: 'Pressed', args: { pressed: true }, caption: 'Held down.' },
       { label: 'Disabled', args: { disabled: true }, caption: 'Nothing to switch yet.' },
+    ],
+  },
+  'Primitives/Tab': {
+    args: { items: views, value: 'spaces', size: 'md', track: false, disabled: false, icon: true, label: true },
+    markup: tabs,
+    states: [
+      { label: 'At rest', args: {}, caption: 'Icon and name; the open one on the quiet fill.' },
+      { label: 'Hover', args: { items: viewTabs({ hover: true }) }, caption: 'Under the pointer.' },
+      { label: 'Focus', args: { items: viewTabs({ focus: true }) }, caption: 'The one ring.' },
+      { label: 'Disabled', args: { disabled: true }, caption: 'Out of reach: the names step down.' },
+      { label: 'Track', args: { track: true, size: 'sm' }, caption: 'One of a few on a track, the chosen one raised.' },
+      { label: 'Icons only', args: { label: false }, caption: 'Square; the name is its tooltip.' },
+      { label: 'Small', args: { size: 'sm' }, caption: 'Inside a row or a card.' },
+      { label: 'Large', args: { size: 'lg' }, caption: 'In a panel or a dialog.' },
+      { label: 'Something waits', args: { items: viewTabs({ dot: true }) }, caption: 'A dot on a closed tab whose session waits.' },
+      { label: 'Open tabs', args: { items: barTabs('at rest'), value: 'checkout' }, caption: 'The open tab closes with ×; one out of view that waits carries its mark.' },
+      { label: 'Close armed', args: { items: barTabs('close armed'), value: 'checkout' }, caption: 'The first press arms for 4 s.' },
+      { label: 'Renaming', args: { items: barTabs('renaming'), value: 'checkout' }, caption: 'The name in place, selected.' },
+      { label: 'Renamed, waiting', args: { items: barTabs('renamed, waiting'), value: 'checkout' }, caption: 'At 80% with a breathing dot until confirmed.' },
+      { label: 'Dragging', args: { items: barTabs('dragging'), value: 'checkout' }, caption: 'The held tab on the pressed wash; the accent bar where it lands.' },
     ],
   },
   'Primitives/Skeleton': {

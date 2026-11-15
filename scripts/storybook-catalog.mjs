@@ -74,7 +74,7 @@ export function replaceSource(source, records, root = '.') {
 }
 
 const primitive = {
-  KeyHint: null, PillAndAvatar: null, Switch: null, Segmented: 'Tab', Field: null,
+  KeyHint: null, PillAndAvatar: null, Switch: null, Segmented: null, Field: null,
   ButtonsFourKinds: null, ButtonsOnALine: null, ActionRows: null, ButtonWithAMark: null, Armed: null,
   FocusRing: null, HoverSelectedPressed: null, Tooltip: 'Tooltip', ChromeAndBarButtons: null,
   FileRow: null, PortRow: null, RowActions: null, SettingRow: null, SettingRowWithAValue: null, FindRow: null,
@@ -94,7 +94,7 @@ const protoPage = {
   'components-pick-list': null, 'components-rename': null, 'components-settings-tabs': 'Panels/Settings',
   'components-shipped': 'Panels/Shipped', 'components-simulator-screen': 'Panels/Simulator',
   'components-status-bar-working': 'Compositions/Status bar', 'components-status-bar': 'Compositions/Status bar',
-  'components-system-notification': 'Compositions/Notifications', 'components-tab-bar': 'Compositions/Tab bar', 'components-tab-states': 'Primitives/Tab',
+  'components-system-notification': 'Compositions/Notifications', 'components-tab-bar': 'Compositions/Tab bar', 'components-tab-states': null,
   'components-title-and-tools': null, 'components-while-you-were-away': 'Compositions/Activity', 'components-worktree-row-open': null,
   'compositions-bars': null, 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
   'compositions-menu-and-dialog': null, 'compositions-panel-pieces': 'Compositions/Panel',

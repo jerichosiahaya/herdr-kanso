@@ -598,21 +598,9 @@ export const playgrounds = {
     },
   },
   'Primitives/Tab': {
-    args: {
-      items: [
-        { key: 'spaces', label: 'Projects', icon: 'lu-folder', tip: 'Projects ⌃1' },
-        { key: 'agents', label: 'Status', icon: 'lu-activity', dot: true, tip: 'Status ⌃2' },
-        { key: 'threads', label: 'Threads', icon: 'lu-message-square', tip: 'Threads ⌃3' },
-      ],
-      value: 'spaces',
-      size: 'md',
-      track: false,
-      disabled: false,
-      icon: true,
-      label: true,
-    },
+    ...statedPages['Primitives/Tab'],
     argTypes: {
-      items: { name: 'items', control: { type: 'object' }, description: '{ key, label, icon, mark, dot, tip, closable, armed }' },
+      items: { name: 'items', control: { type: 'object' }, description: '{ key, label, icon, mark, dot, tip, closable, armed, editing, pending, held, drop, hover, focus }' },
       value: text('value'),
       size: select('size', ['sm', 'md', 'lg']),
       track: flag('track'),
@@ -620,7 +608,6 @@ export const playgrounds = {
       icon: flag('icon'),
       label: flag('label'),
     },
-    markup: tabs,
   },
   'Primitives/Thumbnail': {
     args: { image: 'https://images.placeholders.dev/120x80', label: 'cart-countdown.png', selected: false, loading: false },
