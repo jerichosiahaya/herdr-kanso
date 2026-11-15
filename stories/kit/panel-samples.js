@@ -359,3 +359,108 @@ An empty bucket answers \`429\` with \`Retry-After\` in seconds.` },
     save: { text: 'Couldn’t save limits.ts', source: 'EACCES: permission denied, write \'src/api/limits.ts\'', fix: 'Save', agent: 'checkout' },
   },
 };
+// Pull requests: what is asked of you, then each project's open ones; #142 opened on its verdict, its conversation, its files and its log.
+const pull = (number, title, state, extra = {}) => ({ number, title, state, ...extra });
+export const samplePulls = {
+  asked: [pull('#44', 'Batch webhook retries', 'review'), pull('#91', 'Round tax per line, not per order', 'failing'), pull('#3127', 'Stream large uploads to disk', 'running')],
+  projects: [
+    { name: 'acme-shop', everyone: 'Everyone’s in acme-shop', pulls: [pull('#142', 'Rate limit checkout per customer', 'failed'), pull('#143', 'Show the retry time in the cart', 'failed'), pull('#140', 'Move the limits to Redis', 'blocked')] },
+    { name: 'relay', pulls: [pull('#42', 'Make webhook delivery safe to retry', 'changes')] },
+    { name: 'docs-site', pulls: [pull('#145', 'Translate the limits page', 'draft')] },
+    { name: 'herdr-app', pulls: [pull('#575', 'Recycle the mod runtime before it runs out of memory', 'approved')] },
+  ],
+  branches: {
+    none: { name: 'rate-limit', second: 'No pull request · 4 commits on GitHub', action: 'Create pull request' },
+    unpushed: { name: 'limiter-tests', second: '2 commits not on GitHub', action: 'Push', commits: ['Handle empty checkout buckets', 'Add retry headers'] },
+    behind: { name: 'limits-redis-2', computer: 'devbox', second: '3 commits behind GitHub', action: 'Pull' },
+    merged: { name: 'plan-cache', second: 'No pull request · #139 merged 14:20', action: 'Create pull request' },
+    detached: { name: 'HEAD at 4e1a2b0', second: 'No branch checked out' },
+    noRemote: { name: 'checkout-v2', second: 'No remote' },
+    elsewhere: { name: 'checkout-v2', second: 'No GitHub remote · git@gitlab.com:acme/shop.git' },
+  },
+  closed: [pull('#142', 'Rate limit checkout per customer', 'merged', { second: 'checkout-v2 → main' }), pull('#141', 'Document retry headers', 'closed', { second: 'docs-retry → main' })],
+  others: [['#140', 'Add tax receipts'], ['#139', 'Fix rounding'], ['#138', 'Update customer email'], ['#137', 'Handle refunds']].map(([number, title]) => pull(number, title, 'review', { second: 'Review required' })),
+  counts: { open: 'Open 12', closed: 'Closed', others: 'Other open pull requests · 12' },
+  stale: { limited: 'Read 14:02 · GitHub limited until 14:30', silent: 'Read 14:02 · GitHub not answering · next try 14:07' },
+  contexts: {
+    signIn: { icon: 'lu-git-pull-request', text: 'Not signed in to GitHub', action: 'Sign in' },
+    cli: { icon: 'lu-git-pull-request', text: 'GitHub CLI not installed', action: 'cli.github.com' },
+    nothing: { icon: 'lu-git-pull-request', text: 'Nothing open' },
+    nothingElse: { icon: 'lu-git-pull-request', text: 'Nothing else open' },
+    nothingClosed: { icon: 'lu-git-pull-request', text: 'Nothing closed yet' },
+  },
+  keep: { text: 'Could not keep pull requests', source: 'EACCES: permission denied writing the local cache', fix: 'Refresh' },
+};
+// #142 and its neighbours, each on the verdict GitHub gives it.
+const check = (name, state, time = null) => ({ name, state, time });
+const said = (who, when, text, extra = {}) => ({ who, when, text, ...extra });
+export const samplePull = {
+  number: '#142', title: 'Rate limit checkout per customer', branch: 'acme-shop · checkout-v2 → main', agent: 'checkout',
+  verdicts: {
+    failed: { text: 'test / unit failed', tone: 'blocked', log: 'AssertionError: expected 39 to be 40\n ❯ src/api/limits.test.ts:42:18' },
+    ready: { text: 'Ready to merge', tone: 'done', facts: '2 approvals · 5 checks passed' },
+    draft: { number: '#145', title: 'Translate the limits page', text: 'Draft · 1 check running', tone: 'dim', checks: [check('build / i18n', 'running', '1m 20s')] },
+    running: { text: 'Checks running · 3 of 5', tone: 'dim', checks: [check('test / e2e', 'running', '4m 10s'), check('deploy / preview', 'running', '1m 02s')] },
+    deciding: { number: '#141', title: 'Document the rate limit per plan', text: 'Checking whether it can merge', tone: 'dim' },
+    conflicts: { number: '#88', title: 'Apply tax rates per region', agent: 'billing', text: 'Conflicts with main', tone: 'blocked', heading: '2 files conflict with main', files: 'src/tax/rates.ts\nsrc/tax/regions.ts' },
+    behind: { number: '#57', title: 'Fuzzy search for products', agent: 'search', text: 'Behind main by 4', tone: 'working', heading: 'main has 4 commits this branch lacks', lines: [['a41c2e9', 'Cache the plan lookup (#139)'], ['7be01d3', 'Rate limit checkout (#142)'], ['c09f8aa', 'Bump vitest to 3.2']], more: 'and 1 more' },
+    rules: { number: '#140', title: 'Move the limits to Redis', text: 'Blocked by branch rules', tone: 'working', heading: 'main requires', lines: [['Approvals', '1 of 2'], ['Checks', 'test / e2e has not run'], ['Commits', 'signed: 2 of 4 are not']] },
+    review: { number: '#146', title: 'Round Retry-After up to whole seconds', text: 'Review required', tone: 'working', heading: 'Asked 1h ago', lines: [['sam', 'no review yet'], ['lee', 'no review yet']] },
+    permission: { number: '#575', title: 'Recycle the mod runtime before it runs out of memory', text: 'No permission to merge', tone: 'dim', lines: [['You', 'read; merging needs write'], ['Can merge', 'ogulcan and mira, who approved']] },
+    unfinished: { text: '3 checks did not finish', tone: 'blocked', lines: [['deploy / preview', 'cancelled by a newer push'], ['test / e2e', 'timed out after 30 min'], ['build / docs', 'waiting for approval to run']] },
+    waits: { number: '#143', title: 'Show the retry time in the cart', text: 'test / e2e failed · cart-ui needs you first', tone: 'blocked', log: '✘ cart.spec.ts:18 shows the wait\n  Expected "Try again in 2 s"\n  Received "Try again in NaN s"' },
+    changes: { number: '#42', title: 'Make webhook delivery safe to retry', agent: 'webhooks', text: 'Changes requested', tone: 'blocked' },
+    closed: { text: 'Closed', tone: 'dim' },
+  },
+  refusals: {
+    explain: { text: 'Couldn’t explain to webhooks', source: 'hc send: webhooks closed its prompt', fix: 'Explain to webhooks' },
+    merge: { text: 'Merge refused', source: 'gh: Base branch was modified. Review and try the merge again.', fix: 'Squash and merge', agent: 'docs' },
+    unreachable: { text: 'Couldn’t explain to checkout', source: 'ssh: connect to host devbox port 22: Operation timed out', fix: 'Explain to checkout' },
+    reply: { text: 'Reply not posted', source: 'gh: Could not resolve to a node with the global id of PRRT_kwDOK1', fix: 'Reply' },
+    diff: { text: 'Could not read the diff', source: 'gh: HTTP 502: Bad Gateway', fix: 'Refresh' },
+    reviewer: { text: 'Couldn’t ask sloane to review', source: 'gh: HTTP 422: Reviews may only be requested from collaborators', fix: 'Request review' },
+  },
+  sent: 'Sent to checkout 14:07',
+  thread: {
+    where: 'src/api/limits.ts:12', snippet: { kind: 'source', first: 11, line: 12, text: 'export function bucket(customer) {\n  const plan = planOf(customer);\n  return { plan, tokens: LIMIT[plan] };' },
+    first: said('lee', '2h', 'Should the bucket key include the plan? A customer who upgrades keeps the old limit until the bucket expires.'),
+    replies: [said('jj', '40m', 'Good catch. The key becomes customer and plan; an upgrade starts a fresh bucket.')],
+  },
+  answers: {
+    answer: said('jj', 'now', 'Done in 4e1a2b0: the bucket key is now customer and plan.', { pending: true }),
+    agentAnswer: 'Covered in 9c2d1e4: a timeout after acceptance now retries with the same idempotency key, and deliver.test.ts checks that the receiver sees it once.',
+    answered: 'webhooks answered 14:21',
+  },
+  events: { approved: { name: 'sam approved', meta: '1h' }, comment: said('sam', '1h', 'Fine once test / unit passes.'), mine: { name: 'You approved, with 2 line comments', meta: 'now' }, resolved: { name: 'Resolved: lee', detail: 'limits.ts:12' }, offline: 'GitHub not answering. 1 reply waits.' },
+  details: {
+    summary: '5 checks · 3 people · 3 files',
+    description: 'Limits POST /checkout per customer with a token bucket: 40 a minute on Free, 400 on Pro. An empty bucket answers 429 with Retry-After.\n\nThe bucket lives in memory for now; #140 moves it to Redis.',
+    people: [['Assignees', 'jj'], ['Reviewers', 'lee approved · sam asked'], ['Labels', 'api · rate-limit']],
+    checks: [check('test / unit', 'failed'), check('test / e2e', 'passed', '4m 10s'), check('lint', 'passed', '38s'), check('typecheck', 'passed', '51s'), check('deploy / preview', 'passed', '1m 02s')],
+    files: [{ letter: 'M', name: 'checkout.ts', folder: 'src/api', stat: '+14 −3' }, { letter: 'A', name: 'limits.ts', folder: 'src/api', stat: '+22' }, { letter: 'M', name: 'limits.test.ts', folder: 'src/api', stat: '+6 −4' }],
+    cut: { more: 'Show 92 more', note: 'GitHub lists the first 100 of 140 files.' },
+    moreChecks: 'Show 3 more',
+  },
+  review: { number: '#44', title: 'Batch webhook retries', text: 'Review required · asked of you', tone: 'working', count: '2 line comments', draft: 'Batching looks right. Two notes on the backoff inline.', changed: [{ letter: 'M', name: 'retry.ts', folder: 'src/webhooks', stat: '+52 −9' }, { letter: 'A', name: 'batch.test.ts', folder: 'src/webhooks', stat: '+12' }] },
+  message: { to: 'Message to checkout', text: 'sam  src/api/checkout.ts:42\nHandle an empty bucket before decrementing the token count.\nhttps://github.com/acme/shop/pull/142' },
+  remote: { computer: 'devbox', stale: 'devbox unreachable · Read 14:02' },
+};
+// #142's pages: a file's diff, a long one, a check's log, a new pull request, and the people and labels pickers.
+export const samplePullPages = {
+  diff: { file: 'checkout.ts', facts: '#142 · src/api · +14 −3', text: { kind: 'diff', first: 18, text: '@@ -18,7 +18,14 @@ checkout(req, res)\n const customer = req.user.id;\n+const b = bucket(customer);\n+if (b.tokens < 1) {\n+  res.set("Retry-After", retryAfter(b));\n+  return res.status(429).end();\n+}\n const cart = await carts.get(customer);\n-await charge(cart);\n+await charge(cart, { key: req.id });\n return res.json({ ok: true });' } },
+  commented: { text: 'Round up here, or a client retries a second early', chunks: [
+    { kind: 'diff', first: 18, line: 21, text: ' const customer = req.user.id;\n+const b = bucket(customer);\n+if (b.tokens < 1) {\n+  res.set("Retry-After", retryAfter(b));' },
+    { kind: 'diff', first: 22, text: '+  return res.status(429).end();\n+}' }] },
+  pointed: { kind: 'diff', first: 18, line: 21, text: ' const customer = req.user.id;\n+const b = bucket(customer);\n+if (b.tokens < 1) {\n+  res.set("Retry-After", retryAfter(b));\n+  return res.status(429).end();\n+}' },
+  pending: { file: 'retry.ts', facts: '#44 · src/webhooks · +52 −9 · 1 pending', chunks: [{ kind: 'diff', first: 38, line: 39, text: ' for (const batch of chunks(due, 50)) {\n+  await sleep(backoff(attempt));' }, { kind: 'diff', first: 40, line: 40, text: '+  await Promise.all(batch.map(retry));' }, { kind: 'diff', first: 41, text: ' }' }], note: { who: 'jj', when: 'now', text: 'Cap the backoff; at attempt 12 this waits an hour.' }, draft: 'One failing receiver holds the whole batch back' },
+  threaded: { file: 'limits.ts', facts: '#142 · src/api · +22', chunks: [{ kind: 'diff', first: 11, line: 12, text: '+export function bucket(customer) {\n+  const plan = planOf(customer);' }, { kind: 'diff', first: 13, text: '+  return { plan, tokens: LIMIT[plan] };' }], note: { who: 'lee', when: '2h', text: 'Should the bucket key include the plan?' }, replies: '1 reply' },
+  long: { file: 'pnpm-lock.yaml', facts: '#142 · +1,240 −312 · lines 1 to 400', text: { kind: 'diff', first: 392, text: '+/retry-after@1.2.0:\n+  resolution: {integrity: sha512-…}\n+  engines: {node: \'>=18\'}\n \n-/rollup@4.21.0:\n+/rollup@4.22.4:\n   resolution: {integrity: sha512-…}\n   hasBin: true\n+  optionalDependencies:\n+    fsevents: 2.3.3' }, more: '1,152 more lines', next: 'Show the next 400' },
+  reading: { file: 'limits.test.ts', facts: '#142 · src/api · +6 −4' },
+  picture: { file: 'checkout-429.png', facts: '#142 · docs/shots · added', empty: { icon: 'lu-file', text: 'No text diff' } },
+  log: { file: 'test / unit', facts: '#142 · Run pnpm test · 1m 48s · 38 lines', text: { kind: 'log', first: 1, text: ' RUN  v3.2.0 /work/acme-shop\n ✓ src/api/checkout.test.ts (9 tests) 41ms\n ✓ src/api/plans.test.ts (6 tests) 12ms\n FAIL  src/api/limits.test.ts > refills after 2 s\nAssertionError: expected 39 to be 40\n ❯ src/api/limits.test.ts:42:18\n    40|   vi.advanceTimersByTime(2000)\n    41|   const b = bucket("c1")\n  > 42|   expect(b.tokens).toBe(40)\n Test Files  1 failed | 11 passed (12)\n      Tests  1 failed | 47 passed (48)\n##[error]Process completed with exit code 1.' } },
+  refused: { text: 'Could not create it', source: 'gh: GraphQL: No commits between main and rate-limit', fix: 'Create on GitHub' },
+  create: { facts: 'acme-shop · rate-limit → main · 4 commits', title: 'Rate limit checkout per customer', body: 'Limits POST /checkout per customer with a token bucket.' },
+  people: [{ name: 'sam', second: 'Sam Ortiz' }, { name: 'sloane', second: 'Sloane Park' }, { name: 'stan', second: 'Stan Ruiz' }, { name: 'lee', second: 'Lee Chen' }],
+  labels: [{ name: 'api', dot: 'blue' }, { name: 'rate-limit', dot: 'violet' }, { name: 'bug', second: 'Something isn’t working', dot: 'blocked' }, { name: 'docs', dot: 'working' }],
+  notes: { first: 'First 100 of 132', none: 'Nobody with access matches', offline: 'GitHub not answering. 2 changes wait.', noLabels: 'This repository has no labels', truncated: 'More people have access than are listed here' },
+};

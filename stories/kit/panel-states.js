@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer } from './samples.js';
-import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleTaken, samplePreview } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls } from './panel-samples.js';
 
 // Settings: each page with its samples, then each state as what changes on it.
 const shows = (extra) => ({ page: 'pieces', hidden: sampleHidden, areas: sampleAreas, ...extra });
@@ -305,6 +305,109 @@ const stated = (views, draw) => ({
 });
 const control = (views) => ({ view: { name: 'what it shows', control: { type: 'select' }, options: Object.keys(views) } });
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Preview': [previewViews, preview] };
+// Pull requests: the list, then #142 and its neighbours on each verdict, its conversation, details, pickers and pages.
+const { asked, projects: pullProjects, branches, closed: closedPulls, others, counts, stale: pullStale, contexts, keep } = samplePulls;
+const [acmeShop, ...otherProjects] = pullProjects;
+const askedGroup = { name: 'Asked of you', pulls: asked };
+const listed = (extra = {}) => ({ groups: [askedGroup, ...pullProjects], ...extra });
+const withBranch = (branch, extra = {}) => ({ groups: [askedGroup, { ...acmeShop, branch }, ...otherProjects], ...extra });
+const { verdicts, refusals, thread: talkSample, answers, events, details: detailSample, review: reviewSample } = samplePull;
+const openedPull = (verdict = verdicts.failed, extra = {}) => ({ page: 'pr', number: verdict.number ?? samplePull.number, title: verdict.title ?? samplePull.title, agent: verdict.agent ?? samplePull.agent, verdict, details: { summary: detailSample.summary }, ...extra });
+const failedActs = ['explain', 'log', 'github'];
+const talked = (extra = {}) => openedPull(verdicts.failed, { acts: failedActs, talk: { thread: talkSample, ...extra } });
+const { cut: filesCut, moreChecks, ...detailsShown } = detailSample;
+const detailed = (extra = {}) => openedPull(verdicts.failed, { acts: failedActs, scope: samplePull.branch, details: { ...detailsShown, open: true, ...extra } });
+const person = (checked, extra = {}) => ({ name, second }) => ({ label: name, second, checked: checked.includes(name), ...extra });
+const { people, labels, notes } = samplePullPages;
+const picker = (title, items) => ({ ...detailed(), picker: { title, items: [{ field: 'Find' }, ...items] } });
+const reviewers = (checked) => people.slice(0, 3).map(person(checked));
+const pageOf = (page, { file, facts: said, ...rest }, extra = {}) => ({ page, file, facts: said, back: samplePull.number, ...rest, ...extra });
+export const pullsViews = {
+  'At rest: what waits on you, then each project': [listed(), 'Asked of you first, then each project’s open ones; each row ends on its state, in its tone.'],
+  'A branch with no pull request: its row first': [withBranch(branches.none), 'The branch in front leads its project, with Create pull request.'],
+  'A branch not on GitHub: Push': [withBranch(branches.unpushed), 'Its commits under it, and Push.'],
+  'The pane in front is on devbox: Pull': [{ groups: [{ ...acmeShop, branch: branches.behind, pulls: acmeShop.pulls.slice(0, 1), everyone: null }] }, 'The computer beside the branch, and Pull.'],
+  'Its pull request was merged': [{ groups: [{ ...acmeShop, branch: branches.merged, pulls: acmeShop.pulls.slice(0, 1), everyone: null }] }, 'The merged one is named on the branch row.'],
+  'The default branch: no branch row': [{ groups: [{ ...acmeShop, pulls: [acmeShop.pulls[0], acmeShop.pulls[2]], everyone: null }] }, 'main has no pull request of its own.'],
+  'No branch checked out': [withBranch(branches.detached), 'The branch row says why, with nothing to press.'],
+  'No remote': [withBranch(branches.noRemote), 'The branch row says why.'],
+  'Not a GitHub remote': [withBranch(branches.elsewhere), 'The remote is named, so you know where it lives.'],
+  'First read': [{ reading: true }, 'Nothing read yet: the skeleton, once.'],
+  'Everyone’s, being read': [{ groups: [{ ...acmeShop, pulls: acmeShop.pulls.slice(0, 1), everyone: null, reading: true }] }, 'Everyone’s in acme-shop was pressed; the rest reads in place.'],
+  'Nothing open anywhere': [{ empty: contexts.nothing }, 'One quiet line.'],
+  'Nothing open, a branch without one': [{ groups: [{ name: acmeShop.name, branch: branches.none }], empty: contexts.nothingElse }, 'The branch row, then the quiet line.'],
+  'Not signed in to GitHub': [{ empty: contexts.signIn }, 'Sign in, the one thing to do.'],
+  'GitHub CLI not installed': [{ empty: contexts.cli }, 'Where to get it.'],
+  'Rate limited': [listed({ scope: pullStale.limited, stale: true }), 'The last read stays, stepped down, with when GitHub lets it read again.'],
+  'GitHub not answering': [listed({ scope: pullStale.silent, stale: true }), 'The last read stays, with the next try.'],
+  Closed: [{ counts, tab: 'closed', groups: [{ name: 'This branch', pulls: closedPulls.slice(0, 1) }, { name: 'Yours', pulls: closedPulls.slice(1) }] }, 'Open and Closed when there are closed ones; merged and closed say so.'],
+  'Closed, being read': [{ counts, tab: 'closed', reading: true }, 'The skeleton under the tabs.'],
+  'Nothing closed yet': [{ counts, tab: 'closed', empty: contexts.nothingClosed }, 'One quiet line.'],
+  'Couldn’t keep pull requests': [listed({ keep }), 'The list still shows; the local store’s own words, and Refresh.'],
+  'Narrow, 300': [listed({ look: 'narrow' }), 'Titles cut; the state stays.'],
+  'Create a pull request, in the panel': [{ page: 'new', ...samplePullPages.create }, 'Title and description from the commits; Create, or Create as draft.'],
+  'Create refused': [{ page: 'new', ...samplePullPages.create, failure: samplePullPages.refused }, 'gh’s words, the text kept, and Create on GitHub.'],
+  'Opened: the verdict and what it rests on': [talked(), 'The title, GitHub’s verdict in its tone, the failing lines, then the acts it allows.'],
+  'First paint, from the header': [openedPull(verdicts.failed, { reading: true }), 'The title and the verdict from the list, the rest as a skeleton.'],
+  'Draft: the author’s choice, not a fault': [openedPull(verdicts.draft, { acts: ['ready'] }), 'Ready for review, the one act.'],
+  'Checks running: a wait': [openedPull(verdicts.running, { checking: true }), 'Each running check with its time; Refresh spins.'],
+  'GitHub still deciding': [openedPull(verdicts.deciding), 'Nothing to press yet.'],
+  'Conflicts: the files': [openedPull(verdicts.conflicts, { acts: ['explain'] }), 'The files that conflict, and Explain to the branch’s agent.'],
+  'Conflicts, no agent': [openedPull(verdicts.conflicts, { acts: ['open'] }), 'Without an agent, Open on GitHub.'],
+  'Behind its base: the commits it lacks': [openedPull(verdicts.behind, { acts: ['update', 'explain'] }), 'Update branch, or Explain.'],
+  'Blocked by branch rules: the unmet rules': [openedPull(verdicts.rules, { acts: ['explain'] }), 'Each rule the base asks, with how far it is.'],
+  'Review required: who was asked': [openedPull(verdicts.review, { acts: ['explain'] }), 'Who was asked, and when.'],
+  'No permission: who can merge': [openedPull(verdicts.permission, { acts: ['explain'] }), 'What you have, and who can merge.'],
+  'Checks that did not finish': [openedPull(verdicts.unfinished, { acts: ['explain'] }), 'Which, and why.'],
+  'Its agent waits on you': [openedPull(verdicts.waits, { acts: ['log', 'github'] }), 'No Explain: the agent waits on you first.'],
+  'Explained, one press': [openedPull(verdicts.failed, { sent: samplePull.sent, acts: ['github'] }), 'The press is said, with the time.'],
+  'Explain refused': [openedPull(verdicts.changes, { refused: refusals.explain }), 'hc’s words, and Explain again.'],
+  'Changes requested: Reply on GitHub': [openedPull(verdicts.changes, { acts: ['explain', 'reply'], talk: { said: events.comment } }), 'The request, Explain, and Reply on GitHub.'],
+  'Send to the agent: the message first': [openedPull(verdicts.changes, { acts: ['send'], message: samplePull.message }), 'What goes to the agent shows before Send.'],
+  'Ready to merge': [openedPull(verdicts.ready, { acts: ['merge'] }), 'Merge, the one act.'],
+  'Merge armed': [openedPull(verdicts.ready, { acts: ['merge'], armed: true }), 'Merge asks again.'],
+  Merging: [openedPull(verdicts.ready, { acts: ['merging'] }), 'Merging… until GitHub answers.'],
+  'Merge refused': [openedPull(verdicts.ready, { refused: refusals.merge }), 'gh’s words, Squash and merge, and Explain.'],
+  'Closed: Reopen': [openedPull(verdicts.closed, { acts: ['reopen'] }), 'Reopen, the one act.'],
+  'Link copied': [openedPull(verdicts.ready, { acts: ['merge'], copied: true }), 'Copied, for a moment, where Copy link was.'],
+  'On another computer': [openedPull(verdicts.failed, { acts: failedActs, scope: samplePull.remote.computer }), 'The computer under the number.'],
+  'That computer unreachable': [openedPull(verdicts.failed, { scope: samplePull.remote.stale, stale: true, refused: refusals.unreachable }), 'The last read, stepped down; Explain refused in place.'],
+  'Other open pull requests': [openedPull(verdicts.ready, { acts: ['merge'], others: { label: counts.others, pulls: others } }), 'The rest of the repository’s open ones, and Open the list.'],
+  'Narrow, 300 (open)': [talked({ look: 'narrow' }), 'The acts wrap; the details stay folded.'],
+  'The conversation, under the verdict': [openedPull(verdicts.failed, { acts: failedActs, talk: { thread: talkSample, approved: events.approved, said: events.comment } }), 'Each thread on its lines, then reviews and comments; Comment last.'],
+  'Replying: click, type, ⌘↵': [talked({ typing: answers.answer.text }), 'The reply field opens in the thread.'],
+  'Sent: in the thread at once': [talked({ thread: { ...talkSample, answer: answers.answer } }), 'The reply shows at once, pending until GitHub confirms.'],
+  'Reply refused: the text kept': [talked({ typing: answers.answer.text, refused: refusals.reply }), 'gh’s words; the text stays, Reply again.'],
+  'Offline: kept and said once': [talked({ thread: { ...talkSample, answer: answers.answer }, offline: events.offline }), 'The reply waits and says so once.'],
+  'Resolved: one line, Undo after': [openedPull(verdicts.failed, { acts: failedActs, talk: { resolved: events.resolved, said: events.comment } }), 'A resolved thread folds to one line with Undo.'],
+  'Explain to the agent, then post its answer': [openedPull(verdicts.changes, { talk: { thread: { ...talkSample, agentAnswer: answers.agentAnswer, answered: answers.answered }, explained: samplePull.sent } }), 'The agent’s answer fills Reply; you post it.'],
+  'Asked of you: review here, one submit': [openedPull(reviewSample, { review: reviewSample }), 'The files, then one review: Approve, Request changes or Comment.'],
+  'Review sent: it joins the conversation': [openedPull({ ...reviewSample, text: 'Review required' }, { talk: { approved: events.mine, said: events.comment } }), 'Your review shows at once in the conversation.'],
+  'Details open': [detailed(), 'Description, people and labels, checks and files.'],
+  'No description': [detailed({ description: null }), 'One quiet line.'],
+  'Nobody assigned': [detailed({ nobody: true }), 'Each says None with its verb.'],
+  'More checks': [detailed({ moreChecks }), 'Five checks, then Show 3 more.'],
+  'Files cut off': [detailed({ cut: filesCut }), 'Show 92 more, and what GitHub lists.'],
+  'The diff could not be read': [detailed({ diffFailed: refusals.diff }), 'gh’s words under the files, and Refresh.'],
+  'Reviewers: three clicks, no waiting': [picker('Request a review', reviewers(['sam', 'stan']).map((item) => (item.label === 'stan' ? { ...item, mark: 'working' } : item))), 'Each click is kept at once; a pending one breathes.'],
+  'Reviewers: one refused, the others untouched': [picker('Request a review', [...reviewers(['sam']).slice(0, 2), { failure: refusals.reviewer }, ...reviewers(['stan']).slice(2)]), 'The refusal under its person; the rest stay.'],
+  'Labels, from the local store': [picker('Change labels', [...labels.map(({ name, second, dot }) => ({ label: name, second, dot, checked: name !== 'docs' })), { label: notes.first, disabled: true }]), 'The labels at once, with a dot each; the first 100.'],
+  'Picker, the first open': [picker('Request a review', [{ loading: true }, { loading: true }]), 'The skeleton, once ever.'],
+  'Picker, no match': [picker('Request a review', [{ label: notes.none, disabled: true }]), 'One quiet line.'],
+  'Picker, offline: changes wait': [picker('Request a review', [...people.slice(1, 3).map(person(['sloane', 'stan'], { mark: 'working' })), { label: notes.offline, disabled: true }]), 'The changes wait and say so once.'],
+  'Assign people': [picker('Assign people', people.map(person(['jj']))), 'The people with access.'],
+  'No labels': [picker('Change labels', [{ label: notes.noLabels, disabled: true }]), 'One quiet line.'],
+  'More people than listed': [picker('Request a review', [...people.slice(0, 2).map(person(['sam'])), { label: notes.truncated, disabled: true }, { label: 'Open on GitHub', icon: 'lu-external-link' }]), 'Open on GitHub for the rest.'],
+  'A file’s diff': [pageOf('file', samplePullPages.diff), 'Numbered lines, added and deleted in their wash, hunks named.'],
+  'A line: click it, or the + in its gutter': [pageOf('file', samplePullPages.diff, { text: samplePullPages.pointed }), 'The line under the pointer is lit.'],
+  'A comment on that line, right there': [pageOf('file', samplePullPages.diff, { chunks: samplePullPages.commented.chunks, draft: samplePullPages.commented.text, between: 'comment' }), 'The field opens under the line; Comment.'],
+  'Asked of you: comments wait for the review': [pageOf('file', samplePullPages.pending, { between: 'pending' }), 'A pending comment, then Add to review.'],
+  'A thread on its line, answerable there': [pageOf('file', samplePullPages.threaded, { between: 'thread' }), 'The thread sits on its line, with Reply.'],
+  'A long diff, 400 lines at a time': [pageOf('file', samplePullPages.long), 'How many are left, and Show the next 400.'],
+  'Diff: reading': [pageOf('file', samplePullPages.reading, { reading: true }), 'The skeleton; Refresh spins.'],
+  'No text diff': [pageOf('file', samplePullPages.picture), 'A picture or a binary file says so.'],
+  'Full log: a page': [pageOf('log', samplePullPages.log, { agent: samplePull.agent }), 'The whole log, failures in their tone, and Explain.'],
+};
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

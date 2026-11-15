@@ -76,6 +76,8 @@ export const descriptions = {
   Spend: 'Each plan’s multiple for the month, the period’s number and where it went; the switch, the facts and the lists’ views come with the pointer.',
   Images: 'Pictures from the conversation with pinned notes to send to an agent.',
   'Panels/Markdown': 'Markdown in a window over any layout, edited where you read it; a review waits on Done.',
+  'Panels/PR': 'Pull requests by project, what waits on you first; one opens on its verdict and why, talked over in place.',
+  'Panels/Preview': 'A file opened from Files beside the pane, edited in place; an edit waits for Save.',
   Pins: 'Numbered notes anchored to a point or region of a picture or device screen.',
   Simulator: 'Connected devices, their screens and controls, where the platform tools exist.',
   Share: 'The share menu and card for a panel’s result.',

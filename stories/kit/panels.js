@@ -1,5 +1,5 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, dialog, facts, mark, markdown, menu, metric, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code } from './kit.js';
+import { band, bars, button, chord, dialog, facts, mark, markdown, menu, metric, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, chip, explainButton } from './kit.js';
 import { channelSettings, keyboardExplorer, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
@@ -387,10 +387,110 @@ export const spend = ({ share = false, choosing = null, ...props }) => {
 };
 
 // Preview: a file opened from Files beside the pane; text as numbered code, Markdown formatted; an edit waits for Save.
-const previewBody = ({ doc = null, text = null, cut = null, reading = false, failure = null, empty = null, ...props }) => {
+// A file's text, or in its place the skeleton, the refused read or the empty state.
+const textOr = ({ reading = false, failure = null, empty = null }, shown) => {
   if (reading) return skeletonOf({ shape: 'line', count: 6 });
   if (failure) return failureBlock(failure);
   if (empty) return emptyState(empty);
-  return documentBody(props, doc ? markdown(doc) : code(text), dimLine(cut));
+  return shown();
 };
+const previewBody = ({ doc = null, text = null, cut = null, reading, failure, empty, ...props }) => textOr({ reading, failure, empty }, () => documentBody(props, doc ? markdown(doc) : code(text), dimLine(cut)));
 export const preview = ({ look = 'panel', stale = false, ...props }) => panel({ look, stale, header: documentHeader({ back: 'Files', ...props }) }, previewBody(props));
+
+// Pull requests: what waits on you, then each project's open ones; one opens on its verdict, and its files, a check's log and a new one are pages of the panel.
+const pullTones = { review: 'working', failing: 'blocked', failed: 'blocked', blocked: 'working', changes: 'blocked', draft: 'dim', approved: 'done', running: 'dim', merged: 'dim', closed: 'dim', passed: 'dim' };
+const toned = (label) => chip({ label, quiet: true, tone: pullTones[label] });
+const quietAct = (label) => button({ label, kind: 'quiet', size: 'sm' });
+const tonalAct = (label) => button({ label, kind: 'tonal', size: 'sm' });
+const line = (...items) => stack({ variant: 'line' }, items);
+const pullRow = (picked) => ({ number, title, state, second = null }) => row({ name: phrase(number, title), second, current: number === picked, tools: [toned(state)] });
+const branchRow = ({ name, computer = null, second, action = null, commits = [] }) => list(
+  row({ icon: 'lu-git-branch', name, detail: computer, second, selected: true, action: action ? { label: action, kind: 'quiet' } : null }),
+  commits.map((commit) => row({ name: commit, depth: 1, dimmed: true })));
+const pullGroup = (picked) => ({ name, pulls = [], everyone = null, branch = null, reading = false }) => list(heading(name), branch ? branchRow(branch) : null,
+  pulls.map(pullRow(picked)), reading ? skeletonOf({ shape: 'list row', count: 2 }) : null, everyone ? quietAct(everyone) : null);
+const pullTabs = ({ counts, tab }) => tabs({ items: [{ key: 'open', label: counts.open }, { key: 'closed', label: counts.closed }], value: tab, size: 'sm', track: true });
+const pullList = ({ groups = [], picked = null, tab = null, counts = null, reading = false, failure = null, empty = null, keep = null }) => {
+  if (failure) return failureBlock(failure);
+  return list(tab ? pullTabs({ counts, tab }) : null, reading ? skeletonOf({ shape: 'list row', count: 4 }) : null, groups.map(pullGroup(picked)), empty ? emptyState(empty) : null, keep ? failureBlock(keep) : null);
+};
+
+// One pull request: its title and GitHub's verdict, what the verdict rests on, the one or two acts it allows, then the conversation and the details.
+const checkRow = ({ name, state, time = null }) => (state === 'running' ? row({ name, mark: 'working', meta: time }) : row({ name, meta: time, tools: [toned(state)] }));
+const verdictBody = ({ heading: head = null, lines = [], files = null, log = null, checks = [], more = null }) => (head || lines.length || files || log || checks.length
+  ? stack({ variant: 'column' }, head ? row({ name: head, strong: true }) : null, lines.map(([name, value]) => row({ name, detail: value })),
+    [files, log].filter(Boolean).map((text) => code({ text, kind: 'log', first: 1 })), checks.map(checkRow), dimLine(more))
+  : null);
+const pullActs = {
+  ready: () => tonalAct('Ready for review'),
+  update: () => tonalAct('Update branch'),
+  explain: ({ agent }) => explainButton({ agent, size: 'sm' }),
+  log: () => quietAct('Full log'),
+  github: () => quietAct('Open log on GitHub'),
+  open: () => quietAct('Open on GitHub'),
+  reply: () => quietAct('Reply on GitHub'),
+  merge: ({ armed = false }) => button({ label: 'Merge', kind: 'tonal', size: 'sm', armed }),
+  merging: () => button({ label: 'Merging…', size: 'sm', spin: true, disabled: true }),
+  reopen: () => tonalAct('Reopen'),
+  send: ({ agent }) => tonalAct(phrase('Send to', agent)),
+};
+const comment = ({ who, when, text, where = null, pending = false }) => excerpt({ who: where ? phrase(who, where) : who, when: pending ? phrase(when, '· pending') : when, text });
+const field = ({ label, text = null, multiline = false }) => input({ label, text: text ?? undefined, icon: 'lu-send', focus: Boolean(text), multiline });
+// A thread: the first comment with its lines, the replies, then Reply, Resolve and Explain to the agent; a reply waits, refused or offline, with its text kept.
+const thread = ({ where, snippet, first, replies = [], answer = null, agentAnswer = null, answered = null }, { agent, typing = null, refused = null, offline = null, explained = null }) => stack({ variant: 'column' },
+  comment({ ...first, where }), code(snippet), replies.map(comment), answered ? row({ icon: 'lu-bot', name: answered, dimmed: true }) : null,
+  answer ? comment(answer) : null, field({ label: 'Reply', text: agentAnswer ?? typing }), refused ? failureBlock(refused) : null, dimLine(offline),
+  line(quietAct('Resolve'), typing || agentAnswer ? null : explainButton({ agent, size: 'sm' }), explained ? row({ name: explained, dimmed: true }) : null));
+const conversation = ({ thread: talk = null, resolved = null, approved = null, said = null, agent, ...state }) => list(heading('Conversation'),
+  resolved ? row({ icon: 'lu-check', name: resolved.name, detail: resolved.detail, action: { label: 'Undo', kind: 'quiet' } }) : null,
+  talk ? thread(talk, { agent, ...state }) : null, approved ? row({ icon: 'lu-check', name: approved.name, meta: approved.meta, dimmed: true }) : null,
+  said ? stack({ variant: 'column' }, comment(said)) : null, field({ label: 'Comment' }));
+const review = ({ changed, count, draft }) => list(heading('Files'), changed.map(fileRow(null)), heading('Your review', { meta: count }),
+  stack({ variant: 'column' }, field({ label: 'Review', text: draft, multiline: true }), line(tonalAct('Approve'), quietAct('Request changes'), quietAct('Comment'))));
+const peopleRow = ([name, value]) => row({ name, detail: value });
+const noPeople = [['Assignees', ['Assign people', 'Assign to me']], ['Reviewers', ['Request a review']], ['Labels', ['Change labels']]];
+const detailsBody = ({ description = null, people = [], checks = [], files = [], cut = null, moreChecks = null, diffFailed = null, showAll = 'Show all', nobody = false }) => list(
+  heading('Description'), description ? list(markdown({ source: description }), quietAct(showAll)) : dimLine('No description.'),
+  heading('People and labels'), nobody ? noPeople.map(([name, verbs]) => row({ name, detail: 'None', verbs: verbs.map((label) => ({ label })) })) : people.map(peopleRow),
+  heading('Checks'), checks.map(checkRow), moreChecks ? quietAct(moreChecks) : null,
+  heading('Files'), files.map(fileRow(null)), diffFailed ? failureBlock(diffFailed) : null, cut ? list(quietAct(cut.more), dimLine(cut.note)) : null);
+const detailsFold = ({ summary, open = false, ...body }) => list(row({ level: 0, open, name: 'Details', meta: open ? null : summary }), open ? detailsBody(body) : null);
+const othersBlock = ({ label, pulls }) => list(heading(label), pulls.map(pullRow(null)), quietAct('Open the list'));
+const pullBody = ({ title, verdict, acts = [], agent, armed = false, refused = null, sent = null, review: asked = null, message = null, talk = null, others = null, details = null, closing = true, reading = false }) => (reading
+  ? list(row({ name: title, strong: true }), toned(verdict.text), skeletonOf({ shape: 'line', count: 3 }))
+  : list(row({ name: title, strong: true }), chip({ label: verdict.text, quiet: true, tone: verdict.tone }), verdictBody(verdict),
+    acts.length ? line(acts.map((act) => pullActs[act]({ agent, armed }))) : null, refused ? failureBlock(refused) : null, sent ? line(dimLine(sent), quietAct('Full log')) : null,
+    message ? stack({ variant: 'column' }, row({ name: message.to, strong: true }), markdown({ source: message.text })) : null,
+    asked ? review(asked) : null, talk ? conversation({ agent, ...talk }) : null, others ? othersBlock(others) : null,
+    details ? detailsFold(details) : null, closing ? line(quietAct('Back to draft'), quietAct('Close')) : null));
+
+// A file's diff: a line takes a comment where it is, a thread sits on its line; a long diff shows 400 lines at a time.
+const diffInline = {
+  comment: ({ draft }) => list(field({ label: 'Comment', text: draft }), line(button({ label: 'Comment', size: 'sm' }))),
+  pending: ({ note, draft }) => list(comment({ ...note, pending: true }), field({ label: 'Comment', text: draft }), line(button({ label: 'Add to review', size: 'sm' }))),
+  thread: ({ note, replies }) => stack({ variant: 'column' }, comment(note), dimLine(replies), field({ label: 'Reply' })),
+};
+const diffBody = ({ text = null, chunks = [], between = null, empty, reading, failure, more = null, next = null, ...inline }) => textOr({ reading, failure, empty }, () => {
+  const [top = text, ...rest] = chunks;
+  return list(code(top), between ? diffInline[between](inline) : null, rest.map(code), more ? row({ name: more, dimmed: true, action: { label: next, kind: 'quiet' } }) : null);
+});
+const pullPages = {
+  pr: ({ number, scope = null, copied = false, reading = false, checking = false }) => panelHeader({ title: number, start: [panelBack('Pull requests')], second: scope,
+    tools: [button({ label: copied ? 'Copied' : 'Copy link', kind: copied ? 'quiet' : 'icon', size: 'sm', icon: copied ? 'lu-check' : 'lu-copy' }), button({ label: 'Open on GitHub', kind: 'icon', icon: 'lu-external-link' }), panelRefresh({ reading: reading || checking })] }),
+  file: ({ file, back, facts: said, reading = false }) => panelHeader({ title: file, start: [panelBack(back)], second: said,
+    tools: [button({ label: 'Open the file', kind: 'icon', icon: 'lu-file' }), button({ label: 'Open on GitHub', kind: 'icon', icon: 'lu-external-link' }), panelRefresh({ reading })] }),
+  log: ({ file, back, facts: said }) => panelHeader({ title: file, start: [panelBack(back)], second: said, tools: [button({ label: 'Copy the log', kind: 'icon', icon: 'lu-copy' }), button({ label: 'Open on GitHub', kind: 'icon', icon: 'lu-external-link' })] }),
+  new: ({ facts: said }) => panelHeader({ title: 'New pull request', start: [panelBack('Pull requests')], second: said, tools: [button({ label: 'Create on GitHub', kind: 'icon', icon: 'lu-external-link' })] }),
+  list: ({ scope = null, reading = false }) => panelHeader({ title: 'Pull requests', second: scope, tools: [panelRefresh({ reading })] }),
+};
+const pullContent = {
+  pr: pullBody,
+  file: diffBody,
+  log: ({ text, agent }) => list(code(text), explainButton({ agent, size: 'sm' })),
+  new: ({ title, body, failure = null }) => list(input({ label: 'Title', text: title, focus: true }), input({ label: 'Description', text: body, multiline: true }),
+    failure ? failureBlock(failure) : null, line(button({ label: 'Create', size: 'sm' }), quietAct('Create as draft'))),
+  list: pullList,
+};
+const pullPanel = ({ page = 'list', look = 'panel', stale = false, ...props }) => panel({ look, stale, header: pullPages[page](props) }, pullContent[page](props));
+// A picker hangs beside the panel: find, the people or labels with a check, one refused in place.
+export const pulls = ({ picker = null, ...props }) => (picker ? stack({ variant: 'columns' }, pullPanel(props), menu(picker)) : pullPanel(props));
