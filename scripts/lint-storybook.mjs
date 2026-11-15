@@ -96,11 +96,30 @@ export function structureErrors(files, catalog, template) {
   return errors;
 }
 
+// Compositions only call pieces and never treat them as strings, so the app can share the file as it is.
+export function compositionErrors(source, path = 'stories/kit/compositions.js') {
+  const code = source.replace(/^\s*\/\/.*$/gm, '');
+  const bare = code.replace(/'(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"/g, 'text');
+  const imports = [...code.matchAll(/\bfrom\s*(['"])([^'"]*)\1/g)].map((match) => match[2]);
+  const rules = [
+    [/<\/?[a-z!]/i.test(code), 'markup tag'],
+    [/\bclass(?:Name)?\s*=/.test(code), 'class attribute'],
+    [/\bkanso-[a-z]/.test(code), 'class string'],
+    [/`/.test(code), 'template literal'],
+    [/\.join\(/.test(bare), 'join'],
+    [/''|""/.test(code), 'empty string as nothing'],
+    [/\+|\.concat\(|\bString\(|\.toString\(/.test(bare), 'pieces added as strings'],
+    [imports.some((from) => from !== './pieces.js') || /\bimport\s*(?:\(|['"])|\brequire\s*\(/.test(code), 'import from outside the pieces'],
+  ];
+  return rules.filter(([found]) => found).map(([, rule]) => `${path}: ${rule} in a composition`);
+}
+
 export function lint(root = '.') {
   const catalog = JSON.parse(readFileSync(join(root, 'stories/catalog.json'), 'utf8'));
   const errors = structureErrors(storyFiles(join(root, 'stories')), catalog, readFileSync(join(root, 'stories/kit/ComponentPage.jsx'), 'utf8'));
   if (readFileSync(join(root, 'stories/GAPS.md'), 'utf8') !== gapDocument(expand(catalog))) errors.push('GAPS.md: feature inventory differs from component pages');
   const read = (file) => readFileSync(join(root, file), 'utf8');
+  errors.push(...compositionErrors(read('stories/kit/compositions.js')));
   const [, canvas, docs] = /frame\.className = [^?]+\? '([^']+)' : '([^']+)'/.exec(read('.storybook/preview.js')) ?? [];
   const classes = [
     ['.storybook/preview.js', `${canvas ?? ''} ${docs ?? ''}`.split(/\s+/).filter(Boolean)],

@@ -26,8 +26,9 @@ import { commitLayout, setRail, foldSidebar, railWidth, OPEN_MIN } from "./layou
 import { afterMount } from "./pure.js";
 import { commandLoop, MachineRead } from "./sidebar.js";
 import { gitTail, asleepRow, openAhead } from "./sidebar-draw.js";
+import { guideBars, climb } from "./guides.js";
 import { projectControls, pullKey, runPull, canWake, enterOpens, machineWordTone, ASLEEP_ROW, sectionMarkOf, sectionCount, rowDirectory, threadWord, threadActions, closedControls, signInCommand, noProjectsOn, sortOf, foldTail, readWord, viewChord } from "./sidebar-rows.js";
-import { skeleton, breathe, H, G, T, R, ICON, tokens, stateEmpty, button, iconButton, field, TextField, Armed, segmented, armedLabel, armedLook, pendingDot } from "./ui.js";
+import { skeleton, breathe, H, G, T, R, ICON, tokens, washes, stateEmpty, button, iconButton, field, TextField, Armed, segmented, armedLabel, armedLook, pendingDot } from "./ui.js";
 import { pieces, shown, runs, asksPs, setPiece, pieceOf, STORE } from "./pieces.js";
 import { machineRecord, canRestore, addArgs, rmArgs, loginLine, hcError, needsLogin, heldNames, connectedNames, machinePhase, powerId, machineOf, visibleSpaces, visibleAgents, pollKeys, machineState, machineHot, machineTip, machineVisible, machineInk, listedMachines } from "./machines.js";
 import { Names } from "./alias.js";
@@ -36,6 +37,7 @@ import { readSync, saveSync } from "./sync-row.js";
 import { createAwake, keepAwake } from "./awake.js";
 import { NEEDS_YOU, EMPTY_NOTICE_MS, waitingSignature, sleepingSignature, sameQueue, waitingQueue, nextWaiting, queueState } from "./needs-you.js";
 import { queueControl, queueList } from "./needs-you-view.js";
+import { Visits, visited, stepped, beside } from "./agent-nav.js";
 import { spaces, machines, panes, agents, terminals, run, openOverlay, closeOverlay, props, exec, hc, theme, shared, setShared, watchFolder, window, nextCommand, focused, home, appHome, pickFolder, knownAgents, notify } from "herdr";
 
 const PREFS = ["machines.folded", "spaces.agentsFolded", "spaces.order", "spaces.statusOrder", "spaces.threadOrder", "spaces.threadGroup",
@@ -58,6 +60,7 @@ const PLAIN_ROW = 32;
 const GUIDE_X = 13; // under the parent's name, just in from its first letter: 8px row padding + 5
 const ELBOW_W = 11;
 const GUIDE_OVERLAP = 4; // the line reaches up into the row above, so it never breaks
+const ROW_GAP = 1; // between the list's rows, but in Threads
 const CHILD_PAD = GUIDE_X + ELBOW_W + 6 - 8; // icon starts 6px after the elbow, inside the 8px row padding
 const rowHeight = ({ tree }) => (tree ? TREE_ROW : PLAIN_ROW);
 // Every height is known before anything is drawn, so a scan (`laidOut`) finds where each pill goes.
@@ -97,6 +100,12 @@ const arrange = (props) => openOverlay({ mod: "kanso-sleep", kind: "dialog", wid
 const sleepTab = (spaceId, tab) => arrange({ sleep: { scope: "tab", space: spaceId, tab } });
 // A settled tab wakes whole; a terminal asleep in a tab still shown wakes alone.
 const wakeRow = (z) => arrange({ wake: z.settled ? { space: z.space, tab: z.tabId } : { space: z.space, terminal: z.terminal } });
+const openRow = (a) => {
+  const open = enterOpens(a);
+  if (open?.wake) wakeRow(open.wake);
+  else if (open?.focus) run("pane.focus", { pane: open.focus });
+  else if (open?.peek) run("terminal.peek", { terminal: open.peek });
+};
 const sleepAgent = (spaceId, tab, pane) => arrange({ sleep: { scope: "agent", space: spaceId, tab, pane } });
 const sleepProject = (spaceId) => arrange({ sleep: { scope: "project", space: spaceId } });
 // The Store holds live handles, so it stays the sidebar view's own state, never shared.
@@ -250,12 +259,12 @@ export default class Spaces extends View {
     // Another window's names and projects arrive.
     cx.timer.every(30000, () => this.loadNames(false).catch(() => {}));
     // keys.json: ⌃1-9 and ⌃⌥P/S/T arrive here as commands.
-    cx.spawn((cx) => commandLoop(
+    afterMount(cx, (cx) => cx.spawn((cx) => commandLoop(
       () => nextCommand(),
       () => cx.notify(),
       (command) => this.command(String(command).replace(/^kanso-spaces\./, ""), cx),
       cx.timer,
-    ));
+    )));
   }
 
   leftNavStore() {
@@ -290,7 +299,7 @@ export default class Spaces extends View {
   }
 
   close() {
-    try { this.branch?.release(); this.projectName?.release(); this.convScroll?.release(); this.renaming?.text.release(); } catch { /* already gone */ }
+    try { this.branch?.release(); this.projectName?.release(); this.convScroll?.release(); } catch { /* already gone */ }
   }
 
   menuPlace(m) {
@@ -431,7 +440,7 @@ export default class Spaces extends View {
   plus(id, t, place, tip = "New conversation") {
     return div().id(id).size(20).flex_none().rounded(6).flex().items_center().justify_center().text_color(t.muted)
       .tooltip(tip)
-      .hover((s) => s.bg(t.input).text_color(t.foreground))
+      .hover((s) => s.bg(t.hover).text_color(t.foreground))
       .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
       .on_mouse_up("left", (_e, cx) => { cx.stop_propagation(); this.newAgentMenu(place); })
       .on_mouse_down("right", (_e, cx) => { cx.stop_propagation(); this.newAgentMenu(place); })
@@ -484,6 +493,8 @@ export default class Spaces extends View {
     if (space) { const i = Number(space[1]); if (i >= 1 && i <= spaces().length) run("space.select", { index: i }); }
     else if (view) { this.setView(view[1], cx); cx.notify(); }
     else if (c === "needs-you.next") this.nextNeeds(cx);
+    else if (c === "agent-up" || c === "agent-down") this.besideAgent(c === "agent-up" ? -1 : 1);
+    else if (c === "agent-back" || c === "agent-forward") this.stepAgent(c === "agent-back" ? -1 : 1, cx);
     else if (c.startsWith("retry-machine:") && c.length > "retry-machine:".length) this.retryMachine(c.slice("retry-machine:".length), cx);
     else if (c === "sidebar") this.toggleRail();
     else if (c === "needs-you.list") this.toggleNeeds(cx);
@@ -555,6 +566,46 @@ export default class Spaces extends View {
     cx.notify();
   }
 
+  visit(list = agents()) {
+    return Visits.keep(visited(Visits.now, list.find((a) => a.focused)?.address));
+  }
+
+  stepAgent(by) {
+    const list = agents(), live = new Set(list.map((a) => a.address));
+    const step = stepped(this.visit(list), by, (address) => live.has(address));
+    if (!step) return;
+    Visits.keep(step.visits);
+    openRow(list.find((a) => a.address === step.to));
+  }
+
+  agentOrder() {
+    const sp = visibleSpaces(spaces(), this.offNames()), ps = panes(), terms = terminals(), dozing = this.sleepingNow(sp, terms, ps).dozing;
+    const ctx = { terms, alive: this.alive, strip: shared("strip.state") ?? {}, places: placesOf(sp, ps), now: Date.now(), asleep: { rows: [] },
+      spaceIds: new Set(sp.map((w) => w.id)), all: this.listed(ps, sp, terms).filter((a) => !dozing.has(a.address)) };
+    const view = shown("sidebar.switch", true, pieces(shared)) !== false ? this.view : "spaces";
+    const rows = view === "agents" ? this.statusSections(sp, ctx).flatMap((s) => s.entries.map((e) => e.a))
+      : view === "threads" ? (this.threads ? threadSections(this.threadRows(ctx), { order: this.threadOrder, group: this.threadGroup, now: ctx.now, since: this.since ?? {} }).flatMap((s) => s.rows.map((r) => r.a)) : [])
+      : this.byComputer(this.ordered(sp, ctx.places)).flatMap((r) => nest(this.spaceRows(r.w.id, ctx), terms).map((e) => e.a));
+    const live = new Set(agents().map((a) => a.address));
+    return rows.filter((a) => !a.sub && live.has(a.address));
+  }
+
+  // As machineBlock draws them: this computer's projects, then each other computer's by name.
+  byComputer(rows) {
+    const remote = [...new Set(rows.map((r) => r.w.machine).filter(Boolean))].toSorted();
+    if (!remote.length || !shown("sidebar.computers", true, pieces(shared))) return rows;
+    return [null, ...remote].flatMap((m) => rows.filter((r) => (r.w.machine ?? null) === m));
+  }
+
+  besideAgent(by) {
+    const order = this.agentOrder(), list = agents();
+    const to = order.find((a) => a.address === beside(order.map((x) => x.address), list.find((a) => a.focused)?.address, by));
+    if (!to) return;
+    this.visit(list);
+    Visits.keep(visited(Visits.now, to.address));
+    openRow(to);
+  }
+
   toggleNeeds(cx) {
     this.needsOpen = !this.needsOpen;
     if (this.needsOpen) {
@@ -602,12 +653,7 @@ export default class Spaces extends View {
   }
 
   navRow(a, row) {
-    const open = enterOpens(a);
-    const go = () => {
-      if (open?.wake) wakeRow(open.wake);
-      else if (open?.focus) run("pane.focus", { pane: open.focus });
-      else if (open?.peek) run("terminal.peek", { terminal: open.peek });
-    };
+    const go = () => openRow(a);
     return this.navMark(`agent:${a.address}`, go, Boolean(a.focused)) ? { ...(row ?? {}), kbd: true } : row;
   }
 
@@ -937,6 +983,7 @@ export default class Spaces extends View {
     if ((address ?? null) === (this.held?.address ?? null)) return;
     const cur = (list ?? agents()).find((a) => a.address === address);
     this.held = cur ? { address, done: cur.status === "done" || this.lastSeen?.[address] === "done" } : null;
+    if (cur) Visits.keep(visited(Visits.now, address));
   }
 
   trackAgents(now, sp, cx) {
@@ -1559,12 +1606,14 @@ export default class Spaces extends View {
     const keys = entries.map(colOf);
     const starts = keys.flatMap((key, i) => (i === 0 || !keys[i - 1] || key !== keys[i - 1] ? [i] : []));
     const runs = starts.map((i, k) => {
-      const rows = entries.slice(i, starts[k + 1] ?? entries.length).map((e) => {
+      const span = entries.slice(i, starts[k + 1] ?? entries.length), slab = keys[i] && span.length > 1;
+      const rows = span.map((e, j) => {
         if (e.a.asleep) return { a: e.a, h: ASLEEP_ROW, el: this.asleepLine(e.a, indent, t) };
-        const m = this.more(e, ctx);
+        // A slab's rows touch: a guide climbs no gap there.
+        const m = { ...this.more(e, ctx), gap: slab && j > 0 ? 0 : ROW_GAP };
         return { a: e.a, h: agentRowH(e.a, m), el: agentRow(e.a, indent, t, this.navRow(e.a, e.a.pane && !e.lines.length ? this.rowOf(e.a, mine, space) : null), m) };
       });
-      return { key: keys[i], rows, slab: keys[i] && rows.length > 1 };
+      return { key: keys[i], rows, slab };
     });
     // Down the rows: where each starts, 1px apart, a slab's touching, with 1px after it.
     const { y, focus, focusH } = runs.reduce((acc, run) => {
@@ -1584,6 +1633,7 @@ export default class Spaces extends View {
     return {
       label: this.nameOf(a),
       lines: e.lines,
+      first: e.first,
       time: timed(a.sub ? null : elapsed(a, this.since ?? {}, ctx.now)),
       // A message sent to it from Send and not seen yet: who it is from.
       activity: show ? (fromOf(a) ? `Message from ${fromOf(a)}` : activityOf(a)) : null,
@@ -1751,7 +1801,7 @@ export default class Spaces extends View {
       // A breath of space between projects (a worktree stays close to its checkout).
       const gap = r.tree || r === rows[0] ? [] : [item(div().h(10).flex_none(), 10)];
       // The space's row before its agents': the keyboard's path (navMark) goes in screen order.
-      const head = item(this.row(r, t, whole ? [] : entries.map((e) => e.a), whole), rowHeight(r), r.w.active ? spaceMark(rowHeight(r)) : null);
+      const head = { ...item(this.row(r, t, whole ? [] : entries.map((e) => e.a), whole), rowHeight(r), r.w.active ? spaceMark(rowHeight(r)) : null), row: true, tree: Boolean(r.tree) };
       if (whole) {
         const agents = this.asleepAgents(whole, t, ctx, indent);
         const box = agents.els.map((el) => item(el, this.asleepOpenOf(whole.id) ? ((this.foldH ?? {})[`asleep-${whole.id}`] ?? agents.h) : 0));
@@ -1768,6 +1818,8 @@ export default class Spaces extends View {
         .map((el) => item(el, open ? ((this.foldH ?? {})[r.w.id] ?? st?.h ?? 0) : 0, open && st?.focus != null ? agentMark(st.focus, st.focusH) : null));
       return [...gap, head, ...box];
     };
+    // In order, so a worktree's line climbs just to the line above it.
+    const drawAll = (list) => list.reduce((out, r) => out.concat(draw(r.tree ? { ...r, tree: { ...r.tree, reach: climb(out, ROW_GAP, GUIDE_OVERLAP) } } : r)), []);
     const remote = [...new Set([...rows.map((r) => r.w.machine).filter(Boolean), ...(this.machines ?? []).map((row) => row.name), ...(this.parked ?? []).map((row) => row.name)])].filter(Boolean).toSorted();
     const loading = m => {
       const state = live.find(k => k.name === m)?.layout;
@@ -1781,9 +1833,9 @@ export default class Spaces extends View {
     const heads = shown("sidebar.computers", true, pieces(shared));
     if (!remote.length || !heads) {
       const shut = [null, ...(heads ? [] : remote)].flatMap((m) => closed(m));
-      return loading(null) && !rows.length && !shut.length ? [loadingRow(null)] : [...rows.flatMap(draw), ...shut];
+      return loading(null) && !rows.length && !shut.length ? [loadingRow(null)] : [...drawAll(rows), ...shut];
     }
-    const block = { t, collapsed, rows, draw, closed, loading, loadingRow, ctx, layouts: live };
+    const block = { t, collapsed, rows, draw: drawAll, closed, loading, loadingRow, ctx, layouts: live };
     return [null, ...remote].flatMap((m) => this.machineBlock(m, block));
   }
 
@@ -1891,12 +1943,12 @@ export default class Spaces extends View {
     // Unreachable: its projects as last read, dim, with when.
     if (phase === "unavailable" && !collapsed && mine.length) {
       const when = readWord(this.seenOn?.[m ?? ""]);
-      return [headItem, ...mine.flatMap(draw).map((it) => ({ ...it, el: it.el.opacity(0.55).when(Boolean(when), (el) => el.tooltip(when)) }))];
+      return [headItem, ...draw(mine).map((it) => ({ ...it, el: it.el.opacity(0.55).when(Boolean(when), (el) => el.tooltip(when)) }))];
     }
     if (phase !== "connected" || folded) return [headItem];
     const empty = stateEmpty(`machine-new-${m ?? "local"}`, "folder", noProjectsOn(this.names.title(m)), tokens(t), { label: "New project", onClick: () => run("space.new", { machine: m ?? "" }) });
     const kept = this.closedOn(m, ctx).length > 0;
-    return [headItem, ...(mine.length ? mine.flatMap(draw) : kept ? [] : [loading(m) ? loadingRow(m) : item(empty)]), ...closed(m)];
+    return [headItem, ...(mine.length ? draw(mine) : kept ? [] : [loading(m) ? loadingRow(m) : item(empty)]), ...closed(m)];
   }
 
   pull(place, cx) {
@@ -1906,46 +1958,16 @@ export default class Spaces extends View {
   }
 
   // The last child's line stops at the bend.
-  connector({ last }, t) {
-    const mid = TREE_ROW / 2;
-    return [
-      div().absolute().left(GUIDE_X).top(-GUIDE_OVERLAP).w(1).h(last ? mid + GUIDE_OVERLAP : TREE_ROW + GUIDE_OVERLAP).bg(t.input),
-      div().absolute().left(GUIDE_X).top(mid).w(ELBOW_W).h(1).bg(t.input),
-    ];
+  connector({ last, reach = GUIDE_OVERLAP }, t) {
+    const line = washes(t)?.w12 ?? t.border;
+    return guideBars(last ? "end" : "tee", { x: GUIDE_X, elbow: ELBOW_W, h: TREE_ROW, reach })
+      .map((b) => div().absolute().left(b.left).top(b.top).w(b.w).h(b.h).bg(line));
   }
 
   // Folded: the most urgent mark and how many, and a click there unfolds. Open, the row itself folds.
   fold(w, mine, t) {
     const open = !this.agentsFolded.has(w.id);
     return agentFold(w.id, mine, open, (cx) => { this.setAgentsFolded(w.id, open, cx); cx.notify(); }, t) ?? div().flex_none();
-  }
-
-  // Rename in place: the name becomes a field; Enter keeps it, Esc leaves it as it was.
-  startRename(w) {
-    this.endRename();
-    const text = new TextField({ placeholder: w.name });
-    text.set_value(w.name);
-    text.on("submit", (_e, cx) => this.endRename(true, cx));
-    this.renaming = { id: w.id, name: w.name, text };
-    text.focus();
-  }
-
-  endRename(keep = false, cx = null) {
-    const r = this.renaming;
-    if (!r) return;
-    this.renaming = null;
-    const name = r.text.value().trim();
-    if (keep && name !== r.name) run("space.rename", { id: r.id, name });
-    try { r.text.release(); } catch { /* already gone */ }
-    cx?.notify();
-  }
-
-  renameField(t) {
-    return div().id("space-rename").flex_1().min_w(0)
-      .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
-      .on_mouse_up("left", (_e, cx) => cx.stop_propagation())
-      .on_key_down((e, cx) => { if (String(e.key).toLowerCase() === "escape") { cx.stop_propagation(); this.endRename(false, cx); } })
-      .child(field("space-rename-field", this.renaming.text, tokens(t)));
   }
 
   setAgentsFolded(id, folded, cx = null) {
@@ -1991,7 +2013,7 @@ export default class Spaces extends View {
 
   dots(id, t, open) {
     return div().id(id).size(20).flex_none().rounded(6).flex().items_center().justify_center().text_color(t.muted).tooltip("More")
-      .hover((s) => s.bg(t.input).text_color(t.foreground))
+      .hover((s) => s.bg(t.hover).text_color(t.foreground))
       .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
       .on_mouse_up("left", (_e, cx) => { cx.stop_propagation(); open(); })
       .child(svg("mods/kanso-chrome/icons/ellipsis.svg").size(14));
@@ -2026,7 +2048,7 @@ export default class Spaces extends View {
       .on_mouse_down("left", (e) => {
         this.pressed = tree || e.click_count === 2 ? null : w.id;
         this.over = null;
-        if (e.click_count === 2) this.startRename(w);
+        if (e.click_count === 2) run("space.rename", { id: w.id });
       })
       .on_mouse_move((_e, cx) => this.hold(this.takes(w, tree) ? w.id : null, cx))
       .on_mouse_up("left", (_e, cx) => {
@@ -2052,9 +2074,8 @@ export default class Spaces extends View {
           .gap(9)
           .items_center()
           .when(Boolean(tree), el => el.pl(CHILD_PAD).child(svg("mods/kanso-chrome/icons/branch.svg").size(13).text_color(t.muted)))
-          .child(this.renaming?.id === w.id ? this.renameField(t)
-            : div().flex_shrink(0).max_w(150).truncate().text_size(13.5).font_semibold().text_color(tree && !on ? t.muted : t.foreground).child(w.name))
-          .child(g && !asleep && this.renaming?.id !== w.id && shown("sidebar.git", true, pieces(shared)) ? gitTail(g, tree, w.name, t, place, { id: w.id, active: on, pulling: this.pulling, pull: (cx) => this.pull(place, cx), open: () => openAhead(w) }) : div().flex_1())
+          .child(div().flex_shrink(0).max_w(150).truncate().text_size(13.5).font_semibold().text_color(tree && !on ? t.muted : t.foreground).child(w.name))
+          .child(g && !asleep && shown("sidebar.git", true, pieces(shared)) ? gitTail(g, tree, w.name, t, place, { id: w.id, active: on, pulling: this.pulling, pull: (cx) => this.pull(place, cx), open: () => openAhead(w) }) : div().flex_1())
           .when(asleep, (el) => el.children(this.asleepTail(t, group)))
           .when(controls.plus, (el) => el.child(this.plus(`space-plus-${w.id}`, t, spot, `New agent in ${w.name}`)))
           .when(controls.dots, (el) => el.child(this.dots(`space-dots-${w.id}`, t, () => this.menu(w))))
@@ -2077,14 +2098,25 @@ export default class Spaces extends View {
     return this.railMark(t, `space-${w.id}`, { lead: this.railInitial(w.name, this.avatarColor(w, t)), rows, tip: w.name, on: w.active, space: w.id, menu: () => this.menu(w) });
   }
 
-  agentsView(t, sp, ps, ctx) {
-    // Asleep is a status like the others: those agents are entries too.
+  // Asleep is a status like the others: those agents are entries too.
+  statusSections(sp, ctx) {
     const names = new Map(sp.map((w) => [w.id, w.name]));
     const zz = ctx.asleep.rows.map((a) => ({ a: { ...a, space_name: names.get(a.space) ?? a.asleep.spaceName ?? "" }, lines: [] }));
     const entries = [...nest(this.inStripOrder(ctx.all, ctx.strip), ctx.terms), ...zz];
     const since = { ...(this.since ?? {}), ...Object.fromEntries(zz.map((e) => [e.a.address, { s: "asleep", at: e.a.asleep.saved }])) };
-    const held = this.held?.done ? this.held.address : null;
-    const sections = bySection(entries, since, held, this.statusOrder);
+    return bySection(entries, since, this.held?.done ? this.held.address : null, this.statusOrder);
+  }
+
+  // Asleep, a conversation keeps its place among the others (by your last message in it).
+  threadRows(ctx) {
+    return ctx.all
+      .filter((a) => !a.address.includes("/") && (this.threads[a.address] || a.program?.agent || a.status))
+      .map((a) => ({ a, th: shownThread(this.threads[a.address], this.termBy?.get(a.address), this.alive) }))
+      .concat(ctx.asleep.rows.filter((a) => a.asleep.resume).map((a) => ({ a, th: { title: a.title, said: a.asleep.said ?? a.asleep.saved, at: a.asleep.saved } })));
+  }
+
+  agentsView(t, sp, ps, ctx) {
+    const sections = this.statusSections(sp, ctx);
     if (!sections.length) return machines().some((m) => m.layout === "loading") ? [item(this.silhouette(t), 3 * 32 + 4)]
       : [item(stateEmpty("agents-empty", "activity", "No agents running", tokens(t)))];
     const project = this.projectOf(sp, t);
@@ -2232,11 +2264,7 @@ export default class Spaces extends View {
 
   // Status, collapsed: one mark per section.
   agentsRail(t, sp, ctx) {
-    const names = new Map(sp.map((w) => [w.id, w.name]));
-    const zz = ctx.asleep.rows.map((a) => ({ a: { ...a, space_name: names.get(a.space) ?? a.asleep.spaceName ?? "" }, lines: [] }));
-    const entries = [...nest(this.inStripOrder(ctx.all, ctx.strip), ctx.terms), ...zz];
-    const since = { ...(this.since ?? {}), ...Object.fromEntries(zz.map((e) => [e.a.address, { s: "asleep", at: e.a.asleep.saved }])) };
-    const sections = bySection(entries, since, this.held?.done ? this.held.address : null, this.statusOrder);
+    const sections = this.statusSections(sp, ctx);
     return sections.map((s) => {
       const rows = s.entries.filter((e) => !e.lines.length).map((e) => this.railRow(e.a, e.a.space_name || null, ctx.now));
       const lead = s.id === "other" ? this.railIcon(t, "layers") : h_flex().h(16).items_center().child(statusMark(t, s.id));
@@ -2247,11 +2275,7 @@ export default class Spaces extends View {
   // Threads, collapsed: one mark per project (or per shelf: Pinned, Snoozed, Settled).
   threadsRail(t, sp, ctx) {
     if (!this.threads) return [];
-    const rows = ctx.all
-      .filter((a) => !a.address.includes("/") && (this.threads[a.address] || a.program?.agent || a.status))
-      .map((a) => ({ a, th: shownThread(this.threads[a.address], this.termBy?.get(a.address), this.alive) }))
-      .concat(ctx.asleep.rows.filter((a) => a.asleep.resume).map((a) => ({ a, th: { title: a.title, said: a.asleep.said ?? a.asleep.saved, at: a.asleep.saved } })));
-    const sections = threadSections(rows, { order: this.threadOrder, group: this.threadGroup, now: ctx.now, since: this.since ?? {} });
+    const sections = threadSections(this.threadRows(ctx), { order: this.threadOrder, group: this.threadGroup, now: ctx.now, since: this.since ?? {} });
     const icons = { pinned: "pin", snoozed: "clock", settled: "check" };
     return sections.map((s) => {
       const p = s.project ? ctx.project(s.project) : null;
@@ -2277,11 +2301,7 @@ export default class Spaces extends View {
   threadsView(t, sp, ps, ctx) {
     if (!this.threads) return [item(this.silhouette(t), 3 * 32 + 4)];
     const project = this.projectOf(sp, t);
-    const rows = ctx.all
-      .filter((a) => !a.address.includes("/") && (this.threads[a.address] || a.program?.agent || a.status))
-      .map((a) => ({ a, th: shownThread(this.threads[a.address], this.termBy?.get(a.address), this.alive) }))
-      // Asleep, a conversation keeps its place among the others (by your last message in it).
-      .concat(ctx.asleep.rows.filter((a) => a.asleep.resume).map((a) => ({ a, th: { title: a.title, said: a.asleep.said ?? a.asleep.saved, at: a.asleep.saved } })));
+    const rows = this.threadRows(ctx);
     if (!rows.length) return [item(stateEmpty("threads-empty", "message", "No conversations yet", tokens(t)))];
     const sections = threadSections(rows, { order: this.threadOrder, group: this.threadGroup, now: ctx.now, since: this.since ?? {} });
     // Under its project's header a conversation is nested: indented, the agent's icon as its mark, and no project line.
@@ -2532,7 +2552,7 @@ export default class Spaces extends View {
 
   // A pill keeps its identity per view, so a change of view places it rather than sliding it across.
   list(t, collapsed, view, items) {
-    const gap = view === "threads" ? 6 : 1;
+    const gap = view === "threads" ? 6 : ROW_GAP;
     const { els, space, agent } = laidOut(items, gap);
     const pills = collapsed ? [] : [
       ...(space ? [pill("pill-space", space.y, space.h, t.foreground + "14")] : []),
