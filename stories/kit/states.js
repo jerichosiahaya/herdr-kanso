@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, sampleShot, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -485,6 +485,18 @@ export const statedPages = {
       { label: 'Explain', args: { title: "Couldn't pull checkout", body: 'fatal: Not possible to fast-forward, aborting.', action: '', explain: 'Atlas' }, caption: 'An error sends the source’s words to a session.' },
       { label: 'A home’s icon', args: { level: 'success', icon: 'lu-git-pull-request', title: 'Merged #142', action: '' }, caption: 'The icon of where it happened, in the level’s colour.' },
       { label: 'A session’s mark', args: { level: 'success', mark: 'done', title: 'Atlas finished', action: '' }, caption: 'A session has no icon, so its mark.' },
+    ],
+  },
+  'Primitives/Tooltip': {
+    args: { text: 'New tab', detail: '', key: '⌘T', icon: 'lu-plus', side: 'bottom', open: true },
+    markup: tooltip,
+    states: [
+      { label: 'Below', args: {}, caption: 'The name of an unnamed control and its key, in dim.' },
+      { label: 'Above', args: { side: 'top' }, caption: 'The caret points at the control.' },
+      { label: 'Right', args: { side: 'right' }, caption: 'Beside it when there is more room there.' },
+      { label: 'Left', args: { side: 'left' }, caption: 'The side the composition sets.' },
+      { label: 'A detail', args: { text: 'Adding up', detail: '14 repositories to go', key: '', icon: 'lu-refresh-cw' }, caption: 'A detail follows the name, in dim.' },
+      { label: 'Closed', args: { open: false }, caption: 'Shown on hover and keyboard focus only.' },
     ],
   },
   'Primitives/Skeleton': {
