@@ -1613,10 +1613,9 @@ export default class Spaces extends View {
     const starts = keys.flatMap((key, i) => (i === 0 || !keys[i - 1] || key !== keys[i - 1] ? [i] : []));
     const runs = starts.map((i, k) => {
       const span = entries.slice(i, starts[k + 1] ?? entries.length), slab = keys[i] && span.length > 1;
-      const rows = span.map((e, j) => {
+      const rows = span.map((e) => {
         if (e.a.asleep) return { a: e.a, h: ASLEEP_ROW, el: this.asleepLine(e.a, indent, t) };
-        // A slab's rows touch: a guide climbs no gap there.
-        const m = { ...this.more(e, ctx), gap: slab && j > 0 ? 0 : ROW_GAP };
+        const m = this.more(e, ctx);
         return { a: e.a, h: sessionHeight(m), el: agentSession(e.a, indent ? 2 : 1, c, this.navRow(e.a, e.a.pane && !e.lines.length ? this.rowOf(e.a, mine, space) : null), m) };
       });
       return { key: keys[i], rows, slab };
@@ -1639,7 +1638,6 @@ export default class Spaces extends View {
     return {
       label: this.nameOf(a),
       lines: e.lines,
-      first: e.first,
       time: timed(a.sub ? null : elapsed(a, this.since ?? {}, ctx.now)),
       // A message sent to it from Send and not seen yet: who it is from.
       activity: show ? (fromOf(a) ? `Message from ${fromOf(a)}` : activityOf(a)) : null,
@@ -2333,7 +2331,6 @@ export default class Spaces extends View {
         wordTip: unreadable,
         quiet: Boolean(unreadable),
         refresh: unreadable ? (cx) => this.refreshThreads(cx) : null,
-        strong: unread || up,
         // What the agent says it is on, or said last; else the last thing you wrote.
         activity: unreadable ? null : said(a) ?? (th?.prompt ? `You: ${th.prompt}` : null),
         oneLine: this.narrow,

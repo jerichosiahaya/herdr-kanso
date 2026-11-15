@@ -334,8 +334,8 @@ export function agentFold(id, mine, open, onToggle, t, c) {
 const GUIDE_KIND = { "├": "tee", "└": "end", "│": "pass" };
 // The program's own art, or the terminal's icon for a terminal or an unknown program.
 const programOf = (a) => (a.program?.icon ? { icon: a.program.icon, tint: a.program.tint } : "terminal");
-const tasksTip = (tasks) => tasks.map((x) => `${x.command.length > TASK_TIP ? `${x.command.slice(0, TASK_TIP - 1)}\u2026` : x.command} \u00b7 ${x.time}`).join("\n");
 const TASK_TIP = 90;
+const tasksTip = (tasks) => tasks.map((x) => `${x.command.length > TASK_TIP ? `${x.command.slice(0, TASK_TIP - 1)}\u2026` : x.command} \u00b7 ${x.time}`).join("\n");
 
 // What the session row shows: `base` is the depth of a top-level row in this list, each sub-agent one deeper with its guides.
 export function sessionProps(a, base, row, more = {}) {
