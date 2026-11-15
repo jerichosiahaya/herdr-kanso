@@ -36,6 +36,7 @@ the branch's rules.
 - The Containers panel asks Docker only what can have changed: the container list every 5 seconds, their details when it changes, images, volumes and disk use once a minute, after an action and when a container appears or goes, and Docker's memory limit and context when the panel opens or comes forward, on Read again, when Docker comes back and when another context is chosen. About a quarter as many processes while it is open. (#263)
 - Draw the missing Worktrees, Preview, Markdown and Simulator feature states in Storybook.
 - Draw the missing Share, Shipped, Containers, Ports, Find, Images and Files states in Storybook.
+- In Storybook, Arrangements without sqlite3 reads "No arrangement yet." with one line saying what to install, Save and Overwrite show how programs are kept, and Images with no agent to send to says so on one line above its actions, as the app does.
 - Give Dawn Mode its own Storybook page, and show the Dawn Mode pill on the sidebar.
 - The Storybook link in the site's navigation opens in a new tab.
 - The window's title bar shows only the window controls.
