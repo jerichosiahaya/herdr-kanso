@@ -71,11 +71,11 @@ const hostFailure = ({ name, state, words, agent }) => failureBlock({ text: stat
 const hostRow = ({ name, target, state = 'ready', words, mac = false, agent }) => list(
   row({ icon: 'lu-server', name, detail: target, mark: state === 'added' ? 'done' : 'none', meta: state === 'added' ? 'Added' : null, action: state === 'ready' ? { label: 'Add', kind: 'tonal' } : null }),
   hostFix[state] ? hostFailure({ name, state, words, agent }) : null,
-  mac && state === 'added' ? row({ name: phrase(name, 'asks before agents read Documents'), depth: 1, dimmed: true, action: { label: 'Open the setting', kind: 'quiet' } }) : null);
+  mac && state === 'added' ? row({ name: phrase(name, 'asks before agents read Documents'), depth: 1, dimmed: true, action: { label: phrase('Open the setting on', name), kind: 'tonal' } }) : null);
 export const addComputer = ({ hosts = [], typed, agent }) => dialog({
   title: 'Add computer',
-  body: list(hosts.length ? [row({ name: 'From ~/.ssh/config', heading: true }), hosts.map((host) => hostRow({ ...host, agent }))] : emptyState({ text: '~/.ssh/config lists no hosts' }),
-    row({ name: 'Or how ssh reaches it', heading: true }), input({ text: typed, label: 'user@host', icon: 'lu-plus' })),
+  body: list(hosts.length ? [row({ name: 'From ~/.ssh/config', heading: true }), hosts.map((host) => hostRow({ ...host, agent }))] : emptyState({ icon: 'lu-server', text: '~/.ssh/config lists no hosts' }),
+    row({ name: 'Or how ssh reaches it', heading: true }), input({ text: typed, label: 'user@host', action: 'Add' })),
 });
 
 // Status bar compositions: a computer stands in for its sidebar row; the rest are the bar's Menus and Buttons.
