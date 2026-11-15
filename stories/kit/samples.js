@@ -1,6 +1,6 @@
 // Sample sidebar content for the stories: the rows and tiles of each view, drawn with the compositions.
-import { asleep, computerRow, panelBack, panelClose, panelRefresh, projectRow, section, sessionRow, sidebar, tile } from './compositions.js';
-import { button, glyph, menu, stack, statusItem } from './pieces.js';
+import { asleep, computerRow, needsControl, panelBack, panelClose, panelRefresh, projectRow, railMenu, section, sessionRow, sidebar, tile } from './compositions.js';
+import { button, emptyState, glyph, menu, skeletonOf, stack, statusItem } from './pieces.js';
 import keyFile from '../../kanso/keys.json' with { type: 'json' };
 import windowsKeyFile from '../../kanso/keys.windows.json' with { type: 'json' };
 import { LIST_LAYER, describe, layer } from '../../kanso/mods/kanso-help/keymap.js';
@@ -32,8 +32,48 @@ export const sampleTiles = {
   agents: () => [tile({ status: 'blocked', count: 1 }), tile({ status: 'working', count: 3 }), tile({ status: 'done', count: 2 }), tile({ status: 'idle', count: 3 })],
   threads: () => [tile({ status: 'blocked', count: 1 }), tile({ status: 'working', count: 1 }), tile({ status: 'done', count: 1 })],
 };
+// A moment of the sidebar: only the rows it is about, the rest of the sample left out.
+const kanso = (extra = {}) => projectRow({ name: 'kansō', folder: 'herdr-kanso', branch: 'main', open: true, ...extra });
+const atlas = (extra = {}) => sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m', ...extra });
+const juno = (extra = {}) => sessionRow({ name: 'Juno', status: 'idle', ...extra });
+const iris = () => sessionRow({ program: 'p-codex', name: 'Iris', status: 'done' });
+const under = (menuOf) => stack({ variant: 'row menu' }, menuOf());
+const waiting = (name, place, time) => sessionRow({ program: 'lu-terminal', name, activity: 'Waiting for you', place, time, status: 'blocked', depth: 0 });
+const thread = (name, extra = {}) => sessionRow({ name, depth: 0, ...extra });
+const kansoThreads = (...rows) => [section({ title: 'kansō' }), thread('Review boards 01 to 04', { activity: 'Reviewing step 01', time: '3m' }), ...rows];
+const needs = (label) => needsControl({ label });
+export const sidebarMoments = {
+  keyboard: () => ({ rows: [group(kanso(), atlas({ focus: true }), juno())] }),
+  loading: () => ({ rows: [skeletonOf({ shape: 'row', count: 3 })] }),
+  pinned: () => ({ rows: [group(kanso(), juno({ pinned: true }), atlas(), iris())] }),
+  'running command': () => ({ rows: [group(kanso(), atlas({ commands: 1 }), juno())] }),
+  'stuck step': () => ({ rows: [group(kanso(), atlas({ activity: 'Running tests', time: '24m', late: true }), juno())] }),
+  'incoming message': () => ({ rows: [group(kanso(), atlas({ activity: 'Message from Juno', time: null, status: 'idle', strong: true }), juno())] }),
+  unread: () => ({ rows: [group(kanso(), atlas(), juno({ strong: true }))] }),
+  closed: () => ({ rows: [group(kanso(), atlas()), group(projectRow({ name: 'archive', closed: true }))] }),
+  missing: () => ({ rows: [group(kanso(), atlas()), group(projectRow({ name: 'archive', closed: true, missing: true }))] }),
+  'no projects': () => ({ rows: [group(computerRow({ name: 'light', remote: false })), emptyState({ icon: 'lu-folder', text: 'No projects on light yet', action: 'New project' })] }),
+  'nothing running': () => ({ rows: [group(kanso({ hover: true })), group(projectRow({ name: 'agile' }))] }),
+  ahead: () => ({ rows: [group(kanso({ sync: '↑3' }), atlas())] }),
+  pulling: () => ({ rows: [group(kanso({ sync: '↓12', pulling: true }), atlas())] }),
+  'wake selected': () => ({ rows: [group(kanso(), atlas()), group(asleep({ names: ['Orion', 'Nova'], open: true, focus: 'Orion' }))] }),
+  'rail popup': () => ({ tiles: [...sampleTiles.spaces(), tile({ status: 'asleep', count: 2, open: true }),
+    stack({ variant: 'rail menu' }, railMenu({ title: 'Asleep', rows: [{ name: 'Orion', place: 'kansō', status: 'asleep' }, { name: 'Nova', place: 'prjct', status: 'asleep' }] }))] }),
+  'status empty': () => ({ rows: [emptyState({ icon: 'lu-activity', text: 'No agents running' })] }),
+  'threads empty': () => ({ rows: [emptyState({ icon: 'lu-message-square', text: 'No conversations yet' })] }),
+  'threads asleep': () => ({ rows: kansoThreads(asleep({ names: ['Audit the app errors', 'Sleep lost call'], open: true })) }),
+  settled: () => ({ rows: kansoThreads(section({ title: 'Settled' }), thread('Sleep lost call', { status: 'done' })) }),
+  snoozed: () => ({ rows: kansoThreads(section({ title: 'Snoozed' }), thread('Audit the app errors', { place: '14:30', status: 'idle' })) }),
+  'needs you': () => ({ needs: needs('Needs you · 3'), rows: [waiting('Nova', 'amtelser', '9m'), waiting('Iris', 'prjct', '4m'), waiting('Atlas', 'devbox / kansō', '1m')] }),
+  'needs you reading': () => ({ needs: needs('Needs you · 1'), rows: [waiting('Nova', 'amtelser', '3m'), skeletonOf({ shape: 'row', count: 1 })] }),
+  'needs you unavailable': () => ({ needs: needs('Needs you · 1'), rows: [waiting('Nova', 'amtelser', '3m'), emptyState({ text: 'Queue unavailable' })] }),
+  'nobody waiting': () => ({ needs: needs('Nobody is waiting'), rows: sampleRows.spaces() }),
+};
 // A row's open menu hangs under Orion, the row it was opened on.
-export const sampleSidebar = ({ view = 'spaces', rowMenu = null, ...args } = {}) => sidebar({ ...args, view, rows: sampleRows[view]({ rowMenu }), tiles: sampleTiles[view]() });
+export const sampleSidebar = ({ view = 'spaces', rowMenu = null, moment = null, ...args } = {}) => {
+  const { rows = sampleRows[view]({ rowMenu }), tiles = sampleTiles[view](), needs: count = null } = moment ? sidebarMoments[moment]() : {};
+  return sidebar({ ...args, view, needs: count, rows, tiles });
+};
 
 // The window at rest: the open project's tabs, its focused agent and what that agent's terminal shows, and the panel door it opens.
 export const sampleWindow = {

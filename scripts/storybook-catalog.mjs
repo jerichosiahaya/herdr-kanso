@@ -98,13 +98,13 @@ const protoPage = {
   'components-title-and-tools': null, 'components-while-you-were-away': 'Compositions/Activity', 'components-worktree-row-open': 'Primitives/Row',
   'compositions-bars': null, 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
   'compositions-menu-and-dialog': null, 'compositions-panel-pieces': 'Compositions/Panel',
-  'compositions-sidebar-rows': 'Layouts/Sidebar', 'compositions-states': null,
+  'compositions-sidebar-features': null, 'compositions-sidebar-rows': null, 'compositions-states': null,
   'layouts-sidebar-at-rest': null, 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
   'layouts-window-at-rest': null, 'layouts-right-click-any-piece': null, 'layouts-hjkl-dojo': null,
   'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': 'Compositions/Dawn Mode', 'tokens-icons': 'Tokens/Icons', 'tokens-type': 'Tokens/Type',
 };
-// The sidebar rows are Compositions/Sidebar's pieces; only the two the sort's coverage points at stay.
-const sidebarRowsKept = new Set(['ProjectsStatusThreads', 'StatusViewTile']);
+// Of a source routed to null, the stories a page still draws from.
+const protoKept = { 'compositions-sidebar-features': { AwayEvents: 'Compositions/Activity' } };
 const coveragePage = {
   Arrangements: 'Compositions/Arrangements dialog', SaveArrangement: 'Compositions/Arrangements dialog', SettingsMenu: 'Compositions/Settings menu', UpdateNotice: 'Compositions/Notifications', RuntimeNotice: 'Compositions/Notifications',
   ContainerList: 'Panels/Containers', ContainerRow: 'Panels/Containers', ComposeProject: 'Panels/Containers', ContainerDisk: 'Panels/Containers',
@@ -116,8 +116,8 @@ const coveragePage = {
   WorktreeVerdict: 'Panels/Worktrees', Worktrees: 'Panels/Worktrees', WorktreeHistory: 'Panels/Worktrees', Shipped: 'Panels/Shipped', Share: 'Panels/Share', VerdictBody: 'Panels/PR', CodeLimits: 'Primitives/Code', HistoryChart: 'Primitives/Chart', ActionNotice: 'Primitives/Toast', ShareCard: 'Panels/Share',
   MultilinePrompt: 'Primitives/Field', Prompt: 'Compositions/Prompt dialog', SendDialog: 'Compositions/Send dialog', Pieces: 'Panels/Settings', Bindings: 'Panels/Settings', ReleaseControls: 'Panels/Settings', CreditsLoading: 'Panels/Settings',
   Devices: 'Panels/Simulator', DeviceControls: 'Panels/Simulator', PictureState: 'Panels/Simulator', SleepDialog: 'Compositions/Sleep dialog',
-  Sidebar: 'Layouts/Sidebar', SidebarStatus: 'Layouts/Sidebar', SidebarThreads: 'Layouts/Sidebar', SidebarSort: 'Layouts/Sidebar', ProjectGit: 'Layouts/Sidebar',
-  ProjectMenu: 'Compositions/Project menu', AgentMenu: 'Compositions/Agent menu', NewConversation: 'Compositions/New conversation menu', ProjectCreation: 'Compositions/New project dialog', ComputerMenu: 'Compositions/Computer menu', Asleep: 'Layouts/Sidebar', NeedsQueue: 'Layouts/Sidebar', AwayEvents: 'Compositions/Activity', CreateWorktree: 'Compositions/New worktree dialog',
+  Sidebar: 'Compositions/Sidebar', SidebarStatus: 'Compositions/Sidebar', SidebarThreads: 'Compositions/Sidebar', SidebarSort: 'Compositions/Toolbar', ProjectGit: 'Compositions/Sidebar',
+  ProjectMenu: 'Compositions/Project menu', AgentMenu: 'Compositions/Agent menu', NewConversation: 'Compositions/New conversation menu', ProjectCreation: 'Compositions/New project dialog', ComputerMenu: 'Compositions/Computer menu', Asleep: 'Compositions/Sidebar', NeedsQueue: 'Compositions/Sidebar', AwayEvents: 'Compositions/Activity', CreateWorktree: 'Compositions/New worktree dialog',
   Spend: 'Panels/Spend', SpendBreakdown: 'Panels/Spend', SpendSettings: 'Panels/Spend', SpendChart: 'Primitives/Chart', StatusStandIn: 'Compositions/Status bar', PaneTools: 'Compositions/Pane header', StripNavigation: 'Compositions/Edges', Tabs: 'Primitives/Tab', PanelToolbar: 'Compositions/Tab bar', Notice: 'Primitives/Toast', NoticeStack: 'Primitives/Toast',
 };
 
@@ -131,7 +131,8 @@ export function pageFor(source, file, key) {
   if (source === 'proto') {
     if (primitive[key] && /compositions-/.test(base)) return `Primitives/${primitive[key]}`;
     if (base === 'compositions-panel-pieces' && panelPiece[key]) return panelPiece[key];
-    if (protoPage[base] === null || (base === 'compositions-sidebar-rows' && !sidebarRowsKept.has(key))) return null;
+    if (protoKept[base]?.[key]) return protoKept[base][key];
+    if (protoPage[base] === null) return null;
     if (!protoPage[base]) {
       if (base.startsWith('components-')) return `Primitives/${base.slice(11).replace(/-/g, ' ').replace(/^./, (s) => s.toUpperCase())}`;
       throw new Error(`Missing component route: ${file}:${key}`);

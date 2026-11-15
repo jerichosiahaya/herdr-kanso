@@ -124,16 +124,16 @@
   "panel/Files": {
     "page": "Panels/Files",
     "states": {
-      "Tree": "kit/Panels/Files/All files, with marks",
-      "Changed": "kit/Panels/Files/Changed, opened from the digest",
-      "Loading": "kit/Panels/Files/First read",
-      "No changes": "kit/Panels/Files/Nothing changed",
-      "No folder": "kit/Panels/Files/No folder for this pane",
-      "Read failed": "kit/Panels/Files/The folder can’t be read",
-      "Stale": "kit/Panels/Files/Stale: devbox stopped answering",
-      "Keyboard": "kit/Panels/Files/All files, with marks",
-      "No files": "kit/Panels/Files/An empty folder",
-      "Limit": "kit/Panels/Files/All files, with marks"
+      "Tree": "panels/files/FilesAtRestNow/Default",
+      "Changed": "panels/files/FilesChangedOpenedFromTheDigest/Default",
+      "Loading": "panels/files/FilesFirstRead/Default",
+      "No changes": "panels/files/FilesNothingChanged/Default",
+      "No folder": "panels/files/FilesNoFolderForThisPane/Default",
+      "Read failed": "panels/files/FilesErrorTheFoldersOwnWords/Default",
+      "Stale": "panels/files/FilesStaleDevboxStoppedAnswering/Default",
+      "Keyboard": "panels/files/FilesRightClickARow/Default",
+      "No files": "panels/files/FilesNofiles/Default",
+      "Limit": "panels/files/FilesLimit/Default"
     }
   },
   "panel/Preview": {
@@ -587,78 +587,71 @@
     }
   },
   "spaces/Sidebar": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar",
     "states": {
-      "Closed project": "proto/compositions-sidebar-features/Sidebar/Closed project",
-      "Incoming message": "proto/compositions-sidebar-features/Sidebar/Incoming message",
-      "Keyboard": "proto/compositions-sidebar-features/Sidebar/Keyboard",
-      "Loading": "proto/compositions-sidebar-features/Sidebar/Loading",
-      "Missing folder": "proto/compositions-sidebar-features/Sidebar/Missing folder",
-      "No agents": "proto/compositions-sidebar-features/Sidebar/No agents",
-      "No projects": "proto/compositions-sidebar-features/Sidebar/No projects",
-      "Pinned order": "proto/compositions-sidebar-features/Sidebar/Pinned order",
-      "Running command": "proto/compositions-sidebar-features/Sidebar/Running command",
-      "Search empty": "proto/compositions-sidebar-features/Sidebar/Search empty",
-      "Stacked panes": "proto/compositions-sidebar-features/Sidebar/Stacked panes",
-      "Stuck step": "proto/compositions-sidebar-features/Sidebar/Stuck step",
-      "Unread": "proto/compositions-sidebar-features/Sidebar/Unread"
+      "Closed project": "kit/Sidebar/Closed project",
+      "Incoming message": "kit/Sidebar/Incoming message",
+      "Keyboard": "kit/Sidebar/Keyboard",
+      "Loading": "kit/Sidebar/Loading",
+      "Missing folder": "kit/Sidebar/Missing folder",
+      "No agents": "kit/Sidebar/Nothing running",
+      "No projects": "kit/Sidebar/No projects",
+      "Pinned order": "kit/Sidebar/Pinned",
+      "Running command": "kit/Sidebar/Running command",
+      "Stuck step": "kit/Sidebar/Stuck step",
+      "Unread": "kit/Sidebar/Unread"
     }
   },
   "spaces/SidebarStatus": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar",
     "states": {
-      "Groups": "proto/compositions-sidebar-features/SidebarStatus/Groups",
-      "Empty": "proto/compositions-sidebar-features/SidebarStatus/Empty",
-      "Collapsed groups": "proto/compositions-sidebar-features/SidebarStatus/Collapsed groups"
+      "Groups": "kit/Rail/Open",
+      "Empty": "kit/Sidebar/Status, nothing running",
+      "Collapsed groups": "kit/Rail/Collapsed"
     }
   },
   "spaces/SidebarThreads": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar",
     "states": {
-      "Active": "proto/compositions-sidebar-features/SidebarThreads/Active",
-      "Asleep": "proto/compositions-sidebar-features/SidebarThreads/Asleep",
-      "Empty": "proto/compositions-sidebar-features/SidebarThreads/Empty",
-      "Pinned": "proto/compositions-sidebar-features/SidebarThreads/Pinned",
-      "Reading": "proto/compositions-sidebar-features/SidebarThreads/Reading",
-      "Settled": "proto/compositions-sidebar-features/SidebarThreads/Settled",
-      "Snoozed": "proto/compositions-sidebar-features/SidebarThreads/Snoozed"
+      "Active": "kit/Sidebar/Threads",
+      "Asleep": "kit/Sidebar/Threads, asleep",
+      "Empty": "kit/Sidebar/Threads, none yet",
+      "Pinned": "kit/Sidebar/Threads",
+      "Reading": "kit/Sidebar/Loading",
+      "Settled": "kit/Sidebar/Threads, settled",
+      "Snoozed": "kit/Sidebar/Threads, snoozed"
     }
   },
   "spaces/SidebarSort": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Toolbar",
     "states": {
-      "Projects": "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default",
-      "Status": "proto/compositions-sidebar-rows/StatusViewTile/Default",
-      "Threads": "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default"
+      "Projects": "kit/Toolbar/Sort menu, Projects",
+      "Status": "kit/Toolbar/Sort menu, Status",
+      "Threads": "kit/Toolbar/Sort menu, Threads"
     }
   },
   "spaces/ProjectGit": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar",
     "states": {
-      "Ahead": "proto/compositions-sidebar-features/ProjectGit/Ahead",
-      "Behind": "proto/compositions-sidebar-features/ProjectGit/Behind",
-      "Pulling": "proto/compositions-sidebar-features/ProjectGit/Pulling",
-      "Pull refused": "proto/compositions-sidebar-features/ProjectGit/Pull refused"
+      "Ahead": "kit/Sidebar/Ahead",
+      "Behind": "kit/Sidebar/Open",
+      "Pulling": "kit/Sidebar/Pulling"
     }
   },
   "spaces/Asleep": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar",
     "states": {
-      "Asleep menu": "proto/compositions-sidebar-features/Asleep/Asleep menu",
-      "Forget armed": "proto/compositions-sidebar-features/Asleep/Forget armed",
-      "Rail popup": "proto/compositions-sidebar-features/Asleep/Rail popup",
-      "Sleep stuck": "proto/compositions-sidebar-features/Asleep/Sleep stuck",
-      "Wake pending": "proto/compositions-sidebar-features/Asleep/Wake pending",
-      "Wake selected": "proto/compositions-sidebar-features/Asleep/Wake selected"
+      "Rail popup": "kit/Sidebar/Rail, a group open",
+      "Wake selected": "kit/Sidebar/Asleep, a row selected"
     }
   },
   "spaces/NeedsQueue": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar",
     "states": {
-      "Empty": "proto/compositions-sidebar-features/NeedsQueue/Empty",
-      "Loading": "proto/compositions-sidebar-features/NeedsQueue/Loading",
-      "Queue": "proto/compositions-sidebar-features/NeedsQueue/Queue",
-      "Unavailable": "proto/compositions-sidebar-features/NeedsQueue/Unavailable"
+      "Empty": "kit/Sidebar/Nobody waiting",
+      "Loading": "kit/Sidebar/Needs you, reading",
+      "Queue": "kit/Sidebar/Needs you",
+      "Unavailable": "kit/Sidebar/Needs you, unavailable"
     }
   },
   "spaces/AwayEvents": {
@@ -871,5 +864,11 @@
   "help/Guide": {
     "page": "Panels/Settings",
     "states": {}
+  },
+  "spaces/Asleep/Asleep menu": {
+    "page": "Compositions/Agent menu",
+    "states": {
+      "Asleep menu": "kit/Agent menu/Asleep row"
+    }
   }
 }

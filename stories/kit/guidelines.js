@@ -177,6 +177,7 @@ export const guidelines = {
   ],
   "Compositions/Sidebar": [
     ["Kansō","Built from the pieces above.","Header, View switch, the rows of the chosen view and Footer. Collapsed, the rail keeps every tool, one view button with its menu and each group as a Tile."],
+    ["Kokō","Each state on its row.","Unread, a message, a stuck step, a running command, a pin or a pull say it on the row they belong to; loading, empty and failure are the kit's patterns, in the list's place."],
   ],
   "Compositions/Status bar/Item": [
     ["Kansō", "A Mark or an icon with its words.", "Icons and marks 14, 8 to their words, text 11.5 muted; the colour of a state only on an item in that state."],

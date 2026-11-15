@@ -5,7 +5,7 @@ import { avatarSizes, button, card, chip, code, dawn, dialog, escape, input, key
 import { barWidths, captioned, inSettings, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, projectRefusals, sendReach, sleepCases, statedPages, stepperShown, tabActs, worktreeRefusals } from './states.js';
-import { appNotices, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, statusMenus } from './samples.js';
+import { appNotices, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, sidebarMoments, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -439,7 +439,7 @@ export const playgrounds = {
     markup: (args) => inSidebar(sidebarFooter(args)),
   },
   'Compositions/Sidebar': {
-    args: { collapsed: false, dawn: false, art: true, view: 'spaces', switcher: true, menu: false },
+    ...statedPages['Compositions/Sidebar'],
     argTypes: {
       collapsed: flag('collapsed'),
       dawn: flag('Dawn Mode'),
@@ -447,8 +447,8 @@ export const playgrounds = {
       switcher: flag('view switch'),
       ...pick('view'),
       menu: { name: 'views menu', control: { type: 'boolean' }, if: { arg: 'collapsed' } },
+      moment: select('moment', ['', ...Object.keys(sidebarMoments)]),
     },
-    markup: sampleSidebar,
   },
   'Compositions/Panel': {
     ...statedPages['Compositions/Panel'],

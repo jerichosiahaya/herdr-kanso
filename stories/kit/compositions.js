@@ -22,13 +22,14 @@ export const toolbar = ({ view = 'spaces', column = false, open = false, sorted 
 // Sidebar compositions: each one is the Row, Tab, Menu, Avatar, Mark, Chip or Button in its own configuration.
 const icon = (name, label) => ({ icon: name, label });
 
-export const sessionRow = ({ program = 'p-claude', name, activity = null, time = null, place = null, status = 'working', depth = 1, current = false, pinned = false, commands = 0, hover = false, focus = false, dimmed = false }) => row({
-  icon: program, name, second: activity, detail: place, meta: time, mark: status, depth, current, dimmed, hover, focus,
+export const sessionRow = ({ program = 'p-claude', name, activity = null, time = null, place = null, status = 'working', depth = 1, current = false, pinned = false, commands = 0, strong = false, late = false, hover = false, focus = false, dimmed = false }) => row({
+  icon: program, name, second: activity, detail: place, meta: time, mark: status, depth, current, dimmed, strong, late, hover, focus,
   glint: status === 'working', flag: pinned ? 'lu-pin' : null, chip: commands, actions: [icon('lu-pin', 'Pin to the top'), icon('lu-ellipsis', 'More')],
 });
 
-export const projectRow = ({ name, folder = null, branch = null, sync = null, open = false, status = 'blocked', count = 0, hover = false, focus = false }) => row({
-  name, heading: true, current: open, hover, focus, detail: [folder, branch && { icon: 'lu-git-branch', text: branch }, sync],
+// Closed, a kept project steps down; its folder gone, it says so; a pull running, the pending dot.
+export const projectRow = ({ name, folder = null, branch = null, sync = null, open = false, closed = false, missing = false, pulling = false, status = 'blocked', count = 0, hover = false, focus = false }) => row({
+  name, heading: true, current: open, dimmed: closed, pending: pulling, hover, focus, detail: missing ? 'Not found' : [folder, branch && { icon: 'lu-git-branch', text: branch }, sync],
   mark: count ? status : 'none', meta: count || null, actions: [icon('lu-plus', phrase('New agent in', name)), icon('lu-ellipsis', 'More')],
 });
 
@@ -42,8 +43,14 @@ export const computerRow = ({ name, remote = true, state = 'on', status = 'block
 
 export const section = ({ title, status = 'none', count = 0 }) => row({ name: title, heading: true, mark: status, meta: count || null });
 
-export const asleep = ({ names = [], open = false } = {}) => list(row({ name: 'Asleep', heading: true, mark: 'asleep', meta: open ? null : phrase(names.length) }),
-  open ? names.map((name) => row({ name, depth: 1, dimmed: true, action: { label: 'Wake', kind: 'quiet' } })) : null);
+export const asleep = ({ names = [], open = false, focus = null } = {}) => list(row({ name: 'Asleep', heading: true, mark: 'asleep', meta: open ? null : phrase(names.length) }),
+  open ? names.map((name) => row({ name, depth: 1, dimmed: true, focus: name === focus, action: { label: 'Wake', kind: 'quiet' } })) : null);
+// A rail group's list: each row with its project and mark, then the way to the project.
+export const railMenu = ({ title, rows = [], project = false }) => menu({ title, items: [
+  ...rows.map(({ name, place, status }) => ({ icon: status === 'asleep' ? 'lu-moon' : 'lu-terminal', label: name, hint: place })),
+  ...(project ? [{ separator: true }, { icon: 'lu-chevron-right', label: 'Go to project' }] : [])] });
+// Needs you, over the list: how many wait; opened, the queue takes the list's place.
+export const needsControl = ({ label }) => stack({ variant: 'view switch' }, button({ label, kind: 'quiet', size: 'sm' }));
 
 export const views = [
   { key: 'spaces', label: 'Projects', icon: 'lu-folder' },
@@ -304,9 +311,9 @@ export const channelSettings = ({ channel = 'stable', art = true } = {}) => list
   channel === 'dawn' ? setting({ label: 'Dawn sky', control: toggle({ checked: art, label: 'Dawn sky' }) }) : null);
 
 // The rows and tiles of the current view come in drawn; the sidebar only places them.
-export const sidebar = ({ collapsed = false, dawn: early = false, art = true, view = 'spaces', switcher = true, menu: open = false, rows = [], tiles = [], away = null } = {}) => collapsed
+export const sidebar = ({ collapsed = false, dawn: early = false, art = true, view = 'spaces', switcher = true, menu: open = false, needs = null, rows = [], tiles = [], away = null } = {}) => collapsed
   ? stack({ variant: 'rail' }, header({ collapsed, dawn: early, art, view }), switcher ? viewSwitch({ view, column: true, open }) : null, stack({ variant: 'rail list' }, tiles), stack({ variant: 'rail footer' }, tool('lu-settings', 'Settings')))
-  : stack({ variant: 'sidebar' }, header({ dawn: early, art, view }), switcher ? viewSwitch({ view }) : null, stack({ variant: 'rows' }, rows), away, sidebarFooter());
+  : stack({ variant: 'sidebar' }, header({ dawn: early, art, view }), switcher ? viewSwitch({ view }) : null, needs, stack({ variant: 'rows' }, rows), away, sidebarFooter());
 
 // Two halves around the fixed slot of panes per view; each half folds its own items.
 export const statusBar = ({ left = [], middle = null, right = [], popup = null } = {}) => stack({ variant: 'status bar', grid: true },

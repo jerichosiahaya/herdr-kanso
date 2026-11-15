@@ -2,13 +2,12 @@ import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs'
 import { THEMES, colour, contrast } from './tokens.mjs';
 import { asleep, computerRow, header, projectRow, section, sessionRow, sidebarFooter, tile, viewSwitch } from '../stories/kit/compositions.js';
 import { dawn as dawnSky, input, stack, windowControls } from '../stories/kit/pieces.js';
-import { sampleSidebar } from '../stories/kit/samples.js';
 import { statedPages } from '../stories/kit/states.js';
 export { elements } from './storybook-markup.mjs';
 
-// Each named state of a stated page, drawn from its preset.
-export const statedRecords = () => Object.entries(statedPages).flatMap(([page, { args, markup, states }]) => states.map(({ label, args: preset, caption }) => (
-  { id: `kit/${page.replace('Compositions/', '')}/${label}`, source: 'kit', page, label, html: frame(markup({ ...args, ...preset })), caption })));
+// Each named state of a stated page, drawn from its preset; `id` keeps a state's earlier name.
+export const statedRecords = () => Object.entries(statedPages).flatMap(([page, { args, markup, states }]) => states.map(({ label, args: preset, caption, id }) => (
+  { id: id ?? `kit/${page.replace('Compositions/', '')}/${label}`, source: 'kit', page, label, html: frame(markup({ ...args, ...preset })), caption })));
 
 export function kitRecords(records) {
   const originals = records.filter((record) => record.html !== undefined && !['kit', 'tokens'].includes(record.source));
@@ -76,13 +75,6 @@ export function kitRecords(records) {
     ['Tile', 'Status', inRail(tile({ status: 'working', count: 3 })), 'A state in the rail.'],
     ['Footer', 'Default', inSidebar(sidebarFooter()), 'Settings.'],
     ['Footer', 'Update', inSidebar(sidebarFooter({ update: 'Update kansō to 3.31.0' })), 'An update adds a row on top.'],
-    ['Sidebar', 'Open', sampleSidebar(), 'Header, views, rows and footer.'],
-    ['Sidebar', 'Collapsed', sampleSidebar({ collapsed: true }), 'The rail.'],
-    ['Sidebar', 'Dawn', sampleSidebar({ dawn: true }), 'Open, in Dawn Mode.'],
-    ['Sidebar', 'Dawn collapsed', sampleSidebar({ collapsed: true, dawn: true }), 'The rail, in Dawn Mode.', 'kit/Rail/Dawn'],
-    ['Sidebar', 'Status', sampleSidebar({ view: 'agents' }), 'Open on Status.', 'kit/Rail/Open'],
-    ['Sidebar', 'Status collapsed', sampleSidebar({ collapsed: true, view: 'agents' }), 'The rail on Status.', 'kit/Rail/Collapsed'],
-    ['Sidebar', 'Views menu', sampleSidebar({ collapsed: true, menu: true }), 'The rail: its one view button opens Projects, Status and Threads.'],
   ]) results.push({ id: id ?? `kit/${page}/${label}`, source: 'kit', page: page === 'Sidebar' ? 'Compositions/Sidebar' : `Compositions/Sidebar/${page}`, label, html: frame(html), caption });
   results.push(...statedRecords());
   const choices = elements(byId('proto/components-choosing-the-channel/ChoosingTheChannel/Default'), 'kanso-update');

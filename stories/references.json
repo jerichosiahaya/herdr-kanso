@@ -865,52 +865,13 @@
         "proto/approved-dawn/Reference/10",
         "proto/approved-dawn/Reference/11",
         "proto/approved-dawn/Reference/12",
-        "proto/compositions-sidebar-features/Asleep/Asleep menu",
-        "proto/compositions-sidebar-features/Asleep/Forget armed",
-        "proto/compositions-sidebar-features/Asleep/Rail popup",
-        "proto/compositions-sidebar-features/Asleep/Sleep stuck",
-        "proto/compositions-sidebar-features/Asleep/Wake pending",
-        "proto/compositions-sidebar-features/Asleep/Wake selected",
-        "proto/compositions-sidebar-features/NeedsQueue/Empty",
-        "proto/compositions-sidebar-features/NeedsQueue/Loading",
-        "proto/compositions-sidebar-features/NeedsQueue/Queue",
-        "proto/compositions-sidebar-features/NeedsQueue/Unavailable",
-        "proto/compositions-sidebar-features/ProjectGit/Ahead",
-        "proto/compositions-sidebar-features/ProjectGit/Behind",
-        "proto/compositions-sidebar-features/ProjectGit/Pull refused",
-        "proto/compositions-sidebar-features/ProjectGit/Pulling",
-        "proto/compositions-sidebar-features/Sidebar/Closed project",
-        "proto/compositions-sidebar-features/Sidebar/Incoming message",
-        "proto/compositions-sidebar-features/Sidebar/Keyboard",
-        "proto/compositions-sidebar-features/Sidebar/Loading",
-        "proto/compositions-sidebar-features/Sidebar/Missing folder",
-        "proto/compositions-sidebar-features/Sidebar/No agents",
-        "proto/compositions-sidebar-features/Sidebar/No projects",
-        "proto/compositions-sidebar-features/Sidebar/Pinned order",
-        "proto/compositions-sidebar-features/Sidebar/Running command",
-        "proto/compositions-sidebar-features/Sidebar/Search empty",
-        "proto/compositions-sidebar-features/Sidebar/Stacked panes",
-        "proto/compositions-sidebar-features/Sidebar/Stuck step",
-        "proto/compositions-sidebar-features/Sidebar/Unread",
-        "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default",
-        "proto/compositions-sidebar-rows/StatusViewTile/Default",
-        "proto/compositions-sidebar-features/SidebarStatus/Collapsed groups",
-        "proto/compositions-sidebar-features/SidebarStatus/Empty",
-        "proto/compositions-sidebar-features/SidebarStatus/Groups",
-        "proto/compositions-sidebar-features/SidebarThreads/Active",
-        "proto/compositions-sidebar-features/SidebarThreads/Asleep",
-        "proto/compositions-sidebar-features/SidebarThreads/Empty",
-        "proto/compositions-sidebar-features/SidebarThreads/Pinned",
-        "proto/compositions-sidebar-features/SidebarThreads/Reading",
-        "proto/compositions-sidebar-features/SidebarThreads/Settled",
-        "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -948,54 +909,17 @@
       "records": [
         "proto/approved-sidebar-rest/Reference/1",
         "proto/approved-sidebar-rest/Reference/2",
-        "proto/compositions-sidebar-features/Asleep/Asleep menu",
-        "proto/compositions-sidebar-features/Asleep/Forget armed",
-        "proto/compositions-sidebar-features/Asleep/Rail popup",
-        "proto/compositions-sidebar-features/Asleep/Sleep stuck",
-        "proto/compositions-sidebar-features/Asleep/Wake pending",
-        "proto/compositions-sidebar-features/Asleep/Wake selected",
-        "proto/compositions-sidebar-features/NeedsQueue/Empty",
-        "proto/compositions-sidebar-features/NeedsQueue/Loading",
-        "proto/compositions-sidebar-features/NeedsQueue/Queue",
-        "proto/compositions-sidebar-features/NeedsQueue/Unavailable",
-        "proto/compositions-sidebar-features/ProjectGit/Ahead",
-        "proto/compositions-sidebar-features/ProjectGit/Behind",
-        "proto/compositions-sidebar-features/ProjectGit/Pull refused",
-        "proto/compositions-sidebar-features/ProjectGit/Pulling",
-        "proto/compositions-sidebar-features/Sidebar/Closed project",
-        "proto/compositions-sidebar-features/Sidebar/Incoming message",
-        "proto/compositions-sidebar-features/Sidebar/Keyboard",
-        "proto/compositions-sidebar-features/Sidebar/Loading",
-        "proto/compositions-sidebar-features/Sidebar/Missing folder",
-        "proto/compositions-sidebar-features/Sidebar/No agents",
-        "proto/compositions-sidebar-features/Sidebar/No projects",
-        "proto/compositions-sidebar-features/Sidebar/Pinned order",
-        "proto/compositions-sidebar-features/Sidebar/Running command",
-        "proto/compositions-sidebar-features/Sidebar/Search empty",
-        "proto/compositions-sidebar-features/Sidebar/Stacked panes",
-        "proto/compositions-sidebar-features/Sidebar/Stuck step",
-        "proto/compositions-sidebar-features/Sidebar/Unread",
-        "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default",
-        "proto/compositions-sidebar-rows/StatusViewTile/Default",
-        "proto/compositions-sidebar-features/SidebarStatus/Collapsed groups",
-        "proto/compositions-sidebar-features/SidebarStatus/Empty",
-        "proto/compositions-sidebar-features/SidebarStatus/Groups",
-        "proto/compositions-sidebar-features/SidebarThreads/Active",
-        "proto/compositions-sidebar-features/SidebarThreads/Asleep",
-        "proto/compositions-sidebar-features/SidebarThreads/Empty",
-        "proto/compositions-sidebar-features/SidebarThreads/Pinned",
-        "proto/compositions-sidebar-features/SidebarThreads/Reading",
-        "proto/compositions-sidebar-features/SidebarThreads/Settled",
-        "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
-      "features": [],
+      "features": [
+        "coverage/spaces/Sidebar"
+      ],
       "approvedRecords": [
         "proto/approved-sidebar-rest/Reference/1",
         "proto/approved-sidebar-rest/Reference/2"
@@ -1079,52 +1003,13 @@
         "proto/approved-sidebar-switch/Reference/5",
         "proto/approved-sidebar-switch/Reference/6",
         "proto/approved-sidebar-switch/Reference/7",
-        "proto/compositions-sidebar-features/Asleep/Asleep menu",
-        "proto/compositions-sidebar-features/Asleep/Forget armed",
-        "proto/compositions-sidebar-features/Asleep/Rail popup",
-        "proto/compositions-sidebar-features/Asleep/Sleep stuck",
-        "proto/compositions-sidebar-features/Asleep/Wake pending",
-        "proto/compositions-sidebar-features/Asleep/Wake selected",
-        "proto/compositions-sidebar-features/NeedsQueue/Empty",
-        "proto/compositions-sidebar-features/NeedsQueue/Loading",
-        "proto/compositions-sidebar-features/NeedsQueue/Queue",
-        "proto/compositions-sidebar-features/NeedsQueue/Unavailable",
-        "proto/compositions-sidebar-features/ProjectGit/Ahead",
-        "proto/compositions-sidebar-features/ProjectGit/Behind",
-        "proto/compositions-sidebar-features/ProjectGit/Pull refused",
-        "proto/compositions-sidebar-features/ProjectGit/Pulling",
-        "proto/compositions-sidebar-features/Sidebar/Closed project",
-        "proto/compositions-sidebar-features/Sidebar/Incoming message",
-        "proto/compositions-sidebar-features/Sidebar/Keyboard",
-        "proto/compositions-sidebar-features/Sidebar/Loading",
-        "proto/compositions-sidebar-features/Sidebar/Missing folder",
-        "proto/compositions-sidebar-features/Sidebar/No agents",
-        "proto/compositions-sidebar-features/Sidebar/No projects",
-        "proto/compositions-sidebar-features/Sidebar/Pinned order",
-        "proto/compositions-sidebar-features/Sidebar/Running command",
-        "proto/compositions-sidebar-features/Sidebar/Search empty",
-        "proto/compositions-sidebar-features/Sidebar/Stacked panes",
-        "proto/compositions-sidebar-features/Sidebar/Stuck step",
-        "proto/compositions-sidebar-features/Sidebar/Unread",
-        "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default",
-        "proto/compositions-sidebar-rows/StatusViewTile/Default",
-        "proto/compositions-sidebar-features/SidebarStatus/Collapsed groups",
-        "proto/compositions-sidebar-features/SidebarStatus/Empty",
-        "proto/compositions-sidebar-features/SidebarStatus/Groups",
-        "proto/compositions-sidebar-features/SidebarThreads/Active",
-        "proto/compositions-sidebar-features/SidebarThreads/Asleep",
-        "proto/compositions-sidebar-features/SidebarThreads/Empty",
-        "proto/compositions-sidebar-features/SidebarThreads/Pinned",
-        "proto/compositions-sidebar-features/SidebarThreads/Reading",
-        "proto/compositions-sidebar-features/SidebarThreads/Settled",
-        "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1174,14 +1059,10 @@
         "proto/approved-sidebar-project/Reference/15",
         "proto/approved-sidebar-project/Reference/16",
         "proto/approved-sidebar-project/Reference/17",
-        "proto/approved-sidebar-project/Reference/18",
-        "proto/compositions-sidebar-features/ProjectGit/Ahead",
-        "proto/compositions-sidebar-features/ProjectGit/Behind",
-        "proto/compositions-sidebar-features/ProjectGit/Pull refused",
-        "proto/compositions-sidebar-features/ProjectGit/Pulling"
+        "proto/approved-sidebar-project/Reference/18"
       ],
       "components": [
-        "Layouts/Sidebar",
+        "Compositions/Sidebar",
         "Primitives/Row"
       ],
       "features": [
@@ -1263,11 +1144,10 @@
         "proto/approved-sidebar-agent/Reference/13",
         "proto/approved-sidebar-agent/Reference/14",
         "proto/approved-sidebar-agent/Reference/15",
-        "proto/approved-sidebar-agent/Reference/16",
-        "proto/compositions-sidebar-features/Sidebar/Running command"
+        "proto/approved-sidebar-agent/Reference/16"
       ],
       "components": [
-        "Layouts/Sidebar",
+        "Compositions/Sidebar",
         "Primitives/Row"
       ],
       "features": [],
@@ -1326,7 +1206,7 @@
         "proto/approved-sidebar-computer/Reference/16"
       ],
       "components": [
-        "Layouts/Sidebar",
+        "Compositions/Sidebar",
         "Primitives/Row"
       ],
       "features": [],
@@ -1376,16 +1256,10 @@
         "proto/approved-sidebar-asleep/Reference/8",
         "proto/approved-sidebar-asleep/Reference/9",
         "proto/approved-sidebar-asleep/Reference/10",
-        "proto/approved-sidebar-asleep/Reference/11",
-        "proto/compositions-sidebar-features/Asleep/Asleep menu",
-        "proto/compositions-sidebar-features/Asleep/Forget armed",
-        "proto/compositions-sidebar-features/Asleep/Rail popup",
-        "proto/compositions-sidebar-features/Asleep/Sleep stuck",
-        "proto/compositions-sidebar-features/Asleep/Wake pending",
-        "proto/compositions-sidebar-features/Asleep/Wake selected"
+        "proto/approved-sidebar-asleep/Reference/11"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [
         "coverage/spaces/Asleep"
@@ -1474,14 +1348,10 @@
         "proto/approved-sidebar-needs/Reference/2",
         "proto/approved-sidebar-needs/Reference/3",
         "proto/approved-sidebar-needs/Reference/4",
-        "proto/approved-sidebar-needs/Reference/5",
-        "proto/compositions-sidebar-features/NeedsQueue/Empty",
-        "proto/compositions-sidebar-features/NeedsQueue/Loading",
-        "proto/compositions-sidebar-features/NeedsQueue/Queue",
-        "proto/compositions-sidebar-features/NeedsQueue/Unavailable"
+        "proto/approved-sidebar-needs/Reference/5"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [
         "coverage/spaces/NeedsQueue"
@@ -1518,14 +1388,10 @@
         "proto/approved-sidebar-status/Reference/4",
         "proto/approved-sidebar-status/Reference/5",
         "proto/approved-sidebar-status/Reference/6",
-        "proto/approved-sidebar-status/Reference/7",
-        "proto/compositions-sidebar-features/SidebarStatus/Collapsed groups",
-        "proto/compositions-sidebar-features/SidebarStatus/Empty",
-        "proto/compositions-sidebar-features/SidebarStatus/Groups",
-        "proto/compositions-sidebar-rows/StatusViewTile/Default"
+        "proto/approved-sidebar-status/Reference/7"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [
         "coverage/spaces/SidebarStatus"
@@ -1565,17 +1431,10 @@
         "proto/approved-sidebar-threads/Reference/5",
         "proto/approved-sidebar-threads/Reference/6",
         "proto/approved-sidebar-threads/Reference/7",
-        "proto/approved-sidebar-threads/Reference/8",
-        "proto/compositions-sidebar-features/SidebarThreads/Active",
-        "proto/compositions-sidebar-features/SidebarThreads/Asleep",
-        "proto/compositions-sidebar-features/SidebarThreads/Empty",
-        "proto/compositions-sidebar-features/SidebarThreads/Pinned",
-        "proto/compositions-sidebar-features/SidebarThreads/Reading",
-        "proto/compositions-sidebar-features/SidebarThreads/Settled",
-        "proto/compositions-sidebar-features/SidebarThreads/Snoozed"
+        "proto/approved-sidebar-threads/Reference/8"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [
         "coverage/spaces/SidebarThreads"
@@ -1612,11 +1471,10 @@
         "proto/approved-sidebar-find/Reference/2",
         "proto/approved-sidebar-find/Reference/3",
         "proto/approved-sidebar-find/Reference/4",
-        "proto/approved-sidebar-find/Reference/5",
-        "proto/compositions-sidebar-features/Sidebar/Search empty"
+        "proto/approved-sidebar-find/Reference/5"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1649,52 +1507,13 @@
         "proto/approved-sidebar-dnd/Reference/3",
         "proto/approved-sidebar-dnd/Reference/4",
         "proto/approved-sidebar-dnd/Reference/5",
-        "proto/compositions-sidebar-features/Asleep/Asleep menu",
-        "proto/compositions-sidebar-features/Asleep/Forget armed",
-        "proto/compositions-sidebar-features/Asleep/Rail popup",
-        "proto/compositions-sidebar-features/Asleep/Sleep stuck",
-        "proto/compositions-sidebar-features/Asleep/Wake pending",
-        "proto/compositions-sidebar-features/Asleep/Wake selected",
-        "proto/compositions-sidebar-features/NeedsQueue/Empty",
-        "proto/compositions-sidebar-features/NeedsQueue/Loading",
-        "proto/compositions-sidebar-features/NeedsQueue/Queue",
-        "proto/compositions-sidebar-features/NeedsQueue/Unavailable",
-        "proto/compositions-sidebar-features/ProjectGit/Ahead",
-        "proto/compositions-sidebar-features/ProjectGit/Behind",
-        "proto/compositions-sidebar-features/ProjectGit/Pull refused",
-        "proto/compositions-sidebar-features/ProjectGit/Pulling",
-        "proto/compositions-sidebar-features/Sidebar/Closed project",
-        "proto/compositions-sidebar-features/Sidebar/Incoming message",
-        "proto/compositions-sidebar-features/Sidebar/Keyboard",
-        "proto/compositions-sidebar-features/Sidebar/Loading",
-        "proto/compositions-sidebar-features/Sidebar/Missing folder",
-        "proto/compositions-sidebar-features/Sidebar/No agents",
-        "proto/compositions-sidebar-features/Sidebar/No projects",
-        "proto/compositions-sidebar-features/Sidebar/Pinned order",
-        "proto/compositions-sidebar-features/Sidebar/Running command",
-        "proto/compositions-sidebar-features/Sidebar/Search empty",
-        "proto/compositions-sidebar-features/Sidebar/Stacked panes",
-        "proto/compositions-sidebar-features/Sidebar/Stuck step",
-        "proto/compositions-sidebar-features/Sidebar/Unread",
-        "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default",
-        "proto/compositions-sidebar-rows/StatusViewTile/Default",
-        "proto/compositions-sidebar-features/SidebarStatus/Collapsed groups",
-        "proto/compositions-sidebar-features/SidebarStatus/Empty",
-        "proto/compositions-sidebar-features/SidebarStatus/Groups",
-        "proto/compositions-sidebar-features/SidebarThreads/Active",
-        "proto/compositions-sidebar-features/SidebarThreads/Asleep",
-        "proto/compositions-sidebar-features/SidebarThreads/Empty",
-        "proto/compositions-sidebar-features/SidebarThreads/Pinned",
-        "proto/compositions-sidebar-features/SidebarThreads/Reading",
-        "proto/compositions-sidebar-features/SidebarThreads/Settled",
-        "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1727,52 +1546,13 @@
         "proto/approved-sidebar-keys/Reference/4",
         "proto/approved-sidebar-keys/Reference/5",
         "proto/approved-sidebar-keys/Reference/6",
-        "proto/compositions-sidebar-features/Asleep/Asleep menu",
-        "proto/compositions-sidebar-features/Asleep/Forget armed",
-        "proto/compositions-sidebar-features/Asleep/Rail popup",
-        "proto/compositions-sidebar-features/Asleep/Sleep stuck",
-        "proto/compositions-sidebar-features/Asleep/Wake pending",
-        "proto/compositions-sidebar-features/Asleep/Wake selected",
-        "proto/compositions-sidebar-features/NeedsQueue/Empty",
-        "proto/compositions-sidebar-features/NeedsQueue/Loading",
-        "proto/compositions-sidebar-features/NeedsQueue/Queue",
-        "proto/compositions-sidebar-features/NeedsQueue/Unavailable",
-        "proto/compositions-sidebar-features/ProjectGit/Ahead",
-        "proto/compositions-sidebar-features/ProjectGit/Behind",
-        "proto/compositions-sidebar-features/ProjectGit/Pull refused",
-        "proto/compositions-sidebar-features/ProjectGit/Pulling",
-        "proto/compositions-sidebar-features/Sidebar/Closed project",
-        "proto/compositions-sidebar-features/Sidebar/Incoming message",
-        "proto/compositions-sidebar-features/Sidebar/Keyboard",
-        "proto/compositions-sidebar-features/Sidebar/Loading",
-        "proto/compositions-sidebar-features/Sidebar/Missing folder",
-        "proto/compositions-sidebar-features/Sidebar/No agents",
-        "proto/compositions-sidebar-features/Sidebar/No projects",
-        "proto/compositions-sidebar-features/Sidebar/Pinned order",
-        "proto/compositions-sidebar-features/Sidebar/Running command",
-        "proto/compositions-sidebar-features/Sidebar/Search empty",
-        "proto/compositions-sidebar-features/Sidebar/Stacked panes",
-        "proto/compositions-sidebar-features/Sidebar/Stuck step",
-        "proto/compositions-sidebar-features/Sidebar/Unread",
-        "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default",
-        "proto/compositions-sidebar-rows/StatusViewTile/Default",
-        "proto/compositions-sidebar-features/SidebarStatus/Collapsed groups",
-        "proto/compositions-sidebar-features/SidebarStatus/Empty",
-        "proto/compositions-sidebar-features/SidebarStatus/Groups",
-        "proto/compositions-sidebar-features/SidebarThreads/Active",
-        "proto/compositions-sidebar-features/SidebarThreads/Asleep",
-        "proto/compositions-sidebar-features/SidebarThreads/Empty",
-        "proto/compositions-sidebar-features/SidebarThreads/Pinned",
-        "proto/compositions-sidebar-features/SidebarThreads/Reading",
-        "proto/compositions-sidebar-features/SidebarThreads/Settled",
-        "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [
         "coverage/spaces/SidebarSort"
@@ -1871,7 +1651,7 @@
         "proto/approved-sidebar-footer/Reference/12"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1909,52 +1689,13 @@
         "proto/approved-sidebar-edges/Reference/2",
         "proto/approved-sidebar-edges/Reference/3",
         "proto/approved-sidebar-edges/Reference/4",
-        "proto/compositions-sidebar-features/Asleep/Asleep menu",
-        "proto/compositions-sidebar-features/Asleep/Forget armed",
-        "proto/compositions-sidebar-features/Asleep/Rail popup",
-        "proto/compositions-sidebar-features/Asleep/Sleep stuck",
-        "proto/compositions-sidebar-features/Asleep/Wake pending",
-        "proto/compositions-sidebar-features/Asleep/Wake selected",
-        "proto/compositions-sidebar-features/NeedsQueue/Empty",
-        "proto/compositions-sidebar-features/NeedsQueue/Loading",
-        "proto/compositions-sidebar-features/NeedsQueue/Queue",
-        "proto/compositions-sidebar-features/NeedsQueue/Unavailable",
-        "proto/compositions-sidebar-features/ProjectGit/Ahead",
-        "proto/compositions-sidebar-features/ProjectGit/Behind",
-        "proto/compositions-sidebar-features/ProjectGit/Pull refused",
-        "proto/compositions-sidebar-features/ProjectGit/Pulling",
-        "proto/compositions-sidebar-features/Sidebar/Closed project",
-        "proto/compositions-sidebar-features/Sidebar/Incoming message",
-        "proto/compositions-sidebar-features/Sidebar/Keyboard",
-        "proto/compositions-sidebar-features/Sidebar/Loading",
-        "proto/compositions-sidebar-features/Sidebar/Missing folder",
-        "proto/compositions-sidebar-features/Sidebar/No agents",
-        "proto/compositions-sidebar-features/Sidebar/No projects",
-        "proto/compositions-sidebar-features/Sidebar/Pinned order",
-        "proto/compositions-sidebar-features/Sidebar/Running command",
-        "proto/compositions-sidebar-features/Sidebar/Search empty",
-        "proto/compositions-sidebar-features/Sidebar/Stacked panes",
-        "proto/compositions-sidebar-features/Sidebar/Stuck step",
-        "proto/compositions-sidebar-features/Sidebar/Unread",
-        "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default",
-        "proto/compositions-sidebar-rows/StatusViewTile/Default",
-        "proto/compositions-sidebar-features/SidebarStatus/Collapsed groups",
-        "proto/compositions-sidebar-features/SidebarStatus/Empty",
-        "proto/compositions-sidebar-features/SidebarStatus/Groups",
-        "proto/compositions-sidebar-features/SidebarThreads/Active",
-        "proto/compositions-sidebar-features/SidebarThreads/Asleep",
-        "proto/compositions-sidebar-features/SidebarThreads/Empty",
-        "proto/compositions-sidebar-features/SidebarThreads/Pinned",
-        "proto/compositions-sidebar-features/SidebarThreads/Reading",
-        "proto/compositions-sidebar-features/SidebarThreads/Settled",
-        "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
         "kit/Sidebar/Dawn"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -1995,7 +1736,7 @@
         "kit/Rail/Dawn"
       ],
       "components": [
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [],
       "approvedRecords": [
@@ -2573,6 +2314,16 @@
         "proto/approved-panels-a-subtract/Reference/24",
         "panels/preview/FeatureCodeLimits/Truncated code",
         "panels/preview/FeatureCodeLimits/Truncated markdown",
+        "panels/files/FilesChangedOpenedFromTheDigest/Default",
+        "panels/files/FilesRightClickARow/Default",
+        "panels/files/FilesLimit/Default",
+        "panels/files/FilesFirstRead/Default",
+        "panels/files/FilesNothingChanged/Default",
+        "panels/files/FilesNofiles/Default",
+        "panels/files/FilesNoFolderForThisPane/Default",
+        "panels/files/FilesErrorTheFoldersOwnWords/Default",
+        "panels/files/FilesStaleDevboxStoppedAnswering/Default",
+        "panels/files/FilesAtRestNow/Default",
         "panels/worktrees/FeatureHistoryChart/Disk freed",
         "panels/worktrees/FeatureHistoryChart/Disk held",
         "panels/shipped/HistoryChartShipped daysShippeddays/Default",
@@ -2698,6 +2449,18 @@
         "panels/worktrees/FeatureWorktreeVerdict/Recent",
         "panels/worktrees/FeatureWorktreeVerdict/Replaced",
         "panels/worktrees/FeatureWorktreeVerdict/Unmerged",
+        "panels/files/FilesAllFilesWithMarks/Default",
+        "panels/files/FilesAShellPaneNothingNamed/Default",
+        "panels/files/FilesAtRestBefore/Default",
+        "panels/files/FilesAtRestComparison/Default",
+        "panels/files/FilesAtRestNowLight/Default",
+        "panels/files/FilesLight/Default",
+        "panels/files/FilesLightAllFiles/Default",
+        "panels/files/FilesNarrow300/Default",
+        "panels/files/FilesNotARepositoryTheTreeOnly/Default",
+        "panels/files/FilesOnAnotherComputer/Default",
+        "panels/files/FilesOnThePointer/Default",
+        "panels/files/FilesUnreachableBeforeTheFirstRead/Default",
         "panels/pr/PRActionsExplainedOnePress/Default",
         "panels/pr/PRActionsExplainRefused/Default",
         "panels/pr/PRActionsLightChecksRunning/Default",
@@ -3196,7 +2959,29 @@
         "Remote: none locally (a folder watch). On another computer, one tree read per open folder, then one stat every 5 s in front, 30 s after three quiet reads, none hidden."
       ],
       "records": [
-        "proto/approved-panels-a-files/Reference/1"
+        "proto/approved-panels-a-files/Reference/1",
+        "panels/files/FilesChangedOpenedFromTheDigest/Default",
+        "panels/files/FilesRightClickARow/Default",
+        "panels/files/FilesLimit/Default",
+        "panels/files/FilesFirstRead/Default",
+        "panels/files/FilesNothingChanged/Default",
+        "panels/files/FilesNofiles/Default",
+        "panels/files/FilesNoFolderForThisPane/Default",
+        "panels/files/FilesErrorTheFoldersOwnWords/Default",
+        "panels/files/FilesStaleDevboxStoppedAnswering/Default",
+        "panels/files/FilesAtRestNow/Default",
+        "panels/files/FilesAllFilesWithMarks/Default",
+        "panels/files/FilesAShellPaneNothingNamed/Default",
+        "panels/files/FilesAtRestBefore/Default",
+        "panels/files/FilesAtRestComparison/Default",
+        "panels/files/FilesAtRestNowLight/Default",
+        "panels/files/FilesLight/Default",
+        "panels/files/FilesLightAllFiles/Default",
+        "panels/files/FilesNarrow300/Default",
+        "panels/files/FilesNotARepositoryTheTreeOnly/Default",
+        "panels/files/FilesOnAnotherComputer/Default",
+        "panels/files/FilesOnThePointer/Default",
+        "panels/files/FilesUnreachableBeforeTheFirstRead/Default"
       ],
       "components": [
         "Panels/Files"
@@ -3229,7 +3014,29 @@
         "proto/approved-panels-a-files-states/Reference/1",
         "proto/approved-panels-a-files-states/Reference/2",
         "proto/approved-panels-a-files-states/Reference/3",
-        "proto/approved-panels-a-files-states/Reference/4"
+        "proto/approved-panels-a-files-states/Reference/4",
+        "panels/files/FilesChangedOpenedFromTheDigest/Default",
+        "panels/files/FilesRightClickARow/Default",
+        "panels/files/FilesLimit/Default",
+        "panels/files/FilesFirstRead/Default",
+        "panels/files/FilesNothingChanged/Default",
+        "panels/files/FilesNofiles/Default",
+        "panels/files/FilesNoFolderForThisPane/Default",
+        "panels/files/FilesErrorTheFoldersOwnWords/Default",
+        "panels/files/FilesStaleDevboxStoppedAnswering/Default",
+        "panels/files/FilesAtRestNow/Default",
+        "panels/files/FilesAllFilesWithMarks/Default",
+        "panels/files/FilesAShellPaneNothingNamed/Default",
+        "panels/files/FilesAtRestBefore/Default",
+        "panels/files/FilesAtRestComparison/Default",
+        "panels/files/FilesAtRestNowLight/Default",
+        "panels/files/FilesLight/Default",
+        "panels/files/FilesLightAllFiles/Default",
+        "panels/files/FilesNarrow300/Default",
+        "panels/files/FilesNotARepositoryTheTreeOnly/Default",
+        "panels/files/FilesOnAnotherComputer/Default",
+        "panels/files/FilesOnThePointer/Default",
+        "panels/files/FilesUnreachableBeforeTheFirstRead/Default"
       ],
       "components": [
         "Panels/Files"
@@ -7222,43 +7029,6 @@
       "proposedPredicates": []
     },
     {
-      "page": "Layouts/Sidebar",
-      "existing": true,
-      "boards": [
-        "S01"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-sidebar-rest/Reference/1",
-        "proto/approved-sidebar-rest/Reference/2",
-        "proto/compositions-sidebar-features/Sidebar/Closed project",
-        "proto/compositions-sidebar-features/Sidebar/Incoming message",
-        "proto/compositions-sidebar-features/Sidebar/Keyboard",
-        "proto/compositions-sidebar-features/Sidebar/Loading",
-        "proto/compositions-sidebar-features/Sidebar/Missing folder",
-        "proto/compositions-sidebar-features/Sidebar/No agents",
-        "proto/compositions-sidebar-features/Sidebar/No projects",
-        "proto/compositions-sidebar-features/Sidebar/Pinned order",
-        "proto/compositions-sidebar-features/Sidebar/Running command",
-        "proto/compositions-sidebar-features/Sidebar/Search empty",
-        "proto/compositions-sidebar-features/Sidebar/Stacked panes",
-        "proto/compositions-sidebar-features/Sidebar/Stuck step",
-        "proto/compositions-sidebar-features/Sidebar/Unread"
-      ],
-      "components": [
-        "Layouts/Sidebar"
-      ],
-      "features": [
-        "coverage/spaces/Sidebar"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-sidebar-rest/Reference/1",
-        "proto/approved-sidebar-rest/Reference/2"
-      ]
-    },
-    {
       "page": "Panels/Spend history",
       "existing": false,
       "boards": [],
@@ -7388,7 +7158,7 @@
         "Primitives/Avatar",
         "Primitives/Mark",
         "Compositions/Header",
-        "Layouts/Sidebar"
+        "Compositions/Sidebar"
       ],
       "features": [],
       "proposedPredicates": [],

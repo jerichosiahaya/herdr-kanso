@@ -81,27 +81,3 @@ export const sampleFind = {
   turn: 'The 429 now carries Retry-After, in seconds, from the bucket’s refill time. limits.ts exports refillIn(customer) and checkout.ts sets the header before it returns. Tests: 21 passed.',
   missing: '~/.claude/projects/acme-shop/4f2a.jsonl: no such file',
 };
-
-// Files: what checkout changed in acme-shop; `letter` is git's, modified has none; `stat` opens the diff.
-const changed = (name, folder, stat, letter = 'M') => ({ name, folder, stat, letter });
-export const sampleFiles = {
-  named: [changed('limits.ts', 'src/api', '+22', 'A'), changed('checkout.ts', 'src/api', '+14 −3')],
-  unchanged: ['plans.ts', 'Cart.tsx', 'limits.md'],
-  also: [changed('limits.test.ts', 'src/api', '+6 −4')],
-  shell: [changed('RetryIn.tsx', 'src/web', '+22', 'A')],
-  remote: { named: [changed('limits.ts', 'src/api', '+22', 'A'), changed('checkout.ts', 'src/api', '+14 −3')], unchanged: [], also: [changed('limits.test.ts', 'src/api', '+6 −4')] },
-  computer: 'devbox',
-  menu: { path: 'src/api/checkout.ts' },
-};
-// The tree as All files draws it: each entry its level; a folder open or not, with its count of changed files.
-const folder = (name, level, open, count = null) => ({ name, level, open, count });
-const file = (name, level, letter = null) => ({ name, level, letter });
-export const sampleTree = [folder('.github', 0, false), folder('docs', 0, false), folder('src', 0, true, '3'), folder('api', 1, true, '3'),
-  file('checkout.ts', 2, 'M'), file('limits.test.ts', 2, 'M'), file('limits.ts', 2, 'A'), file('plans.ts', 2), folder('web', 1, false),
-  folder('fixtures', 0, true), file('orders-0001.json', 1), { more: '1,214 more not listed', level: 1 }, file('package.json', 0)];
-export const samplePlainTree = [folder('private', 0, true), { failure: { text: 'Can’t list this folder', source: 'EACCES: permission denied, scandir \'/Users/jj/notes/private\'', fix: 'Refresh' }, level: 1 },
-  file('rate-limits.md', 0), file('standup.md', 0)];
-export const sampleFilesFailures = {
-  folder: { text: 'Can’t list ~/acme-shop', source: 'EACCES: permission denied, scandir \'/Users/jj/acme-shop\'', fix: 'Refresh', agent: 'checkout' },
-  unreachable: { text: 'Can’t reach devbox', source: 'ssh: connect to host devbox port 22: Operation timed out', fix: 'Refresh' },
-};
