@@ -1,8 +1,8 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { computerItem, edge, keyboardSystems, layoutPaused, paletteDoor, panelBack, panelRefresh, panelShell, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
 import { emptyState, failureBlock, keycap, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
-import { keyLayer, keyLayerMods, samplePanel, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleSortMenus, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
@@ -38,7 +38,7 @@ const foldedTabs = ['perf', 'web', 'e2e', 'storybook', 'seed-data'];
 const edgeColumns = (panes, stacked) => stacked && panes.length > 1 ? [panes.slice(0, 2), ...panes.slice(2).map((pane) => [pane])] : panes.map((pane) => [pane]);
 export const edgeSides = ['left', 'right', 'both'];
 
-// Panel shell: the sample panel's content in each read; the last row takes the look picked for it.
+// Panel: the sample panel's content in each read; the last row takes the look picked for it.
 export const panelRowLooks = { rest: {}, hover: { hover: true }, selected: { current: true }, armed: { current: true, action: { label: 'Remove', kind: 'quiet', armed: true } } };
 const panelRows = ({ lines, last }) => samplePanel.rows.map((item, index, rows) => row({ ...item, second: lines ? item.second : null, ...(index === rows.length - 1 ? panelRowLooks[last] : {}) }));
 const panelSection = (rows) => [row({ ...samplePanel.section, heading: true }), panelRows(rows)];
@@ -58,11 +58,29 @@ export const panelReads = {
 };
 
 export const statedPages = {
-  'Compositions/Panel shell': {
-    args: { title: samplePanel.title, scope: samplePanel.scope, state: 'ready', look: 'panel', content: 'rows', last: 'rest' },
-    markup: ({ title, scope, state, look, content, last }) => {
+  'Compositions/Toolbar': {
+    args: { view: 'spaces', column: false, open: false, sorted: false, menu: false },
+    markup: ({ menu: shown, ...args }) => {
+      const bar = toolbar({ ...args, sortMenu: shown ? sampleSortMenus[args.view]() : null });
+      return shown ? `<div class="kanso-story__sort-room">${bar}</div>` : bar;
+    },
+    states: [
+      { label: 'Projects', args: {}, caption: 'Sidebar open on Projects: + adds a project.' },
+      { label: 'Status and Threads', args: { view: 'agents' }, caption: '+ starts a conversation in a project you pick.' },
+      { label: 'Sorted', args: { sorted: true }, caption: 'The order is not the default one.' },
+      { label: 'Sort menu, Projects', args: { menu: true }, caption: 'After a click on Sort, on Projects.' },
+      { label: 'Sort menu, Status', args: { view: 'agents', menu: true }, caption: 'After a click on Sort, on Status.' },
+      { label: 'Sort menu, Threads', args: { view: 'threads', menu: true }, caption: 'After a click on Sort, on Threads.' },
+      { label: 'Collapsed', args: { column: true }, caption: 'Sidebar collapsed.' },
+      { label: 'Collapsed, tools open', args: { column: true, open: true }, caption: 'After a click on the caret.' },
+    ],
+  },
+  'Compositions/Panel': {
+    args: { title: samplePanel.title, scope: samplePanel.scope, header: 'page', state: 'ready', look: 'panel', content: 'rows', last: 'rest' },
+    markup: ({ title, scope, header, state, look, content, last }) => {
       const { reading = false, stale = false, scope: read = scope, body } = panelReads[state];
-      return panelShell({ title, scope: read, look, stale, back: look === 'window' ? panelBack() : null, tools: [samplePanel.tool(), panelRefresh({ reading })] }, body(panelContents[content](last)));
+      const start = look === 'window' ? [panelBack()] : [];
+      return panel({ look, stale, header: panelHeader({ title, form: header, start, second: read, tools: [samplePanel.tool(), panelRefresh({ reading })] }) }, body(panelContents[content](last)));
     },
     states: [
       { label: 'At rest', args: {}, caption: 'The read is fresh.' },
@@ -70,11 +88,23 @@ export const statedPages = {
       { label: 'One-line rows', args: { content: 'one-line rows' }, caption: 'The rows have no second fact.' },
       { label: 'Selected, removal armed', args: { last: 'armed' }, caption: 'After the first press on Remove.' },
       { label: 'Narrow', args: { look: 'narrow' }, caption: 'The panel is under 340 wide.' },
-      { label: 'Window', args: { look: 'window' }, caption: 'A file opened from a panel.' },
+      { label: 'Window', args: { look: 'window', header: 'bar' }, caption: 'A file opened from a panel.' },
       { label: 'Loading', args: { state: 'loading' }, caption: 'Before the first read answers.' },
       { label: 'Empty', args: { state: 'empty' }, caption: 'The read answered with nothing.' },
       { label: 'Failed', args: { state: 'failed' }, caption: 'The read did not answer.' },
       { label: 'Stale', args: { state: 'stale' }, caption: 'Another computer stopped answering.' },
+    ],
+  },
+  'Compositions/Panel/Header': {
+    args: { title: 'Ports', form: 'page', start: 'none', second: '', tools: 'share and refresh' },
+    markup: ({ title, form, start, second, tools }) => panel({ header: panelHeader({ title, form, start: samplePanelHeader.starts[start](), second: second || null, tools: samplePanelHeader.tools[tools]() }) }),
+    states: [
+      { label: 'Page', args: {}, caption: 'A dashboard: its title, then its tools.' },
+      { label: 'Page, reading', args: { title: 'Containers', tools: 'reading' }, caption: 'Refresh turns while the panel reads.' },
+      { label: 'Page inside a panel', args: { title: 'checkout', start: 'back', second: 'Task', tools: 'refresh' }, caption: 'A page opened from a row of the panel.' },
+      { label: 'Bar', args: { title: 'limits.md', form: 'bar', start: 'back', second: '~/acme-shop/docs', tools: 'document' }, caption: 'A file opened from a panel.' },
+      { label: 'Bar with a mark', args: { title: 'cart-ui', form: 'bar', start: 'mark', second: '~/acme-shop', tools: 'pin and refresh' }, caption: 'Images of the agent in focus.' },
+      { label: 'Bar, title only', args: { title: 'Files', form: 'bar', tools: 'none' }, caption: 'A list with nothing to refresh.' },
     ],
   },
   'Compositions/Status bar/Item': {

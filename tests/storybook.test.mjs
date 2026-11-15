@@ -121,8 +121,8 @@ test("An approved page is ready with no tag, and every other page is in review",
 
 test("A page without its status tag, or with a code in its title, fails the lint", () => {
   const catalog = json("stories/catalog.json"), template = read("stories/kit/ComponentPage.jsx");
-  const untagged = { ...files, "stories/components/compositions-tab-bar.stories.js": files["stories/components/compositions-tab-bar.stories.js"].replace(/, tags: \[[^\]]*\]/, "") };
-  assert.ok(structureErrors(untagged, catalog, template).includes("stories/components/compositions-tab-bar.stories.js: needs exactly one status tag"));
+  const untagged = { ...files, "stories/components/compositions-panel-header.stories.js": files["stories/components/compositions-panel-header.stories.js"].replace(/, tags: \[[^\]]*\]/, "") };
+  assert.ok(structureErrors(untagged, catalog, template).includes("stories/components/compositions-panel-header.stories.js: needs exactly one status tag"));
   const coded = { ...files, "stories/start/extra.mdx": '<Meta title="Start/S12 notes" tags={["Ready"]} />\n\n## Prompt for agents\n\n```text\nRead.\n```\n' };
   assert.ok(structureErrors(coded, catalog, template).includes("stories/start/extra.mdx: code in title Start/S12 notes"));
 });
@@ -185,20 +185,42 @@ test("Every hypothesis fills the whole template, and each job names where it goe
   }
 });
 
-test("The panel shell is a frame: its title row over the body it is given, each look a width, stale stepping the body down", async () => {
-  const { panelLooks, panelShell } = await import("../stories/kit/compositions.js");
-  const html = panelShell({ title: "Ports", scope: "This computer", tools: ["<i>tool</i>"] }, "<p>body</p>");
-  assert.match(html, /^<div class="kanso-panel"><div class="kanso-row kanso-row--two-lines kanso-row--title"/);
-  assert.match(html, /kanso-row__name">Ports<[^]*<i>tool<\/i>[^]*This computer[^]*<p>body<\/p><\/div>$/);
-  assert.doesNotMatch(panelShell({ title: "Ports" }), /kanso-content__secondary/);
-  for (const look of panelLooks) assert.match(panelShell({ title: "Ports", look }), look === "panel" ? /^<div class="kanso-panel">/ : new RegExp(`kanso-panel--${look}`), look);
-  assert.match(panelShell({ title: "Ports", stale: true }, "<p>body</p>"), /^<div class="kanso-panel kanso-panel--stale">/);
-  assert.throws(() => panelShell({ title: "Ports", look: "wide" }), { message: "panelShell: unknown look wide" });
+test("A panel is only a container: the header it is given over the body, each look a width, stale stepping down all but the header", async () => {
+  const { panel, panelHeader, panelLooks } = await import("../stories/kit/compositions.js");
+  assert.equal(panel({}, "<p>body</p>"), '<div class="kanso-panel"><p>body</p></div>');
+  assert.match(panel({ header: panelHeader({ title: "Ports" }) }, "<p>body</p>"), /^<div class="kanso-panel"><div class="kanso-panel-header">[^]*<\/div><p>body<\/p><\/div>$/);
+  for (const look of panelLooks) assert.match(panel({ look }), look === "panel" ? /^<div class="kanso-panel">/ : new RegExp(`kanso-panel--${look}`), look);
+  assert.match(panel({ stale: true }, "<p>body</p>"), /^<div class="kanso-panel kanso-panel--stale">/);
+  assert.throws(() => panel({ look: "wide" }), { message: "panel: unknown look wide" });
+});
+
+test("A panel header needs only its title; what goes before it, under it and after it is that panel's own", async () => {
+  const { panelHeader, panelHeaderForms } = await import("../stories/kit/compositions.js");
+  const bare = panelHeader({ title: "Files" });
+  assert.match(bare, /^<div class="kanso-panel-header"><div class="kanso-row kanso-row--title" tabindex="0"><span class="kanso-row__name">Files<\/span><span class="kanso-layout__grow"><\/span><\/div><\/div>$/);
+  const full = panelHeader({ title: "limits.md", form: "bar", start: ["<i>back</i>"], second: "~/acme-shop/docs", tools: ["<i>tool</i>"] });
+  assert.match(full, /^<div class="kanso-panel-header kanso-panel-header--bar">[^]*<i>back<\/i><span class="kanso-row__name">limits\.md<[^]*<i>tool<\/i>[^]*~\/acme-shop\/docs/);
+  assert.deepEqual(panelHeaderForms, ["page", "bar"]);
+  assert.throws(() => panelHeader({ title: "Ports", form: "card" }), { message: "panelHeader: unknown form card" });
+});
+
+test("The sidebar's + names what it adds in each view, and Sort is quiet at its default", async () => {
+  const { addLabels, toolbar, views } = await import("../stories/kit/compositions.js");
+  assert.deepEqual(Object.keys(addLabels), views.map((view) => view.key));
+  for (const [view, label] of Object.entries(addLabels)) assert.match(toolbar({ view }), new RegExp(`title="${label}"`), view);
+  assert.match(toolbar(), /<span class="kanso-toolbar__sort">/);
+  assert.match(toolbar({ sorted: true }), /<span class="kanso-toolbar__sort kanso-toolbar__sort--sorted">/);
+  assert.match(toolbar({ sortMenu: "<i>menu</i>" }), /kanso-button--active[^]*<span class="kanso-toolbar__menu"><i>menu<\/i><\/span>/);
+});
+
+test("A menu can head a group of its items", async () => {
+  const { menu } = await import("../stories/kit/pieces.js");
+  assert.match(menu({ items: [{ label: "Last update" }, { separator: true }, { heading: "Show" }, { label: "Dawn sky" }] }), /kanso-menu__separator"><\/div><div class="kanso-menu__heading">Show<\/div><div class="kanso-menu__item"/);
 });
 
 test("A file opened from a panel keeps the button back to its folder's list before the title", async () => {
   const { statedPages } = await import("../stories/kit/states.js");
-  const { args, markup } = statedPages["Compositions/Panel shell"];
+  const { args, markup } = statedPages["Compositions/Panel"];
   const back = /kanso-content__primary"><span class="kanso-button kanso-button--icon" tabindex="0" title="Markdown in this folder"><svg[^>]*><use href="#lu-chevron-left"\/><\/svg><\/span><span class="kanso-row__name">/;
   assert.match(markup({ ...args, look: "window" }), back);
   assert.doesNotMatch(markup(args), back);
@@ -206,7 +228,7 @@ test("A file opened from a panel keeps the button back to its folder's list befo
 
 test("Every read of the sample panel draws its own state pattern where the list would start", async () => {
   const { panelReads, statedPages } = await import("../stories/kit/states.js");
-  const { args, markup } = statedPages["Compositions/Panel shell"];
+  const { args, markup } = statedPages["Compositions/Panel"];
   const marks = { loading: /kanso-skeleton__list/, empty: /kanso-state-empty/, failed: /kanso-state-block/, stale: /kanso-panel--stale/ };
   for (const state of Object.keys(panelReads)) {
     const html = markup({ ...args, state });
