@@ -73,6 +73,7 @@ export function row(id, c, {
     .when(!second, (el) => el.h(H.line))
     .when(Boolean(ground), (el) => el.bg(ground))
     .hover((s) => s.bg(current ? c.selected : c.subtle))
+    .active((s) => s.bg(c.selected))
     .when(pending, (el) => el.opacity(PENDING))
     .when(nested, (el) => el.child(div().absolute().top_0().bottom_0().left(GUIDE).border_l_1().border_color(c.w12)))
     .when(Boolean(onClick), (el) => el.cursor_pointer().on_click((_e, cx) => onClick(cx)))

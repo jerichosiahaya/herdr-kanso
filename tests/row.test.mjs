@@ -31,7 +31,7 @@ const line = (el) => all(el).find((kid) => kid.tag === "h_flex" && kid !== el);
 const night = { foreground: "#d8d4cb", background: "#1b1b19", hover: "#232321", selected: "#2b2b28", accent: "#da627d", dim: "#6b6862", muted: "#949086", blocked: "#ca938b", working: "#c4b07e", done: "#98ad8f" };
 const tools = (hits = []) => [{ icon: "pin", label: "Pin", onClick: () => hits.push("pin") }, { icon: "ellipsis", label: "More", onClick: () => hits.push("more") }];
 
-test("A row at rest is one line from the tokens: 32 high, 8 inside, radius 6, the body size, and its ring kept clear", async () => {
+test("A row at rest is one line from the tokens: 32 high, 8 inside, radius 6, the body size, its ring kept clear, and washes on hover and press", async () => {
   const { row, tokens, G, H, R, T, CLEAR } = await kit();
   const c = tokens(night);
   const el = row("r", c, { icon: "file", name: "checkout.ts", detail: "src/api", meta: "+14 −3" });
@@ -45,6 +45,7 @@ test("A row at rest is one line from the tokens: 32 high, 8 inside, radius 6, th
   assert.equal(one(el, "border_color"), CLEAR);
   assert.equal(calls(el, "bg").length, 0);
   assert.deepEqual(styled(el, "hover"), [["bg", c.subtle]]);
+  assert.deepEqual(styled(el, "active"), [["bg", c.selected]], "a press is the selected wash");
   assert.deepEqual(texts(el), ["checkout.ts", "src/api", "+14 −3"]);
   assert.deepEqual(svgs(el), ["mods/kanso-chrome/icons/file.svg"]);
 });
