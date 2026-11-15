@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms, paneRightClicks, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
+import { avatarSizes, dialog, escape, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls, dragHandleStates } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
@@ -91,19 +91,20 @@ export const playgrounds = {
     },
   },
   'Primitives/Drag handle': {
-    args: { state: 'default' },
-    argTypes: { state: select('State', ['default', 'hover']) },
-    markup: ({ state }) => `<svg class="kanso-icon kanso-icon--row kanso-grip${state === 'default' ? '' : ' kanso-text--fg'}"><title>Hold and drag onto another pane to move this one there</title><use href="#lu-grip-vertical"/></svg>`,
+    ...statedPages['Primitives/Drag handle'],
+    argTypes: { state: select('State', Object.keys(dragHandleStates)) },
   },
   'Primitives/Field': {
-    args: { text: '', label: 'Comment', icon: 'lu-send', action: '', choose: false, focus: false, error: false, disabled: false, multiline: false, inline: false, selected: false, loading: false, limit: 80 },
+    ...statedPages['Primitives/Field'],
     argTypes: {
       text: text('text'),
       label: text('label'),
       icon: select('icon', icons),
+      lead: select('lead', icons),
       action: { name: 'word action', control: { type: 'text' }, description: 'Replaces the icon; shown once something is typed' },
       choose: { name: 'filled by a chooser', control: { type: 'boolean' }, description: 'Not typed: its word always shows' },
       focus: flag('focus'),
+      hover: flag('hover'),
       error: flag('error'),
       disabled: flag('disabled'),
       multiline: flag('multiline'),
@@ -111,7 +112,6 @@ export const playgrounds = {
       ...pick('selected', 'loading'),
       limit: { name: 'limit', control: { type: 'number', min: 1 } },
     },
-    markup: input,
   },
   'Primitives/Key hint': {
     ...statedPages['Primitives/Key hint'],
@@ -170,7 +170,7 @@ export const playgrounds = {
     markup: ({ tone, ...args }) => `<div class="kanso-panel">${metric({ ...args, tone: tone === 'none' ? '' : tone })}</div>`,
   },
   'Primitives/Window controls': { args: {}, argTypes: {}, markup: windowControls },
-  'Primitives/Dawn': { args: {}, argTypes: {}, markup: () => dawn() },
+  'Primitives/Dawn': { ...statedPages['Primitives/Dawn'], argTypes: {} },
   'Compositions/Add computer dialog': {
     ...statedPages['Compositions/Add computer dialog'],
     argTypes: {

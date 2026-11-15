@@ -74,7 +74,7 @@ export function replaceSource(source, records, root = '.') {
 }
 
 const primitive = {
-  KeyHint: null, PillAndAvatar: null, Switch: 'Switch', Segmented: 'Tab', Field: 'Field',
+  KeyHint: null, PillAndAvatar: null, Switch: 'Switch', Segmented: 'Tab', Field: null,
   ButtonsFourKinds: null, ButtonsOnALine: null, ActionRows: null, ButtonWithAMark: null, Armed: null,
   FocusRing: null, HoverSelectedPressed: null, Tooltip: 'Tooltip', ChromeAndBarButtons: null,
   FileRow: 'Row', PortRow: 'Row', RowActions: 'Row', SettingRow: 'Row', SettingRowWithAValue: 'Row', FindRow: 'Row',

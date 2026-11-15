@@ -94,7 +94,7 @@ export const dialog = ({ title, tools = '', size = 'md', scope, body = '', notes
 };
 
 // A find field leads with its `lead` icon and keeps a `count` slot and its drawn `tools` after the text.
-export const input = ({ text: value = '', label: placeholder, icon = 'none', lead = 'none', count = null, tools = [], action = '', choose = false, focus = false, error, disabled, multiline, inline: rename, selected, loading, limit = 80 }) => {
+export const input = ({ text: value = '', label: placeholder, icon = 'none', lead = 'none', count = null, tools = [], action = '', choose = false, focus = false, hover = false, error, disabled, multiline, inline: rename, selected, loading, limit = 80 }) => {
   const editable = !disabled && !loading && !choose;
   const enter = multiline ? '' : ` onkeydown="if (event.key === 'Enter') event.preventDefault()"`;
   const cap = ` onbeforeinput="if (event.inputType.startsWith('insert') && this.innerText.length >= ${limit}) event.preventDefault()"`;
@@ -103,7 +103,7 @@ export const input = ({ text: value = '', label: placeholder, icon = 'none', lea
   // A word action shows once something is typed, or always when a chooser fills the field.
   const wordTool = value || choose ? button({ label: action, kind: 'tonal', size: 'sm' }) : '';
   const tool = rename ? '' : action ? wordTool : iconTool;
-  const classes = `kanso-field${multiline ? ' kanso-field--multiline' : ''}${rename ? ' kanso-field--inline' : ''}${loading ? ' kanso-skeleton--shape' : `${error ? ' kanso-field--invalid' : ''}${disabled ? ' kanso-control--off' : ''}${focus ? ' kanso-control--focus' : ''}`}`;
+  const classes = `kanso-field${multiline ? ' kanso-field--multiline' : ''}${rename ? ' kanso-field--inline' : ''}${loading ? ' kanso-skeleton--shape' : `${error ? ' kanso-field--invalid' : ''}${disabled ? ' kanso-control--off' : ''}${focus ? ' kanso-control--focus' : ''}${hover ? ' kanso-control--hover' : ''}`}`;
   const after = `${count === null ? '' : `<span class="kanso-field__count">${escape(count)}</span>`}${list(tools)}`;
   return `<div class="${classes}"${disabled ? ' aria-disabled="true"' : ''}>${lead === 'none' ? '' : glyph(lead)}${text}${tool}${after}</div>`;
 };
@@ -333,6 +333,10 @@ export const dojoLevelStates = ['next', 'done', 'current'];
 const levelClass = { next: '', done: ' kanso-row--done', current: ' kanso-control--current' };
 export const dojoLevel = ({ n, name, best = '', state = 'next', focus = false }) => `<div class="kanso-dojo__level${levelClass[state]}${focus ? ' kanso-control--focus' : ''}"><span class="kanso-level__node"></span>`
   + `<span class="kanso-dojo__name"><span class="kanso-annotation--inactive">${escape(String(n))}</span>${escape(name)}</span><span class="kanso-content__secondary">${escape(String(best))}</span></div>`;
+
+export const dragHandleStates = { rest: '', hover: ' kanso-control--hover', dragging: ' kanso-control--active' };
+// The grip a pane is moved by: dim at rest, underlined in accent under the pointer or while dragging.
+export const dragHandle = ({ state = 'rest' } = {}) => `<svg class="kanso-icon kanso-icon--row kanso-grip${dragHandleStates[state]}"><title>Hold and drag onto another pane to move this one there</title><use href="#lu-grip-vertical"/></svg>`;
 
 export const thumbnail = ({ image, label, selected, loading }) => `<span class="kanso-thumbnail${selected ? ' kanso-control--selected' : ''}${loading ? ' kanso-skeleton--shape' : ''}" role="button" aria-pressed="${selected}" aria-label="${escape(label)}" title="${escape(label)}" tabindex="0">${image && !loading ? `<img src="${escape(image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>`;
 

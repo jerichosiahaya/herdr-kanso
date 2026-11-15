@@ -236,7 +236,7 @@
 .kanso-panel__facts{display:flex;flex-wrap:wrap;gap:var(--k-sp-2);margin-top:var(--k-sp-2);font-size:var(--k-fs-body);color:var(--muted)}
 
 .kanso-grip{flex:none;border-bottom:2px solid transparent;color:var(--dim);cursor:grab}
-.kanso-grip:is(:hover,.kanso-control--hover,:focus-visible,.kanso-control--active){border-bottom-color:var(--accent);color:var(--fg)}
+.kanso-grip:is(:hover,.kanso-control--hover,:focus-visible,.kanso-control--active){border-bottom-color:var(--accent);color:var(--fg);background-color:transparent}
 .kanso-tabs{display:flex;align-items:center;gap:var(--k-sp-1);flex:none}
 .kanso-tabs.kanso-tabs--track{padding:var(--k-sp-hair);border-radius:var(--k-r-card);background:var(--w4)}
 .kanso-tabs--track .kanso-tabs__tab{flex:1}

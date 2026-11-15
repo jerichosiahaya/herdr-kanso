@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { avatar, button, card, chip, code, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, dialog, dragHandle, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -339,6 +339,38 @@ export const statedPages = {
       { label: 'Diff', args: { text: '@@ -14,3 +14,7 @@ app.post(\"/checkout\", (req, res) => {\n   const customer = req.user.id;\n-  const b = buckets.get(customer);\n+  const b = bucket(customer);\n+  if (b.tokens < 1) {\n+    res.set(\"Retry-After\", retryAfter(b));\n+    return res.status(429).end();\n+  }', kind: 'diff', first: 14, line: 0 }, caption: 'Numbered as git counts: a hunk restarts at its start, a deleted line has no number.' },
       { label: 'Diff, commenting', args: { text: '@@ -14,3 +14,7 @@ app.post(\"/checkout\", (req, res) => {\n   const customer = req.user.id;\n-  const b = buckets.get(customer);\n+  const b = bucket(customer);\n+  if (b.tokens < 1) {\n+    res.set(\"Retry-After\", retryAfter(b));\n+    return res.status(429).end();\n+  }', kind: 'diff', first: 14, line: 16, comment: 16 }, caption: 'The + in a line’s gutter comments on it.' },
       { label: 'Log', args: { text: ' FAIL  src/api/limits.test.ts > refills after 2 s\nAssertionError: expected 39 to be 40\n ❯ src/api/limits.test.ts:42:18\n    41|   const b = bucket(\"c1\")\n  > 42|   expect(b.tokens).toBe(40)\n      Tests  1 failed | 47 passed (48)', kind: 'log', first: 1, line: 0 }, caption: 'The tool’s words in order; only failure lines turn blocked.' },
+    ],
+  },
+  'Primitives/Dawn': {
+    args: {},
+    markup: () => dawn(),
+    states: [{ label: 'Sunrise', args: {}, caption: 'The sky of Dawn Mode; the sun rises once on load.' }],
+  },
+  'Primitives/Drag handle': {
+    args: { state: 'rest' },
+    markup: dragHandle,
+    states: [
+      { label: 'At rest', args: {}, caption: 'Dim beside the pane’s name.' },
+      { label: 'Hover', args: { state: 'hover' }, caption: 'The pointer is on it: ink and an accent underline.' },
+      { label: 'Dragging', args: { state: 'dragging' }, caption: 'Held while the pane moves.' },
+    ],
+  },
+  'Primitives/Field': {
+    args: { text: '', label: 'Comment', icon: 'lu-send', lead: 'none', action: '', choose: false, focus: false, hover: false, error: false, disabled: false, multiline: false, inline: false, selected: false, loading: false, limit: 80 },
+    markup: input,
+    states: [
+      { label: 'Empty', args: {}, caption: 'The placeholder names what goes in; the icon sends it.' },
+      { label: 'Typed', args: { text: 'Batch the writes' }, caption: 'What was typed, in ink.' },
+      { label: 'Word action', args: { text: 'jj@studio.local', label: 'user@host', icon: 'none', action: 'Add' }, caption: 'The action is a word; it shows once something is typed.' },
+      { label: 'Chosen', args: { text: '~/Apps/checkout', label: 'Folder', icon: 'none', action: 'Choose', choose: true }, caption: 'Filled by a chooser, not typed: its word always shows.' },
+      { label: 'Search', args: { label: 'Find', icon: 'none', lead: 'lu-search', text: 'bucket' }, caption: 'A search leads with its glass.' },
+      { label: 'Hover', args: { hover: true }, caption: 'The edge steps up under the pointer.' },
+      { label: 'Focus', args: { focus: true }, caption: 'The one ring.' },
+      { label: 'Failure', args: { text: 'checkout/', label: 'Name', icon: 'none', error: true }, caption: 'The edge turns blocked; the reason sits under the field.' },
+      { label: 'Disabled', args: { disabled: true }, caption: 'Nothing can be typed yet.' },
+      { label: 'Multiline', args: { text: 'Review the limits page.\nKeep the plan in the bucket key.', label: 'Prompt', multiline: true }, caption: 'A prompt grows with its lines; Enter adds one.' },
+      { label: 'Rename', args: { text: 'checkout', label: 'Name', icon: 'none', inline: true, selected: true, focus: true }, caption: 'In place, its old name selected.' },
+      { label: 'Loading', args: { loading: true }, caption: 'One skeleton in the field’s place.' },
     ],
   },
   'Primitives/Mark': {
