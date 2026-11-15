@@ -220,7 +220,7 @@ export default class Spaces extends View {
       try { if (await this.panel.load()) this.applyPrefs(); this.panelReady = true; } catch { /* tried again from keepSeen; the copy stays meanwhile */ }
       cx.notify();
     });
-    this.orderOpen = false;
+    this.orderOpen = null;
     this.threads = null; // terminal -> its conversation (threads.js), once read
     // A pre-2.7 hide choice moves into the pieces map once.
     for (const [key, id] of [["switch", "sidebar.switch"], ["activity", "sidebar.activity"]]) {
@@ -1670,7 +1670,7 @@ export default class Spaces extends View {
   setOrder(key, value, cx) {
     this[key] = value;
     this.panel.set(`spaces.${key}`, key === "threadGroup" ? (value ? "on" : "off") : value);
-    this.orderOpen = false;
+    this.orderOpen = null;
     cx.notify();
   }
 
