@@ -104,15 +104,31 @@ export const excerpt = ({ who, when = '', text, query = '', lead = '', current =
   + `<div class="kanso-excerpt__who">${list(lead)}<span>${escape(who)}</span><span class="kanso-text--dim">${escape(when)}</span></div><div class="kanso-excerpt__text">${found({ text, query })}</div></div>`;
 
 const inline = (text) => escape(text).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-// An edited table puts its `cell` [row, column] in focus and offers its own actions under it.
+// An edited table puts its `cell` [row, column] in focus, a remover over each column and after each row, and its own actions under it.
 const tableActions = () => `<div class="kanso-markdown__actions">${['Add row', 'Add column', 'Done'].map((label) => button({ label, kind: 'quiet', size: 'sm' })).join('')}</div>`;
+const remover = (what, shown = true) => `<td class="kanso-markdown__remover kanso-markdown__remover--${what}">${shown ? button({ label: `Remove this ${what}`, kind: 'icon', size: 'sm', icon: 'lu-x' }) : ''}</td>`;
 const cellOf = (text, tag, focus) => `<${tag}${focus ? ' class="kanso-control--focus" contenteditable="true"' : ''}>${inline(text.trim())}</${tag}>`;
-const cells = (row, tag, at, cell) => `<tr>${row.split('|').slice(1, -1).map((text, column) => cellOf(text, tag, cell?.[0] === at && cell?.[1] === column)).join('')}</tr>`;
+const rowCells = (row) => row.trim().split('|').slice(1, -1);
+const cells = (row, tag, at, cell) => `<tr>${rowCells(row).map((text, column) => cellOf(text, tag, cell?.[0] === at && cell?.[1] === column)).join('')}${cell ? remover('row', at > 0) : ''}</tr>`;
+const columnRemovers = (head) => {
+  const columns = rowCells(head);
+  return `<tr>${columns.map(() => remover('column', columns.length > 1)).join('')}${remover('row', false)}</tr>`;
+};
 const isTable = (lines) => lines.every((line) => line.trim().startsWith('|'));
 const isFence = (lines) => lines[0].startsWith('```');
-const tableOf = (lines, cell) => `<table class="kanso-markdown__table${cell ? ' kanso-editor--editing' : ''}">${lines.filter((line) => !/^\s*\|[\s:|-]+\|\s*$/.test(line)).map((line, index) => cells(line.trim(), index ? 'td' : 'th', index, cell)).join('')}</table>${cell ? tableActions() : ''}`;
-const blockOf = (block, cell) => {
+const tableOf = (lines, cell) => {
+  const rows = lines.filter((line) => !/^\s*\|[\s:|-]+\|\s*$/.test(line));
+  return `<table class="kanso-markdown__table${cell ? ' kanso-editor--editing' : ''}">${cell ? columnRemovers(rows[0]) : ''}${rows.map((line, index) => cells(line, index ? 'td' : 'th', index, cell)).join('')}</table>${cell ? tableActions() : ''}`;
+};
+// A picture in a note: shown, loading, held on another computer as its name, size and Load, or failed in one quiet line.
+const imageLine = /^!\[([^\]]*)\]\(([^)]+)\)$/;
+const pictureBlock = (path, { state = 'shown', size = '', image = '' }) => state === 'held' ? row({ icon: 'lu-file', name: path.split('/').at(-1), detail: size, action: { label: 'Load', kind: 'quiet' } })
+  : state === 'failed' ? '<p class="kanso-text--dim">Cannot show this picture</p>'
+  : picture({ image, state });
+const blockOf = (block, cell, shot) => {
   const lines = block.split('\n');
+  const image = block.trim().match(imageLine);
+  if (image) return pictureBlock(image[2], shot);
   if (isFence(lines)) return `<pre class="kanso-markdown__code">${escape(lines.slice(1, lines.at(-1).startsWith('```') ? -1 : undefined).join('\n'))}</pre>`;
   if (block.startsWith('## ')) return `<div class="kanso-markdown__subheading">${inline(block.slice(3))}</div>`;
   if (block.startsWith('# ')) return `<div class="kanso-markdown__heading">${inline(block.slice(2))}</div>`;
@@ -122,14 +138,15 @@ const blockOf = (block, cell) => {
 };
 const blockStates = { hover: ' kanso-row--hover', editing: ' kanso-editor--editing kanso-control--focus' };
 // A block in `state`: hovered, or edited in place; an edited table edits its cells instead. The source `view` shows the raw text.
-const blockView = (text, on, state, cell) => {
+const blockView = (text, on, state, cell, shot) => {
   const table = isTable(text.split('\n'));
   const look = on && !(table && state === 'editing') ? blockStates[state] ?? '' : '';
-  return `<div class="kanso-markdown__block${look}"${look.includes('editing') ? ' contenteditable="true"' : ''}>${blockOf(text, on && table && state === 'editing' ? cell : null)}</div>`;
+  return `<div class="kanso-markdown__block${look}"${look.includes('editing') ? ' contenteditable="true"' : ''}>${blockOf(text, on && table && state === 'editing' ? cell : null, shot)}</div>`;
 };
-export const markdown = ({ source, block, state, cell = [1, 0], view = 'document' }) => view === 'source'
+// `shot` is how its pictures stand: { state, size, image }.
+export const markdown = ({ source, block, state, cell = [1, 0], view = 'document', shot = {} }) => view === 'source'
   ? `<div class="kanso-markdown"><div class="kanso-markdown__source">${escape(source.trim())}</div></div>`
-  : `<div class="kanso-markdown">${source.trim().split(/\n\s*\n/).map((text, index) => blockView(text, index + 1 === block, state, cell)).join('')}</div>`;
+  : `<div class="kanso-markdown">${source.trim().split(/\n\s*\n/).map((text, index) => blockView(text, index + 1 === block, state, cell, shot)).join('')}</div>`;
 
 // A washed band over a document: what changed and what to do about it.
 export const band = ({ text, actions = [] }) => `<div class="kanso-band" role="status"><span class="kanso-band__text">${escape(text)}</span>${actions.map(button).join('')}</div>`;

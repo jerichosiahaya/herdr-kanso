@@ -267,6 +267,9 @@
 .kanso-markdown__table th{color:var(--muted);font-weight:var(--k-fw-medium)}
 .kanso-markdown__table.kanso-editor--editing td,.kanso-markdown__table.kanso-editor--editing th{box-shadow:inset -1px 0 0 var(--border);background:var(--raised)}
 .kanso-markdown__table.kanso-editor--editing :is(td,th).kanso-control--focus{box-shadow:inset 0 0 0 1px var(--accent);outline:none}
+.kanso-markdown__table.kanso-editor--editing td.kanso-markdown__remover{padding:0;text-align:center;background:none;box-shadow:none;border-bottom:none}
+.kanso-markdown__remover.kanso-markdown__remover--row{width:var(--k-sp-6)}
+.kanso-markdown__remover>.kanso-button{margin:0 auto}
 .kanso-markdown__source{font:var(--k-fs-body)/var(--k-lh-code) var(--mono);white-space:pre-wrap;margin-top:var(--k-sp-3);color:var(--fg)}
 .kanso-code{font:var(--k-fs-mono)/var(--k-lh-line) var(--mono);white-space:pre;overflow:hidden}
 .kanso-code__line{display:flex;padding-right:var(--k-sp-4)}
