@@ -880,5 +880,43 @@
       "Terminal": "kit/Pane header/A terminal",
       "Working": "kit/Pane header/Focused, working"
     }
+  },
+  "dojo/Practice": {
+    "page": "Panels/Dojo",
+    "states": {
+      "1 · h l": "kit/Panels/Dojo/A level’s first move",
+      "2 · j k": "kit/Panels/Dojo/Level 2: j k",
+      "3 · h j k l": "kit/Panels/Dojo/A round in play",
+      "4 · 0 $ gg G": "kit/Panels/Dojo/The next level",
+      "5 · Counts": "kit/Panels/Dojo/A count waits for its key",
+      "6 · w b e": "kit/Panels/Dojo/Level 6: the text",
+      "7 · f t": "kit/Panels/Dojo/f waits for its letter",
+      "8 · 0 ^ $": "kit/Panels/Dojo/Level 8: 0 ^ $",
+      "9 · All of it": "kit/Panels/Dojo/All nine done"
+    }
+  },
+  "dojo/PracticeFeedback": {
+    "page": "Panels/Dojo",
+    "states": {
+      "Arrow key": "kit/Panels/Dojo/An arrow key",
+      "Count pending": "kit/Panels/Dojo/A count waits for its key",
+      "Exit armed": "kit/Panels/Dojo/Esc once: leave?",
+      "Extra moves": "kit/Panels/Dojo/The long way round",
+      "Find pending": "kit/Panels/Dojo/f waits for its letter",
+      "First move": "kit/Panels/Dojo/A level’s first move",
+      "Go pending": "kit/Panels/Dojo/g waits for another g",
+      "Miss": "kit/Panels/Dojo/A key that is no move here",
+      "Sleeping": "kit/Panels/Dojo/Asleep",
+      "Streak": "kit/Panels/Dojo/A streak"
+    }
+  },
+  "dojo/PracticeResult": {
+    "page": "Panels/Dojo",
+    "states": {
+      "Completed": "kit/Panels/Dojo/Done",
+      "New best": "kit/Panels/Dojo/Done: a new best",
+      "Save failed": "kit/Panels/Dojo/The round could not be kept",
+      "Stopped": "kit/Panels/Dojo/End round: not counted"
+    }
   }
 }

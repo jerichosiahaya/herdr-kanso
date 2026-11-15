@@ -1,5 +1,5 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, device, deviceScreen, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, explainButton, sentence, well, delta, heatmap, shareCard, thumbnail } from './kit.js';
+import { band, bars, button, chord, device, deviceScreen, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, explainButton, sentence, well, delta, heatmap, shareCard, thumbnail, dojoGrid, dojoText, dojoProgress, dojoLevel, keycap, grow } from './kit.js';
 import { channelSettings, keyboardExplorer, newWorktree, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
@@ -526,6 +526,32 @@ const agentChoice = ({ name, project }) => ({ label: name, icon: 'p-claude', hin
 const pinPicker = (agents) => (agents ? menu({ title: 'Send to', items: agents.map(agentChoice) }) : null);
 export const pinPanel = ({ on = 'device', title, scope, frozen = true, pins: placed = [], send = {}, agents = null, ...ground }) => panel({ header: panelHeader({ title, second: scope, tools: pinTools[on]({ frozen }) }) },
   pinGround[on]({ frozen, pins: placed, ...ground }), pinPicker(agents), pinNotes({ pins: placed, send }));
+
+// Dōjō: the level path, the board or the round's result, what it says, and the level's keys with their fingers; a round is ten targets.
+const levelState = (n, current) => (n === current ? 'current' : n < current ? 'done' : 'next');
+const levelPath = ({ levels, current, focus }) => stack({ variant: 'dojo path' }, levels.map(({ n, name, best }) => dojoLevel({ n, name, best: n < current ? best : undefined, state: levelState(n, current), focus: focus && n === current })),
+  line(keyHint({ text: '[ ]' }), 'level', keyHint({ text: 'p' }), 'pet'));
+const capOf = ({ motions, shifted }) => (key) => [motions.includes(shifted[key]) ? shifted[key] : key, motions.includes(key.toUpperCase()) && key !== key.toUpperCase() ? key.toUpperCase() : null].filter(Boolean);
+const dojoKey = ({ motions, fingers, pressed, hint }) => (key) => {
+  const [arrow, finger] = motions.includes(key) ? fingers[key] ?? [] : [];
+  const state = key === pressed ? 'picked' : key === hint ? 'hint' : motions.includes(key) ? 'kanso' : 'free';
+  return keycap({ label: key, state, arrow, finger });
+};
+const dojoKeys = ({ rows, shifted, ...keys }) => stack({ variant: 'keyboard' }, rows.map((keysOfRow) => stack({ variant: 'keyboard row' }, [...keysOfRow].flatMap(capOf({ motions: keys.motions, shifted })).map(dojoKey(keys)))));
+const resultKeys = (next) => line(keyHint({ text: '↩' }), 'play again', next ? keyHint({ text: 'n' }) : null, next ? phrase('next level:', next) : null);
+const roundResult = ({ points, record, facts: counted }, next) => list(metric({ value: points, unit: 'points', second: record, tone: record && 'accent' }), sentence({ text: facts(...counted) }), resultKeys(next));
+const dojoBoard = ({ result, next, code: lines, at, target, best, key, progress }) => stack({ variant: 'dojo board' },
+  result ? roundResult(result, next) : list(dojoProgress(progress), lines ? dojoText({ lines, at, target }) : dojoGrid({ at, target, best, key })));
+const dojoHeader = ({ n, name, playing, shared }) => stack({ variant: 'dojo header' }, 'hjkl dōjō', sentence({ text: phrase('level', n, '·', name) }), grow(),
+  shared ? shareButton() : null, playing ? quietAct('End round') : null, quietAct('Leave'), keyHint({ text: 'esc', faint: true }));
+export const dojo = ({ sample, current, focus = false, playing = false, shared = false, sharing = false, said, missed = false, glad = false, pressed = null, hint = null, ...board }) => {
+  const { levels, rows, shifted, fingers } = sample;
+  const { name, motions } = levels[current - 1];
+  return withBeside(stack({ variant: 'dojo' }, dojoHeader({ n: current, name, playing, shared }),
+    stack({ variant: 'dojo body' }, levelPath({ levels, current, focus }), stack({ variant: 'dojo main' }, dojoBoard({ next: levels[current]?.name, ...board }),
+      stack({ variant: 'dojo talk' }, stack({ variant: 'dojo feedback', missed, success: glad }, said)), dojoKeys({ rows, shifted, motions, fingers, pressed, hint })))),
+  sharing ? shareMenu({ leaves: 'Scores and practice days only' }) : null);
+};
 
 // Simulator: the picked device's picture with its buttons under it; Device swaps the screen for the list, and each state takes the screen's place.
 const deviceKeys = {

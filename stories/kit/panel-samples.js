@@ -719,3 +719,45 @@ export const sampleImages = {
   noAgent: { icon: 'lu-monitor', text: 'No agent in focus' },
   noConversation: { icon: 'lu-eye', text: 'No conversation to read pictures from' },
 };
+
+// Dōjō: the nine levels and their bests, the keys under the board with their fingers, a code snippet, and the words it says.
+const level = (n, name, motions, best = '') => ({ n, name, motions, best });
+export const sampleDojo = {
+  levels: [level(1, 'h l', ['h', 'l'], 88), level(2, 'j k', ['j', 'k'], 104), level(3, 'h j k l', ['h', 'j', 'k', 'l'], 142), level(4, '0 $ gg G', ['h', 'j', 'k', 'l', '0', '$', 'g', 'G'], 131),
+    level(5, 'Counts', ['h', 'j', 'k', 'l', '2', '3', '4', '5', '6', '7', '8', '9'], 156), level(6, 'w b e', ['h', 'j', 'k', 'l', 'w', 'b', 'e'], 149), level(7, 'f t', ['h', 'l', 'f', 't', 'F', 'T'], 162),
+    level(8, '0 ^ $', ['h', 'j', 'k', 'l', '0', '^', '$', 'g', 'G'], 171), level(9, 'All of it', ['h', 'j', 'k', 'l', 'w', 'b', 'e', 'f', 't', 'F', 'T', '0', '^', '$', 'g', 'G'], 181)],
+  rows: ['1234567890', 'qwertyuiop', 'asdfghjkl;', 'zxcvbnm,./'],
+  shifted: { 4: '$', 6: '^' },
+  fingers: { h: ['←', 'index'], j: ['↓', 'index'], k: ['↑', 'middle'], l: ['→', 'ring'] },
+  code: ['export default class Strip extends View {', '  init(props, cx) { this.cols = []; }', '  focus(pane) { run("pane.focus", { pane }); }', '  width(col) { return col.w ?? 1 / this.n; }', '}'],
+  said: {
+    start: 'Make a move to start: 10 targets, in as few moves as you can.',
+    best: 'This one takes 5 at best.',
+    fewest: 'In the fewest moves.',
+    streak: '3 in a row in the fewest moves.',
+    long: '8 moves; 5 would do. Try l.',
+    hint: 'Try l.',
+    find: 'f… now the letter to find.',
+    go: 'g… another g for the first line.',
+    count: '5… now h j k or l.',
+    arrow: 'The arrows don’t count in the dōjō: h j k l.',
+    later: 'w comes at level 6. Here: h j k l',
+    sleep: 'Zzz. Any move wakes me.',
+    leave: 'Press Esc again to leave the dōjō.',
+    stopped: 'Round stopped, not counted. Enter to start again.',
+    record: 'A new best! Enter to play again, n for the next level.',
+    again: 'Enter to play again, n for the next level.',
+    unkept: 'This round could not be kept: database is locked',
+    noSqlite: 'Install sqlite3 to keep your rounds.',
+    next: 'Level 3 done, best 142. Level 4: 0 and $ jump to the ends of a row, gg and G to the first and the last row.',
+    words: 'Level 6, w b e: w jumps to the next word, b back to the start of a word, e to the end of one. A move starts.',
+    column: 'Level 2, j k: j goes down (its tail hangs below the line), k goes up. Index on j, middle finger on k.',
+    ends: 'Level 8, 0 ^ $: 0 is the line’s very start, ^ its first letter, $ its end; gg and G the first and last line.',
+    all: 'All nine. [ and ] take you back to any level.',
+  },
+  results: {
+    record: { points: 142, record: 'a new best for level 3 · was 120', facts: ['10 targets', '8 in the fewest moves', 'best streak 5', '1:12'] },
+    kept: { points: 118, facts: ['10 targets', '6 in the fewest moves', 'best streak 3', '1:20'] },
+    all: { points: 181, record: 'all nine levels done', facts: ['1,284 points across the path', '41 days practised', 'longest streak 12'] },
+  },
+};

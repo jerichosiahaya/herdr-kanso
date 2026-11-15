@@ -4238,8 +4238,7 @@
         "coverage/dojo/PracticeFeedback/Go pending",
         "coverage/dojo/PracticeFeedback/Miss",
         "coverage/dojo/PracticeFeedback/Sleeping",
-        "coverage/dojo/PracticeFeedback/Streak",
-        "panels/dojo/FeaturePracticeFeedback/sqlite3 missing"
+        "coverage/dojo/PracticeFeedback/Streak"
       ],
       "components": [
         "Panels/Dojo"

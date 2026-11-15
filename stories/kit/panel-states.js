@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel, shipped, sharing, simulator, images } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel, shipped, sharing, simulator, images, dojo } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer, sampleScreens, sampleShot } from './samples.js';
-import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleShipped, sampleShippedCard, sampleShippedNotices, sampleShare, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins, sampleSimulator, sampleImages } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleShipped, sampleShippedCard, sampleShippedNotices, sampleShare, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins, sampleSimulator, sampleImages, sampleDojo } from './panel-samples.js';
 
 // A notice's state: the panel at rest with the notice beside it.
 const noticesOf = (notices, draw) => Object.fromEntries(Object.entries(notices).map(([name, said]) => [phrase('Notice:', name), [draw({ notice: said }), 'On screen a toast; away, the computer’s notification with the same words.']]));
@@ -598,6 +598,40 @@ export const imagesViews = {
   'No agent in focus': [{ empty: sampleImages.noAgent }, 'One quiet line.'],
   'Narrow, 300': [onPicture({ look: 'narrow' }), 'The picture fits; the notes wrap.'],
 };
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Shipped': [shippedViews, shipped], 'Panels/Share': [shareViews, sharing], 'Panels/Images': [imagesViews, images], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel], 'Panels/Simulator': [simulatorViews, simulator] };
+// Dōjō: a level's first move, a round in play, its hints and misses, the result, and leaving.
+const { said: dojoSaid, results: dojoResults, code: snippet } = sampleDojo;
+const round = (current, extra = {}) => ({ sample: sampleDojo, current, at: [11, 3], target: [14, 6], progress: { score: 45, time: '38s', streak: 2, moves: 2, best: 5, done: 4 }, playing: true, said: dojoSaid.best, ...extra });
+const resting = (current, said, extra = {}) => round(current, { playing: false, at: [9, 4], target: [13, 2], progress: {}, said, ...extra });
+const onText = (current, said, extra = {}) => resting(current, said, { code: snippet, at: [0, 0], target: [6, 0], ...extra });
+const missed = { at: [11, 4], best: [[12, 4], [13, 4], [14, 4], [14, 5]], key: 'l', progress: { score: 45, time: '51s', streak: 0, moves: 8, best: 5, missed: true, done: 4 } };
+const over = (result, said, extra = {}) => round(3, { playing: false, result, said, glad: true, shared: true, ...extra });
+const dojoViews = {
+  'A level’s first move': [resting(1, dojoSaid.start), 'The level’s keys under the board, with their fingers; the first move starts the round.'],
+  'A round in play': [round(3), 'The count over the board, the cursor and the ringed target; it says what this one takes at best.'],
+  'In the fewest moves': [round(3, { said: dojoSaid.fewest, glad: true, progress: { score: 54, time: '41s', streak: 3, moves: 0, best: 4, done: 5 } }), 'A target in the fewest moves; the line says so.'],
+  'A streak': [round(3, { said: dojoSaid.streak, glad: true, progress: { score: 78, time: '1:02', streak: 3, moves: 0, best: 4, done: 7 } }), 'Three or more in a row in the fewest moves.'],
+  'The long way round': [round(3, { ...missed, said: dojoSaid.long, missed: true, hint: 'l' }), 'The moves in working ink, the shortest way drawn, its first key lit.'],
+  'Idle: a hint': [round(3, { said: dojoSaid.hint, hint: 'l' }), 'Two seconds still, the first key of the shortest way is lit.'],
+  'A key that is no move here': [round(3, { said: dojoSaid.later, missed: true, pressed: 'w' }), 'A later level’s key says where it comes; another says the keys here.'],
+  'An arrow key': [round(3, { said: dojoSaid.arrow, missed: true }), 'The arrows do not count.'],
+  'A count waits for its key': [round(5, { said: dojoSaid.count, pressed: '5' }), 'Counts: a number waits for h j k or l.'],
+  'g waits for another g': [round(4, { said: dojoSaid.go, pressed: 'g' }), 'gg goes to the first row.'],
+  'f waits for its letter': [onText(7, dojoSaid.find, { playing: true, focus: true, at: [2, 2], target: [17, 2], pressed: 'f', progress: { score: 30, time: '22s', streak: 1, moves: 1, best: 2, done: 2 } }), 'f and t, then the letter to find on the line.'],
+  'Level 2: j k': [resting(2, dojoSaid.column), 'A level opens on its tip.'],
+  'Level 6: the text': [onText(6, dojoSaid.words), 'From level 6 the board is code, one character per cell.'],
+  'Level 8: 0 ^ $': [onText(8, dojoSaid.ends), 'Ends of a line and of the text.'],
+  'Done: a new best': [over(dojoResults.record, dojoSaid.record), 'The points, the new best and what was, then what the round counted; Enter plays again, n opens the next level.'],
+  'Done': [over(dojoResults.kept, dojoSaid.again, { glad: false }), 'The same, without a best.'],
+  'The next level': [resting(4, dojoSaid.next, { shared: true }), 'n: the level done and its best, then the next level’s tip.'],
+  'All nine done': [round(9, { playing: false, result: dojoResults.all, said: dojoSaid.all, glad: true, shared: true }), 'The path’s totals; any level again with [ and ].'],
+  'Share: what leaves': [over(dojoResults.record, dojoSaid.record, { sharing: true }), 'Scores and practice days only, as on Panels/Share.'],
+  'Esc once: leave?': [round(3, { said: dojoSaid.leave, progress: { score: 45, time: '40s', streak: 2, moves: 1, best: 5, done: 4 } }), 'Esc during a round asks once more.'],
+  'End round: not counted': [resting(3, dojoSaid.stopped), 'End round or leaving early keeps nothing.'],
+  Asleep: [resting(1, dojoSaid.sleep), 'Twenty seconds without a move; any move wakes it.'],
+  'The round could not be kept': [over(dojoResults.kept, dojoSaid.unkept, { glad: false, missed: true }), 'The store’s words where it talks; the result stays on screen.'],
+  'Without sqlite3': [resting(1, dojoSaid.noSqlite, { missed: true }), 'Practice works; rounds are not kept until sqlite3 is installed.'],
+};
+
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Shipped': [shippedViews, shipped], 'Panels/Share': [shareViews, sharing], 'Panels/Images': [imagesViews, images], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel], 'Panels/Simulator': [simulatorViews, simulator], 'Panels/Dojo': [dojoViews, dojo] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));
