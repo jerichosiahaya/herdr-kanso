@@ -362,3 +362,5 @@
 .kanso-markdown__actions{display:flex;align-items:center;gap:var(--k-sp-2);margin-bottom:var(--k-sp-2)}
 .kanso-band{display:flex;flex-wrap:wrap;align-items:center;gap:var(--k-sp-2);padding:var(--k-sp-2) var(--k-sp-4);background:color-mix(in srgb,var(--blocked) 10%,transparent);font-size:var(--k-fs-body)}
 .kanso-band__text{flex:1 1 100%;min-width:0}
+.kanso-row.kanso-row--strong .kanso-row__name{color:var(--fg)}
+.kanso-row .kanso-row__meta.kanso-row__meta--late{color:var(--blocked)}
