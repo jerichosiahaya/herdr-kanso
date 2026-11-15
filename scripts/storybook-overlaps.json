@@ -817,5 +817,37 @@
       "Programs": "kit/New conversation menu/Agents",
       "Project picker": "kit/New conversation menu/Pick a project"
     }
+  },
+  "spaces/ComputerMenu": {
+    "page": "Compositions/Computer menu",
+    "states": {
+      "Connected": "kit/Computer menu/Connected",
+      "Login": "kit/Computer menu/Sign in",
+      "Off": "kit/Computer menu/Off",
+      "Power failed": "kit/Computer menu/Power refused",
+      "Sync failed": "kit/Computer menu/Sync refused",
+      "Sync on": "kit/Computer menu/Sync on",
+      "Sync pending": "kit/Computer menu/Saving sync",
+      "Unreachable": "kit/Computer menu/Unreachable"
+    }
+  },
+  "spaces/ProjectMenu": {
+    "page": "Compositions/Project menu",
+    "states": {
+      "Asleep": "kit/Project menu/Asleep",
+      "Gone": "kit/Project menu/Gone",
+      "Keep": "kit/Project menu/Not kept",
+      "Missing folder": "kit/Project menu/Folder missing",
+      "Open project": "kit/Project menu/Open",
+      "Remove armed": "kit/Project menu/Remove armed"
+    }
+  },
+  "chrome/SettingsMenu": {
+    "page": "Compositions/Settings menu",
+    "states": {
+      "Rest": "kit/Settings menu/At rest",
+      "Host update": "kit/Settings menu/Herdr update",
+      "Restart armed": "kit/Settings menu/Restart armed"
+    }
   }
 }

@@ -93,6 +93,20 @@ export const guidelines = {
     ["Kansō", "A use of Menu.", "The agents installed in the project, the last used marked, then Terminal, then In a new worktree. With several projects, + asks where first."],
     ["Shizen", "Read while it opens.", "The agents breathe in their place until the computer answers; Terminal is there at once."],
   ],
+  "Compositions/Computer menu": [
+    ["Kansō", "A use of Menu.", "The computer's name as its title; name it, power it, sync it, start a project on it, add another; then the piece lines."],
+    ["Kokō", "The way back leads.", "Off, Turn on comes first; unreachable, Refresh and Sign in; asking for a sign-in, Sign in and the command to copy."],
+    ["Shizen", "Optimistic.", "Sync breathes in its place while it is written; a refusal leads the menu with the blocked mark and its fix, and the switch stays as it was."],
+  ],
+  "Compositions/Project menu": [
+    ["Kansō", "A use of Menu.", "The project's name as its title; start in it, its worktrees under a heading, name it, put it away, remove it; then the piece lines."],
+    ["Kokō", "Only what the project can do now.", "Asleep, Wake leads; with no folder, Locate folder and Remove only; an open folder not kept offers Keep as a project."],
+    ["Seijaku", "Remove asks twice.", "Remove project arms for 4 s and says how many tabs close."],
+  ],
+  "Compositions/Settings menu": [
+    ["Kansō", "A use of Menu.", "Settings as its title; kansō settings with its key, Herdr settings."],
+    ["Kokō", "Herdr's update here only.", "When Herdr has an update, a third item; it restarts Herdr, so it asks twice within 4 s."],
+  ],
   "Compositions/Agent menu": [
     ["Kansō", "A use of Menu.", "The agent's or thread's name as its title; open it, name it, keep it, put it away, close it, then the piece lines. Snooze, Move and Copy each open their own Menu."],
     ["Kokō", "Only the way back when it is away.", "A snoozed thread offers Wake, a settled one Bring back, with Mark unread, Rename and Copy."],

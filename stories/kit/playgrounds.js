@@ -1,6 +1,6 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, inBar } from './frames.js';
 import { arrangementViews, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, projectRefusals, sendReach, sleepCases, statedPages, stepperShown, tabActs, worktreeRefusals } from './states.js';
@@ -161,6 +161,26 @@ export const playgrounds = {
   'Compositions/New conversation menu': {
     ...statedPages['Compositions/New conversation menu'],
     argTypes: { situation: { ...select('situation', [...Object.keys(newInCases), 'pick a project']) } },
+  },
+  'Compositions/Computer menu': {
+    ...statedPages['Compositions/Computer menu'],
+    argTypes: {
+      state: { name: 'computer', control: { type: 'inline-radio' }, options: computerMenuStates },
+      sync: { name: 'sync', control: { type: 'inline-radio' }, options: ['off', 'on', 'saving'], if: { arg: 'state', eq: 'on' } },
+      refused: { name: 'refused', control: { type: 'inline-radio' }, options: ['nothing', 'power', 'sync'] },
+    },
+  },
+  'Compositions/Project menu': {
+    ...statedPages['Compositions/Project menu'],
+    argTypes: {
+      tabs: { name: 'open tabs', control: { type: 'number', min: 0 } },
+      worktrees: flag('worktrees'), asleep: flag('tabs asleep'), kept: flag('kept as a project'),
+      missing: flag('folder missing'), gone: flag('gone'), armed: flag('remove armed'),
+    },
+  },
+  'Compositions/Settings menu': {
+    ...statedPages['Compositions/Settings menu'],
+    argTypes: { update: flag('Herdr update waiting'), armed: { ...flag('restart armed'), if: { arg: 'update' } } },
   },
   'Compositions/Agent menu': {
     ...statedPages['Compositions/Agent menu'],

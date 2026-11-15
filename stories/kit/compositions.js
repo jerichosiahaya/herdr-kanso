@@ -178,7 +178,7 @@ export const moveMenu = ({ name, projects, home }) => menu({ title: phrase('Move
 export const copyMenu = ({ folder, branch, id }) => menu({ title: 'Copy', items: [{ icon: 'lu-folder', label: 'Folder', hint: folder }, { icon: 'lu-git-branch', label: 'Branch', hint: branch }, { icon: 'lu-copy', label: 'Conversation id', hint: id }] });
 
 // A refusal inside a menu: our words with the blocked mark, the tool's words dim, the fix, then Explain.
-const failureItems = ({ text, source, fix }, agent) => [{ label: text, mark: 'blocked' }, { heading: source }, { icon: 'lu-refresh-cw', label: fix }, { icon: 'lu-bot', label: phrase('Explain to', agent) }];
+const failureItems = ({ text, source = null, fix = null }, agent) => [{ label: text, mark: 'blocked' }, ...(source ? [{ heading: source }] : []), ...(fix ? [{ icon: 'lu-refresh-cw', label: fix }] : []), { icon: 'lu-bot', label: phrase('Explain to', agent) }];
 // Open with: the editors that can open the file or folder, terminal editors after the rule; a refusal leads with its mark.
 const editorItem = (editor) => ({ icon: editor.terminal ? 'lu-terminal' : editor.icon, label: editor.name, hint: editor.key, selected: editor.chosen, mark: editor.failed ? 'blocked' : null });
 export const openWithMenu = ({ target = null, editors = [], reading = false, none = null, failure = null, agent }) => menu({ title: target ? phrase('Open with ·', target) : 'Open with', items: [
@@ -195,6 +195,40 @@ export const newInMenu = ({ project, agents = [], reading = false, none = null, 
   ...(failure ? failureItems(failure, agent) : []),
   { icon: 'lu-terminal', label: 'Terminal' }, { separator: true }, { icon: 'lu-git-branch', label: 'In a new worktree…' },
 ] });
+
+// A computer's menu: name it, power it, sync it, start a project on it; off or unreachable, the way back leads.
+const renameItem = { label: 'Rename…' };
+const addComputerItem = { icon: 'lu-server', label: 'Add computer…' };
+const refreshItem = { icon: 'lu-refresh-cw', label: 'Refresh' };
+const signInItem = { label: 'Sign in…' };
+const syncItem = (sync) => (sync === 'saving' ? { loading: true } : { icon: 'lu-arrow-right-left', label: 'Sync', hint: sync === 'on' ? 'on' : null });
+const computerActs = {
+  on: (sync) => [renameItem, { icon: 'lu-power', label: 'Turn off' }, syncItem(sync), { icon: 'lu-plus', label: 'New project' }, addComputerItem],
+  off: () => [{ icon: 'lu-power', label: 'Turn on' }, renameItem, addComputerItem],
+  unreachable: () => [refreshItem, signInItem, renameItem, addComputerItem],
+  'sign in': () => [signInItem, { icon: 'lu-copy', label: 'Copy sign-in command' }, refreshItem],
+};
+export const computerMenuStates = Object.keys(computerActs);
+export const computerMenu = ({ name, state = 'on', sync = 'off', failure = null, agent }) => menu({ title: name, items: [
+  ...(failure ? failureItems(failure, agent) : []), ...computerActs[state](sync), ...pieceLines] });
+
+// A project's menu: start in it, its worktrees, name it, put it away, remove it; asleep, its tabs wake first.
+const worktreeItem = ({ branch, place }) => ({ icon: 'lu-git-branch', label: branch, hint: place });
+const wakeItems = (asleep) => [{ icon: 'lu-sun', label: phrase('Wake', asleep[0]) }, ...(asleep.length > 1 ? [{ icon: 'lu-sun', label: phrase('Wake all', asleep.length) }] : [])];
+const startItems = (worktrees) => [{ label: 'New conversation…' }, { icon: 'lu-git-branch', label: 'New in a worktree…' },
+  ...(worktrees.length ? [{ heading: 'Worktrees' }, ...worktrees.map(worktreeItem)] : [])];
+const keepItems = (tabs) => [renameItem, ...(tabs ? [{ icon: 'lu-moon', label: 'Sleep this tab…' }] : []), ...(tabs > 1 ? [{ icon: 'lu-moon', label: 'Sleep the project…' }] : []), ...(tabs ? [{ label: 'Project options…' }] : [])];
+const removeItem = (tabs, armed) => ({ icon: 'lu-x', label: 'Remove project', verb: tabs ? phrase('remove, close', tabs, tabs === 1 ? 'tab' : 'tabs') : 'remove it', armed });
+export const projectMenu = ({ name, worktrees = [], asleep = [], tabs = 0, kept = true, missing = false, gone = false, armed = false }) => menu({ title: name, items: gone ? [{ heading: 'This project is no longer here' }] : [
+  ...(asleep.length ? wakeItems(asleep) : []),
+  ...(missing ? [{ icon: 'lu-folder', label: 'Locate folder…' }] : [...startItems(worktrees), ...keepItems(tabs)]),
+  ...(kept ? [] : [{ icon: 'lu-pin', label: 'Keep as a project' }]),
+  removeItem(tabs, armed), ...pieceLines] });
+
+// The footer's Settings: kansō's, Herdr's, and Herdr's update when one waits, which restarts it on the second press.
+export const settingsMenu = ({ update = null, armed = false } = {}) => menu({ title: 'Settings', items: [
+  { icon: 'lu-sliders-vertical', label: 'kansō settings', hint: '⌃⇧,' }, { icon: 'lu-panels-top-left', label: 'Herdr settings' },
+  ...(update ? [{ icon: updateIcon, label: update, verb: 'restart Herdr', armed }] : [])] });
 
 export const activityMenu = () => menu({ title: 'While you were away', items: [{ icon: 'lu-x', label: 'Dismiss these' }, ...pieceLines] });
 

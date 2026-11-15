@@ -27,6 +27,32 @@ export const hypotheses = {
       back: 'Sleep shows Cancel and Arrangements shows Close again, as today.',
     },
   ],
+  'Compositions/Computer menu': [
+    {
+      change: 'The computer menu ends with the piece lines, and a refusal leads it instead of a notice.',
+      today: 'Rename, Turn off or on, Sync, New project and Add computer; a refused switch or sync is said in a notice.',
+      why: 'every act on one computer from its row.',
+      question: 'why must someone read a notice to learn that the switch they just pressed was refused, or open Settings to hide the Computers piece?',
+      believe: 'the refusal where the switch was pressed, with its fix, is read without looking away, and the piece is one press from its row.',
+      jobs: [['every act of today', 'stays, in the same menu'], ['the refused switch or sync', 'leads the menu with its fix'], ['hide or tune the Computers piece', 'the piece lines at the end']],
+      wrong: 'someone misses a refusal because the menu closed before it came.',
+      try: 'Dawn Mode first.',
+      back: 'the refusal returns to a notice and the piece lines leave.',
+    },
+  ],
+  'Compositions/Project menu': [
+    {
+      change: 'The project menu adds Rename and the piece lines.',
+      today: 'New conversation, New agent in a worktree, the worktrees, Sleep this tab, Sleep the whole project, Project options and Remove project.',
+      why: 'every act on one project from its row.',
+      question: 'why must someone open Project options to rename a project, or Settings to hide what its row says, when they are on the project?',
+      believe: 'Rename and the piece lines one press from the row save a trip to Project options and to Settings.',
+      jobs: [['every act of today', 'stays, in its place'], ['rename the project', 'Rename…'], ['hide or tune the row piece', 'the piece lines at the end']],
+      wrong: 'nobody renames from the menu, or the menu grows past the screen with many worktrees.',
+      try: 'Dawn Mode first.',
+      back: 'Rename and the piece lines leave the menu.',
+    },
+  ],
   'Compositions/Agent menu': [
     {
       change: 'The agent menu adds Sleep its tab and the piece lines, and groups its items: open and name, keep, put away, close.',

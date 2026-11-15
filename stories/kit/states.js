@@ -1,8 +1,8 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, agentMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
 import { dialog, emptyState, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleArrangements, sampleCapture, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleArrangements, sampleAsleep, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
@@ -162,6 +162,12 @@ const newInCaptions = {
   agents: 'The agents installed there, the last one used marked.', reading: 'The agents are being read.', 'none installed': 'No agent there; Terminal still opens.',
   'search refused': "The computer did not answer: the tool's words, Refresh, Explain.", 'pick a project': '+ on Status and Threads, with several projects: pick where first.',
 };
+// What a computer's switch or sync refusal says.
+const computerRefusals = {
+  nothing: null,
+  power: { text: 'devbox was not changed' },
+  sync: { text: 'Sync devbox was not changed' },
+};
 const capitalized = (text) => text[0].toUpperCase() + text.slice(1);
 const worktreePlace = { here: '~/.kanso/worktrees/kansō-app-audit', devbox: 'devbox · ~/.kanso/worktrees/kansō-app-audit' };
 
@@ -209,6 +215,41 @@ export const statedPages = {
     args: { situation: 'agents' },
     markup: ({ situation }) => (situation === 'pick a project' ? sampleAddMenu() : newInMenu({ project: 'acme-shop', agent: sampleAgent, ...newInCases[situation] })),
     states: [...Object.keys(newInCases), 'pick a project'].map((situation) => ({ label: capitalized(situation), args: { situation }, caption: newInCaptions[situation] })),
+  },
+  'Compositions/Computer menu': {
+    args: { state: 'on', sync: 'off', refused: 'nothing' },
+    markup: ({ state, sync, refused }) => computerMenu({ name: 'devbox', state, sync, failure: computerRefusals[refused], agent: sampleAgent }),
+    states: [
+      { label: 'Connected', args: {}, caption: 'Right-click or ⋯ on a computer.' },
+      { label: 'Sync on', args: { sync: 'on' }, caption: 'Sync says it is on.' },
+      { label: 'Saving sync', args: { sync: 'saving' }, caption: 'Sync breathes in its place until it is written.' },
+      { label: 'Off', args: { state: 'off' }, caption: 'Turn on leads.' },
+      { label: 'Unreachable', args: { state: 'unreachable' }, caption: 'Refresh and Sign in lead.' },
+      { label: 'Sign in', args: { state: 'sign in' }, caption: 'ssh asks for a sign-in: here, or the command to copy.' },
+      { label: 'Power refused', args: { state: 'off', refused: 'power' }, caption: 'Turning it on was refused: our words lead, Turn on stays under them.' },
+      { label: 'Sync refused', args: { refused: 'sync' }, caption: 'Sync was refused and stays as it was: our words lead, Sync stays under them.' },
+    ],
+  },
+  'Compositions/Project menu': {
+    args: { tabs: 3, worktrees: true, asleep: false, kept: true, missing: false, gone: false, armed: false },
+    markup: ({ worktrees, asleep, ...rest }) => projectMenu({ name: 'acme-shop', worktrees: worktrees ? sampleWorktrees : [], asleep: asleep ? sampleAsleep : [], ...rest }),
+    states: [
+      { label: 'Open', args: {}, caption: 'Right-click or ⋯ on a project with open tabs.' },
+      { label: 'Remove armed', args: { armed: true }, caption: 'Remove asks twice within 4 s and says how many tabs close.' },
+      { label: 'Asleep', args: { tabs: 0, asleep: true }, caption: 'Its sleeping tabs wake first.' },
+      { label: 'Not kept', args: { tabs: 1, worktrees: false, kept: false }, caption: 'An open folder that is not a project yet.' },
+      { label: 'Folder missing', args: { tabs: 0, missing: true }, caption: 'Its folder is gone: find it, or remove the project.' },
+      { label: 'Gone', args: { gone: true }, caption: 'The project left while the menu was open.' },
+    ],
+  },
+  'Compositions/Settings menu': {
+    args: { update: false, armed: false },
+    markup: ({ update, armed }) => settingsMenu({ update: update ? 'Update Herdr to 0.1.16' : null, armed }),
+    states: [
+      { label: 'At rest', args: {}, caption: 'Settings in the footer, or the gear in the rail.' },
+      { label: 'Herdr update', args: { update: true }, caption: 'Herdr has an update waiting: a third item, here only.' },
+      { label: 'Restart armed', args: { update: true, armed: true }, caption: 'The update restarts Herdr, so it asks twice within 4 s.' },
+    ],
   },
   'Compositions/Agent menu': {
     args: { on: 'an agent', pinned: false, away: 'no', armed: false, opened: 'none' },

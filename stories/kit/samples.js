@@ -173,3 +173,6 @@ export const sampleEditors = {
 };
 export const sampleTargetsOpened = { file: 'src/session.ts', folder: '~/acme', picture: 'screenshot.png', remote: 'devbox: ~/acme/src/session.ts' };
 export const sampleInstalled = [{ program: 'p-claude', name: 'Claude Code', last: true }, { program: 'p-codex', name: 'Codex' }];
+// A project's worktrees as its menu lists them, and its tabs asleep.
+export const sampleWorktrees = [{ branch: 'checkout-v2', place: 'kansō' }, { branch: 'cart-retry', place: '~/acme-shop-cart' }];
+export const sampleAsleep = ['checkout', 'docs', 'billing'];
