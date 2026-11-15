@@ -1,7 +1,7 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
 import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls } from './panels.js';
 import { phrase } from './kit.js';
-import { keyLayer } from './samples.js';
+import { keyLayer, sampleShot } from './samples.js';
 import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls } from './panel-samples.js';
 
 // Settings: each page with its samples, then each state as what changes on it.
@@ -268,7 +268,10 @@ export const spendViews = {
 };
 
 // Preview: limits.ts as Files opens it, then limits.md; each state is what an edit, a save or a read changes.
-const { code, edit, markdown: note, log, binary, gone } = samplePreview;
+const { code, edit, markdown: note, log, binary, gone, shot, pictured, huge } = samplePreview;
+const shownShot = (state, extra = {}) => ({ file: shot.file, folder: shot.folder, tools: ['open with'], shot: { image: sampleShot, state, action: `Load ${shot.size}` }, ...extra });
+const away = (folder) => `devbox · ${folder}`;
+const notePicture = (state) => shownNote({ folder: away(note.folder), doc: { source: pictured, shot: { image: sampleShot, state, size: shot.size } } });
 const shownCode = (extra) => ({ ...code, tools: ['open with'], ...extra });
 const editedText = { ...code.text, text: code.text.text.replace(edit.from, edit.to), line: edit.line };
 const edited = (extra) => shownCode({ text: editedText, ...extra });
@@ -283,19 +286,27 @@ export const previewViews = {
   Saved: [edited({ said: ['Saved'] }), 'Saved, under the name, until the next edit.'],
   'Changed on disk while edited': [edited({ band: overDisk }), 'Nothing is written until you choose: yours over it, or the file’s.'],
   'After Overwrite or Reload': [edited({ said: ['Saved'], band: { text: 'Saved over the 14:06 text', actions: [{ label: 'Undo', kind: 'quiet' }] } }), 'One Undo, no question before.'],
-  'The computer is gone': [edited({ folder: 'devbox · src/api', said: ['Not saved'], band: { text: 'devbox unreachable. Saves when it answers.' } }), 'The edit waits and saves on its own when the computer is back.'],
+  'The computer is gone': [edited({ folder: away(code.folder), said: ['Not saved'], band: { text: 'devbox unreachable. Saves when it answers.' } }), 'The edit waits and saves on its own when the computer is back.'],
   "Couldn’t save": [edited({ tools: ['save', 'discard', 'open with'], refused: samplePreview.failures.save }), 'The write was refused: its words, Save again, and Explain to the agent.'],
   'Over 1 MB: read only': [{ ...log, said: ['read only'], tools: ['open with'], cut: 'Cut at 1 MB' }, 'The first megabyte, read only; Open with… for the rest.'],
   Binary: [{ ...binary, tools: ['open with'], empty: { icon: 'lu-file', text: 'Binary file · 812 KB', action: 'Open with…' } }, 'Nothing to read here: Open with… another app.'],
   'Gone from disk': [{ ...gone, empty: { icon: 'lu-file', text: 'No longer on disk' } }, 'The file was removed or moved.'],
   'First read': [shownCode({ reading: true }), 'The skeleton while it reads.'],
   "Can’t read": [shownCode({ failure: samplePreview.failures.read }), 'The read was refused: its words, Refresh, and Explain to the agent.'],
+  'A picture on this computer': [shownShot('shown'), 'The picture fitted to the panel, its pixel size beside the folder on hover.'],
+  'Another computer, over 2 MB: Load': [shownShot('held', { folder: away(shot.folder) }), 'Nothing is brought over until Load, with its size.'],
+  'Picture loading': [shownShot('loading', { folder: away(shot.folder), tools: ['refresh', 'open with'] }), 'The picture’s shape breathes; Refresh spins.'],
+  'Over 20 MB': [{ ...huge, folder: away(huge.folder), tools: ['open with'], empty: { icon: 'lu-file', text: 'Over 20 MB: too large to bring over', action: 'Open with…' } }, 'Too large to bring over: Open with… another app.'],
+  'A picture that can’t be shown': [shownShot('shown', { failure: samplePreview.failures.picture }), 'The refused picture: its words, Refresh, and Explain to the agent.'],
   'Markdown, formatted': [shownNote(), 'Markdown formatted; Source shows the file as text.'],
   'Markdown, a click edits that block': [shownNote({ tools: ['save', 'discard', 'source', 'open with'], doc: { block: 2, state: 'editing' } }), 'A click edits that block alone; a click below the last adds one.'],
   'Markdown, a table cell by cell': [shownNote({ tools: ['save', 'discard', 'source', 'open with'], doc: { block: 3, state: 'editing', cell: [2, 1] } }), 'A table opens as its cells, with Add row, Add column and Done under it.'],
   'Markdown, Source': [shownNote({ doc: { view: 'source' } }), 'The whole file as text; Formatted goes back.'],
   'Markdown, cut at 1 MB': [shownNote({ said: ['read only'], tools: ['open with'], cut: 'Cut at 1 MB' }), 'Past 1 MB the start is shown, read only.'],
-  'Another computer, not answering': [shownNote({ folder: 'devbox · docs', said: ['Read 14:02', 'devbox not answering'], stale: true }), 'The last read stays, stepped down, with when it was read.'],
+  'A picture inside a note': [notePicture('held'), 'On another computer a picture waits as its name and size, with Load.'],
+  'A picture inside a note, loading': [notePicture('loading'), 'Its shape breathes in the note.'],
+  'A picture inside a note, can’t be shown': [notePicture('failed'), 'One quiet line; the rest of the note reads on.'],
+  'Another computer, not answering': [shownNote({ folder: away(note.folder), said: ['Read 14:02', 'devbox not answering'], stale: true }), 'The last read stays, stepped down, with when it was read.'],
   'Narrow, 300': [shownNote({ look: 'narrow' }), 'The title steps down; the table keeps its columns.'],
 };
 const stated = (views, draw) => ({

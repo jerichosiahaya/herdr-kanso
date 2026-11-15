@@ -352,11 +352,19 @@ An empty bucket answers \`429\` with \`Retry-After\` in seconds.` },
 14:02:12 POST /checkout 429 2ms
 14:02:12 POST /checkout 429 1ms
 14:02:14 POST /checkout 200 44ms` } },
+  pictured: `## What the customer sees
+
+![checkout-429](shots/checkout-429.png)
+
+The countdown comes from \`Retry-After\`.`,
+  shot: { file: 'checkout-429.png', folder: 'docs/shots', size: '4.2 MB' },
+  huge: { file: 'walkthrough.gif', folder: 'docs/shots' },
   binary: { file: 'limiter.wasm', folder: 'build' },
   gone: { file: 'limits.old.ts', folder: 'src/api' },
   failures: {
     read: { text: 'Can’t read limits.ts', source: 'EACCES: permission denied, open \'src/api/limits.ts\'', fix: 'Refresh', agent: 'checkout' },
     save: { text: 'Couldn’t save limits.ts', source: 'EACCES: permission denied, write \'src/api/limits.ts\'', fix: 'Save', agent: 'checkout' },
+    picture: { text: 'Can’t show checkout-429.png', source: 'Cannot show this picture', fix: 'Refresh', agent: 'checkout' },
   },
 };
 // Pull requests: what is asked of you, then each project's open ones; #142 opened on its verdict, its conversation, its files and its log.

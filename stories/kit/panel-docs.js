@@ -19,10 +19,10 @@ export const panelGuidelines = {
     ['Kokō', 'The guard speaks when you are away.', 'Its notices are a toast while the window is on screen and the computer’s notification otherwise, with the same words.'],
   ],
   'Panels/Preview': [
-    ['Kansō', 'The file, and its name.', 'Files opens a file here beside the pane: its name over its folder, then text as numbered code or Markdown formatted. At rest the header holds Open with… and Close; Refresh comes with the pointer, Source on Markdown.'],
+    ['Kansō', 'The file, and its name.', 'Files opens a file here beside the pane: its name over its folder, then text as numbered code, Markdown formatted or a picture fitted to the panel. At rest the header holds Open with… and Close; Refresh comes with the pointer, Source on Markdown.'],
     ['Shizen', 'An edit waits for Save.', 'Typing washes the line and brings Save, the one primary, or ⌘S, with Discard beside it that asks again. Save spins while it writes; Saved stays under the name until the next edit. A Markdown block or table is edited in place, as in the Markdown window.'],
     ['Kokō', 'The file and you never overwrite each other.', 'A change on disk while yours is unsaved is the band over the text: Overwrite, or Reload, then one Undo. On a computer out of reach the edit waits, Not saved, and saves on its own when it answers.'],
-    ['Seijaku', 'What it cannot show, it says once.', 'Past 1 MB the start shows read only, with Cut at 1 MB under it. A binary file is the empty state with Open with…; a file gone from disk says so. A refused read is the Failure block where the text would start.'],
+    ['Seijaku', 'What it cannot show, it says once.', 'Past 1 MB the start shows read only, with Cut at 1 MB under it. A binary file is the empty state with Open with…; a file gone from disk says so. A refused read is the Failure block where the text would start. A picture on another computer waits as Load with its size past 2 MB and is too large to bring over past 20 MB; in a note it waits as its name, size and Load.'],
   ],
   'Panels/PR': [
     ['Kansō', 'What waits on you, then each project.', 'One list: Asked of you first, then each project’s open pull requests, every row ending on its state in its tone. The branch in front leads its project with the one thing it needs: Create pull request, Push or Pull.'],

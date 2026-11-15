@@ -1,5 +1,5 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, dialog, facts, mark, markdown, menu, metric, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, chip, explainButton } from './kit.js';
+import { band, bars, button, chord, dialog, facts, mark, markdown, menu, metric, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, chip, explainButton } from './kit.js';
 import { channelSettings, keyboardExplorer, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
@@ -163,7 +163,7 @@ export const ports = ({ share = false, ...props }) => (share ? stack({ variant: 
 // A document, in the Markdown window or Preview: its name over its folder and what it says, its tools, then what changed on disk or a refused write over its text.
 const documentTools = {
   source: ({ doc }) => button({ label: doc.view === 'source' ? 'Formatted' : 'Source', kind: 'icon', icon: 'lu-code', active: doc.view === 'source' }),
-  refresh: () => panelRefresh(),
+  refresh: ({ shot }) => panelRefresh({ reading: shot?.state === 'loading' }),
   done: () => button({ label: 'Done', size: 'sm' }),
   save: ({ saving = false }) => button({ label: saving ? 'Saving…' : 'Save', size: 'sm', spin: saving, disabled: saving }),
   discard: ({ discarding = false }) => button({ label: 'Discard', kind: 'icon', icon: 'lu-undo', armed: discarding }),
@@ -386,7 +386,7 @@ export const spend = ({ share = false, choosing = null, ...props }) => {
   return beside ? stack({ variant: 'columns' }, spendPanel(props), beside) : spendPanel(props);
 };
 
-// Preview: a file opened from Files beside the pane; text as numbered code, Markdown formatted; an edit waits for Save.
+// Preview: a file opened from Files beside the pane; text as numbered code, Markdown formatted, a picture fitted; an edit waits for Save.
 // A file's text, or in its place the skeleton, the refused read or the empty state.
 const textOr = ({ reading = false, failure = null, empty = null }, shown) => {
   if (reading) return skeletonOf({ shape: 'line', count: 6 });
@@ -394,7 +394,8 @@ const textOr = ({ reading = false, failure = null, empty = null }, shown) => {
   if (empty) return emptyState(empty);
   return shown();
 };
-const previewBody = ({ doc = null, text = null, cut = null, reading, failure, empty, ...props }) => textOr({ reading, failure, empty }, () => documentBody(props, doc ? markdown(doc) : code(text), dimLine(cut)));
+const previewContent = ({ doc, shot, text }) => (doc ? markdown(doc) : shot ? picture(shot) : code(text));
+const previewBody = ({ doc = null, shot = null, text = null, cut = null, reading, failure, empty, ...props }) => textOr({ reading, failure, empty }, () => documentBody(props, previewContent({ doc, shot, text }), dimLine(cut)));
 export const preview = ({ look = 'panel', stale = false, ...props }) => panel({ look, stale, header: documentHeader({ back: 'Files', ...props }) }, previewBody(props));
 
 // Pull requests: what waits on you, then each project's open ones; one opens on its verdict, and its files, a check's log and a new one are pages of the panel.
