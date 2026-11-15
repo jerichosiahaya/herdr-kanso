@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms, paneRightClicks, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, rowDepths, sides, skeletonShapes, stack, statePatterns, toast, tooltip, windowControls, dragHandleStates } from './pieces.js';
+import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, rowDepths, sides, skeletonShapes, stack, statePatterns, tooltip, windowControls, dragHandleStates } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
@@ -618,7 +618,7 @@ export const playgrounds = {
     },
   },
   'Primitives/Toast': {
-    args: { level: 'error', icon: 'none', title: "Can't reach devbox", body: '', action: 'Refresh', explain: '' },
+    ...statedPages['Primitives/Toast'],
     argTypes: {
       level: select('level', Object.keys(levels)),
       icon: { ...select('icon', icons), description: "Any icon; it takes the level's colour" },
@@ -627,7 +627,6 @@ export const playgrounds = {
       action: text('action'),
       explain: { name: 'explain', control: { type: 'text' }, description: 'The session an error can be explained to' },
     },
-    markup: toast,
   },
   'Primitives/Tooltip': {
     args: { text: 'Adding up', detail: '14 repositories to go', key: '', icon: 'lu-refresh-cw', side: 'auto', open: true },

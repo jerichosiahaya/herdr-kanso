@@ -2175,8 +2175,8 @@
         "coverage/toast/NoticeStack/Expired",
         "coverage/toast/NoticeStack/Three notices",
         "proto/components-system-notification/SystemNotification/Default",
-        "proto/compositions-bars/ToastWithItsSource/Default",
-        "proto/compositions-states/Toast/Default"
+        "kit/Primitives/Toast/Failure",
+        "kit/Primitives/Toast/Two lines"
       ],
       "components": [
         "Compositions/Notifications",

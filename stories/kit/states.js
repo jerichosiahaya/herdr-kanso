@@ -473,6 +473,20 @@ export const statedPages = {
       { label: 'No picture', args: { image: '' }, caption: 'A picture that cannot load leaves the raised square; the name is its tooltip.' },
     ],
   },
+  'Primitives/Toast': {
+    args: { level: 'error', icon: 'none', title: "Can't reach devbox", body: '', action: 'Refresh', explain: '', mark: '', tone: '', detail: '' },
+    markup: toast,
+    states: [
+      { label: 'Failure', args: {}, caption: 'The blocked mark and the one fix.' },
+      { label: 'Warning', args: { level: 'warning', title: 'Sync devbox was not changed', action: '' }, caption: 'A working dot.' },
+      { label: 'Success', args: { level: 'success', title: 'Merged #142', action: '' }, caption: 'The check.' },
+      { label: 'Information', args: { level: 'info', title: 'feat/checkout already had a worktree', action: '' }, caption: 'An accent dot.' },
+      { label: 'Two lines', args: { title: "Couldn't pull checkout", body: 'fatal: Not possible to fast-forward, aborting.', action: 'Retry' }, caption: 'The source’s words on a second line, muted.' },
+      { label: 'Explain', args: { title: "Couldn't pull checkout", body: 'fatal: Not possible to fast-forward, aborting.', action: '', explain: 'Atlas' }, caption: 'An error sends the source’s words to a session.' },
+      { label: 'A home’s icon', args: { level: 'success', icon: 'lu-git-pull-request', title: 'Merged #142', action: '' }, caption: 'The icon of where it happened, in the level’s colour.' },
+      { label: 'A session’s mark', args: { level: 'success', mark: 'done', title: 'Atlas finished', action: '' }, caption: 'A session has no icon, so its mark.' },
+    ],
+  },
   'Primitives/Skeleton': {
     args: { shape: 'row', count: 3 },
     markup: (args) => stack({ variant: 'panel' }, skeletonOf(args)),
