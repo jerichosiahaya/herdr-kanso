@@ -344,6 +344,11 @@ export const guidelines = {
     ["Kansō", "Close only where it acts.", "The × shows on the chosen tab when it can close; a tab holding an agent arms for 4 s."],
     ["Kansō", "Icon, label or both.", "Without a label each tab is a square the size of its height, the label its tooltip, and marks give way to the one dot. Compositions build on this: the rail's column of views is icon tabs."],
   ],
+  "Primitives/Picture": [
+    ["Kansō", "The picture is the page.", "Sized to its panel's width, no frame, no caption; its file and its acts live around it, never on it."],
+    ["Shizen", "It comes or it waits.", "Loading is its breathing shape; a picture too large to bring on its own holds its slot with the one action that brings it."],
+    ["Kokō", "Pins sit on what they name.", "A pin marks a point or rings a region, numbered in the order it was placed."],
+  ],
   "Primitives/Thumbnail": [
     ["Seijaku", "One thumbnail.", "40 square, radius 4, border edge on raised; the picture is cropped to fill it. One per shot in a strip, 4 apart."],
     ["Shizen", "Selected is the shared state.", "The chosen thumbnail takes kanso-control--selected: the 2 px accent ring outside, the same as a focused field, a row or a menu item; nothing moves."],

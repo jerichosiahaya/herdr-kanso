@@ -590,6 +590,13 @@ export const playgrounds = {
       pending: flag('pending'),
     },
   },
+  'Primitives/Picture': {
+    ...statedPages['Primitives/Picture'],
+    argTypes: {
+      state: select('state', pictureStates),
+      action: { ...text('action'), if: { arg: 'state', eq: 'held' } },
+    },
+  },
   'Primitives/Skeleton': {
     ...statedPages['Primitives/Skeleton'],
     argTypes: {

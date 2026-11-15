@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, sampleShot, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -504,6 +504,16 @@ export const statedPages = {
     markup: windowControls,
     states: [
       { label: 'At rest', args: {}, caption: 'The three lights, where the system draws them.' },
+    ],
+  },
+  'Primitives/Picture': {
+    args: { image: sampleShot, state: 'shown', action: 'Load 4.2 MB', pins: [] },
+    markup: (args) => stack({ variant: 'panel' }, picture(args)),
+    states: [
+      { label: 'Shown', args: {}, caption: 'Sized to its panel, nothing around it.' },
+      { label: 'Pinned', args: { pins: [pin({ n: 1, at: [24, 30] }), pin({ n: 2, region: [52, 48, 30, 22] })] }, caption: 'Its pins over it, at a point or around a region.' },
+      { label: 'Loading', args: { state: 'loading' }, caption: 'Its breathing shape until it comes.' },
+      { label: 'Held', args: { state: 'held' }, caption: 'Too large to bring on its own: the slot and the one action that brings it.' },
     ],
   },
   'Primitives/Skeleton': {
