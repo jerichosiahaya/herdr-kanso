@@ -1,5 +1,5 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, computerItem, hostRow, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
 import { emptyState, failureBlock, keycap, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleHosts, sampleSortMenus, statusMenus, statusPanels } from './samples.js';
@@ -58,21 +58,10 @@ export const panelReads = {
 };
 
 export const statedPages = {
-  'Compositions/Add computer/Host row': {
-    args: { name: 'dark', target: 'jj@10.0.4.12', state: 'ready', words: '', mac: false },
-    markup: ({ words, ...host }) => addComputer({ hosts: [{ ...host, words: words || null }], agent: sampleAgent }),
-    states: [
-      { label: 'Ready', args: {}, caption: 'In the config, not added yet.' },
-      { label: 'Added', args: { state: 'added' }, caption: 'At once, before ssh answers.' },
-      { label: 'Added, a Mac', args: { name: 'mini', target: 'jj@mini.local', state: 'added', mac: true }, caption: 'What it will ask, its setting one press away.' },
-      { label: 'Needs a login', args: { name: 'vps', target: 'root@203.0.113.9', state: 'login', words: sampleHosts[2].words }, caption: 'ssh refused the key.' },
-      { label: 'Unreachable', args: { name: 'build', target: 'ci@build.internal', state: 'unreachable', words: sampleHosts[3].words }, caption: 'ssh timed out.' },
-    ],
-  },
-  'Compositions/Add computer': {
+  'Compositions/Add computer dialog': {
     args: { config: true, added: false, typed: '' },
     markup: ({ config, added, typed }) => addComputer({
-      hosts: config ? sampleHosts.map((host) => (added ? host : { ...host, state: 'ready' })) : [], typed: typed || null, agent: sampleAgent }),
+      hosts: config ? sampleHosts.map((host) => (added ? host : { ...host, state: 'ready' })) : [], typed, agent: sampleAgent }),
     states: [
       { label: 'At rest', args: {}, caption: 'Opened from + → Add computer….' },
       { label: 'After Add', args: { added: true }, caption: 'Each host as ssh answered.' },

@@ -62,7 +62,7 @@ export const code = ({ text, kind, first, line }) => {
 
 const shape = (markup) => markup.replace(' kanso-text--fg', '').replace(/class="([^"]*)"/, 'class="$1 kanso-skeleton--shape"');
 const words = (text, skeleton) => skeleton ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(text)}</span>` : escape(text);
-// A dialog asks for a name when it has a value or a placeholder; body goes under it, notes above the note.
+// A dialog asks for a name when it has a value or a placeholder; body goes under it, notes above the note; the footer only when it has an action.
 export const dialog = ({ title, scope, value, placeholder, body = '', loading, notes = [], note, tone, primary, kind = 'solid', state, secondary }) => {
   const action = (label, look, emphasis) => (loading ? shape : String)(button({ label, kind: emphasis, ...(loading ? {} : { disabled: look === 'disabled', spin: look === 'loading', armed: look === 'armed' }) }));
   const field = value ? `${escape(value)}<span class="kanso-caret"></span>` : `<span class="kanso-caret"></span><span class="kanso-dialog__placeholder">${escape(placeholder)}</span>`;
@@ -73,7 +73,7 @@ export const dialog = ({ title, scope, value, placeholder, body = '', loading, n
     + (asks ? `<div class="kanso-field${loading ? ' kanso-skeleton--shape' : ' kanso-control--focus'} kanso-dialog__section" tabindex="0">${field}</div>` : '')
     + body
     + lines.map(({ text, tone: look = 'dim' }) => `<div class="kanso-dialog__note${look === 'dim' ? '' : ` kanso-dialog__note--${look}`}">${words(text, loading)}</div>`).join('')
-    + `<div class="kanso-dialog__footer">${secondary ? action(secondary, 'default', 'quiet') : ''}${action(primary, state, kind)}</div></div>`;
+    + (primary ? `<div class="kanso-dialog__footer">${secondary ? action(secondary, 'default', 'quiet') : ''}${action(primary, state, kind)}</div>` : '') + '</div>';
 };
 
 export const input = ({ text: value, label: placeholder, icon, error, disabled, multiline, inline: rename, selected, loading, limit }) => {

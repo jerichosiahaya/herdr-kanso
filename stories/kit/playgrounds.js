@@ -1,6 +1,6 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, hostStates, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, inBar } from './frames.js';
 import { edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, statedPages, stepperShown, tabActs } from './states.js';
@@ -150,18 +150,8 @@ export const playgrounds = {
   },
   'Primitives/Window controls': { args: {}, argTypes: {}, markup: windowControls },
   'Primitives/Dawn': { args: {}, argTypes: {}, markup: () => dawn() },
-  'Compositions/Add computer/Host row': {
-    ...statedPages['Compositions/Add computer/Host row'],
-    argTypes: {
-      name: { name: 'name', control: { type: 'text' } },
-      target: { name: 'target', control: { type: 'text' } },
-      state: select('state', hostStates),
-      words: { name: 'ssh words', control: { type: 'text' }, if: { arg: 'state', neq: 'ready' } },
-      mac: { name: 'a Mac', control: { type: 'boolean' }, if: { arg: 'state', eq: 'added' } },
-    },
-  },
-  'Compositions/Add computer': {
-    ...statedPages['Compositions/Add computer'],
+  'Compositions/Add computer dialog': {
+    ...statedPages['Compositions/Add computer dialog'],
     argTypes: {
       config: { name: 'hosts in the config', control: { type: 'boolean' } },
       added: { name: 'after Add', control: { type: 'boolean' }, if: { arg: 'config' } },

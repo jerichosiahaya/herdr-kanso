@@ -14,7 +14,7 @@ export const hypotheses = {
       back: 'the caret goes and the rail shows + and Show sidebar only, as today.',
     },
   ],
-  'Compositions/Add computer': [
+  'Compositions/Add computer dialog': [
     {
       change: 'Add computer opens kansō’s dialog listing the hosts of ~/.ssh/config, each with Add.',
       today: 'Add computer opens Herdr’s own dialog, where the host is typed by hand.',
