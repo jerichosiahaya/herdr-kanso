@@ -61,7 +61,7 @@ export const descriptions = {
   Panel: 'The container every panel shares: its width, the stale state, an optional header and the body.',
   'Compositions/Panel/Header': 'A panel’s title with what that panel needs around it: a page heads a dashboard, a bar heads a file or a tool.',
   Activity: 'A card of changes since your last visit that no visible row already shows.',
-  Find: 'Search in the current conversation with results and context.',
+  Find: 'Find in the conversation: ⌘F beside the pane, its matches a day at a time, each one opening its turn.',
   Notifications: 'Update and system notices for events outside their normal surface.',
   Keyboard: 'A keyboard map for viewing and changing shortcuts.',
   Key: 'One key of the keyboard map, shown by what it does in the layer.',

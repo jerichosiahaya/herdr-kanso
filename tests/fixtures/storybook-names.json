@@ -1072,7 +1072,6 @@
     "proto/components-code/Code/Default",
     "proto/components-edges-and-minimap/Edge/Default",
     "proto/components-edges-and-minimap/MinimapSlot/Default",
-    "proto/components-find-in-the-conversation/FindInTheConversation/Default",
     "proto/components-header-digest/HeaderDigest/Default",
     "proto/components-log/Log/Default",
     "proto/components-markdown-window/MarkdownWindow/Default",

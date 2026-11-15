@@ -175,13 +175,13 @@
   "panel/ConversationFind": {
     "page": "Panels/Find",
     "states": {
-      "Selected match": "proto/components-find-in-the-conversation/FindInTheConversation/Default",
-      "Full turn": "proto/components-find-in-the-conversation/FindInTheConversation/Default",
-      "Empty query": "panels/find/ConversationFindEmptyquery/Default",
-      "Loading": "panels/find/ConversationFindLoading/Default",
-      "No matches": "panels/find/ConversationFindNomatches/Default",
-      "Stale": "panels/find/ConversationFindStale/Default",
-      "Unavailable": "panels/find/ConversationFindUnavailable/Default"
+      "Selected match": "kit/Panels/Find/Matches",
+      "Full turn": "kit/Panels/Find/One turn open",
+      "Empty query": "kit/Panels/Find/Empty",
+      "Loading": "kit/Panels/Find/Reading the conversation",
+      "No matches": "kit/Panels/Find/No matches",
+      "Stale": "kit/Panels/Find/Reading the conversation",
+      "Unavailable": "kit/Panels/Find/The conversation file is gone"
     }
   },
   "panel/Images": {

@@ -68,3 +68,16 @@ export const samplePlaces = [
   { name: 'Lucide (ISC)', note: 'Toolbar icons', url: 'lucide.dev' },
 ];
 export const sampleMaintainers = ['JJ', 'Iván Campaña', 'Leangseu Kim', 'Johannes Hund'];
+
+// Find in the conversation: checkout's conversation searched for one header; each hit is who, when and its line.
+const hit = (who, when, text) => ({ who, when, text });
+export const sampleFind = {
+  agent: 'checkout',
+  query: 'Retry-After',
+  days: [
+    ['Today', [hit('You', '14:02', 'Rate limit POST /checkout per customer and send a Retry-After header'), hit('Claude', '14:09', 'The 429 now carries Retry-After, in seconds, from the bucket’s refill time')]],
+    ['Yesterday', [hit('Claude', '17:40', 'cart-ui can read Retry-After to show the countdown')]],
+  ],
+  turn: 'The 429 now carries Retry-After, in seconds, from the bucket’s refill time. limits.ts exports refillIn(customer) and checkout.ts sets the header before it returns. Tests: 21 passed.',
+  missing: '~/.claude/projects/acme-shop/4f2a.jsonl: no such file',
+};

@@ -1,7 +1,7 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { settings } from './panels.js';
+import { conversationFind, settings } from './panels.js';
 import { keyLayer } from './samples.js';
-import { sampleAreas, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
+import { sampleAreas, sampleFind, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
 
 // Settings: each page with its samples, then each state as what changes on it.
 const shows = (extra) => ({ page: 'pieces', hidden: sampleHidden, areas: sampleAreas, ...extra });
@@ -49,14 +49,24 @@ export const settingsViews = {
   'A place under the pointer': [credits({ hover: 'Herdr' }), 'What it is, and the open mark.'],
 };
 
-export const panelPages = {
-  'Panels/Settings': {
-    args: { view: 'What you hid' },
-    markup: ({ view }) => settings(settingsViews[view][0]),
-    states: Object.entries(settingsViews).map(([label, [, caption]]) => ({ label, args: { view: label }, caption })),
-  },
+// Find in the conversation: the query typed, then what the read gives back.
+const finding = (extra) => ({ agent: sampleFind.agent, query: sampleFind.query, count: '', ...extra });
+const second = sampleFind.days[0][1][1];
+export const findViews = {
+  Empty: [finding({ query: null }), 'Opens on an empty field; the arrows wait for a match.'],
+  'Reading the conversation': [finding({ reading: true }), 'The first read, and a read again after the file was cleared; the query stays.'],
+  Matches: [finding({ count: '2 of 3', days: sampleFind.days, at: second }), 'Each day a heading, each hit who and when, then its line with the match marked; the current one washed.'],
+  'One turn open': [finding({ count: '2 of 3', days: sampleFind.days, at: second, open: true, turn: sampleFind.turn }), 'A hit opens its whole turn in place; back returns to the hits.'],
+  'No matches': [finding({ query: 'countdown hook' }), 'Nothing found: the empty state, the count left empty.'],
+  'The conversation file is gone': [finding({ missing: sampleFind.missing }), 'The file cannot be read: its path, Refresh, and Explain to the agent.'],
 };
+const stated = (views, draw) => ({
+  args: { view: Object.keys(views)[0] },
+  markup: ({ view }) => draw(views[view][0]),
+  states: Object.entries(views).map(([label, [, caption]]) => ({ label, args: { view: label }, caption })),
+});
+const control = (views) => ({ view: { name: 'what it shows', control: { type: 'select' }, options: Object.keys(views) } });
 
-export const panelPlaygrounds = {
-  'Panels/Settings': { ...panelPages['Panels/Settings'], argTypes: { view: { name: 'what it shows', control: { type: 'select' }, options: Object.keys(settingsViews) } } },
-};
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind] };
+export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
+export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

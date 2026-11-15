@@ -2292,13 +2292,7 @@
         "Remote: one read on open, then one when the agent stops or on Enter."
       ],
       "records": [
-        "proto/approved-bars-find/Reference/1",
-        "panels/find/ConversationFindEmptyquery/Default",
-        "proto/components-find-in-the-conversation/FindInTheConversation/Default",
-        "panels/find/ConversationFindLoading/Default",
-        "panels/find/ConversationFindNomatches/Default",
-        "panels/find/ConversationFindStale/Default",
-        "panels/find/ConversationFindUnavailable/Default"
+        "proto/approved-bars-find/Reference/1"
       ],
       "components": [
         "Panels/Find"

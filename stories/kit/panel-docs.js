@@ -1,6 +1,13 @@
 // The panels' design guidelines and hypotheses, on the same templates as every page.
 
 export const panelGuidelines = {
+  'Panels/Find': [
+    ['Fukinsei', 'Next to what it searches.', '⌘F opens it under the focused pane’s header, right-aligned, 420 wide. ⌘F again selects the query; Esc closes it and gives the keyboard back to the pane. A plain shell gets the terminal’s own search.'],
+    ['Kokō', 'The field, the count, Previous and Next.', 'The count says where you are, 2 of 3. ↑ and ↓ or the arrows move between matches; they are dim while there is nothing to move to. The query is kept per conversation.'],
+    ['Kansō', 'A hit shows the time only.', 'The day is its heading, so the date never repeats on a row. Each hit is who and when, then its line with the match marked. A press opens the whole turn in place; the back arrow returns to the hits.'],
+    ['Seijaku', 'States where the matches start.', 'Reading is the skeleton under the field. No matches is the empty state with the search icon, the count left empty. A file that cannot be read is the Failure block: its path, Refresh, Explain to the agent.'],
+    ['Kokō', 'Remote reads once.', 'On another computer: one read when it opens, then one when the agent stops or on Enter.'],
+  ],
   'Panels/Settings': [
     ['Kokō', 'One window, four pages.', 'A Dialog at window size: the title and its pages as Tabs beside it. ⌃⇧, opens it on What shows, ⌘⇧/ on Keys, a piece’s Settings for this… on its area; Esc closes it. Herdr settings is a separate window, reached from the footer’s Settings menu.'],
     ['Kansō', 'It opens on what you hid.', 'What shows starts with Hidden by you, one press each to show again. Every other piece is one step away: Find, or Browse the window and pick an area on its map.'],
@@ -13,6 +20,19 @@ export const panelGuidelines = {
 };
 
 export const panelHypotheses = {
+  'Panels/Find': [
+    {
+      change: 'A conversation that cannot be read becomes the Failure block, and no matches the empty state.',
+      today: 'one dim line, This conversation is no longer there, under the field; no matches is the count saying No matches and nothing under it.',
+      why: 'a quiet line where nothing can be done.',
+      question: 'when the file is gone, what does someone do next?',
+      believe: 'the path, Refresh and Explain to the agent let them recover in one press, and the empty state says plainly that the query found nothing.',
+      jobs: [['know the file is gone', 'the Failure block and its path'], ['read it again', 'Refresh'], ['ask the agent', 'Explain to the agent'], ['see nothing matched', 'the empty state']],
+      wrong: 'someone presses Refresh and nothing changes, or misses the count’s No matches.',
+      try: 'Dawn Mode first.',
+      back: 'the dim line and the count’s No matches return.',
+    },
+  ],
   'Panels/Settings': [
     {
       change: 'Pieces becomes What shows, and opens on what you hid.',

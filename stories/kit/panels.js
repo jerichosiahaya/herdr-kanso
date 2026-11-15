@@ -1,10 +1,13 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { button, dialog, emptyState, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
+import { button, chord, dialog, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
 import { channelSettings, keyboardExplorer, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
 export const settingsPages = [{ key: 'pieces', label: 'What shows' }, { key: 'keys', label: 'Keys' }, { key: 'news', label: 'What’s new' }, { key: 'credits', label: 'Credits' }];
-const findField = (query) => input({ label: 'Find', icon: 'lu-search', ...(query ? { text: query, focus: true } : {}) });
+// One find field everywhere: the search mark leads; a conversation's adds its count and arrows.
+const findField = (query, extra = {}) => input({ label: 'Find', lead: 'lu-search', focus: Boolean(query), ...(query ? { text: query } : {}), ...extra });
+const findArrows = (moves) => [{ label: 'Previous match', icon: 'lu-chevron-up' }, { label: 'Next match', icon: 'lu-chevron-down' }].map((arrow) => button({ ...arrow, kind: 'icon', disabled: !moves }));
+const possessive = (name) => chord(null, name, '’s');
 const heading = (name, extra = {}) => row({ name, heading: true, ...extra });
 
 // What shows. A piece's row: its name, where it lives when found, the needed choice in words, its switch; off is dimmed.
@@ -62,4 +65,19 @@ export const settings = ({ page = 'pieces', ...props }) => dialog({
   title: 'kansō settings', size: 'window',
   tools: [tabs({ items: settingsPages, value: page, size: 'sm', track: true, label: true })],
   body: pageBody[page](props),
+});
+
+// Find in the conversation: the field with its count and arrows, then what it found, a day at a time.
+const dayOf = (query, at) => ([day, hits]) => list(row({ name: day, heading: true }), hits.map((item) => excerpt({ ...item, query, current: item === at })));
+const turnOpen = ({ query, at, turn }) => excerpt({ ...at, text: turn, query, lead: button({ label: 'Back', kind: 'icon', icon: 'lu-chevron-left' }) });
+const findBody = ({ agent, query, days = [], at = null, open = false, turn, reading = false, missing = null }) => {
+  if (!query) return null;
+  if (missing) return failureBlock({ text: phrase('Can’t read', possessive(agent), 'conversation'), source: missing, fix: 'Refresh', agent });
+  if (reading) return skeletonOf({ shape: 'line', count: 4 });
+  if (!days.length) return emptyState({ icon: 'lu-search', text: phrase('No matches in', possessive(agent), 'conversation') });
+  return open ? turnOpen({ query, at, turn }) : days.map(dayOf(query, at));
+};
+// `count` is the field's count, empty while there is nothing to move to.
+export const conversationFind = ({ count, ...found }) => dialog({
+  size: 'find', tools: findField(found.query, { label: 'Find in the conversation', focus: true, count, tools: findArrows(Boolean(count)) }), body: list(findBody(found)),
 });
