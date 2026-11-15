@@ -133,12 +133,12 @@ export const skeletonShapes = {
 };
 export const skeletonOf = ({ shape, count }) => `<div class="kanso-skeleton__list kanso-skeleton--breathing" role="status" aria-label="Loading">${Array.from({ length: shape === 'header' ? 1 : count }, (_, i) => skeletonShapes[shape](i)).join('')}</div>`;
 
-const choose = "if (this.closest('.kanso-control--off')) return; for (const tab of this.parentNode.children) { tab.classList.toggle('kanso-tabs__tab--on', tab === this); tab.classList.toggle('kanso-control--selected', tab === this); tab.setAttribute('aria-selected', tab === this); }";
+const choose = "if (this.closest('.kanso-control--off')) return; for (const tab of this.parentNode.children) { tab.classList.toggle('kanso-tabs__tab--on', tab === this); tab.setAttribute('aria-selected', tab === this); }";
 export const tabs = ({ items, value, size, track, disabled, icon, label: named }) => `<div class="kanso-tabs kanso-tabs--${size}${track ? ' kanso-tabs--track' : ''}${disabled ? ' kanso-control--off' : ''}" role="tablist"${disabled ? ' aria-disabled="true"' : ''}>${(Array.isArray(items) ? items : []).map((item) => {
   const on = item.key === value;
   const label = escape(item.label ?? '');
   const square = icon && !named;
-  return `<span class="kanso-tabs__tab${on ? ' kanso-tabs__tab--on kanso-control--selected' : ''}${square ? ' kanso-tabs__tab--icon' : ''}${item.armed ? ' kanso-action--armed' : ''}" role="tab" aria-selected="${on}" aria-label="${label}" tabindex="0" title="${square ? label : escape(item.tip ?? '')}" onclick="${choose}">`
+  return `<span class="kanso-tabs__tab${on ? ' kanso-tabs__tab--on' : ''}${square ? ' kanso-tabs__tab--icon' : ''}${item.armed ? ' kanso-action--armed' : ''}" role="tab" aria-selected="${on}" aria-label="${label}" tabindex="0" title="${square ? label : escape(item.tip ?? '')}" onclick="${choose}">`
     + `${icon && item.icon ? glyph(item.icon) : ''}${named || !item.icon ? label : ''}${item.mark && !square ? mark({ status: item.mark, size: 13 }) : ''}`
     + `${(item.dot || (square && item.mark === 'blocked')) && !on ? '<i class="kanso-tabs__dot"></i>' : ''}${on && item.closable && !square ? '<svg class="kanso-icon kanso-tabs__close"><use href="#lu-x"/></svg>' : ''}</span>`;
 }).join('')}</div>`;

@@ -140,14 +140,14 @@ export const guidelines = {
   "Primitives/Tab": [
     ["Kokō", "One tab for every choice among a few.", "Window tabs, periods, views and settings are this tab. A setting with two or three values is tabs, not a switch."],
     ["Seijaku", "Three sizes.", "sm 24 inside a row or a card, md 26 in a bar, lg 30 in a panel or a dialog. Body size, icon 14, radius 6."],
-    ["Shizen", "Selection is a tone, never a weight,", "so nothing moves: the chosen tab takes the shared selected state, the accent ring, hover w4 with foreground text. On a track (w4 behind the group) the tabs share its width."],
+    ["Shizen", "Selection is a tone, never a weight,", "so nothing moves: the chosen tab is a quiet fill, w7, raised on a track; no ring, no border. Hover w4 with foreground text. On a track (w4 behind the group) the tabs share its width."],
     ["Kokō", "A mark only when it asks.", "Working, blocked or done after the label; a dot marks an unchosen tab that needs you."],
     ["Kansō", "Close only where it acts.", "The × shows on the chosen tab when it can close; a tab holding an agent arms for 4 s."],
     ["Kansō", "Icon, label or both.", "Without a label each tab is a square the size of its height, the label its tooltip, and marks give way to the one dot. Compositions build on this: the rail's column of views is icon tabs."],
   ],
   "Primitives/Thumbnail": [
     ["Seijaku", "One thumbnail.", "40 square, radius 4, border edge on raised; the picture is cropped to fill it. One per shot in a strip, 4 apart."],
-    ["Shizen", "Selected is the shared state.", "The chosen thumbnail takes kanso-control--selected: the 2 px accent ring outside, the same as a focused field, a row, a menu item or a tab; nothing moves."],
+    ["Shizen", "Selected is the shared state.", "The chosen thumbnail takes kanso-control--selected: the 2 px accent ring outside, the same as a focused field, a row or a menu item; nothing moves."],
     ["Kansō", "Nothing to show, nothing drawn.", "A picture that cannot load leaves the raised square; the name is its tooltip."],
   ],
   "Primitives/Toast": [

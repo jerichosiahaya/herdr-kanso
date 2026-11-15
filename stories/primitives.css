@@ -201,7 +201,8 @@
 .kanso-tabs--lg .kanso-tabs__tab--icon{width:var(--k-h-control)}
 .kanso-tabs__tab svg{width:var(--k-ic-row);height:var(--k-ic-row);flex:none}
 .kanso-tabs__tab:is(:hover,.kanso-control--hover){background:var(--w4);color:var(--fg)}
-.kanso-tabs__tab.kanso-tabs__tab--on{color:var(--fg)}
+.kanso-tabs__tab.kanso-tabs__tab--on{background:var(--w7);color:var(--fg)}
+.kanso-tabs--track .kanso-tabs__tab.kanso-tabs__tab--on{background:var(--raised)}
 .kanso-tabs__tab:is(:focus-visible,.kanso-control--focus){outline:2px solid var(--accent);outline-offset:1px}
 .kanso-tabs.kanso-control--off .kanso-tabs__tab{color:var(--dim);cursor:default}
 .kanso-tabs__dot{width:var(--k-sp-2);height:var(--k-sp-2);border-radius:50%;background:var(--blocked);flex:none}
