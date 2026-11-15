@@ -17,6 +17,7 @@ export const descriptions = {
   Metric: 'The one number, with label and unit, that explains the current view.',
   Thumbnail: 'A small picture or strip used to pick or preview an image.',
   Picture: 'A picture sized to its panel, with the pins placed over it.',
+  Annotation: 'A numbered pin and its note, placed over a picture or a screen.',
   Code: 'Monospaced source, limits or diffs where exact characters matter.',
   Markdown: 'Formatted prose and review text with headings, lists and code.',
   Chart: 'Values over time, beside the measurement they explain.',

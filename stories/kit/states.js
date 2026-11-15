@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, sampleShot, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -514,6 +514,21 @@ export const statedPages = {
       { label: 'Pinned', args: { pins: [pin({ n: 1, at: [24, 30] }), pin({ n: 2, region: [52, 48, 30, 22] })] }, caption: 'Its pins over it, at a point or around a region.' },
       { label: 'Loading', args: { state: 'loading' }, caption: 'Its breathing shape until it comes.' },
       { label: 'Held', args: { state: 'held' }, caption: 'Too large to bring on its own: the slot and the one action that brings it.' },
+    ],
+  },
+  'Primitives/Annotation': {
+    args: { n: 1, at: [24, 30], region: null, pending: false, writing: null, text: '', typing: false },
+    markup: ({ n, at, region, pending, writing, text, typing }) => {
+      const mark = pin({ n, at, region, pending });
+      return at || region ? stack({ variant: 'panel' }, picture({ image: sampleShot, pins: [mark, writing ? note({ text, at: writing, typing }) : null] })) : mark;
+    },
+    states: [
+      { label: 'Placed', args: {}, caption: 'A numbered pin on the point it names.' },
+      { label: 'No note yet', args: { pending: true }, caption: 'Stepped down until it has its words.' },
+      { label: 'A region', args: { at: null, region: [36, 42, 30, 22] }, caption: 'The pin rings what it names.' },
+      { label: 'Writing a note', args: { pending: true, writing: [28, 34], text: 'Count from the server', typing: true }, caption: 'The note opens beside the pin, the caret after the words.' },
+      { label: 'Empty note', args: { pending: true, writing: [28, 34], typing: true }, caption: 'Its placeholder until the first word.' },
+      { label: 'Inline', args: { at: null }, caption: 'The pin alone, leading its row in a list of notes.' },
     ],
   },
   'Primitives/Skeleton': {

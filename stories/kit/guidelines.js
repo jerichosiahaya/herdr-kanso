@@ -344,6 +344,11 @@ export const guidelines = {
     ["Kansō", "Close only where it acts.", "The × shows on the chosen tab when it can close; a tab holding an agent arms for 4 s."],
     ["Kansō", "Icon, label or both.", "Without a label each tab is a square the size of its height, the label its tooltip, and marks give way to the one dot. Compositions build on this: the rail's column of views is icon tabs."],
   ],
+  "Primitives/Annotation": [
+    ["Seijaku", "One pin.", "16 round in the accent, its number in the accent's ink; without a note yet it steps down to the input colour."],
+    ["Kokō", "A point or a region.", "A pin sits on the point it names or rings a region; the same pin leads its row in the list of notes."],
+    ["Shizen", "The note opens where you pinned.", "Beside the pin on the popover ground with the accent edge; its words, or its placeholder, and the caret while typing."],
+  ],
   "Primitives/Picture": [
     ["Kansō", "The picture is the page.", "Sized to its panel's width, no frame, no caption; its file and its acts live around it, never on it."],
     ["Shizen", "It comes or it waits.", "Loading is its breathing shape; a picture too large to bring on its own holds its slot with the one action that brings it."],

@@ -597,6 +597,15 @@ export const playgrounds = {
       action: { ...text('action'), if: { arg: 'state', eq: 'held' } },
     },
   },
+  'Primitives/Annotation': {
+    ...statedPages['Primitives/Annotation'],
+    argTypes: {
+      n: { name: 'number', control: { type: 'number', min: 1 } },
+      pending: flag('no note yet'),
+      text: text('note'),
+      typing: flag('typing'),
+    },
+  },
   'Primitives/Skeleton': {
     ...statedPages['Primitives/Skeleton'],
     argTypes: {
