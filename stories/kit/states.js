@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence, well } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { sampleFind, sampleShipped } from './panel-samples.js';
@@ -331,13 +331,15 @@ export const statedPages = {
     ],
   },
   'Primitives/Card': {
-    args: { author: 'sam', picture: 'none', age: '1h', body: 'Batches of 50, flushed every 2 s.', loading: false },
-    markup: ({ picture, ...args }) => stack({ variant: 'panel' }, card({ ...args, image: avatarPictures[picture] })),
+    args: { author: 'sam', picture: 'none', age: '1h', body: 'Batches of 50, flushed every 2 s.', loading: false, heading: '', lines: [] },
+    markup: ({ picture, heading, lines, ...args }) => stack({ variant: 'panel' }, lines.length
+      ? well({ heading }, lines.map(([name, detail]) => row({ name, detail }))) : card({ ...args, image: avatarPictures[picture] })),
     states: [
       { label: 'A comment', args: {}, caption: 'Who, when, then what they said.' },
       { label: 'With a picture', args: { picture: 'a picture' }, caption: 'The author’s picture in place of the initial.' },
       { label: 'A long comment', args: { body: 'Should the bucket key include the plan? A customer who upgrades mid-window keeps the old limit until the window rolls over, and support hears about it first.' }, caption: 'The body wraps; the header stays one line.' },
       { label: 'Loading', args: { loading: true }, caption: 'One skeleton in the card’s place and size.' },
+      { label: 'A well', args: { heading: 'Conflicts', lines: [['src/api/limits.ts', 'both modified'], ['src/api/checkout.ts', 'deleted by them']] }, caption: 'The same inset surface holding what a verdict rests on, its heading in ink first.' },
     ],
   },
   'Primitives/Code': {

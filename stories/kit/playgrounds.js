@@ -703,6 +703,7 @@ export const playgrounds = {
       age: text('Age'),
       body: text('Body'),
       loading: flag('Loading'),
+      heading: text('Well heading'),
     },
   },
   ...panelPlaygrounds,

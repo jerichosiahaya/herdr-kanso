@@ -395,6 +395,7 @@ export const guidelines = {
   "Primitives/Card": [
     ["Seijaku", "One identity.", "Avatar, author in medium, age in dim, then the body. Canvas background, radius 8, padding 12."],
     ["Shizen", "Loading is one skeleton.", "Its content changes too much to draw piece by piece, so the whole card is one skeleton in its place and size."],
+    ["Kansō", "One inset surface.", "A comment, a thread or what a verdict rests on all sit in the same well; its heading, when it has one, in ink first."],
   ],
   "Primitives/Avatar": [
     ["Kokō", "The initial is the avatar.", "A picture from a URL, local or external, is cropped to the circle. When it cannot load, the initial stays."],
