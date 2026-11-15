@@ -4,7 +4,7 @@ import { G, R, T, ICON, tokens } from "./ui.js";
 import { iconButton } from "./ui-button.js";
 import { present, RETURN_LABEL, focusedTarget, MAINTENANCE_MS } from "./since-left-model.js";
 import { SinceStore } from "./since-left-store.js";
-import { statusMark, AGENT_PAD, agentRowH, duration } from "./agents.js";
+import { statusMark, AGENT_PAD, sessionHeight, duration } from "./agents.js";
 
 const ROW_GAP = 1; // the sidebar list's gap; the kit has no token for it
 
@@ -83,7 +83,7 @@ export class SinceLeft {
 
   blockHeight() {
     if (!this.heights.length) return 0;
-    const items = [...this.heights, ...(this.headed ? [agentRowH({}, {})] : [])];
+    const items = [...this.heights, ...(this.headed ? [sessionHeight({})] : [])];
     return items.reduce((sum, h) => sum + h, 0) + (items.length - 1) * ROW_GAP;
   }
 
@@ -102,7 +102,7 @@ export class SinceLeft {
       .when(Boolean(row.outcome), (el) => el.child(div().flex_none().text_size(T.body).text_color(t.muted).child(row.outcome)))
       .child(div().flex_1())
       .when(Boolean(row.age), (el) => el.child(div().flex_none().text_size(T.body).text_color(t.dim).child(row.age)));
-    return h_flex().id(id).h(agentRowH({}, { activity: row.did })).w_full().flex_none().pl(AGENT_PAD).pr(G.md).gap(G.md).min_w(0).items_center().rounded(R.card)
+    return h_flex().id(id).h(sessionHeight({ activity: row.did })).w_full().flex_none().pl(AGENT_PAD).pr(G.md).gap(G.md).min_w(0).items_center().rounded(R.card)
       .when(Boolean(go), (el) => el.cursor_pointer().hover((s) => s.bg(t.foreground + "0c")).on_click((_e, cx) => go(cx)))
       .when(selected, (el) => el.border_1().border_color(t.accent))
       .when(!row.more, (el) => el.child(lead(c, row.mark)))
@@ -113,7 +113,7 @@ export class SinceLeft {
   render(t, project, nav, reach, head = null) {
     const shown = present(this.rows, this.viewOf());
     this.showing = project === this.project && shown.count > 0;
-    this.heights = this.showing ? shown.rows.map((row) => agentRowH({}, { activity: row.did })) : [];
+    this.heights = this.showing ? shown.rows.map((row) => sessionHeight({ activity: row.did })) : [];
     this.headed = Boolean(head) && this.showing;
     if (!this.showing) return div();
     const c = tokens(t);

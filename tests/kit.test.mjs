@@ -87,6 +87,20 @@ test("A shared row takes no piece, one piece or a list of them before its icon a
   assert.deepEqual(["r-start-0", "r-tools-0", "r-tools-1"].filter((id) => ids(single).includes(id)), ["r-start-0", "r-tools-0", "r-tools-1"]);
 });
 
+test("The app gives a shared row its press, release and right-click, and a program's own art passes through as its icon", async () => {
+  const { tokens, app } = await kits();
+  const hits = [];
+  const el = app.row({ name: "Atlas", icon: { icon: "programs/codex.png", tint: false } })("r", tokens(night), {
+    onPress: () => hits.push("press"), onRelease: () => hits.push("release"), onMenu: () => hits.push("menu"),
+  });
+  const mouse = (name, button) => el.calls.filter((call) => call[0] === name && call[1] === button).forEach(([, , handler]) => handler({}, {}));
+  mouse("on_mouse_down", "left");
+  mouse("on_mouse_up", "left");
+  mouse("on_mouse_down", "right");
+  assert.deepEqual(hits, ["press", "release", "menu"]);
+  assert.equal(all(el).filter((kid) => kid.calls.some((call) => call[0] === "svg")).length, 0, "art is not drawn as a glyph");
+});
+
 test("The Storybook's shared kit is its pieces, and the app's has only Storybook pieces", (t) => {
   assert.deepEqual(Object.keys(storybookKit).sort(), Object.keys(storybookPieces).sort());
   const app = exportedNames(readFileSync(new URL("../kanso/mods/kanso-panel/kit.js", import.meta.url), "utf8"));

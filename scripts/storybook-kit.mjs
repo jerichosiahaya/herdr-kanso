@@ -73,7 +73,7 @@ export function kitRecords(records) {
     ['Session row', 'Conversation tools', inSidebar(sessionRow({ name: 'Iris', status: 'done', depth: 0, pinnable: false, tools: [{ icon: 'lu-check', label: 'Settle' }], hover: true })), 'Settle, and the menu; pin stays in the menu.'],
     ['Session row', "Can't read", inSidebar(sessionRow({ name: 'Iris', status: 'idle', depth: 0, place: "Can't read", placeTip: 'The transcript is gone', refresh: true, dimmed: true })), 'Refresh beside the word.'],
     ['Session row', 'Dragged over', inSidebar(sessionRow({ name: 'Atlas', status: 'idle', drop: 'before' })), 'Where the dragged row lands.'],
-    ['Session row', 'Tree', inSidebar(stack({ variant: 'rows' }, sessionRow({ name: 'Atlas' }), sessionRow({ program: 'p-codex', name: 'Juno', status: 'idle', depth: 2, guides: ['tee'] }), sessionRow({ program: 'p-codex', name: 'Iris', status: 'done', depth: 2, guides: ['end'] }))), 'Each sub-session hangs from its parent.'],
+    ['Session row', 'Tree', inSidebar(stack({ variant: 'rows' }, sessionRow({ name: 'Atlas' }), sessionRow({ program: 'p-codex', name: 'Juno', status: 'idle', depth: 2, guides: [null, 'tee'] }), sessionRow({ program: 'p-codex', name: 'Iris', status: 'done', depth: 2, guides: [null, 'end'] }))), 'Each sub-session hangs from its parent.'],
     ['Project row', 'At rest', inSidebar(projectRow({ name: 'kansō', folder: 'herdr-kanso', branch: 'main', sync: '↓12' })), 'Name, folder, branch and sync.'],
     ['Project row', 'Folded', inSidebar(projectRow({ name: 'kansō', folder: 'herdr-kanso', branch: 'main', count: 3 })), 'The most urgent mark and how many.'],
     ['Computer row', 'This computer', inSidebar(computerRow({ name: 'light', remote: false })), 'This computer first.'],

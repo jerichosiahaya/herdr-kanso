@@ -54,7 +54,7 @@ const TONE = {
   red: "blocked", blocked: "blocked",
   yellow: "working", working: "working",
   green: "done", done: "done",
-  violet: "violet", dim: "dim", muted: "muted",
+  violet: "violet", dim: "dim", muted: "muted", fg: "text",
   blue: "blue", teal: "teal",
 };
 export const toneColor = (c, tone) => c[TONE[tone] ?? "dim"];

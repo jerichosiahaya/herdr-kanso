@@ -275,7 +275,7 @@ export const playgrounds = {
       guide: select('guide (proposed)', ['none', 'tee', 'end', 'pass']),
     },
     markup: ({ step, stuck, settle, drop, guide, ...args }) => inSidebar(sessionRow({ ...args, step: step ? { time: step, stuck } : null, tools: settle ? [{ icon: 'lu-check', label: 'Settle' }] : [],
-      drop: drop === 'none' ? null : drop, guides: guide === 'none' ? [] : [guide], commandsTip: args.commands ? 'npm test · 2m' : null, placeTip: args.place ? args.place : null })),
+      drop: drop === 'none' ? null : drop, guides: guide === 'none' ? [] : [null, guide], commandsTip: args.commands ? 'npm test · 2m' : null, placeTip: args.place ? args.place : null })),
   },
   'Compositions/Sidebar/Project row': {
     args: { name: 'kansō', folder: 'herdr-kanso', branch: 'main', sync: '↓12', open: false, status: 'blocked', count: 0, hover: false, focus: false },
@@ -501,7 +501,7 @@ export const playgrounds = {
       wash: select('wash (proposed)', ['none', 'blocked']),
       guide: select('guide at depth 2 (proposed)', ['none', 'tee', 'end', 'pass']),
     },
-    markup: ({ tools, drop, wash, guide, ...args }) => `<div class="kanso-panel">${row({ ...args, drop: drop === 'none' ? null : drop, wash: wash === 'none' ? null : wash, guides: guide === 'none' ? [] : [guide],
+    markup: ({ tools, drop, wash, guide, ...args }) => `<div class="kanso-panel">${row({ ...args, drop: drop === 'none' ? null : drop, wash: wash === 'none' ? null : wash, guides: guide === 'none' ? [] : [null, guide],
       actions: tools ? [{ icon: 'lu-pin', label: 'Pin' }, { icon: 'lu-ellipsis', label: 'More' }] : [] })}</div>`,
   },
   'Primitives/Skeleton': {

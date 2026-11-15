@@ -50,8 +50,10 @@ const chipOf = (id, c, count) => {
   return tipped(chip(c, { label }), `${id}-chip`, tip);
 };
 
-const tool = (id, c) => ({ label, onClick, ...rest }, i) => button(`${id}-tool-${i}`, label, alone(onClick), c, { kind: "icon", size: "sm", ...rest });
-const actionOf = (id, c, { label, onClick, ...rest }) => button(`${id}-action`, label, alone(onClick), c, { size: "sm", ...rest });
+// Nor does a press on it start the row's drag or double-click.
+const held = (el) => el.on_mouse_down("left", (_e, cx) => cx.stop_propagation());
+const tool = (id, c) => ({ label, onClick, ...rest }, i) => held(button(`${id}-tool-${i}`, label, alone(onClick), c, { kind: "icon", size: "sm", ...rest }));
+const actionOf = (id, c, { label, onClick, ...rest }) => held(button(`${id}-action`, label, alone(onClick), c, { size: "sm", ...rest }));
 
 const WASHES = { blocked: (c) => mix(c.blocked, c.background, OPACITY.blockedRow) };
 const groundOf = (c, { current, hover, title, wash }) => {
@@ -97,9 +99,9 @@ const GUIDES = {
   tee: (c, x) => [line(c).top_0().bottom_0().left(x).border_l_1(), line(c).top(ELBOW.y).left(x).w(ELBOW.w).border_t_1()],
   end: (c, x) => [line(c).top_0().h(ELBOW.y).left(x).border_l_1(), line(c).top(ELBOW.y).left(x).w(ELBOW.w).border_t_1()],
 };
-// One guide per level, `tee`, `end` or `pass`; without them a deeper row has one guide under its parent's icon.
+// One guide per depth above the row, under that depth's icon: `tee`, `end`, `pass` or null; without them a deeper row has one under its parent's.
 const guidesOf = (c, depth, guides) => (guides.length
-  ? guides.flatMap((kind, level) => GUIDES[kind]?.(c, guideAt(level + 1)) ?? [])
+  ? guides.flatMap((kind, level) => GUIDES[kind]?.(c, guideAt(level)) ?? [])
   : depth > 1 ? GUIDES.pass(c, guideAt(1)) : []);
 
 const DROPS = { before: (el) => el.top_0(), after: (el) => el.bottom_0() };

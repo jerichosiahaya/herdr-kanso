@@ -136,6 +136,7 @@
 .kanso-row--tree{position:relative}
 .kanso-row--tree::before{content:none}
 .kanso-row__guide{position:absolute;inset-block:0;width:1px;background:var(--w12)}
+.kanso-row__guide--level-0{left:calc(var(--k-sp-2) + var(--k-ic-row) * .5)}
 .kanso-row__guide--level-1{left:calc(var(--k-sp-2) * 2 + var(--k-ic-row) * 1.5)}
 .kanso-row__guide--level-2{left:calc(var(--k-sp-2) * 3 + var(--k-ic-row) * 2.5)}
 .kanso-row__guide--end{bottom:50%}

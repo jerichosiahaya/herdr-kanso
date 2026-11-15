@@ -138,12 +138,12 @@ const marked = ({ tone, tip }, base = '') => `${base || tone ? ` class="${[base,
 const fact = (part) => typeof part === 'string' ? `<span>${escape(part)}</span>` : `${part.icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(part.icon)}"/></svg>` : ''}<span${marked(part)}>${escape(part.text)}</span>`;
 const factOf = (part) => (typeof part === 'object' ? part : { text: part });
 const countOf = (count) => (typeof count === 'object' ? `<span${marked(count)}>${chip({ label: count.label })}</span>` : chip({ label: count }));
-const guide = (kind, level) => (kind ? `<span class="kanso-row__guide kanso-row__guide--${escape(kind)} kanso-row__guide--level-${level + 1}"></span>` : '');
+const guide = (kind, level) => (kind ? `<span class="kanso-row__guide kanso-row__guide--${escape(kind)} kanso-row__guide--level-${level}"></span>` : '');
 const rowTool = (action) => button({ kind: 'icon', size: 'sm', ...action });
 export const rowDepths = [0, 1, 2];
 // `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
 // The title form is a panel's heading: the name at title size, the second line its scope.
-// `second` and `meta` take facts with a tone, `chip` a tip; `drop` is where a dragged row lands, `wash` a state's ground, `guides` one per level ('tee', 'end', 'pass').
+// `second` and `meta` take facts with a tone, `chip` a tip; `drop` is where a dragged row lands, `wash` a state's ground, `guides` one per depth above it ('tee', 'end', 'pass', or null), under that depth's icon.
 export const row = ({ icon = 'none', tone = '', name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, title, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action, start = [], tools = [], keys = [], drop, wash, guides = [] }) => {
   const lead = `${guides.map(guide).join('')}${list(start)}${icon === 'none' ? '' : glyph(icon, tone)}`;
   const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;

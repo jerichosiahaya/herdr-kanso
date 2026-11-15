@@ -474,7 +474,7 @@ test("While you were away is a piece: off, nothing is recorded, read or drawn", 
 test("a row says who, what happened and what it did; a gone agent's row stays but leads nowhere", async () => {
   const ui = tape();
   const { SinceLeft } = await load("kanso-spaces/since-left.js", ["SinceLeft"], ui.host);
-  const { agentRowH } = await load("kanso-spaces/agents.js", ["agentRowH"], ui.host);
+  const { sessionHeight } = await load("kanso-spaces/agents.js", ["sessionHeight"], ui.host);
   const view = Object.assign(new SinceLeft(null), { project, rows: [
     { id: 1, target: "agent:c1", kind: "finished", text: "Cassian", did: "Fixed the away rows", at: 0 },
     { id: 2, target: "agent:gone", kind: "error", text: "Bodhi", did: null, at: 0 },
@@ -486,7 +486,7 @@ test("a row says who, what happened and what it did; a gone agent's row stays bu
   assert.equal(ui.handlers.has("since-2"), false);
   ui.handlers.get("since-1")({}, { notify() {} });
   assert.deepEqual(went, [1]);
-  assert.equal(view.blockHeight(), agentRowH({}, { activity: "x" }) + agentRowH({}, {}) + 1);
+  assert.equal(view.blockHeight(), sessionHeight({ activity: "x" }) + sessionHeight({}) + 1);
 });
 
 test("with While you were away off, a pull request read records no fact", async (t) => {
