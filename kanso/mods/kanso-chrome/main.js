@@ -13,7 +13,7 @@ import { outOfMemory } from "./notices.js";
 import { glyphs } from "./marks.js";
 import { tokens } from "./ui.js";
 import { Armed } from "./ui-button.js";
-import { footerRows, settingsChord, settingsEntries } from "./footer-model.js";
+import { ROW, ITEM, footerRows, settingsChord, settingsEntries } from "./footer-model.js";
 import { sidebarFooter } from "./footer.js";
 
 const SAMPLE_MS = 120_000;
@@ -90,7 +90,7 @@ export default class WorkspaceChrome extends View {
 
   rows() {
     const update = this.updater?.available() ?? null;
-    const acts = { "kanso-update": (cx) => this.updater.install(cx), machine: () => run("mod.open", { name: "machine-add" }) };
+    const acts = { [ROW.update]: (cx) => this.updater.install(cx), [ROW.machine]: () => run("mod.open", { name: "machine-add" }) };
     return footerRows({ update, busy: Boolean(this.updater?.busy), machine: shown("footer.machine", true, pieces(shared)) })
       .map((entry) => ({ ...entry, onClick: acts[entry.key] ?? null }));
   }
@@ -99,9 +99,9 @@ export default class WorkspaceChrome extends View {
   settingsMenu() {
     const setOpen = (open, cx) => { this.menuOpen = open; cx.notify(); };
     const acts = {
-      kanso: (cx) => { setOpen(false, cx); openSettings(); },
-      herdr: (cx) => { setOpen(false, cx); run("app.settings"); },
-      "update-herdr": (cx) => this.armed.press("update-herdr", cx, () => run("app.update")),
+      [ITEM.kanso]: (cx) => { setOpen(false, cx); openSettings(); },
+      [ITEM.herdr]: (cx) => { setOpen(false, cx); run("app.settings"); },
+      [ITEM.updateHerdr]: (cx) => this.armed.press(ITEM.updateHerdr, cx, () => run("app.update")),
     };
     const chord = this.menuOpen ? settingsChord(keys()) : null;
     const entries = this.menuOpen ? settingsEntries({ ready: updates().app.ready, hint: chord && glyphs(chord) }) : [];

@@ -55,7 +55,7 @@ test("Updating Kanso swaps its mods, merges its keys and keeps your layout aside
   assert.equal(done.level, "success");
   assert.match(done.body, /layouts\/kanso\.json\.old-/);
   assert.deepEqual(pending(f), [], "reported once");
-  assert.deepEqual(f.resizes, [120, 86], "and gives the room back");
+  assert.deepEqual(f.resizes, [120, 88], "and gives the room back");
 });
 
 test("A copy that started before version.json arrived stops offering what is installed", async (t) => {

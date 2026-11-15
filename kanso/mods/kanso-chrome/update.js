@@ -5,7 +5,8 @@ import { sameVolume, updateHost, windowsInstallScript, windowsLaunchScript, wind
 // Kanso's own updates, by jlopezlira (https://github.com/jlopezlira/herdr-kanso). Apache-2.0.
 import { exec, readTextFile, appHome, shared, setShared, notify, layout, run, writeTextFile } from "herdr";
 import { tryOr, tryOrAsync } from "./pure.js";
-import { G, H, T } from "./ui.js";
+import { stateBlockPx } from "./ui-state.js";
+import { footerHeight, footerRows, refusalBlock } from "./footer-model.js";
 import { pieces, runs, shown, hiddenSet } from "./pieces.js";
 import { channelOf, compareReleases, hostInstall, installedRelease, newestTag, offerRelease, parseRelease } from "./release.js";
 import { alreadyUpdating, checkFailed, installFailed, updateAvailable, updated, upToDate } from "./notices.js";
@@ -38,20 +39,17 @@ const RECOVER_MS = 5 * 60 * 1000;
 const BUSY = 75;
 // Under Herdr's home: the lock, and per install its staging folder, pid, log and outcome.
 const UPDATES = ".kanso-updates";
-// The footer: its rows a hair apart inside its padding, and a refused update's block; a hidden row gives its place back.
+// The footer is as tall as its rows; a refused update's block counts only while the sidebar is open.
 const FOOTER = "sidebar-footer";
-const OPTIONAL = ["footer.machine"];
-const FOOTER_PAD_PX = G.sm + G.md;
-// The kit's failure block: padding, edge, our words, the tool's two lines, the fix and its margins.
-const REFUSED_PX = Math.ceil(2 * (G.md + G.hair) + H.badge + 3 * G.xs + T.mono * 3 + H.control + G.hair + G.sm);
-const rowsPx = (rows) => rows * H.line + (rows - 1) * G.hair;
-const footerSize = (rows, refused) => FOOTER_PAD_PX + rowsPx(rows) + (refused ? G.hair + REFUSED_PX : 0);
-export const footerPx = (hidden, update, refused = false) =>
-  footerSize(1 + (update ? 1 : 0) + OPTIONAL.filter((id) => !hidden.has(id)).length, update && refused);
-// Every size this sets, now or before the account chip left, so one you sized yourself stays.
+const REFUSED_PX = stateBlockPx(refusalBlock("words"));
+export const footerPx = (hidden, update, refused = null, open = true) => footerHeight(
+  footerRows({ update, machine: !hidden.has("footer.machine") }).length,
+  update && refused && open ? REFUSED_PX : 0,
+);
+// Every size this sets, now or before the account chip left (84 and 36 a row), so one you sized yourself stays.
 const LEGACY_BASE_PX = 84, LEGACY_ROW_PX = 36;
 const legacy = (px) => px >= LEGACY_BASE_PX + LEGACY_ROW_PX && px <= LEGACY_BASE_PX + LEGACY_ROW_PX * 5 && (px - LEGACY_BASE_PX) % LEGACY_ROW_PX === 0;
-const SIZES = new Set([1, 2, 3].flatMap((rows) => [footerSize(rows, false), footerSize(rows, true)]));
+const SIZES = new Set([1, 2, 3].flatMap((rows) => [footerHeight(rows), footerHeight(rows, REFUSED_PX)]));
 const OURS = (px) => legacy(px) || SIZES.has(px);
 
 function findNode(node, id) {
@@ -338,7 +336,7 @@ export class Updater {
       const channel = this.channel();
       const changed = this.seenChannel != null && this.seenChannel !== channel;
       this.seenChannel = channel;
-      const now = JSON.stringify([pieces(shared), this.state().latest ?? null, channel]);
+      const now = JSON.stringify([pieces(shared), this.state().latest ?? null, channel, this.refused(), shared("sidebar.collapsed") === true]);
       if (now !== this.hiddenSeen) { this.hiddenSeen = now; this.fit(); }
       if (changed) cx.spawn((cx) => this.check(cx, true));
     });
@@ -350,7 +348,7 @@ export class Updater {
     if (!found) return;
     const { size } = found;
     const hidden = tryOr(() => hiddenSet(pieces(shared)), new Set());
-    const want = footerPx(hidden, Boolean(this.available()), Boolean(this.refused()));
+    const want = footerPx(hidden, this.available(), this.refused(), shared("sidebar.collapsed") !== true);
     if (size !== want && OURS(size)) run("layout.resize", { id: FOOTER, px: want });
   }
 

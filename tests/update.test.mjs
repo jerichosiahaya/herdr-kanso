@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { load, context, exec, nativePlatform, temporary, clone } from "./helpers.mjs";
+import { load, context, exec, nativePlatform, temporary, clone, gpuiHost } from "./helpers.mjs";
 import { test, dropChild, trackedSpawn, quote, windowsOnly, updater, fixture, version, small, tree, stages, hostFor } from "./update-harness.mjs";
 
 test("Kanso's newest release comes from the vX.Y.Z tags, not from Herdr", async () => {
@@ -207,13 +207,31 @@ test("The footer is as tall as the rows it shows: one switched off in Kanso's se
   const { cx, drain } = context();
   cx.timer = { every() {} };
   f.updater.start(cx); await drain();
-  assert.deepEqual(f.resizes, [86], "3.9.1's taller footer comes back to Update and Settings");
+  assert.deepEqual(f.resizes, [88], "3.9.1's taller footer comes back to Update and Settings");
   const { footerPx } = await updater({ shared: () => null });
-  assert.equal(footerPx(new Set(), false), 86, "Settings and Add computer, a hair apart, inside 8 above and 12 below");
-  assert.equal(footerPx(new Set(["footer.machine"]), false), 52);
-  assert.equal(footerPx(new Set(), true), 120, "an update is a third row");
-  assert.equal(footerPx(new Set(), false, true), 86, "a refusal shows only under an update row");
-  assert.ok(footerPx(new Set(), true, true) > 120 + 100, "a refused update makes room for the tool's words and Update");
+  const { stateBlockPx } = await load("kanso-chrome/ui-state.js", ["stateBlockPx"], gpuiHost());
+  assert.equal(footerPx(new Set(["footer.machine"]), null), 56, "one row: 8 above, 32, 16 below");
+  assert.equal(footerPx(new Set(["footer.machine"]), "3.31.0"), 88, "an update is a row on top");
+  assert.equal(footerPx(new Set(), null), 88, "Settings and Add computer");
+  assert.equal(footerPx(new Set(), "3.31.0"), 120);
+  assert.equal(footerPx(new Set(), null, "words"), 88, "a refusal shows only under an update row");
+  const block = Math.ceil(stateBlockPx({ why: "words", fixes: [{ label: "Update" }] }));
+  assert.equal(footerPx(new Set(), "3.31.0", "words"), 120 + 2 + block + 8, "the kit's block, a hair under its row and 8 above the next");
+  assert.equal(footerPx(new Set(), "3.31.0", "words", false), 120, "in the rail no block is drawn, so none is fitted");
+});
+
+test("A refused update makes room for its block in the open footer, and gives it back in the rail", async (t) => {
+  const f = await fixture(t);
+  const { cx, drain } = context();
+  cx.timer = { every() {} };
+  f.updater.start(cx); await drain();
+  assert.deepEqual(f.resizes, [120], "Update, Settings and Add computer");
+  f.updater.refuse("the download failed");
+  f.updater.fit();
+  assert.ok(f.resizes.at(-1) > 120, "the block fits under the update row");
+  f.store["sidebar.collapsed"] = true;
+  f.updater.fit();
+  assert.equal(f.resizes.at(-1), 120, "the rail draws no block");
 });
 
 test("A refused update keeps the tool's words for the footer, and an update that lands clears them", async (t) => {

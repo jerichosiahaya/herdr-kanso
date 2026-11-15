@@ -17,6 +17,7 @@ const holding = (el, words) => all(el).find((x) => calls(x, "on_click").length &
 const cx = () => ({ notified: 0, notify() { this.notified += 1; }, timer: { after() {} }, stop_propagation() {} });
 const press = (el, context = cx()) => { arg(el, "on_click")({}, context); return context; };
 
+// Mounted as Herdr mounts it, with nothing run; the updater is then a stand-in.
 async function footer({ shared = {}, ready = null, bindings = [{ action: "kanso-tabs.settings", keys: "ctrl-shift-," }], updater = {} } = {}) {
   const ran = [], overlays = [], installs = [];
   const host = {
@@ -27,18 +28,32 @@ async function footer({ shared = {}, ready = null, bindings = [{ action: "kanso-
     updates: () => ({ app: { ready } }), keys: () => bindings, settings: () => ({ font_family: "Mono" }), window: () => ({ platform: "macos" }),
   };
   const { WorkspaceChrome } = await load("kanso-chrome/main.js", ["WorkspaceChrome"], host);
-  const { Armed } = await load("kanso-chrome/ui-button.js", ["Armed"], host);
-  const { CHROME_SQUARE, ICON_CHROME } = await load("kanso-chrome/ui.js", ["CHROME_SQUARE", "ICON_CHROME"], host);
+  const kit = await load("kanso-chrome/ui.js", ["CHROME_SQUARE", "ICON_CHROME", "T", "G"], host);
   const view = new WorkspaceChrome();
-  view.armed = new Armed();
-  view.menuOpen = false;
+  view.init({}, { spawn() {}, timer: { after() {}, every() {} } });
   view.updater = { available: () => null, busy: false, refused: () => null, install: (context) => installs.push(context), ...updater };
-  return { view, ran, overlays, installs, CHROME_SQUARE, ICON_CHROME };
+  return { view, ran, overlays, installs, ...kit };
 }
 
 test("In Stable Mode with nothing to install, the footer is Settings and Add computer", async () => {
   const { view } = await footer();
   assert.deepEqual(texts(view.render()), ["Settings", "Add computer"]);
+});
+
+test("Open, every row is at chrome size, muted at rest, 8 above and 16 below; the rail keeps 12 below", async () => {
+  const { view, ICON_CHROME, T, G } = await footer();
+  const open = view.render();
+  for (const id of ["footer-settings", "footer-machine"]) {
+    const row = byId(open, id);
+    assert.equal(calls(row, "text_size").at(-1)[1], T.card, `${id} reads at 13.5: the last size set wins`);
+    const glyph = all(row).find((x) => arg(x, "size") === ICON_CHROME);
+    assert.equal(arg(glyph, "text_color"), night.muted, `${id}'s icon is 17, muted`);
+  }
+  assert.deepEqual([arg(open, "pt"), arg(open, "pb")], [G.sm, G.lg]);
+  assert.equal(arg(open, "gap"), undefined, "open rows touch");
+  const rail = await footer({ shared: { "sidebar.collapsed": true } });
+  const squares = rail.view.render();
+  assert.deepEqual([arg(squares, "pt"), arg(squares, "pb"), arg(squares, "gap")], [G.sm, G.md, G.hair]);
 });
 
 test("A kansō update is a row on top, in the foreground, and a press installs it", async () => {
