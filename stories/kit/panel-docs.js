@@ -1,6 +1,15 @@
 // The panels' design guidelines and hypotheses, on the same templates as every page.
 
 export const panelGuidelines = {
+  'Panels/Spend': [
+    ['Kansō', 'The month per plan first.', 'One line per subscription: its multiple, its name and one sentence, “$5,012 of work for $200”. Work is the month’s sessions at API list price; the plan is its monthly price. Under 1× both turn working and say not paying for itself; before the 7th the multiple is dim and the pace says the rest. No plan: what API keys cost, paid as used, a line per program.'],
+    ['Kansō', 'Then the period’s number and where it went.', '$41.20 today, then a line per project. With the pointer the switch takes the word’s place, the arrows and the project and model pickers come under it; on the number its tasks, what a task costs and its tokens; on the list Projects, Models and Tasks switch it, and the picked row says its tokens and folder.'],
+    ['Kokō', 'A row opens what it names.', 'A project or a model keeps its period switch, its number and facts, then the other lists. A task is its prompt, its cost and parts, its models and sessions, and Open the project. Running sessions come first under Active now, breathing.'],
+    ['Seijaku', 'History folds at the foot.', 'A bar a day for the period, the peak with its value, like Ports and Memory.'],
+    ['Shizen', 'Settings are found, never typed.', 'A source is on when its folder holds sessions; a missing program says not on this computer. Plans are detected rows corrected in place, Enter keeps, the breathing dot until saved; Add plan covers what cannot be detected; a refused price marks its field and says the rule. Then the price list with Open prices.json, and how often Spend reads.'],
+    ['Seijaku', 'States where the list starts.', 'The first read is the skeleton with how many sessions are read; still reading says how far. Nothing in the period is the empty state. A read that fails is the Failure block; a refresh that fails keeps the last numbers under it. A plan not read says so under its row. Several computers sum here, a line each; one not answering says when it was read.'],
+    ['Kokō', 'Shares only totals.', 'The header’s Share says Totals and days only, and only while nothing is filtered or opened.'],
+  ],
   'Panels/Memory': [
     ['Kansō', 'One line for what is free.', '31% free of 16 GB. With the pointer, swap joins it, and the idle sessions’ words come under it: Recycle all, Only the ones over 500 MB, Close the ones not used for days. Under 20% free the number is in blocked ink and Recycle all is the primary.'],
     ['Kokō', 'A line for Herdr, the hung helpers and each session.', 'Name and size. A session past the guard’s limit has its size in amber; one that needs you keeps the blocked mark. Picked, Herdr says window and core and offers Restart window; a session says its program, idle and up times and why, then Recycle when idle and Close; a working one offers nothing.'],
@@ -59,6 +68,85 @@ export const panelGuidelines = {
 };
 
 export const panelHypotheses = {
+  'Panels/Spend': [
+    {
+      change: 'Each plan’s multiple for the month comes first; the period’s savings sentence goes.',
+      today: 'a 72-point API value, then “Your plans cost $X in this period, so they saved you $Y.” under it, with the plans typed in Settings as a name and an amount.',
+      why: 'one number for what all plans saved.',
+      question: 'does someone open Spend to know the total, or whether each plan pays for itself?',
+      believe: 'whether each plan pays for itself; a multiple per plan answers it, and the total stays as the period’s number.',
+      jobs: [['what the plans cost', 'each plan’s sentence'], ['what they saved', 'the multiple'], ['the period’s API value', 'the number under the plans']],
+      wrong: 'someone asks for the single savings figure.',
+      try: 'Dawn Mode first.',
+      back: 'the savings sentence returns under the number.',
+    },
+    {
+      change: 'The number is one line with its word; the period switch, the arrows, the pickers and the facts come with the pointer.',
+      today: 'the period switch and the project and model pickers on top, the 72-point number, then tasks, per task and tokens as three numbers, all at rest.',
+      why: 'every control in reach.',
+      question: 'how often is the period changed or a filter chosen, against how often the number is read?',
+      believe: 'the number is read every time and the period rarely changes; the controls are one move away.',
+      jobs: [['change the period', 'with the pointer on the number’s word'], ['earlier periods', 'the arrows, Back to now'], ['filter a project or model', 'the pickers under the switch'], ['tasks, per task, tokens', 'with the pointer on the number']],
+      wrong: 'someone cannot find the period switch or a filter.',
+      try: 'Dawn Mode first.',
+      back: 'the switch and the pickers return at rest.',
+    },
+    {
+      change: 'Projects, Models and Tasks are one list with a switch that comes with the pointer.',
+      today: 'Projects and Models side by side, then Tasks, then two footnote lines, all at rest.',
+      why: 'every breakdown at once.',
+      question: 'does someone compare projects with models, or read one breakdown at a time?',
+      believe: 'one at a time; projects first, the others one press away.',
+      jobs: [['each project’s cost', 'the list at rest'], ['each model’s cost and list price', 'Models, the picked row'], ['tasks', 'Tasks'], ['more rows', 'Show N more']],
+      wrong: 'someone switches between Projects and Models to compare them.',
+      try: 'Dawn Mode first.',
+      back: 'the three lists return side by side.',
+    },
+    {
+      change: 'The daily bars fold into History at the foot.',
+      today: 'the bars under the number, at rest.',
+      why: 'the shape of the period at a glance.',
+      question: 'is the shape read, or the number?',
+      believe: 'the number; the shape is asked when the number surprises, as in Ports and Memory.',
+      jobs: [['the days and the peak', 'History, open']],
+      wrong: 'someone opens History every time.',
+      try: 'Dawn Mode first.',
+      back: 'the bars return under the number.',
+    },
+    {
+      change: 'The footnote moves into Settings, under Prices.',
+      today: 'two lines under everything: OpenRouter list prices with their date, and how tasks and plans are counted.',
+      why: 'where every number comes from, always in view.',
+      question: 'is the footnote read after the first time?',
+      believe: 'no; the price list and its rule belong where prices are set.',
+      jobs: [['which price list', 'Settings, Prices'], ['tokens with no price', 'its rule under Prices'], ['set your own prices', 'Open prices.json']],
+      wrong: 'someone asks where the prices come from.',
+      try: 'Dawn Mode first.',
+      back: 'the footnote returns under the lists.',
+    },
+    {
+      change: 'Plans are detected rows corrected in place; Save plans goes.',
+      today: 'each plan a name field, a $ field and Remove, then Add plan and Save plans with a note.',
+      why: 'any plan, typed by hand.',
+      question: 'does someone know their plan’s exact name and price?',
+      believe: 'the CLIs already say which plan is in use; correcting one row is less than typing all.',
+      jobs: [['a detected plan’s price', 'its row'], ['a plan not detected', 'Add plan'], ['remove a plan', 'the row’s Remove'], ['save', 'Enter, the breathing dot until written']],
+      wrong: 'a plan is detected wrong and cannot be corrected.',
+      try: 'Dawn Mode first.',
+      back: 'the name and price fields return with Save plans.',
+    },
+    {
+      change: 'A failed refresh is the Failure block over the kept numbers; Share is the header’s menu.',
+      today: 'a red line, Last update failed, with Try again; Share opens a row with the card and a sentence.',
+      why: 'the error in one line.',
+      question: 'does someone act on the error, or hand it to an agent?',
+      believe: 'hand it on; the Failure block offers Explain to the agent, as every panel does, and Share says what leaves as Ports and Memory do.',
+      jobs: [['try again', 'Refresh'], ['what failed', 'the block’s words'], ['share', 'the header’s Share menu']],
+      wrong: 'someone misses the refresh failure under the block.',
+      try: 'Dawn Mode first.',
+      back: 'the red line returns.',
+    },
+  ],
   'Panels/Memory': [
     {
       change: 'Free memory becomes one line; swap, Herdr’s parts and the totals move to where they are asked.',

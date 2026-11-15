@@ -318,3 +318,61 @@ export const memory = ({ share = false, notice: said = null, ...props }) => {
   const beside = share ? shareMenu({ leaves: 'Counts and sizes only' }) : said ? notice(said) : null;
   return beside ? stack({ variant: 'columns' }, memoryPanel(props), beside) : memoryPanel(props);
 };
+
+// Spend: each plan's multiple, then the period's number, then where it went; the period switch, the facts and the list's views come with the pointer.
+const planLine = ({ value, name, said, tone }) => metric({ value, unit: name, second: said, tone });
+const costRow = (picked) => eachPicked(picked, (item, open) => row({ name: item.name, detail: item.tag, meta: item.cost, current: open, second: open ? item.said : null }));
+const costList = ({ name = null, count = null, rows, picked = null }) => list(name ? row({ name, heading: true, meta: count }) : null, rows.map(costRow(picked)));
+const stepper = (past) => stack({ variant: 'line' }, button({ label: 'Previous period', kind: 'icon', icon: 'lu-chevron-left' }), button({ label: 'Next period', kind: 'icon', icon: 'lu-chevron-right', disabled: !past }), past ? quiet({ label: 'Back to now' }) : null);
+const pickers = (choices) => Object.values(choices).map((label) => quiet({ label, icon: 'lu-chevron-down' }));
+const periodTabs = ({ periods, period }) => tabs({ items: periods, value: period, size: 'sm' });
+const periodSwitch = (when) => list(periodTabs(when), stepper(when.past));
+// The number: the word beside it at rest; the switch in its place with the pointer, the arrows and the pickers under it; its facts with the pointer on it.
+const spendNumber = ({ value, unit, said }, { pointer, choices, ...when }) => list(
+  pointer === 'period' ? list(stack({ variant: 'line' }, metric({ value, size: 'sm' }), periodTabs(when)), stepper(when.past), stack({ variant: 'line' }, pickers(choices))) : metric({ value, unit, size: 'sm' }),
+  pointer === 'number' ? row({ name: facts(...said), dimmed: true }) : null);
+const spendLists = [{ key: 'projects', label: 'Projects' }, { key: 'models', label: 'Models' }, { key: 'tasks', label: 'Tasks' }];
+const historyBars = ({ open = false, ...chart }) => list(historyFold(open), open ? bars(chart) : null);
+const moreRows = (more) => (more ? quiet({ label: phrase('Show', more, 'more') }) : null);
+const whereItWent = ({ lists, view = 'projects', pointer, picked, more = 0 }) => list(
+  pointer === 'list' ? tabs({ items: spendLists, value: view, size: 'sm' }) : null, costList({ rows: lists[view], picked }), moreRows(more));
+const liveList = (live) => list(row({ name: 'Active now', heading: true, pending: true }), live.map(costRow(null)));
+const homeBody = ({ plans = [], plain = null, number = null, showing = null, partial = null, refresh = null, computers = null, live = [], unread = null, history: past = { open: false }, ...where }) => list(
+  refresh ? failureBlock(refresh) : null,
+  plans.map(planLine), plain ? metric(plain) : null, plain ? costList({ rows: plain.programs }) : null,
+  unread ? list(costRow(null)(unread.program), failureBlock(unread.failure)) : null,
+  number ? spendNumber(number, where) : null, showing ? row({ name: showing, dimmed: true, action: { label: 'Show everything', kind: 'quiet' } }) : null,
+  partial ? row({ name: partial, dimmed: true }) : null, computers ? costList({ name: 'Computers', ...computers }) : null,
+  live.length ? liveList(live) : null, where.lists ? whereItWent(where) : null, number ? historyBars(past) : null);
+// A project, a model or a task opened from its row: the period stays switchable; a task is its prompt, its parts, its models and sessions.
+const detailBody = ({ value, said, lists, history: past = { open: false }, ...when }) => list(
+  periodSwitch(when), metric({ value, unit: 'API value', size: 'sm' }), row({ name: facts(...said), dimmed: true }),
+  lists.map(costList), historyBars(past));
+const taskBody = ({ where, prompt, value, parts, models, sessions, count, project }) => list(
+  excerpt({ who: where, text: prompt }), metric({ value, unit: 'API value', size: 'sm' }), row({ name: facts(...parts), dimmed: true }),
+  costList({ name: 'Models', count: phrase(models.length), rows: models }), costList({ name: 'Sessions', count, rows: sessions }),
+  quiet({ label: phrase('Open', project) }));
+// Spend's own settings: where it reads, the plans it found, the prices and how often it reads.
+const sourceRow = ({ name, where, on, pending = false }) => row({ name, detail: where, dimmed: !on, pending, tools: [toggle({ checked: on, label: name })] });
+const planRow = (edit) => (item) => (item.name === edit?.name
+  ? row({ name: item.name, second: edit.said, pending: edit.pending, actions: [{ label: 'Remove plan', icon: 'lu-x' }], tools: [input({ label: 'A month', text: edit.cost, focus: !edit.pending, error: edit.error })] })
+  : row({ name: item.name, meta: item.cost, second: item.said }));
+const newPlan = ({ name, cost, error = false }) => stack({ variant: 'line' }, input({ label: 'ChatGPT Pro, Claude Max…', text: name, focus: !name }), input({ label: '200', text: cost, focus: Boolean(name), error }));
+const spendSettings = ({ sources = null, absent, owned, edit = null, added = null, refused = null, unsaved = null, prices, updates }) => list(
+  heading('Sources'), sources ? list(sources.map(sourceRow), row({ name: absent, dimmed: true })) : skeletonOf({ shape: 'list row', count: 3 }),
+  heading('Plans'), owned.map(planRow(edit)), added ? newPlan(added) : null, refused ? row({ name: refused, dimmed: true }) : null,
+  unsaved ? failureBlock(unsaved) : null, quiet({ label: 'Add plan' }),
+  heading('Prices'), row({ name: prices.list, second: prices.rule, action: { label: 'Open prices.json', kind: 'quiet' } }),
+  heading('Updates'), row({ name: updates.name, second: updates.said }));
+const spendWait = ({ reading, failure }) => (failure ? failureBlock(failure) : reading ? skeletonOf({ shape: 'list row', count: 5 }) : null);
+const spendBodies = { home: homeBody, detail: detailBody, task: taskBody, settings: spendSettings };
+const settingsTool = () => button({ label: 'Settings', kind: 'icon', icon: 'lu-settings' });
+const spendTools = ({ page, reading }) => [page === 'home' ? shareButton() : null, page === 'settings' ? null : settingsTool(), panelRefresh({ reading })];
+// `page` is home, a detail, a task or Spend's settings; `title` and `second` head it; `empty` is a period with nothing in it.
+const spendPanel = ({ page = 'home', title = 'Spend', second = null, look = 'panel', reading = false, failure = null, empty = null, ...body }) => panel({ look, header: panelHeader({
+  title, second, start: page === 'home' ? [] : [panelBack('Back')], tools: spendTools({ page, reading }),
+}) }, spendWait({ reading, failure }) ?? (empty ? emptyState(empty) : spendBodies[page](body)));
+export const spend = ({ share = false, choosing = null, ...props }) => {
+  const beside = share ? shareMenu({ leaves: 'Totals and days only' }) : choosing ? menu({ items: choosing }) : null;
+  return beside ? stack({ variant: 'columns' }, spendPanel(props), beside) : spendPanel(props);
+};

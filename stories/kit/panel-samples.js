@@ -264,3 +264,56 @@ export const sampleMemoryNotices = {
   'Window restarted': notice('done', 'Herdr window restarted', 'Past its 1.2 GB. Your terminals and agents kept running.'),
   'Restart loop': notice('failed', 'Herdr keeps outgrowing its limit', 'Automatic restarts are paused for an hour. Open Memory in kansō to see what grows.'),
 };
+
+// Spend: November, two plans that pay for themselves, $41.20 today over three projects; acme-shop's checkout task opened.
+const plan = (value, name, said, tone = '') => ({ value, name, said, tone });
+const spent = (name, cost, said, extra = {}) => ({ name, cost, said, ...extra });
+export const sampleSpend = {
+  month: 'November',
+  plans: [plan('25×', 'Claude Max 20x', '$5,012 of work for $200'), plan('3.1×', 'ChatGPT Plus', '$62 of work for $20')],
+  under: plan('0.3×', 'ChatGPT Pro', '$61 of work for $200 · not paying for itself', 'working'),
+  early: plan('24×', 'Claude Max 20x · too early to say', 'on pace: $322 in 2 days, about $4,800 by November 30', 'dim'),
+  periods: [{ key: 'day', label: 'Today' }, { key: 'month', label: 'Month' }, { key: '30d', label: '30 days' }, { key: 'year', label: 'Year' }, { key: 'all', label: 'All' }],
+  today: { value: '$41.20', unit: 'today', said: ['14 tasks', '$2.94 a task', '9.1M tokens'] },
+  past: { value: '$824.00', unit: 'October', said: ['212 tasks', '$3.89 a task', '140M tokens'] },
+  lists: {
+    projects: [spent('acme-shop', '$28.40', '6.2M tokens · ~/acme-shop'), spent('docs-site', '$9.10', '2.1M tokens · ~/docs-site'), spent('reports', '$3.70', '0.8M tokens · ~/reports')],
+    models: [spent('claude-opus-5', '$34.90', 'Anthropic · $15 in / $75 out per 1M'), spent('gpt-5-codex', '$6.30', 'OpenAI · $1.25 in / $10 out per 1M')],
+    tasks: [spent('Rate limit checkout per customer', '$12.80', 'acme-shop · claude-opus-5 · 2 sessions'), spent('Fix the refill test after review', '$6.40', 'acme-shop · claude-opus-5', { tag: 'PR #142' }), spent('Add the countdown to the cart', '$4.70', 'acme-shop · claude-opus-5')],
+  },
+  more: 4,
+  choices: { project: 'All projects', model: 'All models' },
+  chooser: [{ label: 'All projects', checked: false }, { label: 'acme-shop', second: '~/acme-shop', hint: '$28.40', checked: true }, { label: 'docs-site', second: '~/docs-site', hint: '$9.10' }, { label: 'reports', second: '~/reports', hint: '$3.70' }],
+  showing: 'Showing acme-shop and claude-opus-5',
+  live: [spent('Rate limit checkout per customer', '$3.10', 'acme-shop · claude-opus-5 · 1.2M tok'), spent('Translate the pricing page', '$0.90', 'docs-site · gpt-5-codex · 310K tok')],
+  history: { bars: [0.05, 0.27, 0, 0.67, 1, 0, 0.18, 0.4, 0, 0.11, 0, 0.22, 0.92], peak: 4, labels: ['', '', '', '', '$45.00'], ticks: ['Nov 1', 'Per day', 'Nov 13'] },
+  partial: 'Still reading your history: 412 of 1,980 files so far.',
+  reading: 'Reading sessions · 412 of 1,980',
+  project: { name: 'acme-shop', value: '$28.40', said: ['8 tasks', '$3.55 a task', '6.2M tokens'], models: [spent('claude-opus-5', '$25.90', '5.8M tokens'), spent('claude-haiku-5', '$2.50', '0.4M tokens')] },
+  model: { name: 'claude-opus-5', value: '$34.90', said: ['11 tasks', '$3.17 a task', '7.4M tokens'], projects: [spent('acme-shop', '$25.90', '5.8M tokens'), spent('docs-site', '$9.00', '1.6M tokens')] },
+  task: {
+    where: 'acme-shop · Today, 09:12 – 13:40', prompt: 'Rate limit checkout per customer, 40 a minute, with Retry-After', value: '$12.80',
+    parts: ['in 3.1M', 'out 180K', 'cache read 22M', 'cache write 1.4M'],
+    models: [spent('claude-opus-5', '$12.10', '25M tokens'), spent('claude-haiku-5', '$0.70', '1.6M tokens')],
+    sessions: [spent('checkout', '$9.60', '09:12'), spent('checkout', '$3.20', '12:58')], count: '2',
+  },
+  plain: { value: '$353', unit: 'paid as used in November', programs: [spent('Codex', '$312', 'API key'), spent('Pi', '$41', 'API key')] },
+  computers: { count: '2 computers', rows: [spent('This computer', '$3,900', '96M tokens'), spent('devbox', '$1,112', '31M tokens')] },
+  away: spent('build', '$0', null, { tag: { text: 'unreachable · read 11:02', tone: 'blocked' } }),
+  unread: { program: spent('Codex', '$62', ''), failure: { text: 'Can’t read the Codex plan', source: '~/.codex/auth.json: EACCES: permission denied', fix: 'Refresh', agent: 'checkout' } },
+  failure: { text: 'Can’t read spend', source: 'spawn /opt/homebrew/bin/node ENOENT', fix: 'Refresh', agent: 'checkout' },
+  refresh: { text: 'Last update failed', source: 'collector.mjs: database is locked', fix: 'Refresh', agent: 'checkout' },
+  runtime: { text: 'Spend can’t run', source: 'Spend needs runtime.json with the path to Node 22: node not found', fix: 'Refresh', agent: 'checkout' },
+  sources: [
+    { name: 'Claude Code', where: '~/.claude/projects · 1,240 sessions', on: true },
+    { name: 'Codex', where: '~/.codex/sessions · 310 sessions', on: true },
+    { name: 'Grok', where: '~/.grok/sessions · 64 sessions', on: false },
+  ],
+  absent: 'Pi not on this computer',
+  owned: [spent('Claude Max 20x', '$200 a month', 'detected'), spent('ChatGPT Plus', '$20 a month', 'detected'), spent('SuperGrok Plus', 'no price', 'detected · not in the price list')],
+  corrected: { name: 'SuperGrok Plus', cost: '$30', said: 'detected · a month, your price' },
+  prices: { list: 'OpenRouter list, Nov 10', rule: 'Tokens with no list price are left out, not guessed.' },
+  updates: { name: 'Every minute while open', said: 'Every 30 s while a session works; closed, nothing.' },
+  invalid: { price: '0', rule: 'A plan needs a name and a price over $0' },
+  unsaved: { text: 'Couldn’t save the plans', source: 'prices.json: EACCES: permission denied', fix: 'Save again', agent: 'checkout' },
+};

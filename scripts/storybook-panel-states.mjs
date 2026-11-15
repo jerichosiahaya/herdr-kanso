@@ -28,21 +28,6 @@ const chart = (title, values, unit) => section(title) + `<div class="kanso-chart
 export function panelStateRecords(records) {
   const drawings = [], find = (part) => records.find((r) => r.id.includes(part) && r.html)?.html;
   const add = (page, component, state, html, behavior) => drawings.push({ id: `panels/${page.toLowerCase()}/Feature${component.replaceAll(' ', '')}/${state}`, source: 'panels', page: `Panels/${page}`, label: `${component} · ${state}`, caption: behavior, html, spec: [['Anatomy', `${component}: shared panel header, scope and kit state primitives.`], ['Values', 'Shared kit tokens, single-line rows with ellipsis, contextual controls.'], ['States', state], ['Behaviour', behavior], ['Principle', 'Kansō']] });
-  if (find('panels/spend/SpendAtRestNow/')) {
-    const history = (values, task = false) => {
-      const total = values.reduce((sum, value) => sum + value, 0), peak = Math.max(...values);
-      const bars = values.map((value, index) => {
-        const tip = `Nov ${index + 1} · $${value.toFixed(2)} · ${(value * 24000).toLocaleString('en-US')} tokens`;
-        return `<i class="${value ? value === peak ? 'kanso-chart__bar--peak' : '' : 'kanso-chart__bar--empty'}" style="height:${value ? `calc(var(--k-sp-4) * ${value / peak * 5})` : 'var(--k-sp-hair)'}" role="listitem" aria-label="${tip}" title="${tip}">${value && value === peak ? `<span class="kanso-chart__value">$${value.toFixed(2)}</span>` : ''}</i>`;
-      }).join('');
-      return frame('Spend', task ? 'checkout' : 'All computers', metric(`$${total.toFixed(2)}`, 'API value this month') + (total ? '' : empty('chart-column', 'No usage this month')) + `<div class="kanso-chart__bars kanso-chart--spend" role="list" aria-label="API value per day">${bars}</div><div class="kanso-chart__ticks"><span>Nov 1</span><span>Per day</span><span>Nov 30</span></div>`, tool('sliders-vertical', 'Sources and plans'));
-    };
-    for (const [state, values, task] of [
-      ['Period bars', [0, 12, 0, 30, 45, 0, 8, 18, 0, 5, 0, 10, 0], false],
-      ['Task bars', [0, 0, 0, 12, 20, 0, 3, 8, 0, 0, 0, 2, 0], true],
-      ['Empty bars', [], false],
-    ]) add('Spend', 'Spend History', state, history([...values, ...Array(30 - values.length).fill(0)], task), `Proposed. Sample ${task ? 'task' : 'period'} history retains daily bars, zero days, peak value and cost/token tooltips from the current app.`);
-  }
   const put = (page, component, state, html, behavior, anatomy) => drawings.push({ id: `panels/${page.split('/')[1].toLowerCase()}/Feature${component.replaceAll(' ', '')}/${state}`, source: 'panels', page, label: `${component} · ${state}`, caption: behavior, html, spec: [['Anatomy', anatomy], ['Values', 'Shared kit tokens, single-line rows with ellipsis, contextual controls.'], ['States', state], ['Behaviour', behavior], ['Principle', 'Kansō']] });
   const toast = (mark, text, fix = '') => free(`<div class="kanso-toast kanso-popover">${mark}<span class="kanso-content__text" title="${esc(text)}">${text}</span>${fix}</div>`);
   const done = '<svg class="kanso-icon kanso-icon--row" aria-hidden="true"><use href="#lu-check"/></svg>';

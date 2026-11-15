@@ -454,56 +454,56 @@
   "spend/Spend": {
     "page": "Panels/Spend",
     "states": {
-      "Period": "panels/spend/SpendAtRestNow/Default",
-      "Loading": "panels/spend/SpendFirstRead/Default",
-      "Empty": "panels/spend/SpendEmptyNothingThisMonth/Default",
-      "Read failed": "panels/spend/SpendAReadFailedNothingKept/Default",
-      "Remote totals": "panels/spend/SpendSeveralComputersEachOnesSessionsSummed/Default",
-      "Active sessions": "panels/spend/SpendActivesessions/Default",
-      "Filter active": "panels/spend/SpendFilteractive/Default",
-      "Filter picker": "panels/spend/SpendFilterpicker/Default",
-      "Partial scan": "panels/spend/SpendPartialscan/Default",
-      "Past period": "panels/spend/SpendPastperiod/Default",
-      "Refresh failed": "panels/spend/SpendRefreshfailed/Default",
-      "Remote unavailable": "panels/spend/SpendRemoteunavailable/Default",
-      "Runtime absent": "panels/spend/SpendRuntimeabsent/Default"
+      "Period": "kit/Panels/Spend/At rest: the month per plan, then today",
+      "Loading": "kit/Panels/Spend/First read",
+      "Empty": "kit/Panels/Spend/Empty",
+      "Read failed": "kit/Panels/Spend/A read failed, nothing kept",
+      "Remote totals": "kit/Panels/Spend/Several computers, summed",
+      "Active sessions": "kit/Panels/Spend/Active now",
+      "Filter active": "kit/Panels/Spend/Showing one project",
+      "Filter picker": "kit/Panels/Spend/Choosing a project",
+      "Partial scan": "kit/Panels/Spend/Still reading the history",
+      "Past period": "kit/Panels/Spend/A past period",
+      "Refresh failed": "kit/Panels/Spend/A refresh failed: the last read stays",
+      "Remote unavailable": "kit/Panels/Spend/A computer not answering",
+      "Runtime absent": "kit/Panels/Spend/Spend can’t run"
     }
   },
   "spend/SpendBreakdown": {
     "page": "Panels/Spend",
     "states": {
-      "Task detail": "panels/spend/SpendATaskOpenedFromItsRow/Default",
-      "Project detail": "panels/spend/SpendAProjectOpenedFromItsRow/Default",
-      "Projects": "panels/spend/SpendBreakdownProjects/Default",
-      "Models": "panels/spend/SpendBreakdownModels/Default",
-      "Tasks": "panels/spend/SpendBreakdownTasks/Default",
-      "Sessions": "panels/spend/SpendBreakdownSessions/Default",
-      "Model detail": "panels/spend/SpendBreakdownModeldetail/Default",
-      "More": "panels/spend/SpendBreakdownMore/Default"
+      "Task detail": "kit/Panels/Spend/A task opened from its row",
+      "Project detail": "kit/Panels/Spend/A project opened from its row",
+      "Projects": "kit/Panels/Spend/Pointer on a project",
+      "Models": "kit/Panels/Spend/Models",
+      "Tasks": "kit/Panels/Spend/Tasks",
+      "Sessions": "kit/Panels/Spend/A task opened from its row",
+      "Model detail": "kit/Panels/Spend/A model opened from its row",
+      "More": "kit/Panels/Spend/More than fit"
     }
   },
   "spend/SpendSettings": {
     "page": "Panels/Spend",
     "states": {
-      "Sources": "panels/spend/SpendSettingsSourcesAndPlansDetected/Default",
-      "Plan saved": "panels/spend/SpendAPlanCorrectedInPlace/Default",
-      "Plans": "panels/spend/SpendSettingsPlans/Default",
-      "Plan added": "panels/spend/SpendSettingsPlanadded/Default",
-      "Plan invalid": "panels/spend/SpendSettingsPlaninvalid/Default",
-      "Settings failed": "panels/spend/SpendSettingsSettingsfailed/Default",
-      "Sources loading": "panels/spend/SpendSettingsSourcesloading/Default",
-      "Sources pending": "panels/spend/SpendSettingsSourcespending/Default",
-      "Prices": "panels/spend/SpendSettingsPrices/Default",
-      "Update policy": "panels/spend/SpendSettingsUpdatepolicy/Default",
-      "Share": "panels/spend/SpendSettingsShare/Default"
+      "Sources": "kit/Panels/Spend/Settings: sources and plans, detected",
+      "Plan saved": "kit/Panels/Spend/A plan corrected in place",
+      "Plans": "kit/Panels/Spend/Settings: sources and plans, detected",
+      "Plan added": "kit/Panels/Spend/A plan added",
+      "Plan invalid": "kit/Panels/Spend/A price refused",
+      "Settings failed": "kit/Panels/Spend/Plans not saved",
+      "Sources loading": "kit/Panels/Spend/Sources loading",
+      "Sources pending": "kit/Panels/Spend/A source just switched",
+      "Prices": "kit/Panels/Spend/Settings: sources and plans, detected",
+      "Update policy": "kit/Panels/Spend/Settings: sources and plans, detected",
+      "Share": "kit/Panels/Spend/Share from the header"
     }
   },
   "spend/SpendChart": {
     "page": "Panels/Spend",
     "states": {
-      "Period bars": "panels/spend/FeatureSpendHistory/Period bars",
-      "Task bars": "panels/spend/FeatureSpendHistory/Task bars",
-      "Empty bars": "panels/spend/FeatureSpendHistory/Empty bars"
+      "Period bars": "kit/Panels/Spend/History open",
+      "Task bars": "kit/Panels/Spend/A project’s History",
+      "Empty bars": "kit/Panels/Spend/History, nothing that period"
     }
   },
   "settings/Pieces": {

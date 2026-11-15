@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, memory, ports, settings } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer } from './samples.js';
-import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleTaken } from './panel-samples.js';
 
 // Settings: each page with its samples, then each state as what changes on it.
 const shows = (extra) => ({ page: 'pieces', hidden: sampleHidden, areas: sampleAreas, ...extra });
@@ -213,6 +213,59 @@ export const memoryViews = {
   'Narrow, 300': [docs({ look: 'narrow' }), 'The words wrap.'],
   ...noticed,
 };
+// Spend: November, two plans, $41.20 today over three projects; each state is what the pointer, a period, a row or a read changes.
+const { month, plans, periods, today, lists, choices, history: chart } = sampleSpend;
+const home = (extra) => ({ second: month, plans, number: today, periods, period: 'day', choices, lists, ...extra });
+const daysOpen = (extra = {}) => ({ history: { open: true, ...chart, ...extra } });
+const openedFrom = (kind, extra = {}) => {
+  const { name, value, said, ...rest } = sampleSpend[kind];
+  const named = { models: 'Models', projects: 'Projects' };
+  return { page: 'detail', title: name, periods, period: 'day', value, said, lists: [...Object.entries(rest).map(([key, rows]) => ({ name: named[key], count: phrase(rows.length), rows })), { name: 'Tasks', count: phrase(lists.tasks.length), rows: lists.tasks }], ...extra };
+};
+const { sources, absent, owned, prices, updates } = sampleSpend;
+const settled = (extra) => ({ page: 'settings', title: 'Settings', second: 'Spend', sources, absent, owned, prices, updates, ...extra });
+const { corrected, invalid } = sampleSpend;
+export const spendViews = {
+  'At rest: the month per plan, then today': [home({}), 'Each plan’s multiple for the month, then today’s number, then where it went.'],
+  'Pointer on today': [home({ pointer: 'period' }), 'The switch takes the word’s place, with the arrows and the project and model pickers.'],
+  'A past period': [home({ pointer: 'period', period: 'month', past: true, number: sampleSpend.past }), 'October: the next arrow and Back to now return to this month.'],
+  'Pointer on the number': [home({ pointer: 'number' }), 'Its tasks, what a task costs and its tokens.'],
+  'Pointer on a project': [home({ pointer: 'list', picked: 'acme-shop' }), 'Projects, Models and Tasks switch the list; the picked row says its tokens and folder.'],
+  Models: [home({ pointer: 'list', view: 'models', picked: 'claude-opus-5' }), 'Each model’s cost; the picked one says its list price.'],
+  Tasks: [home({ pointer: 'list', view: 'tasks' }), 'Sessions that name the same ticket are one task.'],
+  'More than fit': [home({ more: sampleSpend.more }), 'The first ones, then Show 4 more.'],
+  'Choosing a project': [{ ...home({ pointer: 'period' }), choosing: sampleSpend.chooser }, 'Each project with its folder and cost.'],
+  'Showing one project': [home({ showing: sampleSpend.showing }), 'A project or a model chosen: one dim line says so, with Show everything.'],
+  'Active now': [home({ live: sampleSpend.live }), 'Sessions running now come first, breathing; each opens its task.'],
+  'History open': [home(daysOpen()), 'The period a bar a day, the peak with its value.'],
+  'History, nothing that period': [home(daysOpen({ bars: chart.bars.map(() => 0), peak: null, labels: [] })), 'Every day empty.'],
+  'A project opened from its row': [openedFrom('project'), 'Its period, its number and facts, then its models and tasks.'],
+  'A project’s History': [openedFrom('project', daysOpen()), 'The project’s days.'],
+  'A model opened from its row': [openedFrom('model'), 'Its period, its number and facts, then its projects and tasks.'],
+  'A task opened from its row': [{ page: 'task', title: 'Task', ...sampleSpend.task, project: 'acme-shop' }, 'The prompt, its cost and parts, then its models and sessions, and Open acme-shop.'],
+  'Under 1×: not paying for itself': [home({ plans: [plans[0], sampleSpend.under] }), 'The multiple and its sentence in working.'],
+  'Too early to say: the pace instead': [home({ second: 'November 2', plans: [sampleSpend.early] }), 'Before the 7th, the pace in dim.'],
+  'No plan: plain cost': [home({ plans: [], plain: sampleSpend.plain, number: null, lists: null }), 'API keys are paid as used; each program’s cost.'],
+  'Several computers, summed': [home({ plans: plans.slice(0, 1), computers: sampleSpend.computers }), 'Each computer prices its own sessions; one account counts once.'],
+  'A computer not answering': [home({ plans: plans.slice(0, 1), computers: { count: '3 computers', rows: [...sampleSpend.computers.rows, sampleSpend.away] } }), 'It says so, with when it was read.'],
+  'A plan not read, on its row': [home({ plans: plans.slice(0, 1), unread: sampleSpend.unread }), 'The file’s own words under its row.'],
+  'Still reading the history': [home({ partial: sampleSpend.partial }), 'What is read so far, and how far it is.'],
+  'First read': [{ reading: true, second: sampleSpend.reading }, 'The skeleton, with how many sessions are read.'],
+  Empty: [{ second: month, empty: { icon: 'lu-chart-column', text: 'No sessions in November' } }, 'Nothing used in the period.'],
+  'A read failed, nothing kept': [{ failure: sampleSpend.failure }, 'The collector’s words, Refresh, and Explain to the agent.'],
+  'A refresh failed: the last read stays': [home({ refresh: sampleSpend.refresh }), 'The last numbers stay under the failure.'],
+  'Spend can’t run': [{ failure: sampleSpend.runtime }, 'No Node to run the collector: its words, and Explain to the agent.'],
+  'Share from the header': [home({ share: true }), 'Totals and days only leave.'],
+  'Settings: sources and plans, detected': [settled({}), 'A source is on when its folder holds sessions; plans are found, never typed; then prices and updates.'],
+  'Sources loading': [settled({ sources: null }), 'The skeleton under Sources.'],
+  'A source just switched': [settled({ sources: sources.map((item, index) => (index === 2 ? { ...item, on: true, pending: true } : item)) }), 'On at once, with the breathing dot until every number is read again.'],
+  'A plan corrected in place': [settled({ edit: corrected }), 'A plan without a price takes yours; Enter keeps it.'],
+  'Saving a plan': [settled({ edit: { ...corrected, pending: true } }), 'The breathing dot until prices.json is written.'],
+  'A plan added': [settled({ added: {} }), 'Add plan opens its name and price.'],
+  'A price refused': [settled({ added: { name: 'ChatGPT Pro', cost: invalid.price, error: true }, refused: invalid.rule }), 'The field is marked and the rule says why.'],
+  'Plans not saved': [settled({ edit: corrected, unsaved: sampleSpend.unsaved }), 'prices.json refused the write: its words, Save again, and Explain to the agent.'],
+  'Narrow, 300': [home({ look: 'narrow' }), 'The plans and the number stay; the rows truncate.'],
+};
 const stated = (views, draw) => ({
   args: { view: Object.keys(views)[0] },
   markup: ({ view }) => draw(views[view][0]),
@@ -220,6 +273,6 @@ const stated = (views, draw) => ({
 });
 const control = (views) => ({ view: { name: 'what it shows', control: { type: 'select' }, options: Object.keys(views) } });
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory] };
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

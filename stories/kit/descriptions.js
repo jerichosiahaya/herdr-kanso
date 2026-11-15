@@ -73,7 +73,7 @@ export const descriptions = {
   Ports: 'What listens on a port, the ones with no pane first, each one a press from stopping; History behind a fold.',
   Containers: 'What Docker costs on one line, each project and its containers a line each, their words on the picked one; Disk behind it.',
   Memory: 'What is free on one line, Herdr and each session a line, their words on the picked one; the guard and History behind folds.',
-  Spend: 'Plan value and session cost for the selected period.',
+  Spend: 'Each plan’s multiple for the month, the period’s number and where it went; the switch, the facts and the lists’ views come with the pointer.',
   Images: 'Pictures from the conversation with pinned notes to send to an agent.',
   'Panels/Markdown': 'Markdown in a window over any layout, edited where you read it; a review waits on Done.',
   Pins: 'Numbered notes anchored to a point or region of a picture or device screen.',
