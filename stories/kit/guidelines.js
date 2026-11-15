@@ -278,6 +278,12 @@ export const guidelines = {
     ["Kokō", "One selection.", "One wash on the active project, its tab and the focused pane's header."],
     ["Shizen", "Room is given, not taken.", "Opening a panel narrows the panes and collapsing the sidebar widens them; only a menu lies over another region."],
   ],
+  "Layouts/Pane": [
+    ["Kansō", "Composed, never redrawn.", "A Pane header over its body; the body is the terminal, a stand-in while the pane is dragged, or the last output once its process is gone."],
+    ["Seijaku", "A slab on the chrome.", "Radius 8, panes 8 apart; the header takes the selection wash only while the pane has focus."],
+    ["Shizen", "The place holds while it moves.", "Dragged, the pane's place keeps its mark and name and its header steps down; the ruler at its foot lights where it will land."],
+    ["Kokō", "Gone, still readable.", "When its process ends the pane keeps the last output in muted ink, under its header, until it is closed."],
+  ],
   "Compositions/Edges": [
     ["Kansō", "A stand-in for the panes out of view.", "One icon Button per pane past each side, at the side where it is; the panes of one column grouped. A click goes there; the name is the tooltip."],
     ["Kokō", "No state dots.", "A waiting pane is said by the status bar's Needs you; the edge only says where: hovering Needs you gives its pane the active fill, or +N when it is folded."],

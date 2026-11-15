@@ -2082,10 +2082,8 @@
         "coverage/tabs/Tabs/Selected",
         "coverage/tabs/Tabs/Unmeasured",
         "coverage/tabs/Tabs/Zoomed",
-        "proto/components-pane-standing-in/PaneStandingIn/Default",
         "proto/components-tab-bar/TabBar/Default",
         "proto/components-tab-states/TabStates/Default",
-        "proto/compositions-bars/StaleBody/Default",
         "kit/Tab/Default",
         "kit/Tab/Hover",
         "kit/Tab/Focus",
@@ -2136,9 +2134,7 @@
         "coverage/tabs/PanelToolbar/Opened",
         "coverage/tabs/PanelToolbar/Reordering",
         "coverage/tabs/PanelToolbar/Settings",
-        "proto/components-pane-standing-in/PaneStandingIn/Default",
-        "proto/components-tab-bar/TabBar/Default",
-        "proto/compositions-bars/StaleBody/Default"
+        "proto/components-tab-bar/TabBar/Default"
       ],
       "components": [
         "Compositions/Tab bar"

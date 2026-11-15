@@ -4,7 +4,7 @@ import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHead
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, escape, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, captioned, inSettings, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
-import { arrangementViews, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, projectRefusals, sendReach, sleepCases, statedPages, stepperShown, tabActs, worktreeRefusals } from './states.js';
+import { arrangementViews, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, projectRefusals, sendReach, sleepCases, statedPages, stepperShown, tabActs, worktreeRefusals } from './states.js';
 import { appNotices, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
@@ -564,6 +564,10 @@ export const playgrounds = {
   'Layouts/Window': {
     ...statedPages['Layouts/Window'],
     argTypes: { collapsed: flag('sidebar collapsed'), menu: { name: 'a menu on a row', control: { type: 'boolean' }, if: { arg: 'collapsed', truthy: false } }, panel: flag('a panel open') },
+  },
+  'Layouts/Pane': {
+    ...statedPages['Layouts/Pane'],
+    argTypes: { moment: { name: 'moment', control: { type: 'inline-radio' }, options: Object.keys(paneMoments) } },
   },
   'Primitives/Switch': {
     args: { checked: false, label: 'Toggle', disabled: false },

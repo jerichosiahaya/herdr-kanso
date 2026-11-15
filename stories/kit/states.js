@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { dialog, emptyState, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { dialog, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inSettings, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -203,12 +203,19 @@ const panelStory = ({ title, scope, header, state, look, content, last }) => {
 };
 
 // The window: each region is its composition at rest; a panel opens beside the panes and lights its door.
-const windowPane = ({ name, lines }) => stack({ variant: 'pane' }, paneHeader({ name, state: 'idle', focused: true }), stack({ variant: 'pane body' }, terminal({ lines })));
+// A pane in each moment of its life: focused at rest; dragged, its place standing in with the ruler lit where it lands; its process gone, the output kept.
+const paneBody = (...children) => stack({ variant: 'pane body' }, ...children);
+export const paneMoments = {
+  'at rest': ({ name, lines }) => stack({ variant: 'pane' }, paneHeader({ name, state: 'idle', focused: true }), paneBody(terminal({ lines }))),
+  dragged: ({ name }) => stack({ variant: 'pane', 'drop-preview': true }, paneHeader({ name, held: true }),
+    paneBody(stack({ variant: 'pane placeholder' }, glyph('p-claude'), escape(name))), stack({ variant: 'pane drop ruler', on: true })),
+  'process gone': ({ name, lines }) => stack({ variant: 'pane', gone: true }, paneHeader({ name }), paneBody(terminal({ lines }))),
+};
 const windowLayout = ({ collapsed, menu, panel: open }) => stack({ variant: 'window', rest: true },
   sampleSidebar({ collapsed, rowMenu: menu && !collapsed ? agentMenu({ name: sampleWindow.menuOn }) : null }),
   stack({ variant: 'window workspace' },
     tabBar({ items: sampleWindow.tabs, value: sampleWindow.pane.name, panel: open ? sampleWindow.door : null }),
-    stack({ variant: 'window panes' }, windowPane(sampleWindow.pane), open ? panelStory(panelArgs) : null),
+    stack({ variant: 'window panes' }, paneMoments['at rest'](sampleWindow.pane), open ? panelStory(panelArgs) : null),
     statusBar(statusParts({ ...statusArgs, needs: 'none' }))));
 
 // Each state pattern on the pieces that carry it, one surface after another.
@@ -598,6 +605,15 @@ export const statedPages = {
       { label: 'A menu on a row', args: { menu: true }, caption: 'Right-click or ⋯ on a row opens its menu under it, over the rows below; nothing else moves.' },
       { label: 'A panel open', args: { panel: true }, caption: 'The panel opens beside the panes and lights its door; the panes give it room.' },
       { label: 'Sidebar collapsed', args: { collapsed: true }, caption: 'The sidebar folds to its rail; the work keeps the width.' },
+    ],
+  },
+  'Layouts/Pane': {
+    args: { moment: 'at rest' },
+    markup: ({ moment }) => atWidth(760, stack({ variant: 'window panes' }, paneMoments[moment](sampleWindow.pane))),
+    states: [
+      { label: 'At rest', args: {}, caption: 'Its header over its terminal; focused, the header takes the selection wash.' },
+      { label: 'Dragged', args: { moment: 'dragged' }, caption: 'While a pane is dragged its place shows the mark and the name, and the ruler marks the drop.' },
+      { label: 'Process gone', args: { moment: 'process gone' }, caption: 'A pane whose process is gone keeps its last output in readable muted ink.' },
     ],
   },
 };

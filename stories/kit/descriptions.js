@@ -55,7 +55,7 @@ export const descriptions = {
   'Computer item': 'The computer of the pane in front, while its sidebar row is out of sight.',
   'Needs you item': 'Who waits and what they ask; a click goes there.',
   'Tab bar': 'The project’s tabs, with new tab and Arrange, and a door to each panel.',
-  Pane: 'A pane while it is dragged, and after its process is gone.',
+  Pane: 'A pane: its header over its terminal, at rest, while it is dragged, and after its process is gone.',
   Edges: 'The panes past each side of the strip, one tile each; a click goes there.',
   'State patterns': 'The shared loading, empty, pending and failure drawings used by every surface.',
   Panel: 'The container every panel shares: its width, the stale state, an optional header and the body.',
