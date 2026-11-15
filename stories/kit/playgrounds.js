@@ -1,6 +1,6 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { asleep, avatar, avatarSizes, chip, rowDepths, computerItem, computerItemStates, computerRow, computerStates, edge, layoutPaused, needsItem, statusBar, statusItem, statusMenus, statusPanels, stepper, paletteDoor, panelDoors, tabBar, tabBarStates, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, viewSwitch, views, button, card, code, dawn, dialog, escape, header, input, kinds, levels, mark, markSizes, markdown, marks, menu, metric, row, sides, skeletonOf, skeletonShapes, tabs, thumbnail, toast, toggle, toolbar, tooltip, windowControls } from './components.js';
+import { activity, activityMenu, emptyState, failureBlock, failureMenu, statePatterns, asleep, avatar, avatarSizes, chip, rowDepths, computerItem, computerItemStates, computerRow, computerStates, edge, layoutPaused, needsItem, statusBar, statusItem, statusMenus, statusPanels, stepper, paletteDoor, panelDoors, tabBar, tabBarStates, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, viewSwitch, views, button, card, code, dawn, dialog, escape, header, input, kinds, levels, mark, markSizes, markdown, marks, menu, metric, row, sides, skeletonOf, skeletonShapes, tabs, thumbnail, toast, toggle, toolbar, tooltip, windowControls } from './components.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -289,6 +289,52 @@ export const playgrounds = {
       right: [needs && needsItem({ name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?', more: 1 }), memory && statusItem({ text: 'Memory 8% free', tone: 'blocked' }), ...(panels ? statusPanels({ open }) : []), paletteDoor()].filter(Boolean),
       popup: panels && open !== 'none' ? statusMenus[open]() : '',
     })),
+  },
+  'Compositions/Activity': {
+    args: { events: 3, row: 'none', menu: false, docked: false },
+    argTypes: {
+      events: { name: 'events', control: { type: 'number', min: 0, max: 6 } },
+      row: { name: 'second row', control: { type: 'inline-radio' }, options: ['none', 'hover', 'focus'] },
+      menu: { name: 'right-click menu', control: { type: 'boolean' } },
+      docked: { name: 'in the sidebar', control: { type: 'boolean' } },
+    },
+    markup: ({ events, row: state, menu: open, docked }) => {
+      const all = [
+        { icon: 'lu-git-pull-request', subject: 'PR #166', fact: 'merged', age: '32m' },
+        { icon: 'lu-git-pull-request', tone: 'blocked', subject: 'PR #165', fact: 'checks failed', detail: 'test / unit · Run pnpm test', age: '9m' },
+        { icon: 'lu-moon', subject: 'Orion', fact: 'went to sleep', age: '1h' },
+        { icon: 'e-done', tone: 'done', subject: 'Iris', fact: 'finished', detail: 'Boards 01 to 04 done', age: '12m' },
+        { icon: 'lu-check', tone: 'done', subject: 'PR #164', fact: 'approved', age: '41m' },
+        { icon: 'lu-git-pull-request', subject: 'PR #163', fact: 'merged', age: '2h' },
+      ];
+      const card = activity({ events: all.slice(0, events), hover: state === 'hover' ? 1 : -1, focus: state === 'focus' ? 1 : -1 });
+      const menu = open && events ? activityMenu() : '';
+      return docked ? sidebar({ away: card }) + menu : `<div class="kanso-story__slice">${card}${menu}</div>`;
+    },
+  },
+  'Compositions/State patterns': {
+    args: { state: 'failure', menu: false },
+    argTypes: {
+      state: { name: 'state', control: { type: 'inline-radio' }, options: statePatterns },
+      menu: { name: 'right-click menu', control: { type: 'boolean' }, if: { arg: 'state', eq: 'failure' } },
+    },
+    markup: ({ state, menu: open }) => {
+      const at = (place, markup) => `<p class="kanso-story__caption">${place}</p>${markup}`;
+      const slice = (...parts) => `<div class="kanso-story__slice">${parts.join('')}</div>`;
+      const panel = (markup) => `<div class="kanso-panel kanso-story__panel">${markup}</div>`;
+      const source = 'ssh: connect to host dark port 22: Operation timed out';
+      return {
+        failure: () => at('Status bar', inBar(520, { left: [computerItem({ name: 'dark', state: 'unreachable' })] }))
+          + at('Sidebar', slice(computerRow({ name: 'dark', state: 'unreachable' }), open ? failureMenu({ source, fixes: ['Refresh', 'Sign in…'], agent: 'Atlas' }) : ''))
+          + at('Panel', panel(failureBlock({ text: "Can't list worktrees on dark", source: 'git worktree list: timed out after 30 s', fix: 'Refresh', agent: 'Atlas' })))
+          + at('Toast', toast({ level: 'error', icon: 'none', title: "Couldn't pull checkout", action: 'Retry' })),
+        empty: () => at('Panel', panel(emptyState({ icon: 'lu-git-pull-request', text: 'No pull requests on this branch', action: 'Create' }))),
+        pending: () => at('Status bar', inBar(520, { left: [computerItem({ name: 'devbox', state: 'pending' })] }))
+          + at('Sidebar', slice(row({ name: 'acme-shop', heading: true, detail: [{ icon: 'lu-git-branch', text: 'main' }, '↓0'], pending: true })))
+          + at('Panel', panel(row({ name: 'Approved, with 2 line comments', meta: 'now', pending: true }))),
+        loading: () => at('Sidebar', slice(skeletonOf({ shape: 'row', count: 3 }))) + at('Panel', panel(skeletonOf({ shape: 'list row', count: 3 }))),
+      }[state]();
+    },
   },
   'Compositions/Tab bar': {
     args: { width: 1040, value: 'checkout', panel: 'none', state: 'connected', folded: 0, overflow: false, windows: false },

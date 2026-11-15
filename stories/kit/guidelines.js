@@ -134,6 +134,20 @@ export const guidelines = {
     ["Kokō", "Panes per view without the buttons.", "The wheel over the number changes it, a click evens out; the tooltip says both."],
     ["Fukinsei", "Fold order, right half.", "Memory to \"8% free\", then servers, containers and reviews give way, then the question. Left: the computer becomes its icon."],
   ],
+  "Compositions/Activity": [
+    ["Kansō", "Only what nothing in view says.", "A merge, an approval, a red check out of view, an agent that slept or could not, an agent whose pane is gone. Nothing new takes no space."],
+    ["Seijaku", "Docked at the foot of the list.", "A raised card 12 above the footer; no row moves when it comes or goes."],
+    ["Kansō", "Built from the kit.", "The title is a heading Row with × to dismiss all; each event is a Row: its icon in the state colour, the subject, the fact muted, a detail as the second line, the age. Four rows, then +N more."],
+    ["Kokō", "A click opens the thing and drops the row.", "× dismisses all. Right-click: Dismiss these, then the piece lines; Hide this is the sidebar's While you were away switch."],
+  ],
+  "Compositions/State patterns": [
+    ["Kansō", "One drawing per state, in the same words at every size.", "Failure, empty, pending and loading are each one composition of the kit, used by every surface; a surface never draws its own."],
+    ["Kokō", "Failure says what, then the fix.", "Bars (status bar, pane header): mark, our words, the fix as a small quiet Button. Panel: the block where the list would start, the source's words in mono under ours, the fix solid, then Explain to the agent, named. Sidebar: the fix on the row; the source's words, the other fixes and Explain in its right-click Menu. Toast: mark, our words, the fix at the end; no Explain."],
+    ["Seijaku", "Blocked colour only on the edge and the mark.", "Our words stay foreground, the source's words muted."],
+    ["Kansō", "Empty is one sentence.", "Centred: the view's icon dim, one sentence muted, at most one tonal Button."],
+    ["Shizen", "Pending draws the new state at once.", "At 80% with one breathing dot. Confirmed, both go; refused, the old state returns with the failure."],
+    ["Shizen", "Loading keeps the shape.", "The skeleton of the rows that will come, breathing; it never takes the place of a failure."],
+  ],
   "Compositions/Tab bar": [
     ["Kansō", "Built from the kit.", "The tabs are the Tab primitive; new tab, Arrange, +N and the panel doors are icon Buttons; +N opens a Menu. Nothing is drawn twice."],
     ["Kokō", "A mark only for Needs you.", "A tab out of view whose session waits carries the blocked mark; it leaves when the tab is chosen. No mark for working or finished: the rows and the pane headers say it."],
@@ -144,6 +158,7 @@ export const guidelines = {
     ["Kansō", "A stand-in for the panes out of view.", "One icon Button per pane past each side, at the side where it is; the panes of one column grouped. A click goes there; the name is the tooltip."],
     ["Kokō", "No state dots.", "A waiting pane is said by the status bar's Needs you; the edge only says where: hovering Needs you gives its pane the active fill, or +N when it is folded."],
     ["Shizen", "At most four columns.", "The farthest fold behind +N, a Menu with their icons and names; a click goes there."],
+    ["Kokō", "The wheel slides the view.", "Turned over either edge, it moves the strip a column at a time, as the minimap did."],
     ["Shizen", "A drop target while dragging.", "A pane dragged over an edge washes it in accent 25%."],
   ],
   "Primitives/Key hint": [

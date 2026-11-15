@@ -29,7 +29,6 @@
 .kanso-pane-header__segment{display:flex;flex:none;align-items:center;gap:var(--k-sp-2);padding:var(--k-sp-hair) var(--k-sp-1);border-radius:var(--k-r-sm);white-space:nowrap}
 .kanso-pane-header__segment:is(:hover,.kanso-control--hover){background:var(--w12)}
 .kanso-pane-header .kanso-state-line{flex:none}
-.kanso-pane-header .kanso-state-line>.kanso-button--tonal{margin-left:var(--k-sp-1)}
 .kanso-pane-header>.kanso-grip{margin:0 var(--k-sp-hair)}
 
 /* Status bar: two halves around the fixed minimap slot; items 16 apart, icons and marks 14 with 8 to their words. */
@@ -66,3 +65,11 @@
 .kanso-edge__menu{position:absolute;top:0;z-index:1}
 .kanso-edge__menu--right{right:calc(100% + var(--k-sp-1))}
 .kanso-edge__menu--left{left:calc(100% + var(--k-sp-1))}
+
+/* State patterns: the bar's fix sits 4 after our words. */
+.kanso-state-line>.kanso-button{margin-left:var(--k-sp-1)}
+
+/* While you were away: a raised card docked at the foot of the list, 12 above the footer. */
+.kanso-away{display:flex;flex-direction:column;padding:var(--k-sp-1);border-radius:var(--k-r-card);background:var(--raised);box-shadow:0 0 0 1px var(--border)}
+.kanso-away>.kanso-button--quiet{align-self:flex-start}
+.kanso-sidebar>.kanso-away{margin-top:auto;margin-bottom:var(--k-sp-3)}
