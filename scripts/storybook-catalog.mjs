@@ -81,6 +81,8 @@ const primitive = {
   Card: 'Card', Metric: 'Metric', ThumbnailStrip: 'Thumbnail', SkeletonTwoLines: 'Skeleton', Loading: 'Skeleton',
   Toast: 'Toast', ToastWithItsSource: 'Toast', Snippet: 'Code', Reply: 'Markdown', Picture: 'Thumbnail',
 };
+// The panel pieces drawn on their own panel's page.
+const panelPiece = { HeroAndVerdict: 'Panels/PR', InATab: 'Panels/Worktrees', MemoryMetricAndChart: 'Panels/Memory', PlanAndSpend: 'Panels/Spend' };
 const protoPage = {
   'components-annotated-picture': 'Panels/Pins', 'components-choosing-the-channel': 'Compositions/Dawn Mode',
   'components-code': 'Primitives/Code', 'components-collapsed-rail': 'Layouts/Sidebar',
@@ -126,6 +128,7 @@ export function pageFor(source, file, key) {
   }
   if (source === 'proto') {
     if (primitive[key] && /compositions-/.test(base)) return `Primitives/${primitive[key]}`;
+    if (base === 'compositions-panel-pieces' && panelPiece[key]) return panelPiece[key];
     if (!protoPage[base]) {
       if (base.startsWith('components-')) return `Primitives/${base.slice(11).replace(/-/g, ' ').replace(/^./, (s) => s.toUpperCase())}`;
       throw new Error(`Missing component route: ${file}:${key}`);

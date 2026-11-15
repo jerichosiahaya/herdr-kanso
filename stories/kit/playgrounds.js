@@ -1,9 +1,9 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, paneFolds, paneHeader, panelStates, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, asleep, paneFolds, paneHeader, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, inBar } from './frames.js';
-import { edgeSides, layerDefaults, memoryShown, needsShown, panelRowLooks, statedPages, stepperShown, tabActs } from './states.js';
+import { edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, statedPages, stepperShown, tabActs } from './states.js';
 import { appNotices, keyLayer, keyLayerMods, sampleNotices, sampleSidebar, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
@@ -344,13 +344,10 @@ export const playgrounds = {
     argTypes: {
       title: { name: 'title', control: { type: 'text' } },
       scope: { name: 'scope', control: { type: 'text' } },
-      state: { name: 'state', control: { type: 'inline-radio' }, options: panelStates },
-      marks: { name: 'marks', control: { type: 'boolean' } },
-      lines: { name: 'second lines', control: { type: 'boolean' } },
-      period: { name: 'period', control: { type: 'boolean' } },
-      number: { name: 'the number', control: { type: 'boolean' } },
-      narrow: { name: 'narrow', control: { type: 'boolean' } },
-      look: { name: 'the one row', control: { type: 'inline-radio' }, options: Object.keys(panelRowLooks) },
+      state: { name: 'read', control: { type: 'inline-radio' }, options: Object.keys(panelReads) },
+      look: { name: 'look', control: { type: 'inline-radio' }, options: panelLooks },
+      content: select('body', Object.keys(panelContents)),
+      last: { name: 'the last row', control: { type: 'inline-radio' }, options: Object.keys(panelRowLooks) },
     },
   },
   'Compositions/Status bar/Item': {
@@ -473,7 +470,7 @@ export const playgrounds = {
     markup: toggle,
   },
   'Primitives/Row': {
-    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', meta: '+14 −3', mark: 'none', second: '', heading: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false },
+    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', meta: '+14 −3', mark: 'none', second: '', heading: false, title: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false },
     argTypes: {
       icon: select('icon', icons.concat(['p-claude', 'p-codex'])),
       name: { name: 'name', control: { type: 'text' } },
@@ -482,6 +479,7 @@ export const playgrounds = {
       mark: select('mark', ['none', ...Object.keys(marks)]),
       second: { name: 'second', control: { type: 'text' } },
       heading: { name: 'heading', control: { type: 'boolean' } },
+      title: { name: 'title form', control: { type: 'boolean' } },
       depth: { name: 'depth', control: { type: 'inline-radio' }, options: rowDepths },
       tools: { name: 'tools on hover', control: { type: 'boolean' } },
       current: { name: 'current', control: { type: 'boolean' } },

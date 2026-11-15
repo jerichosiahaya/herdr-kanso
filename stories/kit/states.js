@@ -1,8 +1,8 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { computerItem, edge, keyboardSystems, layoutPaused, paletteDoor, panelShell, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
-import { button, keycap, needsItem, stack, statusItem, stepper } from './pieces.js';
+import { computerItem, edge, keyboardSystems, layoutPaused, paletteDoor, panelRefresh, panelShell, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { emptyState, failureBlock, keycap, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
-import { keyLayer, keyLayerMods, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
@@ -38,35 +38,43 @@ const foldedTabs = ['perf', 'web', 'e2e', 'storybook', 'seed-data'];
 const edgeColumns = (panes, stacked) => stacked && panes.length > 1 ? [panes.slice(0, 2), ...panes.slice(2).map((pane) => [pane])] : panes.map((pane) => [pane]);
 export const edgeSides = ['left', 'right', 'both'];
 
+// Panel shell: the sample panel's content in each read; the last row takes the look picked for it.
 export const panelRowLooks = { rest: {}, hover: { hover: true }, selected: { current: true }, armed: { current: true, action: { label: 'Remove', kind: 'quiet', armed: true } } };
-const worktreeRows = [
-  { name: 'acme-shop-cart', meta: '310 MB', second: 'In a tab: cart-ui · today', mark: 'working' },
-  { name: 'rate-limit-v1', meta: '412 MB', second: 'Merged · 3 d', mark: 'done' },
-  { name: 'promo-banner', meta: '380 MB', second: '2 uncommitted changes · 6 d', mark: 'blocked' },
-];
-const panelRows = ({ marks, lines, look }) => worktreeRows.map((item, index) => ({ ...item, mark: marks ? item.mark : 'none', second: lines ? item.second : null, ...(index === worktreeRows.length - 1 ? panelRowLooks[look] : {}) }));
+const panelRows = ({ lines, last }) => samplePanel.rows.map((item, index, rows) => row({ ...item, second: lines ? item.second : null, ...(index === rows.length - 1 ? panelRowLooks[last] : {}) }));
+const panelSection = (rows) => [row({ ...samplePanel.section, heading: true }), panelRows(rows)];
+const periods = () => tabs({ items: samplePanel.periods.map((label) => ({ key: label, label })), value: 'Month', size: 'sm', track: true, label: true });
+export const panelContents = {
+  rows: (last) => panelSection({ lines: true, last }),
+  'one-line rows': (last) => panelSection({ lines: false, last }),
+  'period and the number': (last) => [periods(), metric(samplePanel.number), panelSection({ lines: true, last })],
+};
+// Each read puts its state pattern where the list would start; stale keeps the last body under the time it was read.
+export const panelReads = {
+  ready: { body: (content) => content },
+  loading: { reading: true, body: () => skeletonOf({ shape: 'list row', count: 3 }) },
+  empty: { body: () => emptyState(samplePanel.empty) },
+  failed: { body: () => failureBlock(samplePanel.failure) },
+  stale: { stale: true, scope: samplePanel.read, body: (content) => content },
+};
 
 export const statedPages = {
   'Compositions/Panel shell': {
-    args: { title: 'Worktrees', scope: 'This computer', state: 'ready', marks: true, lines: true, period: false, number: false, narrow: false, look: 'rest' },
-    markup: ({ marks, lines, look, period, number, ...args }) => panelShell({
-      ...args, tools: [button({ label: 'New worktree', kind: 'icon', icon: 'lu-plus' })], read: 'Read 14:02 · devbox unreachable · next try 14:07',
-      period: period ? 'Month' : null, number: number ? { value: '2.4 GB', unit: 'in 9 worktrees' } : null,
-      sections: [{ title: 'acme-shop', meta: '1.6 GB', rows: panelRows({ marks, lines, look }) }],
-      empty: { icon: 'lu-git-fork', text: 'No worktrees' },
-      failure: { text: "Can't list worktrees on devbox", source: 'git worktree list: timed out after 30 s', agent: 'migrate' },
-    }),
+    args: { title: samplePanel.title, scope: samplePanel.scope, state: 'ready', look: 'panel', content: 'rows', last: 'rest' },
+    markup: ({ title, scope, state, look, content, last }) => {
+      const { reading = false, stale = false, scope: read = scope, body } = panelReads[state];
+      return panelShell({ title, scope: read, look, stale, tools: [samplePanel.tool(), panelRefresh({ reading })] }, body(panelContents[content](last)));
+    },
     states: [
-      { label: 'Header and scope', args: {}, caption: 'Header 40 with the title 20 and icon buttons; scope line meta, dim.' },
-      { label: 'Header, scope, period, the number', args: { period: true, number: true }, caption: 'Header, scope, period, the number.' },
-      { label: 'Section and rows', args: { look: 'selected' }, caption: 'Section 15 strong with its fact dim. Row 32 body, the value at the right. Two-line row for a name and a fact.' },
-      { label: 'Sections and the one row: rest, hover, selected, armed', args: { look: 'armed' }, caption: 'Sections and the one row: rest, hover, selected, armed.' },
-      { label: 'With a mark, and the one-line form', args: { lines: false }, caption: 'With a mark, and the one-line form.' },
-      { label: 'Narrow, 300: title 15, meta truncates', args: { narrow: true }, caption: 'Narrow, 300: title 15, meta truncates.' },
-      { label: 'First read', args: { state: 'loading' }, caption: 'First read.' },
-      { label: 'Empty', args: { state: 'empty' }, caption: 'Empty.' },
-      { label: 'A read failed: where the list would start', args: { state: 'failed' }, caption: 'A read failed: where the list would start.' },
-      { label: 'Stale: another computer stopped answering', args: { state: 'stale' }, caption: 'Stale: another computer stopped answering.' },
+      { label: 'At rest', args: {}, caption: 'The read is fresh.' },
+      { label: 'Period and the number', args: { content: 'period and the number' }, caption: 'The panel counts over a period.' },
+      { label: 'One-line rows', args: { content: 'one-line rows' }, caption: 'The rows have no second fact.' },
+      { label: 'Selected, removal armed', args: { last: 'armed' }, caption: 'After the first press on Remove.' },
+      { label: 'Narrow', args: { look: 'narrow' }, caption: 'The panel is under 340 wide.' },
+      { label: 'Window', args: { look: 'window' }, caption: 'A file opened from a panel.' },
+      { label: 'Loading', args: { state: 'loading' }, caption: 'Before the first read answers.' },
+      { label: 'Empty', args: { state: 'empty' }, caption: 'The read answered with nothing.' },
+      { label: 'Failed', args: { state: 'failed' }, caption: 'The read did not answer.' },
+      { label: 'Stale', args: { state: 'stale' }, caption: 'Another computer stopped answering.' },
     ],
   },
   'Compositions/Status bar/Item': {

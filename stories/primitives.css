@@ -95,7 +95,7 @@
 .kanso-skeleton__list{display:flex;flex-direction:column;margin-top:var(--k-sp-4)}
 .kanso-skeleton__list.kanso-skeleton--breathing{animation:none}
 .kanso-skeleton__list .kanso-row{margin-inline:0;padding:0}
-:is(.kanso-menu,.kanso-dialog--settings,.kanso-markdown--window) .kanso-skeleton{background:var(--input)}
+:is(.kanso-menu,.kanso-dialog--settings,.kanso-markdown--window,.kanso-panel--window) .kanso-skeleton{background:var(--input)}
 .kanso-skeleton__list>:nth-child(2n) .kanso-skeleton{animation-delay:-480ms}
 .kanso-skeleton__list>:nth-child(3n) .kanso-skeleton{animation-delay:-960ms}
 .kanso-skeleton:is(.kanso-skeleton--line,.kanso-skeleton--meta,.kanso-skeleton--title,.kanso-skeleton--icon,.kanso-skeleton--control){flex:none}
@@ -122,6 +122,11 @@
 .kanso-row:is(:focus-visible,.kanso-control--focus){outline:2px solid var(--accent);outline-offset:-2px}
 .kanso-row__name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .kanso-row--heading .kanso-row__name{font-weight:var(--k-fw-strong);color:var(--fg)}
+/* Row, title form: a panel's heading, the name at title size and the scope under it; it is not a choice, so no wash. */
+.kanso-row--title,.kanso-row--title .kanso-content__primary{height:var(--k-h-header);align-items:center}
+.kanso-row--title.kanso-row--two-lines{height:auto;padding-block:0}
+.kanso-row--title .kanso-row__name{font-size:var(--k-fs-title);font-weight:var(--k-fw-strong);line-height:var(--k-lh-tight);color:var(--fg)}
+.kanso-row--title:is(:hover,.kanso-control--hover){background:none}
 .kanso-row--depth-1{padding-left:calc(var(--k-sp-2) * 2 + var(--k-ic-row))}
 .kanso-row--depth-2{position:relative;padding-left:calc(var(--k-sp-2) * 3 + var(--k-ic-row) * 2)}
 .kanso-row--depth-2::before{content:"";position:absolute;inset-block:0;left:calc(var(--k-sp-2) * 2 + var(--k-ic-row) * 1.5);width:1px;background:var(--w12)}

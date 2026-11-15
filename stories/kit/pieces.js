@@ -117,10 +117,6 @@ export const metric = ({ value, unit, facts = '', loading = false }) => {
     + (list.length ? `<div class="kanso-panel__facts">${list.map((fact) => loading ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(fact)}</span>` : `<span>${escape(fact)}</span>`).join('')}</div>` : '');
 };
 
-// A panel's title line, its tools after the title, then the scope line; a page inside a panel puts ‹ first.
-export const panelHeading = ({ title, scope = '', back = '', tools = '' }) => `<div class="kanso-panel__header">${back ? button({ label: back, kind: 'icon', icon: 'lu-chevron-left' }) : ''}<span class="kanso-panel__title">${escape(title)}</span>${tools}</div>`
-  + (scope ? `<div class="kanso-panel__scope" title="${escape(scope)}">${escape(scope)}</div>` : '');
-
 // An icon by name: a program's own art or a Lucide icon, at a control's or a row's size; a tone colours it.
 const iconSvg = (icon, size, tone = '') => `<svg class="${tone ? `kanso-text--${escape(tone)} ` : ''}${icon.startsWith('p-') ? 'kanso-icon--program' : size === 'row' ? 'kanso-icon kanso-icon--row' : 'kanso-icon'}"><use href="#${escape(icon)}"/></svg>`;
 export const glyph = (icon, tone = '') => iconSvg(icon, 'row', tone);
@@ -136,16 +132,17 @@ export const chip = ({ label, quiet = false, pill = false, tone = '' }) => `<spa
 const fact = (part) => typeof part === 'string' ? `<span>${escape(part)}</span>` : `${part.icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(part.icon)}"/></svg>` : ''}<span>${escape(part.text)}</span>`;
 const rowTool = (action) => button({ kind: 'icon', size: 'sm', ...action });
 export const rowDepths = [0, 1, 2];
-// `actions` show on hover or focus and take the meta's place; `action` is always shown; `keys` are the row's key hints, last.
-export const row = ({ icon = 'none', tone = '', name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action, keys = [] }) => {
+// `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
+// The title form is a panel's heading: the name at title size, the second line its scope.
+export const row = ({ icon = 'none', tone = '', name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, title, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action, tools = [], keys = [] }) => {
   const lead = icon === 'none' ? '' : glyph(icon, tone);
   const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;
   const facts = [].concat(detail ?? []).filter(Boolean);
   const tail = `${facts.length ? `<span class="kanso-row__detail">${facts.map(fact).join('')}</span>` : ''}${grow()}`
     + `${meta ? `<span class="kanso-row__meta">${escape(meta)}</span>` : ''}${flag ? `<span class="kanso-row__flag">${glyph(flag)}</span>` : ''}`
-    + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}${keys.map(keyHint).join('')}`
+    + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}${list(tools)}${keys.map(keyHint).join('')}`
     + `${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${!status || status === 'none' ? '' : mark({ status })}`;
-  const states = [second && 'kanso-row--two-lines', heading && 'kanso-row--heading', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
+  const states = [second && 'kanso-row--two-lines', heading && 'kanso-row--heading', title && 'kanso-row--title', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
     dimmed && 'kanso-control--dim', pending && 'kanso-state-line--pending', hover && 'kanso-control--hover', focus && 'kanso-control--focus'].filter(Boolean).map((name) => ` ${name}`).join('');
   return second
     ? `<div class="kanso-row${states}" tabindex="0"><div class="kanso-content__primary">${lead}${label}${tail}</div><div class="kanso-content__secondary">${escape(second)}</div></div>`
@@ -292,9 +289,7 @@ export const stacks = {
   'pane tools': { block: 'kanso-pane-header__tools', tag: 'span' },
   'pane more': { block: 'kanso-pane-header__more', tag: 'span' },
   'pane menu': { block: 'kanso-pane-header__menu', tag: 'span' },
-  panel: { block: 'kanso-panel', states: ['narrow'] },
-  'panel window': { block: 'kanso-markdown--window' },
-  'panel stale': { block: 'kanso-panel__stale' },
+  panel: { block: 'kanso-panel', states: ['narrow', 'window', 'stale'] },
 };
 export const stack = ({ variant, on = false, ...flags }, ...children) => {
   if (!Object.hasOwn(stacks, variant)) throw new Error(`stack: unknown variant "${variant}"`);

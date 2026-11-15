@@ -185,17 +185,25 @@ test("Every hypothesis fills the whole template, and each job names where it goe
   }
 });
 
-test("The panel shell draws each state from the kit, even when given only a title", async () => {
-  const { panelShell, panelStates } = await import("../stories/kit/compositions.js");
-  const marks = { loading: /kanso-skeleton__list/, empty: /kanso-state-empty/, failed: /kanso-state-block/, stale: /kanso-panel__stale/ };
-  for (const state of panelStates) {
-    const html = panelShell({ title: "Ports", state });
-    assert.match(html, /kanso-panel__title">Ports</, state);
+test("The panel shell is a frame: its title row over the body it is given, each look a width, stale stepping the body down", async () => {
+  const { panelLooks, panelShell } = await import("../stories/kit/compositions.js");
+  const html = panelShell({ title: "Ports", scope: "This computer", tools: ["<i>tool</i>"] }, "<p>body</p>");
+  assert.match(html, /^<div class="kanso-panel"><div class="kanso-row kanso-row--two-lines kanso-row--title"/);
+  assert.match(html, /kanso-row__name">Ports<[^]*<i>tool<\/i>[^]*This computer[^]*<p>body<\/p><\/div>$/);
+  assert.doesNotMatch(panelShell({ title: "Ports" }), /kanso-content__secondary/);
+  for (const look of panelLooks) assert.match(panelShell({ title: "Ports", look }), look === "panel" ? /^<div class="kanso-panel">/ : new RegExp(`kanso-panel--${look}`), look);
+  assert.match(panelShell({ title: "Ports", stale: true }, "<p>body</p>"), /^<div class="kanso-panel kanso-panel--stale">/);
+  assert.throws(() => panelShell({ title: "Ports", look: "wide" }), { message: "panelShell: unknown look wide" });
+});
+
+test("Every read of the sample panel draws its own state pattern where the list would start", async () => {
+  const { panelReads, statedPages } = await import("../stories/kit/states.js");
+  const { args, markup } = statedPages["Compositions/Panel shell"];
+  const marks = { loading: /kanso-skeleton__list/, empty: /kanso-state-empty/, failed: /kanso-state-block/, stale: /kanso-panel--stale/ };
+  for (const state of Object.keys(panelReads)) {
+    const html = markup({ ...args, state });
     for (const [other, pattern] of Object.entries(marks)) (other === state ? assert.match : assert.doesNotMatch)(html, pattern, `${state} and ${other}`);
   }
-  assert.match(panelShell({ title: "Ports", narrow: true }), /kanso-panel kanso-panel--narrow/);
-  assert.match(panelShell({ title: "Ports", state: "stale", scope: "This computer", read: "Read 14:02" }), /Read 14:02/);
-  assert.throws(() => panelShell({ title: "Ports", state: "gone" }), { message: "panelShell: unknown state gone" });
 });
 
 test("Each named state of a page is a preset of its playground, so the catalog draws it with the playground's markup", async () => {

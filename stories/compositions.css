@@ -62,9 +62,9 @@
 .kanso-status-bar__item.kanso-status-bar__item--open{anchor-name:--kanso-status-item;margin:0 calc(-1 * var(--k-sp-1));padding:var(--k-sp-hair) var(--k-sp-1);border-radius:var(--k-r-sm);background:var(--w12)}
 .kanso-status-bar__popup{position:absolute;bottom:calc(anchor(--kanso-status-item top) + var(--k-sp-1));right:anchor(--kanso-status-item right);z-index:1}
 
-/* Panel shell: the title and the scope keep to one line; a stale body steps down and takes no clicks. */
-.kanso-panel__header>.kanso-panel__title,.kanso-panel__scope{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.kanso-panel__stale{display:flex;flex-direction:column;opacity:var(--k-op-away);pointer-events:none}
+/* Panel shell: narrow, the title drops to the section size; stale, the body under the heading steps down and takes no clicks. */
+.kanso-panel--narrow .kanso-row--title .kanso-row__name{font-size:var(--k-fs-section)}
+.kanso-panel--stale>:not(:first-child){opacity:var(--k-op-away);pointer-events:none}
 
 /* Tab bar: the project's tabs, + and Arrange, then the panel doors; 48 tall, nothing filled at rest. */
 .kanso-tab-bar{position:relative;display:flex;align-items:center;gap:var(--k-sp-2);height:var(--k-h-tab-bar);padding:0 var(--k-sp-3);box-sizing:border-box}

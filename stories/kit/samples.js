@@ -1,6 +1,6 @@
 // Sample sidebar content for the stories: the rows and tiles of each view, drawn with the compositions.
 import { asleep, computerRow, projectRow, section, sessionRow, sidebar, tile } from './compositions.js';
-import { menu, stack, statusItem } from './pieces.js';
+import { button, menu, stack, statusItem } from './pieces.js';
 import keyFile from '../../kanso/keys.json' with { type: 'json' };
 import windowsKeyFile from '../../kanso/keys.windows.json' with { type: 'json' };
 import { LIST_LAYER, describe, layer } from '../../kanso/mods/kanso-help/keymap.js';
@@ -90,3 +90,21 @@ export const sampleNotices = [
   { state: 'done', home: 'agent', text: 'docs finished: Added docs/limits.md and the table' },
   { state: 'waits', home: 'pr', text: '#142 · test / unit failed' },
 ];
+
+// A sample panel's content, composed outside the shell: its tool, its section and rows, and the words of its empty, failed and stale reads.
+export const samplePanel = {
+  title: 'Worktrees',
+  scope: 'This computer',
+  read: 'Read 14:02 · devbox unreachable · next try 14:07',
+  tool: () => button({ label: 'New worktree', kind: 'icon', icon: 'lu-plus' }),
+  periods: ['Today', 'Month', '30 days', 'Year', 'All'],
+  number: { value: '2.4 GB', unit: 'in 9 worktrees' },
+  section: { name: 'acme-shop', meta: '1.6 GB' },
+  rows: [
+    { name: 'acme-shop-cart', meta: '310 MB', second: 'In a tab: cart-ui · today', mark: 'working' },
+    { name: 'rate-limit-v1', meta: '412 MB', second: 'Merged · 3 d', mark: 'done' },
+    { name: 'promo-banner', meta: '380 MB', second: '2 uncommitted changes · 6 d', mark: 'blocked' },
+  ],
+  empty: { icon: 'lu-git-fork', text: 'No worktrees' },
+  failure: { text: "Can't list worktrees on devbox", source: 'git worktree list: timed out after 30 s', fix: 'Refresh', agent: 'migrate' },
+};
