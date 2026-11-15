@@ -2047,6 +2047,8 @@
         "Compositions/Settings menu",
         "Compositions/New conversation menu",
         "Compositions/Tab bar",
+        "Compositions/Pane header",
+        "Compositions/Status bar/Item",
         "Primitives/Menu"
       ],
       "features": [],
