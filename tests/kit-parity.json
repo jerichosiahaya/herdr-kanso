@@ -17,6 +17,7 @@
     "metric",
     "paneName",
     "plus",
+    "release",
     "setting",
     "skeletonOf",
     "stack",
@@ -25,7 +26,8 @@
     "thumbnail",
     "toast",
     "tooltip",
-    "windowControls"
+    "windowControls",
+    "windowMap"
   ],
   "renamed": {
     "input": "field",

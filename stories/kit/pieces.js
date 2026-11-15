@@ -62,11 +62,13 @@ export const code = ({ text, kind, first, line }) => {
 
 const shape = (markup) => markup.replace(' kanso-text--fg', '').replace(/class="([^"]*)"/, 'class="$1 kanso-skeleton--shape"');
 const words = (text, skeleton) => skeleton ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(text)}</span>` : escape(text);
-// A dialog: its title, an optional scope, the body its use composes, notes, then Cancel before the one primary.
-export const dialog = ({ title, scope, body = '', notes = [], primary, kind = 'solid', state = 'default', secondary, loading = false }) => {
+// A dialog: its title with its `tools` after it, an optional scope, the body its use composes, notes, then Cancel before the one primary.
+// The window size is the Settings and Help window.
+const dialogSizes = { md: '', window: ' kanso-dialog--window' };
+export const dialog = ({ title, tools = '', size = 'md', scope, body = '', notes = [], primary, kind = 'solid', state = 'default', secondary, loading = false }) => {
   const action = (label, look, emphasis) => (loading ? shape : String)(button({ label, kind: emphasis, ...(loading ? {} : { disabled: look === 'disabled', spin: look === 'loading', armed: look === 'armed' }) }));
   const footer = primary || secondary ? `<div class="kanso-dialog__footer">${secondary ? action(secondary, 'default', 'quiet') : ''}${primary ? action(primary, state, kind) : ''}</div>` : '';
-  return `<div class="kanso-dialog kanso-popover" role="dialog"><div class="kanso-dialog__header"><span class="kanso-dialog__title">${words(title, loading)}</span></div>`
+  return `<div class="kanso-dialog${dialogSizes[size]} kanso-popover" role="dialog"><div class="kanso-dialog__header"><span class="kanso-dialog__title">${words(title, loading)}</span>${list(tools)}</div>`
     + (scope ? `<div class="kanso-dialog__scope">${words(scope, loading)}</div>` : '')
     + (body ? `<div class="kanso-dialog__body">${body}</div>` : '')
     + notes.map(({ text, tone: look = 'dim' }) => `<div class="kanso-dialog__note${look === 'dim' ? '' : ` kanso-dialog__note--${look}`}">${words(text, loading)}</div>`).join('')
@@ -262,6 +264,24 @@ export const stepper = ({ value = 2, open = false, hover = false } = {}) => `<sp
 const termPart = (part) => typeof part === 'string' ? escape(part) : `<span class="kanso-text--${escape(part.tone)}">${escape(part.text)}</span>`;
 export const terminal = ({ lines = [] }) => `<div class="kanso-terminal">${lines.map((line) => [].concat(line).map(termPart).join('')).join('\n')}</div>`;
 
+// The window's areas by name, each one pressable; the body is blank, the picked area on.
+export const windowAreas = ['Sidebar', 'Tab bar', 'Pane header', 'Body', 'Panels', 'Notifications', 'Status bar'];
+const areaClass = (name) => name.toLowerCase().replace(/ /g, '-');
+export const windowMap = ({ picked = null, hover = null } = {}) => `<div class="kanso-settings__window-map">${windowAreas.map((name) => name === 'Body'
+  ? `<span class="kanso-settings__area kanso-settings__area--body"></span>`
+  : `<span class="kanso-settings__area kanso-settings__area--${areaClass(name)}${name === picked ? ' kanso-control--on' : ''}${name === hover ? ' kanso-control--hover' : ''}" role="button" tabindex="0" aria-pressed="${name === picked}">${escape(name)}</span>`).join('')}</div>`;
+
+// One release on the timeline: a newer one with its date and action, the one you run marked, the older ones folded into one line.
+const releaseDots = { newer: '', here: ' kanso-update__timeline-dot--current', older: ' kanso-update__timeline-dot--small' };
+const changeLines = (changes) => changes.map(({ kind, text }, index) => `<div class="kanso-update__change"><span>${kind === changes[index - 1]?.kind ? '' : escape(kind)}</span><span>${escape(text)}</span></div>`).join('');
+export const release = ({ version, date = null, node = 'newer', action = null, changes = [] }) => {
+  const when = date ? `<span class="kanso-update__timeline-date">${escape(date)}</span>` : '';
+  const heading = node === 'older'
+    ? `<div class="kanso-update__fold">Older<span class="kanso-update__timeline-date">${escape(version)}</span>${inlineIcon('lu-chevron-right')}</div>`
+    : `<div class="kanso-update__timeline-heading"><span class="kanso-update__version-name">${escape(version)}</span>${when}${node === 'here' ? chip({ label: 'you are here' }) : ''}${action ? button({ label: action }) : ''}</div>`;
+  return `<div class="kanso-update__timeline-release kanso-update__timeline-release--${node}"><span class="kanso-update__timeline-dot${releaseDots[node]}"></span>${heading}${changeLines(changes)}</div>`;
+};
+
 export const tabSkeleton = () => '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tab-bar__skeleton"></span>';
 
 // One layout piece for the wrappers that only place other pieces; each variant keeps its own class and states.
@@ -278,6 +298,7 @@ export const stacks = {
   'row group': { block: 'kanso-sidebar__row-group' },
   'view switch': { block: 'kanso-sidebar__view-switch' },
   'view menu': { block: 'kanso-sidebar__view-menu' },
+  'row menu': { block: 'kanso-sidebar__row-menu' },
   footer: { block: 'kanso-sidebar__footer' },
   rail: { block: 'kanso-rail', tag: 'aside' },
   'rail list': { block: 'kanso-rail__list' },
@@ -316,6 +337,9 @@ export const stacks = {
   'pane placeholder': { block: 'kanso-pane__placeholder' },
   'pane drop ruler': { block: 'kanso-pane__drop-ruler' },
   panel: { block: 'kanso-panel', states: ['narrow', 'window', 'stale'] },
+  timeline: { block: 'kanso-update__timeline' },
+  columns: { block: 'kanso-layout kanso-layout--columns' },
+  line: { block: 'kanso-layout kanso-layout--line' },
   'panel header': { block: 'kanso-panel-header', states: ['bar'] },
 };
 export const stack = ({ variant, on = false, ...flags }, ...children) => {

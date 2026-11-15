@@ -25,6 +25,8 @@
 .kanso-rail:has(.kanso-sidebar__view-menu){overflow:visible}
 .kanso-rail .kanso-sidebar__view-switch{position:relative}
 .kanso-sidebar__view-menu{position:absolute;top:0;left:calc(anchor(--kanso-rail right) + var(--k-sp-1));z-index:1}
+.kanso-sidebar__row-menu{position:relative;height:0;z-index:1}
+.kanso-sidebar__row-menu>.kanso-menu{position:absolute;top:var(--k-sp-1);right:0}
 
 /* Pane header: program, name, digest, toolbar, grip. */
 .kanso-pane-header{display:flex;flex:none;align-items:center;gap:var(--k-sp-2);height:var(--k-h-pane);padding:0 var(--k-sp-2) 0 var(--k-sp-3);box-sizing:border-box;border-radius:var(--k-r-card) var(--k-r-card) 0 0;font-size:var(--k-fs-body);white-space:nowrap;cursor:grab}
