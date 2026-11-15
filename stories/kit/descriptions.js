@@ -80,7 +80,7 @@ export const descriptions = {
   Pins: 'Numbered notes anchored to a point or region of a picture or device screen.',
   Simulator: 'Connected devices, their screens and controls, where the platform tools exist.',
   Share: 'The share menu and card for a panel’s result.',
-  Settings: 'kansō settings: what shows, keys, release channel and credits.',
+  Settings: 'kansō settings: what shows, its keys, what is new, and credits, in one window.',
   Help: 'Keys and explanations of available actions.',
   Arrangements: 'Saved pane layouts to restore or save.',
   Dojo: 'The hjkl keyboard practice game with feedback and results.',

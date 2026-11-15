@@ -6382,38 +6382,7 @@
       "records": [
         "proto/approved-dialogs-herdr/Reference/1",
         "proto/approved-dialogs-herdr/Reference/2",
-        "panels/settings/Bindings/Capture",
-        "panels/settings/Bindings/Changed",
-        "panels/settings/Bindings/Conflict armed",
-        "panels/settings/Bindings/Family capture",
-        "panels/settings/Bindings/Invalid family",
-        "panels/settings/Bindings/Memory, while its panel has the keyboard",
-        "proto/components-settings-tabs/Keys/Default",
-        "panels/settings/Bindings/Preview, while it has the keyboard",
-        "panels/settings/Bindings/Spend, while its panel has the keyboard",
-        "panels/settings/Bindings/Unbound",
-        "panels/settings/Bindings/Write failed",
-        "panels/settings/CreditsLoading/Avatars pending",
-        "panels/settings/CreditsLoading/Avatars unavailable",
-        "proto/components-settings-tabs/SettingsWhatShows/Default",
-        "panels/settings/Pieces/Changed",
-        "panels/settings/Pieces/Custom panel",
-        "panels/settings/Pieces/No matches",
-        "panels/settings/ReleaseControls/Cached",
-        "panels/settings/ReleaseControls/Checking",
-        "panels/settings/ReleaseControls/Checks off",
-        "panels/settings/ReleaseControls/Current",
-        "panels/settings/ReleaseControls/Early",
-        "panels/settings/ReleaseControls/Installing",
-        "panels/settings/ReleaseControls/Loading",
-        "panels/settings/ReleaseControls/Read failed",
-        "panels/settings/ReleaseControls/Stable",
-        "panels/settings/ReleaseControls/Update ready",
-        "proto/components-choosing-the-channel/ChoosingTheChannel/Default",
-        "proto/components-settings-tabs/Credits/Default",
-        "proto/components-settings-tabs/Settings/Default",
-        "proto/components-settings-tabs/WhatsNew/Default",
-        "proto/components-settings-tabs/WindowMap/Default"
+        "proto/components-choosing-the-channel/ChoosingTheChannel/Default"
       ],
       "components": [
         "Panels/Settings"
@@ -6452,38 +6421,7 @@
         "proto/approved-dialogs-settings-screens/Reference/10",
         "proto/approved-dialogs-settings-screens/Reference/11",
         "proto/approved-dialogs-settings-screens/Reference/12",
-        "panels/settings/Bindings/Capture",
-        "panels/settings/Bindings/Changed",
-        "panels/settings/Bindings/Conflict armed",
-        "panels/settings/Bindings/Family capture",
-        "panels/settings/Bindings/Invalid family",
-        "panels/settings/Bindings/Memory, while its panel has the keyboard",
-        "proto/components-settings-tabs/Keys/Default",
-        "panels/settings/Bindings/Preview, while it has the keyboard",
-        "panels/settings/Bindings/Spend, while its panel has the keyboard",
-        "panels/settings/Bindings/Unbound",
-        "panels/settings/Bindings/Write failed",
-        "panels/settings/CreditsLoading/Avatars pending",
-        "panels/settings/CreditsLoading/Avatars unavailable",
-        "proto/components-settings-tabs/SettingsWhatShows/Default",
-        "panels/settings/Pieces/Changed",
-        "panels/settings/Pieces/Custom panel",
-        "panels/settings/Pieces/No matches",
-        "panels/settings/ReleaseControls/Cached",
-        "panels/settings/ReleaseControls/Checking",
-        "panels/settings/ReleaseControls/Checks off",
-        "panels/settings/ReleaseControls/Current",
-        "panels/settings/ReleaseControls/Early",
-        "panels/settings/ReleaseControls/Installing",
-        "panels/settings/ReleaseControls/Loading",
-        "panels/settings/ReleaseControls/Read failed",
-        "panels/settings/ReleaseControls/Stable",
-        "panels/settings/ReleaseControls/Update ready",
-        "proto/components-choosing-the-channel/ChoosingTheChannel/Default",
-        "proto/components-settings-tabs/Credits/Default",
-        "proto/components-settings-tabs/Settings/Default",
-        "proto/components-settings-tabs/WhatsNew/Default",
-        "proto/components-settings-tabs/WindowMap/Default"
+        "proto/components-choosing-the-channel/ChoosingTheChannel/Default"
       ],
       "components": [
         "Panels/Settings"
@@ -6539,11 +6477,7 @@
         "proto/approved-dialogs-pieces/Reference/13",
         "proto/approved-dialogs-pieces/Reference/14",
         "proto/approved-dialogs-pieces/Reference/15",
-        "proto/approved-dialogs-pieces/Reference/16",
-        "proto/components-settings-tabs/SettingsWhatShows/Default",
-        "panels/settings/Pieces/Changed",
-        "panels/settings/Pieces/Custom panel",
-        "panels/settings/Pieces/No matches"
+        "proto/approved-dialogs-pieces/Reference/16"
       ],
       "components": [
         "Panels/Settings"
@@ -6643,18 +6577,7 @@
         "coverage/help/KeyboardExplorer/Modifier layer",
         "coverage/help/KeyboardExplorer/Physical press",
         "coverage/help/KeyboardExplorer/Picked key",
-        "coverage/help/KeyboardExplorer/Unbound",
-        "panels/settings/Bindings/Capture",
-        "panels/settings/Bindings/Changed",
-        "panels/settings/Bindings/Conflict armed",
-        "panels/settings/Bindings/Family capture",
-        "panels/settings/Bindings/Invalid family",
-        "panels/settings/Bindings/Memory, while its panel has the keyboard",
-        "proto/components-settings-tabs/Keys/Default",
-        "panels/settings/Bindings/Preview, while it has the keyboard",
-        "panels/settings/Bindings/Spend, while its panel has the keyboard",
-        "panels/settings/Bindings/Unbound",
-        "panels/settings/Bindings/Write failed"
+        "coverage/help/KeyboardExplorer/Unbound"
       ],
       "components": [
         "Compositions/Keyboard",
@@ -6698,18 +6621,7 @@
         "proto/approved-dialogs-news/Reference/8",
         "proto/approved-dialogs-news/Reference/9",
         "proto/approved-dialogs-news/Reference/10",
-        "proto/approved-dialogs-news/Reference/11",
-        "panels/settings/ReleaseControls/Cached",
-        "panels/settings/ReleaseControls/Checking",
-        "panels/settings/ReleaseControls/Checks off",
-        "panels/settings/ReleaseControls/Current",
-        "panels/settings/ReleaseControls/Early",
-        "panels/settings/ReleaseControls/Installing",
-        "panels/settings/ReleaseControls/Loading",
-        "panels/settings/ReleaseControls/Read failed",
-        "panels/settings/ReleaseControls/Stable",
-        "panels/settings/ReleaseControls/Update ready",
-        "proto/components-settings-tabs/WhatsNew/Default"
+        "proto/approved-dialogs-news/Reference/11"
       ],
       "components": [
         "Panels/Settings"
@@ -6750,10 +6662,7 @@
       "records": [
         "proto/approved-dialogs-credits/Reference/1",
         "proto/approved-dialogs-credits/Reference/2",
-        "proto/approved-dialogs-credits/Reference/3",
-        "panels/settings/CreditsLoading/Avatars pending",
-        "panels/settings/CreditsLoading/Avatars unavailable",
-        "proto/components-settings-tabs/Credits/Default"
+        "proto/approved-dialogs-credits/Reference/3"
       ],
       "components": [
         "Panels/Settings"

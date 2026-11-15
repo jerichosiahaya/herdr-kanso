@@ -3,6 +3,7 @@ import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, inBar } from './frames.js';
+import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, projectRefusals, sendReach, sleepCases, statedPages, stepperShown, tabActs, worktreeRefusals } from './states.js';
 import { appNotices, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, statusMenus } from './samples.js';
 
@@ -681,6 +682,7 @@ export const playgrounds = {
     },
     markup: (args) => `<div class="kanso-panel">${card(args)}</div>`,
   },
+  ...panelPlaygrounds,
 };
 
 export const playgroundStory = ({ args, argTypes, markup }) => ({

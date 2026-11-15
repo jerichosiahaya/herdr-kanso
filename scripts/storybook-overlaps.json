@@ -511,57 +511,57 @@
   "settings/Pieces": {
     "page": "Panels/Settings",
     "states": {
-      "Sidebar": "proto/components-settings-tabs/SettingsWhatShows/Default",
-      "Pane header": "proto/components-settings-tabs/SettingsWhatShows/Default",
-      "Status bar": "proto/components-settings-tabs/SettingsWhatShows/Default",
-      "Tab bar and panels": "proto/components-settings-tabs/SettingsWhatShows/Default",
-      "Notifications": "proto/components-settings-tabs/SettingsWhatShows/Default",
-      "Background": "proto/components-settings-tabs/SettingsWhatShows/Default",
-      "Changed": "panels/settings/Pieces/Changed",
-      "Custom panel": "panels/settings/Pieces/Custom panel",
-      "No matches": "panels/settings/Pieces/No matches"
+      "Sidebar": "kit/Panels/Settings/Sidebar picked",
+      "Pane header": "kit/Panels/Settings/Pane header picked",
+      "Status bar": "kit/Panels/Settings/Status bar picked",
+      "Tab bar and panels": "kit/Panels/Settings/Panels picked",
+      "Notifications": "kit/Panels/Settings/Notifications picked",
+      "Background": "kit/Panels/Settings/Behind the scenes picked",
+      "Changed": "kit/Panels/Settings/Changed",
+      "Custom panel": "kit/Panels/Settings/Panels in order",
+      "No matches": "kit/Panels/Settings/Find, nothing"
     }
   },
   "settings/Bindings": {
     "page": "Panels/Settings",
     "states": {
-      "Panels": "proto/components-settings-tabs/Keys/Default",
-      "Sidebar": "proto/components-settings-tabs/Keys/Default",
-      "Panes": "proto/components-settings-tabs/Keys/Default",
-      "Vim keys": "proto/components-settings-tabs/Keys/Default",
-      "Moving along the strip": "proto/components-settings-tabs/Keys/Default",
-      "Capture": "panels/settings/Bindings/Capture",
-      "Changed": "panels/settings/Bindings/Changed",
-      "Conflict armed": "panels/settings/Bindings/Conflict armed",
-      "Family capture": "panels/settings/Bindings/Family capture",
-      "Invalid family": "panels/settings/Bindings/Invalid family",
-      "Memory, while its panel has the keyboard": "panels/settings/Bindings/Memory, while its panel has the keyboard",
-      "Preview, while it has the keyboard": "panels/settings/Bindings/Preview, while it has the keyboard",
-      "Spend, while its panel has the keyboard": "panels/settings/Bindings/Spend, while its panel has the keyboard",
-      "Unbound": "panels/settings/Bindings/Unbound",
-      "Write failed": "panels/settings/Bindings/Write failed"
+      "Panels": "kit/Panels/Settings/Panels",
+      "Sidebar": "kit/Panels/Settings/Sidebar",
+      "Panes": "kit/Panels/Settings/Panes",
+      "Vim keys": "kit/Panels/Settings/Vim keys",
+      "Moving along the strip": "kit/Panels/Settings/Moving along the strip",
+      "Capture": "kit/Panels/Settings/Key, capture",
+      "Changed": "kit/Panels/Settings/Key, changed",
+      "Conflict armed": "kit/Panels/Settings/Key, taken",
+      "Family capture": "kit/Panels/Settings/Numbered keys, capture",
+      "Invalid family": "kit/Panels/Settings/Numbered keys, no digit",
+      "Memory, while its panel has the keyboard": "kit/Panels/Settings/Spend, Preview, Memory",
+      "Preview, while it has the keyboard": "kit/Panels/Settings/Spend, Preview, Memory",
+      "Spend, while its panel has the keyboard": "kit/Panels/Settings/Spend, Preview, Memory",
+      "Unbound": "kit/Panels/Settings/Key, unbound",
+      "Write failed": "kit/Panels/Settings/Key, not saved"
     }
   },
   "settings/ReleaseControls": {
     "page": "Panels/Settings",
     "states": {
-      "Cached": "panels/settings/ReleaseControls/Cached",
-      "Checking": "panels/settings/ReleaseControls/Checking",
-      "Checks off": "panels/settings/ReleaseControls/Checks off",
-      "Current": "panels/settings/ReleaseControls/Current",
-      "Early": "panels/settings/ReleaseControls/Early",
-      "Installing": "panels/settings/ReleaseControls/Installing",
-      "Loading": "panels/settings/ReleaseControls/Loading",
-      "Read failed": "panels/settings/ReleaseControls/Read failed",
-      "Stable": "panels/settings/ReleaseControls/Stable",
-      "Update ready": "panels/settings/ReleaseControls/Update ready"
+      "Cached": "kit/Panels/Settings/GitHub not answering",
+      "Checking": "kit/Panels/Settings/Checking",
+      "Checks off": "kit/Panels/Settings/Checks off",
+      "Current": "kit/Panels/Settings/Up to date",
+      "Early": "kit/Panels/Settings/Dawn Mode",
+      "Installing": "kit/Panels/Settings/Updating",
+      "Loading": "kit/Panels/Settings/First read",
+      "Read failed": "kit/Panels/Settings/Nothing kept",
+      "Stable": "kit/Panels/Settings/Back on Stable Mode",
+      "Update ready": "kit/Panels/Settings/A newer release"
     }
   },
   "settings/CreditsLoading": {
     "page": "Panels/Settings",
     "states": {
-      "Avatars pending": "panels/settings/CreditsLoading/Avatars pending",
-      "Avatars unavailable": "panels/settings/CreditsLoading/Avatars unavailable"
+      "Avatars pending": "kit/Panels/Settings/Credits",
+      "Avatars unavailable": "kit/Panels/Settings/Credits"
     }
   },
   "markdown-panel/MarkdownFiles": {
@@ -859,5 +859,17 @@
       "Child terminal": "kit/Pane menu/A terminal from a conversation",
       "Program menu": "kit/Pane menu/Right-clicks to the program"
     }
+  },
+  "help/Help": {
+    "page": "Panels/Settings",
+    "states": {
+      "Keys": "kit/Panels/Settings/Keys",
+      "Keyboard focus": "kit/Panels/Settings/Keys",
+      "Dōjō invitation": "kit/Panels/Settings/Vim keys"
+    }
+  },
+  "help/Guide": {
+    "page": "Panels/Settings",
+    "states": {}
   }
 }

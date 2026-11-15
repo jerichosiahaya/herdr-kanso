@@ -97,7 +97,7 @@ export function structureErrors(files, catalog, template) {
 }
 
 // Compositions only call pieces and never treat them as strings, so the app can share the file as it is.
-export function compositionErrors(source, path = 'stories/kit/compositions.js') {
+export function compositionErrors(source, path = 'stories/kit/compositions.js', allowed = ['./kit.js']) {
   const code = source.replace(/^\s*\/\/.*$/gm, '');
   const bare = code.replace(/'(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"/g, 'text');
   const imports = [...code.matchAll(/\bfrom\s*(['"])([^'"]*)\1/g)].map((match) => match[2]);
@@ -109,7 +109,7 @@ export function compositionErrors(source, path = 'stories/kit/compositions.js') 
     [/\.join\(/.test(bare), 'join'],
     [/''|""/.test(code), 'empty string as nothing'],
     [/\+|\.concat\(|\bString\(|\.toString\(/.test(bare), 'pieces added as strings'],
-    [imports.some((from) => from !== './kit.js') || /\bimport\s*(?:\(|['"])|\brequire\s*\(/.test(code), 'import from outside the pieces'],
+    [imports.some((from) => !allowed.includes(from)) || /\bimport\s*(?:\(|['"])|\brequire\s*\(/.test(code), 'import from outside the pieces'],
   ];
   return rules.filter(([found]) => found).map(([, rule]) => `${path}: ${rule} in a composition`);
 }
@@ -120,6 +120,7 @@ export function lint(root = '.') {
   if (readFileSync(join(root, 'stories/GAPS.md'), 'utf8') !== gapDocument(expand(catalog))) errors.push('GAPS.md: feature inventory differs from component pages');
   const read = (file) => readFileSync(join(root, file), 'utf8');
   errors.push(...compositionErrors(read('stories/kit/compositions.js')));
+  errors.push(...compositionErrors(read('stories/kit/panels.js'), 'stories/kit/panels.js', ['./kit.js', './compositions.js']));
   const [, canvas, docs] = /frame\.className = [^?]+\? '([^']+)' : '([^']+)'/.exec(read('.storybook/preview.js')) ?? [];
   const classes = [
     ['.storybook/preview.js', `${canvas ?? ''} ${docs ?? ''}`.split(/\s+/).filter(Boolean)],
