@@ -185,20 +185,20 @@
   "panel/Images": {
     "page": "Panels/Images",
     "states": {
-      "Loading": "panels/images/ImagesLoadingThePicturePinnedToOneAgent/Default",
-      "No agent": "panels/images/ImagesNoAgentInFocus/Default",
-      "No pictures": "panels/images/ImagesEmpty/Default",
-      "Deferred": "panels/images/ImagesAnotherComputerNotBroughtOverYet/Default",
-      "Pinned": "panels/images/ImagesLoadingThePicturePinnedToOneAgent/Default",
-      "Kept annotations": "panels/images/ImagesTwoNotesReadyToSend/Default",
-      "Sent": "panels/images/ImagesItsAgentWaitsOnYouSent/Default",
-      "Blocked": "panels/images/ImagesItsAgentWaitsOnYouSent/Default",
-      "Read failed": "panels/images/ImagesAReadFailed/Default",
-      "Stale": "panels/images/ImagesAnotherComputerUnreachable/Default",
-      "Sending": "panels/images/ImagesSending/Default",
-      "Send failed": "panels/images/ImagesSendfailed/Default",
-      "No conversation": "panels/images/ImagesNoconversation/Default",
-      "Wrong file type": "panels/images/ImagesWrongfiletype/Default"
+      "Loading": "kit/Panels/Images/Loading the picture",
+      "No agent": "kit/Panels/Images/No agent in focus",
+      "No pictures": "kit/Panels/Images/No pictures in this conversation",
+      "Deferred": "kit/Panels/Images/Another computer: not brought over yet",
+      "Pinned": "kit/Panels/Images/Kept to checkout",
+      "Kept annotations": "kit/Panels/Images/At rest: two notes, ready to send",
+      "Sent": "kit/Panels/Images/Sent",
+      "Blocked": "kit/Panels/Images/Its agent waits on you",
+      "Read failed": "kit/Panels/Images/A read failed",
+      "Stale": "kit/Panels/Images/Another computer, unreachable",
+      "Sending": "kit/Panels/Images/Sending",
+      "Send failed": "kit/Panels/Images/Not sent",
+      "No conversation": "kit/Panels/Images/No conversation",
+      "Wrong file type": "kit/Panels/Images/Not a picture"
     }
   },
   "panel/Ports": {

@@ -10,6 +10,13 @@ export const panelGuidelines = {
     ['Seijaku', 'States where the list starts.', 'The first read is the skeleton with how many sessions are read; still reading says how far. Nothing in the period is the empty state. A read that fails is the Failure block; a refresh that fails keeps the last numbers under it. A plan not read says so under its row. Several computers sum here, a line each; one not answering says when it was read.'],
     ['Kokō', 'Shares only totals.', 'The header’s Share says Totals and days only, and only while nothing is filtered or opened.'],
   ],
+  'Panels/Images': [
+    ['Kansō', 'The picture, its pins, Send.', 'The picture the agent in focus wrote fills the width with its pins; a row a note under it, then Send to the agent with ⌘↩. No pins, no Send. The count of pictures sits under the title.'],
+    ['Kokō', 'The rest with the pointer.', 'On the picture: its file, folder and time with Open, then the strip of the others; ← → move through them. Keep to this agent and Refresh in the header; the lock stays while it keeps.'],
+    ['Kokō', 'One pin everywhere.', 'The same pins as Preview and the Simulator: a click drops a numbered pin, a drag rings a region, the note is typed beside it; × on a row’s hover removes one.'],
+    ['Seijaku', 'States where the picture starts.', 'Loading is the picture’s breathing shape. On another computer a picture waits for Load with its size; unreachable keeps the last one, stepped down. A refused read is the Failure block. No pictures, no conversation and no agent in focus are one quiet line. A dropped file that is no picture says so under the last picture.'],
+    ['Seijaku', 'Send says what happened.', 'Sending… until hc answers; sent, when it went; refused, hc’s words with Send again and the pins kept. An agent that waits on you gets no Send: Go to it.'],
+  ],
   'Panels/Share': [
     ['Kansō', 'One menu everywhere.', 'The Share icon in a panel’s header, only when there is something to share. Open, its first line says what leaves: Counts and sizes only in Ports and Memory, Totals and days only in Spend, Totals only in Worktrees, Totals only, no names in Shipped, Scores and practice days only in the dōjō. Then Post to X, LinkedIn or Bluesky, and Save image.'],
     ['Seijaku', 'The image is made here.', 'The row pressed says Making the image… and the others wait; nothing leaves the computer until a row is pressed.'],
@@ -130,6 +137,63 @@ const changedOnDisk = {
 };
 
 export const panelHypotheses = {
+  'Panels/Images': [
+    {
+      change: 'The title is Images with the count of pictures; the agent is named on Send, the folder comes with the pointer.',
+      today: 'the agent’s program and name as the title, its folder and the time of the read under it.',
+      why: 'whose pictures these are, at a glance.',
+      question: 'does someone look up for the agent, or at Send?',
+      believe: 'at Send; it names the agent the pins go to, and the folder is a pointer away.',
+      jobs: [['whose pictures', 'Send to checkout'], ['where they are', 'the file row with the pointer'], ['how many', '1 of 3']],
+      wrong: 'someone sends to the wrong agent.',
+      try: 'Dawn Mode first.',
+      back: 'the agent returns as the title.',
+    },
+    {
+      change: 'The coloured dots become a strip of thumbnails with the pointer on the picture; ← → move through them.',
+      today: 'a row of dots under the picture, one per picture, the shown one filled with its colour.',
+      why: 'every picture one click away.',
+      question: 'does someone pick a picture by its colour, or by what it shows?',
+      believe: 'by what it shows; the strip is there the moment the pointer is on the picture.',
+      jobs: [['another picture', 'the strip, or ← →'], ['how many', 'the count under the title']],
+      wrong: 'someone hunts for the strip to change pictures.',
+      try: 'Dawn Mode first.',
+      back: 'the dots return under the picture.',
+    },
+    {
+      change: 'The bar at the foot goes: Send to the agent under the notes, the file and Open with the pointer, a pin removed by its ×.',
+      today: 'a bar of the file’s path, Pin a spot, Send with ⌘↩, Open and Clear N pins.',
+      why: 'every act on one line.',
+      question: 'which of them is pressed after pinning?',
+      believe: 'Send; Open belongs to the file, and pins go one at a time more often than all at once.',
+      jobs: [['send', 'Send to checkout, ⌘↩'], ['open the file', 'the file row'], ['drop a pin', 'its ×'], ['how to start', 'a click on the picture']],
+      wrong: 'someone removes pins one by one to start over.',
+      try: 'Dawn Mode first.',
+      back: 'the bar returns with Clear N pins.',
+    },
+    {
+      change: 'A pin’s note is typed beside it on the picture.',
+      today: 'a click drops a pin and opens a dialog asking what about this spot.',
+      why: 'a dialog gives the note room.',
+      question: 'does someone look at the spot while writing about it?',
+      believe: 'yes; the note beside the pin keeps both in view, as in Preview and the Simulator.',
+      jobs: [['write a note', 'beside its pin'], ['edit it', 'a click on its row']],
+      wrong: 'notes get shorter than they were in the dialog.',
+      try: 'Dawn Mode first.',
+      back: 'the dialog returns.',
+    },
+    {
+      change: 'An agent waiting on you gets no Send, and Go to it in its place.',
+      today: 'Send refuses with a red line naming the agent that needs you first.',
+      why: 'say why it did not send.',
+      question: 'what does someone do after that line?',
+      believe: 'go to the agent; one press does it, and the pins wait.',
+      jobs: [['why no Send', 'the line'], ['answer the agent', 'Go to it'], ['the pins', 'kept']],
+      wrong: 'someone wants to send anyway.',
+      try: 'Dawn Mode first.',
+      back: 'Send returns and refuses.',
+    },
+  ],
   'Panels/Share': [
     {
       change: 'Share is a menu from the header whose first line says what leaves.',

@@ -1,5 +1,5 @@
 // Compose retained panel features from the shared kit.
-import { elements, frame as free } from './storybook-markup.mjs';
+import { frame as free } from './storybook-markup.mjs';
 import { panel, panelBack, panelClose, panelHeader, panelRefresh } from '../stories/kit/compositions.js';
 
 const esc = (s) => s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
@@ -43,11 +43,6 @@ export function panelStateRecords(records) {
   ]) put('Compositions/Notifications', 'Update Notice', state, toast(failed, `kansō was not updated: ${why}`, '<button type="button" class="kanso-button kanso-button--tonal">Update</button>'), behavior, notice);
   const ports = find('panels/ports/PortsAtRestNow/Default');
   if (ports) put('Panels/Ports', 'Ports', 'Not attributed', ports.replace(/(?:<\/div>){4}$/, (end) => blocked('Some servers cannot be attributed', 'Working directories require a Herdr API on Windows.') + end), 'Where working directories cannot be read, servers are still listed and can be stopped; the panel says why they have no project.', 'The panel: header, rows and the failure block.');
-  const pinned = find('panels/images/ImagesTwoNotesReadyToSend/Default');
-  if (pinned) {
-    const one = swap(swap(pinned, '<span class="kanso-annotation" style="left:30%;top:88%">2</span>', ''), elements(pinned, 'kanso-panel__annotation')[1], '');
-    put('Panels/Images', 'Images', 'One pin, no session to send to', swap(one, '<div class="kanso-actions"><span class="kanso-button kanso-button--solid">Send to checkout</span><span class="kanso-button kanso-button--quiet">Open</span><span class="kanso-button kanso-button--quiet">Clear 2 pins</span></div>', refused('No agent to send to') + actions(primary('Send'), button('Open'), button('Clear the pin'))), 'Send with no session in focus says so and keeps the pin; Clear the pin removes it.', 'The panel: picture, pin list, the note line and the action row.');
-  }
   const dojo = find('proto/layouts-hjkl-dojo/HjklDojo/Default');
   if (dojo) put('Panels/Dojo', 'Practice Feedback', 'sqlite3 missing', swap(dojo, 'Make a move to start: 10 targets, in as few moves as you can.', 'Install sqlite3 to keep your rounds.'), 'Without sqlite3 the dōjō plays, and the line under Hachi says rounds are not kept.', 'The dōjō: path, board, feedback line and keyboard.');
   const pr = find('panels/pr/PRDetailsDetailsOpen/Default');

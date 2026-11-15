@@ -1,5 +1,5 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, device, deviceScreen, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, explainButton, sentence, well, delta, heatmap, shareCard } from './kit.js';
+import { band, bars, button, chord, device, deviceScreen, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, explainButton, sentence, well, delta, heatmap, shareCard, thumbnail } from './kit.js';
 import { channelSettings, keyboardExplorer, newWorktree, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
@@ -512,14 +512,15 @@ const pinSend = ({ agent = null, sent = null, open = null, refused = null, sendi
   return line(button({ label: sending ? 'Sending…' : sendLabel(agent), size: 'sm', spin: sending, disabled: sending }), keyHint({ text: '⌘↩', faint: true }));
 };
 const pinNotes = ({ pins, send }) => list(pins.map(pinRow), pinSend(send));
+const pictureFile = ({ name, folder }) => row({ name, detail: folder, action: { label: 'Open', kind: 'quiet' } });
 // Where the pins sit: a device's frame, frozen while pinning, or a picture in Images with its file under it.
 const pinTools = {
   device: ({ frozen, reading = false }) => [button({ label: 'Pin', kind: 'icon', icon: 'lu-map-pin', active: frozen }), button({ label: 'Device', kind: 'icon', icon: 'lu-smartphone' }), panelRefresh({ reading })],
-  picture: () => [button({ label: 'Keep to this agent', kind: 'icon', icon: 'lu-lock' }), panelRefresh()],
+  picture: ({ kept = false, reading = false }) => [button({ label: 'Keep to this agent', kind: 'icon', icon: 'lu-lock', active: kept }), panelRefresh({ reading })],
 };
 const pinGround = {
   device: ({ screen, pins = [], ...look }) => device({ ...look, pins: pinMarks(pins) }, deviceScreen(screen)),
-  picture: ({ image, file, pins }) => list(picture({ image, pins: pinMarks(pins) }), row({ name: file.name, detail: file.folder, action: { label: 'Open', kind: 'quiet' } })),
+  picture: ({ image, file, pins }) => list(picture({ image, pins: pinMarks(pins) }), pictureFile(file)),
 };
 const agentChoice = ({ name, project }) => ({ label: name, icon: 'p-claude', hint: project });
 const pinPicker = (agents) => (agents ? menu({ title: 'Send to', items: agents.map(agentChoice) }) : null);
@@ -638,3 +639,19 @@ export const sharing = ({ title, tools, leaves, open = false, making = null, not
   const beside = list(open ? shareMenu({ leaves, making }) : null, said ? notice(said) : null, card ? shareCard(card) : null);
   return withBeside(sharer({ title, tools, open }), beside ? stack({ variant: 'column' }, beside) : null);
 };
+
+// Images: the picture the agent in focus wrote, its pins and their notes, Send to the agent; its file and the others with the pointer on it.
+const shotStrip = (image, shots) => stack({ variant: 'line' }, shots.map((shot) => thumbnail({ image, ...shot })));
+const shownPicture = ({ image, file, pins, shots, pointer }) => list(picture({ image, pins: pinMarks(pins) }), pointer ? pictureFile(file) : null, pointer ? shotStrip(image, shots) : null);
+// `held` is a picture on another computer, brought over by Load; `wrong` a file dropped that is no picture.
+const imagesView = ({ held = null, loading = false, failure = null, wrong = null, ...shown }) => {
+  if (failure) return failureBlock(failure);
+  if (held) return picture({ state: 'held', action: held });
+  if (loading) return picture({ state: 'loading' });
+  return list(shownPicture(shown), wrong ? sentence({ text: wrong, tone: 'blocked' }) : null);
+};
+const imagesNotes = ({ pins, send, agents }) => (pins.length || send.sent || send.refused ? list(pinPicker(agents), pinNotes({ pins, send })) : null);
+// `scope` is the count of pictures, the agent, or the stale line; `kept` keeps the panel on one agent; `empty` is no agent or no pictures.
+export const images = ({ scope = null, kept = false, reading = false, stale = false, look = 'panel', empty = null, pins = [], send = {}, agents = null, ...shown }) => panel({ look, stale, header: panelHeader({
+  title: 'Images', second: scope, tools: pinTools.picture({ kept, reading: reading || stale }),
+}) }, empty ? emptyState(empty) : list(imagesView({ pins, ...shown }), imagesNotes({ pins, send, agents })));

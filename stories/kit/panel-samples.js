@@ -702,3 +702,20 @@ export const sampleSimulator = {
   },
   empty: { icon: 'lu-smartphone', text: 'No devices' },
 };
+
+// Images: what checkout wrote in acme-shop, the first of three pictures; the pins are Preview's on the same picture.
+export const sampleImages = {
+  count: '1 of 3', agent: 'checkout',
+  shots: [{ label: 'cart-countdown.png', selected: true }, { label: 'cart-old.png' }, { label: 'checkout-429.png' }],
+  file: { name: 'cart-countdown.png', folder: '~/acme-shop/shots · 14:06' },
+  held: { scope: 'migrate on devbox', action: 'Load 2.4 MB' },
+  offline: 'Read 14:02 · devbox unreachable · next try 14:07',
+  wrong: 'Images shows pictures: ~/acme-shop/notes.txt',
+  waiting: { text: 'cart-ui needs you first', fix: 'Go to cart-ui' },
+  sent: 'Sent to checkout 14:06',
+  notSent: { text: 'Not sent', source: 'hc send: checkout is not running', fix: 'Send', agent: 'checkout' },
+  failure: { text: 'Can’t show cart-old.png', source: 'sips: cart-old.png is not a picture', fix: 'Refresh', agent: 'checkout' },
+  empty: { icon: 'lu-eye', text: 'No pictures in this conversation' },
+  noAgent: { icon: 'lu-monitor', text: 'No agent in focus' },
+  noConversation: { icon: 'lu-eye', text: 'No conversation to read pictures from' },
+};

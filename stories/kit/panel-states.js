@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel, shipped, sharing, simulator } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel, shipped, sharing, simulator, images } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer, sampleScreens, sampleShot } from './samples.js';
-import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleShipped, sampleShippedCard, sampleShippedNotices, sampleShare, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins, sampleSimulator } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleShipped, sampleShippedCard, sampleShippedNotices, sampleShare, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins, sampleSimulator, sampleImages } from './panel-samples.js';
 
 // A notice's state: the panel at rest with the notice beside it.
 const noticesOf = (notices, draw) => Object.fromEntries(Object.entries(notices).map(([name, said]) => [phrase('Notice:', name), [draw({ notice: said }), 'On screen a toast; away, the computer’s notification with the same words.']]));
@@ -574,6 +574,30 @@ const simulatorViews = {
   'Narrow, 300: the device scales': [onIphone({ look: 'narrow', narrow: true, screen: { ...sampleScreens.ios, lines: narrowLines } }), 'The device scales down with the panel.'],
 };
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Shipped': [shippedViews, shipped], 'Panels/Share': [shareViews, sharing], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel], 'Panels/Simulator': [simulatorViews, simulator] };
+// Images: the first of checkout's three pictures with Preview's two pins; each state is what the pointer, a pin, Send or a read changes.
+const onPicture = (extra) => ({ scope: sampleImages.count, image: sampleShot, file: sampleImages.file, shots: sampleImages.shots, pins: placedPins, send: { agent: sampleImages.agent }, ...extra });
+const agentOnly = { scope: sampleImages.agent };
+export const imagesViews = {
+  'At rest: two notes, ready to send': [onPicture({}), 'The picture with its pins, a row a note, Send to checkout with ⌘↩; the count beside the title.'],
+  'Pointer on the picture': [onPicture({ pointer: true }), 'Its file, folder and time with Open, then the strip of the others; ← → too.'],
+  'A new pin: its note typed beside it': [onPicture({ pins }), 'A click drops a pin, a drag rings a region; the note is typed beside it.'],
+  'No pins yet': [onPicture({ pins: [] }), 'Nothing under the picture: no pins, no Send.'],
+  'Kept to checkout': [onPicture({ kept: true }), 'The lock stays while the panel keeps to this agent; the pane in focus no longer moves it.'],
+  'Sending': [onPicture({ send: { sending: true } }), 'Sending… until hc answers; the pins stay.'],
+  'Sent': [onPicture({ pins: [], send: { sent: sampleImages.sent } }), 'The pins were the message; when it went stays under the picture.'],
+  'Not sent': [onPicture({ send: { refused: sampleImages.notSent } }), 'hc’s words, the pins kept, and Send again.'],
+  'Its agent waits on you': [onPicture({ send: { refused: sampleImages.waiting } }), 'No Send while the agent needs you; Go to it.'],
+  'No agent in front: the picker': [onPicture({ pins: placedPins.slice(0, 1), send: {}, agents: samplePins.agents }), 'Send to… opens the agents to pick from; the pin stays.'],
+  'Not a picture': [onPicture({ wrong: sampleImages.wrong }), 'The last picture stays; one line says what was dropped.'],
+  'Loading the picture': [{ ...agentOnly, kept: true, reading: true, loading: true }, 'The picture’s shape breathes; Refresh spins.'],
+  'Another computer: not brought over yet': [{ scope: sampleImages.held.scope, held: sampleImages.held.action }, 'Nothing is brought over until Load, with its size.'],
+  'Another computer, unreachable': [onPicture({ scope: sampleImages.offline, stale: true }), 'The last picture stays, stepped down, with when it tries again.'],
+  'A read failed': [{ ...agentOnly, failure: sampleImages.failure }, 'The tool’s words, Refresh, and Explain.'],
+  'No pictures in this conversation': [{ ...agentOnly, empty: sampleImages.empty }, 'One quiet line.'],
+  'No conversation': [{ ...agentOnly, empty: sampleImages.noConversation }, 'The agent has written no conversation yet.'],
+  'No agent in focus': [{ empty: sampleImages.noAgent }, 'One quiet line.'],
+  'Narrow, 300': [onPicture({ look: 'narrow' }), 'The picture fits; the notes wrap.'],
+};
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Shipped': [shippedViews, shipped], 'Panels/Share': [shareViews, sharing], 'Panels/Images': [imagesViews, images], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel], 'Panels/Simulator': [simulatorViews, simulator] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

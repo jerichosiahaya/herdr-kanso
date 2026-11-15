@@ -2457,24 +2457,7 @@
         "The armed Stop is accent on accent_foreground in both themes."
       ],
       "records": [
-        "proto/approved-panels-b-light/Reference/1",
-        "panels/images/ImagesItsAgentWaitsOnYouSent/Default",
-        "panels/images/ImagesAnotherComputerNotBroughtOverYet/Default",
-        "panels/images/ImagesTwoNotesReadyToSend/Default",
-        "panels/images/ImagesLoadingThePicturePinnedToOneAgent/Default",
-        "panels/images/ImagesNoAgentInFocus/Default",
-        "panels/images/ImagesNoconversation/Default",
-        "panels/images/ImagesEmpty/Default",
-        "panels/images/ImagesAReadFailed/Default",
-        "panels/images/ImagesSendfailed/Default",
-        "panels/images/ImagesSending/Default",
-        "panels/images/ImagesAnotherComputerUnreachable/Default",
-        "panels/images/ImagesWrongfiletype/Default",
-        "panels/images/ImagesANewPinItsNoteTypedBesideIt/Default",
-        "panels/images/ImagesAtRestNow/Default",
-        "panels/images/ImagesAtRestNowLight/Default",
-        "panels/images/ImagesNarrow300/Default",
-        "panels/images/ImagesPointerOnThePicture/Default"
+        "proto/approved-panels-b-light/Reference/1"
       ],
       "components": [
         "Panels/Containers",
@@ -3445,24 +3428,7 @@
         "Cost: locally, one stat per change check, a read only when changed. Remote: one stat per check with backoff, the file list on change; a picture moves only on Load. Thumbnails come from copies already made."
       ],
       "records": [
-        "proto/approved-panels-b-images/Reference/1",
-        "panels/images/ImagesItsAgentWaitsOnYouSent/Default",
-        "panels/images/ImagesAnotherComputerNotBroughtOverYet/Default",
-        "panels/images/ImagesTwoNotesReadyToSend/Default",
-        "panels/images/ImagesLoadingThePicturePinnedToOneAgent/Default",
-        "panels/images/ImagesNoAgentInFocus/Default",
-        "panels/images/ImagesNoconversation/Default",
-        "panels/images/ImagesEmpty/Default",
-        "panels/images/ImagesAReadFailed/Default",
-        "panels/images/ImagesSendfailed/Default",
-        "panels/images/ImagesSending/Default",
-        "panels/images/ImagesAnotherComputerUnreachable/Default",
-        "panels/images/ImagesWrongfiletype/Default",
-        "panels/images/ImagesANewPinItsNoteTypedBesideIt/Default",
-        "panels/images/ImagesAtRestNow/Default",
-        "panels/images/ImagesAtRestNowLight/Default",
-        "panels/images/ImagesNarrow300/Default",
-        "panels/images/ImagesPointerOnThePicture/Default"
+        "proto/approved-panels-b-images/Reference/1"
       ],
       "components": [
         "Panels/Images"
@@ -3493,24 +3459,7 @@
       ],
       "records": [
         "proto/approved-subtract-images/Reference/1",
-        "proto/approved-subtract-images/Reference/2",
-        "panels/images/ImagesItsAgentWaitsOnYouSent/Default",
-        "panels/images/ImagesAnotherComputerNotBroughtOverYet/Default",
-        "panels/images/ImagesTwoNotesReadyToSend/Default",
-        "panels/images/ImagesLoadingThePicturePinnedToOneAgent/Default",
-        "panels/images/ImagesNoAgentInFocus/Default",
-        "panels/images/ImagesNoconversation/Default",
-        "panels/images/ImagesEmpty/Default",
-        "panels/images/ImagesAReadFailed/Default",
-        "panels/images/ImagesSendfailed/Default",
-        "panels/images/ImagesSending/Default",
-        "panels/images/ImagesAnotherComputerUnreachable/Default",
-        "panels/images/ImagesWrongfiletype/Default",
-        "panels/images/ImagesANewPinItsNoteTypedBesideIt/Default",
-        "panels/images/ImagesAtRestNow/Default",
-        "panels/images/ImagesAtRestNowLight/Default",
-        "panels/images/ImagesNarrow300/Default",
-        "panels/images/ImagesPointerOnThePicture/Default"
+        "proto/approved-subtract-images/Reference/2"
       ],
       "components": [
         "Panels/Images"
