@@ -1,16 +1,15 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, paneFolds, paneHeader, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, pickedKey, shortcutRow, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, asleep, paneFolds, paneHeader, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, pickedKey, shortcutRow, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycap, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, needsItem, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, statusItem, stepper, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
-import { keyLayer, keyLayerMods, sampleNotices, sampleSidebar, statusMenus, statusPanels } from './samples.js';
-
+import { atWidth, barWidths, inBar } from './frames.js';
+import { appNotices, keyLayer, keyLayerMods, sampleNotices, sampleSidebar, statusMenus, statusPanels } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
 
 const inSidebar = (markup) => stack({ variant: 'sidebar frame' }, markup), inRail = (markup) => stack({ variant: 'rail frame' }, markup);
 const select = (name, options) => ({ name, control: { type: 'select' }, options });
-const inBar = (width, parts) => `<div class="kanso-story__bar" style="width:${width}px">${statusBar(parts)}</div>`;
 
 // One layer control per computer, each labelled the way that computer writes its modifiers.
 const pickable = keyNames().filter((key) => !['ctrl', 'alt', 'shift', 'cmd'].includes(key));
@@ -173,18 +172,19 @@ export const playgrounds = {
       + `<p class="kanso-story__caption">Settings · Updates</p><div class="kanso-story__slice kanso-story__settings">${channelSettings({ channel, art })}</div>`,
   },
   'Compositions/Notifications': {
-    args: { state: 'failed', home: 'agent', text: 'Can\'t reach devbox', act: 'Refresh', detail: 'ssh: connect to host devbox port 22: Connection refused', place: 'window on screen', stacked: 1 },
+    args: { example: 'your own', state: 'failed', home: 'agent', text: 'Can\'t reach devbox', act: 'Refresh', detail: 'ssh: connect to host devbox port 22: Connection refused', place: 'window on screen', stacked: 1 },
     argTypes: {
-      state: select('state', noticeStates),
-      home: select('home', noticeHomes),
-      text: { name: 'sentence', control: { type: 'text' } },
-      act: { name: 'word to act', control: { type: 'text' } },
-      detail: { name: 'detail', control: { type: 'text' } },
+      example: select('a notice the app sends', ['your own', ...Object.keys(appNotices)]),
+      state: { ...select('state', noticeStates), if: { arg: 'example', eq: 'your own' } },
+      home: { ...select('home', noticeHomes), if: { arg: 'example', eq: 'your own' } },
+      text: { name: 'sentence', control: { type: 'text' }, if: { arg: 'example', eq: 'your own' } },
+      act: { name: 'word to act', control: { type: 'text' }, if: { arg: 'example', eq: 'your own' } },
+      detail: { name: 'detail', control: { type: 'text' }, if: { arg: 'example', eq: 'your own' } },
       place: { name: 'where you are', control: { type: 'inline-radio' }, options: noticePlaces },
       stacked: { name: 'on screen', control: { type: 'inline-radio' }, options: [1, 2, 3], if: { arg: 'place', eq: 'window on screen' } },
     },
-    markup: ({ stacked, place, act, detail, ...args }) => {
-      const item = { ...args, act: act || null, detail: detail || null, place };
+    markup: ({ example, stacked, place, act, detail, ...args }) => {
+      const item = example === 'your own' ? { ...args, act: act || null, detail: detail || null, place } : { act: null, detail: null, ...appNotices[example], place };
       const sent = systemMessage(item);
       if (sent) return `<p class="kanso-story__caption">Sent to the computer's notifications</p><p class="kanso-story__caption">Title: ${escape(sent.title)}</p>${sent.body ? `<p class="kanso-story__caption">Text: ${escape(sent.body)}</p>` : ''}`;
       if (place !== 'window on screen') return '<p class="kanso-story__caption">Not sent: its home is on screen.</p>';
@@ -192,13 +192,14 @@ export const playgrounds = {
     },
   },
   'Compositions/Pane header': {
-    args: { program: 'p-claude', name: 'checkout', state: 'working', focused: true, hover: false, menu: false, pinned: false, zoomed: false, reach: 'here', held: false, armed: false, renaming: false,
+    args: { program: 'p-claude', name: 'checkout', state: 'working', focused: true, keyboard: false, hover: false, menu: false, pinned: false, zoomed: false, reach: 'here', held: false, armed: false, renaming: false,
       elsewhere: false, files: 3, commits: 2, pr: 'test / unit failed', github: true, fold: 0 },
     argTypes: {
       program: select('program', ['p-claude', 'p-codex', 'lu-terminal']),
       name: { name: 'name', control: { type: 'text' } },
       state: select('state', paneStates),
       focused: { name: 'focused', control: { type: 'boolean' } },
+      keyboard: { name: 'focus from the keyboard', control: { type: 'boolean' } },
       hover: { name: 'pointer on it', control: { type: 'boolean' } },
       menu: { name: '⋯ open', control: { type: 'boolean' } },
       pinned: { name: 'pinned', control: { type: 'boolean' } },
@@ -375,7 +376,7 @@ export const playgrounds = {
   'Compositions/Status bar': {
     args: { width: 1040, computer: false, paused: false, stepper: false, needs: true, memory: false, panels: false, open: 'none' },
     argTypes: {
-      width: { name: 'width', control: { type: 'inline-radio' }, options: [1200, 1040, 760, 520] },
+      width: { name: 'width', control: { type: 'inline-radio' }, options: barWidths },
       computer: { name: 'computer', control: { type: 'boolean' } },
       paused: { name: 'layout paused', control: { type: 'boolean' } },
       stepper: { name: 'stepper hovered', control: { type: 'boolean' }, if: { arg: 'paused', truthy: false } },
@@ -440,7 +441,7 @@ export const playgrounds = {
   'Compositions/Tab bar': {
     args: { width: 1040, value: 'checkout', panel: 'none', state: 'connected', folded: 0, overflow: false, windows: false },
     argTypes: {
-      width: { name: 'width', control: { type: 'inline-radio' }, options: [1040, 760, 520] },
+      width: { name: 'width', control: { type: 'inline-radio' }, options: barWidths.slice(1) },
       value: { name: 'chosen tab', control: { type: 'inline-radio' }, options: ['checkout', 'cart-ui', 'tests'] },
       panel: select('open door', ['none', ...panelDoors.map((item) => item.key)]),
       state: { name: 'computer', control: { type: 'inline-radio' }, options: tabBarStates },
@@ -448,10 +449,10 @@ export const playgrounds = {
       overflow: { name: 'folded menu open', control: { type: 'boolean' }, if: { arg: 'folded' } },
       windows: { name: 'Windows and Linux', control: { type: 'boolean' } },
     },
-    markup: ({ width, value, panel, folded, ...args }) => `<div class="kanso-story__bar" style="width:${width}px">${tabBar({
+    markup: ({ width, value, panel, folded, ...args }) => atWidth(width, tabBar({
       ...args, value, panel, items: [{ key: 'checkout', label: 'checkout' }, { key: 'cart-ui', label: 'cart-ui', mark: value === 'cart-ui' ? '' : 'blocked' }, { key: 'tests', label: 'tests' }],
       folded: ['perf', 'web', 'e2e', 'storybook', 'seed-data'].slice(0, folded).map((label) => ({ label })),
-    })}</div>`,
+    })),
   },
   'Compositions/Edges': {
     args: { side: 'right', panes: 3, stacked: false, drop: false, waiting: 'none', overflow: false },

@@ -1,8 +1,9 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
-import { asleep, computerItem, computerRow, edge, header, layoutPaused, projectRow, section, sessionRow, sidebarFooter, statusBar, stepperMenu, tabBar, tile, toolbar, viewSwitch } from '../stories/kit/compositions.js';
-import { dawn as dawnSky, needsItem, stack, statusItem, stepper, windowControls } from '../stories/kit/pieces.js';
-import { sampleSidebar, statusMenus, statusPanels } from '../stories/kit/samples.js';
+import { asleep, pickedKey, shortcutRow, computerItem, computerRow, edge, header, layoutPaused, projectRow, section, sessionRow, sidebarFooter, stepperMenu, tabBar, tile, toolbar, viewSwitch } from '../stories/kit/compositions.js';
+import { dawn as dawnSky, keycap, needsItem, stack, statusItem, stepper, windowControls } from '../stories/kit/pieces.js';
+import { keyLayer, keyLayerMods, sampleSidebar, statusMenus, statusPanels } from '../stories/kit/samples.js';
+import { atWidth, inBar, inStrip } from '../stories/kit/frames.js';
 export { elements } from './storybook-markup.mjs';
 
 export function kitRecords(records) {
@@ -88,7 +89,12 @@ export function kitRecords(records) {
     ['Sidebar', 'Status collapsed', sampleSidebar({ collapsed: true, view: 'agents' }), 'The rail on Status.', 'kit/Rail/Collapsed'],
     ['Sidebar', 'Views menu', sampleSidebar({ collapsed: true, menu: true }), 'The rail: its one view button opens Projects, Status and Threads.'],
   ]) results.push({ id: id ?? `kit/${page}/${label}`, source: 'kit', page: page === 'Sidebar' ? 'Compositions/Sidebar' : `Compositions/Sidebar/${page}`, label, html: frame(html), caption });
-  const inBar = (width, parts) => `<div class="kanso-story__bar" style="width:${width}px">${statusBar(parts)}</div>`;
+  // The keyboard's subpages are their playgrounds; one record each gives the page its file.
+  for (const [page, label, html, caption] of [
+    ['Key', 'kansō key', stack({ variant: 'keyboard' }, stack({ variant: 'keyboard row' }, keycap({ label: 'H', state: 'kanso' }))), 'A key that does a kansō action.'],
+    ['Picked key', 'Default', `<div class="kanso-story__slice kanso-story__settings">${pickedKey({ os: 'mac', layer: keyLayer('mac', keyLayerMods.mac[0]), picked: 'h' })}</div>`, 'What the picked key does here, and its act.'],
+    ['Shortcut row', 'Rest', `<div class="kanso-story__slice kanso-story__settings">${shortcutRow({ name: 'Pin the pane', chords: ['⌥⌘P'] })}</div>`, 'One action and its keys.'],
+  ]) results.push({ id: `kit/Keyboard/${page}/${label}`, source: 'kit', page: `Compositions/Keyboard/${page}`, label, html: frame(html), caption });
   const full = (width, parts = {}) => inBar(width, { middle: stepper(), ...parts });
   const waiting = needsItem({ name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?', more: 1 });
   const memory = (word) => statusItem({ text: word ? 'Memory 8% free' : '8% free', tone: 'blocked' });
@@ -119,7 +125,7 @@ export function kitRecords(records) {
     ['Status bar', 'Everything, 760', full(760, { right: [waiting, memory(false)] }), 'Servers, containers and reviews give way.'],
     ['Status bar', 'Everything, 520', full(520, { right: [needsItem({ name: 'cart-ui', more: 1 }), memory(false)] }), 'The question is gone.'],
   ]) results.push({ id: `kit/Status bar/${page === 'Status bar' ? '' : `${page}/`}${label}`, source: 'kit', page: page === 'Status bar' ? 'Compositions/Status bar' : `Compositions/Status bar/${page}`, label, html: frame(html), caption });
-  const strip = (width, left, right) => `<div class="kanso-story__strip" style="width:${width}px">${left || '<span></span>'}${right ?? ''}</div>`;
+  const strip = (width, left, right) => inStrip(width, `${left || '<span></span>'}${right ?? ''}`);
   const pane = (name, program = 'p-claude') => [{ name, program }];
   for (const [label, html, caption] of [
     ['One left, three right', strip(1040, edge({ side: 'left', columns: [pane('api', 'p-codex')] }), edge({ columns: [pane('cart-ui'), pane('docs'), pane('web', 'lu-terminal')] })), 'A tile per pane past each side; a click goes there, the name is its tooltip. No state dots.'],
@@ -129,7 +135,7 @@ export function kitRecords(records) {
   ]) results.push({ id: `kit/Edges/${label}`, source: 'kit', page: 'Compositions/Edges', label, html: frame(html), caption });
   const project = [{ key: 'checkout', label: 'checkout' }, { key: 'cart-ui', label: 'cart-ui', mark: 'blocked' }, { key: 'tests', label: 'tests' }, { key: 'perf', label: 'perf' }, { key: 'web', label: 'web' }];
   const only = (key, change) => project.map((item) => item.key === key ? { ...item, ...change } : item);
-  const bar = (width, options) => `<div class="kanso-story__bar" style="width:${width}px">${tabBar({ items: project, value: 'checkout', ...options })}</div>`;
+  const bar = (width, options) => atWidth(width, tabBar({ items: project, value: 'checkout', ...options }));
   const folded = [{ label: 'perf' }, { label: 'web' }, { label: 'e2e', mark: 'blocked' }, { label: 'storybook' }, { label: 'seed-data' }];
   for (const [label, html, caption] of [
     ['At rest', bar(1040), 'Only a tab out of view whose session waits carries a mark; none for working or finished. Closed doors paint nothing.'],

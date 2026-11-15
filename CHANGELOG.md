@@ -31,12 +31,10 @@ the branch's rules.
 ### Changed
 
 - Each mod carries only the pieces of the panel kit it uses, so a change to one piece reaches only the mods that draw it. (#276)
-- Every Storybook page shows one status, Ready, In review, Proposal or Old look, at its top and as a sidebar filter tag, and its names carry no internal codes.
-- Storybook draws the keyboard for Mac, Windows and Linux from kansō's own keys, with each key, a picked key and a shortcut row in every state; notifications from what happened and where you are; and the pane header in every state, with its ⋯ menu under its button. Design changes carry a hypothesis written from today's app.
+- Storybook draws the keyboard for Mac, Windows and Linux from kansō's own keys; notifications from what happened, where it belongs and where you are, with every notice the app sends today; and the pane header, status bar, edges, tab bar and activity from their states, each with every state by name. Dawn Mode's sky keeps its dawn colours in the light theme, and design changes carry a hypothesis written from today's app.
 - The Containers panel asks Docker only what can have changed: the container list every 5 seconds, their details when it changes, images, volumes and disk use once a minute, after an action and when a container appears or goes, and Docker's memory limit and context when the panel opens or comes forward, on Read again, when Docker comes back and when another context is chosen. About a quarter as many processes while it is open. (#263)
 - Draw the missing Worktrees, Preview, Markdown and Simulator feature states in Storybook.
 - Draw the missing Share, Shipped, Containers, Ports, Find, Images and Files states in Storybook.
-- Draw the remaining missing states in Storybook: arrangements from other projects, the Save and Overwrite headings, what an update did to your keys and layout, the Windows update failures, servers that cannot be attributed, a missing sqlite3, a pull request's files cut off, and a pin with no agent to send to.
 - Give Dawn Mode its own Storybook page, and show the Dawn Mode pill on the sidebar.
 - The Storybook link in the site's navigation opens in a new tab.
 - The window's title bar shows only the window controls.
@@ -46,7 +44,6 @@ the branch's rules.
 - Issue forms ask for steps to reproduce, test cases, acceptance criteria and what ready and done mean.
 - Storybook icons draw the exact Lucide shapes, and its checks run in under a second.
 - Storybook pages say what each piece is in one sentence and keep only the rules a drawing cannot show; its notes for contributors are one short guide.
-- Storybook opens on one Start page: why the kit exists, links to its reference pages, and the seven principles kansō follows.
 - Sidebar rows match their designs: an open project or computer shows no chevron, and folded it shows its most urgent mark and how many; a click on the current project folds it, and the count unfolds it. (#230)
 - A project shows + and the menu under the pointer, a detached checkout shows its commit, and a kept project with a missing folder says Not found with Locate. (#230)
 - The behind and ahead counts say what a press does: pull from the upstream, or open the PR panel. (#230)

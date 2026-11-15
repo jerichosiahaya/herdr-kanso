@@ -66,6 +66,25 @@ export const keyLayer = (os = 'mac', mods = 'alt cmd') => {
   return { held, lists, name: lists ? 'Every list and menu · j k gg G Enter /' : null, keys };
 };
 
+// Every notice the app sends today, each as a state, a home and its words; the Notifications story offers them by name.
+const updated = (detail) => ({ state: 'done', home: 'update', text: 'kansō updated to 3.31.0', detail });
+const notUpdated = (detail) => ({ state: 'failed', home: 'update', text: 'kansō was not updated', act: 'Update', detail });
+export const appNotices = {
+  'Update available': { state: 'fact', home: 'update', text: 'kansō 3.31.0 is available', act: 'Update' },
+  'Already updating': { state: 'fact', home: 'update', text: 'kansō is already being updated' },
+  'Up to date': { state: 'fact', home: 'update', text: 'kansō is up to date' },
+  Updated: updated(null),
+  'Updated, keys updated': updated('kansō\'s keys updated.'),
+  'Updated, kept your keys': updated('kansō\'s keys updated. Kept your own cmd-d, cmd-shift-w.'),
+  'Updated, keys.json unreadable': updated('Your keys.json could not be read, so kansō\'s keys were left as they are.'),
+  'Updated, new layout': updated('New layout; the one you had is in layouts/kanso.json.old-*.'),
+  'Check failed': { state: 'failed', home: 'update', text: 'GitHub could not be reached', act: 'Refresh' },
+  'Install failed': notUpdated('permission denied'),
+  'Install failed, Windows tool missing': notUpdated('curl.exe is not on PATH; nothing was downloaded another way'),
+  'Install failed, Windows folder not moved': notUpdated('could not put kanso-tabs in place: C:\\Users\\you\\AppData\\Roaming\\herdr-app\\mods\\kanso-tabs'),
+  'Out of memory': { state: 'failed', home: 'memory', text: 'Herdr\'s mod runtime is out of memory', act: 'Restart' },
+};
+
 // Two notices already on screen when the story adds one.
 export const sampleNotices = [
   { state: 'done', home: 'agent', text: 'docs finished: Added docs/limits.md and the table' },

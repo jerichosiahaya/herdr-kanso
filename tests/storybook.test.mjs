@@ -135,3 +135,52 @@ test("The kit's Mac keyboard matches the app's Help, and every keyboard has the 
   const keysOf = (rows) => [...new Set(rows.flat().map(([key]) => key))].toSorted();
   for (const os of ["windows", "linux"]) assert.deepEqual(keysOf(keyboards[os].rows), keysOf(ROWS), os);
 });
+
+test("A notice is a toast only while a kansō window is on screen, and goes to the computer only when you are away", async () => {
+  const { notice, systemMessage } = await import("../stories/kit/compositions.js");
+  const item = { state: "failed", home: "update", text: "kansō was not updated", act: "Update", detail: "permission denied" };
+  assert.equal(notice({ ...item, place: "home in view" }), null);
+  assert.equal(notice({ ...item, place: "away" }), null);
+  assert.match(notice({ ...item, place: "window on screen" }), /kansō was not updated/);
+  assert.equal(systemMessage({ ...item, place: "window on screen" }), null);
+  assert.deepEqual(systemMessage({ ...item, place: "away" }), { title: "kansō was not updated", body: "permission denied" });
+});
+
+test("Every notice the app sends today is a state and a home the notifications know", async () => {
+  const { notice, noticeHomes, noticeStates } = await import("../stories/kit/compositions.js");
+  const { appNotices } = await import("../stories/kit/samples.js");
+  for (const [name, item] of Object.entries(appNotices)) {
+    assert.ok(noticeStates.includes(item.state), name);
+    assert.ok(noticeHomes.includes(item.home), name);
+    assert.match(notice(item), /kanso-toast/, name);
+  }
+});
+
+test("The pane header folds its facts in the order the fold list names, and ⋯ takes the tools that fold", async () => {
+  const { paneFolds, paneHeader, paneMenu } = await import("../stories/kit/compositions.js");
+  const place = { folder: "checkout-v2", branch: "limits-table" };
+  const at = (step) => paneHeader({ name: "checkout", place, hover: true, fold: paneFolds.indexOf(step) });
+  assert.match(at("nothing"), /checkout-v2/);
+  assert.doesNotMatch(at("folder"), /checkout-v2/);
+  assert.match(at("folder"), /limits-table/);
+  assert.doesNotMatch(at("branch"), /limits-table/);
+  assert.match(at("branch"), /Split right/);
+  assert.doesNotMatch(at("tools into ⋯"), /Split right/);
+  assert.doesNotMatch(paneMenu({ name: "checkout", fold: paneFolds.indexOf("branch") }), /Split right/);
+  assert.match(paneMenu({ name: "checkout", fold: paneFolds.indexOf("tools into ⋯") }), /Split right/);
+});
+
+test("A shortcut row at rest draws without a taken key", async () => {
+  const { shortcutRow } = await import("../stories/kit/compositions.js");
+  assert.match(shortcutRow({ name: "Pin the pane", chords: ["⌥⌘P"] }), /⌥⌘P/);
+});
+
+test("Every hypothesis fills the whole template, and each job names where it goes", async () => {
+  const { hypotheses } = await import("../stories/kit/hypotheses.js");
+  const fields = ["change", "today", "why", "question", "believe", "wrong", "try", "back"];
+  for (const [page, list] of Object.entries(hypotheses)) for (const item of list) {
+    for (const field of fields) assert.ok(typeof item[field] === "string" && item[field].trim(), `${page}: ${item.change ?? "?"} has no ${field}`);
+    assert.ok(Array.isArray(item.jobs) && item.jobs.length > 0, `${page}: ${item.change} has no jobs`);
+    for (const job of item.jobs) assert.ok(job.length === 2 && job.every((part) => typeof part === "string" && part.trim()), `${page}: ${item.change} has a job without a home`);
+  }
+});

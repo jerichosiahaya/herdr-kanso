@@ -15,6 +15,8 @@ export const guidelines = {
   ],
   "Tokens/Type": [
     ["Fukinsei", "Hierarchy.", "Six roles, each with one size, weight and tone. Display 48 regular, the one number. Title 20 strong. Section 15 strong. Group 13.5 strong. Name 13.5 medium. Body 12.5 regular, with controls at 12.5 medium. Meta 11.5 regular in muted or dim. Size and weight tell the level; colour comes last."],
+    ["Fukinsei", "Dim is the floor:", "foreground, muted, dim; dim passes 3:1 on its ground."],
+    ["Seijaku", "One line never wraps.", "A one-line text ends in an ellipsis when it does not fit. Never a cut, never a second line."],
   ],
   "Tokens/Spacing": [
     ["Seijaku", "Space.", "Use the 4-based scale only: 2, 4, 8, 12, 16, 24, 32. The same relation always gets the same gap. Icon to label is 8. Control to control is 8. Rows touch. Groups and fields are 12 apart. Panel padding is 16. Nothing is glued and nothing floats."],
@@ -152,6 +154,7 @@ export const guidelines = {
     ["Seijaku", "What it is, then what changed.", "The program, the name, the folder and branch only when they differ from the tab's project, the files with their lines, the commits not on GitHub, the pull request with its verdict word in its colour. Each opens its home."],
     ["Kokō", "Four tools under the pointer.", "Split right, wider or narrower, close and ⋯. Close asks twice when an agent is in the pane. A focused agent that finished or idles keeps Sleep and Send out. The rest is in ⋯, with the piece lines."],
     ["Shizen", "The header is the handle.", "Drag it to move the pane; a click focuses it; double-click renames it in place. GitHub not answering is the failure line in place of the pull request."],
+    ["Kansō", "A terminal is a pane too.", "A pane with no agent shows the terminal icon and its command, or Terminal when it has no project, with no digest. Focus moved by the keyboard adds the accent ring around the header."],
     ["Kansō", "Narrow, it folds in order.", "Folder, branch, the tools into ⋯ (close stays), commits, files, the verdict word, the pull request, then close; the name truncates last. The program and the mark never fold; a folded fact stays in the pull request's tooltip."],
   ],
   "Compositions/Keyboard": [
@@ -175,7 +178,7 @@ export const guidelines = {
     ["Kokō", "One act.", "kansō's key: Change. Herdr's key: Herdr settings. A free key: Give it an action. The list keys are fixed and have none."],
   ],
   "Compositions/Activity": [
-    ["Kansō", "Only what nothing in view says.", "A merge, an approval, a red check out of view, an agent that slept or could not, an agent whose pane is gone. Nothing new takes no space."],
+    ["Kansō", "Only what nothing in view says.", "A merge, an approval, a red check out of view, an agent that slept or could not, an agent whose pane is gone with its last words as the second line. Nothing new takes no space."],
     ["Seijaku", "Docked at the foot of the list.", "A raised card 12 above the footer; no row moves when it comes or goes."],
     ["Kansō", "Built from the kit.", "The title is a heading Row with × to dismiss all; each event is a Row: its icon in the state colour, the subject, the fact muted, a detail as the second line, the age. Four rows, then +N more."],
     ["Kokō", "A click opens the thing and drops the row.", "× dismisses all. Right-click: Dismiss these, then the piece lines; Hide this is the sidebar's While you were away switch."],

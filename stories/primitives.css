@@ -229,7 +229,7 @@
 .kanso-tabs__tab--icon .kanso-tabs__dot{position:absolute;top:1px;right:1px;width:6px;height:6px}
 .kanso-tabs__close{color:var(--dim)}
 .kanso-tabs__label{min-width:0;overflow:hidden;text-overflow:ellipsis}
-.kanso-tabs__insertion{display:block;flex:none;width:2px;height:var(--k-h-badge);border-radius:var(--k-r-sm);background:var(--accent)}
+.kanso-tabs__insertion{display:block;flex:none;width:var(--k-sp-hair);height:var(--k-h-badge);border-radius:var(--k-r-sm);background:var(--accent)}
 .kanso-tabs__close:is(:hover,.kanso-control--hover){color:var(--fg)}
 .kanso-markdown{margin-top:var(--k-sp-3);font-size:var(--k-fs-name);line-height:var(--k-lh-body);color:var(--fg)}
 .kanso-markdown .kanso-markdown__heading{font-size:var(--k-fs-title);font-weight:var(--k-fw-strong);letter-spacing:-.01em;margin:0 0 var(--k-sp-2)}

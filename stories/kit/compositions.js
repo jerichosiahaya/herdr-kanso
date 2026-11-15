@@ -151,7 +151,8 @@ export const keyboardSystems = Object.keys(keyboards);
 const named = (os, key) => Object.hasOwn(keyboards[os].caps, key);
 const capOf = (os, key) => named(os, key) ? keyboards[os].caps[key] : key.toUpperCase();
 export const keyNames = (os = 'mac') => [...new Set(keyboards[os].rows.flat().map(([key]) => key))];
-export const heldChord = ({ os = 'mac', held = [] }) => chord(keyboards[os].join, ...modifierKeys.filter((mod) => held.includes(mod)).map((mod) => capOf(os, mod)));
+// The held modifiers, then any key, as that computer writes a chord.
+export const heldChord = ({ os = 'mac', held = [], key = null }) => chord(keyboards[os].join, ...modifierKeys.filter((mod) => held.includes(mod)).map((mod) => capOf(os, mod)), ...(key ? [capOf(os, key)] : []));
 
 // Keyboard: the map of one layer. Holding or clicking a modifier picks the layer; a kansō key has ink, a Herdr key is quieter.
 const keyState = { kanso: 'kanso', list: 'kanso', herdr: 'herdr', free: 'free' };
@@ -162,7 +163,7 @@ export const keyboard = ({ os = 'mac', layer, picked = null, hover = null }) => 
 // The picked key: what it does here, or Nothing, with its one act; Lists opens the layer of every list and menu.
 const pickedChord = ({ os, layer, picked }) => layer.keys[picked]?.chord
   ? phrase(...layer.keys[picked].chord.map((part) => named(os, part) ? keyboards[os].caps[part] : part))
-  : chord(keyboards[os].join, ...modifierKeys.filter((mod) => layer.held.includes(mod)).map((mod) => capOf(os, mod)), capOf(os, picked));
+  : heldChord({ os, held: layer.held, key: picked });
 const layerLine = ({ os, layer }) => layer.lists ? layer.name
   : phrase(heldChord({ os, held: layer.held }), '·', Object.keys(layer.keys).length, Object.keys(layer.keys).length === 1 ? 'key' : 'keys');
 export const pickedKey = ({ os = 'mac', layer, picked }) => keyPicked({ chord: pickedChord({ os, layer, picked }), meaning: layer.keys[picked]?.does ?? null,
@@ -172,11 +173,12 @@ export const keyboardExplorer = ({ os = 'mac', layer, picked, hover = null }) =>
 
 // Shortcut row: what a key does and its chords. A click captures on the row; Reset brings back what kansō ships.
 export const shortcutRowStates = ['rest', 'selected', 'changed', 'unbound', 'capture', 'taken', 'failed'];
+// Each state's keys, built only for that state: a row at rest needs no taken chord.
 const shortcutKeys = ({ chords, state, taken }) => ({
-  unbound: [{ text: 'No key', faint: true }],
-  capture: chords.length ? chords.map((text) => ({ text, recording: true })) : [{ text: 'New key', recording: true }],
-  taken: [{ text: taken.chord, recording: true }],
-}[state] ?? chords.map((text) => ({ text })));
+  unbound: () => [{ text: 'No key', faint: true }],
+  capture: () => chords.length ? chords.map((text) => ({ text, recording: true })) : [{ text: 'New key', recording: true }],
+  taken: () => [{ text: taken.chord, recording: true }],
+}[state] ?? (() => chords.map((text) => ({ text }))))();
 export const shortcutRow = ({ name, chords = [], state = 'rest', taken = null, hover = false, source = null, agent = null }) => list(
   row({ name, hover, current: ['selected', 'capture', 'taken'].includes(state), keys: shortcutKeys({ chords, state, taken }),
     meta: state === 'capture' ? 'Esc keeps · ⌫ removes' : null,
@@ -203,31 +205,34 @@ export const toastStack = ({ notices = [], max = 3 }) => stack({ variant: 'toast
 // Pane header: the program, the name, the place when it differs from the tab's, what changed, then the tools and the state's mark.
 // Each look is a state: focus is the ground; blocked is the wash and the mark; a pin after the name; the header itself drags.
 export const paneStates = ['none', 'working', 'blocked', 'done', 'idle'];
+export const paneNameLimit = 40;
 export const paneReaches = ['here', 'remote', 'unreachable'];
 export const paneFolds = ['nothing', 'folder', 'branch', 'tools into ⋯', 'commits', 'files', 'verdict word', 'PR', 'close into ⋯'];
+// A step of paneFolds is shown until the pane folds that far; the order lives only in paneFolds.
+const shown = (fold, step) => fold < paneFolds.indexOf(step);
 const paneMarks = { working: 'working', blocked: 'blocked', done: 'done' };
 const paneTool = (icon, label) => button({ label, kind: 'icon', size: 'sm', icon });
 const counted = (count, one, many) => phrase(count, count === 1 ? one : many);
 const paneDigest = ({ files = 0, add = 0, del = 0, commits = 0, pr = null, failure = null }, fold, working) => stack({ variant: 'pane digest' },
-  files && fold < 5 ? headerSegment({ act: true, tone: working ? 'dim' : null, title: 'Open the diff', parts: [{ text: counted(files, 'file', 'files') }, { text: diffText({ add, del }), tone: 'dim' }] }) : null,
-  commits && fold < 4 ? headerSegment({ act: true, tone: working ? 'dim' : null, title: phrase(counted(commits, 'commit', 'commits'), 'not on GitHub'), parts: [{ text: counted(commits, 'commit', 'commits') }] }) : null,
+  files && shown(fold, 'files') ? headerSegment({ act: true, tone: working ? 'dim' : null, title: 'Open the diff', parts: [{ text: counted(files, 'file', 'files') }, { text: diffText({ add, del }), tone: 'dim' }] }) : null,
+  commits && shown(fold, 'commits') ? headerSegment({ act: true, tone: working ? 'dim' : null, title: phrase(counted(commits, 'commit', 'commits'), 'not on GitHub'), parts: [{ text: counted(commits, 'commit', 'commits') }] }) : null,
   pr && failure ? failureLine({ text: phrase('Can\'t read', pr.number), fix: 'Refresh', detail: failure }) : null,
-  pr && !failure && fold < 7 ? headerSegment({ act: true, parts: [{ text: pr.number, tone: 'muted' }, fold < 6 && pr.verdict ? { text: phrase('·', pr.verdict), tone: pr.tone } : null],
-    title: facts(fold < 4 || !commits ? null : counted(commits, 'commit', 'commits'), fold < 5 || !files ? null : counted(files, 'file', 'files'), pr.verdict) }) : null);
+  pr && !failure && shown(fold, 'PR') ? headerSegment({ act: true, parts: [{ text: pr.number, tone: 'muted' }, shown(fold, 'verdict word') && pr.verdict ? { text: phrase('·', pr.verdict), tone: pr.tone } : null],
+    title: facts(shown(fold, 'commits') || !commits ? null : counted(commits, 'commit', 'commits'), shown(fold, 'files') || !files ? null : counted(files, 'file', 'files'), pr.verdict) }) : null);
 // Under the pointer: split right, wider or narrower, close and ⋯. A focused agent that finished or idles keeps Sleep and Send out; otherwise they are in ⋯, and a blocked one has no Send.
 const restsOut = ({ state, focused }) => focused && ['done', 'idle'].includes(state);
 // ⋯ opens its Menu under itself, right-aligned to it; while it is open the tools stay out.
 const paneTools = ({ name, state, focused, hover, armed, fold, more }) => stack({ variant: 'pane tools' },
   restsOut({ state, focused }) ? [paneTool('lu-moon', 'Sleep this agent'), paneTool('lu-send', 'Send to another agent')] : null,
-  hover && fold < 3 ? [paneTool('lu-columns-2', 'Split right'), paneTool('lu-move-horizontal', 'Wider or narrower')] : null,
-  hover && fold < 8 ? button({ label: 'Close', kind: 'icon', size: 'sm', icon: 'lu-x', armed, verb: phrase('close', name) }) : null,
+  hover && shown(fold, 'tools into ⋯') ? [paneTool('lu-columns-2', 'Split right'), paneTool('lu-move-horizontal', 'Wider or narrower')] : null,
+  hover && shown(fold, 'close into ⋯') ? button({ label: 'Close', kind: 'icon', size: 'sm', icon: 'lu-x', armed, verb: phrase('close', name) }) : null,
   hover ? stack({ variant: 'pane more' }, button({ label: 'More', kind: 'icon', size: 'sm', icon: 'lu-ellipsis', active: Boolean(more) }), more ? stack({ variant: 'pane menu' }, more) : null) : null);
-export const paneHeader = ({ program = 'p-claude', name, state = 'none', focused = false, hover = false, pinned = false, zoomed = false, menu: open = false, reach = 'here', held = false, armed = false, renaming = false, place = null, digest = {}, fold = 0 }) => stack(
-  { variant: 'pane header', focus: focused, blocked: state === 'blocked', unreachable: reach === 'unreachable', held },
+export const paneHeader = ({ program = 'p-claude', name, state = 'none', focused = false, keyboard = false, hover = false, pinned = false, zoomed = false, menu: open = false, reach = 'here', held = false, armed = false, renaming = false, place = null, digest = {}, fold = 0 }) => stack(
+  { variant: 'pane header', focus: focused, keyboard, blocked: state === 'blocked', unreachable: reach === 'unreachable', held },
   glyph(program),
-  renaming ? input({ text: name, label: 'Name', inline: true, selected: true, limit: 40 }) : paneName({ name }),
-  place?.folder && fold < 1 ? headerSegment({ icon: 'lu-folder', parts: [{ text: place.folder }] }) : null,
-  place?.branch && fold < 2 ? headerSegment({ icon: 'lu-git-branch', parts: [{ text: place.branch }] }) : null,
+  renaming ? input({ text: name, label: 'Name', inline: true, selected: true, limit: paneNameLimit }) : paneName({ name }),
+  place?.folder && shown(fold, 'folder') ? headerSegment({ icon: 'lu-folder', parts: [{ text: place.folder }] }) : null,
+  place?.branch && shown(fold, 'branch') ? headerSegment({ icon: 'lu-git-branch', parts: [{ text: place.branch }] }) : null,
   paneDigest(digest, fold, state === 'working'),
   pinned ? headerSegment({ icon: 'lu-pin', tone: 'dim', title: 'Pinned' }) : null,
   grow(),
@@ -239,6 +244,6 @@ export const paneMenu = ({ name, state = 'none', focused = false, pinned = false
   ...(state === 'none' || restsOut({ state, focused }) ? [] : [{ icon: 'lu-moon', label: 'Sleep this agent' }]),
   ...(state === 'blocked' || restsOut({ state, focused }) ? [] : [{ icon: 'lu-send', label: 'Send to another agent' }]),
   { icon: 'lu-external-link', label: 'Open with…' }, { icon: 'lu-rows-2', label: 'Split down' }, zoomed ? { icon: 'lu-minimize-2', label: 'Unzoom' } : { icon: 'lu-maximize-2', label: 'Zoom' },
-  ...(fold < 3 ? [] : [{ icon: 'lu-columns-2', label: 'Split right' }, { icon: 'lu-move-horizontal', label: 'Wider or narrower' }]),
-  ...(fold < 8 ? [] : [{ icon: 'lu-x', label: 'Close' }]),
+  ...(shown(fold, 'tools into ⋯') ? [] : [{ icon: 'lu-columns-2', label: 'Split right' }, { icon: 'lu-move-horizontal', label: 'Wider or narrower' }]),
+  ...(shown(fold, 'close into ⋯') ? [] : [{ icon: 'lu-x', label: 'Close' }]),
   ...pieceLines] });
