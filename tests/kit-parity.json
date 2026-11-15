@@ -15,13 +15,11 @@
     "keyPicked",
     "markdown",
     "metric",
-    "needsItem",
     "paneName",
     "plus",
     "setting",
     "skeletonOf",
     "stack",
-    "statusItem",
     "stepper",
     "tabSkeleton",
     "thumbnail",
@@ -37,10 +35,13 @@
   "props": {
     "button": { "storybook": ["label"], "app": ["color", "small", "spoken"] },
     "chip": { "storybook": ["pill"] },
+    "herdrMark": { "storybook": ["id"] },
     "input": { "storybook": ["limit", "loading", "multiline", "selected", "text"], "app": ["iconTip", "onIcon", "spoken"] },
     "keyHint": { "app": ["font"] },
+    "needsItem": { "app": ["onClick", "tip"] },
     "keycap": { "storybook": ["hover", "label", "state", "units"] },
     "row": { "storybook": ["glint"], "app": ["focusHandle", "onClick", "onHover", "onKey"] },
+    "statusItem": { "app": ["onClick", "tip"] },
     "tabs": { "storybook": ["icon", "items", "label", "value"], "app": ["collapsed", "spoken"] },
     "toggle": { "storybook": ["checked"] }
   }

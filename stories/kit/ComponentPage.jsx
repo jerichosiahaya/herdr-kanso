@@ -15,7 +15,7 @@ export function ComponentPage({ of, page }) {
   const states = statesFor(page);
   const name = page.split('/').at(-1);
   const stated = states.length > 1 && !guidelines[page];
-  const description = descriptions[name];
+  const description = descriptions[page] ?? descriptions[name];
   const [copied, setCopied] = useState(false);
   const [query, setQuery] = useState('');
   const visible = states.filter((state) => `${state.label} ${content(state.caption)}`.toLowerCase().includes(query.toLowerCase()));

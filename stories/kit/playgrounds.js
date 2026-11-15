@@ -1,10 +1,10 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, paneFolds, paneHeader, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
+import { activity, activityMenu, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, herdrMark, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, inBar } from './frames.js';
 import { edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, statedPages, stepperShown, tabActs } from './states.js';
-import { appNotices, keyLayer, keyLayerMods, sampleNotices, sampleSidebar, statusMenus } from './samples.js';
+import { appNotices, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -150,10 +150,16 @@ export const playgrounds = {
   },
   'Primitives/Window controls': { args: {}, argTypes: {}, markup: windowControls },
   'Primitives/Dawn': { args: {}, argTypes: {}, markup: () => dawn() },
+  'Primitives/Herdr mark': { args: {}, argTypes: {}, markup: herdrMark },
   'Compositions/Toolbar': {
-    args: { column: false, open: false },
-    argTypes: { column: { name: 'column', control: { type: 'boolean' } }, open: { name: 'open', control: { type: 'boolean' }, if: { arg: 'column' } } },
-    markup: toolbar,
+    ...statedPages['Compositions/Toolbar'],
+    argTypes: {
+      view: { name: 'view', control: { type: 'inline-radio' }, options: views.map((item) => item.key) },
+      column: { name: 'collapsed', control: { type: 'boolean' } },
+      open: { name: 'tools open', control: { type: 'boolean' }, if: { arg: 'column' } },
+      sorted: { name: 'sorted', control: { type: 'boolean' } },
+      menu: { name: 'Sort menu', control: { type: 'boolean' } },
+    },
   },
   'Compositions/Header': {
     args: { collapsed: false, dawn: false, art: true },
@@ -339,15 +345,26 @@ export const playgrounds = {
     },
     markup: sampleSidebar,
   },
-  'Compositions/Panel shell': {
-    ...statedPages['Compositions/Panel shell'],
+  'Compositions/Panel': {
+    ...statedPages['Compositions/Panel'],
     argTypes: {
       title: { name: 'title', control: { type: 'text' } },
       scope: { name: 'scope', control: { type: 'text' } },
+      header: { name: 'header', control: { type: 'inline-radio' }, options: panelHeaderForms },
       state: { name: 'read', control: { type: 'inline-radio' }, options: Object.keys(panelReads) },
       look: { name: 'look', control: { type: 'inline-radio' }, options: panelLooks },
       content: select('body', Object.keys(panelContents)),
       last: { name: 'the last row', control: { type: 'inline-radio' }, options: Object.keys(panelRowLooks) },
+    },
+  },
+  'Compositions/Panel/Header': {
+    ...statedPages['Compositions/Panel/Header'],
+    argTypes: {
+      title: { name: 'title', control: { type: 'text' } },
+      form: { name: 'form', control: { type: 'inline-radio' }, options: panelHeaderForms },
+      start: { name: 'before the title', control: { type: 'inline-radio' }, options: Object.keys(samplePanelHeader.starts) },
+      second: { name: 'second line', control: { type: 'text' } },
+      tools: select('tools', Object.keys(samplePanelHeader.tools)),
     },
   },
   'Compositions/Status bar/Item': {
