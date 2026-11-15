@@ -30,7 +30,7 @@ the branch's rules.
 
 ### Changed
 
-- The panels' kit gains the list row, with its states and its tools under the pointer, and a small icon button for those tools; no list uses it yet. (#278)
+- The panels' kit gains the list row, with its states, its title form and its tools under the pointer, plus the key hint and a small icon button for those tools; no list uses them yet. (#278)
 - Each mod carries only the pieces of the panel kit it uses, so a change to one piece reaches only the mods that draw it. (#276)
 - The Containers panel asks Docker only what can have changed: the container list every 5 seconds, their details when it changes, images, volumes and disk use once a minute, after an action and when a container appears or goes, and Docker's memory limit and context when the panel opens or comes forward, on Read again, when Docker comes back and when another context is chosen. About a quarter as many processes while it is open. (#263)
 - Draw the missing Worktrees, Preview, Markdown and Simulator feature states in Storybook.

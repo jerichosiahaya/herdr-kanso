@@ -199,3 +199,46 @@ test("The row takes its click, hover, keyboard and focus from the caller, and wi
 test("The row's code has no number of pixels: every size comes from the tokens", () => {
   assert.deepEqual(numberArguments("kanso-panel/ui-row.js"), []);
 });
+
+test("The title form is the panel's title line: 40 high, the title size, semibold, and no wash under the pointer or the press", async () => {
+  const { row, tokens, H, T, G } = await kit();
+  const c = tokens(night);
+  const name = (el) => all(el).find((kid) => calls(kid, "child").some((call) => call[1] === "Pull request"));
+  const el = row("r", c, { name: "Pull request", title: true, hover: true });
+  assert.equal(one(el, "h"), H.row);
+  assert.equal(one(name(el), "text_size"), T.page);
+  assert.equal(calls(name(el), "font_semibold").length, 1);
+  for (const style of ["hover", "active", "bg"]) assert.equal(calls(el, style).length, 0, style);
+  const scoped = row("r", c, { name: "Pull request", title: true, second: "kansō · main" });
+  assert.equal(calls(scoped, "h").length, 0, "with its scope line the row grows");
+  assert.equal(calls(scoped, "py").length, 0, "and keeps no padding above and below");
+  assert.equal(one(line(scoped), "h"), H.row);
+  assert.equal(one(byTag(scoped, "v_flex"), "gap"), G.sm);
+});
+
+test("A tone colours the lead icon, and the drawn start comes before it", async () => {
+  const { row, tokens, ICON_ROW } = await kit();
+  const { toneColor } = await load("kanso-panel/ui.js", ["toneColor"], host());
+  const c = tokens(night);
+  const grip = chain("grip");
+  const el = row("r", c, { icon: "circle-alert", tone: "blocked", name: "Build failed", start: [grip] });
+  const [first, icon] = line(el).kids;
+  assert.equal(first, grip);
+  assert.equal(one(icon, "size"), ICON_ROW);
+  assert.equal(one(icon, "text_color"), toneColor(c, "blocked"));
+  assert.equal(one(line(row("r", c, { icon: "file", name: "a.ts" })).kids[0], "text_color"), c.text, "with no tone the icon takes the row's ink");
+});
+
+test("Tools are always shown after the action, and key hints close the right side before the mark", async () => {
+  const { row, tokens } = await kit();
+  const c = tokens(night);
+  const reset = chain("reset");
+  const el = row("r", c, { name: "Next agent", tools: [reset], keys: [{ text: "⌘⇧↓" }, { text: "No key", faint: true }], action: { label: "Change", kind: "quiet" }, mark: "done", meta: "changed" });
+  const kids = line(el).kids;
+  const at = (kid) => kids.indexOf(kid);
+  const hints = kids.filter((kid) => calls(kid, "border_1").length);
+  assert.deepEqual(hints.map((kid) => calls(kid, "child")[0][1]), ["⌘⇧↓", "No key"]);
+  assert.ok(at(byTag(el, "r-action")) < at(reset) && at(reset) < at(hints[0]), "action, tools, then keys");
+  assert.equal(at(hints[1]), kids.length - 2, "the mark stays last");
+  assert.ok(texts(el).includes("changed"), "tools do not hide the meta: only the hover tools do");
+});

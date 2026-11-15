@@ -15,7 +15,7 @@ const LOOKS = {
 };
 
 /** An icon button's square and glyph: sm is a row's tool, compact sits in a field, md everywhere else. */
-export const SQUARES = Object.freeze({
+const SQUARES = Object.freeze({
   sm: Object.freeze({ side: H.badge, glyph: ICON_INLINE }),
   compact: Object.freeze({ side: H.compact, glyph: ICON }),
   md: Object.freeze({ side: H.icon, glyph: ICON }),

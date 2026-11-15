@@ -22,7 +22,7 @@
   "props": {
     "button": { "storybook": ["label"], "app": ["color", "small", "spoken"] },
     "input": { "storybook": ["inline", "limit", "loading", "multiline", "selected", "text"], "app": ["iconTip", "onIcon", "spoken"] },
-    "row": { "storybook": ["glint"], "app": ["focusHandle", "onClick", "onHover", "onKey"] },
+    "row": { "storybook": ["glint"], "app": ["focusHandle", "keys", "onClick", "onHover", "onKey", "start", "title", "tone", "tools"] },
     "tabs": { "storybook": ["icon", "items", "label", "value"], "app": ["collapsed", "spoken"] },
     "toggle": { "storybook": ["checked"] }
   }

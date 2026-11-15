@@ -9,7 +9,7 @@ export const END = "// End of the generated sizes.";
 const PICK = {
   G: { hair: "k-sp-hair", xs: "k-sp-1", sm: "k-sp-2", md: "k-sp-3", lg: "k-sp-4", xl: "k-sp-6" },
   H: { control: "k-h-control", compact: "k-h-compact", icon: "k-h-icon", row: "k-h-header", line: "k-h-row", badge: "k-h-badge" },
-  R: { control: "k-r-control", card: "k-r-card" },
+  R: { sm: "k-r-sm", control: "k-r-control", card: "k-r-card" },
   T: { display: "k-fs-display", page: "k-fs-title", title: "k-fs-section", card: "k-fs-name", value: "k-fs-body", body: "k-fs-meta", mono: "k-fs-mono" },
   ICON: "k-ic-control",
   ICON_ROW: "k-ic-row",
