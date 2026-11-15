@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel, shipped, sharing } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel, shipped, sharing, simulator } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer, sampleScreens, sampleShot } from './samples.js';
-import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleShipped, sampleShippedCard, sampleShippedNotices, sampleShare, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleShipped, sampleShippedCard, sampleShippedNotices, sampleShare, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins, sampleSimulator } from './panel-samples.js';
 
 // A notice's state: the panel at rest with the notice beside it.
 const noticesOf = (notices, draw) => Object.fromEntries(Object.entries(notices).map(([name, said]) => [phrase('Notice:', name), [draw({ notice: said }), 'On screen a toast; away, the computer’s notification with the same words.']]));
@@ -544,6 +544,36 @@ const pinsViews = {
   'Copy to devbox refused': [onDevice(scopes.devbox, iosPins.slice(0, 1), { send: { refused: pinRefusals.copy } }), 'Proposed: the copy’s words, the pins kept, and Send again.'],
 };
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Shipped': [shippedViews, shipped], 'Panels/Share': [shareViews, sharing], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel] };
+// Simulator: iOS and Android on their picture with their buttons, the list behind Device, then each state in the screen's place.
+const { groups: deviceGroups, scopes: simScopes, said: simSaid, touch, narrow: narrowLines, url, failures: simFailures, empty: noDevices } = sampleSimulator;
+const onIphone = (extra = {}) => ({ scope: simScopes.iphone, screen: sampleScreens.ios, controls: 'ios', ...extra });
+const onEmulator = (extra = {}) => ({ scope: simScopes.pixel, screen: sampleScreens.android, controls: 'emulator', ...extra });
+const simulatorViews = {
+  'iOS: the picture': [onIphone(), 'The picked device’s picture fitted to the panel, its buttons and Open in Simulator under it, and a URL to open.'],
+  'Android: touch, keys, the device’s buttons': [onEmulator({ touch }), 'A click is a tap, a drag a swipe; the device’s buttons under it, Rotate and Shut down on an emulator.'],
+  'A connected Android phone': [onEmulator({ controls: 'android' }), 'A phone on the cable has its keys, no Rotate and no Shut down.'],
+  'Keys go to the device': [onEmulator({ focus: true }), 'After a touch, typing, Enter, Backspace and the arrows go to the device.'],
+  'Devices: the list replaces the screen': [{ groups: deviceGroups }, 'Device opens every device by platform, the picked one washed; back returns to its picture.'],
+  'First read': [{ scope: [], reading: true }, 'The skeleton while the tools answer; Refresh spins.'],
+  'No devices': [{ scope: [], empty: noDevices }, 'The tools are here and list nothing.'],
+  Off: [{ scope: simScopes.off, shows: 'off' }, 'The empty frame and Boot.'],
+  Starting: [{ scope: simScopes.starting, shows: 'waiting' }, 'The frame breathes and the scope counts down.'],
+  'Start timed out': [{ scope: simScopes.off, failure: simFailures.start }, 'The Failure block with Start again and Explain.'],
+  'The first frame': [onIphone({ shows: 'waiting' }), 'On, before its first picture: the frame breathes, the buttons are there.'],
+  'The picture stalled': [onEmulator({ scope: simScopes.stalled, state: 'stalled' }), 'The last picture stepped down; the scope says how old it is.'],
+  'No picture from the device': [onIphone({ shows: 'blank' }), 'The device answers without a picture; its buttons stay.'],
+  'A command failed': [{ scope: simScopes.pixel, failure: simFailures.command }, 'The Failure block in the tool’s words, Refresh and Explain.'],
+  'A command running': [onIphone({ acting: 'Appearance dark' }), 'The pressed button spins; the others wait for it.'],
+  'A URL typed': [onIphone({ url }), 'Open a URL comes with the text; Enter does the same.'],
+  'A URL that did not open': [onIphone({ url, failure: simFailures.url }), 'simctl’s words in the Failure block; the URL stays in its field.'],
+  Offline: [{ scope: simScopes.offline, shows: 'still' }, 'A device adb sees but cannot reach says so in the scope; no Boot.'],
+  Unauthorized: [{ scope: simScopes.unauthorized, shows: 'still' }, 'A phone that has not allowed this computer says so in the scope.'],
+  'Emulator missing': [{ scope: simScopes.image, said: [simSaid.noEmulator], shows: 'still' }, 'Without the emulator binary an Android image cannot start: one line, no Boot.'],
+  'Another computer’s project': [onEmulator({ said: [simSaid.remote] }), 'The devices are this computer’s, said once under the header.'],
+  'Can’t read the devices': [{ scope: [], failure: simFailures.read }, 'The Failure block with Refresh.'],
+  'Narrow, 300: the device scales': [onIphone({ look: 'narrow', narrow: true, screen: { ...sampleScreens.ios, lines: narrowLines } }), 'The device scales down with the panel.'],
+};
+
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Shipped': [shippedViews, shipped], 'Panels/Share': [shareViews, sharing], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel], 'Panels/Simulator': [simulatorViews, simulator] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

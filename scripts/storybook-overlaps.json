@@ -417,38 +417,38 @@
   "sim/Devices": {
     "page": "Panels/Simulator",
     "states": {
-      "Loading": "panels/simulator/SimulatorFirstRead/Default",
-      "Off": "panels/simulator/SimulatorOff/Default",
-      "Starting": "panels/simulator/SimulatorBooting/Default",
-      "Booted": "panels/simulator/SimulatorDevicesTheListReplacesTheScreen/Default",
-      "Read failed": "panels/simulator/SimulatorError/Default",
-      "Empty": "panels/simulator/FeatureDevices/Empty",
-      "Emulator binary missing": "panels/simulator/FeatureDevices/Emulator binary missing",
-      "Offline": "panels/simulator/FeatureDevices/Offline",
-      "Remote project": "panels/simulator/FeatureDevices/Remote project",
-      "Start timed out": "panels/simulator/FeatureDevices/Start timed out",
-      "Unauthorized": "panels/simulator/FeatureDevices/Unauthorized"
+      "Loading": "kit/Panels/Simulator/First read",
+      "Off": "kit/Panels/Simulator/Off",
+      "Starting": "kit/Panels/Simulator/Starting",
+      "Booted": "kit/Panels/Simulator/Devices: the list replaces the screen",
+      "Read failed": "kit/Panels/Simulator/Can’t read the devices",
+      "Empty": "kit/Panels/Simulator/No devices",
+      "Emulator binary missing": "kit/Panels/Simulator/Emulator missing",
+      "Offline": "kit/Panels/Simulator/Offline",
+      "Remote project": "kit/Panels/Simulator/Another computer’s project",
+      "Start timed out": "kit/Panels/Simulator/Start timed out",
+      "Unauthorized": "kit/Panels/Simulator/Unauthorized"
     }
   },
   "sim/DeviceControls": {
     "page": "Panels/Simulator",
     "states": {
-      "iOS": "panels/simulator/SimulatorIOSThePicture/Default",
-      "Android device": "panels/simulator/SimulatorAndroidTouchKeysTheDevicesButtons/Default",
-      "Android emulator": "panels/simulator/SimulatorAndroidTouchKeysTheDevicesButtons/Default",
-      "Command failed": "panels/simulator/SimulatorError/Default",
-      "Acting": "panels/simulator/FeatureDeviceControls/Acting",
-      "URL invalid": "panels/simulator/FeatureDeviceControls/URL invalid"
+      "iOS": "kit/Panels/Simulator/iOS: the picture",
+      "Android device": "kit/Panels/Simulator/A connected Android phone",
+      "Android emulator": "kit/Panels/Simulator/Android: touch, keys, the device’s buttons",
+      "Command failed": "kit/Panels/Simulator/A command failed",
+      "Acting": "kit/Panels/Simulator/A command running",
+      "URL invalid": "kit/Panels/Simulator/A URL that did not open"
     }
   },
   "sim/PictureState": {
     "page": "Panels/Simulator",
     "states": {
-      "First frame": "panels/simulator/SimulatorFirstRead/Default",
-      "Stale frame": "panels/simulator/SimulatorThePictureStalled/Default",
-      "Touch": "panels/simulator/SimulatorAndroidTouchKeysTheDevicesButtons/Default",
-      "Key focus": "panels/simulator/FeaturePictureState/Key focus",
-      "No picture": "panels/simulator/FeaturePictureState/No picture"
+      "First frame": "kit/Panels/Simulator/The first frame",
+      "Stale frame": "kit/Panels/Simulator/The picture stalled",
+      "Touch": "kit/Panels/Simulator/Android: touch, keys, the device’s buttons",
+      "Key focus": "kit/Panels/Simulator/Keys go to the device",
+      "No picture": "kit/Panels/Simulator/No picture from the device"
     }
   },
   "spend/Spend": {

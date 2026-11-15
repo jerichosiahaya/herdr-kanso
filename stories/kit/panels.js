@@ -514,17 +514,47 @@ const pinSend = ({ agent = null, sent = null, open = null, refused = null, sendi
 const pinNotes = ({ pins, send }) => list(pins.map(pinRow), pinSend(send));
 // Where the pins sit: a device's frame, frozen while pinning, or a picture in Images with its file under it.
 const pinTools = {
-  device: ({ frozen }) => [button({ label: 'Pin', kind: 'icon', icon: 'lu-map-pin', active: frozen }), button({ label: 'Device', kind: 'icon', icon: 'lu-smartphone' }), panelRefresh()],
+  device: ({ frozen, reading = false }) => [button({ label: 'Pin', kind: 'icon', icon: 'lu-map-pin', active: frozen }), button({ label: 'Device', kind: 'icon', icon: 'lu-smartphone' }), panelRefresh({ reading })],
   picture: () => [button({ label: 'Keep to this agent', kind: 'icon', icon: 'lu-lock' }), panelRefresh()],
 };
 const pinGround = {
-  device: ({ screen, frozen, rotated = false, pins }) => device({ frozen, rotated, pins: pinMarks(pins) }, deviceScreen(screen)),
+  device: ({ screen, pins = [], ...look }) => device({ ...look, pins: pinMarks(pins) }, deviceScreen(screen)),
   picture: ({ image, file, pins }) => list(picture({ image, pins: pinMarks(pins) }), row({ name: file.name, detail: file.folder, action: { label: 'Open', kind: 'quiet' } })),
 };
 const agentChoice = ({ name, project }) => ({ label: name, icon: 'p-claude', hint: project });
 const pinPicker = (agents) => (agents ? menu({ title: 'Send to', items: agents.map(agentChoice) }) : null);
 export const pinPanel = ({ on = 'device', title, scope, frozen = true, pins: placed = [], send = {}, agents = null, ...ground }) => panel({ header: panelHeader({ title, second: scope, tools: pinTools[on]({ frozen }) }) },
   pinGround[on]({ frozen, pins: placed, ...ground }), pinPicker(agents), pinNotes({ pins: placed, send }));
+
+// Simulator: the picked device's picture with its buttons under it; Device swaps the screen for the list, and each state takes the screen's place.
+const deviceKeys = {
+  ios: [['Appearance light', 'lu-sun'], ['Appearance dark', 'lu-moon'], ['Shut down', 'lu-power']],
+  android: [['Back', 'lu-chevron-left'], ['Home', 'lu-house'], ['Recents', 'lu-square'], ['Power', 'lu-lock'], ['Volume up', 'lu-volume-2'], ['Volume down', 'lu-volume-1']],
+  emulator: [['Rotate', 'lu-rotate-ccw'], ['Shut down', 'lu-power']],
+};
+const deviceKey = (acting) => ([label, icon]) => button({ label, kind: 'icon', icon, spin: label === acting, disabled: Boolean(acting) });
+const deviceButtons = (keys, acting) => stack({ variant: 'device tools' }, keys.map(deviceKey(acting)));
+const deviceControls = {
+  ios: ({ acting, url }) => list(deviceButtons(deviceKeys.ios, acting), line(tonalAct('Open in Simulator')), input({ label: 'URL', text: url, action: 'Open a URL' })),
+  android: ({ acting }) => deviceButtons(deviceKeys.android, acting),
+  emulator: ({ acting }) => deviceButtons([...deviceKeys.android, ...deviceKeys.emulator], acting),
+};
+const deviceRow = ({ name, runtime, state, picked = false }) => row({ name, detail: runtime, meta: state, current: picked });
+const deviceGroup = ({ name, devices }) => list(heading(name), devices.map(deviceRow));
+const simScreens = {
+  picture: pinGround.device,
+  off: () => device({ state: 'off' }),
+  waiting: () => device({ state: 'booting' }),
+  blank: () => emptyState({ icon: 'lu-image', text: 'No picture from the device' }),
+  still: () => emptyState({ icon: 'lu-smartphone', text: 'Off' }),
+};
+const simHeader = ({ groups, scope, reading }) => (groups
+  ? panelHeader({ title: 'Devices', tools: [panelBack('Back to the device'), panelRefresh({ reading })] })
+  : panelHeader({ title: 'Simulator', second: scope, tools: pinTools.device({ frozen: false, reading }) }));
+const simBody = ({ groups = null, scope, shows = 'picture', controls = null, acting = null, url, said = [], reading = false, failure = null, empty = null, ...look }) => list(said.map(dimLine),
+  textOr({ reading, failure, empty }, () => (groups ? groups.map(deviceGroup) : simScreens[shows](look))),
+  controls ? deviceControls[controls]({ acting, url }) : null);
+export const simulator = ({ look = 'panel', ...props }) => panel({ look, header: simHeader(props) }, simBody(props));
 
 // Worktrees: what they take on one line with Clean up, then each repository with its rows; a row's fact comes when something is wrong, its words when picked.
 const worktreeVerbs = {

@@ -681,3 +681,24 @@ export const sampleShare = {
     Shipped: sampleShippedCard,
   },
 };
+
+// Simulator: the devices xcrun simctl and adb list, the facts said under the header, and the refusals in their tools' words.
+const simDevice = (name, runtime, state, picked = false) => ({ name, runtime, state, picked });
+export const sampleSimulator = {
+  groups: [
+    { name: 'iOS', devices: [simDevice('iPhone 16 Pro', 'iOS 18.2', 'On', true), simDevice('iPhone SE (3rd generation)', 'iOS 18.2', 'Off'), simDevice('iPad Air 11-inch (M2)', 'iPadOS 18.2', 'Off')] },
+    { name: 'Android', devices: [simDevice('Pixel 8', 'Android 15', 'On'), simDevice('Pixel 4 API 30', 'x86 image on arm', 'Off')] },
+  ],
+  scopes: { iphone: ['iPhone 16 Pro'], pixel: ['Pixel 8'], off: ['iPhone SE', 'off'], starting: ['iPhone SE', 'starting… 42s'], stalled: ['Pixel 8', 'as of 12s ago'], offline: ['Pixel 8', 'offline'], image: ['Pixel 4 API 30', 'off'], unauthorized: ['R58M123', 'unauthorized'] },
+  said: { remote: 'Devices are on this computer.', noEmulator: 'Android SDK emulator binary is missing.' },
+  touch: [72, 41],
+  narrow: [{ label: 'Trail runner', value: '$64' }, { label: 'Socks ×2', value: '$12' }],
+  url: 'acme-shop://checkout',
+  failures: {
+    command: { text: 'Can’t reach Pixel 8', source: 'adb: device \'emulator-5554\' offline', fix: 'Refresh', agent: 'checkout' },
+    start: { text: 'Couldn’t start iPhone SE', source: 'Start timed out.', fix: 'Start', agent: 'checkout' },
+    url: { text: 'Couldn’t open acme-shop://checkout', source: 'simctl openurl: no app is registered for the acme-shop scheme', fix: 'Open a URL', agent: 'checkout' },
+    read: { text: 'Couldn’t read the devices', source: 'Devices did not answer.', fix: 'Refresh' },
+  },
+  empty: { icon: 'lu-smartphone', text: 'No devices' },
+};
