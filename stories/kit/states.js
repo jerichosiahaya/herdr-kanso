@@ -9,15 +9,16 @@ export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${
 
 const question = 'Run pnpm add react-countdown@2.3?';
 export const needsShown = { none: null, question: needsItem({ name: 'cart-ui', question, more: 1 }), folded: needsItem({ name: 'cart-ui', more: 1 }) };
-export const memoryShown = { none: null, word: statusItem({ text: 'Memory 8% free', tone: 'blocked' }), folded: statusItem({ text: '8% free', tone: 'blocked' }) };
+const memoryItem = ({ folded = false, open = false }) => statusItem({ text: folded ? '8% free' : 'Memory 8% free', tone: 'blocked', open });
+export const memoryShown = { none: null, word: memoryItem({}), folded: memoryItem({ folded: true }) };
 export const stepperShown = ['rest', 'hover', 'menu'];
 // Each item the bar can show, in its own half and at its fold.
 export const statusItems = {
-  Computer: ({ state, folded }) => ({ left: [computerItem({ name: 'devbox', state, folded })] }),
+  Computer: ({ state, folded, open }) => ({ left: [computerItem({ name: 'devbox', state, folded, open })] }),
   'Needs you': ({ folded, more }) => ({ right: [needsItem({ name: 'cart-ui', question: folded ? '' : question, more })] }),
-  Memory: ({ folded }) => ({ right: [memoryShown[folded ? 'folded' : 'word']] }),
+  Memory: (args) => ({ right: [memoryItem(args)] }),
   'Servers, containers, reviews': () => ({ right: statusPanels() }),
-  'Working count': () => ({ right: [statusItem({ mark: 'working', text: 3 })] }),
+  'Working count': ({ open }) => ({ right: [statusItem({ mark: 'working', text: 3, open })] }),
   'Command palette': () => ({ right: [paletteDoor()] }),
 };
 // Each item's right-click Menu, as board B10 draws it.
@@ -599,7 +600,7 @@ export const statedPages = {
   },
   'Compositions/Status bar/Item': {
     args: { item: 'Computer', state: 'on', folded: false, more: 1, menu: false },
-    markup: ({ item, menu: open, ...args }) => withPopup(760, { ...statusItems[item](args), popup: open ? statusItemMenus[item]?.() : null }),
+    markup: ({ item, menu: open, ...args }) => withPopup(760, { ...statusItems[item]({ ...args, open }), popup: open ? statusItemMenus[item]?.() : null }),
     states: [
       { label: 'Computer', args: {}, caption: 'Only while its sidebar row is out of sight.' },
       { label: 'Computer folded', args: { folded: true }, caption: 'The computer becomes its icon.' },

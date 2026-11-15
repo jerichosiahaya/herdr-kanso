@@ -158,9 +158,9 @@ export const sleepDialog = ({ title, facts: lines = [], rows = [], reading = fal
 // Status bar compositions: a computer stands in for its sidebar row; the rest are the bar's Menus and Buttons.
 export const computerItemStates = ['on', 'unreachable', 'pending'];
 // Unreachable is said in words with Refresh; folded, the name gives way to its icon.
-export const computerItem = ({ name, remote = true, state = 'on', folded = false }) => state === 'unreachable'
+export const computerItem = ({ name, remote = true, state = 'on', folded = false, open = false }) => state === 'unreachable'
   ? failureLine({ text: phrase("Can't reach", name), fix: 'Refresh', detail: phrase('ssh: connect to host', name, 'port 22: Operation timed out') })
-  : statusItem({ icon: remote ? 'lu-server' : 'lu-monitor', text: folded ? null : name, pending: state === 'pending' });
+  : statusItem({ icon: remote ? 'lu-server' : 'lu-monitor', text: folded ? null : name, pending: state === 'pending', open });
 
 // A piece's right-click Menu: its own acts, then the piece lines; a piece shown only when it has something drops Only when needed.
 const pieceLinesFor = (needed) => pieceLines.filter(({ label }) => needed || label !== 'Only when needed');
