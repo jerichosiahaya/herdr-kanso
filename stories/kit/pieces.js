@@ -258,6 +258,7 @@ export const stacks = {
   toolbar: { block: 'kanso-toolbar', states: ['column'] },
   'toolbar group': { block: 'kanso-toolbar__group', states: ['open'] },
   'toolbar sort': { block: 'kanso-toolbar__sort', tag: 'span', states: ['sorted'] },
+  'toolbar add': { block: 'kanso-toolbar__add', tag: 'span' },
   'toolbar menu': { block: 'kanso-toolbar__menu', tag: 'span' },
   header: { block: 'kanso-header', states: ['collapsed'] },
   'header title': { block: 'kanso-header__title' },

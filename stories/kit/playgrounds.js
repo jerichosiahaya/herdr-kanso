@@ -158,6 +158,7 @@ export const playgrounds = {
       open: { name: 'tools open', control: { type: 'boolean' }, if: { arg: 'column' } },
       sorted: { name: 'sorted', control: { type: 'boolean' } },
       menu: { name: 'Sort menu', control: { type: 'boolean' } },
+      add: { name: '+ menu', control: { type: 'boolean' } },
     },
   },
   'Compositions/Header': {

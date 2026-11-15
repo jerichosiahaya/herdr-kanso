@@ -77,7 +77,7 @@ export function kitRecords(records) {
     ['View switch', 'Column', inRail(viewSwitch({ column: true })), 'Sidebar collapsed: the three views as icons.'],
     ['Tile', 'Project', inRail(tile({ initial: 'A', status: 'blocked', count: 4, open: true })), 'A project in the rail.'],
     ['Tile', 'Status', inRail(tile({ status: 'working', count: 3 })), 'A state in the rail.'],
-    ['Footer', 'Default', inSidebar(sidebarFooter()), 'Settings and Add computer.'],
+    ['Footer', 'Default', inSidebar(sidebarFooter()), 'Settings.'],
     ['Footer', 'Update', inSidebar(sidebarFooter({ update: 'Update kansō to 3.31.0' })), 'An update adds a row on top.'],
     ['Sidebar', 'Open', sampleSidebar(), 'Header, views, rows and footer.'],
     ['Sidebar', 'Collapsed', sampleSidebar({ collapsed: true }), 'The rail.'],
