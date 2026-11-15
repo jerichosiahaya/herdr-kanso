@@ -12,14 +12,12 @@
     "failureBlock",
     "failureLine",
     "glyph",
-    "keyHint",
     "keyPicked",
     "markdown",
     "metric",
     "needsItem",
     "paneName",
     "plus",
-    "row",
     "setting",
     "skeletonOf",
     "stack",
@@ -37,10 +35,12 @@
     "toggle": "toggleSwitch"
   },
   "props": {
-    "button": { "storybook": ["label", "size"], "app": ["color", "small", "spoken"] },
+    "button": { "storybook": ["label"], "app": ["color", "small", "spoken"] },
     "chip": { "storybook": ["pill"] },
     "input": { "storybook": ["limit", "loading", "multiline", "selected", "text"], "app": ["iconTip", "onIcon", "spoken"] },
+    "keyHint": { "app": ["font"] },
     "keycap": { "storybook": ["hover", "label", "state", "units"] },
+    "row": { "storybook": ["glint"], "app": ["focusHandle", "onClick", "onHover", "onKey"] },
     "tabs": { "storybook": ["icon", "items", "label", "value"], "app": ["collapsed", "spoken"] },
     "toggle": { "storybook": ["checked"] }
   }
