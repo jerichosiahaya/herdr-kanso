@@ -20,6 +20,7 @@ const COMMON = [
   // Kanso's own updates: the footer shows the row, the tab bar (always on
   // screen, unlike the sidebar) checks, tells you and installs from the toast.
   { source: "kanso/mods/kanso-chrome/update.js", copies: ["kanso/mods/kanso-tabs/update.js"] },
+  { source: "kanso/mods/kanso-chrome/notices.js", copies: ["kanso/mods/kanso-tabs/notices.js"] },
   // Order of a beta, a release candidate and a stable tag, shared with that updater.
   { source: "kanso/mods/kanso-chrome/release.js", copies: ["kanso/mods/kanso-tabs/release.js", "kanso/mods/kanso-settings/release.js"] },
   // A pull request's checks, read one way in the PR panel and the header.

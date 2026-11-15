@@ -171,7 +171,8 @@ test("Kanso looks for releases on every start, every few minutes, and when asked
 
   offline = true;
   await u.check(cx, true, true);
-  assert.equal(toasts.at(-1).title, "kansō could not check for updates");
+  assert.equal(toasts.at(-1).title, "GitHub could not be reached");
+  assert.equal(toasts.at(-1).action.name, "kanso-tabs.check", "Refresh looks again");
 });
 
 test("Automatic update checks can be disabled while manual checks still work", async () => {

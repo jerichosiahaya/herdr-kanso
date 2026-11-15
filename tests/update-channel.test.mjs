@@ -82,17 +82,17 @@ test("The toast names the tag, and Stable never offers an older release", async 
   };
   const early = await look({ channel: "beta", tag: "3.30.0-beta.1" }, "3.30.0");
   assert.equal(early.toasts[0].title, "kansō 3.31.0-beta.1 is available");
-  assert.match(early.toasts[0].body, /You have 3.30.0-beta.1/);
+  assert.equal(early.updater.current(), "3.30.0-beta.1");
 
   const stable = await look({ tag: "3.30.0-beta.2" }, "3.30.0");
   assert.equal(stable.toasts[0].title, "kansō 3.30.0 is available");
-  assert.match(stable.toasts[0].body, /You have 3.30.0-beta.2/);
+  assert.equal(stable.updater.current(), "3.30.0-beta.2");
   assert.equal(stable.toasts.some((note) => note.title.includes("beta")), false);
 
   const ahead = await look({ tag: "3.31.0-beta.1" }, "3.31.0");
   assert.equal(ahead.updater.available(), null);
   assert.equal(ahead.toasts[0].title, "kansō is up to date");
-  assert.match(ahead.toasts[0].body, /You have 3.31.0-beta.1/);
+  assert.equal(ahead.updater.current(), "3.31.0-beta.1");
 });
 
 test("Choosing Early looks again, and Stable stays the default until then", async () => {
