@@ -156,8 +156,9 @@ export const playgrounds = {
     },
   },
   'Primitives/Metric': {
-    args: { value: '31%', unit: 'free of 16 GB · 2.4 GB swap', facts: '14 tasks | $2.94 a task | 9.1M tokens', loading: false },
+    args: { value: '31%', unit: 'free of 16 GB · 2.4 GB swap', facts: '14 tasks | $2.94 a task | 9.1M tokens', loading: false, size: 'md' },
     argTypes: {
+      size: select('size', ['md', 'sm']),
       value: text('Value'),
       unit: text('Unit'),
       facts: text('Facts (separated by |)'),

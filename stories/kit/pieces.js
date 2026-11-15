@@ -158,10 +158,11 @@ const menuEntry = (item) => item.separator ? '<div class="kanso-menu__separator"
   : menuItem(item);
 export const menu = ({ title, items }) => `<div class="kanso-menu kanso-popover" role="menu">${title ? menuHeading(title) : ''}${(Array.isArray(items) ? items : []).map(menuEntry).join('')}</div>`;
 
-export const metric = ({ value, unit, facts = '', loading = false }) => {
+// `size` sm is the value at title size, on one line at row width.
+export const metric = ({ value, unit, facts = '', loading = false, size = 'md' }) => {
   const piece = (text, element) => `<span class="${element}${loading ? ' kanso-skeleton--shape kanso-skeleton--text' : ''}">${escape(text)}</span>`;
   const list = facts.split('|').map((fact) => fact.trim()).filter(Boolean);
-  return `<div class="kanso-metric">${piece(value, 'kanso-metric__value')}${unit ? piece(unit, 'kanso-metric__unit') : ''}</div>`
+  return `<div class="kanso-metric${size === 'sm' ? ' kanso-metric--sm' : ''}">${piece(value, 'kanso-metric__value')}${unit ? piece(unit, 'kanso-metric__unit') : ''}</div>`
     + (list.length ? `<div class="kanso-panel__facts">${list.map((fact) => loading ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(fact)}</span>` : `<span>${escape(fact)}</span>`).join('')}</div>` : '');
 };
 
