@@ -69,12 +69,27 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
   that 6 gutter is where Herdr's own dividers are dragged.
     - **Tab bar** (`kanso-tabs`), 48 tall, no line under it. It drags the
       window.
-      - Tabs are 26 tall with radius 6: program icon 15, name 12.5, then the
-        tab's status. The active tab has a `foreground`+`12` wash and the
-        rest are `muted`, with no borders and no tray behind them. A close x
-        (13) shows on the active tab only when there is more than one tab.
-      - After the tabs, a + (16 icon, 28 square) opens the shipped
-        `new-menu`.
+      - Tabs are the kit's tab (`ui-tab.js`), 26 tall with radius 6, 2
+        apart: the name 12.5, trimmed at 170, then a mark only when an
+        agent in a tab out of view waits for you. No program icon, no
+        working or done mark, nothing after a zoomed tab. The chosen tab
+        has the `w7` fill, gliding under it, and the rest are `muted` with
+        the `w4` wash on hover. A close x shows on the chosen tab only when
+        there is more than one tab; on a tab holding an agent the first
+        press arms it with the accent for 4 s, "Press again to close
+        <name>".
+      - Double-click renames in place, the name selected: Enter or leaving
+        keeps it, Escape restores it. On another computer the new name draws
+        at 80% with a breathing dot until the tab carries it; refused, the
+        old name returns with a toast.
+      - A tab dragged onto another is held on the `selected` wash, with a
+        2-wide accent bar where it lands.
+      - Tabs that do not fit fold behind +N, a Menu of them with their
+        marks. While a project on another computer connects, one breathing
+        skeleton per known tab; unreachable, the tabs step down to `dim`.
+        Both have no + and no Arrange.
+      - After the tabs, 8 apart, a + (26 square) opens the shipped
+        `new-menu`, then Arrange.
       - At the right are the panel buttons: Files, Spend, PR,
         Shipped, Worktrees, Ports, Containers, Memory, Look, Simulator, as icons only (15, in a 26 square ghost
         button), and a wash when their panel is open. While the pointer is
