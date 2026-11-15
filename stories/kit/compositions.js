@@ -82,7 +82,7 @@ export const addComputer = ({ hosts = [], typed, agent }) => dialog({
 
 // One question, one field: a rename, a note; an emptied field shows what it falls back to.
 export const promptDialog = ({ title, scope = null, text, fallback, action }) => dialog({
-  title, scope, body: input({ text, label: fallback, focus: true, selected: Boolean(text) }), primary: action,
+  title, scope, body: input({ text, label: fallback, focus: true, selected: Boolean(text) }), secondary: 'Cancel', primary: action,
 });
 
 // A refusal sits under the fields with its fix; the footer keeps Cancel only.
@@ -112,7 +112,7 @@ export const sendDialog = ({ agents = [], find = null, empty = null, message, to
   body: list(find === null ? null : input({ text: find, label: 'Find an agent or a project', icon: 'lu-search', focus: true }),
     empty ? emptyState({ text: empty }) : agents.map(target),
     input({ text: message, label: 'Message', multiline: true, focus: find === null, limit: messageLimit }), refusal(failure, agent)),
-  primary: to && !failure ? to : null, state: sending ? 'loading' : message ? 'default' : 'disabled',
+  secondary: 'Cancel', primary: to && !failure ? to : null, state: sending ? 'loading' : message ? 'default' : 'disabled',
 });
 
 // Arrangements: each saved one a Row, another project's with that project as its fact; the chosen one shows Overwrite and Delete.

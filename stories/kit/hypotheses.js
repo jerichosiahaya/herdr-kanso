@@ -14,6 +14,19 @@ export const hypotheses = {
       back: 'the caret goes and the rail shows + and Show sidebar only, as today.',
     },
   ],
+  'Primitives/Dialog': [
+    {
+      change: 'Sleep and Arrangements lose their Cancel and Close; Prompt, Send, New project and New worktree keep Cancel.',
+      today: 'Sleep shows Cancel and Arrangements shows Close beside the primary.',
+      why: 'a visible way out for someone who opened the dialog by mistake.',
+      question: 'what does Cancel do in a dialog where nothing was typed, that Esc and a click outside do not already do?',
+      believe: 'where nothing typed is lost, the footer holding one action makes that action clear, and Esc or a click outside is the way out everyone already uses.',
+      jobs: [['leave without acting', 'Esc and a click outside, in every dialog'], ['leave a dialog with typed words', 'Cancel stays where something was typed']],
+      wrong: 'someone stays in Sleep or Arrangements looking for a way out, or presses the primary to leave.',
+      try: 'Dawn Mode first.',
+      back: 'Sleep shows Cancel and Arrangements shows Close again, as today.',
+    },
+  ],
   'Compositions/Add computer dialog': [
     {
       change: 'Add computer opens kansō’s dialog listing the hosts of ~/.ssh/config, each with Add.',
