@@ -150,12 +150,22 @@ export const playgrounds = {
   },
   'Primitives/Window controls': { args: {}, argTypes: {}, markup: windowControls },
   'Primitives/Dawn': { args: {}, argTypes: {}, markup: () => dawn() },
+  'Compositions/Add computer/Host row': {
+    ...statedPages['Compositions/Add computer/Host row'],
+    argTypes: {
+      name: { name: 'name', control: { type: 'text' } },
+      target: { name: 'target', control: { type: 'text' } },
+      state: select('state', hostStates),
+      words: { name: 'ssh words', control: { type: 'text' }, if: { arg: 'state', neq: 'ready' } },
+      mac: { name: 'a Mac', control: { type: 'boolean' }, if: { arg: 'state', eq: 'added' } },
+    },
+  },
   'Compositions/Add computer': {
     ...statedPages['Compositions/Add computer'],
     argTypes: {
-      hosts: select('Hosts', ['config', 'mixed', 'none']),
-      state: { ...select('Every host', hostStates), if: { arg: 'hosts', eq: 'config' } },
-      typed: { name: 'Typed', control: { type: 'text' } },
+      config: { name: 'hosts in the config', control: { type: 'boolean' } },
+      added: { name: 'after Add', control: { type: 'boolean' }, if: { arg: 'config' } },
+      typed: { name: 'typed', control: { type: 'text' } },
     },
   },
   'Compositions/Toolbar': {

@@ -79,10 +79,14 @@ export const guidelines = {
   "Primitives/Dawn": [
     ["Shizen", "One sky.", "The same colours in dark and light. The sun rises once on load; reduced motion shows the last frame."],
   ],
+  "Compositions/Add computer/Host row": [
+    ["Kansō", "A Row, nothing new.", "Server icon, name, ssh target as its fact, Add as a small tonal Button."],
+    ["Seijaku", "Optimistic.", "Add reads Added at once with the done mark; a refusal clears it and puts the failure block under the row: ssh's words, Sign in or Add, Explain to <agent>."],
+    ["Kokō", "A Mac says what it will ask.", "Once added, one dim line under it: it asks before agents read Documents, with Open the setting."],
+  ],
   "Compositions/Add computer": [
-    ["Kansō", "Composed, nothing new.", "A Dialog: the hosts of ~/.ssh/config as Rows with Add, a Field for user@host, the failure block under a refused host. The word is computer, never machine."],
-    ["Seijaku", "Optimistic.", "Add reads Added at once with the done mark; a refusal clears it and leaves ssh's words, the fitting action (Sign in, or Add) and Explain to <agent>."],
-    ["Kokō", "One sentence when empty.", "No hosts in the config: one line, and the field is the action. A Mac, once added, says it asks before agents read Documents, with its setting one press away."],
+    ["Kansō", "A Dialog of Host rows.", "The hosts of ~/.ssh/config under one heading, a Field for user@host, Close and Add. The word is computer, never machine."],
+    ["Kokō", "One sentence when empty.", "No hosts in the config: one line, and the field is the action."],
   ],
   "Compositions/Toolbar": [
     ["Kansō", "Icon buttons only.", "Large icon buttons, 4 apart: + alone on the left, then Sort, Search and Hide sidebar on the right. + says what it adds: Add project on Projects, New conversation on Status and Threads."],

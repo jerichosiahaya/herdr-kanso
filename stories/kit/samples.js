@@ -127,7 +127,7 @@ export const samplePanelHeader = {
 const ticked = (label, on) => ({ label, icon: on ? 'lu-check' : undefined });
 const sortShows = [ticked('What each agent is on', true), ticked('While you were away', true), ticked('Projects, Status and Threads', true)];
 const sortMenu = (title, orders, current, extra = []) => menu({ items: [{ heading: title }, ...orders.map((label) => ticked(label, label === current)), ...extra, { separator: true }, { heading: 'Show' }, ...sortShows] });
-// The hosts of a sample ~/.ssh/config, each in its own state, and the agent that explains a refusal.
+// The hosts of a sample ~/.ssh/config, each as it stands after Add, and the agent that explains a refusal.
 export const sampleHosts = [
   { name: 'dark', target: 'jj@10.0.4.12' },
   { name: 'mini', target: 'jj@mini.local', state: 'added', mac: true },
