@@ -166,19 +166,26 @@ const rowTool = (action) => button({ kind: 'icon', size: 'sm', ...action });
 export const rowDepths = [0, 1, 2];
 // `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
 // The title form is a panel's heading: the name at title size, the second line its scope.
-export const row = ({ icon = 'none', tone = '', name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, title, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action, start = [], tools = [], keys = [] }) => {
-  const lead = `${list(start)}${icon === 'none' ? '' : glyph(icon, tone)}`;
+// A file's git `letter` takes the icon's slot; modified keeps the slot empty so names align.
+const letterTones = { A: 'dim', D: 'dim', U: 'blocked', M: '' };
+const fileLetter = (letter) => `<span class="kanso-row__letter${letterTones[letter] ? ` kanso-text--${letterTones[letter]}` : ''}">${letter === 'M' ? '' : escape(letter)}</span>`;
+// A tree row sits at its `level` and leads with its fold: a folder's chevron, `open` or not, or an empty slot for a file.
+const fold = (open) => `<span class="kanso-row__fold">${open === undefined ? '' : inlineIcon(open ? 'lu-chevron-down' : 'lu-chevron-right')}</span>`;
+export const row = ({ icon = 'none', tone = '', letter, level, open, name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, title, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action, start = [], tools = [], keys = [] }) => {
+  const slot = letter ? fileLetter(letter) : icon === 'none' ? '' : glyph(icon, tone);
+  const lead = `${list(start)}${level === undefined ? '' : fold(open)}${slot}`;
   const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;
   const facts = [].concat(detail ?? []).filter(Boolean);
   const tail = `${facts.length ? `<span class="kanso-row__detail">${facts.map(fact).join('')}</span>` : ''}${grow()}`
     + `${meta ? `<span class="kanso-row__meta">${escape(meta)}</span>` : ''}${flag ? `<span class="kanso-row__flag">${glyph(flag)}</span>` : ''}`
     + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}${list(tools)}${keys.map(keyHint).join('')}`
     + `${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${!status || status === 'none' ? '' : mark({ status })}`;
-  const states = [second && 'kanso-row--two-lines', heading && 'kanso-row--heading', title && 'kanso-row--title', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
+  const states = [second && 'kanso-row--two-lines', level !== undefined && 'kanso-row--tree', heading && 'kanso-row--heading', title && 'kanso-row--title', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
     dimmed && 'kanso-control--dim', pending && 'kanso-state-line--pending', hover && 'kanso-control--hover', focus && 'kanso-control--focus'].filter(Boolean).map((name) => ` ${name}`).join('');
+  const opening = `<div class="kanso-row${states}" tabindex="0"${level === undefined ? '' : ` style="--k-level:${Number(level)}"`}>`;
   return second
-    ? `<div class="kanso-row${states}" tabindex="0"><div class="kanso-content__primary">${lead}${label}${tail}</div><div class="kanso-content__secondary">${escape(second)}</div></div>`
-    : `<div class="kanso-row${states}" tabindex="0">${lead}${label}${tail}</div>`;
+    ? `${opening}<div class="kanso-content__primary">${lead}${label}${tail}</div><div class="kanso-content__secondary">${escape(second)}</div></div>`
+    : `${opening}${lead}${label}${tail}</div>`;
 };
 
 const bar = (shape) => `<span class="kanso-skeleton kanso-skeleton--${shape}"></span>`;

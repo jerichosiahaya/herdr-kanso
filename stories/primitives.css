@@ -334,3 +334,6 @@
 .kanso-dialog--find .kanso-dialog__header{padding:var(--k-sp-2)}
 .kanso-dialog--find .kanso-dialog__header>.kanso-field{flex:1}
 .kanso-dialog--find .kanso-dialog__body{margin-top:0;gap:0;padding:var(--k-sp-1) var(--k-sp-3) var(--k-sp-2);border-top:1px solid var(--border)}
+.kanso-row.kanso-row--tree{padding-left:calc(var(--k-sp-2) + var(--k-level) * var(--k-sp-4))}
+.kanso-row__fold{display:grid;place-items:center;flex:none;width:var(--k-ic-inline);color:var(--dim)}
+.kanso-row__letter{flex:none;width:var(--k-ic-row);font-size:var(--k-fs-meta);text-align:center}
