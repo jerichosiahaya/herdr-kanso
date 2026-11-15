@@ -1,5 +1,5 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { computerItem, edge, keyboardSystems, layoutPaused, paletteDoor, panelRefresh, panelShell, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { computerItem, edge, keyboardSystems, layoutPaused, paletteDoor, panelBack, panelRefresh, panelShell, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
 import { emptyState, failureBlock, keycap, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
 import { keyLayer, keyLayerMods, samplePanel, statusMenus, statusPanels } from './samples.js';
@@ -62,7 +62,7 @@ export const statedPages = {
     args: { title: samplePanel.title, scope: samplePanel.scope, state: 'ready', look: 'panel', content: 'rows', last: 'rest' },
     markup: ({ title, scope, state, look, content, last }) => {
       const { reading = false, stale = false, scope: read = scope, body } = panelReads[state];
-      return panelShell({ title, scope: read, look, stale, tools: [samplePanel.tool(), panelRefresh({ reading })] }, body(panelContents[content](last)));
+      return panelShell({ title, scope: read, look, stale, tools: [look === 'window' ? panelBack() : null, samplePanel.tool(), panelRefresh({ reading })] }, body(panelContents[content](last)));
     },
     states: [
       { label: 'At rest', args: {}, caption: 'The read is fresh.' },

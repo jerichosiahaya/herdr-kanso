@@ -108,7 +108,7 @@ export const tabBar = ({ items = [], value = null, folded = [], overflow = false
 };
 
 // Panel shell: a frame of two slots, the Row in its title form (the title, its tools, the scope under it), then the body it is given.
-// Each look is a width; stale steps the body down. A page inside a panel leads with ‹ as the row's icon.
+// Each look is a width; stale steps the body down.
 export const panelLooks = ['panel', 'narrow', 'window'];
 export const panelShell = ({ title, scope = null, icon = 'none', tools = [], look = 'panel', stale = false }, ...body) => {
   if (!panelLooks.includes(look)) throw new Error(phrase('panelShell: unknown look', look));
@@ -117,6 +117,8 @@ export const panelShell = ({ title, scope = null, icon = 'none', tools = [], loo
 // The tools every panel ends with: Refresh, spinning while it reads, and Close where the panel closes.
 export const panelRefresh = ({ reading = false } = {}) => button({ label: 'Refresh', kind: 'icon', icon: 'lu-refresh-cw', spin: reading });
 export const panelClose = () => button({ label: 'Close', kind: 'icon', icon: 'lu-x' });
+// A file opened from a panel goes back to its folder's list.
+export const panelBack = () => button({ label: 'Markdown in this folder', kind: 'icon', icon: 'lu-chevron-left' });
 
 // Cells
 

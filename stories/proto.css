@@ -885,7 +885,8 @@
 .kanso-state-line{display:inline-flex;flex:1;min-width:0;align-items:center;gap:var(--k-sp-2);white-space:nowrap;font-size:var(--k-fs-body);font-weight:var(--k-fw-medium);color:var(--fg)}
 .kanso-panel__hero{font-size:var(--k-fs-section);font-weight:var(--k-fw-strong);margin-top:var(--k-sp-1);line-height:var(--k-lh-tight)}
 .kanso-panel__number{font-size:var(--k-fs-meta);color:var(--dim);margin-top:var(--k-sp-4)}
-.kanso-panel__scope{font-size:var(--k-fs-meta);color:var(--dim);margin-top:var(--k-sp-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kanso-panel__scope{font-size:var(--k-fs-meta);color:var(--dim);margin-top:var(--k-sp-2)}
+:is(.kanso-panel__title,.kanso-panel__scope){min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kanso-panel__title{font-size:var(--k-fs-title);flex:1;color:var(--fg);letter-spacing:-.01em;line-height:var(--k-lh-tight);font-weight:var(--k-fw-strong)}
 .kanso-panel__verdict{display:flex;gap:var(--k-sp-2);align-items:center;font-size:var(--k-fs-name);font-weight:500;margin-top:var(--k-sp-2)}
 .kanso-panel__pair{justify-content:space-between}
