@@ -137,37 +137,37 @@
   "panel/Preview": {
     "page": "Panels/Preview",
     "states": {
-      "Edited": "panels/preview/PreviewTextEditedSaveAppears/Default",
-      "Saving": "panels/preview/PreviewTextSavingThenSaved/Default",
-      "Saved": "panels/preview/PreviewTextSavingThenSaved/Default",
-      "Remote unavailable": "panels/preview/PreviewTextTheComputerIsGoneItSavesOnItsOwnWhenItIsBack/Default",
-      "Too large": "panels/preview/PreviewTextOver1MBReadOnly/Default",
-      "Binary": "panels/preview/PreviewTextBinary/Default",
-      "Gone": "panels/preview/PreviewTextGoneFromDisk/Default",
-      "Conflict resolved": "panels/preview/PreviewTextAfterOverwriteOrReloadOneUndoNoQuestionBefore/Default",
-      "Loading": "panels/preview/FeaturePreview/Loading",
-      "Picture failed": "panels/preview/FeaturePreview/Picture failed",
-      "Read failed": "panels/preview/FeaturePreview/Read failed",
-      "Save failed": "panels/preview/FeaturePreview/Save failed"
+      "Edited": "kit/Panels/Preview/Edited: Save appears",
+      "Saving": "kit/Panels/Preview/Saving",
+      "Saved": "kit/Panels/Preview/Saved",
+      "Remote unavailable": "kit/Panels/Preview/The computer is gone",
+      "Too large": "kit/Panels/Preview/Over 1 MB: read only",
+      "Binary": "kit/Panels/Preview/Binary",
+      "Gone": "kit/Panels/Preview/Gone from disk",
+      "Conflict resolved": "kit/Panels/Preview/After Overwrite or Reload",
+      "Loading": "kit/Panels/Preview/First read",
+      "Picture failed": "kit/Panels/Preview/A picture that can’t be shown",
+      "Read failed": "kit/Panels/Preview/Can’t read",
+      "Save failed": "kit/Panels/Preview/Couldn’t save"
     }
   },
   "panel/MarkdownEditing": {
     "page": "Panels/Preview",
     "states": {
-      "Block editing": "panels/preview/PreviewMarkdownAClickEditsThatBlock/Default",
-      "Source": "panels/preview/PreviewMarkdownSource/Default",
-      "Table editing": "panels/preview/PreviewMarkdownATableCellByCell/Default",
-      "Image loading": "panels/preview/PreviewPicturesLoading/Default",
-      "Image deferred": "panels/preview/PreviewPicturesOnAnotherComputerOver2MBLoad/Default",
-      "Read": "panels/preview/PreviewMarkdownFormatted/Default",
-      "Editing": "panels/preview/PreviewMarkdownAClickEditsThatBlock/Default",
-      "Conflict": "panels/preview/PreviewTextChangedOnDiskWhileEdited/Default",
-      "Append": "panels/preview/FeatureMarkdownEditing/Append",
-      "Image failed": "panels/preview/FeatureMarkdownEditing/Image failed",
-      "Loading": "panels/preview/FeatureMarkdownEditing/Loading",
-      "Save failed": "panels/preview/FeatureMarkdownEditing/Save failed",
-      "Saving": "panels/preview/FeatureMarkdownEditing/Saving",
-      "Stale": "panels/preview/FeatureMarkdownEditing/Stale"
+      "Block editing": "kit/Panels/Preview/Markdown, a click edits that block",
+      "Source": "kit/Panels/Preview/Markdown, Source",
+      "Table editing": "kit/Panels/Preview/Markdown, a table cell by cell",
+      "Image loading": "kit/Panels/Preview/A picture inside a note, loading",
+      "Image deferred": "kit/Panels/Preview/A picture inside a note",
+      "Read": "kit/Panels/Preview/Markdown, formatted",
+      "Editing": "kit/Panels/Preview/Markdown, a click edits that block",
+      "Conflict": "kit/Panels/Preview/Changed on disk while edited",
+      "Append": "kit/Panels/Preview/Markdown, a click edits that block",
+      "Image failed": "kit/Panels/Preview/A picture inside a note, can’t be shown",
+      "Loading": "kit/Panels/Preview/First read",
+      "Save failed": "kit/Panels/Preview/Couldn’t save",
+      "Saving": "kit/Panels/Preview/Saving",
+      "Stale": "kit/Panels/Preview/Another computer, not answering"
     }
   },
   "panel/ConversationFind": {
@@ -410,8 +410,8 @@
   "panel/CodeLimits": {
     "page": "Panels/Preview",
     "states": {
-      "Truncated code": "panels/preview/FeatureCodeLimits/Truncated code",
-      "Truncated markdown": "panels/preview/FeatureCodeLimits/Truncated markdown"
+      "Truncated code": "kit/Panels/Preview/Over 1 MB: read only",
+      "Truncated markdown": "kit/Panels/Preview/Markdown, cut at 1 MB"
     }
   },
   "sim/Devices": {

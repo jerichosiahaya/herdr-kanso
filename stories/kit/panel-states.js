@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer } from './samples.js';
-import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleTaken } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleTaken, samplePreview } from './panel-samples.js';
 
 // Settings: each page with its samples, then each state as what changes on it.
 const shows = (extra) => ({ page: 'pieces', hidden: sampleHidden, areas: sampleAreas, ...extra });
@@ -121,10 +121,10 @@ export const markdownViews = {
   'Editing a table': [openFile(sampleMarkdown.limits, { said: ['Edited'], doc: { block: 2, state: 'editing', cell: [1, 2] } }), 'A table opens as its cells, with Add row, Add column and Done under it.'],
   'Changed on disk while edited': [plan({ said: ['Edited'], band: { text: 'Changed on disk at 14:06', actions: [{ label: 'Overwrite' }, { label: 'Reload', kind: 'quiet' }] } }), 'Nothing is written until you choose: yours over it, or the file’s.'],
   'After Overwrite': [plan({ band: { text: 'Saved over the 14:06 text', actions: [{ label: 'Undo', kind: 'quiet' }] } }), 'Undo, on that line, until the next change.'],
-  "Couldn’t save": [plan({ said: [waits, 'Edited'], tools: ['done'], failure: sampleMarkdown.failures.save }), 'The write was refused: its words, Save again, and Explain to the agent.'],
+  "Couldn’t save": [plan({ said: [waits, 'Edited'], tools: ['done'], refused: sampleMarkdown.failures.save }), 'The write was refused: its words, Save again, and Explain to the agent.'],
   'Review: an agent waits': [plan({ said: [waits, 'Edited'], tools: ['done'] }), 'md-review waits on this file: Done is the one primary, and tells the agent.'],
   'Another review waits': [plan({ said: [waits], tools: ['done'], also: 'release.md also waits for your review' }), 'Done shows the next review waiting, or closes.'],
-  'Done could not tell the agent': [plan({ said: [waits], failure: sampleMarkdown.failures.told }), 'Done stays; a second press tries again.'],
+  'Done could not tell the agent': [plan({ said: [waits], refused: sampleMarkdown.failures.told }), 'Done stays; a second press tries again.'],
   'No file: the list': [listing({ groups: sampleMarkdown.groups }), 'Reviews waiting first, then what this terminal mentioned, then the folder’s own.'],
   'The folder only': [listing({ groups: [folder] }), 'Nothing waits and the terminal named nothing: the folder’s files, no headings.'],
   'Keyboard on a row': [listing({ groups: [waiting, folder], picked: 'CHANGELOG.md' }), 'j and k move, Enter opens.'],
@@ -266,6 +266,38 @@ export const spendViews = {
   'Plans not saved': [settled({ edit: corrected, unsaved: sampleSpend.unsaved }), 'prices.json refused the write: its words, Save again, and Explain to the agent.'],
   'Narrow, 300': [home({ look: 'narrow' }), 'The plans and the number stay; the rows truncate.'],
 };
+
+// Preview: limits.ts as Files opens it, then limits.md; each state is what an edit, a save or a read changes.
+const { code, edit, markdown: note, log, binary, gone } = samplePreview;
+const shownCode = (extra) => ({ ...code, tools: ['open with'], ...extra });
+const editedText = { ...code.text, text: code.text.text.replace(edit.from, edit.to), line: edit.line };
+const edited = (extra) => shownCode({ text: editedText, ...extra });
+const shownNote = ({ doc = {}, ...extra } = {}) => ({ file: note.file, folder: note.folder, tools: ['source', 'open with'], ...extra, doc: { source: note.source, ...doc } });
+const overDisk = { text: 'Changed on disk at 14:06', actions: [{ label: 'Overwrite' }, { label: 'Reload', kind: 'quiet' }] };
+export const previewViews = {
+  'Opened from Files': [shownCode({}), 'The file as numbered code, its folder under the name; Open with… and Close.'],
+  'Pointer over the header': [shownCode({ tools: ['refresh', 'open with'] }), 'Refresh comes with the pointer, Retry after a failed read.'],
+  'Edited: Save appears': [edited({ tools: ['save', 'discard', 'open with'] }), 'The edited line washed; Save is the one primary, or ⌘S; Discard drops the edit.'],
+  'Discard armed': [edited({ tools: ['save', 'discard', 'open with'], discarding: true }), 'Discard asks again for 4 s.'],
+  Saving: [edited({ tools: ['save', 'open with'], saving: true }), 'Save spins until the file is written.'],
+  Saved: [edited({ said: ['Saved'] }), 'Saved, under the name, until the next edit.'],
+  'Changed on disk while edited': [edited({ band: overDisk }), 'Nothing is written until you choose: yours over it, or the file’s.'],
+  'After Overwrite or Reload': [edited({ said: ['Saved'], band: { text: 'Saved over the 14:06 text', actions: [{ label: 'Undo', kind: 'quiet' }] } }), 'One Undo, no question before.'],
+  'The computer is gone': [edited({ folder: 'devbox · src/api', said: ['Not saved'], band: { text: 'devbox unreachable. Saves when it answers.' } }), 'The edit waits and saves on its own when the computer is back.'],
+  "Couldn’t save": [edited({ tools: ['save', 'discard', 'open with'], refused: samplePreview.failures.save }), 'The write was refused: its words, Save again, and Explain to the agent.'],
+  'Over 1 MB: read only': [{ ...log, said: ['read only'], tools: ['open with'], cut: 'Cut at 1 MB' }, 'The first megabyte, read only; Open with… for the rest.'],
+  Binary: [{ ...binary, tools: ['open with'], empty: { icon: 'lu-file', text: 'Binary file · 812 KB', action: 'Open with…' } }, 'Nothing to read here: Open with… another app.'],
+  'Gone from disk': [{ ...gone, empty: { icon: 'lu-file', text: 'No longer on disk' } }, 'The file was removed or moved.'],
+  'First read': [shownCode({ reading: true }), 'The skeleton while it reads.'],
+  "Can’t read": [shownCode({ failure: samplePreview.failures.read }), 'The read was refused: its words, Refresh, and Explain to the agent.'],
+  'Markdown, formatted': [shownNote(), 'Markdown formatted; Source shows the file as text.'],
+  'Markdown, a click edits that block': [shownNote({ tools: ['save', 'discard', 'source', 'open with'], doc: { block: 2, state: 'editing' } }), 'A click edits that block alone; a click below the last adds one.'],
+  'Markdown, a table cell by cell': [shownNote({ tools: ['save', 'discard', 'source', 'open with'], doc: { block: 3, state: 'editing', cell: [2, 1] } }), 'A table opens as its cells, with Add row, Add column and Done under it.'],
+  'Markdown, Source': [shownNote({ doc: { view: 'source' } }), 'The whole file as text; Formatted goes back.'],
+  'Markdown, cut at 1 MB': [shownNote({ said: ['read only'], tools: ['open with'], cut: 'Cut at 1 MB' }), 'Past 1 MB the start is shown, read only.'],
+  'Another computer, not answering': [shownNote({ folder: 'devbox · docs', said: ['Read 14:02', 'devbox not answering'], stale: true }), 'The last read stays, stepped down, with when it was read.'],
+  'Narrow, 300': [shownNote({ look: 'narrow' }), 'The title steps down; the table keeps its columns.'],
+};
 const stated = (views, draw) => ({
   args: { view: Object.keys(views)[0] },
   markup: ({ view }) => draw(views[view][0]),
@@ -273,6 +305,6 @@ const stated = (views, draw) => ({
 });
 const control = (views) => ({ view: { name: 'what it shows', control: { type: 'select' }, options: Object.keys(views) } });
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend] };
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Preview': [previewViews, preview] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

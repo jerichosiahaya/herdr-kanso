@@ -66,7 +66,7 @@ export const descriptions = {
   'Shortcut row': 'One action and its keys, changed on the row itself.',
   'Picked key': 'The picked key: its chord, what it does, its layer and its one act.',
   Files: 'The current pane’s changed files and repository tree.',
-  Preview: 'A file reader for text, Markdown and pictures beside the current pane.',
+  Preview: 'A file from Files beside the pane: text as code, Markdown formatted, pictures with their pins; an edit waits for Save.',
   PR: 'Pull requests with checks, reviews, diffs and conversation.',
   Worktrees: 'Repository checkouts to open, create, repair or remove.',
   Shipped: 'Contribution totals for a chosen period, with a share card.',

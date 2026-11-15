@@ -18,6 +18,12 @@ export const panelGuidelines = {
     ['Seijaku', 'States where the list starts.', 'Guard off is the empty state with Turn on; turning on is the skeleton under one dim line; a refusal is the Failure block. A guard that stopped answering keeps the last read stepped down, with Turn on the guard.'],
     ['Kokō', 'The guard speaks when you are away.', 'Its notices are a toast while the window is on screen and the computer’s notification otherwise, with the same words.'],
   ],
+  'Panels/Preview': [
+    ['Kansō', 'The file, and its name.', 'Files opens a file here beside the pane: its name over its folder, then text as numbered code or Markdown formatted. At rest the header holds Open with… and Close; Refresh comes with the pointer, Source on Markdown.'],
+    ['Shizen', 'An edit waits for Save.', 'Typing washes the line and brings Save, the one primary, or ⌘S, with Discard beside it that asks again. Save spins while it writes; Saved stays under the name until the next edit. A Markdown block or table is edited in place, as in the Markdown window.'],
+    ['Kokō', 'The file and you never overwrite each other.', 'A change on disk while yours is unsaved is the band over the text: Overwrite, or Reload, then one Undo. On a computer out of reach the edit waits, Not saved, and saves on its own when it answers.'],
+    ['Seijaku', 'What it cannot show, it says once.', 'Past 1 MB the start shows read only, with Cut at 1 MB under it. A binary file is the empty state with Open with…; a file gone from disk says so. A refused read is the Failure block where the text would start.'],
+  ],
   'Panels/Markdown': [
     ['Kansō', 'The document, and Close.', 'A window over any layout, 560 wide. The file’s name over its folder, then the document formatted; at rest the header holds only Close. Source and Refresh come with the pointer; Back returns to the folder’s Markdown.'],
     ['Shizen', 'Edit where you read.', 'A double-click edits that block alone, a table as its cells with Add row, Add column and Done. What you type saves as you go; the folder line says Edited, Saving… or Saved. Source edits the whole file the same way.'],
@@ -65,6 +71,19 @@ export const panelGuidelines = {
     ['Kokō', 'What’s new is a timeline.', 'Updates first, Stable Mode or Dawn Mode. Then the releases from the newest: a newer one carries the one action, Update to it; the installed one says you are here; the older ones fold into one line.'],
     ['Seijaku', 'Room.', 'What shows never scrolls at 860 by 680; Keys and What’s new scroll as documents.'],
   ],
+};
+
+// The Markdown window and Preview share the changed-on-disk band.
+const changedOnDisk = {
+  change: 'The conflict bar becomes a band that says when the file changed, with Overwrite and Reload, and Undo after Overwrite.',
+  today: 'a bar in blocked ink, The file changed on disk while you edited it., with Keep mine and Take the file’s; nothing after the choice.',
+  why: 'a plain choice between two texts.',
+  question: 'when an agent rewrites the plan while someone edits it, what do they need before choosing?',
+  believe: 'when it changed tells them which text is newer, and Undo lets them take back an Overwrite that dropped the agent’s change.',
+  jobs: [['keep mine', 'Overwrite'], ['take the file’s', 'Reload'], ['know when it changed', 'the band’s time'], ['take back an overwrite', 'Undo, on the same band']],
+  wrong: 'someone presses Undo expecting their edit back, or misses the band.',
+  try: 'Dawn Mode first.',
+  back: 'the blocked bar with Keep mine and Take the file’s returns, and Undo goes.',
 };
 
 export const panelHypotheses = {
@@ -204,18 +223,33 @@ export const panelHypotheses = {
       back: 'the large word and the red line return.',
     },
   ],
-  'Panels/Markdown': [
+  'Panels/Preview': [
+    changedOnDisk,
     {
-      change: 'The conflict bar becomes a band that says when the file changed, with Overwrite and Reload, and Undo after Overwrite.',
-      today: 'a bar in blocked ink, The file changed on disk while you edited it., with Keep mine and Take the file’s; nothing after the choice.',
-      why: 'a plain choice between two texts.',
-      question: 'when an agent rewrites the plan while someone edits it, what do they need before choosing?',
-      believe: 'when it changed tells them which text is newer, and Undo lets them take back an Overwrite that dropped the agent’s change.',
-      jobs: [['keep mine', 'Overwrite'], ['take the file’s', 'Reload'], ['know when it changed', 'the band’s time'], ['take back an overwrite', 'Undo, on the same band']],
-      wrong: 'someone presses Undo expecting their edit back, or misses the band.',
+      change: 'Read again comes with the pointer, and Discard is an icon that asks again.',
+      today: 'the header always shows Read again, or Retry, beside Open with… and Close; an edit adds Discard as a word.',
+      why: 'every tool in reach at once.',
+      question: 'how often is a file read again by hand, now that the folder is watched?',
+      believe: 'the watch keeps the text current, so Read again is rare and the pointer reaches it; Discard beside Save stays one press, asked twice.',
+      jobs: [['read it again', 'Refresh, on the pointer'], ['retry a failed read', 'Refresh, in the Failure block'], ['drop the edit', 'Discard'], ['another app', 'Open with…']],
+      wrong: 'someone looks for Read again with the pointer elsewhere, or presses Discard by mistake.',
       try: 'Dawn Mode first.',
-      back: 'the blocked bar with Keep mine and Take the file’s returns, and Undo goes.',
+      back: 'Read again returns at rest and Discard as a word.',
     },
+    {
+      change: 'A binary file and a file gone are the empty state, and a refused read the Failure block.',
+      today: 'one dim line: Binary file: no text preview, This file is no longer available, or Cannot read this file: and the error.',
+      why: 'a quiet line where nothing can be done.',
+      question: 'what does someone do when Preview cannot show the file?',
+      believe: 'a binary file is opened with another app, so Open with… sits in the empty state; a refused read wants Refresh and Explain to the agent.',
+      jobs: [['open it elsewhere', 'Open with…'], ['know it is gone', 'No longer on disk'], ['read it again', 'Refresh'], ['ask the agent', 'Explain to the agent']],
+      wrong: 'someone presses Refresh on a file that cannot change, or misses Open with….',
+      try: 'Dawn Mode first.',
+      back: 'the dim lines return.',
+    },
+  ],
+  'Panels/Markdown': [
+    changedOnDisk,
     {
       change: 'Source and Read again come with the pointer, and Done is the one solid button.',
       today: 'the header always shows the saving state, Source, Read again and Close; Done is a small tonal button.',

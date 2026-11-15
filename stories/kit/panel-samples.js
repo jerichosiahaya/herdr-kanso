@@ -317,3 +317,45 @@ export const sampleSpend = {
   invalid: { price: '0', rule: 'A plan needs a name and a price over $0' },
   unsaved: { text: 'Couldn’t save the plans', source: 'prices.json: EACCES: permission denied', fix: 'Save again', agent: 'checkout' },
 };
+
+// Preview: limits.ts and limits.md as Files opens them, then the files it cannot edit.
+export const samplePreview = {
+  code: { file: 'limits.ts', folder: 'src/api', text: { kind: 'source', first: 1, text: `import { planOf } from "./plans";
+
+const LIMIT = { free: 40, pro: 400 };
+const REFILL_MS = 2000;
+
+export function bucket(customer) {
+  const plan = planOf(customer);
+  return { plan, tokens: LIMIT[plan] };
+}
+
+export function retryAfter(b) {
+  const missing = 1 - b.tokens;
+  return missing * REFILL_MS;
+}` } },
+  edit: { line: 4, from: 'REFILL_MS = 2000', to: 'REFILL_MS = 1000' },
+  markdown: { file: 'limits.md', folder: 'docs', source: `# Rate limits
+
+Each customer gets a bucket of requests. A request takes one token; the bucket refills one token every 2 s.
+
+| Plan | Per minute | Burst |
+|---|---|---|
+| Free | 40 | 10 |
+| Pro | 400 | 60 |
+
+## Retry-After
+
+An empty bucket answers \`429\` with \`Retry-After\` in seconds.` },
+  log: { file: 'api.log', folder: 'logs', text: { kind: 'log', first: 1, text: `14:02:11 POST /checkout 200 41ms
+14:02:11 POST /checkout 200 38ms
+14:02:12 POST /checkout 429 2ms
+14:02:12 POST /checkout 429 1ms
+14:02:14 POST /checkout 200 44ms` } },
+  binary: { file: 'limiter.wasm', folder: 'build' },
+  gone: { file: 'limits.old.ts', folder: 'src/api' },
+  failures: {
+    read: { text: 'Can’t read limits.ts', source: 'EACCES: permission denied, open \'src/api/limits.ts\'', fix: 'Refresh', agent: 'checkout' },
+    save: { text: 'Couldn’t save limits.ts', source: 'EACCES: permission denied, write \'src/api/limits.ts\'', fix: 'Save', agent: 'checkout' },
+  },
+};

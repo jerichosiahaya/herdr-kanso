@@ -1,5 +1,5 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, dialog, facts, mark, markdown, menu, metric, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
+import { band, bars, button, chord, dialog, facts, mark, markdown, menu, metric, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code } from './kit.js';
 import { channelSettings, keyboardExplorer, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
@@ -160,17 +160,26 @@ const portsPanel = ({ scope = null, stale = false, look = 'panel', ...body }) =>
 }) }, portsBody({ look, ...body, reach: !stale }));
 export const ports = ({ share = false, ...props }) => (share ? stack({ variant: 'columns' }, portsPanel(props), shareMenu({ leaves: 'Counts and sizes only' })) : portsPanel(props));
 
-// Markdown: a window over the layout; a file is its document, none is the folder's Markdown.
+// A document, in the Markdown window or Preview: its name over its folder and what it says, its tools, then what changed on disk or a refused write over its text.
 const documentTools = {
-  source: ({ view }) => button({ label: view === 'source' ? 'Formatted' : 'Source', kind: 'icon', icon: 'lu-code', active: view === 'source' }),
+  source: ({ doc }) => button({ label: doc.view === 'source' ? 'Formatted' : 'Source', kind: 'icon', icon: 'lu-code', active: doc.view === 'source' }),
   refresh: () => panelRefresh(),
   done: () => button({ label: 'Done', size: 'sm' }),
+  save: ({ saving = false }) => button({ label: saving ? 'Saving…' : 'Save', size: 'sm', spin: saving, disabled: saving }),
+  discard: ({ discarding = false }) => button({ label: 'Discard', kind: 'icon', icon: 'lu-undo', armed: discarding }),
+  'open with': () => button({ label: 'Open with…', kind: 'icon', icon: 'lu-external-link' }),
 };
-const markdownHeader = ({ file, folder, said = [], tools = [], doc = {}, reading = false }) => (file
-  ? panelHeader({ title: file, start: [panelBack()], second: facts(folder, ...said), tools: [...tools.map((tool) => documentTools[tool](doc)), panelClose()] })
+const documentHeader = ({ back, file, folder, said = [], tools = [], ...props }) => panelHeader({
+  title: file, start: [panelBack(back)], second: facts(folder, ...said), tools: [...tools.map((tool) => documentTools[tool](props)), panelClose()],
+});
+const documentBody = ({ band: changed = null, refused = null }, ...text) => list(changed ? band(changed) : null, refused ? failureBlock(refused) : null, text);
+const dimLine = (name) => (name ? row({ name, dimmed: true }) : null);
+
+// Markdown: a window over the layout; a file is its document, none is the folder's Markdown.
+const markdownBack = 'Markdown in this folder';
+const markdownHeader = ({ file, folder, reading = false, ...props }) => (file
+  ? documentHeader({ back: markdownBack, file, folder, ...props })
   : panelHeader({ title: 'Markdown', second: folder, tools: [panelRefresh({ reading }), panelClose()] }));
-const documentBody = ({ doc, band: changed = null, failure = null, also = null }) => list(
-  changed ? band(changed) : null, failure ? failureBlock(failure) : null, markdown(doc), also ? row({ name: also, dimmed: true }) : null);
 // Headings only when more than the folder's own files are listed.
 const markdownFile = (picked) => ([name, where = null]) => row({ name, icon: 'lu-file', meta: where, current: name === picked });
 const markdownFiles = ({ groups = [], picked = null, reading = false, empty = null }) => {
@@ -180,7 +189,7 @@ const markdownFiles = ({ groups = [], picked = null, reading = false, empty = nu
   return shown.map(([name, files]) => list(shown.length > 1 ? heading(name) : null, files.map(markdownFile(picked))));
 };
 export const markdownWindow = ({ stale = false, ...props }) => panel({ look: 'window', stale, header: markdownHeader(props) },
-  props.file ? documentBody(props) : markdownFiles(props));
+  props.file ? documentBody(props, markdown(props.doc), dimLine(props.also)) : markdownFiles(props));
 
 // Containers: Docker's cost on one line, then each project with its containers; a row's words come with the pointer.
 const quiet = (verb) => button({ kind: 'quiet', size: 'sm', ...verb });
@@ -376,3 +385,12 @@ export const spend = ({ share = false, choosing = null, ...props }) => {
   const beside = share ? shareMenu({ leaves: 'Totals and days only' }) : choosing ? menu({ items: choosing }) : null;
   return beside ? stack({ variant: 'columns' }, spendPanel(props), beside) : spendPanel(props);
 };
+
+// Preview: a file opened from Files beside the pane; text as numbered code, Markdown formatted; an edit waits for Save.
+const previewBody = ({ doc = null, text = null, cut = null, reading = false, failure = null, empty = null, ...props }) => {
+  if (reading) return skeletonOf({ shape: 'line', count: 6 });
+  if (failure) return failureBlock(failure);
+  if (empty) return emptyState(empty);
+  return documentBody(props, doc ? markdown(doc) : code(text), dimLine(cut));
+};
+export const preview = ({ look = 'panel', stale = false, ...props }) => panel({ look, stale, header: documentHeader({ back: 'Files', ...props }) }, previewBody(props));
