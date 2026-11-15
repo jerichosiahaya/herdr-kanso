@@ -57,7 +57,7 @@ export const descriptions = {
   'Tab bar': 'The project’s tabs, with new tab and Arrange, and a door to each panel.',
   Pane: 'A pane: its header over its terminal, at rest, while it is dragged, and after its process is gone.',
   Edges: 'The panes past each side of the strip, one tile each; a click goes there.',
-  'State patterns': 'The shared loading, empty, pending and failure drawings used by every surface.',
+  'State patterns': 'Failure, empty, pending and loading, side by side on the pieces that carry them.',
   Panel: 'The container every panel shares: its width, the stale state, an optional header and the body.',
   'Compositions/Panel/Header': 'A panel’s title with what that panel needs around it: a page heads a dashboard, a bar heads a file or a tool.',
   Activity: 'A card of changes since your last visit that no visible row already shows.',

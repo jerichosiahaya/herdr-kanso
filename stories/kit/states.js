@@ -223,14 +223,14 @@ const unreachable = { name: 'dark', state: 'unreachable' };
 const refused = { text: "Can't reach dark", source: 'ssh: connect to host dark port 22: Operation timed out', fix: 'Refresh' };
 const statePlaces = {
   failure: ({ open }) => [
-    captioned('Status bar', inBar(520, { left: [computerItem(unreachable)] })),
+    captioned('Status bar', inBar(760, { left: [computerItem(unreachable)] })),
     captioned('Sidebar', inSlice(computerRow(unreachable), open ? computerMenu({ ...unreachable, failure: refused, agent: sampleAgent }) : null)),
     captioned('Panel', panel({}, failureBlock({ text: "Can't list worktrees on dark", source: 'git worktree list: timed out after 30 s', fix: 'Refresh', agent: sampleAgent }))),
     captioned('Toast', toast({ level: 'error', title: "Couldn't pull checkout", action: 'Retry' })),
   ],
   empty: () => [captioned('Panel', panel({}, emptyState({ icon: 'lu-git-pull-request', text: 'No pull requests on this branch', action: 'Create' })))],
   pending: () => [
-    captioned('Status bar', inBar(520, { left: [computerItem({ name: 'devbox', state: 'pending' })] })),
+    captioned('Status bar', inBar(760, { left: [computerItem({ name: 'devbox', state: 'pending' })] })),
     captioned('Sidebar', inSlice(row({ name: 'acme-shop', heading: true, detail: [{ icon: 'lu-git-branch', text: 'main' }, '↓0'], pending: true }))),
     captioned('Panel', panel({}, row({ name: 'Approved, with 2 line comments', meta: 'now', pending: true }))),
   ],
