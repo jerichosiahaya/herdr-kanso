@@ -7,6 +7,8 @@ export const list = (...children) => children.flat(Infinity).filter((child) => c
 
 // A label made of words and values, such as a name inside an action's title.
 export const phrase = (...parts) => parts.join(' ');
+// A chord: its keys' names joined as the computer writes them, ⌥⌘H or Alt+L.
+export const chord = (join, ...parts) => parts.join(join ?? '');
 
 export const grow = (inner = '') => `<span class="kanso-layout__grow">${inner}</span>`;
 
@@ -15,10 +17,11 @@ export const grow = (inner = '') => `<span class="kanso-layout__grow">${inner}</
 export const kinds = { solid: 'kanso-button--solid', tonal: 'kanso-button--tonal', quiet: 'kanso-button--quiet kanso-text--fg', icon: 'kanso-button--icon' };
 export const button = ({ label, kind = 'solid', size = 'md', icon = 'none', disabled = false, verb = '', armed = false, active = false, spin = false }) => {
   const classes = ['kanso-button', kinds[kind], size === 'md' ? '' : `kanso-button--${size}`, disabled ? 'kanso-control--off' : '', armed ? 'kanso-action kanso-action--armed' : '', active ? 'kanso-button--active' : '', spin ? 'kanso-button--spinning' : ''].filter(Boolean).join(' ');
-  const glyph = icon === 'none' ? (spin ? '<svg class="kanso-mark kanso-mark--working kanso-icon--inline"><use href="#e-work"/></svg>' : '') : `<svg class="kanso-icon"><use href="#${icon}"/></svg>`;
+  const lead = icon === 'none' ? (spin ? mark({ status: 'working', size: 'sm' }) : '') : iconSvg(icon, 'control');
   const text = kind === 'icon' ? '' : escape(label);
-  const inner = armed ? `<span>${text}</span><span>Press again to ${escape(verb || label.toLowerCase())}</span>` : `${glyph}${text}`;
-  return `<span class="${classes}" tabindex="0" title="${escape(label)}"${disabled ? ' aria-disabled="true"' : ''}${spin ? ' aria-busy="true"' : ''}>${inner}</span>`;
+  const again = `Press again to ${escape(verb || label.toLowerCase())}`;
+  const inner = armed && kind !== 'icon' ? `<span>${text}</span><span>${again}</span>` : `${lead}${text}`;
+  return `<span class="${classes}" tabindex="0" title="${armed && kind === 'icon' ? again : escape(label)}"${disabled ? ' aria-disabled="true"' : ''}${spin ? ' aria-busy="true"' : ''}>${inner}</span>`;
 };
 
 export const windowControls = () => '<span class="kanso-window-controls"><i></i><i></i><i></i></span>';
@@ -97,45 +100,49 @@ export const markdown = ({ source, block, state }) => `<div class="kanso-markdow
 export const menu = ({ title, items }) => {
   const rows = (Array.isArray(items) ? items : []).map((item) => {
     if (item.separator) return '<div class="kanso-menu__separator"></div>';
-    const glyph = item.icon ? `<svg class="kanso-icon kanso-icon--row"><use href="#${escape(item.icon)}"/></svg>` : '<span class="kanso-menu__spacer"></span>';
+    const lead = item.icon ? glyph(item.icon) : '<span class="kanso-menu__spacer"></span>';
     const classes = `kanso-menu__item${item.armed ? ' kanso-action--armed' : item.selected ? ' kanso-control--selected' : ''}`;
     const label = item.armed ? `Press again to ${escape(item.verb || String(item.label ?? '').toLowerCase())}` : escape(item.label ?? '');
-    return `<div class="${classes}" role="menuitem" tabindex="0">${glyph}${grow(label)}`
+    return `<div class="${classes}" role="menuitem" tabindex="0">${lead}${grow(label)}`
       + (item.badge ? `<span class="kanso-menu__badge">${escape(item.badge)}</span>` : '')
-      + (item.hint ? `<span class="kanso-menu__hint">${escape(item.hint)}</span>` : '') + '</div>';
+      + (item.hint ? `<span class="kanso-menu__hint">${escape(item.hint)}</span>` : '') + (item.mark ? mark({ status: item.mark }) : '') + '</div>';
   }).join('');
   return `<div class="kanso-menu kanso-popover" role="menu">${title ? `<div class="kanso-menu__heading">${escape(title)}</div>` : ''}${rows}</div>`;
 };
 
-export const metric = ({ value, unit, facts, loading }) => {
+export const metric = ({ value, unit, facts = '', loading = false }) => {
   const piece = (text, element) => `<span class="${element}${loading ? ' kanso-skeleton--shape kanso-skeleton--text' : ''}">${escape(text)}</span>`;
   const list = facts.split('|').map((fact) => fact.trim()).filter(Boolean);
-  return `<div class="kanso-panel"><div class="kanso-metric">${piece(value, 'kanso-metric__value')}${unit ? piece(unit, 'kanso-metric__unit') : ''}</div>`
-    + (list.length ? `<div class="kanso-panel__facts">${list.map((fact) => loading ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(fact)}</span>` : `<span>${escape(fact)}</span>`).join('')}</div>` : '')
-    + '</div>';
+  return `<div class="kanso-metric">${piece(value, 'kanso-metric__value')}${unit ? piece(unit, 'kanso-metric__unit') : ''}</div>`
+    + (list.length ? `<div class="kanso-panel__facts">${list.map((fact) => loading ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(fact)}</span>` : `<span>${escape(fact)}</span>`).join('')}</div>` : '');
 };
 
-const glyph = (icon) => `<svg class="${icon.startsWith('p-') ? 'kanso-icon--program' : 'kanso-icon kanso-icon--row'}"><use href="#${escape(icon)}"/></svg>`;
+// An icon by name: a program's own art or a Lucide icon, at a control's or a row's size; a tone colours it.
+const iconSvg = (icon, size, tone = '') => `<svg class="${tone ? `kanso-text--${escape(tone)} ` : ''}${icon.startsWith('p-') ? 'kanso-icon--program' : size === 'row' ? 'kanso-icon kanso-icon--row' : 'kanso-icon'}"><use href="#${escape(icon)}"/></svg>`;
+export const glyph = (icon, tone = '') => iconSvg(icon, 'row', tone);
 const flip = "if (this.getAttribute('aria-disabled')) return; this.setAttribute('aria-checked', this.classList.toggle('kanso-control--on'))";
 export const toggle = ({ checked, label, disabled }) => `<span class="kanso-switch${checked ? ' kanso-control--on' : ''}${disabled ? ' kanso-control--off' : ''}" role="switch" aria-checked="${checked}" aria-label="${escape(label)}" tabindex="0"${disabled ? ' aria-disabled="true"' : ''} onclick="${flip}" onkeydown="if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); this.click(); }"><i></i></span>`;
+// The lines that end every piece's right-click Menu.
+export const pieceLines = [{ separator: true }, { icon: 'lu-check', label: 'Only when needed' }, { icon: 'lu-eye-off', label: 'Hide this' }, { icon: 'lu-sliders-vertical', label: 'Settings for this…' }];
 export const marks = { working: 'e-work', blocked: 'e-blk', done: 'e-done', idle: 'e-idle', asleep: 'lu-moon' };
 export const markSizes = { sm: ' kanso-icon--inline', md: '', lg: ' kanso-icon--control' };
 export const mark = ({ status, size = 'md' }) => `<svg class="kanso-mark kanso-mark--${status}${markSizes[size]}"><use href="#${marks[status]}"/></svg>`;
 
-export const chip = ({ label, quiet = false, tone = '' }) => `<span class="kanso-badge${quiet ? ' kanso-badge--quiet' : ''}${tone ? ` kanso-text--${escape(tone)}` : ''}">${escape(String(label))}</span>`;
+export const chip = ({ label, quiet = false, pill = false, tone = '' }) => `<span class="kanso-badge${quiet ? ' kanso-badge--quiet' : ''}${pill ? ' kanso-badge--pill' : ''}${tone ? ` kanso-text--${escape(tone)}` : ''}">${escape(String(label))}</span>`;
 const fact = (part) => typeof part === 'string' ? `<span>${escape(part)}</span>` : `${part.icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(part.icon)}"/></svg>` : ''}<span>${escape(part.text)}</span>`;
 const rowTool = (action) => button({ kind: 'icon', size: 'sm', ...action });
 export const rowDepths = [0, 1, 2];
-// `actions` show on hover or focus and take the meta's place; `action` is always shown.
-export const row = ({ icon = 'none', name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action }) => {
-  const lead = icon === 'none' ? '' : glyph(icon);
+// `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
+// The title form is a panel's heading: the name at title size, the second line its scope.
+export const row = ({ icon = 'none', tone = '', name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, title, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action, start = [], tools = [], keys = [] }) => {
+  const lead = `${list(start)}${icon === 'none' ? '' : glyph(icon, tone)}`;
   const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;
   const facts = [].concat(detail ?? []).filter(Boolean);
   const tail = `${facts.length ? `<span class="kanso-row__detail">${facts.map(fact).join('')}</span>` : ''}${grow()}`
     + `${meta ? `<span class="kanso-row__meta">${escape(meta)}</span>` : ''}${flag ? `<span class="kanso-row__flag">${glyph(flag)}</span>` : ''}`
-    + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}`
+    + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}${list(tools)}${keys.map(keyHint).join('')}`
     + `${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${!status || status === 'none' ? '' : mark({ status })}`;
-  const states = [second && 'kanso-row--two-lines', heading && 'kanso-row--heading', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
+  const states = [second && 'kanso-row--two-lines', heading && 'kanso-row--heading', title && 'kanso-row--title', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
     dimmed && 'kanso-control--dim', pending && 'kanso-state-line--pending', hover && 'kanso-control--hover', focus && 'kanso-control--focus'].filter(Boolean).map((name) => ` ${name}`).join('');
   return second
     ? `<div class="kanso-row${states}" tabindex="0"><div class="kanso-content__primary">${lead}${label}${tail}</div><div class="kanso-content__secondary">${escape(second)}</div></div>`
@@ -151,14 +158,17 @@ export const skeletonShapes = {
 };
 export const skeletonOf = ({ shape, count }) => `<div class="kanso-skeleton__list kanso-skeleton--breathing" role="status" aria-label="Loading">${Array.from({ length: shape === 'header' ? 1 : count }, (_, i) => skeletonShapes[shape](i)).join('')}</div>`;
 
+export const tabNameLimit = 64;
 const choose = "if (this.closest('.kanso-control--off')) return; for (const tab of this.parentNode.children) { tab.classList.toggle('kanso-tabs__tab--on', tab === this); tab.setAttribute('aria-selected', tab === this); }";
 export const tabs = ({ items, value, size, track, disabled, icon, label: named }) => `<div class="kanso-tabs kanso-tabs--${size}${track ? ' kanso-tabs--track' : ''}${disabled ? ' kanso-control--off' : ''}" role="tablist"${disabled ? ' aria-disabled="true"' : ''}>${(Array.isArray(items) ? items : []).map((item) => {
   const on = item.key === value;
   const label = escape(item.label ?? '');
   const square = icon && !named;
-  return `<span class="kanso-tabs__tab${on ? ' kanso-tabs__tab--on' : ''}${square ? ' kanso-tabs__tab--icon' : ''}${item.armed ? ' kanso-action--armed' : ''}" role="tab" aria-selected="${on}" aria-label="${label}" tabindex="0" title="${square ? label : escape(item.tip ?? '')}" onclick="${choose}">`
-    + `${icon && item.icon ? glyph(item.icon) : ''}${named || !item.icon ? label : ''}${item.mark && !square ? mark({ status: item.mark, size: 13 }) : ''}`
-    + `${(item.dot || (square && item.mark === 'blocked')) && !on ? '<i class="kanso-tabs__dot"></i>' : ''}${on && item.closable && !square ? '<svg class="kanso-icon kanso-tabs__close"><use href="#lu-x"/></svg>' : ''}</span>`;
+  const states = [on && 'kanso-tabs__tab--on', square && 'kanso-tabs__tab--icon', item.armed && 'kanso-action--armed', item.pending && 'kanso-state-line--pending', item.held && 'kanso-control--held'].filter(Boolean).map((name) => ` ${name}`).join('');
+  const name = item.editing ? input({ text: item.label ?? '', label: item.label ?? '', icon: 'none', inline: true, selected: true, limit: tabNameLimit }) : `<span class="kanso-tabs__label">${label}</span>`;
+  return `${item.drop ? '<i class="kanso-tabs__insertion"></i>' : ''}<span class="kanso-tabs__tab${states}" role="tab" aria-selected="${on}" aria-label="${label}" tabindex="0" title="${square ? label : escape(item.tip ?? '')}" onclick="${choose}">`
+    + `${icon && item.icon ? glyph(item.icon) : ''}${named || !item.icon ? name : ''}${item.pending ? '<i class="kanso-state-line__pending-dot"></i>' : ''}${item.mark && !square ? mark({ status: item.mark }) : ''}`
+    + `${(item.dot || (square && item.mark === 'blocked')) && !on ? '<i class="kanso-tabs__dot"></i>' : ''}${on && item.closable && !square && !item.editing ? '<svg class="kanso-icon kanso-tabs__close"><use href="#lu-x"/></svg>' : ''}</span>`;
 }).join('')}</div>`;
 
 export const thumbnail = ({ image, label, selected, loading }) => `<span class="kanso-thumbnail${selected ? ' kanso-control--selected' : ''}${loading ? ' kanso-skeleton--shape' : ''}" role="button" aria-pressed="${selected}" aria-label="${escape(label)}" title="${escape(label)}" tabindex="0">${image && !loading ? `<img src="${escape(image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>`;
@@ -167,18 +177,76 @@ export const levels = { error: 'blocked', warning: 'working', success: 'done', i
 const lead = (level) => level === 'error' ? '<svg class="kanso-mark kanso-mark--blocked" aria-hidden="true"><use href="#e-blk"/></svg>'
   : level === 'success' ? '<svg class="kanso-icon kanso-icon--row kanso-text--done" aria-hidden="true"><use href="#lu-check"/></svg>'
   : `<i class="kanso-toast__dot kanso-fill--${levels[level]}"></i>`;
-export const toast = ({ level, icon, title, body, action, explain }) => {
+// `mark` stands in for the level's mark; `tone` colours an icon apart from the level; `detail` is the tool's words, in the tooltip.
+export const toast = ({ level = 'info', icon = 'none', title, body, action, explain, mark: status, tone, detail }) => {
   const fix = action ? button({ label: action, kind: 'tonal', size: 'sm' }) : '';
-  const ask = explain ? `<span class="kanso-button kanso-button--tonal kanso-button--sm" tabindex="0"><svg class="kanso-icon kanso-icon--row" aria-hidden="true"><use href="#lu-bot"/></svg>Explain to ${escape(explain)}</span>` : '';
+  const ask = explain ? explainButton({ agent: explain, size: 'sm' }) : '';
   const text = body ? `<span class="kanso-toast__text"><span>${escape(title)}</span><span class="kanso-toast__body">${escape(body)}</span></span>` : `<span class="kanso-content__text">${escape(title)}</span>`;
-  return `<div class="kanso-toast kanso-popover${body ? ' kanso-toast--two-lines' : ''}" role="status">${icon === 'none' ? lead(level) : glyph(icon).replace('class="', `class="kanso-text--${levels[level]} `)}${text}${fix}${ask}</div>`;
+  const head = status ? mark({ status }) : icon === 'none' ? lead(level) : glyph(icon, tone || levels[level]);
+  return `<div class="kanso-toast kanso-popover${body ? ' kanso-toast--two-lines' : ''}" role="status"${detail ? ` title="${escape(detail)}"` : ''}>${head}${text}${fix}${ask}</div>`;
 };
+
+// Explain to <agent>: the bot icon and the agent named in words.
+export const explainButton = ({ agent, size = 'md' }) => button({ label: `Explain to ${agent}`, kind: 'tonal', size, icon: 'lu-bot' });
 
 export const sides = ['auto', 'top', 'bottom', 'left', 'right'];
 // Auto takes the side with the most room around the control, measured when it opens.
 const place = "const tip = this.nextElementSibling, box = this.getBoundingClientRect(), room = { top: box.top, bottom: innerHeight - box.bottom, left: box.left, right: innerWidth - box.right }; const side = Object.keys(room).reduce((a, b) => room[b] > room[a] ? b : a); tip.className = tip.className.replace(/kanso-tooltip--(top|bottom|left|right)/, 'kanso-tooltip--' + side)";
 export const tooltip = ({ text, detail, key, icon, open, side }) => `<span class="kanso-tooltip__trigger"><span class="kanso-button kanso-button--icon" tabindex="0" aria-label="${escape(text)}"${side === 'auto' ? ` onmouseenter="${place}" onfocus="${place}"` : ''}><svg class="kanso-icon"><use href="#${icon}"/></svg></span>`
   + `<span class="kanso-tooltip kanso-popover kanso-tooltip--${side === 'auto' ? 'bottom' : side}${open ? ' kanso-tooltip--open' : ''}" role="tooltip">${escape(text)}${key ? ` <span>${escape(key)}</span>` : ''}${detail ? ` <span>· ${escape(detail)}</span>` : ''}</span></span>`;
+
+// A setting: its label, its control at the right, and an optional note under both with one quiet link.
+export const setting = ({ label, control, note, link }) => `<div class="kanso-setting"><span class="kanso-setting__label">${escape(label)}</span>${control ?? ''}`
+  + `${note || link ? `<div class="kanso-setting__note">${note ? escape(note) : ''}${link ? ` ${link}` : ''}</div>` : ''}</div>`;
+
+// A key hint: the chord beside the action it runs; faint when it says nothing now, recording while a key is captured.
+export const keyHint = ({ text, faint = false, recording = false }) => `<span class="kanso-key${faint ? ' kanso-text--dim' : ''}${recording ? ' kanso-key--recording kanso-ring--accent kanso-text--accent' : ''}">${escape(text)}</span>`;
+
+// One key of the keyboard map; `units` is its width in keys.
+const keycapClass = { free: '', herdr: ' kanso-keyboard__key--available', kanso: ' kanso-keyboard__key--bound', held: ' kanso-control--held', picked: ' kanso-control--on' };
+export const keycapStates = Object.keys(keycapClass);
+export const keycap = ({ label, units = 1, state = 'free', hover = false }) => `<span class="kanso-keyboard__key${keycapClass[state]}${hover ? ' kanso-control--hover' : ''}" role="button" tabindex="0"${units === 1 ? '' : ` style="--k-units:${Number(units)}"`}>${escape(label ?? '')}</span>`;
+
+// The picked key: its chord, what it does or Nothing, its layer, then the acts on it.
+export const keyPicked = ({ chord, meaning = null, layer = null, actions = [] }) => `<div class="kanso-keyboard__selection"><span class="kanso-keyboard__chord">${escape(chord)}</span>`
+  + `<span class="kanso-keyboard__meaning${meaning ? '' : ' kanso-text--muted'}">${escape(meaning ?? 'Nothing')}</span>${layer ? `<span class="kanso-keyboard__layer">${escape(layer)}</span>` : ''}`
+  + `${list(actions) ? `<div class="kanso-actions">${list(actions)}</div>` : ''}</div>`;
+
+// Pane header pieces: one fact per segment, its parts each in their own tone; `act` opens the fact's home.
+export const headerSegment = ({ parts = [], icon = null, tone = null, title = null, act = false }) => `<span class="kanso-pane-header__segment${act ? ' kanso-pane-header__segment--act' : ''}${tone ? ` kanso-text--${escape(tone)}` : ''}"`
+  + `${act ? ' role="button" tabindex="0"' : ''}${title ? ` title="${escape(title)}"` : ''}>${icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(icon)}"/></svg>` : ''}`
+  + `${parts.filter(Boolean).map(({ text, tone: ink }) => `<span${ink ? ` class="kanso-text--${escape(ink)}"` : ''}>${escape(text)}</span>`).join('')}</span>`;
+export const paneName = ({ name }) => `<span class="kanso-pane-header__name">${escape(name)}</span>`;
+// Lines added and removed, as git says them.
+export const diffText = ({ add = 0, del = 0 }) => `+${Number(add)} −${Number(del)}`;
+// Facts on one line, the way a tooltip lists what was folded away.
+export const facts = (...parts) => parts.filter(Boolean).join(' · ');
+
+// A count of what is folded away, such as +3.
+export const plus = (count) => `+${count}`;
+
+// Status bar pieces: each item is a Mark or an icon with its words, in the bar's meta size.
+const inlineIcon = (name) => `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(name)}"/></svg>`;
+export const statusItem = ({ icon = '', mark: status = '', text = '', tone = '', pending = false, open = false } = {}) => `<span class="kanso-status-bar__item${tone ? ` kanso-text--${escape(tone)}` : ''}${pending ? ' kanso-state-line--pending' : ''}${open ? ' kanso-status-bar__item--open' : ''}">`
+  + `${status ? mark({ status, size: 'sm' }) : icon ? inlineIcon(icon) : ''}${text === '' || text === null ? '' : `<span>${escape(String(text))}</span>`}${pending ? '<i class="kanso-state-line__pending-dot"></i>' : ''}</span>`;
+
+// The failure pattern on a bar: the blocked mark, our words, one small quiet fix.
+export const failureLine = ({ text, fix, detail = '' }) => `<span class="kanso-state-line"${detail ? ` title="${escape(detail)}"` : ''}>${mark({ status: 'blocked' })}${escape(text)}${button({ label: fix, kind: 'quiet', size: 'sm' })}</span>`;
+// The failure pattern in a panel, where the list would start: our words, the source's words, the fix, then Explain.
+export const failureBlock = ({ text, source = '', fix, agent = '' }) => `<div class="kanso-state-block" role="alert">${mark({ status: 'blocked' })}<div class="kanso-state-block__what">${escape(text)}</div>`
+  + `${source ? `<div class="kanso-state-block__why" title="${escape(source)}">${escape(source)}</div>` : ''}<div class="kanso-state-block__actions">${button({ label: fix, kind: 'solid' })}${agent ? explainButton({ agent }) : ''}</div></div>`;
+// The empty pattern: the view's icon, one sentence, at most one action.
+export const emptyState = ({ icon = '', text, action = '' }) => `<div class="kanso-state-empty">${icon ? glyph(icon) : ''}<div class="kanso-content__text">${escape(text)}</div>${action ? button({ label: action, kind: 'tonal' }) : ''}</div>`;
+export const statePatterns = ['failure', 'empty', 'pending', 'loading'];
+
+export const needsItem = ({ name, question = '', more = 0 }) => `<span class="kanso-status-bar__item kanso-status-bar__needs">${mark({ status: 'blocked', size: 'sm' })}<span class="kanso-status-bar__name">${escape(name)}</span>`
+  + `${question ? `<span class="kanso-status-bar__question">${escape(question)}</span>` : ''}${more ? `<span class="kanso-status-bar__more">${plus(more)}</span>` : ''}</span>`;
+
+// Panes per view: the number at rest, − and + on hover; its keys are in the tooltips.
+export const stepper = ({ value = 2, open = false, hover = false } = {}) => `<span class="kanso-status-bar__item kanso-status-bar__stepper${open ? ' kanso-status-bar__item--open' : ''}${hover ? ' kanso-control--hover' : ''}">${button({ label: 'Fewer panes per view ⌘⇧−', kind: 'icon', size: 'sm', icon: 'lu-minus' })}`
+  + `<span class="kanso-status-bar__value" title="${Number(value)} per view · scroll to change, click to even out">${Number(value)}</span>${button({ label: 'More panes per view ⌘⇧=', kind: 'icon', size: 'sm', icon: 'lu-plus' })}</span>`;
+
+export const tabSkeleton = () => '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tab-bar__skeleton"></span>';
 
 // One layout piece for the wrappers that only place other pieces; each variant keeps its own class and states.
 export const stacks = {
@@ -198,6 +266,30 @@ export const stacks = {
   'rail footer': { block: 'kanso-rail__footer' },
   'sidebar frame': { block: 'kanso-sidebar' },
   'rail frame': { block: 'kanso-rail' },
+  'status bar': { block: 'kanso-status-bar', states: ['grid'] },
+  'status bar left': { block: 'kanso-status-bar__left' },
+  'status bar middle': { block: 'kanso-status-bar__middle' },
+  'status bar right': { block: 'kanso-status-bar__right' },
+  'status bar popup': { block: 'kanso-status-bar__popup' },
+  edge: { block: 'kanso-edge', states: ['target'] },
+  'edge column': { block: 'kanso-edge__column', tag: 'span' },
+  'edge more': { block: 'kanso-edge__more', tag: 'span' },
+  'edge menu': { block: 'kanso-edge__menu', tag: 'span', states: ['left', 'right'] },
+  'tab bar': { block: 'kanso-tab-bar' },
+  'tab bar more': { block: 'kanso-tab-bar__more', tag: 'span' },
+  'tab bar menu': { block: 'kanso-tab-bar__menu', tag: 'span' },
+  'tab bar doors': { block: 'kanso-tab-bar__doors', tag: 'span' },
+  away: { block: 'kanso-away', tag: 'section' },
+  keyboard: { block: 'kanso-keyboard' },
+  'keyboard row': { block: 'kanso-keyboard__row' },
+  'keyboard layout': { block: 'kanso-keyboard__layout' },
+  toasts: { block: 'kanso-toasts' },
+  'pane header': { block: 'kanso-pane-header', states: ['focus', 'keyboard', 'blocked', 'unreachable', 'held'] },
+  'pane digest': { block: 'kanso-pane-header__digest', tag: 'span' },
+  'pane tools': { block: 'kanso-pane-header__tools', tag: 'span' },
+  'pane more': { block: 'kanso-pane-header__more', tag: 'span' },
+  'pane menu': { block: 'kanso-pane-header__menu', tag: 'span' },
+  panel: { block: 'kanso-panel', states: ['narrow', 'window', 'stale'] },
 };
 export const stack = ({ variant, on = false, ...flags }, ...children) => {
   if (!Object.hasOwn(stacks, variant)) throw new Error(`stack: unknown variant "${variant}"`);
