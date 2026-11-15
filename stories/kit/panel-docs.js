@@ -1,6 +1,14 @@
 // The panels' design guidelines and hypotheses, on the same templates as every page.
 
 export const panelGuidelines = {
+  'Panels/Memory': [
+    ['Kansō', 'One line for what is free.', '31% free of 16 GB. With the pointer, swap joins it, and the idle sessions’ words come under it: Recycle all, Only the ones over 500 MB, Close the ones not used for days. Under 20% free the number is in blocked ink and Recycle all is the primary.'],
+    ['Kokō', 'A line for Herdr, the hung helpers and each session.', 'Name and size. A session past the guard’s limit has its size in amber; one that needs you keeps the blocked mark. Picked, Herdr says window and core and offers Restart window; a session says its program, idle and up times and why, then Recycle when idle and Close; a working one offers nothing.'],
+    ['Shizen', 'End, Close and every bulk close ask again.', 'A refusal is the Failure block under its row, in the system’s words, with Explain to the agent. A recycle in flight breathes on its row; done ones say before and after; the result line offers Dismiss.'],
+    ['Seijaku', 'The guard and History fold at the foot.', 'Guard on opens each rule with its limit and a switch. History opens free memory over 24 h, 7 days or 30 days with its lowest, what the guard did, then Events and Heaviest.'],
+    ['Seijaku', 'States where the list starts.', 'Guard off is the empty state with Turn on; turning on is the skeleton under one dim line; a refusal is the Failure block. A guard that stopped answering keeps the last read stepped down, with Turn on the guard.'],
+    ['Kokō', 'The guard speaks when you are away.', 'Its notices are a toast while the window is on screen and the computer’s notification otherwise, with the same words.'],
+  ],
   'Panels/Markdown': [
     ['Kansō', 'The document, and Close.', 'A window over any layout, 560 wide. The file’s name over its folder, then the document formatted; at rest the header holds only Close. Source and Refresh come with the pointer; Back returns to the folder’s Markdown.'],
     ['Shizen', 'Edit where you read.', 'A double-click edits that block alone, a table as its cells with Add row, Add column and Done. What you type saves as you go; the folder line says Edited, Saving… or Saved. Source edits the whole file the same way.'],
@@ -51,6 +59,63 @@ export const panelGuidelines = {
 };
 
 export const panelHypotheses = {
+  'Panels/Memory': [
+    {
+      change: 'Free memory becomes one line; swap, Herdr’s parts and the totals move to where they are asked.',
+      today: 'a 72-point number, of 16 GB and swap, then window, core, agents, recycles, closed, restarts and freed as seven numbers, then Restart window and Clean up hung helpers, all at rest.',
+      why: 'every number the guard knows in one look.',
+      question: 'what does someone open Memory to decide?',
+      believe: 'whether to free memory and from which session; the free share and each line’s size answer that; the totals are history.',
+      jobs: [['how much is free', 'the number'], ['swap', 'with the pointer on the number'], ['window and core', 'Herdr, picked'], ['restart the window', 'Herdr, picked'], ['hung helpers', 'their own line with End'], ['what the guard did', 'History’s summary']],
+      wrong: 'someone looks for the totals or Restart window and does not find them.',
+      try: 'Dawn Mode first.',
+      back: 'the seven numbers and the two links return at rest.',
+    },
+    {
+      change: 'The sessions are one list, a line each; the groups go and the words come when a row is picked.',
+      today: 'Ready to recycle, Working and Can’t be recycled as three groups under a count line, each row with its program, times and words.',
+      why: 'what can be freed at a glance.',
+      question: 'does someone read the groups, or the sizes?',
+      believe: 'the sizes; amber past the limit and the blocked mark say which can and cannot be recycled, and the picked row says why.',
+      jobs: [['which can be recycled', 'amber size, idle on the picked row'], ['which is working', 'the picked row says so'], ['why one cannot', 'the picked row’s reason'], ['recycle or close one', 'its words'], ['all of them', 'Show N more']],
+      wrong: 'someone picks rows one by one to find an idle one.',
+      try: 'Dawn Mode first.',
+      back: 'the three groups and their counts return.',
+    },
+    {
+      change: 'Recycle all, Only the heavy ones and Close the unused come with the pointer on the number, or at once when memory is low.',
+      today: 'they sit under the agents’ count whenever any session is idle.',
+      why: 'one press to free memory.',
+      question: 'when does someone free memory in bulk?',
+      believe: 'when it is low, and then they are the primary; otherwise the number is where they look.',
+      jobs: [['free memory now', 'Recycle all, primary when low'], ['only the heavy ones', 'its word beside it'], ['close what is unused', 'its word, asking again']],
+      wrong: 'someone with plenty free looks for Recycle all and does not find it.',
+      try: 'Dawn Mode first.',
+      back: 'the bulk words return under the sessions at rest.',
+    },
+    {
+      change: 'The chart, Events and Heaviest move behind History; the limits become the guard’s fold with a switch each.',
+      today: 'the chart with its ranges follows the number; Heaviest and Events follow the agents; a line at the foot lists the limits.',
+      why: 'how memory moved and what the guard did, in view.',
+      question: 'how often does someone read the past compared to acting now?',
+      believe: 'rarely; History’s summary says what the guard did, and the rules are set once.',
+      jobs: [['free over time', 'History, the chart'], ['what the guard did', 'History, Events'], ['what is heaviest', 'History, Heaviest'], ['the limits', 'Guard on']],
+      wrong: 'someone opens History every visit, or misses the limits.',
+      try: 'Dawn Mode first.',
+      back: 'the chart, Heaviest, Events and the limits line return at rest.',
+    },
+    {
+      change: 'Off, unreadable and stopped use the shared patterns.',
+      today: 'a large Off or Unreadable with Turn on and Read again; Stopped at 14:02 in red with Turn on above the stepped-down read.',
+      why: 'the guard’s state first.',
+      question: 'what does someone do when the guard is not running?',
+      believe: 'turn it on; the empty state or the Failure block offers it, Refresh reads again, and the stale line says when.',
+      jobs: [['turn it on', 'Turn on'], ['read again', 'Refresh'], ['why it failed', 'the Failure block'], ['since when', 'the stale line']],
+      wrong: 'someone misses that the guard stopped.',
+      try: 'Dawn Mode first.',
+      back: 'the large word and the red line return.',
+    },
+  ],
   'Panels/Markdown': [
     {
       change: 'The conflict bar becomes a band that says when the file changed, with Overwrite and Reload, and Undo after Overwrite.',

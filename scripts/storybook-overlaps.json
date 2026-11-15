@@ -50,74 +50,73 @@
   "guard/Memory": {
     "page": "Panels/Memory",
     "states": {
-      "Normal": "panels/memory/MemoryAtRestNow/Default",
-      "Low": "panels/memory/MemoryLowTheWindowPastItsLimit/Default",
-      "Loading": "panels/memory/MemoryFirstRead/Default",
-      "Off": "panels/memory/MemoryGuardOff/Default",
-      "Unreadable": "panels/memory/MemoryStaleTheGuardStoppedAnswering/Default",
-      "Installing": "panels/memory/MemoryTurnOnPending/Default",
-      "Install failed": "panels/memory/MemoryTurnOnRefusedInTheInstallersWords/Default",
-      "Working set": "panels/memory/MemoryWindowsTheGuardReadsTheWorkingSet/Default",
-      "Paused": "panels/memory/Memory/Paused",
-      "Stopped": "panels/memory/Memory/Stopped",
-      "Unsupported": "panels/memory/Memory/Unsupported"
+      "Normal": "kit/Panels/Memory/At rest: guard on, one session past the limit, one needing you",
+      "Low": "kit/Panels/Memory/Low: the window past its limit",
+      "Loading": "kit/Panels/Memory/First read",
+      "Off": "kit/Panels/Memory/Guard off",
+      "Unreadable": "kit/Panels/Memory/Unreadable",
+      "Installing": "kit/Panels/Memory/Turning on",
+      "Install failed": "kit/Panels/Memory/Turn on refused",
+      "Working set": "kit/Panels/Memory/Windows: the working set",
+      "Paused": "kit/Panels/Memory/Guard paused",
+      "Stopped": "kit/Panels/Memory/Guard stopped answering"
     }
   },
   "guard/MemoryAgent": {
     "page": "Panels/Memory",
     "states": {
-      "Idle selected": "panels/memory/MemoryRestGuardOnOneAgentNeedsYouOnePastTheLimit/Default",
-      "Over limit": "panels/memory/MemoryRestGuardOnOneAgentNeedsYouOnePastTheLimit/Default",
-      "Needs user": "panels/memory/MemoryRestGuardOnOneAgentNeedsYouOnePastTheLimit/Default",
-      "Focused idle": "panels/memory/MemoryOnlyTheAgentYouAreOnIsIdleNoBulkRecycle/Default",
-      "Recycle armed": "panels/memory/MemoryRecycledOneRefusedOnItsRowAnAgentArmed/Default",
-      "Pending": "panels/memory/MemoryRecycle3IdleTwoConfirmedOnePending/Default",
-      "Cannot recycle": "panels/memory/MemoryAgent/Cannot recycle",
-      "Close armed": "panels/memory/MemoryAgent/Close armed",
-      "More": "panels/memory/MemoryAgent/More",
-      "No agents": "panels/memory/MemoryAgent/No agents",
-      "Working": "panels/memory/MemoryAgent/Working"
+      "Idle selected": "kit/Panels/Memory/Pointer on docs",
+      "Over limit": "kit/Panels/Memory/At rest: guard on, one session past the limit, one needing you",
+      "Needs user": "kit/Panels/Memory/At rest: guard on, one session past the limit, one needing you",
+      "Focused idle": "kit/Panels/Memory/Only the session you are on is idle",
+      "Recycle armed": "kit/Panels/Memory/Recycled, one refused on its row",
+      "Pending": "kit/Panels/Memory/Recycling three: two done, one pending",
+      "Cannot recycle": "kit/Panels/Memory/A session that cannot be recycled",
+      "Close armed": "kit/Panels/Memory/Close armed",
+      "More": "kit/Panels/Memory/More sessions than fit",
+      "No agents": "kit/Panels/Memory/No sessions",
+      "Working": "kit/Panels/Memory/A working session picked"
     }
   },
   "guard/MemoryRecovery": {
     "page": "Panels/Memory",
     "states": {
-      "Batch running": "panels/memory/MemoryRecycle3IdleTwoConfirmedOnePending/Default",
-      "Batch completed": "panels/memory/MemoryRecycledOneRefusedOnItsRowAnAgentArmed/Default",
-      "Batch refused": "panels/memory/MemoryRecycledOneRefusedOnItsRowAnAgentArmed/Default",
-      "Focused skipped": "panels/memory/MemoryOnlyTheAgentYouAreOnIsIdleNoBulkRecycle/Default",
-      "Hung helpers": "panels/memory/MemoryRecovery/Hung helpers",
-      "Recovery failed": "panels/memory/MemoryRecovery/Recovery failed",
-      "Restart window": "panels/memory/MemoryRecovery/Restart window"
+      "Batch running": "kit/Panels/Memory/Recycling three: two done, one pending",
+      "Batch completed": "kit/Panels/Memory/Recycled, one refused on its row",
+      "Batch refused": "kit/Panels/Memory/Recycled, one refused on its row",
+      "Focused skipped": "kit/Panels/Memory/Only the session you are on is idle",
+      "Hung helpers": "kit/Panels/Memory/End hung helpers, armed",
+      "Recovery failed": "kit/Panels/Memory/Ending the helpers refused",
+      "Restart window": "kit/Panels/Memory/Herdr picked, past its limit"
     }
   },
   "guard/MemoryHistory": {
     "page": "Panels/Memory",
     "states": {
-      "History": "panels/memory/MemoryHistoryOpenFreeOverTimeThenWhatTheGuardDid/Default",
-      "Refusal event": "panels/memory/MemoryHistoryOpenFreeOverTimeThenWhatTheGuardDid/Default",
-      "Share": "panels/memory/MemoryHistory/Share"
+      "History": "kit/Panels/Memory/History open",
+      "Refusal event": "kit/Panels/Memory/History open",
+      "Share": "kit/Panels/Memory/Share from the header"
     }
   },
   "guard/MemoryChart": {
     "page": "Panels/Memory",
     "states": {
-      "Free memory": "panels/memory/MemoryHistoryOpenFreeOverTimeThenWhatTheGuardDid/Default",
-      "Empty": "panels/memory/MemoryChart/Empty",
-      "Process spark": "panels/memory/MemoryChart/Process spark"
+      "Free memory": "kit/Panels/Memory/History open",
+      "Empty": "kit/Panels/Memory/History, nothing recorded yet",
+      "Process spark": "kit/Panels/Memory/Its memory over time"
     }
   },
   "guard/SystemNotice": {
     "page": "Panels/Memory",
     "states": {
-      "Batch": "panels/memory/SystemNotice/Batch",
-      "Did not resume": "panels/memory/SystemNotice/Did not resume",
-      "Recycled": "panels/memory/SystemNotice/Recycled",
-      "Restart loop": "panels/memory/SystemNotice/Restart loop",
-      "Restart needed": "panels/memory/SystemNotice/Restart needed",
-      "Restart scheduled": "panels/memory/SystemNotice/Restart scheduled",
-      "Terminal busy": "panels/memory/SystemNotice/Terminal busy",
-      "Window restarted": "panels/memory/SystemNotice/Window restarted"
+      "Batch": "kit/Panels/Memory/Notice: Batch",
+      "Did not resume": "kit/Panels/Memory/Notice: Did not resume",
+      "Recycled": "kit/Panels/Memory/Notice: Recycled",
+      "Restart loop": "kit/Panels/Memory/Notice: Restart loop",
+      "Restart needed": "kit/Panels/Memory/Notice: Restart needed",
+      "Restart scheduled": "kit/Panels/Memory/Notice: Restart scheduled",
+      "Terminal busy": "kit/Panels/Memory/Notice: Terminal busy",
+      "Window restarted": "kit/Panels/Memory/Notice: Window restarted"
     }
   },
   "panel/Files": {

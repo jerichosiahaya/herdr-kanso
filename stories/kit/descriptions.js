@@ -72,7 +72,7 @@ export const descriptions = {
   Shipped: 'Contribution totals for a chosen period, with a share card.',
   Ports: 'What listens on a port, the ones with no pane first, each one a press from stopping; History behind a fold.',
   Containers: 'What Docker costs on one line, each project and its containers a line each, their words on the picked one; Disk behind it.',
-  Memory: 'Free memory, per-session use and the memory guard on supported computers.',
+  Memory: 'What is free on one line, Herdr and each session a line, their words on the picked one; the guard and History behind folds.',
   Spend: 'Plan value and session cost for the selected period.',
   Images: 'Pictures from the conversation with pinned notes to send to an agent.',
   'Panels/Markdown': 'Markdown in a window over any layout, edited where you read it; a review waits on Done.',

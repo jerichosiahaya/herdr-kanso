@@ -2,7 +2,7 @@
 
 These features exist in the app and stay available; they await a design.
 
-14 feature states await design. Each page lists its own under Not designed yet.
+15 feature states await design. Each page lists its own under Not designed yet.
 
 | Module | State | Source |
 | --- | --- | --- |
@@ -13,6 +13,7 @@ These features exist in the app and stay available; they await a design.
 | Compositions/Sidebar | Sidebar · Search empty | kanso/mods/kanso-spaces/main.js:2415 |
 | Compositions/Sidebar | Sidebar · Stacked panes | kanso/mods/kanso-spaces/main.js:2415 |
 | Panels/Containers | Container List · Tool absent | kanso/mods/kanso-containers/main.js:395 |
+| Panels/Memory | Memory · Unsupported | kanso/mods/kanso-guard/main.js:230 |
 | Panels/Settings | Guide · Every list and menu | kanso/mods/kanso-help/guide.js:13 |
 | Panels/Settings | Guide · Panels | kanso/mods/kanso-help/guide.js:13 |
 | Panels/Settings | Guide · Sleep and Arrangements | kanso/mods/kanso-help/guide.js:13 |

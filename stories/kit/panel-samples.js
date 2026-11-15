@@ -119,8 +119,9 @@ export const samplePorts = {
 };
 // Ports · History: servers at once over the range, the part with no pane, then what opened and ended.
 const opened = (name, ports, when, ran, peak, how = null) => ({ name, ports, when, ran, peak, how });
+export const sampleRanges = [{ key: 'day', label: '24 h' }, { key: 'week', label: '7 days' }, { key: 'month', label: '30 days' }];
 export const samplePortHistory = {
-  ranges: [{ key: 'day', label: '24 h' }, { key: 'week', label: '7 days' }, { key: 'month', label: '30 days' }],
+  ranges: sampleRanges,
   bars: [0.3, 0.4, 0.25, 0.5, 0.45, 0.6, 0.35, 0.5, 0.7, 0.55, 0.4, 1, 0.6, 0.45, 0.5, 0.65, 0.4, 0.55, 0.3, 0.5, 0.45, 0.6, 0.4, 0.35],
   part: [0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.3, 0, 0, 0.4, 0, 0, 0, 0.2, 0, 0, 0, 0, 0, 0.2, 0, 0],
   peak: 11,
@@ -210,4 +211,56 @@ export const sampleDisk = {
   volumes: [{ name: 'mailpit-data', users: 'acme-shop · mailpit' }, { name: 'pg-old', users: 'unused' }, { name: 'cache-old', users: 'unused' }],
   unusedVolumes: 2,
   cache: '860 MB',
+};
+
+// Memory: 31% free on a 16 GB Mac, the guard on, five sessions with docs past the guard's limit and cart-ui needing you.
+const session = (name, size, state, said, extra = {}) => ({ name, size, state, said, ...extra });
+export const sampleMemory = {
+  free: { value: '31%', of: 'free of 16 GB', swap: '2.4 GB swap' },
+  herdr: { size: '1.4 GB', window: '1.1 GB window', core: '210 MB core', limit: 'past its 1.2 GB' },
+  helpers: { count: 2, size: '60 MB' },
+  sessions: [
+    session('checkout', '1.2 GB', 'working', ['Claude', 'working', 'up 3 d']),
+    session('docs', '980 MB', 'idle', ['Codex', 'idle 3 h', 'up 2 d', 'past the guard’s 900 MB'], { over: true }),
+    session('cart-ui', '760 MB', 'blocked', ['Claude', 'needs you', 'left as it is']),
+    session('perf', '720 MB', 'idle', ['Claude', 'idle 2 d', 'up 6 d']),
+    session('i18n', '640 MB', 'working', ['Codex', 'working', 'docs-site']),
+  ],
+  more: 3,
+  spark: [0.2, 0.3, 0.35, 0.5, 0.45, 0.6, 0.7, 0.65, 0.8, 0.9, 1, 0.95],
+  unrecyclable: 'No conversation to resume',
+  bulk: { idle: '2 idle', back: 'about 1.7 GB back', heavy: 'Only the 1 over 500 MB', unused: 'Close the 1 not used for 2 days · 720 MB' },
+  batch: { done: [['checkout', '1.6 GB → 210 MB'], ['perf', '720 MB → 180 MB']], current: 'docs', said: 'Recycled 2 of 2 · 1.9 GB back' },
+  guard: [['Recycle idle agents past 900 MB', true], ['Restart the window past 1.2 GB', true], ['Notify under 20% free', true]],
+  history: {
+    ranges: sampleRanges,
+    bars: [0.6, 0.55, 0.5, 0.52, 0.45, 0.4, 0.3, 0.2, 0.12, 0.08, 0.15, 0.3, 0.45, 0.5, 0.55, 0.5, 0.48, 0.52, 0.55, 0.58, 0.5, 0.45, 0.4, 0.31],
+    low: [8, 9, 10],
+    ticks: ['yesterday 15:00', 'now'],
+    most: 'lowest 8% · 11:20',
+    summary: ['6 recycles', '1 closed', '1 restart', '2.3 GB freed'],
+    lists: [
+      { key: 'events', label: 'Events', rows: [['docs recycled: 1.4 GB to 190 MB', '11:24'], ['Memory low: 8% free', '11:20'], ['cart-ui not recycled: it needs you', '09:02', true], ['Window restarted past 1.2 GB', '08:41']], more: 0 },
+      { key: 'heaviest', label: 'Heaviest', rows: [['Docker VM', '2.1 GB'], ['Herdr window', '1.1 GB'], ['Safari', '940 MB']], more: 0 },
+    ],
+  },
+  refused: { text: 'Couldn’t recycle docs', source: 'docs: its terminal did not take the restart', fix: 'Recycle', agent: 'docs' },
+  reap: { text: 'Couldn’t end 2 hung helpers', source: 'kill: (4121) - Operation not permitted', fix: 'End', agent: 'checkout' },
+  install: { text: 'Couldn’t turn on the memory guard', source: 'launchctl bootstrap: 5: Input/output error', fix: 'Turn on', agent: 'checkout' },
+  unreadable: { text: 'Can’t read the memory guard', source: 'guard.json: Unexpected end of JSON input', fix: 'Turn on', agent: 'checkout' },
+  stale: 'Stopped at 14:02',
+  silent: 'The guard stopped answering',
+  remote: { computer: 'devbox', free: { value: '54%', of: 'free of 32 GB', swap: '0 swap' }, herdr: { size: '320 MB' }, sessions: [session('relay', '1.1 GB', 'working', ['Claude', 'working', 'up 1 d'])] },
+};
+// The guard's notices in its own words; on screen they are toasts, away the computer's notifications.
+const notice = (state, text, detail) => ({ state, home: 'memory', text, detail });
+export const sampleMemoryNotices = {
+  'Recycled': notice('done', 'docs restarted', 'It held 1400 MB; the same conversation goes on in a fresh process (190 MB).'),
+  'Batch': notice('done', 'Agents recycled', '3 of 3, 2100 MB freed. Same conversations, fresh processes.'),
+  'Did not resume': notice('failed', 'docs did not resume', 'Run in its terminal: codex resume 0199a4'),
+  'Terminal busy': notice('waits', 'docs needs a manual restart', 'It exited, but its terminal is busy. Run: codex resume 0199a4'),
+  'Restart needed': notice('waits', 'perf needs a manual restart', 'Run in its terminal: claude --resume 7f3e'),
+  'Restart scheduled': notice('fact', 'Herdr will restart its window', 'Past its 1.2 GB. It restarts when you pause for a minute; terminals keep running.'),
+  'Window restarted': notice('done', 'Herdr window restarted', 'Past its 1.2 GB. Your terminals and agents kept running.'),
+  'Restart loop': notice('failed', 'Herdr keeps outgrowing its limit', 'Automatic restarts are paused for an hour. Open Memory in kansō to see what grows.'),
 };

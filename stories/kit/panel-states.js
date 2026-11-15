@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, ports, settings } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer } from './samples.js';
-import { sampleContainers, sampleDisk, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
 
 // Settings: each page with its samples, then each state as what changes on it.
 const shows = (extra) => ({ page: 'pieces', hidden: sampleHidden, areas: sampleAreas, ...extra });
@@ -172,6 +172,47 @@ export const containersViews = {
   'Memory not attributed': [docked({ unattributed: sampleContainers.unattributed }), 'On Windows the VM’s memory cannot be read yet: it says so.'],
   'Narrow, 300': [running({ look: 'narrow' }), 'The image hides; the words wrap.'],
 };
+// Memory: 31% free, Herdr, two hung helpers, five sessions; each state is what the pointer, a recycle, the guard or a read changes.
+const { free, herdr, helpers, sessions, guard: rules, bulk, batch } = sampleMemory;
+const held = (extra) => ({ free, herdr, helpers, sessions, rules, ...extra });
+const docs = (extra) => held({ picked: 'docs', ...extra });
+const low = { ...free, value: '8%', low: true };
+const recalled = (extra = {}) => held({ history: { open: true, ...sampleMemory.history, ...extra } });
+const noticed = Object.fromEntries(Object.entries(sampleMemoryNotices).map(([name, said]) => [phrase('Notice:', name), [held({ notice: said }), 'On screen a toast; away, the computer’s notification with the same words.']]));
+export const memoryViews = {
+  'At rest: guard on, one session past the limit, one needing you': [held({}), 'Free memory on one line; Herdr, the hung helpers and each session a line; Guard on and History fold at the foot.'],
+  'Pointer on the number': [held({ free: { ...free, hover: true }, bulk }), 'Swap joins the number; Recycle every idle one, Only the heavy ones and Close the unused come under it.'],
+  'Pointer on docs': [docs({}), 'Its program, idle and up times, why it is past the limit; Recycle and Close.'],
+  'A working session picked': [held({ picked: 'checkout' }), 'A working session cannot be recycled; it says working and offers nothing.'],
+  'A session that cannot be recycled': [held({ picked: 'perf', unrecyclable: sampleMemory.unrecyclable }), 'Why it cannot be recycled, and Close.'],
+  'Close armed': [held({ picked: 'perf', armed: 'session' }), 'Close asks again.'],
+  'Its memory over time': [docs({ spark: sampleMemory.spark }), 'The picked session’s memory as a small chart.'],
+  'More sessions than fit': [held({ more: sampleMemory.more }), 'The first five, then Show 3 more.'],
+  'No sessions': [held({ sessions: [] }), 'One quiet line.'],
+  'Low: the window past its limit': [held({ free: low, bulk, herdr: { ...herdr, over: true } }), 'The number in blocked ink, Recycle every idle one as the primary, Herdr’s size in blocked ink.'],
+  'Herdr picked, past its limit': [held({ free: low, herdr: { ...herdr, over: true }, picked: 'Herdr' }), 'Window and core apart, its limit, and Restart window as the primary.'],
+  'Only the session you are on is idle': [held({ bulk: { only: 'Only the agent you are on is idle; it is never recycled in bulk.' } }), 'Nothing to recycle in bulk; it says why.'],
+  'Close the unused, armed': [held({ free: { ...free, hover: true }, bulk, armed: 'unused' }), 'It asks again.'],
+  'End hung helpers, armed': [held({ armed: 'helpers' }), 'It asks again.'],
+  'Ending the helpers refused': [held({ reap: sampleMemory.reap }), 'The system’s words under the row, End again, and Explain to the agent.'],
+  'Recycling three: two done, one pending': [held({ batch: { ...batch, said: 'Recycling 3 of 3 · docs' } }), 'Each done one says before and after; the one in flight breathes.'],
+  'Recycled, one refused on its row': [docs({ batch: { done: batch.done, said: batch.said, finished: true }, refused: sampleMemory.refused }), 'What came back, Dismiss, and the refusal under its row.'],
+  'Guard open': [held({ foot: { open: true } }), 'Each rule with its limit and a switch.'],
+  'History open': [recalled(), 'Free memory over time with its lowest, what the guard did, then Events and Heaviest.'],
+  'History, nothing recorded yet': [recalled({ bars: [], most: 'nothing recorded yet', summary: [], lists: [] }), 'Right after the guard is turned on: the ranges and one quiet line.'],
+  'Share from the header': [held({ share: true }), 'The Share menu says what leaves.'],
+  'Guard paused': [held({ guard: 'paused', free: { ...free, paused: true } }), 'The number says paused; so does the guard’s fold.'],
+  'Guard stopped answering': [held({ stale: sampleMemory.stale, silent: sampleMemory.silent }), 'The last read stays, stepped down, with Turn on the guard.'],
+  'Guard off': [{ guard: 'off' }, 'The empty state and Turn on.'],
+  'Turning on': [{ guard: 'turning' }, 'The skeleton under one dim line.'],
+  'Turn on refused': [{ guard: 'refused', install: sampleMemory.install }, 'The installer’s words, Turn on, and Explain to the agent.'],
+  'Unreadable': [{ failure: sampleMemory.unreadable }, 'What the guard wrote could not be read: its words and Turn on.'],
+  'First read': [{ reading: true }, 'The skeleton, once.'],
+  'Windows: the working set': [held({ title: 'Memory · working set' }), 'On Windows the guard reads the working set; the title says so.'],
+  'On another computer': [{ ...sampleMemory.remote, rules, scope: sampleMemory.remote.computer }, 'The focused project’s computer, read by its own guard.'],
+  'Narrow, 300': [docs({ look: 'narrow' }), 'The words wrap.'],
+  ...noticed,
+};
 const stated = (views, draw) => ({
   args: { view: Object.keys(views)[0] },
   markup: ({ view }) => draw(views[view][0]),
@@ -179,6 +220,6 @@ const stated = (views, draw) => ({
 });
 const control = (views) => ({ view: { name: 'what it shows', control: { type: 'select' }, options: Object.keys(views) } });
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers] };
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

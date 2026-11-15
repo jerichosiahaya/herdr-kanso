@@ -1,6 +1,6 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
 import { band, bars, button, chord, dialog, facts, mark, markdown, menu, metric, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
-import { channelSettings, keyboardExplorer, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
+import { channelSettings, keyboardExplorer, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
 export const settingsPages = [{ key: 'pieces', label: 'What shows' }, { key: 'keys', label: 'Keys' }, { key: 'news', label: 'What’s new' }, { key: 'credits', label: 'Credits' }];
@@ -130,17 +130,19 @@ const serverRow = ({ picked, refused, narrow, armed, stopping, reach }) => (item
 const noPaneHeading = ({ count, hover, armed }) => row({ name: 'No pane', heading: true, action: hover ? { label: phrase('Stop', count), kind: 'quiet', armed, verb: 'stop every one' } : null });
 const historyFold = (open) => row({ name: 'History', level: 0, open });
 const historyRow = ({ name, ports, when, ran, peak, how }) => row({ name, meta: peak, second: facts(ports, when, ran, how) });
-const historyLists = (lists) => {
+const historyLists = (lists, each) => {
   const shown = lists.filter(({ rows }) => rows.length);
   const [first] = shown;
+  if (!first) return null;
   return list(shown.length > 1 ? tabs({ items: shown, value: first.key, size: 'sm' }) : row({ name: first.label, heading: true }),
-    first.rows.map(historyRow), first.more ? button({ label: phrase('Show', first.more, 'more'), kind: 'quiet', size: 'sm' }) : null);
+    first.rows.map(each), first.more ? button({ label: phrase('Show', first.more, 'more'), kind: 'quiet', size: 'sm' }) : null);
 };
 const guardLine = (said) => setting({ label: said, control: button({ label: 'Turn on the guard', kind: 'quiet', size: 'sm' }) });
-const history = ({ open = false, ranges, range, most, summary, guard = null, lists = [], ...chart }) => (open
+// `each` draws one row of the lists; Ports' rows are servers that ran.
+const history = ({ open = false, ranges, range, most, summary, guard = null, lists = [], each = historyRow, ...chart }) => (open
   ? list(historyFold(true), guard ? guardLine(guard) : null, guard && !chart.bars ? null : list(
     stack({ variant: 'line' }, tabs({ items: ranges, value: range ?? ranges[0].key, size: 'sm' }), row({ name: most, dimmed: true })),
-    bars(chart), row({ name: facts(...summary), dimmed: true }), historyLists(lists)))
+    bars(chart), summary.length ? row({ name: facts(...summary), dimmed: true }) : null, historyLists(lists, each)))
   : historyFold(false));
 const portsBody = ({ servers, picked = null, refused = null, armed = false, stopping = false, heading = {}, reach = true, look, reading = false, failure = null, unattributed = null, history: past }) => {
   if (failure) return failureBlock(failure);
@@ -197,8 +199,9 @@ const containerVerbs = (item, { details, armed, pending, local }) => [
   item.health === 'running' ? null : { label: 'Remove', armed, verb: 'remove' },
 ].filter(Boolean).map((verb) => ({ ...verb, disabled: pending }));
 const detailRows = (said) => (said.length ? said.map(([name, value]) => row({ name, detail: value, depth: 1 })) : row({ name: 'No details from Docker', depth: 1, dimmed: true }));
-const containerRow = ({ picked, details, said = [], armed, pending, refused, narrow, local }) => (item) => {
-  const open = item.name === picked;
+// A list's row factory that knows whether its item is the picked one.
+const eachPicked = (picked, draw) => (item) => draw(item, item.name === picked);
+const containerRow = ({ picked, details, said = [], armed, pending, refused, narrow, local }) => eachPicked(picked, (item, open) => {
   const status = healthMarks[item.health];
   return list(row({
     name: item.name, meta: item.meta, late: item.health === 'failed', current: open, pending: open && pending,
@@ -206,7 +209,7 @@ const containerRow = ({ picked, details, said = [], armed, pending, refused, nar
     second: open ? facts(narrow ? null : item.image, item.ports, item.age) : null,
     verbs: open ? containerVerbs(item, { details, armed, pending, local }) : [],
   }), open && details ? detailRows(said) : null, open && refused ? failureBlock(refused) : null);
-};
+});
 const bulkVerbs = (containers) => {
   const running = containers.filter(({ health }) => health === 'running').length;
   return [running > 1 ? { label: 'Stop all' } : null, containers.length - running > 1 ? { label: 'Start all' } : null];
@@ -229,13 +232,10 @@ const runForm = ({ name, port, field = null, source = null, image: picked }) => 
   input({ label: 'Name', text: name, focus: field === 'name', error: field === 'name' }),
   input({ label: 'Port', text: port, focus: field === 'port', error: field === 'port' }),
   source ? null : button({ label: 'Run', size: 'sm' })), source ? failureBlock({ text: phrase('Could not run', picked), source, fix: 'Run' }) : null);
-const imageRow = ({ picked, run, armed }) => (item) => {
-  const open = item.name === picked;
-  return list(row({
-    name: item.name, meta: item.size, dimmed: item.unused, current: open, second: open ? item.users : null,
-    verbs: open ? [{ label: run ? 'Cancel' : 'Run…' }, item.unused ? { label: 'Remove', armed, verb: 'remove' } : null].filter(Boolean) : [],
-  }), open && run ? runForm({ ...run, image: item.name }) : null);
-};
+const imageRow = ({ picked, run, armed }) => eachPicked(picked, (item, open) => list(row({
+  name: item.name, meta: item.size, dimmed: item.unused, current: open, second: open ? item.users : null,
+  verbs: open ? [{ label: run ? 'Cancel' : 'Run…' }, item.unused ? { label: 'Remove', armed, verb: 'remove' } : null].filter(Boolean) : [],
+}), open && run ? runForm({ ...run, image: item.name }) : null));
 const disk = ({ summary, pull, spare, images, volumes, unusedVolumes, cache, picked = null, run = null, armed = null }) => list(
   row({ name: 'Disk', level: 0, open: true, meta: summary }),
   input({ label: 'Image to pull', text: pull, action: 'Pull' }),
@@ -261,3 +261,60 @@ const containersBody = ({ projects = [], loose = [], cost: held = null, hover = 
 export const containers = ({ scope = null, stale = false, look = 'panel', context = false, ...body }) => panel({ look, stale, header: panelHeader({
   title: 'Containers', second: scope, tools: [panelRefresh({ reading: body.reading || body.docker === 'starting' || stale })],
 }) }, containersBody({ look, ...body, local: !context && !stale }));
+
+// Memory: free memory, then Herdr, hung helpers and each session a line; the guard and History fold at the foot.
+const freeLine = ({ value, of, swap, hover = false, low = false, paused = false }) => metric({ value, unit: facts(of, hover ? swap : null, paused ? 'paused' : null), tone: low ? 'blocked' : undefined });
+const bulkLine = ({ idle, back, heavy, unused, only }, { low, armed }) => (only
+  ? row({ name: only, dimmed: true })
+  : row({ name: idle, meta: back, verbs: [{ label: 'Recycle all', kind: low ? 'solid' : undefined }, heavy ? { label: heavy } : null, unused ? { label: unused, armed, verb: 'close them' } : null].filter(Boolean) }));
+const herdrRow = ({ size, window: held, core, limit, over = false }, open) => row({
+  name: 'Herdr', meta: over ? { text: size, tone: 'blocked' } : size, current: open,
+  second: open ? facts(held, core, over ? limit : null) : null,
+  verbs: open ? [{ label: 'Restart window', kind: over ? 'solid' : undefined }] : [],
+});
+const helpersRow = ({ count, size }, armed) => row({ name: phrase(count, 'hung helpers'), meta: size, action: { label: 'End', kind: 'quiet', armed, verb: phrase('end', count) } });
+const sessionVerbs = (item, { armed, unrecyclable }) => [
+  item.state === 'idle' && !unrecyclable ? { label: 'Recycle' } : null,
+  item.state === 'working' ? null : { label: 'Close', armed, verb: 'close' },
+].filter(Boolean);
+const sessionMeta = (item, done) => done ?? (item.over ? { text: item.size, tone: 'working' } : item.size);
+const sessionRow = ({ picked, armed, refused, spark, unrecyclable, batch }) => {
+  const done = Object.fromEntries(batch?.done ?? []);
+  return eachPicked(picked, (item, open) => list(row({
+    name: item.name, meta: sessionMeta(item, done[item.name]), current: open, pending: item.name === batch?.current,
+    mark: item.state === 'blocked' ? 'blocked' : 'none',
+    second: open ? facts(...item.said, unrecyclable) : null,
+    verbs: open ? sessionVerbs(item, { armed, unrecyclable }) : [],
+  }), open && spark ? bars({ bars: spark }) : null, open && refused ? failureBlock(refused) : null));
+};
+const batchLine = ({ said, finished }) => row({ name: said, dimmed: true, action: finished ? { label: 'Dismiss', kind: 'quiet' } : null });
+const eventRow = ([name, when, late = false]) => row({ name, meta: late ? { text: when, tone: 'blocked' } : when });
+const guardRules = (rules) => rules.map(([label, on]) => setting({ label, control: toggle({ checked: on, label }) }));
+const memoryFoot = ({ guard, past }) => list(
+  stack({ variant: 'line' }, row({ name: guard.said, level: 0, open: Boolean(guard.open) }), past.open ? null : historyFold(false)),
+  guard.open ? guardRules(guard.rules) : null, past.open ? history({ ...past, each: eventRow }) : null);
+const memoryWait = ({ guard: state, install }) => ({
+  off: () => emptyState({ icon: 'lu-memory-stick', text: 'The memory guard is off', action: 'Turn on' }),
+  turning: () => list(row({ name: 'Turning on the guard…', dimmed: true }), skeletonOf({ shape: 'list row', count: 3 })),
+  refused: () => failureBlock(install),
+})[state];
+const memoryBody = ({ free, herdr, helpers = null, sessions = [], more = 0, bulk = null, batch = null, guard = 'on', install = null, rules = [], foot = {}, history: past = { open: false }, picked = null, armed = null, refused = null, reap = null, spark = null, unrecyclable = null, silent = null, reading = false, failure = null }) => {
+  if (failure) return failureBlock(failure);
+  if (reading) return skeletonOf({ shape: 'list row', count: 4 });
+  const waiting = memoryWait({ guard, install });
+  if (waiting) return waiting();
+  const each = sessionRow({ picked, armed: armed === 'session', refused, spark, unrecyclable, batch });
+  return list(silent ? guardLine(silent) : null, freeLine(free), bulk ? bulkLine(bulk, { low: free.low, armed: armed === 'unused' }) : null,
+    herdrRow(herdr, picked === 'Herdr'), helpers ? helpersRow(helpers, armed === 'helpers') : null, reap ? failureBlock(reap) : null,
+    batch ? batchLine(batch) : null, sessions.length ? sessions.map(each) : row({ name: 'No agents running', dimmed: true }),
+    more ? button({ label: phrase('Show', more, 'more'), kind: 'quiet', size: 'sm' }) : null,
+    memoryFoot({ guard: { said: guard === 'paused' ? 'Guard paused' : 'Guard on', rules, ...foot }, past }));
+};
+// `scope` is the remote computer, or the stale line; `share` opens the header's Share menu, `notice` shows a guard notice on screen.
+const memoryPanel = ({ scope = null, look = 'panel', title = 'Memory', ...body }) => panel({ look, stale: Boolean(body.stale), header: panelHeader({
+  title, second: scope ?? body.stale, tools: [shareButton(), panelRefresh({ reading: body.reading })],
+}) }, memoryBody(body));
+export const memory = ({ share = false, notice: said = null, ...props }) => {
+  const beside = share ? shareMenu({ leaves: 'Counts and sizes only' }) : said ? notice(said) : null;
+  return beside ? stack({ variant: 'columns' }, memoryPanel(props), beside) : memoryPanel(props);
+};
