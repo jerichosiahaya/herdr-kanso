@@ -1,7 +1,6 @@
 // What the status bar says, and where a click goes. No host calls.
 import { machineTitle, parseOr, oneLine, memoryFree, plural } from "./pure.js";
 
-export const QUESTION_W = 260;
 export const MEMORY_MS = 60_000;
 // A now.json older than three minutes is not a current fact (the guard's own rule).
 export const MEMORY_STALE_MS = 3 * 60_000;
@@ -27,20 +26,14 @@ const waiting = (rows) => (Array.isArray(rows) ? rows : []).filter((row) => row?
 
 const tipLine = (row, question) => [row.name || "Agent", row.project, question].filter(Boolean).join(" · ");
 
-export function needsItem(rows, questions = {}) {
+export function waitingItem(rows, questions = {}) {
   const list = waiting(rows);
   if (!list.length) return null;
   const ask = (row) => questions[row.address] || null;
-  const more = list.length - 1;
   return {
     name: list[0].name || "Agent",
     question: ask(list[0]),
-    more: more > 0 ? `+${more}` : null,
-    mark: "blocked",
-    nameTone: "text",
-    questionTone: "muted",
-    moreTone: "dim",
-    questionWidth: QUESTION_W,
+    more: list.length - 1,
     command: NEEDS_COMMAND,
     tooltip: list.map((row) => tipLine(row, ask(row))).join("\n"),
   };

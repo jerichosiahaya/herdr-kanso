@@ -2,45 +2,26 @@
 // Modified by 0OZ: no background or top border.
 // Modified by José Gutiérrez (minimalistic, 0oz design fork): renamed from oz-status.
 // Modified by jlopezlira (Kanso, https://github.com/jlopezlira/herdr-kanso): renamed from mn-status; one quiet line; who is waiting and what they ask (a click goes there, as Cmd+J); low memory from the guard's file; stand-ins that show only while their home is out of sight.
-import { View, div, svg } from "gpui-kit";
+import { View, div } from "gpui-kit";
 import { h_flex } from "gpui-base";
 import { spaces, agents, terminals, machines, theme, run, window, props, shared, appHome, readTextFile } from "herdr";
-import { G, R, T, ICON_INLINE, glyphOf, tokens } from "./ui.js";
+import { G, T, tokens } from "./ui.js";
 import { mark } from "./ui-mark.js";
 import { iconButton } from "./ui-button.js";
-import { stateLine, PENDING, pendingDot } from "./ui-state.js";
+import { stateLine } from "./ui-state.js";
+import { statusItem, needsItem } from "./ui-status.js";
 import { afterMount, aliasText, tryOrAsync } from "./pure.js";
 import { paths } from "./platform-paths.js";
-import { MEMORY_MS, PALETTE_COMMAND, computerOf, computerShown, needsItem, questionOf, memoryLow, workingItem, paletteTip } from "./model.js";
+import { MEMORY_MS, PALETTE_COMMAND, computerOf, computerShown, waitingItem, questionOf, memoryLow, workingItem, paletteTip } from "./model.js";
 import { pieces, shown } from "./pieces.js";
 
 const GUARD_NOW = ["data", "kanso-guard", "now.json"];
 const SIDEBAR_COLLAPSED = "sidebar.collapsed";
+const go = (command) => () => run(command);
 
-// One item of the bar: its mark or icon, 8 to its words.
-const item = () => h_flex().gap(G.sm).items_center().min_w(0);
-// A click on an item goes where its fact lives; the hover is the row's wash.
-const act = (el, c, id, tip, command) => el.id(id).cursor_pointer().tooltip(tip).rounded(R.sm).mx(-G.xs).px(G.xs)
-  .hover((s) => s.bg(c.w7).text_color(c.text)).on_click(() => run(command));
-
-const computerItem = (computer, c) => computer.fix
-  ? stateLine("status-computer", mark(c, { status: "blocked" }), computer.words, c, { label: computer.fix, onClick: () => run(computer.command) }).tooltip(computer.tooltip)
-  : item().when(computer.pending, (el) => el.opacity(PENDING))
-    .child(svg(glyphOf(computer.icon)).size(ICON_INLINE).flex_none())
-    .child(div().truncate().child(computer.words))
-    .when(computer.pending, (el) => el.child(pendingDot("status-computer-pending", c)));
-
-const needsYou = (needs, c) => act(item(), c, "needs-you", needs.tooltip, needs.command)
-  .child(mark(c, { status: needs.mark, size: "sm" }))
-  .child(div().flex_none().font_medium().text_color(c[needs.nameTone]).child(needs.name))
-  .when(Boolean(needs.question), (row) => row.child(div().max_w(needs.questionWidth).min_w(0).truncate().text_color(c[needs.questionTone]).child(needs.question)))
-  .when(Boolean(needs.more), (row) => row.child(div().flex_none().text_color(c[needs.moreTone]).child(needs.more)));
-
-const memoryItem = (low, c) => act(item().flex_none().text_color(c[low.tone]), c, "status-memory", low.tooltip, low.command).child(low.words);
-
-const workingCount = (working, c) => act(item().flex_none(), c, "status-working", working.tooltip, working.command)
-  .child(mark(c, { status: working.mark, size: "sm" }))
-  .child(working.words);
+const computerItem = (computer, c) => (computer.fix
+  ? stateLine("status-computer", mark(c, { status: "blocked" }), computer.words, c, { label: computer.fix, onClick: go(computer.command) }).tooltip(computer.tooltip)
+  : statusItem("status-computer", c, { icon: computer.icon, text: computer.words, pending: computer.pending }));
 
 export default class WorkspaceStatus extends View {
   init(_props, cx) {
@@ -84,16 +65,18 @@ export default class WorkspaceStatus extends View {
         msg: byTerm.get(row.address)?.report?.msg, title: agent?.title, name: row.name, program: agent?.program,
       })]] : [];
     }));
-    const needs = needsItem(rows, questions);
+    const needs = waitingItem(rows, questions);
     const low = right ? memoryLow(this.memoryText) : null;
     const working = workingItem(list);
     return h_flex().size_full().px(G.md).gap(G.lg).items_center().text_size(T.body).text_color(c.muted)
       .when(right && !left, (el) => el.justify_end())
       .when(computerShown(computer, shared(SIDEBAR_COLLAPSED)), (el) => el.child(computerItem(computer, c)))
       .when(left && right, (el) => el.child(div().flex_1()))
-      .when(Boolean(needs), (el) => el.child(needsYou(needs, c)))
-      .when(Boolean(low), (el) => el.child(memoryItem(low, c)))
-      .when(right && shown("status.agents", working.count > 0, map), (el) => el.child(workingCount(working, c)))
-      .when(right && shown("status.palette", true, map), (el) => el.child(iconButton("palette", "command", paletteTip(window()?.platform), () => run(PALETTE_COMMAND), c, { size: "sm" })));
+      .when(Boolean(needs), (el) => el.child(needsItem("needs-you", c,
+        { name: needs.name, question: needs.question, more: needs.more, tip: needs.tooltip, onClick: go(needs.command) })))
+      .when(Boolean(low), (el) => el.child(statusItem("status-memory", c, { text: low.words, tone: low.tone, tip: low.tooltip, onClick: go(low.command) })))
+      .when(right && shown("status.agents", working.count > 0, map), (el) => el.child(statusItem("status-working", c,
+        { mark: working.mark, text: working.words, tip: working.tooltip, onClick: go(working.command) })))
+      .when(right && shown("status.palette", true, map), (el) => el.child(iconButton("palette", "command", paletteTip(window()?.platform), go(PALETTE_COMMAND), c, { size: "sm" })));
   }
 }

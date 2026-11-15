@@ -30,32 +30,26 @@ test("A question is what the agent said, or a title that says more than its name
 });
 
 test("Needs you names the oldest blocked agent, and nothing when nobody waits", async () => {
-  const { needsItem, QUESTION_W, NEEDS_COMMAND } = await load("kanso-status/model.js", ["needsItem", "QUESTION_W", "NEEDS_COMMAND"]);
-  assert.equal(needsItem(null), null);
-  assert.equal(needsItem([]), null);
-  assert.equal(needsItem([row("a", "done")]), null);
-  assert.equal(needsItem([row("a", "blocked", { pane: null })]), null);
-  assert.equal(needsItem([row("a", "blocked", { address: "" })]), null);
-  const one = needsItem([row("later", "blocked"), row("done", "done")], { later: "Add the countdown?" });
+  const { waitingItem, NEEDS_COMMAND } = await load("kanso-status/model.js", ["waitingItem", "NEEDS_COMMAND"]);
+  assert.equal(waitingItem(null), null);
+  assert.equal(waitingItem([]), null);
+  assert.equal(waitingItem([row("a", "done")]), null);
+  assert.equal(waitingItem([row("a", "blocked", { pane: null })]), null);
+  assert.equal(waitingItem([row("a", "blocked", { address: "" })]), null);
+  const one = waitingItem([row("later", "blocked"), row("done", "done")], { later: "Add the countdown?" });
   assert.equal(one.name, "later");
   assert.equal(one.question, "Add the countdown?");
-  assert.equal(one.more, null);
-  assert.equal(one.mark, "blocked");
-  assert.equal(one.nameTone, "text");
-  assert.equal(one.questionTone, "muted");
-  assert.equal(one.moreTone, "dim");
-  assert.equal(one.questionWidth, QUESTION_W);
-  assert.equal(QUESTION_W, 260);
+  assert.equal(one.more, 0);
   assert.equal(one.command, NEEDS_COMMAND);
   assert.equal(one.tooltip, "later · kanso · Add the countdown?");
   const queued = [row("new", "blocked"), row("old", "blocked", { project: "site" }), row("done", "done", { name: "Finished" })];
-  const two = needsItem(queued, { new: null, old: "Ship it" });
+  const two = waitingItem(queued, { new: null, old: "Ship it" });
   assert.equal(two.name, "new");
   assert.equal(two.question, null);
-  assert.equal(two.more, "+1");
+  assert.equal(two.more, 1);
   assert.equal(two.tooltip, "new · kanso\nold · site · Ship it");
-  assert.equal(needsItem([row("a", "blocked"), row("b", "blocked"), row("c", "blocked")]).more, "+2");
-  assert.equal(needsItem([{ address: "a", status: "blocked", pane: "p", project: "kanso" }]).name, "Agent");
+  assert.equal(waitingItem([row("a", "blocked"), row("b", "blocked"), row("c", "blocked")]).more, 2);
+  assert.equal(waitingItem([{ address: "a", status: "blocked", pane: "p", project: "kanso" }]).name, "Agent");
 });
 
 test("The computer says where you are, Can't reach with Refresh only when that computer is unreachable, and pending while it connects", async () => {
@@ -121,12 +115,20 @@ test("Low memory uses the guard's words, and a stale or fine reading says nothin
 });
 
 function bar() {
-  const texts = [], colors = [], handlers = new Map(), tips = new Map(), runs = [], marks = [];
+  const texts = [], colors = [], handlers = new Map(), tips = new Map(), runs = [], marks = [], ids = [], opacities = new Map(), hovers = new Map();
   const node = () => {
     let id = null;
     const el = new Proxy({}, { get(_target, key) {
       if (key === "then") return undefined;
-      if (key === "id") return (value) => { id = value; return el; };
+      if (key === "id") return (value) => { id = value; ids.push(value); return el; };
+      if (key === "opacity") return (value) => { opacities.set(id, value); return el; };
+      if (key === "hover") return (style) => {
+        const seen = [];
+        const recorder = new Proxy({}, { get: (_t, name) => (...args) => { seen.push([name, ...args]); return recorder; } });
+        style(recorder);
+        hovers.set(id, seen);
+        return el;
+      };
       if (key === "tooltip") return (value) => { tips.set(id, value); return el; };
       if (key === "text_color") return (value) => { colors.push(value); return el; };
       if (key === "child") return (value) => { if (typeof value === "string") texts.push(value); return el; };
@@ -147,7 +149,7 @@ function bar() {
     readTextFile: async (path) => { state.reads.push(path); return state.file; },
     mark: (c, { status, size = "md" }) => { marks.push([status, size, c.blocked]); return node().child(status === "blocked" ? "!" : ""); },
   };
-  return { texts, colors, handlers, tips, runs, marks, state, host };
+  return { texts, colors, handlers, tips, runs, marks, ids, opacities, hovers, state, host };
 }
 
 const at = (texts, word) => texts.indexOf(word);
@@ -288,6 +290,40 @@ test("Visible home stand-in: with the sidebar open the computer is not repeated;
   view.render();
   assert.ok(ui.texts.includes("devbox"));
   assert.equal(ui.handlers.has("status-computer-fix"), false);
+});
+
+test("A computer that is connecting is drawn at the pending opacity with its breathing dot", async () => {
+  const ui = bar();
+  const { PENDING } = await load("kanso-status/ui-state.js", ["PENDING"], ui.host);
+  const { WorkspaceStatus } = await load("kanso-status/main.js", ["WorkspaceStatus"], ui.host);
+  ui.state.props = { side: "left" };
+  ui.state.shared["sidebar.collapsed"] = true;
+  ui.state.spaces = [{ active: true, machine: "devbox" }];
+  ui.state.machines = [{ name: "devbox", layout: "loading" }];
+  const view = new WorkspaceStatus();
+  view.render();
+  assert.equal(ui.opacities.get("status-computer"), PENDING);
+  assert.equal(PENDING, 0.8);
+  assert.ok(ui.ids.includes("status-computer-pending"));
+  ui.ids.length = 0;
+  ui.opacities.clear();
+  ui.state.machines = [{ name: "devbox", layout: "ready" }];
+  view.render();
+  assert.equal(ui.opacities.has("status-computer"), false);
+  assert.equal(ui.ids.includes("status-computer-pending"), false);
+});
+
+test("Low memory keeps its blocked colour under the pointer; an item without a state turns foreground", async () => {
+  const ui = bar();
+  const { WorkspaceStatus } = await load("kanso-status/main.js", ["WorkspaceStatus"], ui.host);
+  ui.state.agents = [{ address: "a", status: "working" }];
+  const view = new WorkspaceStatus();
+  view.memoryText = reading(8, Date.now());
+  view.render();
+  const memory = ui.hovers.get("status-memory");
+  assert.ok(memory.some(([name]) => name === "bg"));
+  assert.equal(memory.some(([name]) => name === "text_color"), false);
+  assert.deepEqual(ui.hovers.get("status-working").find(([name]) => name === "text_color"), ["text_color", "foreground"]);
 });
 
 test("An unreachable computer is a failure line whose Refresh is the only computer button, even with the sidebar open", async () => {
