@@ -259,17 +259,24 @@ export const statusPanels = ({ open = '' } = {}) => [
   statusItem({ icon: 'lu-git-pull-request', text: 2, open: open === 'reviews' }),
 ];
 
-// Panes per view; its keys are in the tooltips, Even out and the piece lines in its right-click Menu.
-export const stepper = ({ value = 2, open = false } = {}) => `<span class="kanso-status-bar__item kanso-status-bar__stepper${open ? ' kanso-status-bar__item--open' : ''}">${button({ label: 'Fewer panes per view ⌘⇧−', kind: 'icon', size: 'sm', icon: 'lu-minus' })}`
-  + `<span class="kanso-status-bar__value">${Number(value)}</span>${button({ label: 'More panes per view ⌘⇧=', kind: 'icon', size: 'sm', icon: 'lu-plus' })}</span>`;
+// Panes per view: the number at rest, − and + on hover; its keys are in the tooltips, Even out and the piece lines in its right-click Menu.
+export const stepper = ({ value = 2, open = false, hover = false } = {}) => `<span class="kanso-status-bar__item kanso-status-bar__stepper${open ? ' kanso-status-bar__item--open' : ''}${hover ? ' kanso-control--hover' : ''}">${button({ label: 'Fewer panes per view ⌘⇧−', kind: 'icon', size: 'sm', icon: 'lu-minus' })}`
+  + `<span class="kanso-status-bar__value" title="${Number(value)} per view · scroll to change, click to even out">${Number(value)}</span>${button({ label: 'More panes per view ⌘⇧=', kind: 'icon', size: 'sm', icon: 'lu-plus' })}</span>`;
 export const stepperMenu = () => menu({ title: 'Panes per view', items: [{ icon: 'lu-move-horizontal', label: 'Even out', hint: '⌘⇧0' }, { separator: true },
-  { icon: 'lu-check', label: 'Only when needed' }, { icon: 'lu-eye-off', label: 'Hide this' }, { icon: 'lu-sliders-vertical', label: 'Settings for this…' }] });
+  { icon: 'lu-eye-off', label: 'Hide this' }, { icon: 'lu-sliders-vertical', label: 'Settings for this…' }] });
+// The command palette's only pointer door; its key is in the tooltip.
+export const paletteDoor = () => button({ label: 'Command palette ⌘K', kind: 'icon', size: 'sm', icon: 'lu-command' });
 export const layoutPaused = () => failureLine({ text: 'Layout paused', fix: 'Resume', detail: 'layout write refused 3 times' });
 
 // Edges: the panes past each side, one icon Button per pane, the panes of one column grouped; a click goes there, the name is the tooltip.
-export const edge = ({ side = 'right', columns = [], drop = false } = {}) => `<div class="kanso-edge${drop ? ' kanso-edge--target' : ''}">`
-  + `<svg class="kanso-icon kanso-icon--row"><use href="#lu-chevron-${side}"/></svg>`
-  + columns.map((panes) => `<span class="kanso-edge__column">${panes.map(({ program = 'p-claude', name }) => button({ label: name, kind: 'icon', size: 'sm', icon: program })).join('')}</span>`).join('') + '</div>';
+// Past max columns the farthest fold behind +N, a Menu; a lit pane (its Needs you hovered) takes the active fill, or +N when it is folded.
+export const edge = ({ side = 'right', columns = [], drop = false, max = 4, overflow = false } = {}) => {
+  const shown = columns.slice(0, max), folded = columns.slice(max).flat();
+  const more = folded.length ? `<span class="kanso-edge__more">${button({ label: `+${folded.length}`, kind: 'quiet', size: 'sm', active: overflow || folded.some((pane) => pane.lit) })}`
+    + `${overflow ? `<span class="kanso-edge__menu kanso-edge__menu--${side}">${menu({ items: folded.map(({ program = 'p-claude', name }) => ({ icon: program, label: name })) })}</span>` : ''}</span>` : '';
+  return `<div class="kanso-edge${drop ? ' kanso-edge--target' : ''}"><svg class="kanso-icon kanso-icon--row"><use href="#lu-chevron-${side}"/></svg>`
+    + shown.map((panes) => `<span class="kanso-edge__column">${panes.map(({ program = 'p-claude', name, lit = false }) => button({ label: name, kind: 'icon', size: 'sm', icon: program, active: lit })).join('')}</span>`).join('') + `${more}</div>`;
+};
 
 // Tab bar: the Tab primitive for the tabs, icon Buttons for everything else.
 export const panelDoors = [

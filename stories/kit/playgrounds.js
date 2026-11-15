@@ -1,6 +1,6 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { asleep, avatar, avatarSizes, chip, rowDepths, computerItem, computerItemStates, computerRow, computerStates, edge, layoutPaused, needsItem, statusBar, statusItem, statusMenus, statusPanels, stepper, panelDoors, tabBar, tabBarStates, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, viewSwitch, views, button, card, code, dawn, dialog, escape, header, input, kinds, levels, mark, markSizes, markdown, marks, menu, metric, row, sides, skeletonOf, skeletonShapes, tabs, thumbnail, toast, toggle, toolbar, tooltip, windowControls } from './components.js';
+import { asleep, avatar, avatarSizes, chip, rowDepths, computerItem, computerItemStates, computerRow, computerStates, edge, layoutPaused, needsItem, statusBar, statusItem, statusMenus, statusPanels, stepper, paletteDoor, panelDoors, tabBar, tabBarStates, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, viewSwitch, views, button, card, code, dawn, dialog, escape, header, input, kinds, levels, mark, markSizes, markdown, marks, menu, metric, row, sides, skeletonOf, skeletonShapes, tabs, thumbnail, toast, toggle, toolbar, tooltip, windowControls } from './components.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -272,20 +272,21 @@ export const playgrounds = {
     markup: (args) => inBar(760, { right: [needsItem(args)] }),
   },
   'Compositions/Status bar': {
-    args: { width: 1040, computer: false, paused: false, needs: true, memory: false, panels: false, open: 'none' },
+    args: { width: 1040, computer: false, paused: false, stepper: false, needs: true, memory: false, panels: false, open: 'none' },
     argTypes: {
       width: { name: 'width', control: { type: 'inline-radio' }, options: [1200, 1040, 760, 520] },
       computer: { name: 'computer', control: { type: 'boolean' } },
       paused: { name: 'layout paused', control: { type: 'boolean' } },
+      stepper: { name: 'stepper hovered', control: { type: 'boolean' }, if: { arg: 'paused', truthy: false } },
       needs: { name: 'needs you', control: { type: 'boolean' } },
       memory: { name: 'memory low', control: { type: 'boolean' } },
       panels: { name: 'servers, containers, reviews', control: { type: 'boolean' } },
       open: { ...select('open', ['none', ...Object.keys(statusMenus)]), if: { arg: 'panels' } },
     },
-    markup: ({ width, computer, paused, needs, memory, panels, open }) => (panels && open !== 'none' ? (html) => `<div class="kanso-story__popup-room">${html}</div>` : String)(inBar(width, {
+    markup: ({ width, computer, paused, stepper: hover, needs, memory, panels, open }) => (panels && open !== 'none' ? (html) => `<div class="kanso-story__popup-room">${html}</div>` : String)(inBar(width, {
       left: computer ? [computerItem({ name: 'devbox' })] : [],
-      middle: paused ? layoutPaused() : stepper(),
-      right: [needs && needsItem({ name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?', more: 1 }), memory && statusItem({ text: 'Memory 8% free', tone: 'blocked' }), ...(panels ? statusPanels({ open }) : [])].filter(Boolean),
+      middle: paused ? layoutPaused() : stepper({ hover }),
+      right: [needs && needsItem({ name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?', more: 1 }), memory && statusItem({ text: 'Memory 8% free', tone: 'blocked' }), ...(panels ? statusPanels({ open }) : []), paletteDoor()].filter(Boolean),
       popup: panels && open !== 'none' ? statusMenus[open]() : '',
     })),
   },
@@ -306,17 +307,20 @@ export const playgrounds = {
     })}</div>`,
   },
   'Compositions/Edges': {
-    args: { side: 'right', panes: 3, stacked: false, drop: false },
+    args: { side: 'right', panes: 3, stacked: false, drop: false, waiting: 'none', overflow: false },
     argTypes: {
       side: { name: 'side', control: { type: 'inline-radio' }, options: ['left', 'right'] },
       panes: { name: 'panes past the edge', control: { type: 'number', min: 1, max: 10 } },
       stacked: { name: 'first column stacked', control: { type: 'boolean' } },
       drop: { name: 'dragging over', control: { type: 'boolean' } },
+      waiting: { name: 'Needs you hovered', control: { type: 'inline-radio' }, options: ['none', 'nearest', 'farthest'] },
+      overflow: { name: 'folded menu open', control: { type: 'boolean' } },
     },
-    markup: ({ side, panes, stacked, drop }) => {
-      const list = Array.from({ length: panes }, (_, index) => ({ name: `pane ${index + 1}`, program: ['p-claude', 'p-codex', 'lu-terminal'][index % 3] }));
+    markup: ({ side, panes, stacked, drop, waiting, overflow }) => {
+      const lit = { none: -1, nearest: 0, farthest: panes - 1 }[waiting];
+      const list = Array.from({ length: panes }, (_, index) => ({ name: `pane ${index + 1}`, program: ['p-claude', 'p-codex', 'lu-terminal'][index % 3], lit: index === lit }));
       const columns = stacked && list.length > 1 ? [list.slice(0, 2), ...list.slice(2).map((item) => [item])] : list.map((item) => [item]);
-      return `<div class="kanso-story__strip">${edge({ side, columns, drop })}</div>`;
+      return `<div class="kanso-story__strip${side === 'right' ? ' kanso-story__strip--end' : ''}">${edge({ side, columns, drop, overflow })}</div>`;
     },
   },
   'Primitives/Switch': {

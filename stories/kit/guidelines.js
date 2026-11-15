@@ -123,13 +123,15 @@ export const guidelines = {
     ["Kokō", "Unreachable says so, with Refresh.", "Also only while its row is out of sight: the row already says it. A click reconnects; pending draws at 80% with a breathing dot."],
   ],
   "Compositions/Status bar/Needs you item": [
-    ["Kokō", "A stand-in for the waiting row.", "Only while that row is out of view: mark, name, question and +1 for the others out of view, in the same words and cut as the row. A click is ⌘J."],
+    ["Kokō", "A stand-in for the waiting row.", "Only while that row is out of view: mark, name, question and +1 for the others out of view, in the same words and cut as the row. A click is ⌘J; hover lights its pane on the edge."],
     ["Kansō", "The name and +1 never fold.", "The question gives way first when the bar narrows."],
   ],
   "Compositions/Status bar": [
     ["Seijaku", "Two halves around panes per view.", "26 tall, 12 inside, 16 between items. Panes per view keeps the fixed 180 slot; each half folds within its own width. Layout paused takes the slot while the strip is stopped."],
-    ["Kansō", "A stand-in, never a second copy.", "No working count: the rows and tiles say it. No palette key: keys live in tooltips and menus."],
-    ["Kansō", "At rest, only panes per view.", "Each fact shows only while its own home is out of view. No minimap: the edges say what is past each side."],
+    ["Kansō", "A stand-in, never a second copy.", "No working count: the rows and tiles say it. The palette is an icon Button, its key in the tooltip: keys live in tooltips and menus."],
+    ["Kansō", "At rest, panes per view and the palette.", "The number of panes per view, its − and + on hover; the palette door. Each other fact shows only while its own home is out of view. No minimap: the edges say what is past each side."],
+    ["Shizen", "Nothing jumps.", "An item fades in over the hover timing; its neighbours keep their places in their own half."],
+    ["Kokō", "Panes per view without the buttons.", "The wheel over the number changes it, a click evens out; the tooltip says both."],
     ["Fukinsei", "Fold order, right half.", "Memory to \"8% free\", then servers, containers and reviews give way, then the question. Left: the computer becomes its icon."],
   ],
   "Compositions/Tab bar": [
@@ -140,7 +142,8 @@ export const guidelines = {
   ],
   "Compositions/Edges": [
     ["Kansō", "A stand-in for the panes out of view.", "One icon Button per pane past each side, at the side where it is; the panes of one column grouped. A click goes there; the name is the tooltip."],
-    ["Kokō", "No state dots.", "A waiting pane is said by the status bar's Needs you; the edge only says where."],
+    ["Kokō", "No state dots.", "A waiting pane is said by the status bar's Needs you; the edge only says where: hovering Needs you gives its pane the active fill, or +N when it is folded."],
+    ["Shizen", "At most four columns.", "The farthest fold behind +N, a Menu with their icons and names; a click goes there."],
     ["Shizen", "A drop target while dragging.", "A pane dragged over an edge washes it in accent 25%."],
   ],
   "Primitives/Key hint": [
