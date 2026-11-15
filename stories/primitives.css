@@ -3,7 +3,7 @@
 @keyframes ghost{from{opacity:.5}to{opacity:1}}
 @keyframes dgx-blink{50%{opacity:0}}
 
-:is(.kanso-row,.kanso-button,.kanso-tabs__tab,.kanso-switch,.kanso-switch i,.kanso-field,.kanso-menu__item,.kanso-thumbnail,.kanso-rail__tile){transition:all 320ms cubic-bezier(.4,0,.2,1) 100ms}
+:is(.kanso-row,.kanso-button,.kanso-tabs__tab,.kanso-switch,.kanso-switch i,.kanso-field,.kanso-menu__item,.kanso-thumbnail,.kanso-rail__tile){transition:all var(--k-hover-ms) var(--k-hover-ease) var(--k-hover-delay)}
 @media (prefers-reduced-motion:reduce){:is(.kanso-row,.kanso-button,.kanso-tabs__tab,.kanso-switch,.kanso-switch i,.kanso-field,.kanso-menu__item,.kanso-thumbnail,.kanso-rail__tile),.kanso-row__actions,.kanso-row__meta,.kanso-row__flag{transition:none}}
 
 .kanso-caret{display:inline-block;flex:none;width:1px;height:14px;vertical-align:-2px;background:var(--fg);animation:dgx-blink 1.06s steps(1) infinite}
@@ -15,7 +15,8 @@
 .kanso-avatar--lg{width:var(--k-h-row);height:var(--k-h-row);font-size:var(--k-fs-name)}
 
 .kanso-badge{display:flex;align-items:center;height:var(--k-h-compact);padding:0 var(--k-sp-2);margin-right:0;border-radius:var(--k-r-control);background:var(--w7);font-size:var(--k-fs-meta);color:var(--fg);white-space:nowrap}
-.kanso-badge--count{display:inline-flex;height:var(--k-h-badge);margin-left:var(--k-sp-2);border-radius:var(--k-r-full);background:color-mix(in srgb,var(--dawn-sun) 22%,transparent);font-weight:var(--k-fw-medium)}
+:is(.kanso-badge--count,.kanso-badge--pill){display:inline-flex;height:var(--k-h-badge);margin-left:var(--k-sp-2);border-radius:var(--k-r-full);background:color-mix(in srgb,var(--dawn-sun) 22%,transparent);font-weight:var(--k-fw-medium)}
+.kanso-badge--pill{background:var(--dawn-top);color:var(--dawn-star)}
 .kanso-badge.kanso-badge--quiet{height:auto;padding:0;background:none;color:var(--dim)}
 
 .kanso-key{display:inline-flex;align-items:center;height:var(--k-h-compact);padding:0 var(--k-sp-2);border-radius:var(--k-r-sm);box-shadow:inset 0 0 0 1px var(--border);font:var(--k-fs-meta) var(--mono);letter-spacing:.1em;color:var(--muted)}
@@ -94,7 +95,7 @@
 .kanso-skeleton__list{display:flex;flex-direction:column;margin-top:var(--k-sp-4)}
 .kanso-skeleton__list.kanso-skeleton--breathing{animation:none}
 .kanso-skeleton__list .kanso-row{margin-inline:0;padding:0}
-:is(.kanso-menu,.kanso-dialog--settings,.kanso-markdown--window) .kanso-skeleton{background:var(--input)}
+:is(.kanso-menu,.kanso-dialog--settings,.kanso-markdown--window,.kanso-panel--window) .kanso-skeleton{background:var(--input)}
 .kanso-skeleton__list>:nth-child(2n) .kanso-skeleton{animation-delay:-480ms}
 .kanso-skeleton__list>:nth-child(3n) .kanso-skeleton{animation-delay:-960ms}
 .kanso-skeleton:is(.kanso-skeleton--line,.kanso-skeleton--meta,.kanso-skeleton--title,.kanso-skeleton--icon,.kanso-skeleton--control){flex:none}
@@ -121,6 +122,11 @@
 .kanso-row:is(:focus-visible,.kanso-control--focus){outline:2px solid var(--accent);outline-offset:-2px}
 .kanso-row__name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .kanso-row--heading .kanso-row__name{font-weight:var(--k-fw-strong);color:var(--fg)}
+/* Row, title form: a panel's heading, the name at title size and the scope under it; it is not a choice, so no wash. */
+.kanso-row--title,.kanso-row--title .kanso-content__primary{height:var(--k-h-header);align-items:center}
+.kanso-row--title.kanso-row--two-lines{height:auto;padding-block:0}
+.kanso-row--title .kanso-row__name{font-size:var(--k-fs-title);font-weight:var(--k-fw-strong);line-height:var(--k-lh-tight);color:var(--fg)}
+.kanso-row--title:is(:hover,.kanso-control--hover){background:none}
 .kanso-row--depth-1{padding-left:calc(var(--k-sp-2) * 2 + var(--k-ic-row))}
 .kanso-row--depth-2{position:relative;padding-left:calc(var(--k-sp-2) * 3 + var(--k-ic-row) * 2)}
 .kanso-row--depth-2::before{content:"";position:absolute;inset-block:0;left:calc(var(--k-sp-2) * 2 + var(--k-ic-row) * 1.5);width:1px;background:var(--w12)}
@@ -128,8 +134,8 @@
 .kanso-row__detail>span:not(:last-child){margin-right:var(--k-sp-1)}
 .kanso-row__flag{display:flex;color:var(--dim)}
 /* Tools take no line height, so hover changes colour and content, never the row's size. */
-.kanso-row__actions{display:none;align-items:center;align-self:center;gap:var(--k-sp-hair);margin-block:calc(-1 * var(--k-sp-1));transition:opacity 320ms cubic-bezier(.4,0,.2,1) 100ms,display 0s allow-discrete 100ms}
-.kanso-row__meta,.kanso-row__flag{transition:display 0s allow-discrete 100ms}
+.kanso-row__actions{display:none;align-items:center;align-self:center;gap:var(--k-sp-hair);margin-block:calc(-1 * var(--k-sp-1));transition:opacity var(--k-hover-ms) var(--k-hover-ease) var(--k-hover-delay),display 0s allow-discrete var(--k-hover-delay)}
+.kanso-row__meta,.kanso-row__flag{transition:display 0s allow-discrete var(--k-hover-delay)}
 .kanso-row:is(:hover,:focus-within,.kanso-control--hover,.kanso-control--focus) .kanso-row__actions{display:flex}
 @starting-style{.kanso-row:is(:hover,:focus-within,.kanso-control--hover,.kanso-control--focus) .kanso-row__actions{opacity:0}}
 .kanso-row:is(:hover,:focus-within,.kanso-control--hover,.kanso-control--focus) :is(.kanso-row__meta,.kanso-row__flag):has(~ .kanso-row__actions){display:none}
@@ -162,7 +168,7 @@
 .kanso-button--tonal{background:var(--w7);color:var(--fg);box-shadow:none}
 .kanso-button--quiet{color:var(--muted)}
 .kanso-button:is(.kanso-button--solid,.kanso-button--tonal,.kanso-button--quiet){display:inline-flex;align-items:center;justify-content:center;gap:var(--k-sp-2);flex:none;box-sizing:border-box;height:var(--k-h-control);padding:0 var(--k-sp-3);margin:0;border-radius:var(--k-r-control);font-size:var(--k-fs-body);font-weight:var(--k-fw-medium);line-height:1;white-space:nowrap}
-.kanso-button:is(.kanso-button--solid,.kanso-button--tonal).kanso-button--sm{height:var(--k-h-compact);padding:0 var(--k-sp-2);font-size:var(--k-fs-meta)}
+.kanso-button:is(.kanso-button--solid,.kanso-button--tonal,.kanso-button--quiet).kanso-button--sm{height:var(--k-h-compact);padding:0 var(--k-sp-2);font-size:var(--k-fs-meta)}
 .kanso-button:is(.kanso-button--solid,.kanso-button--tonal) :is(.kanso-icon,.kanso-icon--program){width:var(--k-ic-row);height:var(--k-ic-row)}
 .kanso-button--tonal .kanso-icon--program{width:var(--k-ic-inline);height:var(--k-ic-inline)}
 .kanso-button--icon{display:grid;place-items:center;flex:none;width:var(--k-h-icon);height:var(--k-h-icon);border-radius:var(--k-r-control);color:var(--muted)}
@@ -177,8 +183,8 @@
 .kanso-button--solid:is(:hover,.kanso-control--hover){background-color:color-mix(in srgb,var(--solid) 88%,var(--bg));transition-duration:var(--k-hover-in);transition-timing-function:var(--k-ease-in)}
 .kanso-button--solid:is(:active,.kanso-control--active){background-color:color-mix(in srgb,var(--solid) 76%,var(--bg))}
 .kanso-button--tonal:not(.kanso-action--armed):is(:hover,.kanso-control--hover){background-color:var(--w12)}
-.kanso-button--icon.kanso-button--active{background:var(--w12);color:var(--fg)}
-.kanso-button--icon.kanso-button--active:is(:hover,.kanso-control--hover,:active,.kanso-control--active){background-color:var(--w12)}
+:is(.kanso-button--icon,.kanso-button--quiet).kanso-button--active{background:var(--w12);color:var(--fg)}
+:is(.kanso-button--icon,.kanso-button--quiet).kanso-button--active:is(:hover,.kanso-control--hover,:active,.kanso-control--active){background-color:var(--w12)}
 .kanso-button--icon.kanso-button--spinning .kanso-icon{color:var(--fg);animation:spin var(--k-spin-ms) linear infinite}
 :is(.kanso-button--solid.kanso-control--off,.kanso-button--icon.kanso-button--off){cursor:default}
 .kanso-button--icon.kanso-button--off{background:var(--w4);color:var(--dim);cursor:not-allowed}
@@ -227,6 +233,8 @@
 .kanso-tabs__dot{width:var(--k-sp-2);height:var(--k-sp-2);border-radius:50%;background:var(--blocked);flex:none}
 .kanso-tabs__tab--icon .kanso-tabs__dot{position:absolute;top:1px;right:1px;width:6px;height:6px}
 .kanso-tabs__close{color:var(--dim)}
+.kanso-tabs__label{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.kanso-tabs__insertion{display:block;flex:none;width:var(--k-sp-hair);height:var(--k-h-badge);border-radius:var(--k-r-sm);background:var(--accent)}
 .kanso-tabs__close:is(:hover,.kanso-control--hover){color:var(--fg)}
 .kanso-markdown{margin-top:var(--k-sp-3);font-size:var(--k-fs-name);line-height:var(--k-lh-body);color:var(--fg)}
 .kanso-markdown .kanso-markdown__heading{font-size:var(--k-fs-title);font-weight:var(--k-fw-strong);letter-spacing:-.01em;margin:0 0 var(--k-sp-2)}
@@ -278,3 +286,9 @@
 .kanso-skeleton--shape>*{visibility:hidden}
 .kanso-window-controls{display:flex;gap:var(--k-sp-2)}
 .kanso-window-controls>i{width:var(--k-ic-inline);height:var(--k-ic-inline);border-radius:50%;background:var(--input)}
+
+/* Setting: label left, control right, the note under both. */
+.kanso-setting{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:var(--k-sp-3);row-gap:var(--k-sp-1);padding-block:var(--k-sp-2)}
+.kanso-setting__label{font-size:var(--k-fs-body);color:var(--fg)}
+.kanso-setting__note{grid-column:1/-1;font-size:var(--k-fs-meta);line-height:var(--k-lh-line);color:var(--dim)}
+.kanso-setting__note>.kanso-button{display:inline-flex;vertical-align:baseline}

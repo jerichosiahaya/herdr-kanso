@@ -57,3 +57,18 @@
 .kanso-story .kanso-story__frame > .kanso-sidebar { block-size: auto; border-radius: var(--k-r-card); box-shadow: 0 0 0 1px var(--border); }
 .kanso-story__frame > .kanso-toolbar:not(.kanso-toolbar--column) { inline-size: calc(256px - 2 * var(--k-sp-2)); }
 .kanso-story__frame > .kanso-dawn { position: relative; inline-size: 256px; }
+.kanso-story__popup-room { padding-top: var(--k-room-popup); }
+.kanso-story__menu-room { padding-bottom: var(--k-room-menu); }
+.kanso-story--w520 { inline-size: var(--k-w-window-small); }
+.kanso-story--w760 { inline-size: var(--k-w-window-narrow); }
+.kanso-story--w1040 { inline-size: var(--k-w-window); }
+.kanso-story--w1200 { inline-size: var(--k-w-window-wide); }
+.kanso-story__strip { display: flex; justify-content: space-between; align-items: stretch; min-block-size: var(--k-h-strip); }
+.kanso-story__strip--end { justify-content: flex-end; }
+.kanso-story__slice { inline-size: var(--k-w-sidebar); padding: var(--k-sp-2); box-sizing: border-box; border-radius: var(--k-r-card); background: var(--chrome); box-shadow: 0 0 0 1px var(--border); }
+.kanso-story__slice > .kanso-menu { margin-top: var(--k-sp-1); }
+.kanso-story__slice.kanso-story__settings { inline-size: var(--k-w-panel); padding-inline: var(--k-sp-4); background: var(--bg); }
+.kanso-story__frame > .kanso-panel.kanso-story__panel { inline-size: var(--k-w-panel); block-size: auto; }
+.kanso-story__frame > .kanso-pane.kanso-story__pane { flex: none; inline-size: var(--k-w-pane); max-inline-size: 100%; }
+.kanso-story__frame > .kanso-pane.kanso-story__pane { overflow: visible; }
+.kanso-story__frame > .kanso-pane.kanso-story__pane:has(.kanso-pane-header__menu) { margin-block-end: var(--k-room-pane-menu); }

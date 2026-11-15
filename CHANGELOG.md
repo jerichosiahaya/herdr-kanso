@@ -31,10 +31,13 @@ the branch's rules.
 ### Changed
 
 - The pane header is quieter: focus is its ground alone, an agent waiting for you is its wash and mark without words, the header itself is what you drag, and under the pointer it shows split right, wider or narrower, close and ⋯, which holds pin, sleep, send, open with, split down and zoom. Folder and branch show only where they differ from the project, the pull request has no dot, a narrow pane folds the header in order instead of crowding it, a double-click renames the pane in place, close asks twice while an agent is in the pane, and GitHub not answering says Can't read with Refresh. (#234)
+- Toasts say one sentence, with any detail in their tooltip; they lead with the icon of what they are about in the colour of its state, a failure always with the blocked mark, and end with the word for their fix. The update and out of memory notices follow: Update, Refresh and Restart act from the toast, and the update's icon is the same in the toast and the sidebar. (#237)
 - Each mod carries only the pieces of the panel kit it uses, so a change to one piece reaches only the mods that draw it. (#276)
+- Storybook draws the keyboard for Mac, Windows and Linux from kansō's own keys; notifications from what happened, where it belongs and where you are, with every notice the app sends today; and the pane header, panel shell, status bar, edges, tab bar and activity from their states, each with every state by name. Dawn Mode's sky keeps its dawn colours in the light theme, and design changes carry a hypothesis written from today's app.
 - The Containers panel asks Docker only what can have changed: the container list every 5 seconds, their details when it changes, images, volumes and disk use once a minute, after an action and when a container appears or goes, and Docker's memory limit and context when the panel opens or comes forward, on Read again, when Docker comes back and when another context is chosen. About a quarter as many processes while it is open. (#263)
 - Draw the missing Worktrees, Preview, Markdown and Simulator feature states in Storybook.
 - Draw the missing Share, Shipped, Containers, Ports, Find, Images and Files states in Storybook.
+- In Storybook, Arrangements without sqlite3 reads "No arrangement yet." with one line saying what to install, Save and Overwrite show how programs are kept, and Images with no agent to send to says so on one line above its actions, as the app does.
 - Give Dawn Mode its own Storybook page, and show the Dawn Mode pill on the sidebar.
 - The Storybook link in the site's navigation opens in a new tab.
 - The window's title bar shows only the window controls.
