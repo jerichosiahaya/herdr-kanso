@@ -16,12 +16,13 @@ const PICK = {
   ICON_ROW: "k-ic-row",
   ICON_INLINE: "k-ic-inline",
   DRAG_START: "k-drag-start",
+  GLINT: { run: "k-glint-run", wide: "k-glint-w1", mid: "k-glint-w2", narrow: "k-glint-w3" },
   SWITCH: { w: "k-sw-w", h: "k-sw-h", knob: "k-sw-knob" },
 };
 // Durations in milliseconds.
-const TIMING = { SPIN: "k-spin-ms" };
+const TIMING = { SPIN: "k-spin-ms", GLINT_MS: "k-glint-ms", GLINT_STAGGER: "k-glint-stagger", DOTS_MS: "k-dots-ms" };
 // Shares of full strength, from 0 to 1.
-const SHARES = { away: "k-op-away", held: "k-op-held", blockedWash: "k-wash-blocked" };
+const SHARES = { away: "k-op-away", held: "k-op-held", blockedWash: "k-wash-blocked", glintFaint: "k-op-glint-faint", glintMid: "k-op-glint-mid" };
 
 const reader = (unit) => (tokens) => {
   const all = Object.entries(tokens).filter(([group]) => group !== "colour").flatMap(([, list]) => list);
