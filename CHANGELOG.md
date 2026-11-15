@@ -30,6 +30,7 @@ the branch's rules.
 
 ### Changed
 
+- The pane header is quieter: focus is its ground alone, an agent waiting for you is its wash and mark without words, the header itself is what you drag, and under the pointer it shows split right, wider or narrower, close and ⋯, which holds pin, sleep, send, open with, split down and zoom. Folder and branch show only where they differ from the project, the pull request has no dot, a narrow pane folds the header in order instead of crowding it, a double-click renames the pane in place, close asks twice while an agent is in the pane, and GitHub not answering says Can't read with Refresh. (#234)
 - Each mod carries only the pieces of the panel kit it uses, so a change to one piece reaches only the mods that draw it. (#276)
 - The Containers panel asks Docker only what can have changed: the container list every 5 seconds, their details when it changes, images, volumes and disk use once a minute, after an action and when a container appears or goes, and Docker's memory limit and context when the panel opens or comes forward, on Read again, when Docker comes back and when another context is chosen. About a quarter as many processes while it is open. (#263)
 - Draw the missing Worktrees, Preview, Markdown and Simulator feature states in Storybook.

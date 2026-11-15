@@ -57,7 +57,7 @@ export default class Settings extends View {
     this.installed = null;
     this.news = { entries: null, error: null, from: null };
     this.avatars = null;
-    this.find = new TextField({ placeholder: "Find" });
+    this.find = new TextField({ placeholder: "Find", value: props()?.find ?? "" });
     this.find.on("change", (_e, cx) => cx.notify());
     if (this.page === "credits") this.readAvatars(cx);
     cx.spawn(async (cx) => {

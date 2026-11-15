@@ -33,25 +33,28 @@ export class TextField {
   release() { return this.state.release(); }
 }
 
-/** One text field. `text` is a TextField; `icon` adds a trailing icon button, `iconTip` its name. */
-export function field(id, text, c, { label = null, icon = null, onIcon = null, iconTip = label, error = false, disabled = false, spoken = label } = {}) {
-  const multi = text.multiline;
+/** One text field. `text` is a TextField; `icon` adds a trailing icon button, `iconTip` its name.
+ * `inline`: rename in place, a badge tall inside the line it renames, with no action. */
+export function field(id, text, c, { label = null, icon = null, onIcon = null, iconTip = label, error = false, disabled = false, spoken = label, inline = false } = {}) {
+  const multi = text.multiline && !inline;
+  const radius = inline ? R.sm : R.control;
+  const inset = inline ? G.xs : G.md;
   const editor = disabled
     ? div().flex_1().min_w(0).text_color(c.dim).when(!multi, (el) => el.truncate()).child(text.value())
     : (multi ? Textarea : Input).new(text.state).flex_1().min_w(0).text_color(c.text);
-  const box = h_flex().id(`${id}-box`).rounded(R.control).border_1().bg(disabled ? well(c) : c.canvas)
+  const box = h_flex().id(`${id}-box`).rounded(radius).border_1().bg(disabled ? well(c) : c.canvas)
     .border_color(error ? c.blocked : c.input)
     .when(!disabled && !error, (el) => el.hover((s) => s.border_color(c.muted)))
     .when(multi, (el) => el.min_h(H.control * 2 + G.md).items_stretch())
-    .when(!multi, (el) => el.h(H.control))
-    .child(editor.text_size(T.value).pl(G.md).when(!icon, (el) => el.pr(G.md)).when(multi, (el) => el.py(G.sm))
+    .when(!multi, (el) => el.h(inline ? H.badge : H.control))
+    .child(editor.text_size(T.value).pl(inset).when(!icon || inline, (el) => el.pr(inset)).when(multi, (el) => el.py(G.sm))
       .when(Boolean(spoken), (el) => el.accessibility_label(spoken)))
-    .when(Boolean(icon), (el) => el.gap(G.sm).pr(G.xs)
+    .when(Boolean(icon) && !inline, (el) => el.gap(G.sm).pr(G.xs)
       .child(iconButton(`${id}-icon`, icon, iconTip ?? icon, onIcon, c, { small: true, disabled })));
   // The ring sits outside the edge and takes no room, as an outline would; Herdr has none.
-  const ring = v_flex().id(id).m(-G.hair).rounded(R.control + G.hair).border_2()
+  const ring = v_flex().id(id).m(-G.hair).rounded(radius + G.hair).border_2()
     .border_color(text.focused && !disabled ? c.accent : CLEAR).child(box);
-  return label
+  return label && !inline
     ? v_flex().gap(G.sm).child(div().text_size(T.value).font_medium().text_color(c.muted).child(label)).child(ring)
     : ring;
 }

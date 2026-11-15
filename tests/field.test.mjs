@@ -120,3 +120,17 @@ test("A label sits 8 above in 12.5 medium muted", async () => {
   assert.equal(one(label, "text_color"), c.muted);
   assert.equal(one(parts(ring).editor, "accessibility_label"), "Name");
 });
+
+test("Inline renames in place: a badge tall, radius 4, 4 inside, no label and no action", async () => {
+  const { field, TextField, tokens, G, H, R } = await kit();
+  const c = tokens(night);
+  const ring = field("rename", new TextField({ value: "checkout" }), c, { inline: true, label: "Name", icon: "send" });
+  const { box, editor, icon } = parts(ring);
+  assert.equal(one(box, "h"), H.badge);
+  assert.equal(one(box, "rounded"), R.sm);
+  assert.equal(one(ring, "rounded"), R.sm + G.hair);
+  assert.equal(one(editor, "pl"), G.xs);
+  assert.equal(one(editor, "pr"), G.xs);
+  assert.equal(icon, undefined, "no action inside the line it renames");
+  assert.equal(one(editor, "accessibility_label"), "Name", "the label is still spoken");
+});
