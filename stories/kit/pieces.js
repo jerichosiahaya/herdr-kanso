@@ -19,8 +19,9 @@ export const button = ({ label, kind = 'solid', size = 'md', icon = 'none', disa
   const classes = ['kanso-button', kinds[kind], size === 'md' ? '' : `kanso-button--${size}`, disabled ? 'kanso-control--off' : '', armed ? 'kanso-action kanso-action--armed' : '', active ? 'kanso-button--active' : '', spin ? 'kanso-button--spinning' : ''].filter(Boolean).join(' ');
   const glyph = icon === 'none' ? (spin ? '<svg class="kanso-mark kanso-mark--working kanso-icon--inline"><use href="#e-work"/></svg>' : '') : `<svg class="${icon.startsWith('p-') ? 'kanso-icon--program' : 'kanso-icon'}"><use href="#${icon}"/></svg>`;
   const text = kind === 'icon' ? '' : escape(label);
-  const inner = armed ? `<span>${text}</span><span>Press again to ${escape(verb || label.toLowerCase())}</span>` : `${glyph}${text}`;
-  return `<span class="${classes}" tabindex="0" title="${escape(label)}"${disabled ? ' aria-disabled="true"' : ''}${spin ? ' aria-busy="true"' : ''}>${inner}</span>`;
+  const again = `Press again to ${escape(verb || label.toLowerCase())}`;
+  const inner = armed && kind !== 'icon' ? `<span>${text}</span><span>${again}</span>` : `${glyph}${text}`;
+  return `<span class="${classes}" tabindex="0" title="${armed && kind === 'icon' ? again : escape(label)}"${disabled ? ' aria-disabled="true"' : ''}${spin ? ' aria-busy="true"' : ''}>${inner}</span>`;
 };
 
 export const windowControls = () => '<span class="kanso-window-controls"><i></i><i></i><i></i></span>';
@@ -209,6 +210,16 @@ export const keyPicked = ({ chord, meaning = null, layer = null, actions = [] })
   + `<span class="kanso-keyboard__meaning${meaning ? '' : ' kanso-text--muted'}">${escape(meaning ?? 'Nothing')}</span>${layer ? `<span class="kanso-keyboard__layer">${escape(layer)}</span>` : ''}`
   + `${list(actions) ? `<div class="kanso-actions">${list(actions)}</div>` : ''}</div>`;
 
+// Pane header pieces: one fact per segment, its parts each in their own tone; `act` opens the fact's home.
+export const headerSegment = ({ parts = [], icon = null, tone = null, title = null, act = false }) => `<span class="kanso-pane-header__segment${act ? ' kanso-pane-header__segment--act' : ''}${tone ? ` kanso-text--${escape(tone)}` : ''}"`
+  + `${act ? ' role="button" tabindex="0"' : ''}${title ? ` title="${escape(title)}"` : ''}>${icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(icon)}"/></svg>` : ''}`
+  + `${parts.filter(Boolean).map(({ text, tone: ink }) => `<span${ink ? ` class="kanso-text--${escape(ink)}"` : ''}>${escape(text)}</span>`).join('')}</span>`;
+export const paneName = ({ name }) => `<span class="kanso-pane-header__name">${escape(name)}</span>`;
+// Lines added and removed, as git says them.
+export const diffText = ({ add = 0, del = 0 }) => `+${Number(add)} −${Number(del)}`;
+// Facts on one line, the way a tooltip lists what was folded away.
+export const facts = (...parts) => parts.filter(Boolean).join(' · ');
+
 // A count of what is folded away, such as +3.
 export const plus = (count) => `+${count}`;
 
@@ -271,6 +282,11 @@ export const stacks = {
   'keyboard row': { block: 'kanso-keyboard__row' },
   'keyboard layout': { block: 'kanso-keyboard__layout' },
   toasts: { block: 'kanso-toasts' },
+  'pane header': { block: 'kanso-pane-header', states: ['focus', 'blocked', 'unreachable', 'held'] },
+  'pane digest': { block: 'kanso-pane-header__digest', tag: 'span' },
+  'pane tools': { block: 'kanso-pane-header__tools', tag: 'span' },
+  'pane more': { block: 'kanso-pane-header__more', tag: 'span' },
+  'pane menu': { block: 'kanso-pane-header__menu', tag: 'span' },
 };
 export const stack = ({ variant, on = false, ...flags }, ...children) => {
   if (!Object.hasOwn(stacks, variant)) throw new Error(`stack: unknown variant "${variant}"`);

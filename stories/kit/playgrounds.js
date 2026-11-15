@@ -1,6 +1,6 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, pickedKey, shortcutRow, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, asleep, paneFolds, paneHeader, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, pickedKey, shortcutRow, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycap, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, needsItem, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, statusItem, stepper, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { keyLayer, keyLayerMods, sampleNotices, sampleSidebar, statusMenus, statusPanels } from './samples.js';
 
@@ -189,6 +189,36 @@ export const playgrounds = {
       if (sent) return `<p class="kanso-story__caption">Sent to the computer's notifications</p><p class="kanso-story__caption">Title: ${escape(sent.title)}</p>${sent.body ? `<p class="kanso-story__caption">Text: ${escape(sent.body)}</p>` : ''}`;
       if (place !== 'window on screen') return '<p class="kanso-story__caption">Not sent: its home is on screen.</p>';
       return toastStack({ notices: [...sampleNotices, item].slice(-stacked) });
+    },
+  },
+  'Compositions/Pane header': {
+    args: { program: 'p-claude', name: 'checkout', state: 'working', focused: true, hover: false, menu: false, pinned: false, zoomed: false, reach: 'here', held: false, armed: false, renaming: false,
+      elsewhere: false, files: 3, commits: 2, pr: 'test / unit failed', github: true, fold: 0 },
+    argTypes: {
+      program: select('program', ['p-claude', 'p-codex', 'lu-terminal']),
+      name: { name: 'name', control: { type: 'text' } },
+      state: select('state', paneStates),
+      focused: { name: 'focused', control: { type: 'boolean' } },
+      hover: { name: 'pointer on it', control: { type: 'boolean' } },
+      menu: { name: '⋯ open', control: { type: 'boolean' } },
+      pinned: { name: 'pinned', control: { type: 'boolean' } },
+      zoomed: { name: 'zoomed', control: { type: 'boolean' }, if: { arg: 'menu' } },
+      reach: { name: 'computer', control: { type: 'inline-radio' }, options: paneReaches },
+      held: { name: 'held to move', control: { type: 'boolean' } },
+      armed: { name: 'close armed', control: { type: 'boolean' }, if: { arg: 'hover' } },
+      renaming: { name: 'renaming', control: { type: 'boolean' } },
+      elsewhere: { name: 'folder differs from the tab', control: { type: 'boolean' } },
+      files: { name: 'files changed', control: { type: 'number', min: 0 } },
+      commits: { name: 'commits not on GitHub', control: { type: 'number', min: 0 } },
+      pr: { name: 'pull request', control: { type: 'select' }, options: ['none', 'ready', 'checks running', 'test / unit failed', 'changes requested', 'conflicts with main', 'behind main'] },
+      github: { name: 'GitHub answers', control: { type: 'boolean' }, if: { arg: 'pr', neq: 'none' } },
+      fold: { name: 'folded', control: { type: 'select', labels: Object.fromEntries(paneFolds.map((label, step) => [step, label])) }, options: paneFolds.map((_, step) => step) },
+    },
+    markup: ({ files, commits, pr, github, elsewhere, ...args }) => {
+      const tone = { ready: 'done', 'checks running': 'working', 'behind main': 'working' }[pr] ?? 'blocked';
+      const digest = { files, add: files * 14, del: files * 2, commits, pr: pr === 'none' ? null : { number: '#142', verdict: pr, tone }, failure: github ? null : 'gh: HTTP 502: Bad Gateway (https://api.github.com/graphql)' };
+      const place = elsewhere ? { folder: args.reach === 'here' ? 'checkout-v2' : '~/checkout-v2', branch: 'limits-table' } : null;
+      return `<div class="kanso-pane kanso-story__pane">${paneHeader({ ...args, digest, place })}</div>`;
     },
   },
   'Compositions/Keyboard/Key': {

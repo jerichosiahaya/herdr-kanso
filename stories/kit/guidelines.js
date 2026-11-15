@@ -147,6 +147,13 @@ export const guidelines = {
     ["Kokō", "One word, only for a different act.", "A click goes to the home. A word shows only when the act differs (Undo, Update, Refresh); a failure always has its fix. The detail, the tool's words or the context, is the toast's tooltip."],
     ["Shizen", "Up to three.", "The newest at the bottom; a fourth makes the oldest leave."],
   ],
+  "Compositions/Pane header": [
+    ["Kansō", "One look per state.", "Focus is the selected ground. Waiting is the blocked wash and the blocked mark. Working and done are their marks. Pinned is a pin after the name. A computer out of reach is the header at 55%, with no mark."],
+    ["Seijaku", "What it is, then what changed.", "The program, the name, the folder and branch only when they differ from the tab's project, the files with their lines, the commits not on GitHub, the pull request with its verdict word in its colour. Each opens its home."],
+    ["Kokō", "Four tools under the pointer.", "Split right, wider or narrower, close and ⋯. Close asks twice when an agent is in the pane. A focused agent that finished or idles keeps Sleep and Send out. The rest is in ⋯, with the piece lines."],
+    ["Shizen", "The header is the handle.", "Drag it to move the pane; a click focuses it; double-click renames it in place. GitHub not answering is the failure line in place of the pull request."],
+    ["Kansō", "Narrow, it folds in order.", "Folder, branch, the tools into ⋯ (close stays), commits, files, the verdict word, the pull request, then close; the name truncates last. The program and the mark never fold; a folded fact stays in the pull request's tooltip."],
+  ],
   "Compositions/Keyboard": [
     ["Kansō", "One layer at a time.", "The map shows the keys of the held modifiers. Holding or clicking a modifier picks the layer; pressing a key picks it. Lists, in the picked key, opens the layer of every list and menu."],
     ["Seijaku", "Built from the kit.", "Rows of Keys on the canvas ground, the Picked key beside them. A key is a row tall; a wider key spans its units and the gaps between them."],

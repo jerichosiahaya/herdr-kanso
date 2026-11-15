@@ -65,3 +65,6 @@
 .kanso-story__slice > .kanso-menu { margin-top: var(--k-sp-1); }
 .kanso-story__slice.kanso-story__settings { inline-size: 420px; padding-inline: var(--k-sp-4); background: var(--bg); }
 .kanso-story__frame > .kanso-panel.kanso-story__panel { inline-size: 420px; block-size: auto; }
+.kanso-story__frame > .kanso-pane.kanso-story__pane { flex: none; inline-size: calc(var(--k-sp-8) * 24); max-inline-size: 100%; }
+.kanso-story__frame > .kanso-pane.kanso-story__pane { overflow: visible; }
+.kanso-story__frame > .kanso-pane.kanso-story__pane:has(.kanso-pane-header__menu) { margin-block-end: calc(var(--k-sp-8) * 10); }
