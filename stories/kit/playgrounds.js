@@ -4,7 +4,7 @@ import { activity, activityMenu, computerMenuStates, paneFolds, paneHeader, pane
 import { avatarSizes, button, card, code, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
-import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, worktreeRefusals } from './states.js';
+import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
 import { appNotices, footerUpdates, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, sidebarMoments, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
@@ -538,6 +538,7 @@ export const playgrounds = {
       folded: { name: 'folded tabs', control: { type: 'number', min: 0, max: 5 } },
       overflow: { name: 'folded menu open', control: { type: 'boolean' }, if: { arg: 'folded' } },
       windows: flag('Windows and Linux'),
+      menu: { name: 'right-click the first tab', control: { type: 'inline-radio' }, options: Object.keys(tabMenus), if: { arg: 'state', eq: 'connected' } },
     },
   },
   'Compositions/Edges': {

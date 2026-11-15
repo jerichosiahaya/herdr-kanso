@@ -275,7 +275,11 @@ export const panelDoors = [
 const door = (icon, label, active = false) => button({ label, kind: 'icon', icon, active });
 export const tabBarStates = ['connected', 'connecting', 'unreachable'];
 // Folded tabs go behind +N, a Menu with their marks; + and Arrange never fold.
-export const tabBar = ({ items = [], value = null, folded = [], overflow = false, panels = panelDoors, panel = null, state = 'connected', windows = false } = {}) => {
+// A tab's right-click Menu: rename, a new tab, sleep, close armed in place for the agents it holds, then the piece lines.
+export const tabMenu = ({ name, agents = 0, armed = false }) => pieceMenu({ title: name, items: [
+  { icon: 'lu-pencil', label: 'Rename' }, { icon: 'lu-plus', label: 'New tab', hint: '⌘T' }, { icon: 'lu-moon', label: 'Sleep this tab…' },
+  { separator: true }, { icon: 'lu-x', label: 'Close tab', hint: '⌘W', verb: phrase('close', agents, 'agents'), armed }], needed: false });
+export const tabBar = ({ items = [], value = null, folded = [], overflow = false, panels = panelDoors, panel = null, state = 'connected', windows = false, menu: open = null } = {}) => {
   const connected = state === 'connected';
   const tabList = state === 'connecting' ? [tabSkeleton(), tabSkeleton()]
     : tabs({ items: items.map((item) => ({ closable: true, ...item })), value, size: 'md', disabled: state === 'unreachable', label: true });
@@ -284,7 +288,7 @@ export const tabBar = ({ items = [], value = null, folded = [], overflow = false
   const tools = connected ? [door('lu-plus', 'New tab'), door('lu-panels-top-left', 'Arrange')] : null;
   const right = connected ? panels.map((item) => door(item.icon, item.label, item.key === panel)) : null;
   const system = windows ? [door('lu-minus', 'Minimize'), door('lu-square', 'Maximize'), door('lu-x', 'Close')] : null;
-  return stack({ variant: 'tab bar' }, tabList, more, tools, grow(), stack({ variant: 'tab bar doors' }, right, system));
+  return stack({ variant: 'tab bar' }, tabList, more, tools, grow(), stack({ variant: 'tab bar doors' }, right, system), open ? stack({ variant: 'tab bar menu' }, open) : null);
 };
 
 // Panel: only the container. Each look is a width; stale steps down all but the header; the header comes drawn, or none.

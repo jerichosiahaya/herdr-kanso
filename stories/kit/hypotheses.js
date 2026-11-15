@@ -2,6 +2,19 @@
 // Today rests on the running app; every job gets a new home or the hypothesis stops; with no signal yet it is unproven.
 import { panelHypotheses } from './panel-docs.js';
 export const hypotheses = {
+  'Compositions/Tab bar': [
+    {
+      change: 'Right-clicking a tab opens kansō’s Menu: Rename, New tab, Sleep this tab…, Close tab armed in place, then Hide this and Settings for this….',
+      today: 'a double-click renames, × closes, and right-click opens Herdr’s own tab menu, drawn apart from every other menu.',
+      why: 'act on one tab without hunting for its controls.',
+      question: 'why does the one menu kansō does not draw sit on the bar people use most?',
+      believe: 'one Menu everywhere makes the tab’s acts findable, and Close arming in place stops a tab with agents being closed by mistake.',
+      jobs: [['rename', 'Rename, and the double-click as today'], ['a new tab', 'New tab ⌘T, and + as today'], ['sleep', 'Sleep this tab…'], ['close', 'Close tab, armed, and × as today'], ['hide or tune', 'Hide this, Settings for this…']],
+      wrong: 'people still reach for × and the double-click and never open the menu.',
+      try: 'Dawn Mode first.',
+      back: 'Herdr’s tab menu, as today.',
+    },
+  ],
   'Compositions/Status bar/Item': [
     {
       change: 'Right-clicking an item opens its Menu: its one act, then the piece lines.',

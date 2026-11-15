@@ -1,5 +1,5 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
 import { avatar, chip, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
@@ -54,6 +54,7 @@ export const tabActs = {
   'long name': ([first, second, third]) => [first, second, { ...third, label: 'retry-after-header-for-cart-and-checkout' }],
 };
 const foldedTabs = ['perf', 'web', 'e2e', 'storybook', 'seed-data'];
+export const tabMenus = { none: null, open: (name) => tabMenu({ name, agents: 2 }), 'close armed': (name) => tabMenu({ name, agents: 2, armed: true }) };
 
 const edgeColumns = (panes, stacked) => stacked && panes.length > 1 ? [panes.slice(0, 2), ...panes.slice(2).map((pane) => [pane])] : panes.map((pane) => [pane]);
 export const edgeSides = ['left', 'right', 'both'];
@@ -642,10 +643,11 @@ export const statedPages = {
     ],
   },
   'Compositions/Tab bar': {
-    args: { width: 1040, value: 'checkout', tab: 'at rest', panel: 'none', state: 'connected', folded: 0, overflow: false, windows: false },
-    markup: ({ width, value, tab, folded, overflow, ...args }) => {
-      const bar = atWidth(width, tabBar({ ...args, value, overflow, items: tabActs[tab](tabItems(value)), folded: foldedTabs.slice(0, folded).map((label) => ({ label })) }));
-      return overflow && folded ? `<div class="kanso-story__menu-room">${bar}</div>` : bar;
+    args: { width: 1040, value: 'checkout', tab: 'at rest', panel: 'none', state: 'connected', folded: 0, overflow: false, windows: false, menu: 'none' },
+    markup: ({ width, value, tab, folded, overflow, menu: right, ...args }) => {
+      const menu = tabMenus[right]?.(tabItems(value)[0].label) ?? null;
+      const bar = atWidth(width, tabBar({ ...args, value, overflow, menu, items: tabActs[tab](tabItems(value)), folded: foldedTabs.slice(0, folded).map((label) => ({ label })) }));
+      return (overflow && folded) || menu ? `<div class="kanso-story__menu-room">${bar}</div>` : bar;
     },
     states: [
       { label: 'At rest', args: {}, caption: 'Only a tab out of view whose session waits carries a mark; none for working or finished. Closed doors paint nothing.' },
@@ -659,6 +661,8 @@ export const statedPages = {
       { label: 'Connecting', args: { width: 520, state: 'connecting' }, caption: 'A project on devbox: one breathing skeleton per known tab.' },
       { label: 'Unreachable', args: { width: 520, state: 'unreachable' }, caption: 'The tabs step down; no + and no doors.' },
       { label: 'Windows and Linux', args: { windows: true }, caption: 'The window buttons after the doors, in the same button.' },
+      { label: 'Right-click a tab', args: { menu: 'open' }, caption: 'Rename, New tab, Sleep, Close tab, then Hide this and Settings.' },
+      { label: 'Right-click, Close pressed once', args: { menu: 'close armed' }, caption: 'Close arms in place for 4 s and says what it ends; the menu stays open.' },
     ],
   },
   'Compositions/Edges': {
