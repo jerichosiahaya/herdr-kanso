@@ -58,9 +58,9 @@ test("A composition that treats pieces as strings fails the lint", () => {
   assert.deepEqual(added("export const extra = () => row({ name: 'C++ build' });"), []);
 });
 
-test("A composition that imports anything but the pieces fails the lint", () => {
+test("A composition that imports anything but the shared kit fails the lint", () => {
   const source = read("stories/kit/compositions.js");
-  for (const line of ["import { badge } from './helpers.js';", "import './helpers.js';", "export const extra = () => import('./helpers.js');", "export { badge } from './helpers.js';"]) {
+  for (const line of ["import { row } from './pieces.js';", "import { badge } from './helpers.js';", "import './helpers.js';", "export const extra = () => import('./helpers.js');", "export { badge } from './helpers.js';"]) {
     assert.deepEqual(compositionErrors(`${source}${line}\n`), ["stories/kit/compositions.js: import from outside the pieces in a composition"], line);
   }
 });
