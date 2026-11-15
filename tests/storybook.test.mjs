@@ -184,3 +184,30 @@ test("Every hypothesis fills the whole template, and each job names where it goe
     for (const job of item.jobs) assert.ok(job.length === 2 && job.every((part) => typeof part === "string" && part.trim()), `${page}: ${item.change} has a job without a home`);
   }
 });
+
+test("The panel shell draws each state from the kit, even when given only a title", async () => {
+  const { panelShell, panelStates } = await import("../stories/kit/compositions.js");
+  const marks = { loading: /kanso-skeleton__list/, empty: /kanso-state-empty/, failed: /kanso-state-block/, stale: /kanso-panel__stale/ };
+  for (const state of panelStates) {
+    const html = panelShell({ title: "Ports", state });
+    assert.match(html, /kanso-panel__title">Ports</, state);
+    for (const [other, pattern] of Object.entries(marks)) (other === state ? assert.match : assert.doesNotMatch)(html, pattern, `${state} and ${other}`);
+  }
+  assert.match(panelShell({ title: "Ports", narrow: true }), /kanso-panel kanso-panel--narrow/);
+  assert.match(panelShell({ title: "Ports", state: "stale", scope: "This computer", read: "Read 14:02" }), /Read 14:02/);
+  assert.throws(() => panelShell({ title: "Ports", state: "gone" }), { message: "panelShell: unknown state gone" });
+});
+
+test("Each named state of a page is a preset of its playground, so the catalog draws it with the playground's markup", async () => {
+  const { statedPages } = await import("../stories/kit/states.js");
+  for (const [page, { args, markup, states }] of Object.entries(statedPages)) for (const state of states) {
+    assert.deepEqual(Object.keys(state.args).filter((name) => !Object.hasOwn(args, name)), [], `${page}: ${state.label}`);
+    assert.equal(typeof markup({ ...args, ...state.args }), "string", `${page}: ${state.label}`);
+  }
+});
+
+test("A bar asked at a width the kit has no frame for fails instead of drawing at another", async () => {
+  const { atWidth, barWidths } = await import("../stories/kit/frames.js");
+  for (const width of barWidths) assert.match(atWidth(width, ""), new RegExp(`kanso-story--w${width}`));
+  assert.throws(() => atWidth(900, ""), { message: "frames: unknown width 900" });
+});

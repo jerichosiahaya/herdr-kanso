@@ -2728,20 +2728,20 @@
       ],
       "records": [
         "proto/approved-skeleton/Reference/1",
-        "panels/skeleton/SkeletonAReadFailedWhereTheListWouldStart/Default",
-        "panels/skeleton/SkeletonEmpty/Default",
-        "panels/skeleton/SkeletonFirstRead/Default",
-        "panels/skeleton/SkeletonHeaderScopePeriodTheNumber/Default",
-        "panels/skeleton/SkeletonNarrow300Title15MetaTruncates/Default",
-        "panels/skeleton/SkeletonSectionsAndTheOneRowRestHoverSelectedArmed/Default",
-        "panels/skeleton/SkeletonStaleAnotherComputerStoppedAnswering/Default",
-        "panels/skeleton/SkeletonWithAMarkAndTheOneLineForm/Default",
-        "proto/compositions-panel-pieces/HeaderAndScope/Default",
+        "kit/Panel shell/A read failed: where the list would start",
+        "kit/Panel shell/Empty",
+        "kit/Panel shell/First read",
+        "kit/Panel shell/Header, scope, period, the number",
+        "kit/Panel shell/Narrow, 300: title 15, meta truncates",
+        "kit/Panel shell/Sections and the one row: rest, hover, selected, armed",
+        "kit/Panel shell/Stale: another computer stopped answering",
+        "kit/Panel shell/With a mark, and the one-line form",
+        "kit/Panel shell/Header and scope",
         "proto/compositions-panel-pieces/HeroAndVerdict/Default",
         "proto/compositions-panel-pieces/InATab/Default",
         "proto/compositions-panel-pieces/MemoryMetricAndChart/Default",
         "proto/compositions-panel-pieces/PlanAndSpend/Default",
-        "proto/compositions-panel-pieces/SectionAndRows/Default"
+        "kit/Panel shell/Section and rows"
       ],
       "components": [
         "Compositions/Panel shell"
@@ -3081,20 +3081,20 @@
       ],
       "records": [
         "proto/approved-subtract/Reference/1",
-        "panels/skeleton/SkeletonAReadFailedWhereTheListWouldStart/Default",
-        "panels/skeleton/SkeletonEmpty/Default",
-        "panels/skeleton/SkeletonFirstRead/Default",
-        "panels/skeleton/SkeletonHeaderScopePeriodTheNumber/Default",
-        "panels/skeleton/SkeletonNarrow300Title15MetaTruncates/Default",
-        "panels/skeleton/SkeletonSectionsAndTheOneRowRestHoverSelectedArmed/Default",
-        "panels/skeleton/SkeletonStaleAnotherComputerStoppedAnswering/Default",
-        "panels/skeleton/SkeletonWithAMarkAndTheOneLineForm/Default",
-        "proto/compositions-panel-pieces/HeaderAndScope/Default",
+        "kit/Panel shell/A read failed: where the list would start",
+        "kit/Panel shell/Empty",
+        "kit/Panel shell/First read",
+        "kit/Panel shell/Header, scope, period, the number",
+        "kit/Panel shell/Narrow, 300: title 15, meta truncates",
+        "kit/Panel shell/Sections and the one row: rest, hover, selected, armed",
+        "kit/Panel shell/Stale: another computer stopped answering",
+        "kit/Panel shell/With a mark, and the one-line form",
+        "kit/Panel shell/Header and scope",
         "proto/compositions-panel-pieces/HeroAndVerdict/Default",
         "proto/compositions-panel-pieces/InATab/Default",
         "proto/compositions-panel-pieces/MemoryMetricAndChart/Default",
         "proto/compositions-panel-pieces/PlanAndSpend/Default",
-        "proto/compositions-panel-pieces/SectionAndRows/Default"
+        "kit/Panel shell/Section and rows"
       ],
       "components": [
         "Compositions/Panel shell"

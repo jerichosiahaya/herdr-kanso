@@ -1,5 +1,5 @@
 // The kit's compositions: each one only calls pieces with its own props and draws no markup.
-import { avatar, button, chip, chord, dawn, diffText, facts, headerSegment, input, paneName, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './pieces.js';
+import { avatar, button, chip, chord, dawn, diffText, emptyState, facts, headerSegment, input, metric, panelHeading, paneName, setting, skeletonOf, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './pieces.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
 const more = (open) => stack({ variant: 'toolbar group', open }, tool(open ? 'lu-chevron-up' : 'lu-chevron-down', open ? 'Fewer tools' : 'More tools'), open ? [tool('lu-arrow-up-down', 'Sort'), tool('lu-search', 'Search')] : null);
@@ -105,6 +105,29 @@ export const tabBar = ({ items = [], value = null, folded = [], overflow = false
   const right = connected ? panels.map((item) => door(item.icon, item.label, item.key === panel)) : null;
   const system = windows ? [door('lu-minus', 'Minimize'), door('lu-square', 'Maximize'), door('lu-x', 'Close')] : null;
   return stack({ variant: 'tab bar' }, tabList, more, tools, grow(), stack({ variant: 'tab bar doors' }, right, system));
+};
+
+// Panel shell: the heading with Refresh last, then what its state draws; stale keeps the last body under the time it was read.
+export const panelStates = ['ready', 'loading', 'empty', 'failed', 'stale'];
+export const panelPeriods = ['Today', 'Month', '30 days', 'Year', 'All'];
+const panelSection = ({ title, meta = null, rows = [] }) => list(row({ name: title, heading: true, meta }), rows.map(row));
+const panelContent = ({ period, number, sections, body }) => body ?? list(
+  period ? tabs({ items: panelPeriods.map((label) => ({ key: label, label })), value: period, size: 'sm', track: true, label: true }) : null,
+  number ? metric(number) : null, sections.map(panelSection));
+const panelBodies = {
+  ready: panelContent,
+  loading: () => skeletonOf({ shape: 'list row', count: 3 }),
+  empty: ({ empty }) => emptyState(empty),
+  failed: ({ failure }) => failureBlock({ fix: 'Refresh', ...failure }),
+  stale: (content) => stack({ variant: 'panel stale' }, panelContent(content)),
+};
+export const panelShell = ({ title, scope = null, read = null, back = null, tools = [], close = false, window = false, narrow = false, state = 'ready', period = null, number = null, sections = [], body = null,
+  empty = { text: 'Nothing here' }, failure = { text: "Can't read this" } }) => {
+  if (!Object.hasOwn(panelBodies, state)) throw new Error(phrase('panelShell: unknown state', state));
+  const refresh = button({ label: 'Refresh', kind: 'icon', icon: 'lu-refresh-cw', spin: state === 'loading' });
+  return stack(window ? { variant: 'panel window' } : { variant: 'panel', narrow },
+    panelHeading({ title, back, scope: state === 'stale' ? read : scope, tools: list(tools, refresh, close ? button({ label: 'Close', kind: 'icon', icon: 'lu-x' }) : null) }),
+    panelBodies[state]({ period, number, sections, body, empty, failure }));
 };
 
 // Cells

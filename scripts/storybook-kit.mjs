@@ -1,9 +1,9 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
-import { asleep, pickedKey, shortcutRow, computerItem, computerRow, edge, header, layoutPaused, projectRow, section, sessionRow, sidebarFooter, stepperMenu, tabBar, tile, toolbar, viewSwitch } from '../stories/kit/compositions.js';
-import { dawn as dawnSky, keycap, needsItem, stack, statusItem, stepper, windowControls } from '../stories/kit/pieces.js';
-import { keyLayer, keyLayerMods, sampleSidebar, statusMenus, statusPanels } from '../stories/kit/samples.js';
-import { atWidth, inBar, inStrip } from '../stories/kit/frames.js';
+import { asleep, computerRow, header, projectRow, section, sessionRow, sidebarFooter, tile, toolbar, viewSwitch } from '../stories/kit/compositions.js';
+import { dawn as dawnSky, stack, windowControls } from '../stories/kit/pieces.js';
+import { sampleSidebar } from '../stories/kit/samples.js';
+import { statedPages } from '../stories/kit/states.js';
 export { elements } from './storybook-markup.mjs';
 
 export function kitRecords(records) {
@@ -89,67 +89,9 @@ export function kitRecords(records) {
     ['Sidebar', 'Status collapsed', sampleSidebar({ collapsed: true, view: 'agents' }), 'The rail on Status.', 'kit/Rail/Collapsed'],
     ['Sidebar', 'Views menu', sampleSidebar({ collapsed: true, menu: true }), 'The rail: its one view button opens Projects, Status and Threads.'],
   ]) results.push({ id: id ?? `kit/${page}/${label}`, source: 'kit', page: page === 'Sidebar' ? 'Compositions/Sidebar' : `Compositions/Sidebar/${page}`, label, html: frame(html), caption });
-  // The keyboard's subpages are their playgrounds; one record each gives the page its file.
-  for (const [page, label, html, caption] of [
-    ['Key', 'kansō key', stack({ variant: 'keyboard' }, stack({ variant: 'keyboard row' }, keycap({ label: 'H', state: 'kanso' }))), 'A key that does a kansō action.'],
-    ['Picked key', 'Default', `<div class="kanso-story__slice kanso-story__settings">${pickedKey({ os: 'mac', layer: keyLayer('mac', keyLayerMods.mac[0]), picked: 'h' })}</div>`, 'What the picked key does here, and its act.'],
-    ['Shortcut row', 'Rest', `<div class="kanso-story__slice kanso-story__settings">${shortcutRow({ name: 'Pin the pane', chords: ['⌥⌘P'] })}</div>`, 'One action and its keys.'],
-  ]) results.push({ id: `kit/Keyboard/${page}/${label}`, source: 'kit', page: `Compositions/Keyboard/${page}`, label, html: frame(html), caption });
-  const full = (width, parts = {}) => inBar(width, { middle: stepper(), ...parts });
-  const waiting = needsItem({ name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?', more: 1 });
-  const memory = (word) => statusItem({ text: word ? 'Memory 8% free' : '8% free', tone: 'blocked' });
-  const [ports, containers, reviews] = statusPanels();
-  const opened = (open) => `<div class="kanso-story__popup-room">${inBar(520, { right: statusPanels({ open }), popup: statusMenus[open]() })}</div>`;
-  for (const [page, label, html, caption] of [
-    ['Item', 'Memory', inBar(520, { right: [memory(true)] }), 'This computer is low on memory.'],
-    ['Item', 'Memory folded', inBar(520, { right: [memory(false)] }), 'Memory loses its word last.'],
-    ['Item', 'Servers, containers and reviews', inBar(520, { right: [ports, containers, reviews] }), 'Each its icon and how many need a look; gone while its panel is open.'],
-    ['Item', 'Servers open', opened('servers'), 'The server with no pane: open, copy, stop.'],
-    ['Item', 'Containers open', opened('containers'), 'The stopped container: start, logs, remove.'],
-    ['Item', 'Reviews open', opened('reviews'), 'Each pull request waiting for you; a click opens it in PR.'],
-    ['Computer item', 'Out of sight', inBar(520, { left: [computerItem({ name: 'devbox' })] }), 'Only while its sidebar row is out of sight.'],
-    ['Computer item', 'Folded', inBar(520, { left: [computerItem({ name: 'devbox', folded: true })] }), 'The computer becomes its icon.'],
-    ['Computer item', 'Unreachable', inBar(520, { left: [computerItem({ name: 'devbox', state: 'unreachable' })] }), 'While its row is out of sight; Refresh reconnects.'],
-    ['Computer item', 'Reconnecting', inBar(520, { left: [computerItem({ name: 'devbox', state: 'pending' })] }), 'At 80% with a breathing dot.'],
-    ['Needs you item', 'One', inBar(760, { right: [needsItem({ name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?' })] }), 'Mark, name and question, as the row says them. Click: ⌘J.'],
-    ['Needs you item', 'Several', inBar(760, { right: [waiting] }), 'How many more wait out of view.'],
-    ['Needs you item', 'Folded', inBar(520, { right: [needsItem({ name: 'cart-ui', more: 1 })] }), 'The question goes; the name and +1 never fold.'],
-    ['Status bar', 'At rest', full(1040), 'Nothing to say; panes per view keeps its slot.'],
-    ['Status bar', 'Panes per view menu', `<div class="kanso-story__popup-room">${inBar(1040, { middle: stepper({ open: true }), popup: stepperMenu() })}</div>`, 'Right-click: Even out, then the piece lines.'],
-    ['Status bar', 'Layout paused', inBar(1040, { middle: layoutPaused() }), 'The strip stopped after a failure; it resumes alone after 10 s.'],
-    ['Status bar', 'Sidebar folded', full(1040, { left: [computerItem({ name: 'devbox' })] }), 'The focused project is on devbox.'],
-    ['Status bar', 'Unreachable', full(1040, { left: [computerItem({ name: 'devbox', state: 'unreachable' })] }), "devbox can't be reached and its row is out of sight."],
-    ['Status bar', 'Needs you', full(1040, { right: [waiting] }), 'While the waiting row is out of view.'],
-    ['Status bar', 'Everything, 1200', full(1200, { right: [waiting, memory(true), ports, containers, reviews] }), 'Every item at once.'],
-    ['Status bar', 'Everything, 1040', full(1040, { right: [waiting, memory(false), ports, containers, reviews] }), 'The question shrinks; Memory loses its word.'],
-    ['Status bar', 'Everything, 760', full(760, { right: [waiting, memory(false)] }), 'Servers, containers and reviews give way.'],
-    ['Status bar', 'Everything, 520', full(520, { right: [needsItem({ name: 'cart-ui', more: 1 }), memory(false)] }), 'The question is gone.'],
-  ]) results.push({ id: `kit/Status bar/${page === 'Status bar' ? '' : `${page}/`}${label}`, source: 'kit', page: page === 'Status bar' ? 'Compositions/Status bar' : `Compositions/Status bar/${page}`, label, html: frame(html), caption });
-  const strip = (width, left, right) => inStrip(width, `${left || '<span></span>'}${right ?? ''}`);
-  const pane = (name, program = 'p-claude') => [{ name, program }];
-  for (const [label, html, caption] of [
-    ['One left, three right', strip(1040, edge({ side: 'left', columns: [pane('api', 'p-codex')] }), edge({ columns: [pane('cart-ui'), pane('docs'), pane('web', 'lu-terminal')] })), 'A tile per pane past each side; a click goes there, the name is its tooltip. No state dots.'],
-    ['A stacked column', strip(520, '', edge({ columns: [[{ name: 'tests' }, { name: 'e2e', program: 'p-codex' }], pane('web', 'lu-terminal')] })), 'The panes of one column stay together.'],
-    ['Dragging past the edge', strip(520, '', edge({ columns: [pane('cart-ui')], drop: true })), 'A pane dragged over an edge washes it in accent.'],
-    ['Ten beyond', strip(520, '', edge({ columns: ['cart-ui', 'docs', 'api', 'perf', 'web', 'seed', 'e2e', 'auth', 'mail', 'cron'].map((name, index) => pane(name, ['p-claude', 'p-codex', 'lu-terminal'][index % 3])) })), 'Every pane keeps its tile.'],
-  ]) results.push({ id: `kit/Edges/${label}`, source: 'kit', page: 'Compositions/Edges', label, html: frame(html), caption });
-  const project = [{ key: 'checkout', label: 'checkout' }, { key: 'cart-ui', label: 'cart-ui', mark: 'blocked' }, { key: 'tests', label: 'tests' }, { key: 'perf', label: 'perf' }, { key: 'web', label: 'web' }];
-  const only = (key, change) => project.map((item) => item.key === key ? { ...item, ...change } : item);
-  const bar = (width, options) => atWidth(width, tabBar({ items: project, value: 'checkout', ...options }));
-  const folded = [{ label: 'perf' }, { label: 'web' }, { label: 'e2e', mark: 'blocked' }, { label: 'storybook' }, { label: 'seed-data' }];
-  for (const [label, html, caption] of [
-    ['At rest', bar(1040), 'Only a tab out of view whose session waits carries a mark; none for working or finished. Closed doors paint nothing.'],
-    ['Panel open', bar(1040, { panel: 'pr' }), 'The open door on the quiet fill.'],
-    ['Close armed', bar(1040, { items: only('checkout', { armed: true, tip: 'Press again to close checkout' }) }), 'A tab holding a session: the first press arms for 4 s.'],
-    ['Renaming', bar(1040, { items: only('checkout', { editing: true }) }), 'Double-click renames in place, the name selected.'],
-    ['Renamed on devbox, waiting', bar(1040, { items: only('checkout', { label: 'api-limits', pending: true }) }), 'At 80% with a breathing dot until confirmed.'],
-    ['Dragging', bar(1040, { items: [project[0], { ...project[1], drop: true }, { ...project[2], held: true }, project[3]] }), 'The held tab on the pressed wash; the accent bar where it lands.'],
-    ['Long name', bar(1040, { items: only('perf', { label: 'retry-after-header-for-cart-and-checkout' }) }), 'A name stops at 170 and truncates.'],
-    ['Folded, 760', `<div class="kanso-story__menu-room">${bar(760, { items: project.slice(0, 3), folded, overflow: true })}</div>`, 'What does not fit goes behind +5, a Menu with the marks.'],
-    ['Connecting', bar(520, { state: 'connecting' }), 'A project on devbox: one breathing skeleton per known tab.'],
-    ['Unreachable', bar(520, { items: project.slice(0, 2), state: 'unreachable' }), 'The tabs step down; no + and no doors.'],
-    ['Windows and Linux', bar(1040, { windows: true }), 'The window buttons after the doors, in the same button.'],
-  ]) results.push({ id: `kit/Tab bar/${label}`, source: 'kit', page: 'Compositions/Tab bar', label, html: frame(html), caption });
+  for (const [page, { args, markup, states }] of Object.entries(statedPages)) {
+    for (const { label, args: preset, caption } of states) results.push({ id: `kit/${page.replace('Compositions/', '')}/${label}`, source: 'kit', page, label, html: frame(markup({ ...args, ...preset })), caption });
+  }
   const choices = elements(byId('proto/components-choosing-the-channel/ChoosingTheChannel/Default'), 'kanso-update');
   const sky = elements(byId('proto/tokens-dawn/TheBand/Default'), 'kanso-dawn--preview')[0];
   const mark = elements(byId('proto/approved-dawn/Reference/12'), 'kanso-settings__piece-choice')[0];

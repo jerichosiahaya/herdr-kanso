@@ -110,13 +110,16 @@ export const menu = ({ title, items }) => {
   return `<div class="kanso-menu kanso-popover" role="menu">${title ? `<div class="kanso-menu__heading">${escape(title)}</div>` : ''}${rows}</div>`;
 };
 
-export const metric = ({ value, unit, facts, loading }) => {
+export const metric = ({ value, unit, facts = '', loading = false }) => {
   const piece = (text, element) => `<span class="${element}${loading ? ' kanso-skeleton--shape kanso-skeleton--text' : ''}">${escape(text)}</span>`;
   const list = facts.split('|').map((fact) => fact.trim()).filter(Boolean);
-  return `<div class="kanso-panel"><div class="kanso-metric">${piece(value, 'kanso-metric__value')}${unit ? piece(unit, 'kanso-metric__unit') : ''}</div>`
-    + (list.length ? `<div class="kanso-panel__facts">${list.map((fact) => loading ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(fact)}</span>` : `<span>${escape(fact)}</span>`).join('')}</div>` : '')
-    + '</div>';
+  return `<div class="kanso-metric">${piece(value, 'kanso-metric__value')}${unit ? piece(unit, 'kanso-metric__unit') : ''}</div>`
+    + (list.length ? `<div class="kanso-panel__facts">${list.map((fact) => loading ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(fact)}</span>` : `<span>${escape(fact)}</span>`).join('')}</div>` : '');
 };
+
+// A panel's title line, its tools after the title, then the scope line; a page inside a panel puts ‹ first.
+export const panelHeading = ({ title, scope = '', back = '', tools = '' }) => `<div class="kanso-panel__header">${back ? button({ label: back, kind: 'icon', icon: 'lu-chevron-left' }) : ''}<span class="kanso-panel__title">${escape(title)}</span>${tools}</div>`
+  + (scope ? `<div class="kanso-panel__scope" title="${escape(scope)}">${escape(scope)}</div>` : '');
 
 // An icon by name: a program's own art or a Lucide icon, at a control's or a row's size; a tone colours it.
 const iconSvg = (icon, size, tone = '') => `<svg class="${tone ? `kanso-text--${escape(tone)} ` : ''}${icon.startsWith('p-') ? 'kanso-icon--program' : size === 'row' ? 'kanso-icon kanso-icon--row' : 'kanso-icon'}"><use href="#${escape(icon)}"/></svg>`;
@@ -236,7 +239,7 @@ export const failureLine = ({ text, fix, detail = '' }) => `<span class="kanso-s
 export const failureBlock = ({ text, source = '', fix, agent = '' }) => `<div class="kanso-state-block" role="alert">${mark({ status: 'blocked' })}<div class="kanso-state-block__what">${escape(text)}</div>`
   + `${source ? `<div class="kanso-state-block__why" title="${escape(source)}">${escape(source)}</div>` : ''}<div class="kanso-state-block__actions">${button({ label: fix, kind: 'solid' })}${agent ? explainButton({ agent }) : ''}</div></div>`;
 // The empty pattern: the view's icon, one sentence, at most one action.
-export const emptyState = ({ icon, text, action = '' }) => `<div class="kanso-state-empty">${glyph(icon)}<div class="kanso-content__text">${escape(text)}</div>${action ? button({ label: action, kind: 'tonal' }) : ''}</div>`;
+export const emptyState = ({ icon = '', text, action = '' }) => `<div class="kanso-state-empty">${icon ? glyph(icon) : ''}<div class="kanso-content__text">${escape(text)}</div>${action ? button({ label: action, kind: 'tonal' }) : ''}</div>`;
 export const statePatterns = ['failure', 'empty', 'pending', 'loading'];
 
 export const needsItem = ({ name, question = '', more = 0 }) => `<span class="kanso-status-bar__item kanso-status-bar__needs">${mark({ status: 'blocked', size: 'sm' })}<span class="kanso-status-bar__name">${escape(name)}</span>`
@@ -289,6 +292,9 @@ export const stacks = {
   'pane tools': { block: 'kanso-pane-header__tools', tag: 'span' },
   'pane more': { block: 'kanso-pane-header__more', tag: 'span' },
   'pane menu': { block: 'kanso-pane-header__menu', tag: 'span' },
+  panel: { block: 'kanso-panel', states: ['narrow'] },
+  'panel window': { block: 'kanso-markdown--window' },
+  'panel stale': { block: 'kanso-panel__stale' },
 };
 export const stack = ({ variant, on = false, ...flags }, ...children) => {
   if (!Object.hasOwn(stacks, variant)) throw new Error(`stack: unknown variant "${variant}"`);

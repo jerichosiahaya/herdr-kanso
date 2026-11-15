@@ -1,9 +1,10 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, paneFolds, paneHeader, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, pickedKey, shortcutRow, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycap, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, needsItem, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, statusItem, stepper, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
-import { atWidth, barWidths, inBar } from './frames.js';
-import { appNotices, keyLayer, keyLayerMods, sampleNotices, sampleSidebar, statusMenus, statusPanels } from './samples.js';
+import { activity, activityMenu, asleep, paneFolds, paneHeader, panelStates, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
+import { barWidths, inBar } from './frames.js';
+import { edgeSides, layerDefaults, memoryShown, needsShown, panelRowLooks, statedPages, stepperShown, tabActs } from './states.js';
+import { appNotices, keyLayer, keyLayerMods, sampleNotices, sampleSidebar, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -14,7 +15,6 @@ const select = (name, options) => ({ name, control: { type: 'select' }, options 
 // One layer control per computer, each labelled the way that computer writes its modifiers.
 const pickable = keyNames().filter((key) => !['ctrl', 'alt', 'shift', 'cmd'].includes(key));
 const layerArgs = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, { name: 'layer', control: { type: 'select', labels: Object.fromEntries(keyLayerMods[os].map((mods) => [mods, mods === 'lists' ? 'Lists' : heldChord({ os, held: mods.split(' ') })])) }, options: keyLayerMods[os], if: { arg: 'os', eq: os } }]));
-const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const osArg = { name: 'computer', control: { type: 'inline-radio' }, options: keyboardSystems };
 
 export const playgrounds = {
@@ -146,7 +146,7 @@ export const playgrounds = {
       facts: { name: 'Facts (separated by |)', control: { type: 'text' } },
       loading: { name: 'Loading', control: { type: 'boolean' } },
     },
-    markup: metric,
+    markup: (args) => `<div class="kanso-panel">${metric(args)}</div>`,
   },
   'Primitives/Window controls': { args: {}, argTypes: {}, markup: windowControls },
   'Primitives/Dawn': { args: {}, argTypes: {}, markup: () => dawn() },
@@ -223,30 +223,26 @@ export const playgrounds = {
     },
   },
   'Compositions/Keyboard/Key': {
-    args: { label: 'H', units: 1, state: 'kanso', hover: false },
+    ...statedPages['Compositions/Keyboard/Key'],
     argTypes: {
       label: { name: 'label', control: { type: 'text', maxLength: 3 } },
       units: { name: 'width in keys', control: { type: 'inline-radio' }, options: [...new Set(Object.values(keyboards).flatMap(({ rows }) => rows.flat().map(([, units = 1]) => units)))].sort((a, b) => a - b) },
       state: select('state', keycapStates),
       hover: { name: 'hover', control: { type: 'boolean' } },
     },
-    markup: (args) => stack({ variant: 'keyboard' }, stack({ variant: 'keyboard row' }, keycap(args))),
   },
   'Compositions/Keyboard/Picked key': {
-    args: { os: 'mac', ...layerDefaults, key: 'h' },
+    ...statedPages['Compositions/Keyboard/Picked key'],
     argTypes: { os: osArg, ...layerArgs, key: select('key', pickable) },
-    markup: ({ os, key, ...args }) => `<div class="kanso-story__slice kanso-story__settings">${pickedKey({ os, layer: keyLayer(os, args[`${os}Layer`]), picked: key })}</div>`,
   },
   'Compositions/Keyboard/Shortcut row': {
-    args: { name: 'Pin the pane', chords: '⌥⌘P', state: 'rest', hover: false },
+    ...statedPages['Compositions/Keyboard/Shortcut row'],
     argTypes: {
       name: { name: 'does', control: { type: 'text' } },
       chords: { name: 'chords, comma between', control: { type: 'text' } },
       state: select('state', shortcutRowStates),
       hover: { name: 'hover', control: { type: 'boolean' } },
     },
-    markup: ({ chords, ...args }) => `<div class="kanso-story__slice kanso-story__settings">${shortcutRow({ ...args, chords: chords.split(',').map((chord) => chord.trim()).filter(Boolean),
-      taken: { chord: '⌥⌘J', name: 'Pane below' }, source: 'keys.json: EACCES: permission denied', agent: 'checkout' })}</div>`,
   },
   'Compositions/Keyboard': {
     args: { os: 'mac', ...layerDefaults, key: 'h', hover: 'none' },
@@ -343,8 +339,22 @@ export const playgrounds = {
     },
     markup: sampleSidebar,
   },
+  'Compositions/Panel shell': {
+    ...statedPages['Compositions/Panel shell'],
+    argTypes: {
+      title: { name: 'title', control: { type: 'text' } },
+      scope: { name: 'scope', control: { type: 'text' } },
+      state: { name: 'state', control: { type: 'inline-radio' }, options: panelStates },
+      marks: { name: 'marks', control: { type: 'boolean' } },
+      lines: { name: 'second lines', control: { type: 'boolean' } },
+      period: { name: 'period', control: { type: 'boolean' } },
+      number: { name: 'the number', control: { type: 'boolean' } },
+      narrow: { name: 'narrow', control: { type: 'boolean' } },
+      look: { name: 'the one row', control: { type: 'inline-radio' }, options: Object.keys(panelRowLooks) },
+    },
+  },
   'Compositions/Status bar/Item': {
-    args: { icon: 'lu-container', mark: 'none', text: '1', tone: 'blocked', pending: false },
+    ...statedPages['Compositions/Status bar/Item'],
     argTypes: {
       icon: select('icon', icons),
       mark: select('mark', ['none', 'working', 'blocked', 'done', 'idle']),
@@ -352,45 +362,36 @@ export const playgrounds = {
       tone: select('tone', ['', 'working', 'blocked', 'done']),
       pending: { name: 'pending', control: { type: 'boolean' } },
     },
-    markup: ({ icon, mark: status, ...args }) => inBar(520, { right: [statusItem({ ...args, icon: icon === 'none' ? '' : icon, mark: status === 'none' ? '' : status })] }),
   },
   'Compositions/Status bar/Computer item': {
-    args: { name: 'devbox', remote: true, state: 'on', folded: false },
+    ...statedPages['Compositions/Status bar/Computer item'],
     argTypes: {
       name: { name: 'name', control: { type: 'text' } },
       remote: { name: 'remote', control: { type: 'boolean' } },
       state: select('state', computerItemStates),
       folded: { name: 'folded', control: { type: 'boolean' } },
     },
-    markup: (args) => inBar(520, { left: [computerItem(args)] }),
   },
   'Compositions/Status bar/Needs you item': {
-    args: { name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?', more: 1 },
+    ...statedPages['Compositions/Status bar/Needs you item'],
     argTypes: {
       name: { name: 'name', control: { type: 'text' } },
       question: { name: 'question', control: { type: 'text' } },
       more: { name: 'more waiting', control: { type: 'number', min: 0 } },
     },
-    markup: (args) => inBar(760, { right: [needsItem(args)] }),
   },
   'Compositions/Status bar': {
-    args: { width: 1040, computer: false, paused: false, stepper: false, needs: true, memory: false, panels: false, open: 'none' },
+    ...statedPages['Compositions/Status bar'],
     argTypes: {
       width: { name: 'width', control: { type: 'inline-radio' }, options: barWidths },
-      computer: { name: 'computer', control: { type: 'boolean' } },
+      computer: select('computer', ['none', ...computerItemStates]),
       paused: { name: 'layout paused', control: { type: 'boolean' } },
-      stepper: { name: 'stepper hovered', control: { type: 'boolean' }, if: { arg: 'paused', truthy: false } },
-      needs: { name: 'needs you', control: { type: 'boolean' } },
-      memory: { name: 'memory low', control: { type: 'boolean' } },
+      stepper: { name: 'panes per view', control: { type: 'inline-radio' }, options: stepperShown, if: { arg: 'paused', truthy: false } },
+      needs: { name: 'needs you', control: { type: 'inline-radio' }, options: Object.keys(needsShown) },
+      memory: { name: 'memory low', control: { type: 'inline-radio' }, options: Object.keys(memoryShown) },
       panels: { name: 'servers, containers, reviews', control: { type: 'boolean' } },
       open: { ...select('open', ['none', ...Object.keys(statusMenus)]), if: { arg: 'panels' } },
     },
-    markup: ({ width, computer, paused, stepper: hover, needs, memory, panels, open }) => (panels && open !== 'none' ? (html) => `<div class="kanso-story__popup-room">${html}</div>` : String)(inBar(width, {
-      left: computer ? [computerItem({ name: 'devbox' })] : [],
-      middle: paused ? layoutPaused() : stepper({ hover }),
-      right: [needs && needsItem({ name: 'cart-ui', question: 'Run pnpm add react-countdown@2.3?', more: 1 }), memory && statusItem({ text: 'Memory 8% free', tone: 'blocked' }), ...(panels ? statusPanels({ open }) : []), paletteDoor()].filter(Boolean),
-      popup: panels && open !== 'none' ? statusMenus[open]() : '',
-    })),
   },
   'Compositions/Activity': {
     args: { events: 3, row: 'none', menu: false, docked: false },
@@ -439,36 +440,27 @@ export const playgrounds = {
     },
   },
   'Compositions/Tab bar': {
-    args: { width: 1040, value: 'checkout', panel: 'none', state: 'connected', folded: 0, overflow: false, windows: false },
+    ...statedPages['Compositions/Tab bar'],
     argTypes: {
       width: { name: 'width', control: { type: 'inline-radio' }, options: barWidths.slice(1) },
       value: { name: 'chosen tab', control: { type: 'inline-radio' }, options: ['checkout', 'cart-ui', 'tests'] },
+      tab: select('a tab', Object.keys(tabActs)),
       panel: select('open door', ['none', ...panelDoors.map((item) => item.key)]),
       state: { name: 'computer', control: { type: 'inline-radio' }, options: tabBarStates },
       folded: { name: 'folded tabs', control: { type: 'number', min: 0, max: 5 } },
       overflow: { name: 'folded menu open', control: { type: 'boolean' }, if: { arg: 'folded' } },
       windows: { name: 'Windows and Linux', control: { type: 'boolean' } },
     },
-    markup: ({ width, value, panel, folded, ...args }) => atWidth(width, tabBar({
-      ...args, value, panel, items: [{ key: 'checkout', label: 'checkout' }, { key: 'cart-ui', label: 'cart-ui', mark: value === 'cart-ui' ? '' : 'blocked' }, { key: 'tests', label: 'tests' }],
-      folded: ['perf', 'web', 'e2e', 'storybook', 'seed-data'].slice(0, folded).map((label) => ({ label })),
-    })),
   },
   'Compositions/Edges': {
-    args: { side: 'right', panes: 3, stacked: false, drop: false, waiting: 'none', overflow: false },
+    ...statedPages['Compositions/Edges'],
     argTypes: {
-      side: { name: 'side', control: { type: 'inline-radio' }, options: ['left', 'right'] },
+      side: { name: 'side', control: { type: 'inline-radio' }, options: edgeSides },
       panes: { name: 'panes past the edge', control: { type: 'number', min: 1, max: 10 } },
       stacked: { name: 'first column stacked', control: { type: 'boolean' } },
       drop: { name: 'dragging over', control: { type: 'boolean' } },
       waiting: { name: 'Needs you hovered', control: { type: 'inline-radio' }, options: ['none', 'nearest', 'farthest'] },
       overflow: { name: 'folded menu open', control: { type: 'boolean' } },
-    },
-    markup: ({ side, panes, stacked, drop, waiting, overflow }) => {
-      const lit = { none: -1, nearest: 0, farthest: panes - 1 }[waiting];
-      const list = Array.from({ length: panes }, (_, index) => ({ name: `pane ${index + 1}`, program: ['p-claude', 'p-codex', 'lu-terminal'][index % 3], lit: index === lit }));
-      const columns = stacked && list.length > 1 ? [list.slice(0, 2), ...list.slice(2).map((item) => [item])] : list.map((item) => [item]);
-      return `<div class="kanso-story__strip${side === 'right' ? ' kanso-story__strip--end' : ''}">${edge({ side, columns, drop, overflow })}</div>`;
     },
   },
   'Primitives/Switch': {

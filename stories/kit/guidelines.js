@@ -157,6 +157,13 @@ export const guidelines = {
     ["Kansō", "A terminal is a pane too.", "A pane with no agent shows the terminal icon and its command, or Terminal when it has no project, with no digest. Focus moved by the keyboard adds the accent ring around the header."],
     ["Kansō", "Narrow, it folds in order.", "Folder, branch, the tools into ⋯ (close stays), commits, files, the verdict word, the pull request, then close; the name truncates last. The program and the mark never fold; a folded fact stays in the pull request's tooltip."],
   ],
+  "Compositions/Panel shell": [
+    ["Seijaku", "One heading for every panel.", "Title 20, 15 under 340; at most two context icons, Refresh last, its tooltip says when it was read. A page inside a panel puts ‹ before its title. The scope line under it says what the panel looks at."],
+    ["Fukinsei", "The period, then the number.", "The segmented control with a two-button stepper at its right; a past period adds Now. Under 340 the stepper moves to the number's line."],
+    ["Kansō", "A section says one fact.", "Its title, then at its right one dim fact or one quiet link, such as Clean up 1. Never a count of the rows below. More rows wait behind a quiet Show 4 more."],
+    ["Shizen", "One row for every list.", "The name truncates, the value sits at the right, the second line is dim, a mark goes first. Selected shows its actions: at most one primary, the rest quiet, a removal arms."],
+    ["Yūgen", "Every read has a state.", "First read: the skeleton shaped like the rows. Empty: one line. Failed: the tool's words with Refresh. Stale: when it was read takes the scope's place, the body steps down to 55% and takes no clicks."],
+  ],
   "Compositions/Keyboard": [
     ["Kansō", "One layer at a time.", "The map shows the keys of the held modifiers. Holding or clicking a modifier picks the layer; pressing a key picks it. Lists, in the picked key, opens the layer of every list and menu."],
     ["Seijaku", "Built from the kit.", "Rows of Keys on the canvas ground, the Picked key beside them. A key is a row tall; a wider key spans its units and the gaps between them."],

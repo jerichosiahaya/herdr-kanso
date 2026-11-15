@@ -2,7 +2,10 @@
 import { statusBar } from './compositions.js';
 
 export const barWidths = [1200, 1040, 760, 520];
-const width = (value) => `kanso-story--w${barWidths.includes(value) ? value : 1040}`;
+const width = (value) => {
+  if (!barWidths.includes(value)) throw new Error(`frames: unknown width ${value}`);
+  return `kanso-story--w${value}`;
+};
 export const atWidth = (value, markup) => `<div class="kanso-story__bar ${width(value)}">${markup}</div>`;
 export const inStrip = (value, markup) => `<div class="kanso-story__strip ${width(value)}">${markup}</div>`;
 export const inBar = (value, parts) => atWidth(value, statusBar(parts));

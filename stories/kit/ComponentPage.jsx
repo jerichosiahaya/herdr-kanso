@@ -33,7 +33,7 @@ export function ComponentPage({ of, page }) {
     {stated && <h2>States</h2>}
     <Canvas of={of.Variants} />
     {(stated || playgrounds[page]) && <Controls of={of.Variants} />}
-    {playgrounds[page] && states.length > 0 && <details className="kanso-docs__today"><summary>Every state, by name ({states.length})</summary>
+    {playgrounds[page] && states.length > 0 && <details><summary>Every state, by name ({states.length})</summary>
       <table><thead><tr><th>State</th><th>When shown</th></tr></thead><tbody>{states.map((state) => <tr key={state.id}><td>{state.label}</td><td>{content(state.caption)}</td></tr>)}</tbody></table>
     </details>}
     {stated && <>
