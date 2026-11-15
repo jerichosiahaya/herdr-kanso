@@ -170,7 +170,7 @@ async function sidebar(state) {
     powerBusy: new Set(), hints: state.hints ?? {}, hoverMachine: state.hover ?? null,
     kbd: state.kbd === true, navKey: state.navKey ?? null,
     handle: { is_focused: () => state.kbd === true, focus() {} },
-    hostName: state.hostName ?? "macbook", orderPicker: node, sync: state.sync ?? { config: {}, status: {} },
+    hostName: state.hostName ?? "macbook", tools: node, sync: state.sync ?? { config: {}, status: {} },
   });
   view.render();
   return { view, ids, texts, tips };

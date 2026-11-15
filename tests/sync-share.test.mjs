@@ -1,11 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readdir, readFile } from "node:fs/promises";
-import { SHARED, sharedDependencies } from "../scripts/sync-share.mjs";
+import { SHARED, sharedDependencies, sharedFile as platformFile } from "../scripts/sync-share.mjs";
 
 const root = new URL("../", import.meta.url);
 const source = "kanso/mods/kanso-panel/";
-const platformFile = (name) => /^(?:platform|ui)(?:-[\w-]+)?\.js$/.test(name);
 
 test("Platform copies follow only direct and transitive imports, including cycles", () => {
   const canonical = new Map([

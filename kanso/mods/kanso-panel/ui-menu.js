@@ -24,7 +24,13 @@ function item(id, { icon = null, label, hint = null, mark: status = null, armed 
     .when(Boolean(status), (el) => el.child(mark(c, { status })));
 }
 
-/** A Menu. `items`: { icon, label, hint, mark, armed, verb, selected, onClick }, or { separator: true }. `armed` asks twice, in the button's words. */
+const entry = (id, line, c) => {
+  if (line.separator) return separator(c);
+  if (line.heading) return heading(line.heading, c);
+  return item(id, line, c);
+};
+
+/** A Menu. `items`: { icon, label, hint, mark, armed, verb, selected, onClick }, { heading }, or { separator: true }. `armed` asks twice, in the button's words. */
 export const menu = (id, { title = null, items = [] }, c) => v_flex().id(id).w(W.menu).p(G.xs).rounded(R.card).bg(c.popover).border_1().border_color(c.border).shadow_md()
   .when(Boolean(title), (el) => el.child(heading(title, c)))
-  .children(items.map((entry, i) => (entry.separator ? separator(c) : item(`${id}-${i}`, entry, c))));
+  .children(items.map((line, i) => entry(`${id}-${i}`, line, c)));
