@@ -4,7 +4,7 @@ import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHead
 import { avatarSizes, button, card, code, dawn, dialog, escape, input, keycapStates, keyHint, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, captioned, inSettings, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
-import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, projectRefusals, sendReach, sleepCases, statedPages, stepperShown, tabActs, worktreeRefusals } from './states.js';
+import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, worktreeRefusals } from './states.js';
 import { appNotices, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, sidebarMoments, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
@@ -477,27 +477,10 @@ export const playgrounds = {
   'Compositions/Status bar/Item': {
     ...statedPages['Compositions/Status bar/Item'],
     argTypes: {
-      icon: select('icon', icons),
-      mark: select('mark', ['none', 'working', 'blocked', 'done', 'idle']),
-      text: text('text'),
-      tone: select('tone', ['', 'working', 'blocked', 'done']),
-      pending: flag('pending'),
-    },
-  },
-  'Compositions/Status bar/Computer item': {
-    ...statedPages['Compositions/Status bar/Computer item'],
-    argTypes: {
-      ...pick('name', 'remote'),
-      state: select('state', computerItemStates),
-      folded: flag('folded'),
-    },
-  },
-  'Compositions/Status bar/Needs you item': {
-    ...statedPages['Compositions/Status bar/Needs you item'],
-    argTypes: {
-      name: text('name'),
-      question: text('question'),
-      more: { name: 'more waiting', control: { type: 'number', min: 0 } },
+      item: { name: 'item', control: { type: 'inline-radio' }, options: Object.keys(statusItems) },
+      state: { ...select('computer', computerItemStates), if: { arg: 'item', eq: 'Computer' } },
+      folded: { ...flag('folded'), if: { arg: 'item', neq: 'Servers, containers, reviews' } },
+      more: { name: 'more waiting', control: { type: 'number', min: 0 }, if: { arg: 'item', eq: 'Needs you' } },
     },
   },
   'Compositions/Status bar': {

@@ -183,14 +183,10 @@ export const guidelines = {
     ["Kansō", "A Mark or an icon with its words.", "Icons and marks 14, 8 to their words, text 11.5 muted; the colour of a state only on an item in that state."],
     ["Kokō", "Shown only while it says something.", "Memory while low; servers, containers and reviews with how many need a look, while their panel is closed. Never a colour alone."],
     ["Kansō", "A notice you can act on.", "Servers, containers and reviews each open the bar's Menu: what they hold, their actions, the act that ends it, then Open and Hide this."],
-  ],
-  "Compositions/Status bar/Computer item": [
-    ["Kansō", "Only while its sidebar row is out of sight.", "Its name with its icon; folded, the icon alone. No branch on the status bar."],
+    ["Kansō", "The computer, only while its sidebar row is out of sight.", "Its name with its icon; folded, the icon alone. No branch on the status bar."],
     ["Kokō", "Unreachable says so, with Refresh.", "Also only while its row is out of sight: the row already says it. A click reconnects; pending draws at 80% with a breathing dot."],
-  ],
-  "Compositions/Status bar/Needs you item": [
-    ["Kokō", "A stand-in for the waiting row.", "Only while that row is out of view: mark, name, question and +1 for the others out of view, in the same words and cut as the row. A click is ⌘J; hover lights its pane on the edge."],
-    ["Kansō", "The name and +1 never fold.", "The question gives way first when the bar narrows."],
+    ["Kokō", "Needs you stands in for the waiting row.", "Only while that row is out of view: mark, name, question and +1 for the others out of view, in the same words and cut as the row. A click is ⌘J; hover lights its pane on the edge."],
+    ["Kansō", "Its name and +1 never fold.", "The question gives way first when the bar narrows."],
   ],
   "Compositions/Status bar": [
     ["Seijaku", "Two halves around panes per view.", "26 tall, 12 inside, 16 between items. Panes per view keeps the fixed 180 slot; each half folds within its own width. Layout paused takes the slot while the strip is stopped."],

@@ -11,6 +11,13 @@ const question = 'Run pnpm add react-countdown@2.3?';
 export const needsShown = { none: null, question: needsItem({ name: 'cart-ui', question, more: 1 }), folded: needsItem({ name: 'cart-ui', more: 1 }) };
 export const memoryShown = { none: null, word: statusItem({ text: 'Memory 8% free', tone: 'blocked' }), folded: statusItem({ text: '8% free', tone: 'blocked' }) };
 export const stepperShown = ['rest', 'hover', 'menu'];
+// Each item the bar can show, in its own half and at its fold.
+export const statusItems = {
+  Computer: ({ state, folded }) => ({ left: [computerItem({ name: 'devbox', state, folded })] }),
+  'Needs you': ({ folded, more }) => ({ right: [needsItem({ name: 'cart-ui', question: folded ? '' : question, more })] }),
+  Memory: ({ folded }) => ({ right: [memoryShown[folded ? 'folded' : 'word']] }),
+  'Servers, containers, reviews': () => ({ right: statusPanels() }),
+};
 
 // The status bar's halves for its controls; the page frames them at a width, the window places them as they are.
 const statusParts = ({ computer, paused, stepper: middle, needs, memory, panels, open }) => {
@@ -536,30 +543,19 @@ export const statedPages = {
     ],
   },
   'Compositions/Status bar/Item': {
-    args: { icon: 'lu-container', mark: 'none', text: '1', tone: 'blocked', pending: false },
-    markup: ({ icon, mark: status, ...args }) => inBar(520, { right: [statusItem({ ...args, icon: icon === 'none' ? '' : icon, mark: status === 'none' ? '' : status })] }),
+    args: { item: 'Computer', state: 'on', folded: false, more: 1 },
+    markup: ({ item, ...args }) => inBar(760, statusItems[item](args)),
     states: [
-      { label: 'Memory', args: { icon: 'none', text: 'Memory 8% free' }, caption: 'This computer is low on memory.' },
-      { label: 'Memory folded', args: { icon: 'none', text: '8% free' }, caption: 'Memory loses its word last.' },
-    ],
-  },
-  'Compositions/Status bar/Computer item': {
-    args: { name: 'devbox', remote: true, state: 'on', folded: false },
-    markup: (args) => inBar(520, { left: [computerItem(args)] }),
-    states: [
-      { label: 'Out of sight', args: {}, caption: 'Only while its sidebar row is out of sight.' },
-      { label: 'Folded', args: { folded: true }, caption: 'The computer becomes its icon.' },
+      { label: 'Computer', args: {}, caption: 'Only while its sidebar row is out of sight.' },
+      { label: 'Computer folded', args: { folded: true }, caption: 'The computer becomes its icon.' },
       { label: 'Unreachable', args: { state: 'unreachable' }, caption: 'While its row is out of sight; Refresh reconnects.' },
       { label: 'Reconnecting', args: { state: 'pending' }, caption: 'At 80% with a breathing dot.' },
-    ],
-  },
-  'Compositions/Status bar/Needs you item': {
-    args: { name: 'cart-ui', question, more: 1 },
-    markup: (args) => inBar(760, { right: [needsItem(args)] }),
-    states: [
-      { label: 'One', args: { more: 0 }, caption: 'Mark, name and question, as the row says them. Click: ⌘J.' },
-      { label: 'Several', args: {}, caption: 'How many more wait out of view.' },
-      { label: 'Folded', args: { question: '' }, caption: 'The question goes; the name and +1 never fold.' },
+      { label: 'Needs you', args: { item: 'Needs you', more: 0 }, caption: 'Mark, name and question, as the row says them. Click: ⌘J.' },
+      { label: 'Needs you, several', args: { item: 'Needs you' }, caption: 'How many more wait out of view.' },
+      { label: 'Needs you folded', args: { item: 'Needs you', folded: true }, caption: 'The question goes; the name and +1 never fold.' },
+      { label: 'Memory', args: { item: 'Memory' }, caption: 'This computer is low on memory.' },
+      { label: 'Memory folded', args: { item: 'Memory', folded: true }, caption: 'Memory loses its word last.' },
+      { label: 'Servers, containers and reviews', args: { item: 'Servers, containers, reviews' }, caption: 'Each its icon and how many need a look.' },
     ],
   },
   'Compositions/Status bar': {
