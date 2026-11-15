@@ -84,10 +84,9 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
     - **Panes**: an endless canvas (`kanso-strip`). Panes sit side by side
       in columns. You choose how many fit in the view at once, 1 to 8
       (default 2): a new column takes 1/n of it, so on a wide screen you can
-      hold 3, 4 or more side by side. A lone pane fills the view. Every header ends in a
-      six-dot grip (14 icon, `dim`, `foreground` on hover or while held,
-      grab cursor), 6 from the edge. The header's top corners round with
-      the slab's (8). Resizing is Herdr's own: drag the 6
+      hold 3, 4 or more side by side. A lone pane fills the view. The header
+      itself is the handle (grab cursor); a pinned one does not move. The
+      header's top corners round with the slab's (8). Resizing is Herdr's own: drag the 6
       gutter between two columns sideways, or between two stacked panes up
       and down (a column never goes under 140 px, a stacked pane under 90).
       Once the drag has rested 250 ms, the strip reads the sizes back from
@@ -116,14 +115,13 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
       (evening out resets that). Panes never move vertically: dragging one out
       of a stack makes it its own column. A tab holding a mod pane falls back to
       Herdr's own split view.
-      A column can be pinned (the header's pin button on hover, "Pin pane"
+      A column can be pinned (Pin in the header's ⋯, "Pin pane"
       in the right-click menu, Cmd+Alt+P). It stays on the side of the view
       it was on, always whole and at its width, and never changes place:
       dragging it, moving it, dropping a pane on it and new panes leave it
       where it is. The rest slides in what the pinned columns leave (never
       under 20% of the view; a pin that would leave less is refused). A
-      pinned header has the `accent` at 14% (25% when selected) and a 12 px
-      pin by the title; it has no grip.
+      pinned header shows only a 12 px `dim` pin after the name.
       Each pane has a 34-tall header (a `{pane}` copy of `kanso-strip`,
       always shown). The
       selected pane's header has the `selected` background (in the strip, the
@@ -132,16 +130,26 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
       1px border in `accent` at 55%, following its rounded corners; the
       others carry the same border in clear, so a new selection shifts no
       terminal, and none shows while a pane is held. A pane whose agent needs you has `blocked` at 40% instead,
-      a 2px `blocked` bar along the header's bottom breathing between 45% and
-      full (1.6 s), its title in full ink, and "Needs you" in `foreground`
-      after a breathing dot.
-      - Program icon 15 (75% opacity when unfocused) and the title, 12.5 in
-        `foreground` and medium weight when focused, `muted` otherwise.
-      - The folder (`~/...`) and branch (with a branch glyph) as plain 11.5
-        text.
-      - At the right, the pane's status. On hover the status gives way to
-        open with (a terminal pane only), split right, split down, zoom and
-        close (15 icons).
+      and the blocked mark; no words. Focus moved by the keyboard adds a 2px
+      `accent` ring around the header. A pane on a computer out of reach is
+      at 55% with no mark; a held pane at 40%.
+      - Program icon 15 and the name, 12.5 medium in `foreground`, the same
+        focused or not. A pane with no agent and no project is "Terminal".
+      - The folder (`~/...`) and branch (with a branch glyph), each only when
+        it differs from the tab's project; files with their lines, commits
+        not on GitHub and the pull request with its verdict word in its
+        colour, each opening its home. GitHub not answering is the failure
+        line ("Can't read #N", Refresh) in the pull request's place; a
+        refresh in flight draws the pull request at 80% with a breathing dot.
+      - At the right, Sleep and Send stay out on a focused agent that
+        finished or idles, then the state's mark. Under the pointer: split
+        right, wider or narrower, close (asks twice while an agent is in
+        the pane) and ⋯, a Menu with pin, sleep, send, open with, split
+        down, zoom, the tools folded away and the piece lines.
+      - As the pane narrows the header folds, in order: folder, branch, the
+        tools into ⋯ (close stays), commits, files, the verdict word, the
+        pull request, then close; the name truncates last. A folded fact
+        stays in the pull request's tooltip.
       - Terminal padding is `[14, 10]`.
     - **Side panel**, at the right of the panes: 368 wide (280 to 900),
       hidden by default. It holds whichever panel is open: `kanso-panel`
@@ -209,8 +217,8 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
     22%) with a 100° arc running on it (1.7 stroke, round caps;
     `icons/working.svg`), in `working`, turning once every 0.9 s
     (`.spin(900)`). No other spinner for an agent's state.
-  - Blocked: a solid `blocked` disc with a bold `chrome` "!". The pane
-    header adds "Needs you", and a project in the collapsed rail shows it.
+  - Blocked: a solid `blocked` disc with a bold `chrome` "!". A project in
+    the collapsed rail shows it.
   - Done: the circle closed, in `done`.
   - Idle: a thin even ring in `idle` at 70%, on sidebar rows (and in the
     status bar when nothing works); nothing on the tab or header.
@@ -417,7 +425,7 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
     below (stacked in the same column). The new pane is focused. The header's
     split buttons and the right-click menu do the same.
   - Cmd+W closes the focused pane. Cmd+Shift+[ and Cmd+Shift+] move it left
-    and right. Cmd+Shift+Enter (or the header's zoom button) cycles its width
+    and right. Cmd+Shift+Enter (or the header's wider or narrower button) cycles its width
     1/4, 1/3, 1/2, 2/3, 1.
   - Cmd+Shift+- and Cmd+Shift+= show fewer or more panes per view (every
     column 1/n); Cmd+Shift+0 evens them out. `kanso-strip.per-N` sets N.
@@ -430,8 +438,8 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
     moving the focus; if the focused pane leaves the view, the keyboard
     moves to the nearest pane still in view. Cmd+Alt+, and Cmd+Alt+. slide
     one column. Clicking an edge tab or a minimap mark slides to that pane.
-  - Hold a header's six-dot grip (or Ctrl+drag the header) and drag onto
-    another pane to move the pane. While a pane is held the strip is
+  - Press a header and drag it a few pixels onto another pane to move the
+    pane; a click still only focuses it. While a pane is held the strip is
     sorting: every pane's terminal gives its place to a drop card (a
     `kanso-strip` copy with `{drop: pane}`; the terminal lives on, the tree
     just stops showing it), so the whole pane takes the drop, not only its
@@ -505,8 +513,8 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
     the cards that stand in for terminals while a pane is held.
     A `{pane, terminal}` copy (the app passes those to a header; the strip
     adds `strip: true`) is the pane header: icon, name, folder, branch,
-    status, hover buttons, the grip and the wheel. Double-click it to
-    rename the terminal (the same dialog and `kanso.name` label as the
+    digest, status, hover tools, ⋯ and the wheel. Double-click it to
+    rename the terminal in place (the same `kanso.name` label as the
     sidebar). The strip owns the header, drag, drop zones, names and icons;
     Herdr cannot import files across mods.
   - `kanso-prompt`: Herdr's prompt dialog, copied, for what Herdr has no

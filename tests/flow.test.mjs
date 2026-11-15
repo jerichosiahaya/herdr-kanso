@@ -29,7 +29,7 @@ test("The digest reads changed files, lines, commits and checks", async () => {
 
 test("The header digest names why a blocked pull request cannot merge", async () => {
   const { readDigest } = await load("kanso-strip/main.js", ["readDigest"]);
-  const run = async (cmd, args) => {
+  const answer = (cmd, args) => {
     if (cmd === "gh") {
       assert.ok(args.join(" ").includes("mergeStateStatus"));
       assert.ok(args.join(" ").includes("reviewDecision"));
@@ -46,6 +46,7 @@ test("The header digest names why a blocked pull request cannot merge", async ()
     if (line.includes("symbolic-ref")) return "feat\n";
     return null;
   };
+  const run = async (cmd, args) => { const out = answer(cmd, args); return out == null ? { code: 1, stdout: "", stderr: "" } : { code: 0, stdout: out, stderr: "" }; };
   const d = await readDigest("/repo", run);
   assert.equal(d.pr.hold, "Review required");
   assert.equal(d.pr.checks, "passing");
@@ -64,7 +65,7 @@ test("The digest of a real repository: uncommitted files, lines and commits on t
   await git("commit", "-q", "-m", "first");
   await writeFile(join(dir, "a.txt"), "one\nthree\nfour\n");
   await writeFile(join(dir, "new.txt"), "new\n");
-  const run = async (cmd, args, cwd) => { const r = await exec(cmd, args, { cwd }); return r.code === 0 ? r.stdout : null; };
+  const run = (cmd, args, cwd) => exec(cmd, args, { cwd });
   const d = clone(await readDigest(dir, run));
   assert.equal(d.files, 2, "a changed file and an untracked one");
   assert.equal(d.add, 2);

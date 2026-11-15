@@ -4,9 +4,9 @@
 //
 // An import from the mod's own folder (`./x.js`) is inlined in its own
 // scope, so two files may declare the same names:
-//   import { a, b } from "./x.js";
+//   import { a, b as c } from "./x.js";
 // becomes
-//   const { a, b } = __pick((() => { <x.js with its exports stripped>; return { ...its exports }; })(), ["a", "b"]);
+//   const { a, b: c } = __pick((() => { <x.js with its exports stripped>; return { ...its exports }; })(), ["a", "b"]);
 // where a name the host also provides (a test's stand-in) wins over the
 // file's own. Imports from "herdr" and the SDK are dropped (the host provides
 // them), and the outer file's own `export` keywords are stripped.
@@ -34,9 +34,10 @@ export function inlineImports(text, read, seen = new Set()) {
     const source = read(from);
     const body = stripExports(inlineImports(source, read, new Set([...seen, from])));
     const module = `(() => {\n${body}\nreturn { ${exportedNames(source).join(", ")} };\n})()`;
-    const imported = names ? names.slice(1, -1).split(",").map((s) => s.trim()).filter(Boolean) : [];
+    const imported = names ? names.slice(1, -1).split(",").map((s) => s.trim().split(/\s+as\s+/)).filter(([name]) => name) : [];
     if (!imported.length) return `${module};\n`;
-    return `const { ${imported.join(", ")} } = __pick(${module}, ${JSON.stringify(imported)});\n`;
+    const bound = imported.map(([name, as]) => (as ? `${name}: ${as}` : name));
+    return `const { ${bound.join(", ")} } = __pick(${module}, ${JSON.stringify(imported.map(([name]) => name))});\n`;
   });
 }
 

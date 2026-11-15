@@ -1,5 +1,5 @@
 // The kit's compositions: each one only calls pieces with its own props and draws no markup.
-import { avatar, button, herdrMark, chip, chord, dawn, diffText, facts, headerSegment, input, paneName, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './pieces.js';
+import { avatar, button, herdrMark, chip, chord, dawn, diffText, facts, headerSegment, input, paneName, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './kit.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
 // + names what it adds in the view on show.

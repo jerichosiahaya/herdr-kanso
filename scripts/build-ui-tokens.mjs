@@ -9,15 +9,19 @@ export const END = "// End of the generated sizes.";
 const PICK = {
   G: { hair: "k-sp-hair", xs: "k-sp-1", sm: "k-sp-2", md: "k-sp-3", lg: "k-sp-4", xl: "k-sp-6" },
   H: { control: "k-h-control", compact: "k-h-compact", icon: "k-h-icon", row: "k-h-header", line: "k-h-row", badge: "k-h-badge" },
-  R: { control: "k-r-control", card: "k-r-card" },
+  R: { sm: "k-r-sm", control: "k-r-control", card: "k-r-card" },
+  W: { paneName: "k-w-pane-name", paneSegment: "k-w-pane-segment", menu: "k-w-menu" },
   T: { display: "k-fs-display", page: "k-fs-title", title: "k-fs-section", card: "k-fs-name", value: "k-fs-body", body: "k-fs-meta", mono: "k-fs-mono" },
   ICON: "k-ic-control",
   ICON_ROW: "k-ic-row",
   ICON_INLINE: "k-ic-inline",
+  DRAG_START: "k-drag-start",
   SWITCH: { w: "k-sw-w", h: "k-sw-h", knob: "k-sw-knob" },
 };
 // Durations in milliseconds.
 const TIMING = { SPIN: "k-spin-ms" };
+// Shares of full strength, from 0 to 1.
+const SHARES = { away: "k-op-away", held: "k-op-held", blockedWash: "k-wash-blocked" };
 
 const reader = (unit) => (tokens) => {
   const all = Object.entries(tokens).filter(([group]) => group !== "colour").flatMap(([, list]) => list);
@@ -30,6 +34,11 @@ const reader = (unit) => (tokens) => {
 };
 export const px = reader("px");
 const ms = reader("ms");
+// A share is written as .55 or as 40%.
+const share = (tokens) => {
+  const plain = reader("")(tokens), percent = reader("%")(tokens);
+  return (name) => (tokens.opacity.find((t) => t.name === name)?.value.endsWith("%") ? percent(name) / 100 : plain(name));
+};
 
 const WASH = /^color-mix\(in srgb, var\(--fg\) ([\d.]+)%, transparent\)$/;
 
@@ -51,7 +60,9 @@ export function block(tokens) {
     : `export const ${name} = { ${Object.entries(pick).map(([key, token]) => `${key}: ${value(token)}`).join(", ")} };`);
   const duration = ms(tokens);
   const timings = Object.entries(TIMING).map(([name, token]) => `export const ${name} = ${duration(token)};`);
-  return [START, ...lines, ...timings, washes(tokens), END].join("\n");
+  const of = share(tokens);
+  const shares = `export const OPACITY = { ${Object.entries(SHARES).map(([key, token]) => `${key}: ${of(token)}`).join(", ")} };`;
+  return [START, ...lines, ...timings, shares, washes(tokens), END].join("\n");
 }
 
 export function withTokens(text, tokens) {

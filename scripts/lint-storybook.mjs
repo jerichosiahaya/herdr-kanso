@@ -109,7 +109,7 @@ export function compositionErrors(source, path = 'stories/kit/compositions.js') 
     [/\.join\(/.test(bare), 'join'],
     [/''|""/.test(code), 'empty string as nothing'],
     [/\+|\.concat\(|\bString\(|\.toString\(/.test(bare), 'pieces added as strings'],
-    [imports.some((from) => from !== './pieces.js') || /\bimport\s*(?:\(|['"])|\brequire\s*\(/.test(code), 'import from outside the pieces'],
+    [imports.some((from) => from !== './kit.js') || /\bimport\s*(?:\(|['"])|\brequire\s*\(/.test(code), 'import from outside the pieces'],
   ];
   return rules.filter(([found]) => found).map(([, rule]) => `${path}: ${rule} in a composition`);
 }
