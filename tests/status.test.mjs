@@ -41,7 +41,7 @@ test("Needs you names the oldest blocked agent, and nothing when nobody waits", 
   assert.equal(one.question, "Add the countdown?");
   assert.equal(one.more, null);
   assert.equal(one.mark, "blocked");
-  assert.equal(one.nameTone, "foreground");
+  assert.equal(one.nameTone, "text");
   assert.equal(one.questionTone, "muted");
   assert.equal(one.moreTone, "dim");
   assert.equal(one.questionWidth, QUESTION_W);
@@ -58,22 +58,45 @@ test("Needs you names the oldest blocked agent, and nothing when nobody waits", 
   assert.equal(needsItem([{ address: "a", status: "blocked", pane: "p", project: "kanso" }]).name, "Agent");
 });
 
-test("The computer says where you are, and Can't reach with Refresh only when that computer is unreachable", async () => {
+test("The computer says where you are, Can't reach with Refresh only when that computer is unreachable, and pending while it connects", async () => {
   const { computerOf } = await load("kanso-status/model.js", ["computerOf"]);
   const shown = (space, layouts, alias = "") => clone(computerOf(space, layouts, alias));
-  assert.deepEqual(shown(null, []), { icon: "monitor", words: "This computer", tone: "muted", command: null, tooltip: null });
-  assert.deepEqual(shown({ machine: "" }, [{ name: "devbox", layout: "unavailable" }]), { icon: "monitor", words: "This computer", tone: "muted", command: null, tooltip: null });
-  assert.deepEqual(shown({ machine: "devbox" }, [{ name: "devbox", layout: "ready" }]), { icon: "server", words: "devbox", tone: "muted", command: null, tooltip: null });
-  assert.deepEqual(shown({ machine: "devbox" }, [{ name: "devbox", layout: "loading" }]), { icon: "server", words: "devbox", tone: "muted", command: null, tooltip: null });
-  assert.deepEqual(shown({ machine: "devbox" }, []), { icon: "server", words: "devbox", tone: "muted", command: null, tooltip: null });
-  assert.deepEqual(shown({ machine: "devbox" }, [{ name: "other", layout: "unavailable" }]), { icon: "server", words: "devbox", tone: "muted", command: null, tooltip: null });
+  const here = { icon: "monitor", words: "This computer", command: null, tooltip: null, pending: false };
+  const devbox = { icon: "server", words: "devbox", command: null, tooltip: null, pending: false };
+  assert.deepEqual(shown(null, []), here);
+  assert.deepEqual(shown({ machine: "" }, [{ name: "devbox", layout: "unavailable" }]), here);
+  assert.deepEqual(shown({ machine: "devbox" }, [{ name: "devbox", layout: "ready" }]), devbox);
+  assert.deepEqual(shown({ machine: "devbox" }, [{ name: "devbox", layout: "loading" }]), { ...devbox, pending: true });
+  assert.deepEqual(shown({ machine: "devbox" }, []), devbox);
+  assert.deepEqual(shown({ machine: "devbox" }, [{ name: "other", layout: "unavailable" }]), devbox);
   assert.deepEqual(shown({ machine: "devbox" }, [{ name: "devbox", layout: "unavailable" }]), {
-    icon: "server", words: "Can't reach devbox", tone: "foreground", command: "kanso-spaces.retry-machine:devbox", tooltip: "Can't reach devbox", fix: "Refresh",
+    icon: "server", words: "Can't reach devbox", command: "kanso-spaces.retry-machine:devbox", tooltip: "Can't reach devbox", fix: "Refresh", pending: false,
   });
   assert.deepEqual(shown({ machine: "devbox" }, [{ name: "devbox", layout: "unavailable" }], "Night"), {
-    icon: "server", words: "Can't reach Night", tone: "foreground", command: "kanso-spaces.retry-machine:devbox", tooltip: "Can't reach Night", fix: "Refresh",
+    icon: "server", words: "Can't reach Night", command: "kanso-spaces.retry-machine:devbox", tooltip: "Can't reach Night", fix: "Refresh", pending: false,
   });
-  assert.deepEqual(shown(null, [], "Studio"), { icon: "monitor", words: "Studio", tone: "muted", command: null, tooltip: null });
+  assert.deepEqual(shown(null, [], "Studio"), { ...here, words: "Studio" });
+});
+
+test("The computer stands in for its sidebar row: only while the sidebar is folded, or while it can't be reached", async () => {
+  const { computerOf, computerShown } = await load("kanso-status/model.js", ["computerOf", "computerShown"]);
+  const ready = computerOf({ machine: "devbox" }, [{ name: "devbox", layout: "ready" }]);
+  const unreachable = computerOf({ machine: "devbox" }, [{ name: "devbox", layout: "unavailable" }]);
+  assert.equal(computerShown(ready, false), false);
+  assert.equal(computerShown(ready, undefined), false);
+  assert.equal(computerShown(ready, true), true);
+  assert.equal(computerShown(unreachable, false), true);
+  assert.equal(computerShown(null, true), false);
+});
+
+test("The working count is the working mark and how many work, and its click opens Status", async () => {
+  const { workingItem, STATUS_COMMAND } = await load("kanso-status/model.js", ["workingItem", "STATUS_COMMAND"]);
+  assert.equal(STATUS_COMMAND, "kanso-spaces.view-agents");
+  assert.deepEqual(clone(workingItem([{ status: "working" }, { status: "working" }, { status: "idle" }])),
+    { count: 2, mark: "working", words: "2", command: STATUS_COMMAND, tooltip: "2 agents working" });
+  assert.equal(workingItem([{ status: "working" }]).tooltip, "1 agent working");
+  assert.deepEqual(clone(workingItem([{ status: "done" }])), { count: 0, mark: "idle", words: "0", command: STATUS_COMMAND, tooltip: "0 agents working" });
+  assert.equal(workingItem(null).count, 0);
 });
 
 test("Low memory uses the guard's words, and a stale or fine reading says nothing", async () => {
@@ -129,7 +152,7 @@ function bar() {
 
 const at = (texts, word) => texts.indexOf(word);
 
-test("The right side names who waits, then low memory, then the working count and the palette", async () => {
+test("One waiting off screen: the bar names who waits and what they ask, then low memory, the working count and the palette", async () => {
   const ui = bar();
   const { WorkspaceStatus } = await load("kanso-status/main.js", ["WorkspaceStatus"], ui.host);
   ui.state.agents = [
@@ -151,12 +174,13 @@ test("The right side names who waits, then low memory, then the working count an
   assert.ok(at(ui.texts, "Fury") < at(ui.texts, "Which approach?"));
   assert.ok(at(ui.texts, "Which approach?") < at(ui.texts, "+1"));
   assert.ok(at(ui.texts, "+1") < at(ui.texts, "Memory 8% free"));
-  assert.ok(at(ui.texts, "Memory 8% free") < at(ui.texts, "1 of 2 working"));
-  assert.ok(at(ui.texts, "1 of 2 working") < at(ui.texts, "⌘⇧P"));
+  assert.ok(at(ui.texts, "Memory 8% free") < at(ui.texts, "1"));
+  assert.deepEqual([...ui.handlers.keys()], ["needs-you", "status-memory", "status-working", "palette"]);
   assert.equal(ui.texts.includes("Rey"), false);
   assert.equal(ui.texts.includes("Done"), false);
   assert.equal(ui.texts.includes("Ship the site"), false);
   assert.equal(ui.texts.includes("This computer"), false);
+  assert.equal(ui.texts.includes("⌘⇧P"), false, "the palette key lives in its tooltip");
   assert.ok(ui.colors.includes("foreground"));
   assert.ok(ui.colors.includes("muted"));
   assert.ok(ui.colors.includes("dim"));
@@ -164,15 +188,28 @@ test("The right side names who waits, then low memory, then the working count an
   assert.deepEqual(ui.marks[0], ["blocked", "sm", "blocked"]);
   assert.equal(ui.tips.get("needs-you"), "Fury · kanso · Which approach?\nRey · site · Ship the site");
   assert.equal(ui.tips.get("status-memory"), "Memory 8% free");
-  assert.equal(ui.tips.get("palette"), "Command palette");
+  assert.equal(ui.tips.get("status-working"), "1 agent working");
+  assert.equal(ui.tips.get("palette"), "Command palette ⌘⇧P");
   ui.handlers.get("needs-you")();
   ui.handlers.get("status-memory")();
+  ui.handlers.get("status-working")();
   ui.handlers.get("palette")();
-  assert.deepEqual(ui.runs, ["kanso-spaces.needs-you.next", "kanso-tabs.memory", "app.palette"]);
+  assert.deepEqual(ui.runs, ["kanso-spaces.needs-you.next", "kanso-tabs.memory", "kanso-spaces.view-agents", "app.palette"]);
   assert.equal(ui.handlers.has("status-computer"), false);
 });
 
-test("A title stands in for an empty question, and a quiet bar paints no waiting item", async () => {
+test("Several waiting: the bar names the oldest and how many more wait", async () => {
+  const ui = bar();
+  const { WorkspaceStatus } = await load("kanso-status/main.js", ["WorkspaceStatus"], ui.host);
+  ui.state.shared["kanso.needs-you"] = { rows: ["a", "b", "c"].map((address) => row(address, "blocked")) };
+  new WorkspaceStatus().render();
+  assert.ok(ui.texts.includes("a"));
+  assert.ok(ui.texts.includes("+2"));
+  assert.equal(ui.texts.includes("b"), false);
+  assert.equal(ui.tips.get("needs-you"), "a · kanso\nb · kanso\nc · kanso");
+});
+
+test("A title stands in for an empty question, and a quiet bar keeps only the palette", async () => {
   const ui = bar();
   const { WorkspaceStatus } = await load("kanso-status/main.js", ["WorkspaceStatus"], ui.host);
   ui.state.agents = [{ address: "a", status: "blocked", title: "Add the countdown?", program: { key: "claude", name: "Claude" } }];
@@ -186,41 +223,84 @@ test("A title stands in for an empty question, and a quiet bar paints no waiting
   ui.texts.length = 0;
   ui.handlers.clear();
   ui.state.shared["kanso.needs-you"] = { rows: [{ address: "a", pane: "p", status: "done", name: "Finished", project: "kanso" }] };
-  ui.state.agents = [{ address: "a", status: "done", title: "Finished" }];
+  ui.state.agents = [{ address: "a", status: "done", title: "Finished" }, { address: "b", status: "idle" }];
   view.memoryText = reading(40);
   view.render();
-  assert.equal(ui.texts.includes("Finished"), false);
-  assert.equal(ui.texts.includes("Memory"), false);
-  assert.equal(ui.handlers.has("needs-you"), false);
-  assert.equal(ui.handlers.has("status-memory"), false);
+  assert.deepEqual(ui.texts, []);
   assert.deepEqual([...ui.handlers.keys()], ["palette"]);
 });
 
-test("The left side names this computer, and an unreachable one is a failure line whose Refresh is the only computer button", async () => {
+test("Sessions at work: the bar shows the working mark and how many, and shown always it counts zero", async () => {
+  const ui = bar();
+  const { WorkspaceStatus } = await load("kanso-status/main.js", ["WorkspaceStatus"], ui.host);
+  ui.state.agents = [{ address: "a", status: "working" }, { address: "b", status: "working" }, { address: "c", status: "idle" }];
+  const view = new WorkspaceStatus();
+  view.render();
+  assert.ok(ui.texts.includes("2"));
+  assert.ok(ui.marks.some(([status, size]) => status === "working" && size === "sm"));
+  assert.equal(ui.tips.get("status-working"), "2 agents working");
+  assert.equal(ui.texts.some((text) => /of \d+ working|idle|No agents/.test(text)), false);
+  ui.texts.length = 0;
+  ui.handlers.clear();
+  ui.state.agents = [{ address: "c", status: "idle" }];
+  view.render();
+  assert.equal(ui.handlers.has("status-working"), false);
+  ui.state.shared["kanso.pieces"] = { "status.agents": "show" };
+  view.render();
+  assert.ok(ui.texts.includes("0"));
+  assert.ok(ui.marks.some(([status]) => status === "idle"));
+});
+
+test("Low memory stand-in: the bar says how much is free while it is low, and nothing once it recovers", async () => {
+  const ui = bar();
+  const { WorkspaceStatus } = await load("kanso-status/main.js", ["WorkspaceStatus"], ui.host);
+  const view = new WorkspaceStatus();
+  view.memoryText = reading(8, Date.now());
+  view.render();
+  assert.ok(ui.texts.includes("Memory 8% free"));
+  assert.ok(ui.colors.includes("blocked"));
+  ui.texts.length = 0;
+  ui.handlers.clear();
+  view.memoryText = reading(40, Date.now());
+  view.render();
+  assert.equal(ui.texts.includes("Memory 40% free"), false);
+  assert.equal(ui.handlers.has("status-memory"), false);
+});
+
+test("Visible home stand-in: with the sidebar open the computer is not repeated; folded, the bar names it without a branch", async () => {
   const ui = bar();
   const { WorkspaceStatus } = await load("kanso-status/main.js", ["WorkspaceStatus"], ui.host);
   ui.state.props = { side: "left" };
   ui.state.spaces = [{ active: true, branch: "develop" }];
   const view = new WorkspaceStatus();
   view.render();
+  assert.deepEqual(ui.texts, []);
+  ui.state.shared["sidebar.collapsed"] = true;
+  view.render();
   assert.ok(ui.texts.includes("This computer"));
-  assert.ok(ui.texts.includes("develop"));
+  assert.equal(ui.texts.includes("develop"), false, "the branch lives in the pane header and the sidebar");
   assert.equal(ui.handlers.has("status-computer"), false);
   assert.equal(ui.handlers.has("needs-you"), false);
   assert.equal(ui.handlers.has("palette"), false);
   ui.texts.length = 0;
   ui.state.spaces = [{ active: true, machine: "devbox", branch: "feat/status-attention" }];
-  ui.state.machines = [{ name: "devbox", layout: "ready" }];
+  ui.state.machines = [{ name: "devbox", layout: "loading" }];
   view.render();
   assert.ok(ui.texts.includes("devbox"));
-  assert.equal(ui.texts.includes("Can't reach devbox"), false);
   assert.equal(ui.handlers.has("status-computer-fix"), false);
-  ui.texts.length = 0;
+});
+
+test("An unreachable computer is a failure line whose Refresh is the only computer button, even with the sidebar open", async () => {
+  const ui = bar();
+  const { WorkspaceStatus } = await load("kanso-status/main.js", ["WorkspaceStatus"], ui.host);
+  ui.state.props = { side: "left" };
+  ui.state.spaces = [{ active: true, machine: "devbox", branch: "feat/status-attention" }];
   ui.state.machines = [{ name: "devbox", layout: "unavailable" }];
+  const view = new WorkspaceStatus();
   view.render();
   assert.ok(ui.texts.includes("Can't reach devbox"));
   assert.ok(ui.texts.includes("Refresh"));
-  assert.ok(ui.texts.includes("feat/status-attention"));
+  assert.equal(ui.texts.includes("feat/status-attention"), false);
   assert.deepEqual(ui.marks.at(-1), ["blocked", "md", "blocked"]);
   assert.equal(ui.colors.includes("blocked"), false, "the blocked colour stays on the mark");
   assert.equal(ui.tips.get("status-computer"), "Can't reach devbox");
@@ -228,17 +308,21 @@ test("The left side names this computer, and an unreachable one is a failure lin
   assert.deepEqual(ui.runs, ["kanso-spaces.retry-machine:devbox"]);
 });
 
-test("Hidden working count and palette stay hidden, and Windows names its palette chord", async () => {
+test("Hidden computer, working count and palette stay hidden, and Windows names its palette chord", async () => {
   const ui = bar();
   const { WorkspaceStatus } = await load("kanso-status/main.js", ["WorkspaceStatus"], ui.host);
   ui.state.platform = "windows";
-  ui.state.shared["kanso.pieces"] = { "status.agents": "hide", "status.palette": "hide" };
   ui.state.agents = [{ address: "a", status: "working" }];
   const view = new WorkspaceStatus();
   view.render();
-  assert.equal(ui.texts.includes("1 of 1 working"), false);
-  assert.equal(ui.texts.includes("Ctrl+Shift+P"), false);
-  assert.equal(ui.handlers.has("palette"), false);
+  assert.equal(ui.tips.get("palette"), "Command palette Ctrl+Shift+P");
+  ui.handlers.clear();
+  ui.state.shared["kanso.pieces"] = { "status.agents": "hide", "status.palette": "hide", "status.computer": "hide" };
+  ui.state.shared["sidebar.collapsed"] = true;
+  ui.state.props = { side: undefined };
+  view.render();
+  assert.deepEqual([...ui.handlers.keys()], []);
+  assert.equal(ui.texts.includes("This computer"), false);
 });
 
 test("The right side reads the guard file on a timer and does not start a process", async () => {
