@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel } from './panels.js';
 import { phrase } from './kit.js';
-import { keyLayer, sampleShot } from './samples.js';
-import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls } from './panel-samples.js';
+import { keyLayer, sampleScreens, sampleShot } from './samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins } from './panel-samples.js';
 
 // A notice's state: the panel at rest with the notice beside it.
 const noticesOf = (notices, draw) => Object.fromEntries(Object.entries(notices).map(([name, said]) => [phrase('Notice:', name), [draw({ notice: said }), 'On screen a toast; away, the computer’s notification with the same words.']]));
@@ -323,6 +323,8 @@ export const worktreesViews = {
 };
 // Preview: limits.ts as Files opens it, then limits.md; each state is what an edit, a save or a read changes.
 const { code, edit, markdown: note, log, binary, gone, shot, pictured, huge, pins } = samplePreview;
+// The pins once their notes are typed.
+const placedPins = pins.map(({ writing, ...placed }) => placed);
 const shownShot = (state, extra = {}) => ({ file: shot.file, folder: shot.folder, tools: ['open with'], shot: { image: sampleShot, state, action: `Load ${shot.size}` }, ...extra });
 const away = (folder) => `devbox · ${folder}`;
 const notePicture = (state) => shownNote({ folder: away(note.folder), doc: { source: pictured, shot: { image: sampleShot, state, size: shot.size } } });
@@ -352,7 +354,7 @@ export const previewViews = {
   'Picture loading': [shownShot('loading', { folder: away(shot.folder), tools: ['refresh', 'open with'] }), 'The picture’s shape breathes; Refresh spins.'],
   'Over 20 MB': [{ ...huge, folder: away(huge.folder), tools: ['open with'], empty: { icon: 'lu-file', text: 'Over 20 MB: too large to bring over', action: 'Open with…' } }, 'Too large to bring over: Open with… another app.'],
   'Pins: click, drag, type': [shownShot('shown', { pins, send: { agent: samplePull.agent } }), 'Proposed: a click drops a numbered pin, a drag rings a region, the note is typed beside it; Send to the agent, or ⌘↩.'],
-  'Pins sent': [shownShot('shown', { pins: pins.map(({ writing, ...placed }) => placed), send: { sent: samplePull.sent } }), 'Proposed: the list was the message; the pins stay with when it went.'],
+  'Pins sent': [shownShot('shown', { pins: placedPins, send: { sent: samplePull.sent } }), 'Proposed: the list was the message; the pins stay with when it went.'],
   'A picture that can’t be shown': [shownShot('shown', { failure: samplePreview.failures.picture }), 'The refused picture: its words, Refresh, and Explain to the agent.'],
   'Markdown, formatted': [shownNote(), 'Markdown formatted; Source shows the file as text.'],
   'Markdown, a click edits that block': [shownNote({ tools: ['save', 'discard', 'source', 'open with'], doc: { block: 2, state: 'editing' } }), 'A click edits that block alone; a click below the last adds one.'],
@@ -475,6 +477,26 @@ export const pullsViews = {
   'No text diff': [pageOf('file', samplePullPages.picture), 'A picture or a binary file says so.'],
   'Full log: a page': [pageOf('log', samplePullPages.log, { agent: samplePull.agent }), 'The whole log, failures in their tone, and Explain.'],
 };
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls] };
+// Pins: the Simulator frozen for pinning on iOS and Android, kept, rotated, stalled, remote, refused and sent; Images with the same pins.
+const { scopes, ios: iosPins, typing, android, rotated, stalled, file: pinFile, agents: pinAgents, sent: pinsSent, refusals: pinRefusals } = samplePins;
+const toCheckout = { agent: 'checkout' };
+const onDevice = (scope, placed, extra = {}) => ({ title: 'Simulator', scope, screen: sampleScreens.ios, pins: placed, send: toCheckout, ...extra });
+const onPixel = (scope, placed, extra = {}) => onDevice(scope, placed, { screen: sampleScreens.android, ...extra });
+const pinsViews = {
+  'iOS, pinning: a region, a note being typed': [onDevice(scopes.frozen, typing), 'Proposed: Pin freezes the frame and rings it; a click drops a numbered pin, a drag rings a region, the note is typed beside it.'],
+  'Android, pinning: touches wait': [onPixel(scopes.touches, android), 'Proposed: the same pins on Android; touches wait while it is frozen, and a pin without a note says so.'],
+  'Sent: live again': [onDevice(scopes.live, [], { frozen: false, send: { sent: pinsSent, open: 'Open in Simulator' } }), 'Proposed: the list was the message; the pins clear and the picture is live again.'],
+  'No agent in front: the picker': [onDevice(scopes.frozen, iosPins.slice(0, 2), { send: {}, agents: pinAgents }), 'Proposed: with no pane in front, Send to… opens the agents to pick from.'],
+  'Kept from before, not sent': [onDevice(scopes.kept, [iosPins[0], { ...iosPins[1], hover: true }]), 'Proposed: unsent pins stay per agent and picture; × on hover removes one.'],
+  'Images: the same pins, no tool': [{ on: 'picture', title: 'Images', scope: scopes.images, image: sampleShot, file: pinFile, pins, send: toCheckout }, 'Pins are always on in Images: the same marks, list and Send.'],
+  'Images: sending': [{ on: 'picture', title: 'Images', scope: scopes.images, image: sampleShot, file: pinFile, pins: placedPins, send: { sending: true } }, 'Sending… until hc answers, as Images does today.'],
+  'Rotated since the freeze': [onPixel(scopes.rotated, rotated, { rotated: true, screen: { ...sampleScreens.android, lines: sampleScreens.android.lines.slice(1, 3) } }), 'Proposed: a rotation is said once in the scope; the pins stay on the frame they were dropped on.'],
+  'The picture had stalled': [onPixel(scopes.stalled, stalled), 'Proposed: pinning a stalled picture says so; the pins are on what you saw.'],
+  'The agent is on devbox': [onDevice(scopes.devbox, iosPins.slice(0, 1), { send: { agent: 'migrate' } }), 'Proposed: to an agent on another computer the frame is copied first.'],
+  'Send refused': [onDevice(scopes.frozen, iosPins.slice(0, 1), { send: { refused: pinRefusals.send } }), 'Proposed: hc’s words, the pins kept, and Send again.'],
+  'Copy to devbox refused': [onDevice(scopes.devbox, iosPins.slice(0, 1), { send: { refused: pinRefusals.copy } }), 'Proposed: the copy’s words, the pins kept, and Send again.'],
+};
+
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

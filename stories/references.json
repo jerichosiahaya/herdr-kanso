@@ -2441,19 +2441,7 @@
         "Cost: freezing reads no new file. Sending: one hc send; remote adds one frame copy (about 300 KB)."
       ],
       "records": [
-        "proto/approved-panels-b-pins/Reference/1",
-        "panels/pins/PinsAndroidPinningTouchesWait/Default",
-        "panels/pins/PinsCopyToDevboxRefused/Default",
-        "panels/pins/PinsImagesTheSamePinsNoTool/Default",
-        "panels/pins/PinsIOSPinningARegionANoteBeingTyped/Default",
-        "panels/pins/PinsKeptFromBeforeNotSent/Default",
-        "panels/pins/PinsNoAgentInFrontThePicker/Default",
-        "panels/pins/PinsRotatedSinceTheFreeze/Default",
-        "panels/pins/PinsSendRefused/Default",
-        "panels/pins/PinsSentLiveAgain/Default",
-        "panels/pins/PinsTheAgentIsOnDevbox/Default",
-        "panels/pins/PinsThePictureHadStalled/Default",
-        "proto/components-annotated-picture/AnnotatedPicture/Default"
+        "proto/approved-panels-b-pins/Reference/1"
       ],
       "components": [
         "Panels/Pins"

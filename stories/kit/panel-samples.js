@@ -539,3 +539,27 @@ export const sampleWorktreeNotices = {
   Repaired: worktreeNotice('done', 'Repaired checkout-spike', 'It is linked to its repository again.'),
   'No agent': worktreeNotice('failed', 'Could not start the agent', 'no agent is installed'),
 };
+
+// Pins: checkout on a frozen iPhone and acme shop on a Pixel, the notes about them, and an Images picture with the same pins.
+const pinned = (n, text, place, extra = {}) => ({ n, text, ...place, ...extra });
+const iphone = 'iPhone 16 Pro · iOS 18.2';
+const pixel = 'Pixel 8 · Android 15';
+const iosNotes = [pinned(1, 'Pay sits under the home indicator', { at: [50, 97] }), pinned(2, 'The hold timer wraps on a narrow phone', { region: [7, 42, 86, 7] }), pinned(3, 'Shipping should say free over $75', { at: [80, 38] })];
+export const samplePins = {
+  scopes: {
+    frozen: [iphone, 'frozen at 14:06:12'], live: [iphone, 'this computer'], kept: [iphone, 'kept from 13:52', 'not sent'], devbox: ['iPhone 16 Pro', 'frozen at 14:06:12', 'to migrate on devbox'],
+    touches: [pixel, 'frozen at 14:06:40', 'touches wait'], rotated: [pixel, 'frozen at 14:08:02', 'rotated since'], stalled: ['Pixel 8', 'frozen at 14:05', 'the picture had stalled'], images: ['checkout', '~/acme-shop'],
+  },
+  ios: iosNotes,
+  typing: [iosNotes[0], iosNotes[1], { ...iosNotes[2], writing: [40, 24] }],
+  android: [pinned(1, 'Search keeps the old query after a result', { region: [5, 15, 90, 7] }), pinned(2, '', { at: [50, 93] }, { writing: [-8, 80] })],
+  rotated: [pinned(1, 'Both cards should fit side by side', { at: [36, 92] })],
+  stalled: [pinned(1, 'Road runner price should match the list', { at: [70, 39] })],
+  file: { name: 'checkout-429.png', folder: '~/acme-shop/shots · 14:07' },
+  agents: [{ name: 'checkout', project: 'acme-shop' }, { name: 'docs', project: 'acme-shop' }, { name: 'i18n', project: 'docs-site' }],
+  sent: 'Sent to checkout 14:07',
+  refusals: {
+    send: { text: 'Couldn’t send to checkout', source: 'hc send: checkout is not running', fix: 'Send' },
+    copy: { text: 'Couldn’t copy to devbox', source: 'scp: devbox: Connection timed out', fix: 'Send' },
+  },
+};

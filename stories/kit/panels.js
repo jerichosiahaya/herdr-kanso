@@ -1,5 +1,5 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, explainButton, sentence, well } from './kit.js';
+import { band, bars, button, chord, device, deviceScreen, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, explainButton, sentence, well } from './kit.js';
 import { channelSettings, keyboardExplorer, newWorktree, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
@@ -498,9 +498,28 @@ export const pulls = ({ picker = null, ...props }) => (picker ? stack({ variant:
 
 // Pins: a numbered pin on a spot or ringing a region, its note typed beside it; the list repeats them, and one press sends it to the agent.
 const pinMarks = (pins = []) => pins.flatMap(({ n, at, region, text, writing }) => [pin({ n, at, region, pending: !text }), writing ? note({ text, at: writing, typing: true }) : null]);
-const pinRow = ({ n, text, writing }) => row({ start: [pin({ n, pending: !text })], name: text || 'No note yet', dimmed: !text, hover: Boolean(writing), tools: writing ? [button({ label: 'Remove', kind: 'icon', icon: 'lu-x' })] : [] });
-const pinSend = ({ agent, sent = null, refused = null }) => sent ? dimLine(sent) : refused ? failureBlock(refused) : line(button({ label: phrase('Send to', agent), size: 'sm' }), keyHint({ text: '⌘↩', faint: true }));
+const pinRow = ({ n, text, hover = false }) => row({ start: [pin({ n, pending: !text })], name: text || 'No note yet', dimmed: !text, hover, tools: hover ? [button({ label: 'Remove', kind: 'icon', icon: 'lu-x' })] : [] });
+const sendLabel = (agent) => (agent ? phrase('Send to', agent) : 'Send to…');
+const sentLine = ({ sent, open = null }) => list(dimLine(sent), open ? line(tonalAct(open)) : null);
+const pinSend = ({ agent = null, sent = null, open = null, refused = null, sending = false }) => {
+  if (sent) return sentLine({ sent, open });
+  if (refused) return failureBlock(refused);
+  return line(button({ label: sending ? 'Sending…' : sendLabel(agent), size: 'sm', spin: sending, disabled: sending }), keyHint({ text: '⌘↩', faint: true }));
+};
 const pinNotes = ({ pins, send }) => list(pins.map(pinRow), pinSend(send));
+// Where the pins sit: a device's frame, frozen while pinning, or a picture in Images with its file under it.
+const pinTools = {
+  device: ({ frozen }) => [button({ label: 'Pin', kind: 'icon', icon: 'lu-map-pin', active: frozen }), button({ label: 'Device', kind: 'icon', icon: 'lu-smartphone' }), panelRefresh()],
+  picture: () => [button({ label: 'Keep to this agent', kind: 'icon', icon: 'lu-lock' }), panelRefresh()],
+};
+const pinGround = {
+  device: ({ screen, frozen, rotated = false, pins }) => device({ frozen, rotated, pins: pinMarks(pins) }, deviceScreen(screen)),
+  picture: ({ image, file, pins }) => list(picture({ image, pins: pinMarks(pins) }), row({ name: file.name, detail: file.folder, action: { label: 'Open', kind: 'quiet' } })),
+};
+const agentChoice = ({ name, project }) => ({ label: name, icon: 'p-claude', hint: project });
+const pinPicker = (agents) => (agents ? menu({ title: 'Send to', items: agents.map(agentChoice) }) : null);
+export const pinPanel = ({ on = 'device', title, scope, frozen = true, pins: placed = [], send = {}, agents = null, ...ground }) => panel({ header: panelHeader({ title, second: scope, tools: pinTools[on]({ frozen }) }) },
+  pinGround[on]({ frozen, pins: placed, ...ground }), pinPicker(agents), pinNotes({ pins: placed, send }));
 
 // Worktrees: what they take on one line with Clean up, then each repository with its rows; a row's fact comes when something is wrong, its words when picked.
 const worktreeVerbs = {

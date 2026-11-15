@@ -78,6 +78,7 @@ export const descriptions = {
   'Panels/Markdown': 'Markdown in a window over any layout, edited where you read it; a review waits on Done.',
   'Panels/PR': 'Pull requests by project, what waits on you first; one opens on its verdict and why, talked over in place.',
   'Panels/Preview': 'A file opened from Files beside the pane, edited in place; an edit waits for Save.',
+  'Panels/Pins': 'Numbered pins on a picture, a note beside each; the list goes to the agent in one press.',
   Pins: 'Numbered notes anchored to a point or region of a picture or device screen.',
   Simulator: 'Connected devices, their screens and controls, where the platform tools exist.',
   Share: 'The share menu and card for a panel’s result.',
