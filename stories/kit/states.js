@@ -1,9 +1,9 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
-import { keyLayer, keyLayerMods, sampleShot, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, sampleShot, sampleScreens, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 
@@ -529,6 +529,22 @@ export const statedPages = {
       { label: 'Writing a note', args: { pending: true, writing: [28, 34], text: 'Count from the server', typing: true }, caption: 'The note opens beside the pin, the caret after the words.' },
       { label: 'Empty note', args: { pending: true, writing: [28, 34], typing: true }, caption: 'Its placeholder until the first word.' },
       { label: 'Inline', args: { at: null }, caption: 'The pin alone, leading its row in a list of notes.' },
+    ],
+  },
+  'Primitives/Device': {
+    args: { screen: 'ios', state: 'on', frozen: false, focus: false, touch: null, rotated: false, narrow: false, pins: [] },
+    markup: ({ screen, ...look }) => device(look, deviceScreen(sampleScreens[screen])),
+    states: [
+      { label: 'On', args: {}, caption: 'The app on its screen, in the device’s frame.' },
+      { label: 'Another system', args: { screen: 'android' }, caption: 'The same frame for every system.' },
+      { label: 'Focus', args: { focus: true }, caption: 'Touches and keys go to it.' },
+      { label: 'A touch', args: { focus: true, touch: [50, 82] }, caption: 'The point being pressed.' },
+      { label: 'Frozen', args: { frozen: true, pins: [pin({ n: 1, at: [70, 62] })] }, caption: 'Held still to pin; the pins sit over the screen.' },
+      { label: 'Off', args: { state: 'off' }, caption: 'The empty frame and Boot.' },
+      { label: 'Booting', args: { state: 'booting' }, caption: 'Its breathing blank.' },
+      { label: 'Stalled', args: { state: 'stalled' }, caption: 'The last picture, stepped down.' },
+      { label: 'Rotated', args: { rotated: true }, caption: 'On its side.' },
+      { label: 'Narrow', args: { narrow: true }, caption: 'In a narrow panel.' },
     ],
   },
   'Primitives/Skeleton': {

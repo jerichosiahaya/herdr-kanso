@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms, paneRightClicks, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, rowDepths, sides, skeletonShapes, stack, statePatterns, dragHandleStates } from './pieces.js';
+import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, rowDepths, sides, skeletonShapes, stack, statePatterns, dragHandleStates, deviceStates } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
@@ -604,6 +604,17 @@ export const playgrounds = {
       pending: flag('no note yet'),
       text: text('note'),
       typing: flag('typing'),
+    },
+  },
+  'Primitives/Device': {
+    ...statedPages['Primitives/Device'],
+    argTypes: {
+      screen: select('screen', ['ios', 'android']),
+      state: select('state', deviceStates),
+      ...pick('focus'),
+      frozen: flag('frozen'),
+      rotated: flag('rotated'),
+      narrow: flag('narrow'),
     },
   },
   'Primitives/Skeleton': {

@@ -349,6 +349,11 @@ export const guidelines = {
     ["Kokō", "A point or a region.", "A pin sits on the point it names or rings a region; the same pin leads its row in the list of notes."],
     ["Shizen", "The note opens where you pinned.", "Beside the pin on the popover ground with the accent edge; its words, or its placeholder, and the caret while typing."],
   ],
+  "Primitives/Device": [
+    ["Seijaku", "One frame.", "Every system's screen sits in the same frame; rotated it lies on its side, narrow it keeps its shape at a smaller size."],
+    ["Shizen", "Its life is its look.", "Off is the empty frame with Boot, booting a breathing blank, stalled the last picture stepped down; nothing else says it."],
+    ["Kokō", "One ring at a time.", "Focus rings it while touches and keys go to it; frozen rings it while pinning, the pins over the screen."],
+  ],
   "Primitives/Picture": [
     ["Kansō", "The picture is the page.", "Sized to its panel's width, no frame, no caption; its file and its acts live around it, never on it."],
     ["Shizen", "It comes or it waits.", "Loading is its breathing shape; a picture too large to bring on its own holds its slot with the one action that brings it."],
