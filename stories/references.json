@@ -2374,18 +2374,7 @@
         "Cost: none until chosen; then a local render. The post opens in the browser."
       ],
       "records": [
-        "proto/approved-panels-b-share/Reference/1",
-        "panels/share/ShareAttachfallback/Default",
-        "panels/share/ShareClipboardfallback/Default",
-        "panels/share/ShareFailed/Default",
-        "panels/share/ShareMaking/Default",
-        "panels/share/ShareClosedOpenAPostPendingTheDojo/Default",
-        "panels/share/ShareSaved/Default",
-        "panels/share/ShareCardDj/Default",
-        "panels/share/ShareCardMemory/Default",
-        "panels/share/ShareCardPorts/Default",
-        "panels/share/ShareCardShipped/Default",
-        "panels/share/ShareCardSpend/Default"
+        "proto/approved-panels-b-share/Reference/1"
       ],
       "components": [
         "Panels/Share"
@@ -4950,13 +4939,7 @@
       "status": "Approved reference",
       "guidelines": [],
       "records": [
-        "proto/approved-panels-b-share/Reference/1",
-        "panels/share/ShareAttachfallback/Default",
-        "panels/share/ShareClipboardfallback/Default",
-        "panels/share/ShareFailed/Default",
-        "panels/share/ShareMaking/Default",
-        "panels/share/ShareClosedOpenAPostPendingTheDojo/Default",
-        "panels/share/ShareSaved/Default"
+        "proto/approved-panels-b-share/Reference/1"
       ],
       "components": [
         "Panels/Share"

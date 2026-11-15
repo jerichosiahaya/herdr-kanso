@@ -110,8 +110,13 @@ export const files = ({ menu: path = null, ...props }) => withBeside(filesPanel(
 
 // Share: a panel's header menu; its title says what leaves.
 const shareTargets = ['Post to X', 'Post to LinkedIn', 'Post to Bluesky'];
-export const shareMenu = ({ leaves }) => menu({ title: leaves, items: [...shareTargets.map((label) => ({ label })), { separator: true }, { label: 'Save image' }] });
-const shareButton = ({ disabled = false } = {}) => button({ label: 'Share', kind: 'icon', icon: 'lu-share', disabled });
+// The row in flight makes the image and the others wait.
+const shareItem = (making) => (label) => (label === making ? { label: 'Making the image…', mark: 'working' } : { label, disabled: Boolean(making) });
+export const shareMenu = ({ leaves, making = null }) => {
+  const item = shareItem(making);
+  return menu({ title: leaves, items: [...shareTargets.map(item), { separator: true }, item('Save image')] });
+};
+const shareButton = ({ disabled = false, active = false } = {}) => button({ label: 'Share', kind: 'icon', icon: 'lu-share', disabled, active });
 // What opens beside a panel: its Share menu, a notice, a dialog.
 const withBeside = (drawn, beside) => (beside ? stack({ variant: 'columns' }, drawn, beside) : drawn);
 // The first read is the skeleton; a refusal is the Failure block in its place.
@@ -595,3 +600,11 @@ const shippedPanel = ({ label, period, periods, past = false, gate = null, scope
 // Share opens its menu beside the panel, `card` the card it makes; a new record is a notice.
 export const shipped = ({ share = null, card = null, notice: said = null, ...props }) => withBeside(shippedPanel(props),
   share ? shareMenu({ leaves: share }) : card ? shareCard(card) : said ? notice(said) : null);
+
+// Share, one menu everywhere: a panel's header with its Share icon; open, the menu says what leaves; the result is a notice, the card is what it makes.
+const headerTools = { refresh: () => panelRefresh(), settings: () => settingsTool() };
+const sharer = ({ title, tools = [], open }) => panel({ header: panelHeader({ title, tools: [shareButton({ active: open }), ...tools.map((key) => headerTools[key]())] }) });
+export const sharing = ({ title, tools, leaves, open = false, making = null, notice: said = null, card = null }) => {
+  const beside = list(open ? shareMenu({ leaves, making }) : null, said ? notice(said) : null, card ? shareCard(card) : null);
+  return withBeside(sharer({ title, tools, open }), beside ? stack({ variant: 'column' }, beside) : null);
+};

@@ -629,3 +629,55 @@ export const sampleShippedCard = {
 export const sampleShippedNotices = {
   'New record': { state: 'done', home: 'shipped', text: 'New record: best day', detail: '+2,904 lines · Tue 11 Nov' },
 };
+
+// Share: each panel's header with its Share icon and what leaves; the image made, then where it went.
+const sharer = (title, leaves, tools = ['refresh']) => ({ title, leaves, tools });
+const sevenDays = ['Wed', 'now'];
+const stat = (value, unit) => ({ value, unit });
+export const sampleShare = {
+  panels: {
+    memory: sharer('Memory', 'Counts and sizes only'),
+    spend: sharer('Spend', 'Totals and days only', ['settings', 'refresh']),
+    dojo: sharer('hjkl dōjō', 'Scores and practice days only', []),
+  },
+  network: 'Post to LinkedIn',
+  save: 'Save image',
+  file: 'Downloads/kanso-memory-2026-11-12.png',
+  notices: {
+    'In the post': { state: 'done', home: 'memory', text: 'Your LinkedIn post has the image and the text', detail: 'Check it and post. Not there? It is on the clipboard: ⌘V. Saved in Downloads/kanso-memory-2026-11-12.png.' },
+    'Paste it': { state: 'done', home: 'memory', text: 'Paste the image into your LinkedIn post: ⌘V', detail: 'It is on the clipboard and in Downloads/kanso-memory-2026-11-12.png. Allow accessibility access to paste automatically.' },
+    'Attach it': { state: 'done', home: 'memory', text: 'Attach kanso-memory-2026-11-12.png to your LinkedIn post', detail: '~/Downloads/kanso-memory-2026-11-12.png' },
+    Saved: { state: 'done', home: 'memory', text: 'Memory image saved', detail: 'Downloads/kanso-memory-2026-11-12.png' },
+  },
+  failed: { state: 'failed', home: 'memory', text: 'The image could not be made', detail: 'Install Chrome, Chromium or rsvg-convert to make the image.' },
+  cards: {
+    Ports: {
+      title: 'Ports', right: 'last 30 days', note: '1.6 GB of memory given back',
+      hero: { big: '7', unit: 'servers', label: 'Left running after their panes closed, found and stopped' },
+      stats: [stat('4', 'running now'), stat('8', 'at once at the peak'), stat('21', 'opened this week'), stat('9', 'left with no pane')],
+      blocks: [{ kind: 'bars', title: 'Dev servers running, last 7 days', right: 'peak 8', values: [2, 3, 4, 8, 3, 2, 2], ticks: sevenDays }],
+    },
+    Memory: {
+      title: 'Memory', right: 'since Nov 1', note: '4.2 GB given back by recycling, same conversations',
+      hero: { big: '12', unit: 'days', label: 'My longest session, still open · 4 sessions on 32 GB' },
+      stats: [stat('4', 'sessions open'), stat('8', 'recycles'), stat('2', 'closed'), stat('4.8 GB', 'given back'), stat('620 MB', 'Herdr window'), stat('1', 'window restart')],
+      blocks: [{ kind: 'bars', title: 'Memory free, last 7 days', right: 'lowest 18%', values: [32, 24, 18, 24, 40, 32, 48], ticks: sevenDays }],
+    },
+    Spend: {
+      title: 'Spend', right: 'This month', note: 'Pro plan · $20 per month',
+      hero: { big: '$214.80', unit: 'of AI work at API list price', delta: { text: '18% more than last month', up: true } },
+      stats: [stat('48', 'tasks'), stat('12.4M', 'tokens'), stat('5', 'projects'), stat('3', 'models')],
+      blocks: [{ kind: 'bars', title: 'Daily spend', right: 'peak $24.10', values: [6, 10, 14, 24, 14, 9, 13], ticks: ['Nov 1', 'Nov 12'] }],
+    },
+    'Dōjō': {
+      title: 'hjkl dōjō', subtitle: 'The vim game inside kansō, a layout for Herdr', right: 'since Nov 1', note: '10 targets in a row in the fewest moves',
+      hero: { big: '980', unit: 'points', label: 'My best round of vim, ten targets, level 1: h l' },
+      stats: [stat('120', 'targets reached'), stat('84%', 'in the fewest moves'), stat('12', 'rounds'), stat('7', 'days practiced')],
+      blocks: [
+        { kind: 'streak', title: 'Practice', right: 'h j k l, every day', n: '5', unit: 'days in a row', days: shipDays },
+        { kind: 'list', title: 'Levels', rows: [{ name: '1 · best round', value: '980', unit: 'points' }, { name: '2 · best round', value: '820', unit: 'points' }] },
+      ],
+    },
+    Shipped: sampleShippedCard,
+  },
+};

@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel, shipped } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel, shipped, sharing } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer, sampleScreens, sampleShot } from './samples.js';
-import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleShipped, sampleShippedCard, sampleShippedNotices, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleShipped, sampleShippedCard, sampleShippedNotices, sampleShare, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins } from './panel-samples.js';
 
 // A notice's state: the panel at rest with the notice beside it.
 const noticesOf = (notices, draw) => Object.fromEntries(Object.entries(notices).map(([name, said]) => [phrase('Notice:', name), [draw({ notice: said }), 'On screen a toast; away, the computer’s notification with the same words.']]));
@@ -350,6 +350,24 @@ export const shippedViews = {
   'The card it makes': [shipping({ card: sampleShippedCard }), 'Totals, the streak, the records and the hours; never a repository or a computer. 1200 wide, shown at half.'],
   ...noticesOf(sampleShippedNotices, shipping),
 };
+// Share: Memory, Spend and the dōjō; each state is what opening, a row, the image or its result changes.
+const { panels: sharers, network } = sampleShare;
+const menuOpen = (key, extra = {}) => ({ ...sharers[key], open: true, ...extra });
+const cardOf = (name) => [{ title: sampleShare.cards[name].title, card: sampleShare.cards[name] }, 'Shown at half of its 1200 width; light or dark as the theme.'];
+export const shareViews = {
+  'Closed: the icon in the header': [sharers.memory, 'Share shows only when there is something to share.'],
+  'Open: what leaves, then where': [menuOpen('memory'), 'The menu’s first line says what leaves; Post to X, LinkedIn or Bluesky, then Save image.'],
+  'Spend: totals and days only': [menuOpen('spend'), 'The same menu; its first line is Spend’s.'],
+  'The dōjō: after a round': [menuOpen('dojo'), 'Scores and practice days only.'],
+  'Making the image': [menuOpen('spend', { making: network }), 'The row says so; the others wait until the image is made.'],
+  'The image could not be made': [menuOpen('memory', { notice: sampleShare.failed }), 'The menu stays; the notice says what to install, and a row tries again.'],
+  ...noticesOf(sampleShare.notices, (extra) => ({ ...sharers.memory, ...extra })),
+  'Card: Shipped': cardOf('Shipped'),
+  'Card: Spend': cardOf('Spend'),
+  'Card: Memory': cardOf('Memory'),
+  'Card: Ports': cardOf('Ports'),
+  'Card: the dōjō': cardOf('Dōjō'),
+};
 // Preview: limits.ts as Files opens it, then limits.md; each state is what an edit, a save or a read changes.
 const { code, edit, markdown: note, log, binary, gone, shot, pictured, huge, pins } = samplePreview;
 // The pins once their notes are typed.
@@ -526,6 +544,6 @@ const pinsViews = {
   'Copy to devbox refused': [onDevice(scopes.devbox, iosPins.slice(0, 1), { send: { refused: pinRefusals.copy } }), 'Proposed: the copy’s words, the pins kept, and Send again.'],
 };
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Shipped': [shippedViews, shipped], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel] };
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Shipped': [shippedViews, shipped], 'Panels/Share': [shareViews, sharing], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

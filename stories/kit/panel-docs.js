@@ -10,6 +10,12 @@ export const panelGuidelines = {
     ['Seijaku', 'States where the list starts.', 'The first read is the skeleton with how many sessions are read; still reading says how far. Nothing in the period is the empty state. A read that fails is the Failure block; a refresh that fails keeps the last numbers under it. A plan not read says so under its row. Several computers sum here, a line each; one not answering says when it was read.'],
     ['Kokō', 'Shares only totals.', 'The header’s Share says Totals and days only, and only while nothing is filtered or opened.'],
   ],
+  'Panels/Share': [
+    ['Kansō', 'One menu everywhere.', 'The Share icon in a panel’s header, only when there is something to share. Open, its first line says what leaves: Counts and sizes only in Ports and Memory, Totals and days only in Spend, Totals only in Worktrees, Totals only, no names in Shipped, Scores and practice days only in the dōjō. Then Post to X, LinkedIn or Bluesky, and Save image.'],
+    ['Seijaku', 'The image is made here.', 'The row pressed says Making the image… and the others wait; nothing leaves the computer until a row is pressed.'],
+    ['Kokō', 'The result is a notice.', 'The post opens with the image in it, or says how to paste or attach it; Save image says where it went. An image that cannot be made says what to install, and the menu stays.'],
+    ['Kansō', 'One card for every panel.', 'Its heading and period, the figure with how it compares, the counts, a sentence, then its streak, bars or list; the ensō foot. Never a repository, a computer or a session’s name.'],
+  ],
   'Panels/Shipped': [
     ['Kansō', 'One number for the period.', '+12,480 lines with the −3,210 taken away, how it compares with the period before, then what it counts on one dim line: pull requests merged, commits, reviews, days in a row. A day leads with contributions. With the pointer on the number: the contributions and what you shipped since joining GitHub.'],
     ['Kokō', 'The period in the header.', 'Day, Week, Month and Year with the arrows on one line; the header’s second line names it. A past period adds Back to now.'],
@@ -117,6 +123,30 @@ const changedOnDisk = {
 };
 
 export const panelHypotheses = {
+  'Panels/Share': [
+    {
+      change: 'Share is a menu from the header whose first line says what leaves.',
+      today: 'Share opens a row in the panel: Share to, X, LinkedIn, Bluesky and Save image as buttons, and a sentence of what leaves under them.',
+      why: 'the choices and what leaves in view at once.',
+      question: 'does someone read what leaves before choosing where?',
+      believe: 'yes, when it is the first line of the menu they choose from; the panel does not move.',
+      jobs: [['what leaves', 'the menu’s first line'], ['where', 'its rows'], ['keep it', 'Save image']],
+      wrong: 'someone shares and is surprised by what the card holds.',
+      try: 'Dawn Mode first.',
+      back: 'the row returns in the panel.',
+    },
+    {
+      change: 'While the image is made the other rows wait.',
+      today: 'only the pressed button says Making the image…; the others can still be pressed.',
+      why: 'nothing blocked.',
+      question: 'does someone press a second network while the first image is made?',
+      believe: 'no; a second press would only queue a second image.',
+      jobs: [['how far', 'the pressed row'], ['another network', 'after the notice']],
+      wrong: 'someone waits for one network to post to two.',
+      try: 'Dawn Mode first.',
+      back: 'the other rows stay pressable.',
+    },
+  ],
   'Panels/Shipped': [
     {
       change: 'The counts become one dim line under the number; contributions, repositories and the lifetime sentence come with the pointer on the number.',

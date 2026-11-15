@@ -388,23 +388,23 @@
   "panel/Share": {
     "page": "Panels/Share",
     "states": {
-      "Menu": "panels/share/ShareClosedOpenAPostPendingTheDojo/Default",
-      "Post ready": "panels/share/ShareClosedOpenAPostPendingTheDojo/Default",
-      "Making": "panels/share/ShareMaking/Default",
-      "Failed": "panels/share/ShareFailed/Default",
-      "Saved": "panels/share/ShareSaved/Default",
-      "Clipboard fallback": "panels/share/ShareClipboardfallback/Default",
-      "Attach fallback": "panels/share/ShareAttachfallback/Default"
+      "Menu": "kit/Panels/Share/Open: what leaves, then where",
+      "Post ready": "kit/Panels/Share/Notice: In the post",
+      "Making": "kit/Panels/Share/Making the image",
+      "Failed": "kit/Panels/Share/The image could not be made",
+      "Saved": "kit/Panels/Share/Notice: Saved",
+      "Clipboard fallback": "kit/Panels/Share/Notice: Paste it",
+      "Attach fallback": "kit/Panels/Share/Notice: Attach it"
     }
   },
   "panel/ShareCard": {
     "page": "Panels/Share",
     "states": {
-      "Ports": "panels/share/ShareCardPorts/Default",
-      "Memory": "panels/share/ShareCardMemory/Default",
-      "Spend": "panels/share/ShareCardSpend/Default",
-      "Dōjō": "panels/share/ShareCardDj/Default",
-      "Shipped": "panels/share/ShareCardShipped/Default"
+      "Ports": "kit/Panels/Share/Card: Ports",
+      "Memory": "kit/Panels/Share/Card: Memory",
+      "Spend": "kit/Panels/Share/Card: Spend",
+      "Dōjō": "kit/Panels/Share/Card: the dōjō",
+      "Shipped": "kit/Panels/Share/Card: Shipped"
     }
   },
   "panel/CodeLimits": {

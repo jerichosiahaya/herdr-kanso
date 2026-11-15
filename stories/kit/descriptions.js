@@ -81,7 +81,7 @@ export const descriptions = {
   'Panels/Pins': 'Numbered pins on a picture, a note beside each; the list goes to the agent in one press.',
   Pins: 'Numbered notes anchored to a point or region of a picture or device screen.',
   Simulator: 'Connected devices, their screens and controls, where the platform tools exist.',
-  Share: 'The share menu and card for a panel’s result.',
+  Share: 'One menu from a panel’s header saying what leaves, the image made in place, the result a notice, and the one card every panel shares.',
   Settings: 'kansō settings: what shows, its keys, what is new, and credits, in one window.',
   Help: 'Keys and explanations of available actions.',
   Arrangements: 'Saved pane layouts to restore or save.',
