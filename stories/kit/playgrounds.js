@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms, paneRightClicks, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, dialog, escape, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls, dragHandleStates } from './pieces.js';
+import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls, dragHandleStates } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
@@ -129,13 +129,14 @@ export const playgrounds = {
     },
   },
   'Primitives/Markdown': {
-    args: { source: '# Rate limits\n\nEach customer gets a bucket of requests. A request takes one token; the bucket refills one token every 2 s.\n\n| Plan | Per minute | Burst |\n| --- | --- | --- |\n| Free | 40 | 10 |\n| Pro | 400 | 60 |\n\n## Retry-After\n\nAn empty bucket answers `429` with `Retry-After` in seconds.', block: 3, state: 'hover' },
+    ...statedPages['Primitives/Markdown'],
     argTypes: {
       source: text('Markdown'),
+      view: select('View', ['document', 'source']),
       state: select('Block state', ['rest', 'hover', 'editing']),
       block: { name: 'Block', control: { type: 'number', min: 1 }, if: { arg: 'state', neq: 'rest' } },
+      picture: select('Picture', [...pictureStates, 'failed']),
     },
-    markup: (args) => `<div class="kanso-panel">${markdown(args)}</div>`,
   },
   'Primitives/Menu': {
     ...statedPages['Primitives/Menu'],
@@ -157,17 +158,19 @@ export const playgrounds = {
     },
   },
   'Primitives/Metric': {
-    args: { value: '31%', unit: 'free of 16 GB · 2.4 GB swap', second: '', facts: '14 tasks | $2.94 a task | 9.1M tokens', loading: false, size: 'md', tone: 'none' },
+    ...statedPages['Primitives/Metric'],
     argTypes: {
       size: select('size', ['md', 'sm']),
-      tone: select('tone', ['none', ...Object.values(levels)]),
+      tone: select('tone', ['', ...Object.values(levels)]),
       value: text('Value'),
+      small: text('Small figure'),
       unit: text('Unit'),
       second: text('Second line'),
       facts: text('Facts (separated by |)'),
+      delta: text('Delta'),
+      up: { ...flag('Delta up'), if: { arg: 'delta', truthy: true } },
       loading: flag('Loading'),
     },
-    markup: ({ tone, ...args }) => `<div class="kanso-panel">${metric({ ...args, tone: tone === 'none' ? '' : tone })}</div>`,
   },
   'Primitives/Window controls': { args: {}, argTypes: {}, markup: windowControls },
   'Primitives/Dawn': { ...statedPages['Primitives/Dawn'], argTypes: {} },

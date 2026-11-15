@@ -1,9 +1,9 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, dialog, dragHandle, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, sampleShot, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 
@@ -371,6 +371,33 @@ export const statedPages = {
       { label: 'Multiline', args: { text: 'Review the limits page.\nKeep the plan in the bucket key.', label: 'Prompt', multiline: true }, caption: 'A prompt grows with its lines; Enter adds one.' },
       { label: 'Rename', args: { text: 'checkout', label: 'Name', icon: 'none', inline: true, selected: true, focus: true }, caption: 'In place, its old name selected.' },
       { label: 'Loading', args: { loading: true }, caption: 'One skeleton in the field’s place.' },
+    ],
+  },
+  'Primitives/Markdown': {
+    args: { source: '# Rate limits\n\nEach customer gets a bucket of requests. A request takes one token; the bucket refills one token every 2 s.\n\n| Plan | Per minute | Burst |\n| --- | --- | --- |\n| Free | 40 | 10 |\n| Pro | 400 | 60 |\n\n## Retry-After\n\nAn empty bucket answers `429` with `Retry-After` in seconds.\n\n```js\nres.set(\"Retry-After\", retryAfter(b));\n```\n\n![checkout-429.png](shots/checkout-429.png)', view: 'document', block: 0, state: 'rest', picture: 'shown' },
+    markup: ({ picture: state, ...args }) => stack({ variant: 'panel' }, markdown({ ...args, shot: { state, size: '4.2 MB', image: sampleShot } })),
+    states: [
+      { label: 'At rest', args: {}, caption: 'Headings, paragraphs, a table, code in text, a fence and a picture, as the note reads.' },
+      { label: 'Hover', args: { block: 2, state: 'hover' }, caption: 'The block under the pointer is washed; a click edits it.' },
+      { label: 'Editing', args: { block: 2, state: 'editing' }, caption: 'The block is edited in place.' },
+      { label: 'Editing a table', args: { block: 3, state: 'editing' }, caption: 'A table edits its cells; a row or a column goes with its ×, then Add row, Add column, Done.' },
+      { label: 'Source', args: { view: 'source' }, caption: 'The raw text, as it is on disk.' },
+      { label: 'Picture loading', args: { picture: 'loading' }, caption: 'The picture’s shape breathes until it comes.' },
+      { label: 'Picture held', args: { picture: 'held' }, caption: 'On another computer past 2 MB: its name, size and Load.' },
+      { label: 'Picture failed', args: { picture: 'failed' }, caption: 'One quiet line.' },
+    ],
+  },
+  'Primitives/Metric': {
+    args: { value: '31%', unit: 'free of 16 GB · 2.4 GB swap', small: '', second: '', facts: '14 tasks | $2.94 a task | 9.1M tokens', loading: false, size: 'md', tone: '', delta: '', up: true },
+    markup: ({ delta: text, up, ...args }) => stack({ variant: 'panel' }, metric(args), text ? delta({ text, up }) : ''),
+    states: [
+      { label: 'A panel’s figure', args: {}, caption: 'The one number of a panel, its unit beside it, its facts under it.' },
+      { label: 'Toned', args: { value: '8%', tone: 'blocked', facts: '' }, caption: 'The figure takes the tone of what it says.' },
+      { label: 'Second line', args: { value: '25×', unit: 'Claude Max 20x', second: '$5,012 of work for $200', tone: 'working', facts: '' }, caption: 'A unit in ink over a dim second line, both beside the value.' },
+      { label: 'Small figure', args: { value: '+12,480', small: '−3,210', unit: 'lines', facts: '' }, caption: 'A second figure, muted, between the value and its unit.' },
+      { label: 'Delta', args: { value: '+12,480', small: '−3,210', unit: 'lines', facts: '', delta: '18% on last week' }, caption: 'The change against the last period, under the figure.' },
+      { label: 'Small', args: { value: '$41.20', unit: 'today', size: 'sm', facts: '' }, caption: 'A figure at title size inside a line, on one line.' },
+      { label: 'Loading', args: { loading: true }, caption: 'Each part keeps its shape while it reads.' },
     ],
   },
   'Primitives/Mark': {

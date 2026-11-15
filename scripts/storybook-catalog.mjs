@@ -78,8 +78,8 @@ const primitive = {
   ButtonsFourKinds: null, ButtonsOnALine: null, ActionRows: null, ButtonWithAMark: null, Armed: null,
   FocusRing: null, HoverSelectedPressed: null, Tooltip: 'Tooltip', ChromeAndBarButtons: null,
   FileRow: 'Row', PortRow: 'Row', RowActions: 'Row', SettingRow: 'Row', SettingRowWithAValue: 'Row', FindRow: 'Row',
-  Card: null, Metric: 'Metric', ThumbnailStrip: 'Thumbnail', SkeletonTwoLines: 'Skeleton', Loading: 'Skeleton',
-  Toast: 'Toast', ToastWithItsSource: 'Toast', Snippet: null, Reply: 'Markdown', Picture: 'Thumbnail',
+  Card: null, Metric: null, ThumbnailStrip: 'Thumbnail', SkeletonTwoLines: 'Skeleton', Loading: 'Skeleton',
+  Toast: 'Toast', ToastWithItsSource: 'Toast', Snippet: null, Reply: null, Picture: 'Thumbnail',
 };
 // The panel pieces drawn on their own panel's page.
 const panelPiece = { HeroAndVerdict: 'Panels/PR', InATab: 'Panels/Worktrees', MemoryMetricAndChart: 'Panels/Memory', PlanAndSpend: 'Panels/Spend' };
@@ -88,7 +88,7 @@ const protoPage = {
   'components-code': null, 'components-collapsed-rail': null,
   'components-dialog': null, 'components-edges-and-minimap': 'Compositions/Edges',
   'components-find-in-the-conversation': 'Panels/Find', 'components-header-digest': null,
-  'components-log': null, 'components-markdown-window': 'Panels/Markdown', 'components-markdown': 'Primitives/Markdown',
+  'components-log': null, 'components-markdown-window': 'Panels/Markdown', 'components-markdown': null,
   'components-menu': null, 'components-new-project': null, 'components-new-worktree': null,
   'components-pane-header': null, 'components-pane-standing-in': null, 'components-panel-menu': null,
   'components-pick-list': 'Primitives/Row', 'components-rename': null, 'components-settings-tabs': 'Panels/Settings',
