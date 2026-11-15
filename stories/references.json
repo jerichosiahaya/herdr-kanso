@@ -6676,12 +6676,18 @@
         "coverage/help/KeyboardExplorer/Modifier layer",
         "coverage/help/KeyboardExplorer/Physical press",
         "coverage/help/KeyboardExplorer/Picked key",
-        "coverage/help/KeyboardExplorer/Unbound"
+        "coverage/help/KeyboardExplorer/Unbound",
+        "coverage/help/Help/Dōjō invitation",
+        "coverage/help/Help/Guide",
+        "coverage/help/Help/Keyboard focus",
+        "coverage/help/Help/Keys"
       ],
       "components": [
         "Compositions/Keyboard"
       ],
-      "features": [],
+      "features": [
+        "coverage/help/Help"
+      ],
       "approvedRecords": [
         "proto/approved-dialogs-help/Reference/1",
         "proto/approved-dialogs-help/Reference/2",
@@ -7123,37 +7129,6 @@
         "coverage/help/Guide"
       ],
       "proposedPredicates": []
-    },
-    {
-      "page": "Panels/Help",
-      "existing": true,
-      "boards": [
-        "D14"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-dialogs-help/Reference/1",
-        "proto/approved-dialogs-help/Reference/2",
-        "proto/approved-dialogs-help/Reference/3",
-        "coverage/help/Help/Dōjō invitation",
-        "coverage/help/Help/Guide",
-        "coverage/help/Help/Keyboard focus",
-        "coverage/help/Help/Keys"
-      ],
-      "components": [
-        "Compositions/Keyboard",
-        "Panels/Help"
-      ],
-      "features": [
-        "coverage/help/Help"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-dialogs-help/Reference/1",
-        "proto/approved-dialogs-help/Reference/2",
-        "proto/approved-dialogs-help/Reference/3"
-      ]
     },
     {
       "page": "Panels/History chart",
