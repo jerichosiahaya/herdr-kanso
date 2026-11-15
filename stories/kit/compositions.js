@@ -67,7 +67,13 @@ export const viewSwitch = ({ view = 'spaces', column = false, open = false } = {
 
 // The update's one icon: the footer row that runs it and every notice about it.
 export const updateIcon = 'lu-refresh-cw';
-export const sidebarFooter = ({ update = null } = {}) => stack({ variant: 'footer' }, update ? row({ icon: updateIcon, name: update }) : null, row({ icon: 'lu-settings', name: 'Settings' }));
+// The sidebar's foot: kansō's update while one is offered, quiet once pressed, its refusal under it; then Settings. In the rail, squares.
+const updateLine = (update, updating) => ({ icon: updateIcon, name: updating ? 'Updating kansō' : update, dimmed: updating });
+const settingsLine = { icon: 'lu-settings', name: 'Settings' };
+export const sidebarFooter = ({ update = null, updating = false, refused = null, collapsed = false } = {}) => collapsed
+  ? stack({ variant: 'rail footer' }, update ? tool(updateIcon, updateLine(update, updating).name) : null, tool(settingsLine.icon, settingsLine.name))
+  : stack({ variant: 'footer' }, update ? row(updateLine(update, updating)) : null,
+    update && refused ? failureBlock({ text: "kansō didn't update", fix: 'Update', ...refused }) : null, row(settingsLine));
 
 export const tile = ({ initial = null, tone = 'teal', status = 'none', count = 0, open = false }) => stack({ variant: 'rail tile', on: open },
   initial ? avatar({ initial, tone, size: 'md' }) : mark({ status, size: 'lg' }), count ? chip({ label: count, quiet: true, tone: status === 'blocked' ? 'blocked' : null }) : null);
@@ -242,7 +248,7 @@ export const projectMenu = ({ name, worktrees = [], asleep = [], tabs = 0, kept 
 // The footer's Settings: kansō's, Herdr's, and Herdr's update when one waits, which restarts it on the second press.
 export const settingsMenu = ({ update = null, armed = false } = {}) => menu({ title: 'Settings', items: [
   { icon: 'lu-sliders-vertical', label: 'kansō settings', hint: '⌃⇧,' }, { icon: 'lu-panels-top-left', label: 'Herdr settings' },
-  ...(update ? [{ icon: updateIcon, label: update, verb: 'restart Herdr', armed }] : [])] });
+  ...(update ? [{ separator: true }, { icon: updateIcon, label: update, verb: 'restart Herdr', armed }] : [])] });
 
 export const activityMenu = () => menu({ title: 'While you were away', items: [{ icon: 'lu-x', label: 'Dismiss these' }, ...pieceLines] });
 
@@ -312,7 +318,7 @@ export const channelSettings = ({ channel = 'stable', art = true } = {}) => list
 
 // The rows and tiles of the current view come in drawn; the sidebar only places them.
 export const sidebar = ({ collapsed = false, dawn: early = false, art = true, view = 'spaces', switcher = true, menu: open = false, needs = null, rows = [], tiles = [], away = null } = {}) => collapsed
-  ? stack({ variant: 'rail' }, header({ collapsed, dawn: early, art, view }), switcher ? viewSwitch({ view, column: true, open }) : null, stack({ variant: 'rail list' }, tiles), stack({ variant: 'rail footer' }, tool('lu-settings', 'Settings')))
+  ? stack({ variant: 'rail' }, header({ collapsed, dawn: early, art, view }), switcher ? viewSwitch({ view, column: true, open }) : null, stack({ variant: 'rail list' }, tiles), sidebarFooter({ collapsed }))
   : stack({ variant: 'sidebar' }, header({ dawn: early, art, view }), switcher ? viewSwitch({ view }) : null, needs, stack({ variant: 'rows' }, rows), away, sidebarFooter());
 
 // Two halves around the fixed slot of panes per view; each half folds its own items.

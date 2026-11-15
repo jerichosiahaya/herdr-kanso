@@ -1,16 +1,15 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, header, panelDoors, projectRow, section, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatarSizes, button, card, code, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
-import { barWidths, captioned, inSettings, inSlice } from './frames.js';
+import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, worktreeRefusals } from './states.js';
-import { appNotices, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, sidebarMoments, statusMenus } from './samples.js';
+import { appNotices, footerUpdates, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, sidebarMoments, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
 
-const inSidebar = (markup) => stack({ variant: 'sidebar frame' }, markup), inRail = (markup) => stack({ variant: 'rail frame' }, markup);
 const select = (name, options) => ({ name, control: { type: 'select' }, options });
 const text = (name) => ({ name, control: { type: 'text' } });
 const flag = (name) => ({ name, control: { type: 'boolean' } });
@@ -437,9 +436,13 @@ export const playgrounds = {
     markup: (args) => inRail(tile(args)),
   },
   'Compositions/Sidebar/Footer': {
-    args: { update: '' },
-    argTypes: { update: text('update') },
-    markup: (args) => inSidebar(sidebarFooter(args)),
+    ...statedPages['Compositions/Sidebar/Footer'],
+    argTypes: {
+      update: { name: 'update', control: { type: 'inline-radio' }, options: Object.keys(footerUpdates) },
+      moment: { name: 'pressed', control: { type: 'inline-radio' }, options: ['offered', 'updating', 'refused'], if: { arg: 'update', neq: 'none' } },
+      collapsed: flag('in the rail'),
+      open: flag('Settings open'),
+    },
   },
   'Compositions/Sidebar': {
     ...statedPages['Compositions/Sidebar'],

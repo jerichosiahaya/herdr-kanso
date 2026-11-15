@@ -80,6 +80,19 @@ export const hypotheses = {
       back: 'right-click and ⋯ keep their own items, as today.',
     },
   ],
+  'Compositions/Sidebar/Footer': [
+    {
+      change: 'A refused update offers Explain to the agent beside Update.',
+      today: 'the failure block under the row says kansō didn’t update, the tool’s words and Update.',
+      why: 'say why kansō did not update and try again.',
+      question: 'why must someone copy the tool’s words into a conversation to learn what they mean?',
+      believe: 'one press hands the agent the failure, and the update is retried sooner.',
+      jobs: [['try again', 'Update'], ['read why', 'the tool’s words'], ['ask an agent', 'Explain to the agent']],
+      wrong: 'nobody presses Explain on a refused update.',
+      try: 'Dawn Mode first.',
+      back: 'the block keeps Update alone.',
+    },
+  ],
   'Compositions/Agent menu': [
     {
       change: 'The agent menu adds Sleep its tab and the piece lines, and groups its items: open and name, keep, put away, close.',

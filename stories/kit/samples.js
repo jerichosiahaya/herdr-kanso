@@ -215,6 +215,9 @@ export const sampleCapture = [
 // What the agent menu's second Menus offer for checkout, as the approved board names them.
 export const sampleSnooze = [['In 1 hour', '15:02'], ['In 3 hours', '17:02'], ['This evening', '18:00'], ['Tomorrow', 'Thu 9:00'], ['Monday', 'Mon 9:00']];
 export const sampleMove = { projects: ['docs-site', 'reports'], home: 'acme-shop' };
+// kansō's update as the footer offers it, in Stable Mode and in a Dawn Mode build, and the tool's words when it is refused.
+export const footerUpdates = { none: null, 'kansō': 'Update kansō to 3.31.0', 'Dawn Mode build': 'Update to 3.31.0-beta.3' };
+export const sampleRefusedUpdate = { source: 'git ls-remote: Could not resolve host: github.com', agent: 'checkout' };
 export const sampleAsleepRow = { title: 'billing, asleep since 14:02', more: 3, group: 'in review' };
 export const sampleCopy = { folder: '~/acme-shop-checkout', branch: 'checkout-v2', id: '9f2c…' };
 // The editors Open with finds for a file, a folder, a picture and a remote file, and the agents installed in a project.

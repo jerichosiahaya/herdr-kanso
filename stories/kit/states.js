@@ -1,9 +1,9 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, sidebarFooter, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
 import { avatar, chip, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
-import { atWidth, captioned, inBar, inSettings, inSlice } from './frames.js';
+import { atWidth, captioned, inBar, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 
@@ -380,6 +380,22 @@ export const statedPages = {
       { label: 'Not kept', args: { tabs: 1, worktrees: false, kept: false }, caption: 'An open folder that is not a project yet.' },
       { label: 'Folder missing', args: { tabs: 0, missing: true }, caption: 'Its folder is gone: find it, or remove the project.' },
       { label: 'Gone', args: { gone: true }, caption: 'The project left while the menu was open.' },
+    ],
+  },
+  'Compositions/Sidebar/Footer': {
+    args: { update: 'none', moment: 'offered', collapsed: false, open: false },
+    markup: ({ update, moment = 'offered', collapsed, open }) => {
+      const footer = sidebarFooter({ update: footerUpdates[update], updating: moment === 'updating', refused: moment === 'refused' ? sampleRefusedUpdate : null, collapsed });
+      return list(open ? settingsMenu() : null, collapsed ? inRail(footer) : inSidebar(footer));
+    },
+    states: [
+      { label: 'At rest', args: {}, caption: 'Settings alone, the same in Stable Mode and Dawn Mode.' },
+      { label: 'A kansō update', args: { update: 'kansō' }, caption: 'One row above Settings, in foreground.' },
+      { label: 'A Dawn Mode build', args: { update: 'Dawn Mode build' }, caption: 'The row names the build.' },
+      { label: 'Updating', args: { update: 'kansō', moment: 'updating' }, caption: 'Marked at once, quiet until it lands.' },
+      { label: 'Update refused', args: { update: 'kansō', moment: 'refused' }, caption: "The row unchanged, the tool's words under it." },
+      { label: 'Settings open', args: { open: true }, caption: 'One menu: kansō settings and Herdr settings.' },
+      { label: 'In the rail', args: { collapsed: true }, caption: 'Squares; the gear opens the same menu.' },
     ],
   },
   'Compositions/Settings menu': {

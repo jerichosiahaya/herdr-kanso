@@ -174,6 +174,8 @@ export const guidelines = {
   ],
   "Compositions/Sidebar/Footer": [
     ["Kokō", "Rows with an icon.", "An update when there is one, then Settings. Add computer lives in + on Status and Threads and in a computer's menu: the footer configures, it does not create."],
+    ["Kansō", "Update is one press.", "The row reads Updating kansō, quiet, until it lands. Refused, the row stays and the failure block sits under it: the tool's words, Update and Explain."],
+    ["Seijaku", "Settings opens one menu.", "kansō settings and Herdr settings; Herdr's own update is the Settings menu's, after a line. In the rail the gear square opens the same menu."],
   ],
   "Compositions/Sidebar": [
     ["Kansō","Built from the pieces above.","Header, View switch, the rows of the chosen view and Footer. Collapsed, the rail keeps every tool, one view button with its menu and each group as a Tile."],
