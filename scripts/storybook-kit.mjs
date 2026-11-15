@@ -41,8 +41,8 @@ export function kitRecords(records) {
   const byId = (id) => originals.find((record) => record.id === id)?.html ?? '';
   add('Window controls', 'Default', windowControls(), 'The three lights, where the system draws them.');
   add('Dawn', 'Default', dawnSky(), 'The sky of Dawn Mode; the sun rises once on load.');
-  add('Row', 'Toned fact', row({ icon: 'lu-container', name: 'postgres', detail: { text: 'unhealthy', tone: 'blocked' }, meta: '412 MB' }), 'Proposed. A fact that is a verdict leads with its dot and takes its tone: a container’s health, a worktree’s verdict, a PR’s state, a port’s owner.');
-  add('Field', 'Word action', input({ text: 'jj@studio.local', label: 'user@host', action: 'Add', limit: 80 }), 'Proposed. The action is a word; it shows once something is typed.');
+  add('Row', 'Toned fact', row({ icon: 'lu-container', name: 'postgres', detail: { text: 'unhealthy', tone: 'blocked' }, meta: '412 MB' }), 'A fact that is a verdict leads with its dot and takes its tone: a container’s health, a worktree’s verdict, a PR’s state, a port’s owner.');
+  add('Field', 'Word action', input({ text: 'jj@studio.local', label: 'user@host', action: 'Add', limit: 80 }), 'The action is a word; it shows once something is typed.');
   for (const [page, label, html, caption, id] of [
     ['Session row', 'Working', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' })), 'What it is on and for how long.'],
     ['Session row', 'Needs you', inSidebar(sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' })), 'The question, in foreground.'],
