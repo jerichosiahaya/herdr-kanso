@@ -34,7 +34,7 @@ export const descriptions = {
   Section: 'A heading over rows in Status and Threads.',
   'View switch': 'Projects, Status and Threads: by name in the sidebar, as icons in the rail.',
   Tile: 'A project or a state in the rail: its initial or mark and a count.',
-  Footer: 'The bottom of the sidebar: an update when there is one, Settings and Add computer.',
+  Footer: 'The bottom of the sidebar: an update when there is one, then Settings.',
   'Dawn Mode': 'The early channel’s mark in the sidebar header; Stable Mode shows nothing.',
   'Status bar': 'A row of facts at the window edge, each shown only while its own home is out of view.',
   Item: 'One fact on the status bar: a mark or an icon with its words.',

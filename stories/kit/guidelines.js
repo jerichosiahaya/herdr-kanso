@@ -111,7 +111,7 @@ export const guidelines = {
     ["Kansō", "A group in the rail.", "An Avatar with the project’s initial, or the state’s Mark, and a quiet Chip with how many."],
   ],
   "Compositions/Sidebar/Footer": [
-    ["Kokō", "Rows with an icon.", "An update when there is one, then Settings and Add computer."],
+    ["Kokō", "Rows with an icon.", "An update when there is one, then Settings. Add computer lives in + on Status and Threads and in a computer's menu: the footer configures, it does not create."],
   ],
   "Compositions/Sidebar": [
     ["Kansō","Built from the pieces above.","Header, View switch, the rows of the chosen view and Footer. Collapsed, the rail keeps every tool, one view button with its menu and each group as a Tile."],
