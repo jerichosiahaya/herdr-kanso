@@ -143,9 +143,10 @@ const rowTool = (action) => button({ kind: 'icon', size: 'sm', ...action });
 export const rowDepths = [0, 1, 2];
 // `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
 // The title form is a panel's heading: the name at title size, the second line its scope.
-// `second` and `meta` take facts with a tone, `chip` a tip; `drop` is where a dragged row lands, `wash` a state's ground, `guides` one per depth above it ('tee', 'end', 'pass', or null), under that depth's icon.
+// `second` and `meta` take facts with a tone, `chip` a tip; `drop` is where a dragged row lands, `wash` a state's ground, `guides` one per depth above it ('tee', 'end', 'pass', or null), under that depth's icon; without them a deeper row hangs from its parent.
 export const row = ({ icon = 'none', tone = '', name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, title, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action, start = [], tools = [], keys = [], drop, wash, guides = [] }) => {
-  const lead = `${guides.map(guide).join('')}${list(start)}${icon === 'none' ? '' : glyph(icon, tone)}`;
+  const lines = guides.length ? guides : depth > 1 ? [null, 'pass'] : [];
+  const lead = `${lines.map(guide).join('')}${list(start)}${icon === 'none' ? '' : glyph(icon, tone)}`;
   const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;
   const facts = [].concat(detail ?? []).filter(Boolean);
   const tail = `${facts.length ? `<span class="kanso-row__detail">${facts.map(fact).join('')}</span>` : ''}${grow()}`
@@ -154,7 +155,7 @@ export const row = ({ icon = 'none', tone = '', name, detail, meta, chip: count,
     + `${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${!status || status === 'none' ? '' : mark({ status })}`;
   const states = [second && 'kanso-row--two-lines', heading && 'kanso-row--heading', title && 'kanso-row--title', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
     dimmed && 'kanso-control--dim', pending && 'kanso-state-line--pending', hover && 'kanso-control--hover', focus && 'kanso-control--focus',
-    drop && `kanso-row--drop-${drop}`, wash && `kanso-row--wash-${wash}`, guides.length && 'kanso-row--tree'].filter(Boolean).map((name) => ` ${name}`).join('');
+    drop && `kanso-row--drop-${drop}`, wash && `kanso-row--wash-${wash}`, lines.length && 'kanso-row--tree'].filter(Boolean).map((name) => ` ${name}`).join('');
   return second
     ? `<div class="kanso-row${states}" tabindex="0"><div class="kanso-content__primary">${lead}${label}${tail}</div><div class="kanso-content__secondary">${typeof second === 'string' ? escape(second) : second.filter(Boolean).map(fact).join('')}</div></div>`
     : `<div class="kanso-row${states}" tabindex="0">${lead}${label}${tail}</div>`;

@@ -7,6 +7,10 @@ import windowsKeyFile from '../../kanso/keys.windows.json' with { type: 'json' }
 import { LIST_LAYER, describe, layer } from '../../kanso/mods/kanso-help/keymap.js';
 
 const group = (...rows) => stack({ variant: 'row group' }, ...rows);
+// A conversation's own tools under the pointer, and what a session's commands tooltip says.
+export const sessionTools = [{ icon: 'lu-check', label: 'Settle' }];
+export const sessionCommandsTip = 'npm test · 2m';
+
 export const sampleRows = {
   spaces: () => [
     group(computerRow({ name: 'light', remote: false })),

@@ -3,7 +3,7 @@ import { THEMES, colour, contrast } from './tokens.mjs';
 import { asleep, computerRow, header, projectRow, section, sidebarFooter, tile, toolbar, viewSwitch } from '../stories/kit/compositions.js';
 import { sessionRow } from '../stories/kit/session-row.js';
 import { dawn as dawnSky, stack, windowControls } from '../stories/kit/pieces.js';
-import { sampleSidebar } from '../stories/kit/samples.js';
+import { sampleSidebar, sessionTools } from '../stories/kit/samples.js';
 import { statedPages } from '../stories/kit/states.js';
 export { elements } from './storybook-markup.mjs';
 
@@ -70,7 +70,7 @@ export function kitRecords(records) {
     ['Session row', 'Sub-session', inSidebar(sessionRow({ program: 'p-codex', name: 'Juno', status: 'idle', depth: 2 })), 'Under its parent.'],
     ['Session row', 'Stuck on a step', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', step: { time: '14m', stuck: true }, time: '20m' })), 'How long on this step, in the blocked colour once it is long.'],
     ['Session row', 'Under the pointer, pinned', inSidebar(sessionRow({ name: 'Atlas', status: 'done', pinned: true, hover: true })), 'Unpin takes the pin\'s place.'],
-    ['Session row', 'Conversation tools', inSidebar(sessionRow({ name: 'Iris', status: 'done', depth: 0, pinnable: false, tools: [{ icon: 'lu-check', label: 'Settle' }], hover: true })), 'Settle, and the menu; pin stays in the menu.'],
+    ['Session row', 'Conversation tools', inSidebar(sessionRow({ name: 'Iris', status: 'done', depth: 0, pinnable: false, tools: sessionTools, hover: true })), 'Settle, and the menu; pin stays in the menu.'],
     ['Session row', "Can't read", inSidebar(sessionRow({ name: 'Iris', status: 'idle', depth: 0, place: "Can't read", placeTip: 'The transcript is gone', refresh: true, dimmed: true })), 'Refresh beside the word.'],
     ['Session row', 'Dragged over', inSidebar(sessionRow({ name: 'Atlas', status: 'idle', drop: 'before' })), 'Where the dragged row lands.'],
     ['Session row', 'Tree', inSidebar(stack({ variant: 'rows' }, sessionRow({ name: 'Atlas' }), sessionRow({ program: 'p-codex', name: 'Juno', status: 'idle', depth: 2, guides: [null, 'tee'] }), sessionRow({ program: 'p-codex', name: 'Iris', status: 'done', depth: 2, guides: [null, 'end'] }))), 'Each sub-session hangs from its parent.'],

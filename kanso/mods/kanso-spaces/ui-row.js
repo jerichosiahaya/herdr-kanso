@@ -41,7 +41,7 @@ const detailOf = (c, id, detail) => {
 const secondOf = (c, id, second) => {
   const line = div().w_full().min_w(0).text_size(T.body).text_color(c.dim);
   if (typeof second === "string") return line.truncate().child(second);
-  return h_flex().w_full().min_w(0).items_center().gap(G.xs).whitespace_nowrap().text_size(T.body).text_color(c.dim)
+  return h_flex().w_full().min_w(0).items_center().gap(G.sm).whitespace_nowrap().text_size(T.body).text_color(c.dim)
     .children(second.filter(Boolean).map((part, i) => textOf(c, `${id}-second-${i}`, factOf(part)).when(i > 0, (el) => el.flex_none())));
 };
 
@@ -100,9 +100,10 @@ const GUIDES = {
   end: (c, x) => [line(c).top_0().h(ELBOW.y).left(x).border_l_1(), line(c).top(ELBOW.y).left(x).w(ELBOW.w).border_t_1()],
 };
 // One guide per depth above the row, under that depth's icon: `tee`, `end`, `pass` or null; without them a deeper row has one under its parent's.
-const guidesOf = (c, depth, guides) => (guides.length
-  ? guides.flatMap((kind, level) => GUIDES[kind]?.(c, guideAt(level)) ?? [])
-  : depth > 1 ? GUIDES.pass(c, guideAt(1)) : []);
+const guidesOf = (c, depth, guides) => {
+  const lines = guides.length ? guides : depth > 1 ? [null, "pass"] : [];
+  return lines.flatMap((kind, level) => GUIDES[kind]?.(c, guideAt(level)) ?? []);
+};
 
 const DROPS = { before: (el) => el.top_0(), after: (el) => el.bottom_0() };
 const dropOf = (c, drop) => (DROPS[drop] ? DROPS[drop](div().absolute().left_0().right_0().h(G.hair).bg(c.accent)) : null);
