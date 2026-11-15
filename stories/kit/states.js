@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, sampleShot, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -497,6 +497,13 @@ export const statedPages = {
       { label: 'Left', args: { side: 'left' }, caption: 'The side the composition sets.' },
       { label: 'A detail', args: { text: 'Adding up', detail: '14 repositories to go', key: '', icon: 'lu-refresh-cw' }, caption: 'A detail follows the name, in dim.' },
       { label: 'Closed', args: { open: false }, caption: 'Shown on hover and keyboard focus only.' },
+    ],
+  },
+  'Primitives/Window controls': {
+    args: {},
+    markup: windowControls,
+    states: [
+      { label: 'At rest', args: {}, caption: 'The three lights, where the system draws them.' },
     ],
   },
   'Primitives/Skeleton': {

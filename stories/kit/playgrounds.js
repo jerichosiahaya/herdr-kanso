@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms, paneRightClicks, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, rowDepths, sides, skeletonShapes, stack, statePatterns, windowControls, dragHandleStates } from './pieces.js';
+import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, rowDepths, sides, skeletonShapes, stack, statePatterns, dragHandleStates } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
@@ -172,7 +172,7 @@ export const playgrounds = {
       loading: flag('Loading'),
     },
   },
-  'Primitives/Window controls': { args: {}, argTypes: {}, markup: windowControls },
+  'Primitives/Window controls': { ...statedPages['Primitives/Window controls'], argTypes: {} },
   'Primitives/Dawn': { ...statedPages['Primitives/Dawn'], argTypes: {} },
   'Compositions/Add computer dialog': {
     ...statedPages['Compositions/Add computer dialog'],

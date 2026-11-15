@@ -1,7 +1,6 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
 import { computerRow, projectRow, sessionRow, tile, viewSwitch } from '../stories/kit/compositions.js';
-import { windowControls } from '../stories/kit/pieces.js';
 import { statedPages } from '../stories/kit/states.js';
 import { inRail, inSidebar } from '../stories/kit/frames.js';
 export { elements } from './storybook-markup.mjs';
@@ -13,9 +12,7 @@ export const statedRecords = () => Object.entries(statedPages).flatMap(([page, {
 export function kitRecords(records) {
   const originals = records.filter((record) => record.html !== undefined && !['kit', 'tokens'].includes(record.source));
   const results = [];
-  const add = (name, label, html, caption) => results.push({ id: `kit/${name}/${label}`, source: 'kit', page: `Primitives/${name}`, label, html: frame(html), caption });
   const byId = (id) => originals.find((record) => record.id === id)?.html ?? '';
-  add('Window controls', 'Default', windowControls(), 'The three lights, where the system draws them.');
   for (const [page, label, html, caption, id] of [
     ['Session row', 'Working', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' })), 'What it is on and for how long.'],
     ['Session row', 'Needs you', inSidebar(sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' })), 'The question, in foreground.'],
