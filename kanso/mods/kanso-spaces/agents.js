@@ -4,10 +4,13 @@ import { paths } from "./platform-paths.js";
 import { div, svg } from "gpui-kit";
 import { h_flex, v_flex } from "gpui-base";
 import { run, openOverlay } from "herdr";
-import { stateMark, programIcon, NAME_LABEL, onBattery } from "./marks.js";
+import { programIcon, NAME_LABEL, onBattery } from "./marks.js";
 import { parseProcesses, etimeMs } from "./procs.js";
 import { oneLine } from "./since-left-model.js";
 import { activityTone, foldTail, timePlace } from "./sidebar-rows.js";
+import { washes } from "./ui.js";
+import { mark, MARK_SIZES } from "./ui-mark.js";
+import { guideBars, reachOf } from "./guides.js";
 
 export { NAME_LABEL };
 
@@ -208,12 +211,12 @@ export function nest(rows, all = []) {
   ];
   const children = new Map([...Map.groupBy(pairs, ([p]) => p)].map(([p, list]) => [p, list.map(([, k]) => k)]));
   // `path` cuts parent loops; should an address still show twice, only its first place stays.
-  const tree = (a, lines, lead, path) => {
+  const tree = (a, lines, lead, path, first = false) => {
     const kids = (children.get(a.address) ?? []).filter((k) => !path.has(k.address));
     const below = new Set([...path, a.address]);
-    return [{ a, lines }, ...kids.flatMap((k, i) => {
+    return [{ a, lines, first }, ...kids.flatMap((k, i) => {
       const last = i === kids.length - 1;
-      return tree(k, [...lead, last ? "└" : "├"], [...lead, last ? "" : "│"], below);
+      return tree(k, [...lead, last ? "└" : "├"], [...lead, last ? "" : "│"], below, i === 0);
     })];
   };
   const placed = rows.filter((a) => !(a.parent && listed.has(a.parent))).flatMap((a) => tree(a, [], [], new Set()));
@@ -302,9 +305,8 @@ export function snoozePresets(now) {
 }
 
 // With no status, a blank of the same width so the rows line up.
-const ENSO = 15;
-export function statusMark(t, status) {
-  return stateMark(t, status, ENSO, { idle: true }) ?? div().size(ENSO).flex_none();
+export function statusMark(c, status) {
+  return mark(c, { status, size: "lg" }) ?? div().size(MARK_SIZES.lg).flex_none();
 }
 
 // Herdr's agents() lists only programs that report a status; this adds every other terminal.
@@ -319,27 +321,29 @@ export function withTerminals(list, ps, ss) {
 export const mostUrgent = (list) => list.reduce((m, a) => ((RANK[a.status] ?? 0) > (RANK[m] ?? 0) ? a.status : m), null);
 
 // Open, nothing: the row itself folds. Folded, the most urgent mark and how many; a click unfolds.
-export function agentFold(id, mine, open, onToggle, t) {
+export function agentFold(id, mine, open, onToggle, t, c) {
   const tail = foldTail(open, mine.map((a) => a.status));
   if (!tail) return null;
   return h_flex().id(`agents-fold-${id}`).flex_none().h(20).px(3).gap(4).items_center().rounded(6)
     .text_size(11.5).text_color(t.dim).cursor_pointer()
-    .hover((s) => s.bg(t.input).text_color(t.foreground))
+    .hover((s) => s.bg(t.hover).text_color(t.foreground))
     // The row selects on mouse up and drags on mouse down: keep both to the toggle.
     .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
     .on_mouse_up("left", (_e, cx) => { cx.stop_propagation(); onToggle(cx); })
-    .when(Boolean(tail.mark), (el) => el.child(stateMark(t, tail.mark, 12)))
+    .when(Boolean(tail.mark), (el) => el.child(mark(c, { status: tail.mark, size: "sm" })))
     .child(div().child(String(tail.count)));
 }
 
 // One column per level, icon-wide, so a sub-agent's icon sits under its parent's name.
-const GUIDE_W = 15, GUIDE_X = 7;
-function guide(l, h, t) {
+const GUIDE_W = 15, GUIDE_X = 7, GUIDE_REACH = 4;
+const GUIDE_KIND = { "└": "end", "├": "tee", "│": "pass" };
+// `reach`: up to the row above's line, or into the parent's row, which has none in this column.
+function guide(l, h, t, reach) {
   const col = div().relative().w(GUIDE_W).h(h).flex_none();
   if (!l) return col;
-  const down = l === "└" ? h / 2 + 4 : h + 4;
-  return col.child(div().absolute().left(GUIDE_X).top(-4).w(1).h(down).bg(t.input))
-    .when(l !== "│", (el) => el.child(div().absolute().left(GUIDE_X).top(h / 2).w(GUIDE_W - GUIDE_X + 7).h(1).bg(t.input)));
+  const line = washes(t)?.w12 ?? t.border;
+  return col.children(guideBars(GUIDE_KIND[l], { x: GUIDE_X, elbow: GUIDE_W - GUIDE_X + 7, h, reach })
+    .map((b) => div().absolute().left(b.left).top(b.top).w(b.w).h(b.h).bg(line)));
 }
 
 // Each glint window slides one way while its copy of the text slides the other, so the lit letters stay in place.
@@ -364,7 +368,7 @@ function shimmer(text, t, address) {
 // `more.steady` keeps the second line even with nothing to say, so the list never jumps.
 // Each event has one handler: a second one would replace the first.
 const ROW = 32, TWO = 50, G_HAIR = 2;
-export function agentRow(a, indent, t, row, more = {}) {
+export function agentRow(a, indent, t, c, row, more = {}) {
   const pic = programIcon(a.program, a.sub ? 13 : 15, t.foreground);
   const zz = Boolean(a.dozing);
   const live = !zz && (a.status === "working" || a.status === "blocked" || more.strong);
@@ -386,7 +390,7 @@ export function agentRow(a, indent, t, row, more = {}) {
     .opacity(zz ? 0.45 : a.focused || live ? 1 : 0.75);
   const iconTool = (id, icon, tip, act, size = 12) => div().id(id).size(20).flex_none().rounded(6)
     .flex().items_center().justify_center().text_color(t.muted).tooltip(tip)
-    .hover((s) => s.bg(t.input).text_color(t.foreground))
+    .hover((s) => s.bg(t.hover).text_color(t.foreground))
     .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
     .on_click((_e, cx) => { cx.stop_propagation(); act(cx); })
     .child(svg(`mods/kanso-chrome/icons/${icon}.svg`).size(size));
@@ -407,7 +411,7 @@ export function agentRow(a, indent, t, row, more = {}) {
       .flex().items_center().text_size(11).text_color(t.muted).tooltip(tasks.map((x) => `${x.command.length > 90 ? x.command.slice(0, 89) + "\u2026" : x.command} \u00b7 ${x.time}`).join("\n"))
       .child(String(tasks.length))))
     .when(hovered && Boolean(row?.menu), (el) => el.child(iconTool(`dots-${a.address}`, "ellipsis", "More", (cx) => row.menu(cx), 14)))
-    .child(statusMark(t, zz ? "asleep" : a.status));
+    .child(statusMark(c, zz ? "asleep" : a.status));
   const second = h_flex().h(20).mt(G_HAIR).min_w(0).items_center().text_size(11.5)
     .when(Boolean(more.activity), (el) => el.child(div().flex_shrink(1).min_w(0).truncate().text_color(t[activityTone(a.status)]).child(more.activity)))
     .when(place === "line" && !tools, (el) => el.child(div().flex_none().pl(4).text_color(t.dim).child(`\u00b7 ${more.time}`)))
@@ -426,7 +430,7 @@ export function agentRow(a, indent, t, row, more = {}) {
     .when(Boolean(row?.menu), (el) => el.on_mouse_down("right", (_e, cx) => { cx.stop_propagation(); row.menu(cx); }))
     .when(drag?.target === "before", (el) => el.border_t(2).border_color(t.accent))
     .when(drag?.target === "after", (el) => el.border_b(2).border_color(t.accent))
-    .children(lines.map((l) => guide(l, h, t)))
+    .children(lines.map((l, c) => guide(l, h, t, reachOf(lines, c, more, GUIDE_REACH))))
     .child(two ? v_flex().h(h).pt(Math.round((h - 45) / 2) + 3).flex_none().child(lead) : lead)
     .child(body);
 }

@@ -91,7 +91,7 @@ export async function load(file, names, host = {}, root = mods) {
     }
   }
   const source = modScript(sources.get(file), (name) => sources.get(`${dir}${name.slice(2)}`));
-  return vm.runInContext(`${source}\n;({ ${names.join(", ")} });`, modSandbox({ View: class {}, join, basename, shared() {}, setShared() {}, writeTextFile: (path, text) => writeFile(path, text, { flag: "wx" }), exec: async () => { throw new Error("Unexpected command in fixture"); }, window: host.exec === exec ? nativeWindow : () => ({ platform: "macos" }), layout: () => null, focused: () => null, panes: () => [], terminals: () => [], settings: () => ({}), ...host, __herdrModule: (name) => modules[name] }));
+  return vm.runInContext(`${source}\n;({ ${names.join(", ")} });`, modSandbox({ View: class {}, join, basename, shared() {}, setShared() {}, writeTextFile: (path, text) => writeFile(path, text, { flag: "wx" }), exec: async () => { throw new Error("Unexpected command in fixture"); }, window: host.exec === exec ? nativeWindow : () => ({ platform: "macos" }), layout: () => null, focused: () => null, panes: () => [], terminals: () => [], machines: () => [], settings: () => ({}), ...host, __herdrModule: (name) => modules[name] }));
 }
 
 // Tests that watch real processes need ps; a sandbox that denies it skips them, saying so, rather than failing.
@@ -211,3 +211,6 @@ export const gpuiHost = () => ({
   Input: { new: () => chain() },
   Toggle: { new: (id) => { const el = chain(id); el.calls.push(["new", id]); return el; } },
 });
+
+// Every call in a kit file that takes a bare number other than 0, as the token lint counts them: a piece reads its sizes from the tokens instead.
+export const numberArguments = (file) => [...readFileSync(new URL(`../kanso/mods/${file}`, import.meta.url), "utf8").matchAll(/\.\w+\([^()]*?(?<![\w.])-?(?:0\.\d|[1-9])[\d.]*\s*[,)]/g)].map((m) => m[0]);

@@ -5,7 +5,11 @@ import { systemApi } from "./platform-system.js";
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex, Button } from "gpui-base";
 import { appHome, theme, nextCommand, readTextFile, layout } from "herdr";
-import { G, T, PULSE, breathe, Armed, tokens, segmented, quietLink, iconButton, section, ghost } from "./ui.js";
+import { G, T, PULSE, breathe, tokens } from "./ui.js";
+import { Armed, quietLink, iconButton } from "./ui-button.js";
+import { section } from "./ui-section.js";
+import { ghost } from "./ui-skeleton.js";
+import { segmented } from "./ui-tab.js";
 import { Share } from "./share.js";
 import { tryOr, tryOrAsync, afterMount } from "./pure.js";
 import { memorySpec, memoryText } from "./memory-card.js";
@@ -67,25 +71,28 @@ export default class Memory extends View {
 
     if (!hiddenInLayout()) afterMount(cx, (cx) => this.wake(cx));
 
-    this.commandTask = cx.spawn(async (commandCx) => {
-      for (;;) {
-        // A replaced build (hot reload, update) stops here.
-        const next = await tryOrAsync(async () => {
-          const command = await nextCommand();
-          commandCx.notify();
-          return { command };
-        });
-        if (!next) break;
-        const name = String(next.command).replace(new RegExp(`^${MOD}\\.`), "");
-        if (name === "refresh") this.check(commandCx);
-        else if (name === "open") this.wake(commandCx);
-        else if (name === "back") {
-          const next = leaveShowAll(this.showAll);
-          if (next === null) return;
-          this.showAll = next;
-          commandCx.notify();
+    afterMount(cx, (cx) => {
+      if (this.closed) return;
+      this.commandTask = cx.spawn(async (commandCx) => {
+        for (;;) {
+          // A replaced build (hot reload, update) stops here.
+          const next = await tryOrAsync(async () => {
+            const command = await nextCommand();
+            commandCx.notify();
+            return { command };
+          });
+          if (!next) break;
+          const name = String(next.command).replace(new RegExp(`^${MOD}\\.`), "");
+          if (name === "refresh") this.check(commandCx);
+          else if (name === "open") this.wake(commandCx);
+          else if (name === "back") {
+            const next = leaveShowAll(this.showAll);
+            if (next === null) return;
+            this.showAll = next;
+            commandCx.notify();
+          }
         }
-      }
+      });
     });
   }
 

@@ -6,7 +6,14 @@ import { imageApi } from "./platform-images.js";
 import { View, div, svg, image } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
 import { theme, props, closeOverlay, keys, shared, setShared, readTextFile, writeTextFile, appHome, run } from "herdr";
-import { G, H, T, tokens, button, quietLink, skeleton, breathe, Armed, field, TextField, section, segmented, toggleSwitch, undoLine, pressAgain } from "./ui.js";
+import { G, H, T, tokens, breathe } from "./ui.js";
+import { button, quietLink, Armed, pressAgain } from "./ui-button.js";
+import { field, TextField } from "./ui-field.js";
+import { section } from "./ui-section.js";
+import { skeleton } from "./ui-skeleton.js";
+import { undoLine } from "./ui-state.js";
+import { segmented } from "./ui-tab.js";
+import { toggleSwitch } from "./ui-toggle.js";
 import { pieces, choice, setPiece, filterPieces, groupsOf, withRoster, STATE_LABEL, STORE } from "./pieces.js";
 import { glyphs, keycap, familyPattern, shownChord } from "./marks.js";
 import { GROUPS, ofRow, familyChords, conflictsOf, rebound } from "./actions.js";
@@ -228,7 +235,7 @@ export default class Settings extends View {
     const step = (id, by, glyph) => {
       const i = panelIds.indexOf(id), j = i + by, can = i >= 0 && j >= 0 && j < panelIds.length;
       return div().id(`order-${id}-${by}`).size(22).flex_none().rounded(4).flex().items_center().justify_center().text_size(12)
-        .text_color(can ? c.muted : c.border).when(can, (el) => el.cursor_pointer().hover((s) => s.bg(c.input).text_color(c.text))
+        .text_color(can ? c.muted : c.border).when(can, (el) => el.cursor_pointer().hover((s) => s.bg(c.subtle).text_color(c.text))
           .on_click(() => setShared("kanso.panels.order", panelIds.with(i, panelIds[j]).with(j, panelIds[i]))))
         .child(glyph);
     };

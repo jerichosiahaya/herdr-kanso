@@ -6,7 +6,13 @@ import { fileApi } from "./platform-files.js";
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex, Button, Popover } from "gpui-base";
 import { exec, appHome, home, theme, nextCommand, readTextFile, writeTextFile, layout, machines, shared, setShared } from "herdr";
-import { G, H, R, PULSE, breathe, tokens, toggleSwitch, field, TextField, segmented, quietLink, iconButton, section, ghost } from "./ui.js";
+import { G, H, R, PULSE, breathe, tokens } from "./ui.js";
+import { quietLink, iconButton } from "./ui-button.js";
+import { field, TextField } from "./ui-field.js";
+import { section } from "./ui-section.js";
+import { ghost } from "./ui-skeleton.js";
+import { segmented } from "./ui-tab.js";
+import { toggleSwitch } from "./ui-toggle.js";
 import { PERIOD_KEY, SPEND_PERIODS, spendPeriod } from "./period.js";
 import { Share } from "./share.js";
 import { spendSpec, spendText } from "./spend-card.js";
@@ -123,21 +129,24 @@ export default class TokenSpend extends View {
     // Herdr starts hidden copies too, so wake only when this one is on screen.
     if (!hiddenInLayout()) afterMount(cx, (cx) => this.wake(cx));
 
-    this.commandTask = cx.spawn(async (commandCx) => {
-      for (;;) {
-        const next = await tryOrAsync(async () => {
-          const command = await nextCommand();
-          commandCx.notify();
-          return { command };
-        });
-        if (!next) break; // a replaced build (hot reload, update) stops here, before acting
-        const { command } = next;
-        const name = String(command).replace(new RegExp(`^${MOD}\\.`), "");
-        if (name === "refresh") this.run("snapshot", commandCx);
-        else if (name === "open") this.wake(commandCx);
-        else if (name === "settings") this.openSettings(commandCx);
-        else if (name === "back") this.back(commandCx);
-      }
+    afterMount(cx, (cx) => {
+      if (this.closed) return;
+      this.commandTask = cx.spawn(async (commandCx) => {
+        for (;;) {
+          const next = await tryOrAsync(async () => {
+            const command = await nextCommand();
+            commandCx.notify();
+            return { command };
+          });
+          if (!next) break; // a replaced build (hot reload, update) stops here, before acting
+          const { command } = next;
+          const name = String(command).replace(new RegExp(`^${MOD}\\.`), "");
+          if (name === "refresh") this.run("snapshot", commandCx);
+          else if (name === "open") this.wake(commandCx);
+          else if (name === "settings") this.openSettings(commandCx);
+          else if (name === "back") this.back(commandCx);
+        }
+      });
     });
   }
 

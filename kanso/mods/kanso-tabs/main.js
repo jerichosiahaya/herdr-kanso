@@ -9,11 +9,13 @@ import { fileApi } from "./platform-files.js";
 import { View, div, svg } from "gpui-kit";
 import { h_flex, v_flex } from "gpui-base";
 import { spaces, panes, run, openOverlay, props, theme, window, shared, setShared, layout, appHome, exec, watchFolder, nextCommand, home } from "herdr";
-import { stateMark, programIcon } from "./marks.js";
+import { programIcon } from "./marks.js";
 import { walkLayout, commitLayout, sidebarBack, foldSidebar } from "./layout.js";
 import { Updater } from "./update.js";
-import { tryOr, tryOrAsync } from "./pure.js";
-import { iconButton, tokens } from "./ui.js";
+import { tryOr, tryOrAsync, afterMount } from "./pure.js";
+import { tokens } from "./ui.js";
+import { mark } from "./ui-mark.js";
+import { iconButton } from "./ui-button.js";
 import { Kdb, projectKey } from "./kdb.js";
 import { projectOpen, OPEN } from "./panel-state.js";
 import { TOOLS, PROBE_MS, available, probeTools } from "./sim-registration.js";
@@ -127,7 +129,7 @@ export default class Tabs extends View {
       this.updater.start(cx);
       cx.timer.after(0, (next) => this.probeSimulator(next));
       // keys.json: tab-N and panel-N arrive here as commands.
-      cx.spawn(async (cx) => {
+      afterMount(cx, (cx) => cx.spawn(async (cx) => {
         for (;;) {
           const next = await tryOrAsync(async () => { const c = await nextCommand(); cx.notify(); return { c }; });
           if (!next) break; // a replaced build (hot reload, update) stops here, before acting
@@ -141,7 +143,7 @@ export default class Tabs extends View {
           else this.command(name);
           cx.notify();
         }
-      });
+      }));
     }
   }
 
@@ -323,6 +325,7 @@ export default class Tabs extends View {
     const c = tokens(t);
     // A press on a tool never starts a window drag.
     const tool = (id, icon, tip, action) => iconButton(id, icon, tip, action, c).on_mouse_down("left", stop);
+    const tabMark = (status) => mark(c, { status });
     // The pill under the chosen tab glides to it; tab widths are measured as they draw.
     this.tabW ??= {};
     for (const id of Object.keys(this.tabW)) if (!openTabs.some((c) => c.id === id)) delete this.tabW[id];
@@ -351,7 +354,7 @@ export default class Tabs extends View {
         .on_mouse_down("right", () => openOverlay({ mod: "menu", kind: "popup", width: 200, props: { tab: "tab", target: { id: c.id, space: space.id } } }))
         .when(Boolean(program?.icon), el => el.child(programIcon(program, 15, t.muted).opacity(c.active ? 1 : 0.8)))
         .child(div().max_w(170).truncate().child(c.zoomed ? `${name} Z` : name))
-        .when(["working", "blocked", "done"].includes(c.status), el => el.child(stateMark(t, c.status)))
+        .when(["working", "blocked", "done"].includes(c.status), el => el.child(tabMark(c.status)))
         .when(c.active && openTabs.length > 1, el => el.child(div().id(`close-${c.id}`).text_color(t.dim).hover(s => s.text_color(t.foreground)).on_mouse_down("left", stop).on_click((_e, cx) => { cx.stop_propagation(); run("tab.close", { id: c.id }); }).child(svg("mods/kanso-chrome/icons/close.svg").size(13))));
     };
     const panel = walkLayout(tree, "panel"), body = walkLayout(tree, "panel-body");

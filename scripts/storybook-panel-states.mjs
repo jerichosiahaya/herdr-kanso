@@ -3,9 +3,9 @@ import { elements, frame as free } from './storybook-markup.mjs';
 
 const esc = (s) => s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
 const icon = (name) => `<svg class="kanso-icon" aria-hidden="true"><use href="#lu-${name}"/></svg>`;
-const button = (text, kind = 'quiet', disabled = false) => `<button type="button" class="kanso-button--${kind}"${disabled ? ' disabled' : ''}>${text}</button>`;
-const primary = (text) => `<button type="button" class="kanso-button">${text}</button>`;
-const tool = (name, title) => `<button type="button" class="kanso-button--icon" aria-label="${title}" title="${title}">${icon(name)}</button>`;
+const button = (text, kind = 'quiet', disabled = false) => `<button type="button" class="kanso-button kanso-button--${kind}"${disabled ? ' disabled' : ''}>${text}</button>`;
+const primary = (text) => `<button type="button" class="kanso-button kanso-button--solid">${text}</button>`;
+const tool = (name, title) => `<button type="button" class="kanso-button kanso-button--icon" aria-label="${title}" title="${title}">${icon(name)}</button>`;
 const actions = (...items) => `<div class="kanso-actions">${items.join('')}</div>`;
 const note = (text) => `<div class="kanso-panel__note">${text}</div>`;
 const refused = (text) => `<div class="kanso-panel__note kanso-text--blocked">${text}</div>`;
@@ -14,7 +14,7 @@ const row = (name, value, focused = false) => `<div class="kanso-row${focused ? 
 const pending = (text) => `<span class="kanso-state-line kanso-state-line--pending"><span class="kanso-state-line__pending-dot"></span>${text}</span>`;
 const empty = (name, text) => `<div class="kanso-state-empty">${icon(name)}<div class="kanso-content__text">${text}</div></div>`;
 const bones = (count = 4) => `<div class="kanso-skeleton__list kanso-skeleton--breathing" aria-label="Loading">${Array.from({ length: count }, () => '<div class="kanso-row"><span class="kanso-skeleton kanso-layout__grow"></span></div>').join('')}</div>`;
-const failure = (what, why, fix = 'Refresh') => `<div class="kanso-state-block"><svg class="kanso-mark kanso-mark--blocked" aria-hidden="true"><use href="#e-blk"/></svg><div class="kanso-state-block__what">${what}</div><div class="kanso-state-block__why" title="${esc(why)}">${why}</div><div class="kanso-state-block__actions">${button(fix, 'tonal')}<button type="button" class="kanso-button--tonal kanso-explain">${icon('bot')}Explain to checkout</button></div></div>`;
+const failure = (what, why, fix = 'Refresh') => `<div class="kanso-state-block"><svg class="kanso-mark kanso-mark--blocked" aria-hidden="true"><use href="#e-blk"/></svg><div class="kanso-state-block__what">${what}</div><div class="kanso-state-block__why" title="${esc(why)}">${why}</div><div class="kanso-state-block__actions">${button(fix, 'tonal')}<button type="button" class="kanso-button kanso-button--tonal kanso-explain">${icon('bot')}Explain to checkout</button></div></div>`;
 const blocked = (what, why = '', ...fixes) => `<div class="kanso-state-block"><svg class="kanso-mark kanso-mark--blocked" aria-hidden="true"><use href="#e-blk"/></svg><div class="kanso-state-block__what">${what}</div>${why ? `<div class="kanso-state-block__why" title="${esc(why)}">${why}</div>` : ''}${fixes.length ? `<div class="kanso-state-block__actions">${fixes.join('')}</div>` : ''}</div>`;
 const swap = (html, from, to) => {
   if (!html.includes(from)) throw new Error(`Drawing changed, cannot find: ${from.slice(0, 80)}`);
@@ -45,21 +45,23 @@ export function panelStateRecords(records) {
   const put = (page, component, state, html, behavior, anatomy) => drawings.push({ id: `panels/${page.split('/')[1].toLowerCase()}/Feature${component.replaceAll(' ', '')}/${state}`, source: 'panels', page, label: `${component} · ${state}`, caption: behavior, html, spec: [['Anatomy', anatomy], ['Values', 'Shared kit tokens, single-line rows with ellipsis, contextual controls.'], ['States', state], ['Behaviour', behavior], ['Principle', 'Kansō']] });
   const arranged = find('proto/approved-dialogs-arrange/Reference/1');
   if (arranged) {
-    const dialog = (heading, scope, body) => free(`<div class="kanso-dialog--settings" style="width:420px"><div class="kanso-dialog__heading"><span class="kanso-content__text">${heading}</span></div><div class="kanso-dialog__scope">${scope}</div>${body}</div>`);
+    const dialog = (heading, scope, body) => free(`<div class="kanso-dialog kanso-popover"><div class="kanso-dialog__header"><span class="kanso-dialog__title">${heading}</span></div><div class="kanso-dialog__scope">${scope}</div>${body}</div>`);
+    const footer = (...items) => `<div class="kanso-dialog__footer">${items.join('')}</div>`;
+    const say = (text, tone = '') => `<div class="kanso-dialog__note${tone ? ` kanso-dialog__note--${tone}` : ''}">${text}</div>`;
     const arrangement = (name, from = '', selected = false) => `<div class="kanso-row${selected ? ' kanso-row--selected' : ''}"><span>${name}</span><span class="kanso-layout__grow"></span>${from ? `<span class="kanso-row__meta">from ${from}</span>` : ''}${selected ? button('Overwrite') + button('Delete') : ''}</div>`;
     const group = (text) => `<div class="kanso-dialog__group">${text}</div>`;
     const list = (...rows) => `<div class="kanso-dialog__list">${rows.join('')}</div>`;
     const anatomy = 'The dialog shell: heading, scope, list and actions.';
-    put('Panels/Arrangements', 'Arrangements', 'This project and other projects', dialog('Arrangements', 'Opens in acme-shop', list(group('This project'), arrangement('web and api', '', true), arrangement('review pair'), group('Other projects, opened here'), arrangement('i18n', 'docs-site'), arrangement('release', 'infra')) + actions(button('Close'), button('Save this tab', 'tonal'))), 'Arrangements saved in other projects follow this project’s, under their own heading; each names the project it came from and opens here.', anatomy);
-    put('Panels/Arrangements', 'Arrangements', 'Only other projects', dialog('Arrangements', 'Opens in acme-shop', list(group('From other projects, opened here'), arrangement('i18n', 'docs-site', true), arrangement('release', 'infra')) + actions(button('Close'), button('Save this tab', 'tonal'))), 'With none saved in this project, the list is the other projects’ arrangements, opened here.', anatomy);
-    put('Panels/Arrangements', 'Arrangements', 'sqlite3 missing', dialog('Arrangements', 'Opens in acme-shop', empty('layers', 'No arrangement yet.') + refused('Install sqlite3 to keep arrangements.') + actions(button('Close'), primary('Save this tab'))), 'Without sqlite3 nothing can be read or kept; one line under the list says what to install.', anatomy);
+    put('Panels/Arrangements', 'Arrangements', 'This project and other projects', dialog('Arrangements', 'Opens in acme-shop', list(group('This project'), arrangement('web and api', '', true), arrangement('review pair'), group('Other projects, opened here'), arrangement('i18n', 'docs-site'), arrangement('release', 'infra')) + footer(button('Close'), button('Save this tab', 'tonal'))), 'Arrangements saved in other projects follow this project’s, under their own heading; each names the project it came from and opens here.', anatomy);
+    put('Panels/Arrangements', 'Arrangements', 'Only other projects', dialog('Arrangements', 'Opens in acme-shop', list(group('From other projects, opened here'), arrangement('i18n', 'docs-site', true), arrangement('release', 'infra')) + footer(button('Close'), button('Save this tab', 'tonal'))), 'With none saved in this project, the list is the other projects’ arrangements, opened here.', anatomy);
+    put('Panels/Arrangements', 'Arrangements', 'sqlite3 missing', dialog('Arrangements', 'Opens in acme-shop', empty('layers', 'No arrangement yet.') + say('Install sqlite3 to keep arrangements.', 'error') + footer(button('Close'), primary('Save this tab'))), 'Without sqlite3 nothing can be read or kept; one line under the list says what to install.', anatomy);
     const shape = elements(arranged, 'kanso-arrangement')[0];
-    const kept = note("Each program is kept with the flags you started it with. A resumed session's id is left out, so each agent starts fresh.");
-    const field = (name) => `<div class="kanso-field kanso-control--focus kanso-dialog__section">${name}<span class="kanso-field__caret"></span></div>`;
-    put('Primitives/Dialog', 'Save Arrangement', 'Save header', dialog('Save this tab', 'An arrangement for acme-shop', field('checkout and docs') + shape + kept + actions(button('Back'), primary('Save'))), 'Save this tab names the project the arrangement is for.', anatomy);
-    put('Primitives/Dialog', 'Save Arrangement', 'Overwrite header', dialog('Overwrite web and api', 'With this tab as it is now', field('web and api') + shape + kept + note('This replaces the arrangement named web and api.') + actions(button('Back'), primary('Overwrite'))), 'Overwrite on a row opens the save with that arrangement named in the heading; the tab as it is now replaces it.', anatomy);
+    const kept = say("Each program is kept with the flags you started it with. A resumed session's id is left out, so each agent starts fresh.");
+    const field = (name) => `<div class="kanso-field kanso-control--focus kanso-dialog__section">${name}<span class="kanso-caret"></span></div>`;
+    put('Primitives/Dialog', 'Save Arrangement', 'Save header', dialog('Save this tab', 'An arrangement for acme-shop', field('checkout and docs') + shape + kept + footer(button('Back'), primary('Save'))), 'Save this tab names the project the arrangement is for.', anatomy);
+    put('Primitives/Dialog', 'Save Arrangement', 'Overwrite header', dialog('Overwrite web and api', 'With this tab as it is now', field('web and api') + shape + kept + say('This replaces the arrangement named web and api.', 'muted') + footer(button('Back'), primary('Overwrite'))), 'Overwrite on a row opens the save with that arrangement named in the heading; the tab as it is now replaces it.', anatomy);
   }
-  const toast = (mark, text, fix = '') => free(`<div class="kanso-toast">${mark}<span class="kanso-content__text" title="${esc(text)}">${text}</span>${fix}</div>`);
+  const toast = (mark, text, fix = '') => free(`<div class="kanso-toast kanso-popover">${mark}<span class="kanso-content__text" title="${esc(text)}">${text}</span>${fix}</div>`);
   const done = '<svg class="kanso-icon kanso-icon--row" aria-hidden="true"><use href="#lu-check"/></svg>';
   const failed = '<svg class="kanso-mark kanso-mark--blocked" aria-hidden="true"><use href="#e-blk"/></svg>';
   const notice = 'The toast: mark, one line, at most one action.';
@@ -72,13 +74,13 @@ export function panelStateRecords(records) {
   for (const [state, why, behavior] of [
     ['Install failed, Windows tool missing', 'curl.exe is not on PATH; nothing was downloaded another way', 'On Windows the update needs curl.exe and tar.exe; nothing else downloads it.'],
     ['Install failed, Windows folder not moved', 'could not put kanso-tabs in place: C:\\Users\\you\\AppData\\Roaming\\herdr-app\\mods\\kanso-tabs', 'On Windows a mod folder that cannot be moved stops the update; what you had stays in place.'],
-  ]) put('Compositions/Notifications', 'Update Notice', state, toast(failed, `kansō was not updated: ${why}`, '<button type="button" class="kanso-button--tonal">Update</button>'), behavior, notice);
+  ]) put('Compositions/Notifications', 'Update Notice', state, toast(failed, `kansō was not updated: ${why}`, '<button type="button" class="kanso-button kanso-button--tonal">Update</button>'), behavior, notice);
   const ports = find('panels/ports/PortsAtRestNow/Default');
   if (ports) put('Panels/Ports', 'Ports', 'Not attributed', ports.replace(/(?:<\/div>){4}$/, (end) => blocked('Some servers cannot be attributed', 'Working directories require a Herdr API on Windows.') + end), 'Where working directories cannot be read, servers are still listed and can be stopped; the panel says why they have no project.', 'The panel: header, rows and the failure block.');
   const pinned = find('panels/images/ImagesTwoNotesReadyToSend/Default');
   if (pinned) {
     const one = swap(swap(pinned, '<span class="kanso-annotation" style="left:30%;top:88%">2</span>', ''), elements(pinned, 'kanso-panel__annotation')[1], '');
-    put('Panels/Images', 'Images', 'One pin, no session to send to', swap(one, '<div class="kanso-actions"><span class="kanso-button">Send to checkout</span><span class="kanso-button--quiet">Open</span><span class="kanso-button--quiet">Clear 2 pins</span></div>', refused('No agent to send to') + actions(primary('Send'), button('Open'), button('Clear the pin'))), 'Send with no session in focus says so and keeps the pin; Clear the pin removes it.', 'The panel: picture, pin list, the failure block and the action row.');
+    put('Panels/Images', 'Images', 'One pin, no session to send to', swap(one, '<div class="kanso-actions"><span class="kanso-button kanso-button--solid">Send to checkout</span><span class="kanso-button kanso-button--quiet">Open</span><span class="kanso-button kanso-button--quiet">Clear 2 pins</span></div>', refused('No agent to send to') + actions(primary('Send'), button('Open'), button('Clear the pin'))), 'Send with no session in focus says so and keeps the pin; Clear the pin removes it.', 'The panel: picture, pin list, the failure block and the action row.');
   }
   const dojo = find('proto/layouts-hjkl-dojo/HjklDojo/Default');
   if (dojo) put('Panels/Dojo', 'Practice Feedback', 'sqlite3 missing', swap(dojo, 'Make a move to start: 10 targets, in as few moves as you can.', 'Install sqlite3 to keep your rounds.'), 'Without sqlite3 the dōjō plays, and the line under Hachi says rounds are not kept.', 'The dōjō: path, board, feedback line and keyboard.');
@@ -92,7 +94,7 @@ export function panelStateRecords(records) {
   }
   if (!find('components-markdown-window/MarkdownWindow/') || !find('SimulatorAndroidTouchKeysTheDevicesButtons/')) return drawings;
   const document = find('components-markdown-window/MarkdownWindow/').match(/<div class="kanso-markdown__document">[\s\S]*(?=<\/div><\/div><\/div><\/div>$)/)[0];
-  const code = '<div class="kanso-code"><span class="kanso-row__name">1</span>const LIMIT = { free: 40, pro: 400 };\n<span class="kanso-row__name">2</span>const REFILL_MS = 1000;</div>';
+  const code = '<div class="kanso-code kanso-code--source"><span class="kanso-row__name">1</span>const LIMIT = { free: 40, pro: 400 };\n<span class="kanso-row__name">2</span>const REFILL_MS = 1000;</div>';
   const md = (body, scope = '~/acme-shop/docs', tools = '') => frame('plan.md', scope, body, tool('code', 'Source') + tools, true);
   const preview = (body, scope = '~/acme-shop/docs', tools = '', title = 'limits.md') => frame(title, scope, body, tool('code', 'Source') + tool('external-link', 'Open with…') + tools);
   const worktrees = (body) => frame('Worktrees', 'This computer', body, tool('plus', 'New worktree') + tool('share', 'Share'));
@@ -114,7 +116,7 @@ export function panelStateRecords(records) {
     wt('Worktree Verdict', state, section(state === 'Orphan' ? 'Left behind' : 'acme-shop') + row(state === 'Detached' || state === 'Lost' ? 'a82f9c1' : 'feat/checkout', missing ? '0 KB' : '380 MB', true) + `<div class="kanso-worktree__details"><div class="kanso-worktree__reason">${verdict}</div>${note(consequence)}<div class="kanso-worktree__path">~/.kanso/worktrees/acme-shop/checkout</div>${actions(...(missing ? [] : [button('Open in a new tab'), button('Explain it')]), ...(removable ? [button(missing ? 'Prune 1 record' : 'Remove')] : []))}</div>`, `${verdict}. ${consequence}`);
   }
   wt('Worktrees', 'Removing', section('acme-shop') + row('feat/checkout', '380 MB') + note(pending('Removing…')) + actions(button('Remove', 'quiet', true), button('Clean up', 'quiet', true)), 'The selected removal is pending; other destructive controls wait.');
-  wt('Worktrees', 'Notice', metric('380 MB', 'freed') + `<div class="kanso-toast"><span class="kanso-content__text">Removed 1 worktree and 1 merged branch</span></div>` + row('feat/search', '240 MB'), 'Completed cleanup leaves the remaining worktrees visible.');
+  wt('Worktrees', 'Notice', metric('380 MB', 'freed') + `<div class="kanso-toast kanso-popover"><span class="kanso-content__text">Removed 1 worktree and 1 merged branch</span></div>` + row('feat/search', '240 MB'), 'Completed cleanup leaves the remaining worktrees visible.');
   wt('Worktrees', 'History failed', metric('2.4 GB', 'in 9 worktrees') + section('Freed') + failure('Can’t read cleanup history', 'SQLITE_READONLY: database is read only') + row('feat/checkout', '380 MB'), 'A history failure keeps the current scan and offers Refresh.');
   wt('Worktree History', 'sqlite3 missing', metric('2.4 GB', 'in 9 worktrees') + section('Freed') + blocked("Can't read the history", 'Install sqlite3 to keep the history of your worktrees.') + row('feat/checkout', '380 MB'), 'Without sqlite3 the scan still shows; only the history says what to install.');
   const freed = metric('1.8 GB', 'of disk freed') + note('1.2 GB here, 600 MB removed outside the panel since a scan saw them.') + row('Worktrees removed', '8') + row('Merged branches deleted', '5') + row('Leftovers cleared', '3');
@@ -130,13 +132,13 @@ export function panelStateRecords(records) {
   add('Preview', 'Preview', 'Read failed', preview(failure('Can’t read limits.ts', 'EACCES: permission denied, open limits.ts'), '~/acme-shop/src/api', '', 'limits.ts'), 'Read failure offers Refresh and the source error.');
   add('Preview', 'Preview', 'Picture failed', preview(failure('Can’t show checkout.png', 'Cannot show this picture'), '~/acme-shop/screens', '', 'checkout.png'), 'A failed picture keeps Open with and Refresh available.');
   add('Preview', 'Preview', 'Save failed', preview(failure('Couldn’t save limits.ts', 'EACCES: permission denied, write limits.ts', 'Save') + code + actions(button('Discard')), '~/acme-shop/src/api · Edited', '', 'limits.ts'), 'The draft stays after a refused save; Save retries and Discard remains available.');
-  add('Preview', 'Markdown Editing', 'Append', preview(document + '<div class="kanso-markdown__editor kanso-control--focus" tabindex="0" role="textbox" aria-label="New Markdown block">## Rollout<span class="kanso-field__caret"></span></div>', '~/acme-shop/docs · Edited', button('Discard')), 'Double-clicking below the final block appends an editable block; Escape returns to reading.');
+  add('Preview', 'Markdown Editing', 'Append', preview(document + '<div class="kanso-markdown__editor kanso-control--focus" tabindex="0" role="textbox" aria-label="New Markdown block">## Rollout<span class="kanso-caret"></span></div>', '~/acme-shop/docs · Edited', button('Discard')), 'Double-clicking below the final block appends an editable block; Escape returns to reading.');
   add('Preview', 'Markdown Editing', 'Image failed', preview(document + failure('Can’t show diagram.png', 'Cannot show this picture')), 'A failed inline image leaves the surrounding Markdown readable.');
   add('Preview', 'Markdown Editing', 'Loading', preview(bones(6)), 'Markdown blocks load beneath the document controls.');
   add('Preview', 'Markdown Editing', 'Save failed', preview(failure('Couldn’t save limits.md', 'EACCES: permission denied, write limits.md', 'Save') + document, '~/acme-shop/docs · Edited', button('Discard')), 'The Markdown draft remains available after the write fails.');
   add('Preview', 'Markdown Editing', 'Saving', preview(document, '~/acme-shop/docs · Saving…', pending('Saving…')), 'The edited Markdown remains visible during the pending write.');
   add('Preview', 'Markdown Editing', 'Stale', preview(document + note('devbox did not answer. Changes save when it is back.'), 'devbox: ~/acme-shop/docs · as of 14:06', button('Discard')), 'The last document and local draft remain while the remote computer is unreachable.');
-  add('Preview', 'Code Limits', 'Truncated code', preview(code + '<div class="kanso-code">… (file truncated)</div>', '~/acme-shop/src/api · Read only', '', 'limits.ts'), 'Code beyond 400,000 characters is truncated and read only.');
+  add('Preview', 'Code Limits', 'Truncated code', preview(code + '<div class="kanso-code kanso-code--source">… (file truncated)</div>', '~/acme-shop/src/api · Read only', '', 'limits.ts'), 'Code beyond 400,000 characters is truncated and read only.');
   add('Preview', 'Code Limits', 'Truncated markdown', preview(document + '<div class="kanso-markdown__section">… (file truncated)</div>', '~/acme-shop/docs · Read only'), 'The Markdown renderer ends its retained content with the truncation marker.');
 
   const list = (body, scope = '~/acme-shop/docs') => frame('Markdown', scope, body, '', true);
@@ -165,5 +167,11 @@ export function panelStateRecords(records) {
   add('Simulator', 'Devices', 'Start timed out', sim(row('Pixel 8', 'Android · Off', true) + failure('Couldn’t start Pixel 8', 'Start timed out.', 'Start')), 'A start timeout returns the device to Off and offers Start again.');
   add('Simulator', 'Picture State', 'Key focus', android.replace('kanso-simulator kanso-panel--focus', 'kanso-simulator kanso-panel--focus kanso-control--focus').replace('<div class="kanso-panel__tools">', '<div class="kanso-panel__scope">Keyboard · type, paste, Enter, Backspace and arrow keys go to Pixel 8</div><div class="kanso-panel__tools">'), 'A focused Android picture receives keyboard input, paste and touch gestures.');
   add('Simulator', 'Picture State', 'No picture', sim(row('iPhone 16 Pro', 'iOS 18 · Booted') + empty('smartphone', 'No picture from the device') + iosControls()), 'A booted device with no frame still offers its commands and Refresh.');
+  const port = (number, command, ...labels) => `<div class="kanso-row--two-lines"><div class="kanso-content__primary kanso-panel__compact-row"><span class="kanso-row__port">${number}</span><span class="kanso-text--muted kanso-text--truncate">${command}</span></div><div class="kanso-content__actions kanso-panel__actions">${labels.map((label) => button(label)).join('')}</div></div>`;
+  const computer = (name, count) => `<div class="kanso-section">${name}<span class="kanso-row__meta">${count}</span></div>`;
+  const computers = (body) => frame('Ports', 'All computers', body, tool('share', 'Share'));
+  const here = section('dark') + port(':3000', 'next dev', 'Open in the browser', 'Go to its pane', 'Stop') + port(':6006', 'storybook', 'Open in the browser', 'Stop');
+  add('Ports', 'Computers', 'Another computer', computers(here + computer('light', 1) + port(':5173', 'vite', 'Open in the browser', 'Go to its pane', 'Stop')), 'Each connected computer’s servers sit under its name, this computer first; Open, Go to its pane and Stop act on the computer the server runs on.');
+  add('Ports', 'Computers', 'Unreachable', computers(here + note('<span class="kanso-text--blocked">light · unreachable</span>')), 'A computer out of reach is one line, “light · unreachable”, or what it lacks, such as “lsof is not installed”; this computer’s list never waits for it.');
   return drawings;
 }
