@@ -16,7 +16,11 @@ const text = (name) => ({ name, control: { type: 'text' } });
 const flag = (name) => ({ name, control: { type: 'boolean' } });
 // Controls several pages share, each named once.
 const shared = {
-  title: text('title'), scope: text('scope'), name: text('name'), program: select('program', ['p-claude', 'p-codex', 'lu-terminal']),
+  title: text('title'), scope: text('scope'), name: text('name'),
+  program: { name: 'program', control: { type: 'select', labels: { 'p-claude': 'Claude Code', 'p-codex': 'Codex', 'lu-terminal': 'Terminal' } }, options: ['p-claude', 'p-codex', 'lu-terminal'] },
+  view: { name: 'view', control: { type: 'inline-radio', labels: Object.fromEntries(views.map(({ key, label }) => [key, label])) }, options: views.map(({ key }) => key) },
+  count: { name: 'folded count', control: { type: 'number', min: 0 } },
+  status: { ...select('mark', ['blocked', 'working', 'done', 'idle']), if: { arg: 'count' } },
   hover: flag('hover'), focus: flag('focus'), dimmed: flag('dimmed'), remote: flag('remote'), selected: flag('selected'), loading: flag('loading'),
 };
 const pick = (...names) => Object.fromEntries(names.map((name) => [name, shared[name]]));
@@ -259,7 +263,7 @@ export const playgrounds = {
   'Compositions/Toolbar': {
     ...statedPages['Compositions/Toolbar'],
     argTypes: {
-      view: { name: 'view', control: { type: 'inline-radio' }, options: views.map((item) => item.key) },
+      ...pick('view'),
       column: flag('collapsed'),
       open: { name: 'tools open', control: { type: 'boolean' }, if: { arg: 'column' } },
       sorted: flag('sorted'),
@@ -384,10 +388,7 @@ export const playgrounds = {
       branch: text('branch'),
       sync: text('sync'),
       open: flag('open'),
-      count: { name: 'folded count', control: { type: 'number', min: 0 } },
-      status: { ...select('mark', ['blocked', 'working', 'done', 'idle']), if: { arg: 'count' } },
-      hover: flag('hover'),
-      focus: flag('focus'),
+      ...pick('count', 'status', 'hover', 'focus'),
     },
     markup: (args) => inSidebar(projectRow(args)),
   },
@@ -396,10 +397,7 @@ export const playgrounds = {
     argTypes: {
       ...pick('name', 'remote'),
       state: select('state', computerStates),
-      count: { name: 'folded count', control: { type: 'number', min: 0 } },
-      status: { ...select('mark', ['blocked', 'working', 'done', 'idle']), if: { arg: 'count' } },
-      hover: flag('hover'),
-      focus: flag('focus'),
+      ...pick('count', 'status', 'hover', 'focus'),
     },
     markup: (args) => inSidebar(computerRow(args)),
   },
@@ -415,7 +413,7 @@ export const playgrounds = {
   },
   'Compositions/Sidebar/View switch': {
     args: { view: 'spaces', column: false },
-    argTypes: { view: { name: 'view', control: { type: 'inline-radio' }, options: views.map((item) => item.key) }, column: flag('column') },
+    argTypes: { ...pick('view'), column: flag('column') },
     markup: (args) => (args.column ? inRail : inSidebar)(viewSwitch(args)),
   },
   'Compositions/Sidebar/Tile': {
@@ -441,7 +439,7 @@ export const playgrounds = {
       dawn: flag('Dawn Mode'),
       art: { name: 'Dawn sky', control: { type: 'boolean' }, if: { arg: 'dawn' } },
       switcher: flag('view switch'),
-      view: { name: 'view', control: { type: 'inline-radio' }, options: views.map((item) => item.key) },
+      ...pick('view'),
       menu: { name: 'views menu', control: { type: 'boolean' }, if: { arg: 'collapsed' } },
     },
     markup: sampleSidebar,
