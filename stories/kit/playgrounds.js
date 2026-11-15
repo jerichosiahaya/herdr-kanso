@@ -131,7 +131,15 @@ export const playgrounds = {
     ...statedPages['Primitives/Menu'],
     argTypes: {
       title: text('title'),
-      items: { name: 'items', control: { type: 'object' }, description: '{ label, icon, hint, badge, mark, verb, armed, selected, loading } or { separator: true } or { heading }' },
+      values: flag('items with values'),
+      headings: { ...flag('groups with headings'), if: { arg: 'values', truthy: false } },
+      keys: { ...flag('keyboard on an item'), if: { arg: 'values', truthy: false } },
+      armed: { ...flag('Delete armed'), if: { arg: 'values', truthy: false } },
+      badge: { ...flag('a count on an item'), if: { arg: 'values', truthy: false } },
+      mark: { ...flag('a mark on an item'), if: { arg: 'values', truthy: false } },
+      titleMark: select('a mark on the title', ['none', ...Object.keys(marks)]),
+      reading: flag('items still reading'),
+      refused: flag('the read refused'),
     },
   },
   'Primitives/Metric': {

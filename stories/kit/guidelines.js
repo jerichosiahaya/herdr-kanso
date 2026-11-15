@@ -291,6 +291,7 @@ export const guidelines = {
     ["Shizen", "Read in place.", "An item still being read breathes as a skeleton in its place; the rest of the menu is there at once."],
     ["Kansō", "Only actions for the item in focus.", "Every right-click, + and panel menu is this menu with its own items; none draws its own."],
     ["Kansō", "Armed for what cannot be undone.", "The item fills with accent and reads \"Press again to …\" for 4 s."],
+    ["Kokō", "A refusal stays in the menu.", "What the menu could not read is the failure pattern in its place: our words, the tool's words, the fix, Explain; the items that need nothing stay. The title's Mark says the state of what the menu is about."],
   ],
   "Primitives/Metric": [
     ["Fukinsei", "The one number.", "One per panel, display 48 regular, its unit in meta dim beside it on the baseline."],

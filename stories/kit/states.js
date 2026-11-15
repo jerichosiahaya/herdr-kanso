@@ -138,7 +138,19 @@ export const menuItems = [
   { label: 'Open the diff', icon: 'lu-git-pull-request' }, { label: 'Open', icon: 'lu-file', hint: '↵' }, { separator: true },
   { label: 'Hide this section', icon: 'lu-eye-off' }, { label: 'Delete worktree', icon: 'lu-x', verb: 'delete' },
 ];
-const withItem = (index, look) => menuItems.map((item, at) => (at === index ? { ...item, ...look } : item));
+// Each look a Menu control turns on, on the item it belongs to.
+const itemLooks = { keys: [1, { selected: true }], armed: [4, { armed: true }], badge: [0, { badge: '2' }], mark: [0, { mark: 'blocked' }] };
+const lookedItems = (on) => menuItems.map((item, at) => Object.entries(itemLooks).reduce((shown, [name, [index, look]]) => (on[name] && index === at ? { ...shown, ...look } : shown), item));
+const grouped = (items) => [{ heading: 'This worktree' }, ...items.slice(0, 2), { separator: true }, { heading: 'Show' }, ...items.slice(3)];
+const menuRefusal = { text: "Can't read this worktree", source: 'fatal: not a git repository', fix: 'Refresh', agent: sampleAgent };
+const menuOf = ({ title, values, headings, reading, refused, titleMark, ...on }) => {
+  const actions = lookedItems(on);
+  const items = values ? sampleSnooze.map(([label, hint]) => ({ label, hint })) : headings ? grouped(actions) : actions;
+  const read = reading ? [{ loading: true }, { loading: true }, ...items.slice(2)] : items;
+  const body = refused ? [{ failure: menuRefusal }, ...read.slice(2)] : read;
+  // A marked title is the first heading, carrying its Mark.
+  return titleMark === 'none' ? menu({ title, items: body }) : menu({ items: [{ heading: title, mark: titleMark }, ...body] });
+};
 // Open with: what is opened, and what the editor search answered.
 export const openWithCases = {
   'a file': { target: 'file' }, 'a folder': { target: 'folder' }, 'a picture': { target: 'picture' }, 'on devbox': { target: 'remote' },
@@ -190,17 +202,19 @@ export const statedPages = {
     ],
   },
   'Primitives/Menu': {
-    args: { title: 'src/api/checkout.ts', items: menuItems },
-    markup: menu,
+    args: { title: 'src/api/checkout.ts', values: false, headings: false, keys: false, armed: false, badge: false, mark: false, titleMark: 'none', reading: false, refused: false },
+    markup: menuOf,
     states: [
       { label: 'At rest', args: {}, caption: 'A title, items with their icons, a rule between groups.' },
-      { label: 'Keyboard', args: { items: withItem(1, { selected: true }) }, caption: 'The item the keys are on, its key at the right.' },
-      { label: 'Armed', args: { items: withItem(4, { armed: true }) }, caption: 'What cannot be undone asks twice within 4 s.' },
-      { label: 'Values', args: { title: 'Snooze checkout', items: sampleSnooze.map(([label, hint]) => ({ label, hint })) }, caption: 'Each item with the value it gives.' },
-      { label: 'Headings', args: { items: [{ heading: 'This worktree' }, ...menuItems.slice(0, 2), { separator: true }, { heading: 'Show' }, menuItems[3]] }, caption: 'A dim heading names a group.' },
-      { label: 'A badge', args: { items: withItem(0, { badge: '2' }) }, caption: 'How many, on the item they belong to.' },
-      { label: 'A mark', args: { items: withItem(0, { mark: 'blocked' }) }, caption: 'The state of the thing the item opens.' },
-      { label: 'Reading', args: { items: [{ loading: true }, { loading: true }, ...menuItems.slice(2)] }, caption: 'Items still being read breathe in their place.' },
+      { label: 'Keyboard', args: { keys: true }, caption: 'The item the keys are on, its key at the right.' },
+      { label: 'Armed', args: { armed: true }, caption: 'What cannot be undone asks twice within 4 s.' },
+      { label: 'Values', args: { title: 'Snooze checkout', values: true }, caption: 'Each item with the value it gives.' },
+      { label: 'Headings', args: { headings: true }, caption: 'A dim heading names a group.' },
+      { label: 'A badge', args: { badge: true }, caption: 'How many, on the item they belong to.' },
+      { label: 'A mark', args: { mark: true }, caption: 'The state of the thing the item opens.' },
+      { label: 'A mark on the title', args: { title: 'devbox', titleMark: 'working' }, caption: 'The state of what the menu is about, at its title’s right.' },
+      { label: 'Reading', args: { reading: true }, caption: 'Items still being read breathe in their place.' },
+      { label: 'A refusal', args: { refused: true, titleMark: 'blocked' }, caption: 'What the menu could not read: the failure pattern in its place, the rest still there.' },
     ],
   },
   'Compositions/Open with menu': {

@@ -101,10 +101,13 @@ export const markdown = ({ source, block, state }) => `<div class="kanso-markdow
   return `<div class="kanso-markdown__block${on}"${on.includes('editing') ? ' contenteditable="true"' : ''}>${html}</div>`;
 }).join('')}</div>`;
 
+// A heading's `mark` sits at its right, the state of what it names; a `failure` item is the failure pattern in the menu's place.
+const menuHeading = (text, status) => `<div class="kanso-menu__heading">${grow(escape(text))}${status ? mark({ status, size: 'sm' }) : ''}</div>`;
 export const menu = ({ title, items }) => {
   const rows = (Array.isArray(items) ? items : []).map((item) => {
     if (item.separator) return '<div class="kanso-menu__separator"></div>';
-    if (item.heading) return `<div class="kanso-menu__heading">${escape(item.heading)}</div>`;
+    if (item.failure) return failureBlock(item.failure);
+    if (item.heading) return menuHeading(item.heading, item.mark);
     if (item.loading) return `<div class="kanso-menu__item kanso-skeleton--breathing" aria-busy="true">${bar('icon')}${bar('line')}</div>`;
     const lead = item.icon ? glyph(item.icon) : '<span class="kanso-menu__spacer"></span>';
     const classes = `kanso-menu__item${item.armed ? ' kanso-action--armed' : item.selected ? ' kanso-control--selected' : ''}`;
@@ -113,7 +116,7 @@ export const menu = ({ title, items }) => {
       + (item.badge ? `<span class="kanso-menu__badge">${escape(item.badge)}</span>` : '')
       + (item.hint ? `<span class="kanso-menu__hint">${escape(item.hint)}</span>` : '') + (item.mark ? mark({ status: item.mark }) : '') + '</div>';
   }).join('');
-  return `<div class="kanso-menu kanso-popover" role="menu">${title ? `<div class="kanso-menu__heading">${escape(title)}</div>` : ''}${rows}</div>`;
+  return `<div class="kanso-menu kanso-popover" role="menu">${title ? menuHeading(title) : ''}${rows}</div>`;
 };
 
 export const metric = ({ value, unit, facts = '', loading = false }) => {
