@@ -47,7 +47,7 @@ export const guidelines = {
   ],
   "Primitives/Chip": [
     ["Kansō", "Only a fact not said elsewhere.", "A count or a short fact the row does not already say."],
-    ["Seijaku", "One look.", "24 high, radius 6, on w7, meta size."],
+    ["Seijaku", "One look, two quiet forms.", "24 high, radius 6, on w7, meta size. Quiet drops the ground for a count on a rail tile, in blocked ink when one of its items waits; the pill names the channel beside the window lights."],
   ],
   "Primitives/Code": [
     ["Seijaku", "Exact characters.", "Monospaced, line numbers in dim. Keywords violet, strings done, numbers working."],

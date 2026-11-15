@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { avatar, dialog, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { avatar, chip, dialog, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inSettings, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -252,6 +252,16 @@ export const statedPages = {
       { label: 'Large', args: { size: 'lg' }, caption: 'On a card or a header.' },
       { label: 'A computer', args: { initial: 'D', tone: 'teal' }, caption: 'A computer’s initial in its own colour, in the rail.' },
       { label: 'Tile', args: { initial: 'Z', round: false, size: 'sm' }, caption: 'An app’s picture or letter, square, in a menu.' },
+    ],
+  },
+  'Primitives/Chip': {
+    args: { label: '3 files', quiet: false, pill: false, tone: '' },
+    markup: chip,
+    states: [
+      { label: 'A fact', args: {}, caption: 'A count or a short fact the row does not already say.' },
+      { label: 'Quiet', args: { label: '4', quiet: true }, caption: 'A count with no ground, on a rail tile.' },
+      { label: 'Quiet, needs you', args: { label: '4', quiet: true, tone: 'blocked' }, caption: 'A tile’s count when one of its items waits for someone.' },
+      { label: 'Pill', args: { label: 'Dawn Mode', pill: true }, caption: 'The channel’s name beside the window lights.' },
     ],
   },
   'Primitives/Mark': {

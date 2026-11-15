@@ -74,7 +74,7 @@ export function replaceSource(source, records, root = '.') {
 }
 
 const primitive = {
-  KeyHint: 'Key hint', PillAndAvatar: 'Chip', Switch: 'Switch', Segmented: 'Tab', Field: 'Field',
+  KeyHint: 'Key hint', PillAndAvatar: null, Switch: 'Switch', Segmented: 'Tab', Field: 'Field',
   ButtonsFourKinds: 'Button', ButtonsOnALine: 'Button', ActionRows: 'Button', ButtonWithAMark: 'Button', Armed: 'Button',
   FocusRing: 'Button', HoverSelectedPressed: 'Button', Tooltip: 'Tooltip', ChromeAndBarButtons: 'Button',
   FileRow: 'Row', PortRow: 'Row', RowActions: 'Row', SettingRow: 'Row', SettingRowWithAValue: 'Row', FindRow: 'Row',
@@ -129,7 +129,7 @@ export function pageFor(source, file, key) {
     return coveragePage[key];
   }
   if (source === 'proto') {
-    if (primitive[key] && /compositions-/.test(base)) return `Primitives/${primitive[key]}`;
+    if (key in primitive && /compositions-/.test(base)) return primitive[key] && `Primitives/${primitive[key]}`;
     if (base === 'compositions-panel-pieces' && panelPiece[key]) return panelPiece[key];
     if (protoKept[base]?.[key]) return protoKept[base][key];
     if (protoPage[base] === null) return null;

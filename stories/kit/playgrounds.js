@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, button, card, chip, code, dawn, dialog, escape, input, keycapStates, keyHint, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
+import { avatarSizes, button, card, code, dawn, dialog, escape, input, keycapStates, keyHint, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, captioned, inSettings, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, projectRefusals, sendReach, sleepCases, statedPages, stepperShown, tabActs, worktreeRefusals } from './states.js';
@@ -59,9 +59,13 @@ export const playgrounds = {
     },
   },
   'Primitives/Chip': {
-    args: { label: '3 files', quiet: false },
-    argTypes: { label: text('Label'), quiet: flag('quiet') },
-    markup: chip,
+    ...statedPages['Primitives/Chip'],
+    argTypes: {
+      label: text('label'),
+      quiet: flag('quiet'),
+      pill: { ...flag('pill'), if: { arg: 'quiet', truthy: false } },
+      tone: select('ink', ['', 'blocked']),
+    },
   },
   'Primitives/Code': {
     args: { text: 'export function bucket(customer) {\n  const plan = planOf(customer);\n  return { plan, tokens: LIMIT[plan] };\n}', kind: 'source', first: 11, line: 12 },
