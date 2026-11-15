@@ -88,7 +88,8 @@ export function importApproved(file, root = ".") {
   for (const board of references.boards.filter((item) => item.page !== null)) {
     const reference = references.pages.find((page) => page.page === board.page);
     const extracted = approvedDrawings(master, board);
-    const owner = reference.components[0] ?? "Compositions/State patterns";
+    // A layout composes its pieces, so a board drawn for a layout keeps its drawings on its own page.
+    const owner = reference.components[0]?.startsWith("Layouts/") ? board.page : reference.components[0] ?? "Compositions/State patterns";
     const ids = extracted.drawings.map((drawing, index) => {
       const id = `proto/approved-${board.anchor}/Reference/${index + 1}`;
       const linked = renameMarkup(drawing.source).replace(/<a\b([^>]*?)href="#([^"]+)"([^>]*)>/g, (match, before, anchor, after) => {
@@ -101,7 +102,7 @@ export function importApproved(file, root = ".") {
       return id;
     });
     reference.records = [...ids, ...reference.records.filter((id) => !id.startsWith("proto/approved-"))];
-    reference.components = [...new Set([owner, ...reference.components])];
+    reference.components = [...new Set([...(owner === board.page ? [] : [owner]), ...reference.components])];
     reference.approvedRecords = ids;
     reference.status = "Approved reference";
     reference.sourceHash = extracted.hash;

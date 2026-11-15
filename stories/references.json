@@ -797,11 +797,11 @@
         "Bring a piece back from a right-click on its region or from Settings · Pieces, the one list of everything hidden."
       ],
       "records": [
-        "proto/approved-hide/Reference/1",
-        "proto/layouts-right-click-any-piece/RightClickAnyPiece/Default"
+        "proto/approved-hide/Reference/1"
       ],
       "components": [
-        "Layouts/Context menus"
+        "Primitives/Menu",
+        "Compositions/Agent menu"
       ],
       "features": [],
       "approvedRecords": [
@@ -832,11 +832,13 @@
       ],
       "records": [
         "proto/approved-rest/Reference/1",
-        "proto/approved-rest/Reference/2",
-        "proto/layouts-window-at-rest/WindowAtRest/Default"
+        "proto/approved-rest/Reference/2"
       ],
       "components": [
-        "Layouts/Window"
+        "Compositions/Sidebar",
+        "Compositions/Tab bar",
+        "Compositions/Pane header",
+        "Compositions/Status bar"
       ],
       "features": [],
       "approvedRecords": [
@@ -913,10 +915,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/DawnBand/Default",
-        "proto/compositions-sidebar-rows/Find/Default",
-        "proto/compositions-sidebar-rows/Footer/Default",
-        "proto/layouts-sidebar-at-rest/SidebarAtRest/Default",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
@@ -1000,10 +998,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/DawnBand/Default",
-        "proto/compositions-sidebar-rows/Find/Default",
-        "proto/compositions-sidebar-rows/Footer/Default",
-        "proto/layouts-sidebar-at-rest/SidebarAtRest/Default",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
@@ -1052,7 +1046,6 @@
         "coverage/strip/PaneTools/Working",
         "proto/components-header-digest/HeaderDigest/Default",
         "proto/components-pane-header/PaneHeader/Default",
-        "proto/components-title-and-tools/TitleAndTools/Default",
         "proto/layouts-sidebar-header-three-ways/SidebarHeaderThreeWays/Default",
         "kit/Header/Open",
         "kit/Header/Collapsed",
@@ -1136,10 +1129,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/DawnBand/Default",
-        "proto/compositions-sidebar-rows/Find/Default",
-        "proto/compositions-sidebar-rows/Footer/Default",
-        "proto/layouts-sidebar-at-rest/SidebarAtRest/Default",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
@@ -1200,9 +1189,7 @@
         "proto/compositions-sidebar-features/ProjectGit/Ahead",
         "proto/compositions-sidebar-features/ProjectGit/Behind",
         "proto/compositions-sidebar-features/ProjectGit/Pull refused",
-        "proto/compositions-sidebar-features/ProjectGit/Pulling",
-        "proto/compositions-sidebar-rows/Project/Default",
-        "proto/compositions-sidebar-rows/WorktreeRow/Default"
+        "proto/compositions-sidebar-features/ProjectGit/Pulling"
       ],
       "components": [
         "Layouts/Sidebar",
@@ -1288,10 +1275,7 @@
         "proto/approved-sidebar-agent/Reference/14",
         "proto/approved-sidebar-agent/Reference/15",
         "proto/approved-sidebar-agent/Reference/16",
-        "proto/compositions-sidebar-features/Sidebar/Running command",
-        "proto/compositions-sidebar-rows/AgentOneLine/Default",
-        "proto/compositions-sidebar-rows/AgentTwoLines/Default",
-        "proto/compositions-sidebar-rows/SubAgent/Default"
+        "proto/compositions-sidebar-features/Sidebar/Running command"
       ],
       "components": [
         "Layouts/Sidebar",
@@ -1350,8 +1334,7 @@
         "proto/approved-sidebar-computer/Reference/13",
         "proto/approved-sidebar-computer/Reference/14",
         "proto/approved-sidebar-computer/Reference/15",
-        "proto/approved-sidebar-computer/Reference/16",
-        "proto/compositions-sidebar-rows/Computer/Default"
+        "proto/approved-sidebar-computer/Reference/16"
       ],
       "components": [
         "Layouts/Sidebar",
@@ -1641,8 +1624,7 @@
         "proto/approved-sidebar-find/Reference/3",
         "proto/approved-sidebar-find/Reference/4",
         "proto/approved-sidebar-find/Reference/5",
-        "proto/compositions-sidebar-features/Sidebar/Search empty",
-        "proto/compositions-sidebar-rows/Find/Default"
+        "proto/compositions-sidebar-features/Sidebar/Search empty"
       ],
       "components": [
         "Layouts/Sidebar"
@@ -1717,10 +1699,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/DawnBand/Default",
-        "proto/compositions-sidebar-rows/Find/Default",
-        "proto/compositions-sidebar-rows/Footer/Default",
-        "proto/layouts-sidebar-at-rest/SidebarAtRest/Default",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
@@ -1799,10 +1777,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/DawnBand/Default",
-        "proto/compositions-sidebar-rows/Find/Default",
-        "proto/compositions-sidebar-rows/Footer/Default",
-        "proto/layouts-sidebar-at-rest/SidebarAtRest/Default",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
@@ -1936,8 +1910,7 @@
         "proto/approved-sidebar-footer/Reference/9",
         "proto/approved-sidebar-footer/Reference/10",
         "proto/approved-sidebar-footer/Reference/11",
-        "proto/approved-sidebar-footer/Reference/12",
-        "proto/compositions-sidebar-rows/Footer/Default"
+        "proto/approved-sidebar-footer/Reference/12"
       ],
       "components": [
         "Layouts/Sidebar"
@@ -2017,10 +1990,6 @@
         "proto/compositions-sidebar-features/SidebarThreads/Reading",
         "proto/compositions-sidebar-features/SidebarThreads/Settled",
         "proto/compositions-sidebar-features/SidebarThreads/Snoozed",
-        "proto/compositions-sidebar-rows/DawnBand/Default",
-        "proto/compositions-sidebar-rows/Find/Default",
-        "proto/compositions-sidebar-rows/Footer/Default",
-        "proto/layouts-sidebar-at-rest/SidebarAtRest/Default",
         "proto/tokens-dawn/TheBand/Default",
         "kit/Sidebar/Open",
         "kit/Sidebar/Collapsed",
@@ -2063,7 +2032,6 @@
         "proto/approved-sidebar-rail/Reference/6",
         "proto/approved-sidebar-rail/Reference/7",
         "proto/approved-sidebar-rail/Reference/8",
-        "proto/components-collapsed-rail/CollapsedRail/Default",
         "kit/Rail/Open",
         "kit/Rail/Collapsed",
         "kit/Rail/Dawn"
@@ -2136,7 +2104,7 @@
         "kit/Tab/Disabled"
       ],
       "components": [
-        "Compositions/Bars",
+        "Compositions/Tab bar",
         "Primitives/Tab"
       ],
       "features": [
@@ -2184,7 +2152,7 @@
         "proto/compositions-bars/StaleBody/Default"
       ],
       "components": [
-        "Compositions/Bars"
+        "Compositions/Tab bar"
       ],
       "features": [
         "coverage/tabs/PanelToolbar"
@@ -2292,7 +2260,6 @@
         "coverage/strip/PaneTools/Working",
         "proto/components-header-digest/HeaderDigest/Default",
         "proto/components-pane-header/PaneHeader/Default",
-        "proto/components-title-and-tools/TitleAndTools/Default",
         "proto/layouts-sidebar-header-three-ways/SidebarHeaderThreeWays/Default",
         "kit/Header/Open",
         "kit/Header/Collapsed",
@@ -2333,7 +2300,6 @@
         "coverage/strip/PaneTools/Working",
         "proto/components-header-digest/HeaderDigest/Default",
         "proto/components-pane-header/PaneHeader/Default",
-        "proto/components-title-and-tools/TitleAndTools/Default",
         "proto/layouts-sidebar-header-three-ways/SidebarHeaderThreeWays/Default",
         "kit/Header/Open",
         "kit/Header/Collapsed",
@@ -2374,7 +2340,6 @@
         "coverage/strip/PaneTools/Working",
         "proto/components-header-digest/HeaderDigest/Default",
         "proto/components-pane-header/PaneHeader/Default",
-        "proto/components-title-and-tools/TitleAndTools/Default",
         "proto/layouts-sidebar-header-three-ways/SidebarHeaderThreeWays/Default",
         "kit/Header/Open",
         "kit/Header/Collapsed",
@@ -2476,13 +2441,11 @@
         "coverage/spaces/ProjectMenu/Open project",
         "coverage/spaces/ProjectMenu/Remove armed",
         "proto/components-pick-list/PickList/Default",
-        "proto/layouts-right-click-any-piece/RightClickAnyPiece/Default",
         "kit/Primitives/Menu/At rest"
       ],
       "components": [
         "Compositions/Menus of the bars and headers",
-        "Primitives/Menu",
-        "Layouts/Context menus"
+        "Primitives/Menu"
       ],
       "features": [],
       "approvedRecords": [
@@ -2552,7 +2515,7 @@
         "proto/components-edges-and-minimap/MinimapSlot/Default"
       ],
       "components": [
-        "Compositions/Edge and Minimap"
+        "Compositions/Edges"
       ],
       "features": [],
       "approvedRecords": [
@@ -6942,12 +6905,10 @@
         "coverage/dojo/PracticeResult/Completed",
         "coverage/dojo/PracticeResult/New best",
         "coverage/dojo/PracticeResult/Save failed",
-        "coverage/dojo/PracticeResult/Stopped",
-        "proto/layouts-hjkl-dojo/HjklDojo/Default"
+        "coverage/dojo/PracticeResult/Stopped"
       ],
       "components": [
-        "Panels/Dojo",
-        "Layouts/Practice"
+        "Panels/Dojo"
       ],
       "features": [
         "coverage/dojo/Practice"
@@ -7665,8 +7626,8 @@
         "coverage/strip/StripNavigation/Several offscreen"
       ],
       "components": [
-        "Compositions/Edge and Minimap",
-        "Compositions/Bars"
+        "Compositions/Edges",
+        "Compositions/Tab bar"
       ],
       "features": [
         "coverage/strip/StripNavigation"
@@ -7758,7 +7719,6 @@
         "Primitives/Avatar",
         "Primitives/Mark",
         "Compositions/Header",
-        "Layouts/Sidebar",
         "Layouts/Sidebar"
       ],
       "features": [],

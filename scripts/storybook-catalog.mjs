@@ -85,7 +85,7 @@ const primitive = {
 const panelPiece = { HeroAndVerdict: 'Panels/PR', InATab: 'Panels/Worktrees', MemoryMetricAndChart: 'Panels/Memory', PlanAndSpend: 'Panels/Spend' };
 const protoPage = {
   'components-annotated-picture': 'Panels/Pins', 'components-choosing-the-channel': 'Compositions/Dawn Mode',
-  'components-code': 'Primitives/Code', 'components-collapsed-rail': 'Layouts/Sidebar',
+  'components-code': 'Primitives/Code', 'components-collapsed-rail': null,
   'components-dialog': null, 'components-edges-and-minimap': 'Compositions/Edges',
   'components-find-in-the-conversation': 'Panels/Find', 'components-header-digest': 'Compositions/Pane header',
   'components-log': 'Primitives/Code', 'components-markdown-window': 'Panels/Markdown', 'components-markdown': 'Primitives/Markdown',
@@ -95,14 +95,16 @@ const protoPage = {
   'components-shipped': 'Panels/Shipped', 'components-simulator-screen': 'Panels/Simulator',
   'components-status-bar-working': 'Compositions/Status bar', 'components-status-bar': 'Compositions/Status bar',
   'components-system-notification': 'Compositions/Notifications', 'components-tab-bar': 'Compositions/Tab bar', 'components-tab-states': 'Primitives/Tab',
-  'components-title-and-tools': 'Layouts/Sidebar header', 'components-while-you-were-away': 'Compositions/Activity', 'components-worktree-row-open': 'Primitives/Row',
+  'components-title-and-tools': null, 'components-while-you-were-away': 'Compositions/Activity', 'components-worktree-row-open': 'Primitives/Row',
   'compositions-bars': 'Layouts/Pane', 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
   'compositions-menu-and-dialog': null, 'compositions-panel-pieces': 'Compositions/Panel',
   'compositions-sidebar-rows': 'Layouts/Sidebar', 'compositions-states': 'Compositions/State patterns',
-  'layouts-sidebar-at-rest': 'Layouts/Sidebar', 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
-  'layouts-window-at-rest': 'Layouts/Window', 'layouts-right-click-any-piece': 'Layouts/Context menus', 'layouts-hjkl-dojo': 'Layouts/Practice',
+  'layouts-sidebar-at-rest': null, 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
+  'layouts-window-at-rest': null, 'layouts-right-click-any-piece': null, 'layouts-hjkl-dojo': null,
   'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': 'Compositions/Dawn Mode', 'tokens-icons': 'Tokens/Icons', 'tokens-type': 'Tokens/Type',
 };
+// The sidebar rows are Compositions/Sidebar's pieces; only the two the sort's coverage points at stay.
+const sidebarRowsKept = new Set(['ProjectsStatusThreads', 'StatusViewTile']);
 const coveragePage = {
   Arrangements: 'Compositions/Arrangements dialog', SaveArrangement: 'Compositions/Arrangements dialog', SettingsMenu: 'Compositions/Settings menu', UpdateNotice: 'Compositions/Notifications', RuntimeNotice: 'Compositions/Notifications',
   ContainerList: 'Panels/Containers', ContainerRow: 'Panels/Containers', ComposeProject: 'Panels/Containers', ContainerDisk: 'Panels/Containers',
@@ -129,7 +131,7 @@ export function pageFor(source, file, key) {
   if (source === 'proto') {
     if (primitive[key] && /compositions-/.test(base)) return `Primitives/${primitive[key]}`;
     if (base === 'compositions-panel-pieces' && panelPiece[key]) return panelPiece[key];
-    if (protoPage[base] === null) return null;
+    if (protoPage[base] === null || (base === 'compositions-sidebar-rows' && !sidebarRowsKept.has(key))) return null;
     if (!protoPage[base]) {
       if (base.startsWith('components-')) return `Primitives/${base.slice(11).replace(/-/g, ' ').replace(/^./, (s) => s.toUpperCase())}`;
       throw new Error(`Missing component route: ${file}:${key}`);
