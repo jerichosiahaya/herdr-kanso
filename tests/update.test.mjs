@@ -207,10 +207,24 @@ test("The footer is as tall as the rows it shows: one switched off in Kanso's se
   const { cx, drain } = context();
   cx.timer = { every() {} };
   f.updater.start(cx); await drain();
-  assert.deepEqual(f.resizes, [156], "3.9.1's taller footer comes back to Update and Settings");
+  assert.deepEqual(f.resizes, [86], "3.9.1's taller footer comes back to Update and Settings");
   const { footerPx } = await updater({ shared: () => null });
-  assert.equal(footerPx(new Set(), false), 156);
-  assert.equal(footerPx(new Set(["footer.machine"]), false), 120);
+  assert.equal(footerPx(new Set(), false), 86, "Settings and Add computer, a hair apart, inside 8 above and 12 below");
+  assert.equal(footerPx(new Set(["footer.machine"]), false), 52);
+  assert.equal(footerPx(new Set(), true), 120, "an update is a third row");
+  assert.equal(footerPx(new Set(), false, true), 86, "a refusal shows only under an update row");
+  assert.ok(footerPx(new Set(), true, true) > 120 + 100, "a refused update makes room for the tool's words and Update");
+});
+
+test("A refused update keeps the tool's words for the footer, and an update that lands clears them", async (t) => {
+  const f = await fixture(t);
+  const { cx } = context();
+  f.updater.refuse("git ls-remote: Could not resolve host: github.com");
+  assert.equal(f.updater.refused(), "git ls-remote: Could not resolve host: github.com");
+  await f.updater.report(cx, "error", "the download failed");
+  assert.equal(f.updater.refused(), "the download failed");
+  await f.updater.report(cx, "ok", "");
+  assert.equal(f.updater.refused(), null);
 });
 
 test("A mod that did not load for want of memory asks for a restart, however the runtime words it", async () => {

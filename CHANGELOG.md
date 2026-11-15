@@ -26,10 +26,12 @@ the branch's rules.
 
 ### Added
 
+- Settings in the sidebar footer opens one menu: kansō settings, with its key, and Herdr settings. When Herdr has an update waiting, the menu offers it as a third row; the first press arms it and the second restarts Herdr into it. (#241)
 - Cmd+Shift+Up and Cmd+Shift+Down go to the agent above or below in the sidebar, across tabs and projects; Cmd+Shift+Left and Cmd+Shift+Right go back and forward through the agents you visited, as in a browser. On Windows, Ctrl+Shift with the arrows.
 
 ### Changed
 
+- The sidebar footer follows the new design: kansō's update row while one is ready (a beta is named by its build), Settings and Add computer, and in the collapsed sidebar the same as squares. A pressed update turns quiet at once; a refused one keeps its row and shows the tool's words under it, with Update to try again. The account chip is gone; Herdr settings are in the Settings menu. (#241)
 - The pane header is quieter: focus is its ground alone, an agent waiting for you is its wash and mark without words, the header itself is what you drag, and under the pointer it shows split right, wider or narrower, close and ⋯, which holds pin, sleep, send, open with, split down and zoom. Folder and branch show only where they differ from the project, the pull request has no dot, a narrow pane folds the header in order instead of crowding it, a double-click renames the pane in place, close asks twice while an agent is in the pane, and GitHub not answering says Can't read with Refresh. (#234)
 - The panels' kit gains the list row, with its states, its title form and its tools under the pointer, plus the key hint and a small icon button for those tools; no list uses them yet. (#278)
 - Toasts say one sentence, with any detail in their tooltip; they lead with the icon of what they are about in the colour of its state, a failure always with the blocked mark, and end with the word for their fix. The update and out of memory notices follow: Update, Refresh and Restart act from the toast, and the update's icon is the same in the toast and the sidebar. (#237)

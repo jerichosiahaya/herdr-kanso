@@ -5,6 +5,7 @@ import { sameVolume, updateHost, windowsInstallScript, windowsLaunchScript, wind
 // Kanso's own updates, by jlopezlira (https://github.com/jlopezlira/herdr-kanso). Apache-2.0.
 import { exec, readTextFile, appHome, shared, setShared, notify, layout, run, writeTextFile } from "herdr";
 import { tryOr, tryOrAsync } from "./pure.js";
+import { G, H, T } from "./ui.js";
 import { pieces, runs, shown, hiddenSet } from "./pieces.js";
 import { channelOf, compareReleases, hostInstall, installedRelease, newestTag, offerRelease, parseRelease } from "./release.js";
 import { alreadyUpdating, checkFailed, installFailed, updateAvailable, updated, upToDate } from "./notices.js";
@@ -37,14 +38,21 @@ const RECOVER_MS = 5 * 60 * 1000;
 const BUSY = 75;
 // Under Herdr's home: the lock, and per install its staging folder, pid, log and outcome.
 const UPDATES = ".kanso-updates";
-// The footer is its account chip and a 34px row (and its gap) for each of Update, Settings and
-// Add machine that shows; a row a switch hides gives its place back.
+// The footer: its rows a hair apart inside its padding, and a refused update's block; a hidden row gives its place back.
 const FOOTER = "sidebar-footer";
-const FOOTER_BASE_PX = 84, ROW_PX = 36;
 const OPTIONAL = ["footer.machine"];
-export const footerPx = (hidden, update) => FOOTER_BASE_PX + ROW_PX * (1 + (update ? 1 : 0) + OPTIONAL.filter((id) => !hidden.has(id)).length);
-// Every size this sets, now or before (228 and 264 in 3.9.1), so one you sized yourself stays.
-const OURS = (px) => px >= FOOTER_BASE_PX + ROW_PX && px <= FOOTER_BASE_PX + ROW_PX * 5 && (px - FOOTER_BASE_PX) % ROW_PX === 0;
+const FOOTER_PAD_PX = G.sm + G.md;
+// The kit's failure block: padding, edge, our words, the tool's two lines, the fix and its margins.
+const REFUSED_PX = Math.ceil(2 * (G.md + G.hair) + H.badge + 3 * G.xs + T.mono * 3 + H.control + G.hair + G.sm);
+const rowsPx = (rows) => rows * H.line + (rows - 1) * G.hair;
+const footerSize = (rows, refused) => FOOTER_PAD_PX + rowsPx(rows) + (refused ? G.hair + REFUSED_PX : 0);
+export const footerPx = (hidden, update, refused = false) =>
+  footerSize(1 + (update ? 1 : 0) + OPTIONAL.filter((id) => !hidden.has(id)).length, update && refused);
+// Every size this sets, now or before the account chip left, so one you sized yourself stays.
+const LEGACY_BASE_PX = 84, LEGACY_ROW_PX = 36;
+const legacy = (px) => px >= LEGACY_BASE_PX + LEGACY_ROW_PX && px <= LEGACY_BASE_PX + LEGACY_ROW_PX * 5 && (px - LEGACY_BASE_PX) % LEGACY_ROW_PX === 0;
+const SIZES = new Set([1, 2, 3].flatMap((rows) => [footerSize(rows, false), footerSize(rows, true)]));
+const OURS = (px) => legacy(px) || SIZES.has(px);
 
 function findNode(node, id) {
   if (node?.id === id) return node;
@@ -287,6 +295,10 @@ export class Updater {
 
   available() { return offerRelease(this.state().latest, this.current(), this.channel()); }
 
+  // Shared, so the footer shows the tool's words whichever copy installed.
+  refused() { return this.state().refused ?? null; }
+  refuse(why) { if (this.refused() !== why) this.setState({ refused: why }); }
+
   // Not cached: mid-update a copy can start before version.json lands and would re-offer what is installed.
   async readInstalled() {
     try {
@@ -338,7 +350,7 @@ export class Updater {
     if (!found) return;
     const { size } = found;
     const hidden = tryOr(() => hiddenSet(pieces(shared)), new Set());
-    const want = footerPx(hidden, Boolean(this.available()));
+    const want = footerPx(hidden, Boolean(this.available()), Boolean(this.refused()));
     if (size !== want && OURS(size)) run("layout.resize", { id: FOOTER, px: want });
   }
 
@@ -384,6 +396,8 @@ export class Updater {
     const id = opId();
     this.working = true;
     this.error = null;
+    this.refuse(null);
+    this.fit();
     const spec = hostInstall(v, this.installed);
     this.mark(id, { version: v, from: this.installed, notes: "", at: Date.now(), phase: "preparing" });
     cx.notify();
@@ -503,6 +517,7 @@ export class Updater {
       this.error = why || "the update failed";
       notify(installFailed(this.error));
     }
+    this.refuse(state === "error" ? this.error : null);
     this.fit();
     cx.notify();
     return told;
