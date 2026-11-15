@@ -164,14 +164,16 @@ export const chip = ({ label, quiet = false, pill = false, tone = '' }) => `<spa
 const fact = (part) => typeof part === 'string' ? `<span>${escape(part)}</span>` : `${part.icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(part.icon)}"/></svg>` : ''}<span>${escape(part.text)}</span>`;
 const rowTool = (action) => button({ kind: 'icon', size: 'sm', ...action });
 export const rowDepths = [0, 1, 2];
-// `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
-// The title form is a panel's heading: the name at title size, the second line its scope.
 // A file's git `letter` takes the icon's slot; modified keeps the slot empty so names align.
 const letterTones = { A: 'dim', D: 'dim', U: 'blocked', M: '' };
 const fileLetter = (letter) => `<span class="kanso-row__letter${letterTones[letter] ? ` kanso-text--${letterTones[letter]}` : ''}">${letter === 'M' ? '' : escape(letter)}</span>`;
 // A tree row sits at its `level` and leads with its fold: a folder's chevron, `open` or not, or an empty slot for a file.
 const fold = (open) => `<span class="kanso-row__fold">${open === undefined ? '' : inlineIcon(open ? 'lu-chevron-down' : 'lu-chevron-right')}</span>`;
-export const row = ({ icon = 'none', tone = '', letter, level, open, name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, title, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action, start = [], tools = [], keys = [] }) => {
+const rowVerb = (verb) => button({ kind: 'quiet', size: 'sm', ...verb });
+// `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
+// The title form is a panel's heading: the name at title size, the second line its scope.
+// `verbs` are a line of quiet word actions under it.
+export const row = ({ icon = 'none', tone = '', letter, level, open, name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, title, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action, verbs = [], start = [], tools = [], keys = [] }) => {
   const slot = letter ? fileLetter(letter) : icon === 'none' ? '' : glyph(icon, tone);
   const lead = `${list(start)}${level === undefined ? '' : fold(open)}${slot}`;
   const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;
@@ -180,12 +182,12 @@ export const row = ({ icon = 'none', tone = '', letter, level, open, name, detai
     + `${meta ? `<span class="kanso-row__meta">${escape(meta)}</span>` : ''}${flag ? `<span class="kanso-row__flag">${glyph(flag)}</span>` : ''}`
     + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}${list(tools)}${keys.map(keyHint).join('')}`
     + `${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${!status || status === 'none' ? '' : mark({ status })}`;
-  const states = [second && 'kanso-row--two-lines', level !== undefined && 'kanso-row--tree', heading && 'kanso-row--heading', title && 'kanso-row--title', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
+  const twoLines = Boolean(second) || verbs.length > 0;
+  const states = [twoLines && 'kanso-row--two-lines', level !== undefined && 'kanso-row--tree', heading && 'kanso-row--heading', title && 'kanso-row--title', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
     dimmed && 'kanso-control--dim', pending && 'kanso-state-line--pending', hover && 'kanso-control--hover', focus && 'kanso-control--focus'].filter(Boolean).map((name) => ` ${name}`).join('');
   const opening = `<div class="kanso-row${states}" tabindex="0"${level === undefined ? '' : ` style="--k-level:${Number(level)}"`}>`;
-  return second
-    ? `${opening}<div class="kanso-content__primary">${lead}${label}${tail}</div><div class="kanso-content__secondary">${escape(second)}</div></div>`
-    : `${opening}${lead}${label}${tail}</div>`;
+  const under = `${second ? `<div class="kanso-content__secondary">${escape(second)}</div>` : ''}${verbs.length ? `<div class="kanso-content__actions">${verbs.map(rowVerb).join('')}</div>` : ''}`;
+  return twoLines ? `${opening}<div class="kanso-content__primary">${lead}${label}${tail}</div>${under}</div>` : `${opening}${lead}${label}${tail}</div>`;
 };
 
 const bar = (shape) => `<span class="kanso-skeleton kanso-skeleton--${shape}"></span>`;
@@ -309,6 +311,19 @@ export const release = ({ version, date = null, node = 'newer', action = null, c
     : `<div class="kanso-update__timeline-heading"><span class="kanso-update__version-name">${escape(version)}</span>${when}${node === 'here' ? chip({ label: 'you are here' }) : ''}${action ? button({ label: action }) : ''}</div>`;
   return `<div class="kanso-update__timeline-release kanso-update__timeline-release--${node}"><span class="kanso-update__timeline-dot${releaseDots[node]}"></span>${heading}${changeLines(changes)}</div>`;
 };
+
+// Bars over time, each a share of the tallest: the `peak` one marked, `low` ones in the blocked tone, a zero one empty,
+// a `part` share stacked inside a bar, `values` over their bars and `ticks` under the run; `filled` bars share the width.
+const share = (value) => `--k-share:${Math.max(0, Math.min(1, Number(value) || 0))}`;
+const barState = (value, index, peak, low) => index === peak ? ' kanso-bars__bar--peak' : low.includes(index) ? ' kanso-bars__bar--low' : Number(value) ? '' : ' kanso-bars__bar--empty';
+export const bars = ({ bars: values = [], peak = null, low = [], part = [], labels = [], ticks = [], filled = false }) => `<div class="kanso-bars${filled ? ' kanso-bars--filled' : ''}${labels.some(Boolean) ? ' kanso-bars--labelled' : ''}">`
+  + `<div class="kanso-bars__plot">${values.map((value, index) => `<span class="kanso-bars__bar${barState(value, index, peak, low)}" style="${share(value)}">`
+    + `${part[index] ? `<span class="kanso-bars__part" style="${share(part[index])}"></span>` : ''}${labels[index] ? `<span class="kanso-bars__label">${escape(labels[index])}</span>` : ''}</span>`).join('')}</div>`
+  + `${ticks.length ? `<div class="kanso-bars__ticks">${ticks.map((tick) => `<span>${escape(tick)}</span>`).join('')}</div>` : ''}</div>`;
+// A thin track with its filled `share`.
+export const meter = ({ share: value = 0, label = '' }) => `<div class="kanso-meter" role="meter" aria-valuemin="0" aria-valuemax="1" aria-valuenow="${Number(value)}"${label ? ` aria-label="${escape(label)}"` : ''}><span class="kanso-meter__fill" style="${share(value)}"></span></div>`;
+// Days in week columns, each a level from 0 (none) to 4, or null where there is no day.
+export const heatmap = ({ days = [] }) => `<div class="kanso-days">${days.map((level) => `<span class="kanso-days__day${level === null ? ' kanso-days__day--none' : ` kanso-days__day--${Number(level)}`}"></span>`).join('')}</div>`;
 
 export const tabSkeleton = () => '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tab-bar__skeleton"></span>';
 

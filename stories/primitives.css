@@ -337,3 +337,24 @@
 .kanso-row.kanso-row--tree{padding-left:calc(var(--k-sp-2) + var(--k-level) * var(--k-sp-4))}
 .kanso-row__fold{display:grid;place-items:center;flex:none;width:var(--k-ic-inline);color:var(--dim)}
 .kanso-row__letter{flex:none;width:var(--k-ic-row);font-size:var(--k-fs-meta);text-align:center}
+.kanso-bars__plot{display:flex;justify-content:space-between;align-items:flex-end;gap:var(--k-sp-hair);height:calc(var(--k-sp-4) * 3)}
+.kanso-bars--labelled .kanso-bars__plot{margin-top:var(--k-sp-6)}
+.kanso-bars__bar{position:relative;display:flex;flex-direction:column;justify-content:flex-end;flex:none;width:var(--k-sp-hair);height:calc(var(--k-share) * 100%);min-height:var(--k-sp-hair);background:color-mix(in srgb,var(--muted) 55%,transparent)}
+.kanso-bars__bar.kanso-bars__bar--peak{width:3px;background:var(--accent)}
+.kanso-bars__bar.kanso-bars__bar--low{background:color-mix(in srgb,var(--blocked) 70%,transparent)}
+.kanso-bars__bar.kanso-bars__bar--empty{background:var(--border)}
+.kanso-bars__part{display:block;height:calc(var(--k-share) * 100%);background:var(--working)}
+.kanso-bars__label{position:absolute;bottom:calc(100% + var(--k-sp-1));left:50%;transform:translateX(-50%);font-size:var(--k-fs-meta);color:var(--fg);white-space:nowrap}
+.kanso-bars__ticks{display:flex;justify-content:space-between;margin-top:var(--k-sp-1);font-size:var(--k-fs-meta);color:var(--dim)}
+.kanso-bars--filled .kanso-bars__bar{flex:1;width:auto;border-radius:var(--k-sp-hair);background:color-mix(in srgb,var(--fg) 28%,transparent)}
+.kanso-bars--filled .kanso-bars__bar.kanso-bars__bar--peak{background:var(--fg)}
+.kanso-bars--filled .kanso-bars__bar.kanso-bars__bar--empty{background:var(--w7)}
+.kanso-meter{height:var(--k-sp-1);border-radius:var(--k-sp-hair);background:var(--w7)}
+.kanso-meter__fill{display:block;width:calc(var(--k-share) * 100%);height:100%;border-radius:inherit;background:color-mix(in srgb,var(--fg) 50%,transparent)}
+.kanso-days{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,var(--k-sp-2));grid-auto-columns:var(--k-sp-2);gap:var(--k-sp-1)}
+.kanso-days__day{border-radius:var(--k-sp-hair);background:var(--w7)}
+.kanso-days__day.kanso-days__day--none{background:transparent}
+.kanso-days__day.kanso-days__day--1{background:color-mix(in srgb,var(--fg) 25%,transparent)}
+.kanso-days__day.kanso-days__day--2{background:color-mix(in srgb,var(--fg) 45%,transparent)}
+.kanso-days__day.kanso-days__day--3{background:color-mix(in srgb,var(--fg) 68%,transparent)}
+.kanso-days__day.kanso-days__day--4{background:var(--fg)}

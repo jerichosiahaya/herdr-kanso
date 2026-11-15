@@ -1,5 +1,6 @@
 {
   "missing": [
+    "bars",
     "card",
     "chord",
     "code",
@@ -15,8 +16,10 @@
     "failureLine",
     "found",
     "glyph",
+    "heatmap",
     "keyPicked",
     "markdown",
+    "meter",
     "metric",
     "paneName",
     "plus",
@@ -45,7 +48,7 @@
     "keyHint": { "app": ["font"] },
     "needsItem": { "app": ["onClick", "tip"] },
     "keycap": { "storybook": ["hover", "label", "state", "units"] },
-    "row": { "storybook": ["glint", "letter", "level", "open"], "app": ["focusHandle", "onClick", "onHover", "onKey"] },
+    "row": { "storybook": ["glint", "letter", "level", "open", "verbs"], "app": ["focusHandle", "onClick", "onHover", "onKey"] },
     "statusItem": { "app": ["onClick", "tip"] },
     "tabs": { "storybook": ["icon", "items", "label", "value"], "app": ["collapsed", "spoken"] },
     "toggle": { "storybook": ["checked"] }
