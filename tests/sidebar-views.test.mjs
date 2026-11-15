@@ -28,7 +28,7 @@ async function sidebar(state) {
   const { Spaces } = await load("kanso-spaces/main.js", ["Spaces"], {
     div: node, image: node, h_flex: node, v_flex: node,
     svg: (path) => { icons.push(path); return node(); },
-    Popover: { new: node }, Toggle: { new: node }, Button: { new: (x) => { ids.push(x); return node(); } },
+    Popover: { new: node }, Toggle: { new: node }, Button: { new: (x) => node().id(x) },
     InputState: { new: () => field }, Input: { new: node },
     theme: () => ({ foreground: "#fff", muted: "#888", dim: "#666", chrome: "#111", hover: "#222", input: "#333", ansi2: "#0f0", blocked: "#c44", border: "#333", raised: "#222", accent: "#09f" }),
     shared: (key) => (key === "kanso.registry" ? state.registry ?? [] : null), setShared: () => {},
@@ -200,17 +200,19 @@ test("Threads lists active, finished, snoozed and settled conversations, and one
 });
 
 test("away from its default, the sort stays on the toolbar and keeps working in each view", async () => {
+  const orders = await load("kanso-spaces/agents.js", ["ORDERS", "STATUS_ORDERS", "THREAD_ORDERS"], {});
   const cases = [
-    ["spaces", { order: "attention" }, "Sort: Needs you first", "order", "updated"],
-    ["agents", { statusOrder: "longest" }, "Sort: Longest in its state", "statusOrder", "latest"],
-    ["threads", { threadOrder: "started" }, "Sort: When it started", "threadOrder", "said"],
+    ["spaces", { order: "attention" }, "Sort: Needs you first", "order", "updated", orders.ORDERS],
+    ["agents", { statusOrder: "longest" }, "Sort: Longest in its state", "statusOrder", "latest", orders.STATUS_ORDERS],
+    ["threads", { threadOrder: "started" }, "Sort: When it started", "threadOrder", "said", orders.THREAD_ORDERS],
   ];
-  for (const [view, own, tip, key, rest] of cases) {
-    const drawn = await sidebar({ view, own, agents: [agent("t1", { status: "working" })], threads: {} });
-    assert.equal(drawn.ids.includes("spaces-order"), true, view);
+  for (const [view, own, tip, key, rest, list] of cases) {
+    const drawn = await sidebar({ view, own: { ...own, orderOpen: true }, agents: [agent("t1", { status: "working" })], threads: {} });
+    assert.equal(drawn.ids.includes("spaces-tools-sort"), true, view);
     assert.equal(drawn.tips.includes(tip), true, view);
     const cx = { notify() {} };
-    const back = drawn.handlers[`on_click:spaces-order-${rest}`];
+    // The menu opens with its heading first, then the view's orders.
+    const back = drawn.handlers[`on_click:spaces-order-menu-${Object.keys(list).indexOf(rest) + 1}`];
     assert.ok(back, `${view}: its default is one press away`);
     back({}, cx);
     assert.equal(drawn.view[key], rest);

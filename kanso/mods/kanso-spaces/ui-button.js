@@ -2,7 +2,7 @@
 // Kept byte for byte by `npm run sync:share`: edit kanso-panel/ui-button.js.
 import { div, svg } from "gpui-kit";
 import { v_flex, Button } from "gpui-base";
-import { G, H, R, T, ICON, ICON_ROW, ICON_INLINE, SPIN, ARM_MS, WASH, CLEAR, glyphOf, mix, well } from "./ui.js";
+import { G, H, R, T, ICON, ICON_ROW, ICON_INLINE, ICON_CHROME, SPIN, ARM_MS, WASH, CLEAR, glyphOf, mix, well } from "./ui.js";
 
 const filled = (fill, ink, c) => ({ fill, ink, hover: mix(fill, c.background, WASH.hover), press: mix(fill, c.background, WASH.press) });
 /** The armed look: the accent fill, its hover and press washes, the accent foreground. */
@@ -14,11 +14,12 @@ const LOOKS = {
   icon: (c) => ({ fill: null, ink: c.muted, hover: c.subtle, press: c.selected }),
 };
 
-/** An icon button's square and glyph: sm is a row's tool, compact sits in a field, md everywhere else. */
+/** An icon button's square and glyph: sm is a row's tool, compact sits in a field, lg is the window chrome's tool, md everywhere else. */
 const SQUARES = Object.freeze({
   sm: Object.freeze({ side: H.badge, glyph: ICON_INLINE }),
   compact: Object.freeze({ side: H.compact, glyph: ICON }),
   md: Object.freeze({ side: H.icon, glyph: ICON }),
+  lg: Object.freeze({ side: H.line, glyph: ICON_CHROME }),
 });
 
 export const pressAgain = (verb) => `Press again to ${verb}`;
@@ -31,7 +32,7 @@ export function armedLabel(label, verb, on, text, { start = false } = {}) {
 }
 
 /** solid: the one primary action; tonal: a wash, no edge; quiet: text only; icon: `label` is its tip. `icon`: a name in kanso-chrome's icons, or a path.
- * `size`: "sm" draws the small form, an icon button at the row's 20 with a 12 glyph. `verb`: the action asks twice; `armed` fills it with the accent and reads "Press again to <verb>". */
+ * `size`: "sm" draws the small form, an icon button at the row's 20 with a 12 glyph; "lg" an icon button at 32 with a 17 glyph. `verb`: the action asks twice; `armed` fills it with the accent and reads "Press again to <verb>". */
 export function button(id, label, onClick, c, { kind = "solid", icon = null, small = false, size = null, disabled = false, spoken = label, verb = null, armed = false, active = false, spin = false, color = null } = {}) {
   const square = kind === "icon", on = armed && !disabled;
   const look = disabled ? { fill: kind === "quiet" ? null : well(c), ink: c.dim }
