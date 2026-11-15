@@ -58,7 +58,7 @@ export const code = ({ text, kind, first, line }) => {
     if (sign === 'hunk') return `<div class="${classes}">${escape(source)}</div>`;
     if (kind === 'log') return `<div class="${classes}"><span class="kanso-code__number"></span><span class="kanso-code__sign"> </span>${failure.test(source) ? `<span class="kanso-text--blocked">${escape(source)}</span>` : escape(source)}</div>`;
     const body = sign || (kind === 'diff' && source[0] === ' ') ? source.slice(1) : source;
-    return `<div class="${classes}"><span class="kanso-code__number">${first + index}</span><span class="kanso-code__sign">${sign === 'added' ? '+' : sign === 'deleted' ? '-' : ' '}</span>${kind === 'source' ? highlight(body) : escape(body)}</div>`;
+    return `<div class="${classes}"><span class="kanso-code__number">${first + index}</span><span class="kanso-code__sign">${sign === 'added' ? '+' : sign === 'deleted' ? '-' : ' '}</span><span class="kanso-code__text">${kind === 'source' ? highlight(body) : escape(body)}</span></div>`;
   }).join('');
   return `<div class="kanso-code">${rows}</div>`;
 };

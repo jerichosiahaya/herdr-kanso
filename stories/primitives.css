@@ -266,6 +266,7 @@
 .kanso-markdown__source{font:var(--k-fs-body)/var(--k-lh-code) var(--mono);white-space:pre-wrap;margin-top:var(--k-sp-3);color:var(--fg)}
 .kanso-code{font:var(--k-fs-mono)/var(--k-lh-line) var(--mono);white-space:pre;overflow:hidden}
 .kanso-code__line{display:flex;padding-right:var(--k-sp-4)}
+.kanso-code__text{min-width:0}
 .kanso-code--source{margin:var(--k-sp-3) calc(-1 * var(--k-sp-4)) 0;padding:0 var(--k-sp-4) 0 0;font:var(--k-fs-body)/var(--k-lh-code) var(--mono);color:var(--fg)}
 .kanso-code--source .kanso-row__name{display:inline-block;width:30px;padding-right:var(--k-sp-3);text-align:right;color:var(--dim)}
 .kanso-code--source .kanso-control--current{display:block;background:var(--w4)}
