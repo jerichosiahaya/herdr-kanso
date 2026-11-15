@@ -50,10 +50,10 @@ export const statusPanels = ({ open = '' } = {}) => [
   statusItem({ icon: 'lu-git-pull-request', text: 2, open: open === 'reviews' }),
 ];
 
-// The Keyboard's sample layers: kansō's own keys file for each computer, read by the app's keymap; of Herdr's keys, only the two the stories name.
+// The Keyboard's sample layers: kansō's own keys file for each computer, read by the app's keymap; of Herdr's keys, only ⌘T, the one the design names.
 const bindingsOf = (file, herdr = []) => [...Object.entries(file).flatMap(([section, keys]) => Object.entries(keys).map(([chord, action]) => ({ section, keys: chord, action }))), ...herdr];
 const keyFiles = {
-  mac: bindingsOf(keyFile, [{ section: 'global', keys: 'cmd-t', action: 'tab.new' }, { section: 'global', keys: 'cmd-k', action: 'app.palette' }]),
+  mac: bindingsOf(keyFile, [{ section: 'global', keys: 'cmd-t', action: 'tab.new' }]),
   windows: bindingsOf(windowsKeyFile),
   linux: bindingsOf(keyFile),
 };
@@ -65,3 +65,9 @@ export const keyLayer = (os = 'mac', mods = 'alt cmd') => {
   const keys = Object.fromEntries([...found].map(([key, does]) => [key, { kind: lists ? 'list' : does.section === 'global' ? 'herdr' : 'kanso', does: describe(does.action), ...(lists ? { chord: does.chord.split(' ') } : {}) }]));
   return { held, lists, name: lists ? 'Every list and menu · j k gg G Enter /' : null, keys };
 };
+
+// Two notices already on screen when the story adds one.
+export const sampleNotices = [
+  { state: 'done', home: 'agent', text: 'docs finished: Added docs/limits.md and the table' },
+  { state: 'waits', home: 'pr', text: '#142 · test / unit failed' },
+];

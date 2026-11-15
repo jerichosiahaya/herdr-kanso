@@ -140,6 +140,13 @@ export const guidelines = {
     ["Shizen", "The sun rises once.", "When the window opens in Dawn Mode or on switching to it, 2.6 s, then still. Reduced motion shows the last frame. Every copy plays together."],
     ["Kokō", "One press switches.", "Settings · Updates: Stable Mode or Dawn Mode as Tabs on a track. Dawn Mode says it can break, with Star on GitHub; the Dawn sky switch follows."],
   ],
+  "Compositions/Notifications": [
+    ["Kansō", "A fact, its state, its home.", "A notice is built from three things only: the state (waits, done, failed, fact), the home a click goes to, and one sentence that names who or what it is about. No notice is drawn case by case."],
+    ["Kansō", "Where you are decides.", "Home in view: nothing is sent, the home says it. A kansō window on screen: a Toast. No kansō window: the computer's own notification, which kansō does not draw; it gets the sentence as its title and the detail as its text."],
+    ["Seijaku", "The lead says where and how.", "The home's icon in the state's colour; an agent, which has no icon, leads with its mark; a failure always leads with the blocked mark, as everywhere."],
+    ["Kokō", "One word, only for a different act.", "A click goes to the home. A word shows only when the act differs (Undo, Update, Refresh); a failure always has its fix. The detail, the tool's words or the context, is the toast's tooltip."],
+    ["Shizen", "Up to three.", "The newest at the bottom; a fourth makes the oldest leave."],
+  ],
   "Compositions/Keyboard": [
     ["Kansō", "One layer at a time.", "The map shows the keys of the held modifiers. Holding or clicking a modifier picks the layer; pressing a key picks it. Lists, in the picked key, opens the layer of every list and menu."],
     ["Seijaku", "Built from the kit.", "Rows of Keys on the canvas ground, the Picked key beside them. A key is a row tall; a wider key spans its units and the gaps between them."],

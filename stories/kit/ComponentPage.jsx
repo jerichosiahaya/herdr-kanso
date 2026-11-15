@@ -44,7 +44,7 @@ export function ComponentPage({ of, page }) {
     </table></>}
     {(sections[page] ?? []).map(([title, text]) => <React.Fragment key={title}><h2>{title}</h2><Markdown>{text}</Markdown></React.Fragment>)}
     {guidelines[page] && <><h2>Design guidelines</h2><ul className="kanso-docs__guidelines">{guidelines[page].map(([principle, rule, detail]) => <li key={rule}><span className="kanso-docs__principle">{principle}</span> <b>{rule}</b> <Markdown options={{ forceInline: true }}>{detail}</Markdown></li>)}</ul></>}
-    {hypotheses[page] && <><h2>Hypotheses</h2><ul className="kanso-docs__guidelines">{hypotheses[page].map(({ change, believe, wrong }) => <li key={change}><b>{change}</b> We believe {believe} <em>Wrong if</em> {wrong}</li>)}</ul></>}
+    {hypotheses[page] && <><h2>Hypotheses</h2><ul className="kanso-docs__guidelines">{hypotheses[page].map(({ change, today, why, question, believe, jobs, wrong, try: first, back }) => <li key={change}><b>{change}</b> Unproven.<br /><em>Today</em> {today}<br /><em>Why it is there</em> {why}<br /><em>Question</em> {question}<br /><em>We believe</em> {believe}<br /><em>Each job goes to</em> {jobs.map(([job, home]) => `${job}: ${home}`).join('; ')}.<br /><em>Wrong if</em> {wrong}<br /><em>Try</em> {first}<br /><em>Return</em> {back}</li>)}</ul></>}
     {notes.length > 0 && !playgrounds[page] && <><h2>Guidelines</h2>{notes.map((id) => <Markdown className="kanso-docs__note" key={id}>{content(id)}</Markdown>)}</>}
     <h2>Prompt for agents</h2>
     <button className="kanso-button kanso-button--solid" type="button" onClick={async () => { await navigator.clipboard.writeText(prompt); setCopied(true); }}>{copied ? 'Copied' : 'Copy prompt'}</button>

@@ -1,8 +1,8 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, pickedKey, shortcutRow, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, asleep, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, pickedKey, shortcutRow, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, edge, failureMenu, header, layoutPaused, paletteDoor, panelDoors, projectRow, section, sessionRow, sidebarFooter, statusBar, tabBar, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycap, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, needsItem, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, statusItem, stepper, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
-import { keyLayer, keyLayerMods, sampleSidebar, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, sampleNotices, sampleSidebar, statusMenus, statusPanels } from './samples.js';
 
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
@@ -171,6 +171,25 @@ export const playgrounds = {
     },
     markup: ({ channel, art, collapsed }) => `<p class="kanso-story__caption">Sidebar header</p>${header({ collapsed, dawn: channel === 'dawn', art })}`
       + `<p class="kanso-story__caption">Settings · Updates</p><div class="kanso-story__slice kanso-story__settings">${channelSettings({ channel, art })}</div>`,
+  },
+  'Compositions/Notifications': {
+    args: { state: 'failed', home: 'agent', text: 'Can\'t reach devbox', act: 'Refresh', detail: 'ssh: connect to host devbox port 22: Connection refused', place: 'window on screen', stacked: 1 },
+    argTypes: {
+      state: select('state', noticeStates),
+      home: select('home', noticeHomes),
+      text: { name: 'sentence', control: { type: 'text' } },
+      act: { name: 'word to act', control: { type: 'text' } },
+      detail: { name: 'detail', control: { type: 'text' } },
+      place: { name: 'where you are', control: { type: 'inline-radio' }, options: noticePlaces },
+      stacked: { name: 'on screen', control: { type: 'inline-radio' }, options: [1, 2, 3], if: { arg: 'place', eq: 'window on screen' } },
+    },
+    markup: ({ stacked, place, act, detail, ...args }) => {
+      const item = { ...args, act: act || null, detail: detail || null, place };
+      const sent = systemMessage(item);
+      if (sent) return `<p class="kanso-story__caption">Sent to the computer's notifications</p><p class="kanso-story__caption">Title: ${escape(sent.title)}</p>${sent.body ? `<p class="kanso-story__caption">Text: ${escape(sent.body)}</p>` : ''}`;
+      if (place !== 'window on screen') return '<p class="kanso-story__caption">Not sent: its home is on screen.</p>';
+      return toastStack({ notices: [...sampleNotices, item].slice(-stacked) });
+    },
   },
   'Compositions/Keyboard/Key': {
     args: { label: 'H', units: 1, state: 'kanso', hover: false },

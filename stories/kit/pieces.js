@@ -173,12 +173,15 @@ export const levels = { error: 'blocked', warning: 'working', success: 'done', i
 const lead = (level) => level === 'error' ? '<svg class="kanso-mark kanso-mark--blocked" aria-hidden="true"><use href="#e-blk"/></svg>'
   : level === 'success' ? '<svg class="kanso-icon kanso-icon--row kanso-text--done" aria-hidden="true"><use href="#lu-check"/></svg>'
   : `<i class="kanso-toast__dot kanso-fill--${levels[level]}"></i>`;
-export const toast = ({ level, icon, title, body, action, explain }) => {
+// `mark` stands in for the level's mark; `tone` colours an icon apart from the level; `detail` is the tool's words, in the tooltip.
+export const toast = ({ level = 'info', icon = 'none', title, body, action, explain, mark: status, tone, detail }) => {
   const fix = action ? button({ label: action, kind: 'tonal', size: 'sm' }) : '';
   const ask = explain ? explainButton({ agent: explain, size: 'sm' }) : '';
   const text = body ? `<span class="kanso-toast__text"><span>${escape(title)}</span><span class="kanso-toast__body">${escape(body)}</span></span>` : `<span class="kanso-content__text">${escape(title)}</span>`;
-  return `<div class="kanso-toast kanso-popover${body ? ' kanso-toast--two-lines' : ''}" role="status">${icon === 'none' ? lead(level) : glyph(icon).replace('class="', `class="kanso-text--${levels[level]} `)}${text}${fix}${ask}</div>`;
+  const head = status ? mark({ status }) : icon === 'none' ? lead(level) : glyph(icon).replace('class="', `class="kanso-text--${tone || levels[level]} `);
+  return `<div class="kanso-toast kanso-popover${body ? ' kanso-toast--two-lines' : ''}" role="status"${detail ? ` title="${escape(detail)}"` : ''}>${head}${text}${fix}${ask}</div>`;
 };
+
 
 // Explain to <agent>: the bot icon and the agent named in words.
 export const explainButton = ({ agent, size = 'md' }) => button({ label: `Explain to ${agent}`, kind: 'tonal', size, icon: 'lu-bot' });
@@ -267,6 +270,7 @@ export const stacks = {
   keyboard: { block: 'kanso-keyboard' },
   'keyboard row': { block: 'kanso-keyboard__row' },
   'keyboard layout': { block: 'kanso-keyboard__layout' },
+  toasts: { block: 'kanso-toasts' },
 };
 export const stack = ({ variant, on = false, ...flags }, ...children) => {
   if (!Object.hasOwn(stacks, variant)) throw new Error(`stack: unknown variant "${variant}"`);

@@ -91,3 +91,5 @@
 .kanso-keyboard__meaning.kanso-text--muted{color:var(--muted)}
 .kanso-keyboard__layer{font-size:var(--k-fs-meta);color:var(--dim)}
 .kanso-keyboard__selection>.kanso-actions{display:flex;flex-wrap:wrap;margin-top:var(--k-sp-1);gap:var(--k-sp-2)}
+/* Notifications: toasts stack at the corner, the newest at the bottom. */
+.kanso-toasts{display:flex;flex-direction:column;align-items:flex-end;gap:var(--k-sp-2)}

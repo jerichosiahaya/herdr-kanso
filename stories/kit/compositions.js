@@ -1,5 +1,5 @@
 // The kit's compositions: each one only calls pieces with its own props and draws no markup.
-import { avatar, button, chip, chord, dawn, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, windowControls } from './pieces.js';
+import { avatar, button, chip, chord, dawn, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './pieces.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
 const more = (open) => stack({ variant: 'toolbar group', open }, tool(open ? 'lu-chevron-up' : 'lu-chevron-down', open ? 'Fewer tools' : 'More tools'), open ? [tool('lu-arrow-up-down', 'Sort'), tool('lu-search', 'Search')] : null);
@@ -46,7 +46,9 @@ export const viewSwitch = ({ view = 'spaces', column = false, open = false } = {
   return stack({ variant: 'view switch' }, button({ label: current.label, kind: 'icon', size: 'lg', icon: current.icon, active: open }), list);
 };
 
-export const sidebarFooter = ({ update = null } = {}) => stack({ variant: 'footer' }, update ? row({ icon: 'lu-refresh-cw', name: update }) : null, row({ icon: 'lu-settings', name: 'Settings' }), row({ icon: 'lu-server', name: 'Add computer' }));
+// The update's one icon: the footer row that runs it and every notice about it.
+export const updateIcon = 'lu-refresh-cw';
+export const sidebarFooter = ({ update = null } = {}) => stack({ variant: 'footer' }, update ? row({ icon: updateIcon, name: update }) : null, row({ icon: 'lu-settings', name: 'Settings' }), row({ icon: 'lu-server', name: 'Add computer' }));
 
 export const tile = ({ initial = null, tone = 'teal', status = 'none', count = 0, open = false }) => stack({ variant: 'rail tile', on: open },
   initial ? avatar({ initial, tone, size: 'md' }) : mark({ status, size: 'lg' }), count ? chip({ label: count, quiet: true, tone: status === 'blocked' ? 'blocked' : null }) : null);
@@ -60,7 +62,7 @@ export const computerItem = ({ name, remote = true, state = 'on', folded = false
 
 export const stepperMenu = () => menu({ title: 'Panes per view', items: [{ icon: 'lu-move-horizontal', label: 'Even out', hint: '⌘⇧0' }, ...pieceLines] });
 // The command palette's only pointer door; its key is in the tooltip.
-export const paletteDoor = () => button({ label: 'Command palette ⌘K', kind: 'icon', size: 'sm', icon: 'lu-command' });
+export const paletteDoor = () => button({ label: 'Command palette ⌘⇧P', kind: 'icon', size: 'sm', icon: 'lu-command' });
 export const layoutPaused = () => failureLine({ text: 'Layout paused', fix: 'Resume', detail: 'layout write refused 3 times' });
 
 // A failing row's right-click Menu: the source's words, the fixes, Explain, then the piece lines.
@@ -181,3 +183,19 @@ export const shortcutRow = ({ name, chords = [], state = 'rest', taken = null, h
     second: state === 'taken' ? phrase(taken.chord, 'already does', taken.name, '· Esc keeps yours') : null,
     action: { changed: { label: 'Reset', kind: 'quiet' }, taken: { label: 'Take it', kind: 'quiet', armed: true, verb: 'take it' } }[state] ?? null }),
   state === 'failed' ? failureBlock({ text: phrase('Couldn\'t save', chords[0], 'for', name), source, fix: 'Change', agent }) : null);
+
+// Notifications. A notice is a fact with a state and a home; where you are decides whether it is said, and how.
+// The lead is the home's icon in the state's colour; an agent has no icon, so its mark; a failure is always the blocked mark.
+export const noticeStates = ['waits', 'done', 'failed', 'fact'];
+export const noticePlaces = ['home in view', 'window on screen', 'away'];
+const noticeIcons = { ...Object.fromEntries(panelDoors.map(({ key, icon }) => [key, icon])), update: updateIcon };
+export const noticeHomes = ['agent', ...Object.keys(noticeIcons)];
+const noticeTone = { waits: 'blocked', done: 'done', failed: 'blocked', fact: 'muted' };
+const noticeMark = { waits: 'blocked', done: 'done', failed: 'blocked', fact: 'idle' };
+const noticeLead = ({ state, home }) => state === 'failed' || !noticeIcons[home] ? { mark: noticeMark[state] } : { icon: noticeIcons[home], tone: noticeTone[state] };
+// The detail is the tool's words or the context, in the toast's tooltip. Away, the computer draws it: kansō only gives the words.
+export const notice = ({ state = 'fact', home = 'agent', text, act = null, detail = null, place = 'window on screen' }) => place === 'window on screen'
+  ? toast({ ...noticeLead({ state, home }), title: text, action: act, detail }) : null;
+export const systemMessage = ({ text, detail = null, place = 'window on screen' }) => place === 'away' ? { title: text, body: detail } : null;
+// Up to three on screen, the newest at the bottom.
+export const toastStack = ({ notices = [], max = 3 }) => stack({ variant: 'toasts' }, notices.slice(-max).map((item) => notice(item)));
