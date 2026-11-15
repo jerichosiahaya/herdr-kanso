@@ -3,7 +3,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { load, chain, gpuiHost } from "./helpers.mjs";
 
-const kit = async () => ({ ...await load("kanso-panel/ui.js", ["mix", "WASH", "tokens", "G", "H", "R", "T", "ICON", "ICON_ROW"], gpuiHost()), ...await load("kanso-panel/ui-button.js", ["button", "quietLink", "iconButton"], gpuiHost()) });
+const kit = async () => ({ ...await load("kanso-panel/ui.js", ["mix", "WASH", "tokens", "G", "H", "R", "T", "ICON", "ICON_ROW", "ICON_INLINE"], gpuiHost()), ...await load("kanso-panel/ui-button.js", ["button", "quietLink", "iconButton"], gpuiHost()) });
 
 const calls = (el, name) => el.calls.filter((call) => call[0] === name);
 const one = (el, name) => {
@@ -142,4 +142,17 @@ test("quietLink and iconButton are the quiet and icon kinds", async () => {
   assert.equal(one(icon, "h"), H.icon);
   assert.equal(one(icon, "bg"), c.selected);
   assert.equal(one(icon.kids[0], "size"), ICON);
+});
+
+test("A small icon button is the row's tool, 20 with a 12 glyph, and the field's small icon and the plain one keep 24 and 26 with 15", async () => {
+  const { button, tokens, H, T, ICON, ICON_INLINE } = await kit();
+  const c = tokens(night);
+  const side = (o) => { const el = button("i", "Pin", () => {}, c, { kind: "icon", icon: "pin", ...o }); return [one(el, "h"), one(el, "w"), one(el.kids[0], "size")]; };
+  assert.deepEqual([H.badge, ICON_INLINE], [20, 12]);
+  assert.deepEqual(side({ size: "sm" }), [H.badge, H.badge, ICON_INLINE]);
+  assert.deepEqual(side({ small: true }), [H.compact, H.compact, ICON]);
+  assert.deepEqual(side({}), [H.icon, H.icon, ICON]);
+  const text = button("w", "Wake", () => {}, c, { kind: "quiet", size: "sm" });
+  assert.equal(one(text, "h"), H.compact, "a small text button is the compact one");
+  assert.equal(one(text.kids.at(-1), "text_size"), T.body);
 });
