@@ -53,6 +53,19 @@ export const hypotheses = {
       back: 'Rename and the piece lines leave the menu.',
     },
   ],
+  'Compositions/New conversation menu': [
+    {
+      change: 'Every + opens one menu: Terminal and the agents by number, then New project, New worktree, Open worktree and Arrange.',
+      today: 'the agents installed, the last used saying last, Terminal, and In a new worktree; New project, the worktrees and Arrangements each live elsewhere.',
+      why: 'one place to start a conversation in a project.',
+      question: 'why must someone look in three places to start a terminal, a project, a worktree or an arrangement, when each starts from the same +?',
+      believe: 'every way in behind one +, with its key, starts work in one press, and the last agent used stays the first choice under the keys.',
+      jobs: [['each agent and Terminal', 'stay, with a number or ⌘T'], ['the last agent used', 'where the keys start'], ['In a new worktree', 'New worktree…'], ['open a worktree, New project, Arrangements', 'the items after the rule']],
+      wrong: 'someone misses the word last, or the menu takes longer to read than today.',
+      try: 'Dawn Mode first.',
+      back: 'the menu returns to the agents, Terminal and In a new worktree, with last.',
+    },
+  ],
   'Compositions/Agent menu': [
     {
       change: 'The agent menu adds Sleep its tab and the piece lines, and groups its items: open and name, keep, put away, close.',

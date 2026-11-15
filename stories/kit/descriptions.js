@@ -23,7 +23,7 @@ export const descriptions = {
   Header: 'The top of the sidebar: the window’s lights and the toolbar, open or collapsed.',
   'Add computer dialog': 'Another computer for your agents: a host from your ssh config, or one you type.',
   'Open with menu': 'The editors that can open a file or a folder, here or on another computer.',
-  'New conversation menu': 'What a new conversation in a project can run: its agents, Terminal, a new worktree.',
+  'New conversation menu': 'What every + starts in a place: a terminal, an agent installed there, a project, a worktree, an arrangement.',
   'Computer menu': 'What you can do to one computer, from its row.',
   'Project menu': 'What you can do to one project, from its row: start in it, open a worktree, put it away.',
   'Settings menu': 'Where Settings in the footer leads: kansō’s, Herdr’s, and Herdr’s update.',

@@ -162,8 +162,10 @@ export const openWithCases = {
 };
 const openWithEditors = ({ target, keys, failed }) => (target ? sampleEditors[target].map((item, index) => ({ ...item, key: keys && index < 3 ? String(index + 1) : null, chosen: keys && !index, failed: item.name === failed })) : []);
 export const newInCases = {
-  agents: { agents: sampleInstalled }, reading: { reading: true }, 'none installed': { none: 'No agents found on devbox' },
-  'search refused': { failure: { text: "Can't list agents on devbox", source: 'ssh: connection timed out', fix: 'Refresh' } },
+  installed: { agents: sampleInstalled }, 'checking again': { place: 'devbox · api', agents: sampleInstalled.slice(0, 1), checking: true },
+  'first read': { place: 'devbox · api', reading: true },
+  'did not answer': { place: 'devbox · api', failure: { text: "Can't list agents on devbox", source: 'agent list: timed out after 10 s', fix: 'Refresh' } },
+  'none installed, not a repository': { place: 'notes', repository: false },
 };
 const openWithCaptions = {
   'a file': 'The editors that open it; terminal editors after the rule.', 'a folder': 'Folders open in code editors and terminals.', 'a picture': 'Pictures open in Images first.',
@@ -171,14 +173,16 @@ const openWithCaptions = {
   'no editor': 'Nothing here opens it.', 'did not open': 'The chosen editor refused: its mark stays on it.', 'search refused': "The search failed: the tool's words, Refresh, Explain.",
 };
 const newInCaptions = {
-  agents: 'The agents installed there, the last one used marked.', reading: 'The agents are being read.', 'none installed': 'No agent there; Terminal still opens.',
-  'search refused': "The computer did not answer: the tool's words, Refresh, Explain.", 'pick a project': '+ on Status and Threads, with several projects: pick where first.',
+  installed: 'Terminal first, then each program installed there with its number; the last used is where the keys start.',
+  'checking again': 'The last list stays while the computer is asked again.', 'first read': 'Nothing read yet: two items breathe in place.',
+  'did not answer': "The computer did not answer: the failure block in the programs' place.", 'none installed, not a repository': 'Terminal, New project and Arrange only.',
+  'pick a project': '+ on Status and Threads, with several projects: pick where first.',
 };
 // What a computer's switch or sync refusal says.
 const computerRefusals = {
   nothing: null,
-  power: { text: 'devbox was not changed' },
-  sync: { text: 'Sync devbox was not changed' },
+  power: { text: 'devbox was not changed', fix: 'Turn on' },
+  sync: { text: 'Sync devbox was not changed', fix: 'Sync' },
 };
 const capitalized = (text) => text[0].toUpperCase() + text.slice(1);
 const worktreePlace = { here: '~/.kanso/worktrees/kansō-app-audit', devbox: 'devbox · ~/.kanso/worktrees/kansō-app-audit' };
@@ -226,8 +230,8 @@ export const statedPages = {
     states: Object.keys(openWithCases).map((situation) => ({ label: capitalized(situation), args: { situation }, caption: openWithCaptions[situation] })),
   },
   'Compositions/New conversation menu': {
-    args: { situation: 'agents' },
-    markup: ({ situation }) => (situation === 'pick a project' ? sampleAddMenu() : newInMenu({ project: 'acme-shop', agent: sampleAgent, ...newInCases[situation] })),
+    args: { situation: 'installed' },
+    markup: ({ situation }) => (situation === 'pick a project' ? sampleAddMenu() : newInMenu({ place: 'acme-shop', agent: sampleAgent, ...newInCases[situation] })),
     states: [...Object.keys(newInCases), 'pick a project'].map((situation) => ({ label: capitalized(situation), args: { situation }, caption: newInCaptions[situation] })),
   },
   'Compositions/Computer menu': {
@@ -240,8 +244,8 @@ export const statedPages = {
       { label: 'Off', args: { state: 'off' }, caption: 'Turn on leads.' },
       { label: 'Unreachable', args: { state: 'unreachable' }, caption: 'Refresh and Sign in lead.' },
       { label: 'Sign in', args: { state: 'sign in' }, caption: 'ssh asks for a sign-in: here, or the command to copy.' },
-      { label: 'Power refused', args: { state: 'off', refused: 'power' }, caption: 'Turning it on was refused: our words lead, Turn on stays under them.' },
-      { label: 'Sync refused', args: { refused: 'sync' }, caption: 'Sync was refused and stays as it was: our words lead, Sync stays under them.' },
+      { label: 'Power refused', args: { state: 'off', refused: 'power' }, caption: 'Turning it on was refused: the failure block leads, Turn on is its fix.' },
+      { label: 'Sync refused', args: { refused: 'sync' }, caption: 'Sync was refused and stays as it was: the failure block leads, Sync is its fix.' },
     ],
   },
   'Compositions/Project menu': {

@@ -811,10 +811,10 @@
   "spaces/NewConversation": {
     "page": "Compositions/New conversation menu",
     "states": {
-      "Loading programs": "kit/New conversation menu/Reading",
-      "No programs": "kit/New conversation menu/None installed",
-      "Probe failed": "kit/New conversation menu/Search refused",
-      "Programs": "kit/New conversation menu/Agents",
+      "Loading programs": "kit/New conversation menu/First read",
+      "No programs": "kit/New conversation menu/None installed, not a repository",
+      "Probe failed": "kit/New conversation menu/Did not answer",
+      "Programs": "kit/New conversation menu/Installed",
       "Project picker": "kit/New conversation menu/Pick a project"
     }
   },

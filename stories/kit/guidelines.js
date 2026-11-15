@@ -90,8 +90,9 @@ export const guidelines = {
     ["Kokō", "A refusal stays where it happened.", "An editor that did not open keeps the blocked mark; a failed search leads with our words, the tool's words, Refresh and Explain."],
   ],
   "Compositions/New conversation menu": [
-    ["Kansō", "A use of Menu.", "The agents installed in the project, the last used marked, then Terminal, then In a new worktree. With several projects, + asks where first."],
-    ["Shizen", "Read while it opens.", "The agents breathe in their place until the computer answers; Terminal is there at once."],
+    ["Kansō", "A use of Menu, behind every +.", "The place as its heading; Terminal with ⌘T; the agents installed there, numbered from 1; then New project, New worktree, Open worktree; then Arrange with ⌥⌘T. The approved drawing is on The + menu."],
+    ["Kokō", "Only what the place can do.", "No agent installed, no agent group; not a repository, no worktree items. The last agent used is where the keys start. With several projects, + on Status and Threads asks where first."],
+    ["Shizen", "Read while it opens.", "Terminal is there at once. The first read breathes two items in place; checking again keeps the last list with the working mark on the heading; no answer puts the failure block in their place."],
   ],
   "Compositions/Computer menu": [
     ["Kansō", "A use of Menu.", "The computer's name as its title; name it, power it, sync it, start a project on it, add another; then the piece lines."],
@@ -238,6 +239,7 @@ export const guidelines = {
     ["Kansō", "What it does, then its keys.", "A Row with the action's words and a Key hint per chord; a family is one row (⌃⇧1–9), a pair shares one. A row with no key shows No key, faint."],
     ["Kokō", "Change on the row.", "A click captures: the hint breathes in the accent and the row says Esc keeps · ⌫ removes. Nothing else moves."],
     ["Kokō", "A taken chord asks twice.", "The second line says which action has it; Take it is Armed for 4 s, Esc keeps yours."],
+    ["Kokō", "A family needs its digit.", "A key with no digit for a numbered family keeps capturing; the second line says Press a key with a digit from 1 to 9: N takes its place."],
     ["Shizen", "Reset only when changed.", "A changed row shows Reset beside its keys. A refused write shows the failure pattern under the row: Change, then Explain."],
   ],
   "Compositions/Keyboard/Picked key": [

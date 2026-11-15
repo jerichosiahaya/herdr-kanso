@@ -177,26 +177,32 @@ export const snoozeMenu = ({ name, times }) => menu({ title: phrase('Snooze', na
 export const moveMenu = ({ name, projects, home }) => menu({ title: phrase('Move', name, 'to'), items: [...projects.map((label) => ({ label })), { separator: true }, { icon: 'lu-undo', label: phrase('Back to', home) }] });
 export const copyMenu = ({ folder, branch, id }) => menu({ title: 'Copy', items: [{ icon: 'lu-folder', label: 'Folder', hint: folder }, { icon: 'lu-git-branch', label: 'Branch', hint: branch }, { icon: 'lu-copy', label: 'Conversation id', hint: id }] });
 
-// A refusal inside a menu: our words with the blocked mark, the tool's words dim, the fix, then Explain.
-const failureItems = ({ text, source = null, fix = null }, agent) => [{ label: text, mark: 'blocked' }, ...(source ? [{ heading: source }] : []), ...(fix ? [{ icon: 'lu-refresh-cw', label: fix }] : []), { icon: 'lu-bot', label: phrase('Explain to', agent) }];
-// Open with: the editors that can open the file or folder, terminal editors after the rule; a refusal leads with its mark.
+// A refusal inside a menu: the failure block, first, with its fix and Explain.
+const failureItems = (failure, agent) => (failure ? [{ failure: { ...failure, agent } }] : []);
+// Open with: the editors that can open the file or folder, terminal editors after the rule; a refusal leads with its failure block.
 const editorItem = (editor) => ({ icon: editor.terminal ? 'lu-terminal' : editor.icon, label: editor.name, hint: editor.key, selected: editor.chosen, mark: editor.failed ? 'blocked' : null });
 export const openWithMenu = ({ target = null, editors = [], reading = false, none = null, failure = null, agent }) => menu({ title: target ? phrase('Open with ·', target) : 'Open with', items: [
-  ...(failure ? failureItems(failure, agent) : []),
+  ...failureItems(failure, agent),
   ...(reading ? [{ loading: true }, { loading: true }] : []),
   ...(none ? [{ heading: none }] : []),
   ...editors.filter((editor) => !editor.terminal).map(editorItem),
   ...(editors.some((editor) => editor.terminal) ? [{ separator: true }, ...editors.filter((editor) => editor.terminal).map(editorItem)] : []),
 ] });
-// New in a project: the agents installed there, Terminal, then a new worktree; the agents read while the menu opens.
-export const newInMenu = ({ project, agents = [], reading = false, none = null, failure = null, agent }) => menu({ title: phrase('New in', project), items: [
-  ...(reading ? [{ loading: true }, { loading: true }] : agents.map(({ program, name, last }) => ({ icon: program, label: name, hint: last ? 'last' : null }))),
-  ...(none ? [{ heading: none }] : []),
-  ...(failure ? failureItems(failure, agent) : []),
-  { icon: 'lu-terminal', label: 'Terminal' }, { separator: true }, { icon: 'lu-git-branch', label: 'In a new worktree…' },
+// Every + ends here: Terminal, the agents installed in the place by number, then the other ways in; the last used is where the keys start.
+// The agents read in place; checking again keeps them with the working mark; a refusal takes their place.
+const numberKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const grouped = (items) => (items.length ? [{ separator: true }, ...items] : []);
+const installedItems = ({ agents, reading, failure, agent }) => (reading ? [{ loading: true }, { loading: true }] : failure ? failureItems(failure, agent)
+  : agents.map(({ program, name, last }, index) => ({ icon: program, label: name, hint: numberKeys[index], selected: last })));
+export const newInMenu = ({ place, agents = [], reading = false, checking = false, repository = true, failure = null, agent }) => menu({ items: [
+  { heading: place, mark: checking ? 'working' : null }, { icon: 'lu-terminal', label: 'Terminal', hint: '⌘T' },
+  ...grouped(installedItems({ agents, reading, failure, agent })),
+  { separator: true }, { icon: 'lu-folder-plus', label: 'New project' },
+  ...(repository ? [{ icon: 'lu-git-branch', label: 'New worktree…' }, { icon: 'lu-git-fork', label: 'Open worktree…' }] : []),
+  { separator: true }, { icon: 'lu-panels-top-left', label: 'Arrange…', hint: '⌥⌘T' },
 ] });
 
-// A computer's menu: name it, power it, sync it, start a project on it; off or unreachable, the way back leads.
+// A computer's menu: name it, power it, sync it, start a project on it; off or unreachable, the way back leads; a refused act moves into its failure block.
 const renameItem = { label: 'Rename…' };
 const addComputerItem = { icon: 'lu-server', label: 'Add computer…' };
 const refreshItem = { icon: 'lu-refresh-cw', label: 'Refresh' };
@@ -210,7 +216,7 @@ const computerActs = {
 };
 export const computerMenuStates = Object.keys(computerActs);
 export const computerMenu = ({ name, state = 'on', sync = 'off', failure = null, agent }) => menu({ title: name, items: [
-  ...(failure ? failureItems(failure, agent) : []), ...computerActs[state](sync), ...pieceLines] });
+  ...failureItems(failure, agent), ...computerActs[state](sync).filter((item) => item.label !== failure?.fix), ...pieceLines] });
 
 // A project's menu: start in it, its worktrees, name it, put it away, remove it; asleep, its tabs wake first.
 const worktreeItem = ({ branch, place }) => ({ icon: 'lu-git-branch', label: branch, hint: place });
@@ -347,17 +353,24 @@ export const pickedKey = ({ os = 'mac', layer, picked }) => keyPicked({ chord: p
 export const keyboardExplorer = ({ os = 'mac', layer, picked, hover = null }) => stack({ variant: 'keyboard layout' }, keyboard({ os, layer, picked, hover }), pickedKey({ os, layer, picked }));
 
 // Shortcut row: what a key does and its chords. A click captures on the row; Reset brings back what kansō ships.
-export const shortcutRowStates = ['rest', 'selected', 'changed', 'unbound', 'capture', 'taken', 'failed'];
+export const shortcutRowStates = ['rest', 'selected', 'changed', 'unbound', 'capture', 'no digit', 'taken', 'failed'];
 // Each state's keys, built only for that state: a row at rest needs no taken chord.
+const recordingKeys = (chords) => (chords.length ? chords.map((text) => ({ text, recording: true })) : [{ text: 'New key', recording: true }]);
 const shortcutKeys = ({ chords, state, taken }) => ({
   unbound: () => [{ text: 'No key', faint: true }],
-  capture: () => chords.length ? chords.map((text) => ({ text, recording: true })) : [{ text: 'New key', recording: true }],
+  capture: () => recordingKeys(chords),
+  'no digit': () => recordingKeys(chords),
   taken: () => [{ text: taken.chord, recording: true }],
 }[state] ?? (() => chords.map((text) => ({ text }))))();
+// What a capture says under the row: a key someone else has, or a numbered family's key with no digit.
+const shortcutNotes = {
+  taken: (taken) => phrase(taken.chord, 'already does', taken.name, '· Esc keeps yours'),
+  'no digit': () => 'Press a key with a digit from 1 to 9: N takes its place.',
+};
 export const shortcutRow = ({ name, chords = [], state = 'rest', taken = null, hover = false, source = null, agent = null }) => list(
-  row({ name, hover, current: ['selected', 'capture', 'taken'].includes(state), keys: shortcutKeys({ chords, state, taken }),
-    meta: state === 'capture' ? 'Esc keeps · ⌫ removes' : null,
-    second: state === 'taken' ? phrase(taken.chord, 'already does', taken.name, '· Esc keeps yours') : null,
+  row({ name, hover, current: ['selected', 'capture', 'no digit', 'taken'].includes(state), keys: shortcutKeys({ chords, state, taken }),
+    meta: ['capture', 'no digit'].includes(state) ? 'Esc keeps · ⌫ removes' : null,
+    second: shortcutNotes[state]?.(taken) ?? null,
     action: { changed: { label: 'Reset', kind: 'quiet' }, taken: { label: 'Take it', kind: 'quiet', armed: true, verb: 'take it' } }[state] ?? null }),
   state === 'failed' ? failureBlock({ text: phrase('Couldn\'t save', chords[0], 'for', name), source, fix: 'Change', agent }) : null);
 
