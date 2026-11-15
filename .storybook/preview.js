@@ -47,7 +47,7 @@ const preview = {
           'Start', ['Philosophy', 'About', 'One fact, one home', 'How to read this Storybook', 'How to use the prompt for agents'],
           'Tokens', ['Colour', 'Contrast, light and dark', 'Type', 'Spacing', 'Radius', 'Motion', 'Icons'],
           'Primitives',
-          'Compositions', ['Header', 'Sidebar', 'Rail', 'Status bar', 'Bars', 'Edge and Minimap', 'State patterns'],
+          'Compositions', ['Header', 'Sidebar', 'Toolbar', 'Tab bar', 'Pane header', 'Edges', 'Status bar', 'Activity', 'Notifications', 'Keyboard', 'Panel shell', 'State patterns', 'Dawn Mode'],
           'Features',
           'Panels',
           'Layouts',

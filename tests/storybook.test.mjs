@@ -121,8 +121,109 @@ test("An approved page is ready with no tag, and every other page is in review",
 
 test("A page without its status tag, or with a code in its title, fails the lint", () => {
   const catalog = json("stories/catalog.json"), template = read("stories/kit/ComponentPage.jsx");
-  const untagged = { ...files, "stories/components/compositions-pane-header.stories.js": files["stories/components/compositions-pane-header.stories.js"].replace(/, tags: \[[^\]]*\]/, "") };
-  assert.ok(structureErrors(untagged, catalog, template).includes("stories/components/compositions-pane-header.stories.js: needs exactly one status tag"));
+  const untagged = { ...files, "stories/components/compositions-tab-bar.stories.js": files["stories/components/compositions-tab-bar.stories.js"].replace(/, tags: \[[^\]]*\]/, "") };
+  assert.ok(structureErrors(untagged, catalog, template).includes("stories/components/compositions-tab-bar.stories.js: needs exactly one status tag"));
   const coded = { ...files, "stories/start/extra.mdx": '<Meta title="Start/S12 notes" tags={["Ready"]} />\n\n## Prompt for agents\n\n```text\nRead.\n```\n' };
   assert.ok(structureErrors(coded, catalog, template).includes("stories/start/extra.mdx: code in title Start/S12 notes"));
+});
+
+test("The kit's Mac keyboard matches the app's Help, and every keyboard has the same keys", async () => {
+  const { keyboards } = await import("../stories/kit/compositions.js");
+  const { ROWS, CAP } = await import("../kanso/mods/kanso-help/keymap.js");
+  assert.deepEqual(keyboards.mac.rows, ROWS);
+  for (const [key, name] of Object.entries(CAP)) assert.equal(keyboards.mac.caps[key] ?? "", name, key);
+  const keysOf = (rows) => [...new Set(rows.flat().map(([key]) => key))].toSorted();
+  for (const os of ["windows", "linux"]) assert.deepEqual(keysOf(keyboards[os].rows), keysOf(ROWS), os);
+});
+
+test("A notice is a toast only while a kansō window is on screen, and goes to the computer only when you are away", async () => {
+  const { notice, systemMessage } = await import("../stories/kit/compositions.js");
+  const item = { state: "failed", home: "update", text: "kansō was not updated", act: "Update", detail: "permission denied" };
+  assert.equal(notice({ ...item, place: "home in view" }), null);
+  assert.equal(notice({ ...item, place: "away" }), null);
+  assert.match(notice({ ...item, place: "window on screen" }), /kansō was not updated/);
+  assert.equal(systemMessage({ ...item, place: "window on screen" }), null);
+  assert.deepEqual(systemMessage({ ...item, place: "away" }), { title: "kansō was not updated", body: "permission denied" });
+});
+
+test("Every notice the app sends today is a state and a home the notifications know", async () => {
+  const { notice, noticeHomes, noticeStates } = await import("../stories/kit/compositions.js");
+  const { appNotices } = await import("../stories/kit/samples.js");
+  for (const [name, item] of Object.entries(appNotices)) {
+    assert.ok(noticeStates.includes(item.state), name);
+    assert.ok(noticeHomes.includes(item.home), name);
+    assert.match(notice(item), /kanso-toast/, name);
+  }
+});
+
+test("The pane header folds its facts in the order the fold list names, and ⋯ takes the tools that fold", async () => {
+  const { paneFolds, paneHeader, paneMenu } = await import("../stories/kit/compositions.js");
+  const place = { folder: "checkout-v2", branch: "limits-table" };
+  const at = (step) => paneHeader({ name: "checkout", place, hover: true, fold: paneFolds.indexOf(step) });
+  assert.match(at("nothing"), /checkout-v2/);
+  assert.doesNotMatch(at("folder"), /checkout-v2/);
+  assert.match(at("folder"), /limits-table/);
+  assert.doesNotMatch(at("branch"), /limits-table/);
+  assert.match(at("branch"), /Split right/);
+  assert.doesNotMatch(at("tools into ⋯"), /Split right/);
+  assert.doesNotMatch(paneMenu({ name: "checkout", fold: paneFolds.indexOf("branch") }), /Split right/);
+  assert.match(paneMenu({ name: "checkout", fold: paneFolds.indexOf("tools into ⋯") }), /Split right/);
+});
+
+test("A shortcut row at rest draws without a taken key", async () => {
+  const { shortcutRow } = await import("../stories/kit/compositions.js");
+  assert.match(shortcutRow({ name: "Pin the pane", chords: ["⌥⌘P"] }), /⌥⌘P/);
+});
+
+test("Every hypothesis fills the whole template, and each job names where it goes", async () => {
+  const { hypotheses } = await import("../stories/kit/hypotheses.js");
+  const fields = ["change", "today", "why", "question", "believe", "wrong", "try", "back"];
+  for (const [page, list] of Object.entries(hypotheses)) for (const item of list) {
+    for (const field of fields) assert.ok(typeof item[field] === "string" && item[field].trim(), `${page}: ${item.change ?? "?"} has no ${field}`);
+    assert.ok(Array.isArray(item.jobs) && item.jobs.length > 0, `${page}: ${item.change} has no jobs`);
+    for (const job of item.jobs) assert.ok(job.length === 2 && job.every((part) => typeof part === "string" && part.trim()), `${page}: ${item.change} has a job without a home`);
+  }
+});
+
+test("The panel shell is a frame: its title row over the body it is given, each look a width, stale stepping the body down", async () => {
+  const { panelLooks, panelShell } = await import("../stories/kit/compositions.js");
+  const html = panelShell({ title: "Ports", scope: "This computer", tools: ["<i>tool</i>"] }, "<p>body</p>");
+  assert.match(html, /^<div class="kanso-panel"><div class="kanso-row kanso-row--two-lines kanso-row--title"/);
+  assert.match(html, /kanso-row__name">Ports<[^]*<i>tool<\/i>[^]*This computer[^]*<p>body<\/p><\/div>$/);
+  assert.doesNotMatch(panelShell({ title: "Ports" }), /kanso-content__secondary/);
+  for (const look of panelLooks) assert.match(panelShell({ title: "Ports", look }), look === "panel" ? /^<div class="kanso-panel">/ : new RegExp(`kanso-panel--${look}`), look);
+  assert.match(panelShell({ title: "Ports", stale: true }, "<p>body</p>"), /^<div class="kanso-panel kanso-panel--stale">/);
+  assert.throws(() => panelShell({ title: "Ports", look: "wide" }), { message: "panelShell: unknown look wide" });
+});
+
+test("A file opened from a panel keeps the button back to its folder's list before the title", async () => {
+  const { statedPages } = await import("../stories/kit/states.js");
+  const { args, markup } = statedPages["Compositions/Panel shell"];
+  const back = /kanso-content__primary"><span class="kanso-button kanso-button--icon" tabindex="0" title="Markdown in this folder"><svg[^>]*><use href="#lu-chevron-left"\/><\/svg><\/span><span class="kanso-row__name">/;
+  assert.match(markup({ ...args, look: "window" }), back);
+  assert.doesNotMatch(markup(args), back);
+});
+
+test("Every read of the sample panel draws its own state pattern where the list would start", async () => {
+  const { panelReads, statedPages } = await import("../stories/kit/states.js");
+  const { args, markup } = statedPages["Compositions/Panel shell"];
+  const marks = { loading: /kanso-skeleton__list/, empty: /kanso-state-empty/, failed: /kanso-state-block/, stale: /kanso-panel--stale/ };
+  for (const state of Object.keys(panelReads)) {
+    const html = markup({ ...args, state });
+    for (const [other, pattern] of Object.entries(marks)) (other === state ? assert.match : assert.doesNotMatch)(html, pattern, `${state} and ${other}`);
+  }
+});
+
+test("Each named state of a page is a preset of its playground, so the catalog draws it with the playground's markup", async () => {
+  const { statedPages } = await import("../stories/kit/states.js");
+  for (const [page, { args, markup, states }] of Object.entries(statedPages)) for (const state of states) {
+    assert.deepEqual(Object.keys(state.args).filter((name) => !Object.hasOwn(args, name)), [], `${page}: ${state.label}`);
+    assert.equal(typeof markup({ ...args, ...state.args }), "string", `${page}: ${state.label}`);
+  }
+});
+
+test("A bar asked at a width the kit has no frame for fails instead of drawing at another", async () => {
+  const { atWidth, barWidths } = await import("../stories/kit/frames.js");
+  for (const width of barWidths) assert.match(atWidth(width, ""), new RegExp(`kanso-story--w${width}`));
+  assert.throws(() => atWidth(900, ""), { message: "frames: unknown width 900" });
 });

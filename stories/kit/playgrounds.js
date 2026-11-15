@@ -1,8 +1,10 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { asleep, computerRow, computerStates, header, projectRow, section, sessionRow, sidebarFooter, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, escape, input, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
-import { sampleSidebar } from './samples.js';
+import { activity, activityMenu, asleep, paneFolds, paneHeader, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
+import { barWidths, inBar } from './frames.js';
+import { edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, statedPages, stepperShown, tabActs } from './states.js';
+import { appNotices, keyLayer, keyLayerMods, sampleNotices, sampleSidebar, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -10,6 +12,10 @@ const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__the
 const inSidebar = (markup) => stack({ variant: 'sidebar frame' }, markup), inRail = (markup) => stack({ variant: 'rail frame' }, markup);
 const select = (name, options) => ({ name, control: { type: 'select' }, options });
 
+// One layer control per computer, each labelled the way that computer writes its modifiers.
+const pickable = keyNames().filter((key) => !['ctrl', 'alt', 'shift', 'cmd'].includes(key));
+const layerArgs = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, { name: 'layer', control: { type: 'select', labels: Object.fromEntries(keyLayerMods[os].map((mods) => [mods, mods === 'lists' ? 'Lists' : heldChord({ os, held: mods.split(' ') })])) }, options: keyLayerMods[os], if: { arg: 'os', eq: os } }]));
+const osArg = { name: 'computer', control: { type: 'inline-radio' }, options: keyboardSystems };
 
 export const playgrounds = {
   'Primitives/Button': {
@@ -96,7 +102,7 @@ export const playgrounds = {
       faint: { name: 'faint', control: { type: 'boolean' } },
       recording: { name: 'recording', control: { type: 'boolean' } },
     },
-    markup: ({ text, faint, recording }) => `<span class="kanso-key${faint ? ' kanso-text--dim' : ''}${recording ? ' kanso-key--recording kanso-ring--accent kanso-text--accent' : ''}">${escape(text.slice(0, 6))}</span>`,
+    markup: ({ text, faint, recording }) => keyHint({ text: text.slice(0, 6), faint, recording }),
   },
   'Primitives/Mark': {
     args: { status: 'working', size: 'md' },
@@ -140,7 +146,7 @@ export const playgrounds = {
       facts: { name: 'Facts (separated by |)', control: { type: 'text' } },
       loading: { name: 'Loading', control: { type: 'boolean' } },
     },
-    markup: metric,
+    markup: (args) => `<div class="kanso-panel">${metric(args)}</div>`,
   },
   'Primitives/Window controls': { args: {}, argTypes: {}, markup: windowControls },
   'Primitives/Dawn': { args: {}, argTypes: {}, markup: () => dawn() },
@@ -150,9 +156,98 @@ export const playgrounds = {
     markup: toolbar,
   },
   'Compositions/Header': {
-    args: { collapsed: false, dawn: false },
-    argTypes: { collapsed: { name: 'collapsed', control: { type: 'boolean' } }, dawn: { name: 'Dawn Mode', control: { type: 'boolean' } } },
+    args: { collapsed: false, dawn: false, art: true },
+    argTypes: { collapsed: { name: 'collapsed', control: { type: 'boolean' } }, dawn: { name: 'Dawn Mode', control: { type: 'boolean' } },
+      art: { name: 'Dawn sky', control: { type: 'boolean' }, if: { arg: 'dawn' } } },
     markup: header,
+  },
+  'Compositions/Dawn Mode': {
+    args: { channel: 'dawn', art: true, collapsed: false },
+    argTypes: {
+      channel: { name: 'channel', control: { type: 'inline-radio' }, options: channels.map((item) => item.key) },
+      art: { name: 'Dawn sky', control: { type: 'boolean' }, if: { arg: 'channel', eq: 'dawn' } },
+      collapsed: { name: 'collapsed', control: { type: 'boolean' } },
+    },
+    markup: ({ channel, art, collapsed }) => `<p class="kanso-story__caption">Sidebar header</p>${header({ collapsed, dawn: channel === 'dawn', art })}`
+      + `<p class="kanso-story__caption">Settings · Updates</p><div class="kanso-story__slice kanso-story__settings">${channelSettings({ channel, art })}</div>`,
+  },
+  'Compositions/Notifications': {
+    args: { example: 'your own', state: 'failed', home: 'agent', text: 'Can\'t reach devbox', act: 'Refresh', detail: 'ssh: connect to host devbox port 22: Connection refused', place: 'window on screen', stacked: 1 },
+    argTypes: {
+      example: select('a notice the app sends', ['your own', ...Object.keys(appNotices)]),
+      state: { ...select('state', noticeStates), if: { arg: 'example', eq: 'your own' } },
+      home: { ...select('home', noticeHomes), if: { arg: 'example', eq: 'your own' } },
+      text: { name: 'sentence', control: { type: 'text' }, if: { arg: 'example', eq: 'your own' } },
+      act: { name: 'word to act', control: { type: 'text' }, if: { arg: 'example', eq: 'your own' } },
+      detail: { name: 'detail', control: { type: 'text' }, if: { arg: 'example', eq: 'your own' } },
+      place: { name: 'where you are', control: { type: 'inline-radio' }, options: noticePlaces },
+      stacked: { name: 'on screen', control: { type: 'inline-radio' }, options: [1, 2, 3], if: { arg: 'place', eq: 'window on screen' } },
+    },
+    markup: ({ example, stacked, place, act, detail, ...args }) => {
+      const item = example === 'your own' ? { ...args, act: act || null, detail: detail || null, place } : { act: null, detail: null, ...appNotices[example], place };
+      const sent = systemMessage(item);
+      if (sent) return `<p class="kanso-story__caption">Sent to the computer's notifications</p><p class="kanso-story__caption">Title: ${escape(sent.title)}</p>${sent.body ? `<p class="kanso-story__caption">Text: ${escape(sent.body)}</p>` : ''}`;
+      if (place !== 'window on screen') return '<p class="kanso-story__caption">Not sent: its home is on screen.</p>';
+      return toastStack({ notices: [...sampleNotices, item].slice(-stacked) });
+    },
+  },
+  'Compositions/Pane header': {
+    args: { program: 'p-claude', name: 'checkout', state: 'working', focused: true, keyboard: false, hover: false, menu: false, pinned: false, zoomed: false, reach: 'here', held: false, armed: false, renaming: false,
+      elsewhere: false, files: 3, commits: 2, pr: 'test / unit failed', github: true, fold: 0 },
+    argTypes: {
+      program: select('program', ['p-claude', 'p-codex', 'lu-terminal']),
+      name: { name: 'name', control: { type: 'text' } },
+      state: select('state', paneStates),
+      focused: { name: 'focused', control: { type: 'boolean' } },
+      keyboard: { name: 'focus from the keyboard', control: { type: 'boolean' } },
+      hover: { name: 'pointer on it', control: { type: 'boolean' } },
+      menu: { name: '⋯ open', control: { type: 'boolean' } },
+      pinned: { name: 'pinned', control: { type: 'boolean' } },
+      zoomed: { name: 'zoomed', control: { type: 'boolean' }, if: { arg: 'menu' } },
+      reach: { name: 'computer', control: { type: 'inline-radio' }, options: paneReaches },
+      held: { name: 'held to move', control: { type: 'boolean' } },
+      armed: { name: 'close armed', control: { type: 'boolean' }, if: { arg: 'hover' } },
+      renaming: { name: 'renaming', control: { type: 'boolean' } },
+      elsewhere: { name: 'folder differs from the tab', control: { type: 'boolean' } },
+      files: { name: 'files changed', control: { type: 'number', min: 0 } },
+      commits: { name: 'commits not on GitHub', control: { type: 'number', min: 0 } },
+      pr: { name: 'pull request', control: { type: 'select' }, options: ['none', 'ready', 'checks running', 'test / unit failed', 'changes requested', 'conflicts with main', 'behind main'] },
+      github: { name: 'GitHub answers', control: { type: 'boolean' }, if: { arg: 'pr', neq: 'none' } },
+      fold: { name: 'folded', control: { type: 'select', labels: Object.fromEntries(paneFolds.map((label, step) => [step, label])) }, options: paneFolds.map((_, step) => step) },
+    },
+    markup: ({ files, commits, pr, github, elsewhere, ...args }) => {
+      const tone = { ready: 'done', 'checks running': 'working', 'behind main': 'working' }[pr] ?? 'blocked';
+      const digest = { files, add: files * 14, del: files * 2, commits, pr: pr === 'none' ? null : { number: '#142', verdict: pr, tone }, failure: github ? null : 'gh: HTTP 502: Bad Gateway (https://api.github.com/graphql)' };
+      const place = elsewhere ? { folder: args.reach === 'here' ? 'checkout-v2' : '~/checkout-v2', branch: 'limits-table' } : null;
+      return `<div class="kanso-pane kanso-story__pane">${paneHeader({ ...args, digest, place })}</div>`;
+    },
+  },
+  'Compositions/Keyboard/Key': {
+    ...statedPages['Compositions/Keyboard/Key'],
+    argTypes: {
+      label: { name: 'label', control: { type: 'text', maxLength: 3 } },
+      units: { name: 'width in keys', control: { type: 'inline-radio' }, options: [...new Set(Object.values(keyboards).flatMap(({ rows }) => rows.flat().map(([, units = 1]) => units)))].sort((a, b) => a - b) },
+      state: select('state', keycapStates),
+      hover: { name: 'hover', control: { type: 'boolean' } },
+    },
+  },
+  'Compositions/Keyboard/Picked key': {
+    ...statedPages['Compositions/Keyboard/Picked key'],
+    argTypes: { os: osArg, ...layerArgs, key: select('key', pickable) },
+  },
+  'Compositions/Keyboard/Shortcut row': {
+    ...statedPages['Compositions/Keyboard/Shortcut row'],
+    argTypes: {
+      name: { name: 'does', control: { type: 'text' } },
+      chords: { name: 'chords, comma between', control: { type: 'text' } },
+      state: select('state', shortcutRowStates),
+      hover: { name: 'hover', control: { type: 'boolean' } },
+    },
+  },
+  'Compositions/Keyboard': {
+    args: { os: 'mac', ...layerDefaults, key: 'h', hover: 'none' },
+    argTypes: { os: osArg, ...layerArgs, key: select('picked', pickable), hover: select('hover', ['none', ...keyNames()]) },
+    markup: ({ os, key, hover, ...args }) => keyboardExplorer({ os, layer: keyLayer(os, args[`${os}Layer`]), picked: key, hover }),
   },
   'Compositions/Sidebar/Session row': {
     args: { program: 'p-claude', name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: '', status: 'working', depth: 1, current: false, pinned: false, commands: 0, hover: false, focus: false, dimmed: false },
@@ -233,15 +328,137 @@ export const playgrounds = {
     markup: (args) => inSidebar(sidebarFooter(args)),
   },
   'Compositions/Sidebar': {
-    args: { collapsed: false, dawn: false, view: 'spaces', switcher: true, menu: false },
+    args: { collapsed: false, dawn: false, art: true, view: 'spaces', switcher: true, menu: false },
     argTypes: {
       collapsed: { name: 'collapsed', control: { type: 'boolean' } },
       dawn: { name: 'Dawn Mode', control: { type: 'boolean' } },
+      art: { name: 'Dawn sky', control: { type: 'boolean' }, if: { arg: 'dawn' } },
       switcher: { name: 'view switch', control: { type: 'boolean' } },
       view: { name: 'view', control: { type: 'inline-radio' }, options: views.map((item) => item.key) },
       menu: { name: 'views menu', control: { type: 'boolean' }, if: { arg: 'collapsed' } },
     },
     markup: sampleSidebar,
+  },
+  'Compositions/Panel shell': {
+    ...statedPages['Compositions/Panel shell'],
+    argTypes: {
+      title: { name: 'title', control: { type: 'text' } },
+      scope: { name: 'scope', control: { type: 'text' } },
+      state: { name: 'read', control: { type: 'inline-radio' }, options: Object.keys(panelReads) },
+      look: { name: 'look', control: { type: 'inline-radio' }, options: panelLooks },
+      content: select('body', Object.keys(panelContents)),
+      last: { name: 'the last row', control: { type: 'inline-radio' }, options: Object.keys(panelRowLooks) },
+    },
+  },
+  'Compositions/Status bar/Item': {
+    ...statedPages['Compositions/Status bar/Item'],
+    argTypes: {
+      icon: select('icon', icons),
+      mark: select('mark', ['none', 'working', 'blocked', 'done', 'idle']),
+      text: { name: 'text', control: { type: 'text' } },
+      tone: select('tone', ['', 'working', 'blocked', 'done']),
+      pending: { name: 'pending', control: { type: 'boolean' } },
+    },
+  },
+  'Compositions/Status bar/Computer item': {
+    ...statedPages['Compositions/Status bar/Computer item'],
+    argTypes: {
+      name: { name: 'name', control: { type: 'text' } },
+      remote: { name: 'remote', control: { type: 'boolean' } },
+      state: select('state', computerItemStates),
+      folded: { name: 'folded', control: { type: 'boolean' } },
+    },
+  },
+  'Compositions/Status bar/Needs you item': {
+    ...statedPages['Compositions/Status bar/Needs you item'],
+    argTypes: {
+      name: { name: 'name', control: { type: 'text' } },
+      question: { name: 'question', control: { type: 'text' } },
+      more: { name: 'more waiting', control: { type: 'number', min: 0 } },
+    },
+  },
+  'Compositions/Status bar': {
+    ...statedPages['Compositions/Status bar'],
+    argTypes: {
+      width: { name: 'width', control: { type: 'inline-radio' }, options: barWidths },
+      computer: select('computer', ['none', ...computerItemStates]),
+      paused: { name: 'layout paused', control: { type: 'boolean' } },
+      stepper: { name: 'panes per view', control: { type: 'inline-radio' }, options: stepperShown, if: { arg: 'paused', truthy: false } },
+      needs: { name: 'needs you', control: { type: 'inline-radio' }, options: Object.keys(needsShown) },
+      memory: { name: 'memory low', control: { type: 'inline-radio' }, options: Object.keys(memoryShown) },
+      panels: { name: 'servers, containers, reviews', control: { type: 'boolean' } },
+      open: { ...select('open', ['none', ...Object.keys(statusMenus)]), if: { arg: 'panels' } },
+    },
+  },
+  'Compositions/Activity': {
+    args: { events: 3, row: 'none', menu: false, docked: false },
+    argTypes: {
+      events: { name: 'events', control: { type: 'number', min: 0, max: 6 } },
+      row: { name: 'second row', control: { type: 'inline-radio' }, options: ['none', 'hover', 'focus'] },
+      menu: { name: 'right-click menu', control: { type: 'boolean' } },
+      docked: { name: 'in the sidebar', control: { type: 'boolean' } },
+    },
+    markup: ({ events, row: state, menu: open, docked }) => {
+      const all = [
+        { icon: 'lu-git-pull-request', subject: 'PR #166', fact: 'merged', age: '32m' },
+        { icon: 'lu-git-pull-request', tone: 'blocked', subject: 'PR #165', fact: 'checks failed', detail: 'test / unit · Run pnpm test', age: '9m' },
+        { icon: 'lu-moon', subject: 'Orion', fact: 'went to sleep', age: '1h' },
+        { icon: 'e-done', tone: 'done', subject: 'Iris', fact: 'finished', detail: 'Boards 01 to 04 done', age: '12m' },
+        { icon: 'lu-check', tone: 'done', subject: 'PR #164', fact: 'approved', age: '41m' },
+        { icon: 'lu-git-pull-request', subject: 'PR #163', fact: 'merged', age: '2h' },
+      ];
+      const card = activity({ events: all.slice(0, events), hover: state === 'hover' ? 1 : -1, focus: state === 'focus' ? 1 : -1 }) ?? '';
+      const menu = open && events ? activityMenu() : '';
+      return docked ? sampleSidebar({ away: card }) + menu : `<div class="kanso-story__slice">${card}${menu}</div>`;
+    },
+  },
+  'Compositions/State patterns': {
+    args: { state: 'failure', menu: false },
+    argTypes: {
+      state: { name: 'state', control: { type: 'inline-radio' }, options: statePatterns },
+      menu: { name: 'right-click menu', control: { type: 'boolean' }, if: { arg: 'state', eq: 'failure' } },
+    },
+    markup: ({ state, menu: open }) => {
+      const at = (place, markup) => `<p class="kanso-story__caption">${place}</p>${markup}`;
+      const slice = (...parts) => `<div class="kanso-story__slice">${parts.join('')}</div>`;
+      const panel = (markup) => `<div class="kanso-panel kanso-story__panel">${markup}</div>`;
+      const source = 'ssh: connect to host dark port 22: Operation timed out';
+      return {
+        failure: () => at('Status bar', inBar(520, { left: [computerItem({ name: 'dark', state: 'unreachable' })] }))
+          + at('Sidebar', slice(computerRow({ name: 'dark', state: 'unreachable' }), open ? failureMenu({ source, fixes: ['Refresh', 'Sign in…'], agent: 'Atlas' }) : ''))
+          + at('Panel', panel(failureBlock({ text: "Can't list worktrees on dark", source: 'git worktree list: timed out after 30 s', fix: 'Refresh', agent: 'Atlas' })))
+          + at('Toast', toast({ level: 'error', icon: 'none', title: "Couldn't pull checkout", action: 'Retry' })),
+        empty: () => at('Panel', panel(emptyState({ icon: 'lu-git-pull-request', text: 'No pull requests on this branch', action: 'Create' }))),
+        pending: () => at('Status bar', inBar(520, { left: [computerItem({ name: 'devbox', state: 'pending' })] }))
+          + at('Sidebar', slice(row({ name: 'acme-shop', heading: true, detail: [{ icon: 'lu-git-branch', text: 'main' }, '↓0'], pending: true })))
+          + at('Panel', panel(row({ name: 'Approved, with 2 line comments', meta: 'now', pending: true }))),
+        loading: () => at('Sidebar', slice(skeletonOf({ shape: 'row', count: 3 }))) + at('Panel', panel(skeletonOf({ shape: 'list row', count: 3 }))),
+      }[state]();
+    },
+  },
+  'Compositions/Tab bar': {
+    ...statedPages['Compositions/Tab bar'],
+    argTypes: {
+      width: { name: 'width', control: { type: 'inline-radio' }, options: barWidths.slice(1) },
+      value: { name: 'chosen tab', control: { type: 'inline-radio' }, options: ['checkout', 'cart-ui', 'tests'] },
+      tab: select('a tab', Object.keys(tabActs)),
+      panel: select('open door', ['none', ...panelDoors.map((item) => item.key)]),
+      state: { name: 'computer', control: { type: 'inline-radio' }, options: tabBarStates },
+      folded: { name: 'folded tabs', control: { type: 'number', min: 0, max: 5 } },
+      overflow: { name: 'folded menu open', control: { type: 'boolean' }, if: { arg: 'folded' } },
+      windows: { name: 'Windows and Linux', control: { type: 'boolean' } },
+    },
+  },
+  'Compositions/Edges': {
+    ...statedPages['Compositions/Edges'],
+    argTypes: {
+      side: { name: 'side', control: { type: 'inline-radio' }, options: edgeSides },
+      panes: { name: 'panes past the edge', control: { type: 'number', min: 1, max: 10 } },
+      stacked: { name: 'first column stacked', control: { type: 'boolean' } },
+      drop: { name: 'dragging over', control: { type: 'boolean' } },
+      waiting: { name: 'Needs you hovered', control: { type: 'inline-radio' }, options: ['none', 'nearest', 'farthest'] },
+      overflow: { name: 'folded menu open', control: { type: 'boolean' } },
+    },
   },
   'Primitives/Switch': {
     args: { checked: false, label: 'Toggle', disabled: false },
@@ -253,7 +470,7 @@ export const playgrounds = {
     markup: toggle,
   },
   'Primitives/Row': {
-    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', meta: '+14 −3', mark: 'none', second: '', heading: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false },
+    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', meta: '+14 −3', mark: 'none', second: '', heading: false, title: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false },
     argTypes: {
       icon: select('icon', icons.concat(['p-claude', 'p-codex'])),
       name: { name: 'name', control: { type: 'text' } },
@@ -262,6 +479,7 @@ export const playgrounds = {
       mark: select('mark', ['none', ...Object.keys(marks)]),
       second: { name: 'second', control: { type: 'text' } },
       heading: { name: 'heading', control: { type: 'boolean' } },
+      title: { name: 'title form', control: { type: 'boolean' } },
       depth: { name: 'depth', control: { type: 'inline-radio' }, options: rowDepths },
       tools: { name: 'tools on hover', control: { type: 'boolean' } },
       current: { name: 'current', control: { type: 'boolean' } },
