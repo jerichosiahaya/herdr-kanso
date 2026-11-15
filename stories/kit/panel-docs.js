@@ -1,6 +1,14 @@
 // The panels' design guidelines and hypotheses, on the same templates as every page.
 
 export const panelGuidelines = {
+  'Panels/Files': [
+    ['Kansō', 'Changed or All files, and nothing else at rest.', 'The title, Changed and All files as Tabs, then Refresh. Folder and branch live in the pane header, so there is no scope line; only a remote computer, or the stale line, takes it. Outside a repository there is only the tree.'],
+    ['Kokō', 'What the agent named comes first.', 'For an agent pane with a conversation, the files it named, newest first; a named file that changed carries its stat and is not listed again. Named files that did not change sit on one dim line. Also changed holds the rest. Hiding the piece stops the transcript read.'],
+    ['Kokō', 'Each row carries its own facts.', 'No totals. git’s letter sits where the file icon goes: A and D dim, U blocked, modified none. A folder shows how many changed files it holds. The stat opens the diff; the row opens the file in Preview.'],
+    ['Shizen', 'Keys and the right-click.', 'j k move, Enter opens, Esc returns to the pane. Right-click: Open the diff, Open, Open with…, Copy path, then the piece’s own lines.'],
+    ['Seijaku', 'Limits and failures in place.', 'The 500-per-folder cap is a dim row inside the folder it cut. An unreadable folder says so in its place. The first read is the skeleton; later reads keep the rows and spin Refresh. A computer out of reach keeps the last read stepped down, with when it was read.'],
+    ['Kokō', 'Remote reads only what is open.', 'Here, a folder watch. On another computer, one tree read per open folder, then one stat every 5 s in front, 30 s after three quiet reads, none hidden.'],
+  ],
   'Panels/Find': [
     ['Fukinsei', 'Next to what it searches.', '⌘F opens it under the focused pane’s header, right-aligned, 420 wide. ⌘F again selects the query; Esc closes it and gives the keyboard back to the pane. A plain shell gets the terminal’s own search.'],
     ['Kokō', 'The field, the count, Previous and Next.', 'The count says where you are, 2 of 3. ↑ and ↓ or the arrows move between matches; they are dim while there is nothing to move to. The query is kept per conversation.'],
@@ -20,6 +28,30 @@ export const panelGuidelines = {
 };
 
 export const panelHypotheses = {
+  'Panels/Files': [
+    {
+      change: 'Changed lists the files the agent named first, and every row carries its stat.',
+      today: 'Changed is the tree filtered to changed files, each with git’s letter; nothing says which files the agent worked on.',
+      why: 'git knows what changed; the conversation was not read.',
+      question: 'when an agent finishes, which files does someone open first?',
+      believe: 'the ones it named, with how much each changed, answer what did it touch before reading any diff; the rest stay one heading below.',
+      jobs: [['see what changed', 'Changed, every row with its stat'], ['see what the agent touched', 'its named files first'], ['the whole tree', 'All files']],
+      wrong: 'someone opens Also changed first, or the named list misses files the agent changed.',
+      try: 'Dawn Mode first.',
+      back: 'Changed lists the changed files only, as today; the transcript read stops.',
+    },
+    {
+      change: 'Right-click opens a menu, and the header loses the folder name.',
+      today: 'right-click opens Open with at once; the header shows the root folder’s name at its right; the cap is one line under the list.',
+      why: 'one action per click, and where the files come from.',
+      question: 'what else do people do with a file than open it with another app?',
+      believe: 'Open the diff and Copy path are as common as Open with, and the pane header already names the folder; the cap reads best inside the folder it cut.',
+      jobs: [['open with another app', 'Open with… in the menu'], ['the diff', 'Open the diff, or the stat'], ['the path', 'Copy path'], ['which folder', 'the pane header'], ['the cap', 'a dim row in its folder']],
+      wrong: 'someone looks for the folder name in the panel, or misses the one-click Open with.',
+      try: 'Dawn Mode first.',
+      back: 'right-click opens Open with again and the header shows the folder.',
+    },
+  ],
   'Panels/Find': [
     {
       change: 'A conversation that cannot be read becomes the Failure block, and no matches the empty state.',

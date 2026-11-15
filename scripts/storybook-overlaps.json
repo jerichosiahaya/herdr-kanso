@@ -124,16 +124,16 @@
   "panel/Files": {
     "page": "Panels/Files",
     "states": {
-      "Tree": "panels/files/FilesAtRestNow/Default",
-      "Changed": "panels/files/FilesChangedOpenedFromTheDigest/Default",
-      "Loading": "panels/files/FilesFirstRead/Default",
-      "No changes": "panels/files/FilesNothingChanged/Default",
-      "No folder": "panels/files/FilesNoFolderForThisPane/Default",
-      "Read failed": "panels/files/FilesErrorTheFoldersOwnWords/Default",
-      "Stale": "panels/files/FilesStaleDevboxStoppedAnswering/Default",
-      "Keyboard": "panels/files/FilesRightClickARow/Default",
-      "No files": "panels/files/FilesNofiles/Default",
-      "Limit": "panels/files/FilesLimit/Default"
+      "Tree": "kit/Panels/Files/All files, with marks",
+      "Changed": "kit/Panels/Files/Changed, opened from the digest",
+      "Loading": "kit/Panels/Files/First read",
+      "No changes": "kit/Panels/Files/Nothing changed",
+      "No folder": "kit/Panels/Files/No folder for this pane",
+      "Read failed": "kit/Panels/Files/The folder can’t be read",
+      "Stale": "kit/Panels/Files/Stale: devbox stopped answering",
+      "Keyboard": "kit/Panels/Files/All files, with marks",
+      "No files": "kit/Panels/Files/An empty folder",
+      "Limit": "kit/Panels/Files/All files, with marks"
     }
   },
   "panel/Preview": {

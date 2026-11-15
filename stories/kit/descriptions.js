@@ -67,7 +67,7 @@ export const descriptions = {
   Key: 'One key of the keyboard map, shown by what it does in the layer.',
   'Shortcut row': 'One action and its keys, changed on the row itself.',
   'Picked key': 'The picked key: its chord, what it does, its layer and its one act.',
-  Files: 'The current pane’s changed files and repository tree.',
+  Files: 'The pane’s files: what changed, the agent’s named ones first, or the whole tree.',
   Preview: 'A file reader for text, Markdown and pictures beside the current pane.',
   PR: 'Pull requests with checks, reviews, diffs and conversation.',
   Worktrees: 'Repository checkouts to open, create, repair or remove.',

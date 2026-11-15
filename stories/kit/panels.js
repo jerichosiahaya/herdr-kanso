@@ -1,6 +1,6 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { button, chord, dialog, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
-import { channelSettings, keyboardExplorer, shortcutRow } from './compositions.js';
+import { button, chord, dialog, menu, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
+import { channelSettings, keyboardExplorer, panel, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
 export const settingsPages = [{ key: 'pieces', label: 'What shows' }, { key: 'keys', label: 'Keys' }, { key: 'news', label: 'What’s new' }, { key: 'credits', label: 'Credits' }];
@@ -81,3 +81,29 @@ const findBody = ({ agent, query, days = [], at = null, open = false, turn, read
 export const conversationFind = ({ count, ...found }) => dialog({
   size: 'find', tools: findField(found.query, { label: 'Find in the conversation', focus: true, count, tools: findArrows(Boolean(count)) }), body: list(findBody(found)),
 });
+
+// Files: Changed or All files beside the title; a remote computer, or the stale line, is its only scope.
+const fileViews = [{ key: 'changed', label: 'Changed' }, { key: 'all', label: 'All files' }];
+const fileRow = (picked) => ({ name, folder, stat, letter }) => row({ name, letter, detail: folder, meta: stat, current: name === picked });
+const changedList = ({ named = [], unchanged = [], also = [], picked = null }) => (named.length || unchanged.length
+  ? list(named.map(fileRow(picked)), unchanged.length ? row({ name: 'Named, unchanged', detail: unchanged, dimmed: true }) : null, also.length ? row({ name: 'Also changed', heading: true }) : null, also.map(fileRow(picked)))
+  : also.map(fileRow(picked)));
+const treeRow = (picked) => ({ name, level, open, count = null, letter = null, more = null, failure = null }) => {
+  if (failure) return failureBlock(failure);
+  if (more) return row({ name: more, level, dimmed: true });
+  return row({ name, level, open, letter, icon: open === undefined ? 'lu-file' : 'lu-folder', chip: count, current: name === picked });
+};
+const filesBody = ({ view, files = {}, tree = [], picked = null, reading = false, failure = null, empty = null }) => {
+  if (failure) return failureBlock(failure);
+  if (reading) return skeletonOf({ shape: 'row', count: 5 });
+  if (empty) return emptyState(empty);
+  return view === 'changed' ? changedList({ ...files, picked }) : tree.map(treeRow(picked));
+};
+const fileMenu = (path) => menu({ title: path, items: [{ icon: 'lu-git-pull-request', label: 'Open the diff' }, { icon: 'lu-file', label: 'Open', hint: '↵' }, { icon: 'lu-external-link', label: 'Open with…' }, { icon: 'lu-copy', label: 'Copy path' }, ...pieceLines] });
+// `repository` false is a folder outside git: the tree only. `scope` is the remote computer or the stale line.
+const filesPanel = ({ view = 'changed', repository = true, scope = null, stale = false, look = 'panel', ...body }) => panel({ look, stale, header: panelHeader({
+  title: 'Files', second: scope,
+  tools: [repository ? tabs({ items: fileViews, value: view, size: 'sm' }) : null, panelRefresh({ reading: body.reading || stale })],
+}) }, filesBody({ view: repository ? view : 'all', ...body }));
+// A right-clicked row's menu opens beside the panel.
+export const files = ({ menu: path = null, ...props }) => (path ? stack({ variant: 'columns' }, filesPanel(props), fileMenu(path)) : filesPanel(props));

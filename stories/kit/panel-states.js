@@ -1,7 +1,7 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { conversationFind, settings } from './panels.js';
+import { conversationFind, files, settings } from './panels.js';
 import { keyLayer } from './samples.js';
-import { sampleAreas, sampleFind, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
+import { sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, samplePlaces, sampleReleases, sampleTaken } from './panel-samples.js';
 
 // Settings: each page with its samples, then each state as what changes on it.
 const shows = (extra) => ({ page: 'pieces', hidden: sampleHidden, areas: sampleAreas, ...extra });
@@ -60,6 +60,26 @@ export const findViews = {
   'No matches': [finding({ query: 'countdown hook' }), 'Nothing found: the empty state, the count left empty.'],
   'The conversation file is gone': [finding({ missing: sampleFind.missing }), 'The file cannot be read: its path, Refresh, and Explain to the agent.'],
 };
+// Files: Changed with what the agent named, All files as the tree, then each read that is not the list.
+const { named, unchanged, also, shell, remote, computer } = sampleFiles;
+const changes = (extra) => ({ view: 'changed', files: { named, unchanged, also }, ...extra });
+const tree = (extra) => ({ view: 'all', tree: sampleTree, ...extra });
+export const filesViews = {
+  'Changed, opened from the digest': [changes({}), 'What the agent named first, newest first; the named files that did not change on one dim line; then the rest.'],
+  'All files, with marks': [tree({ picked: 'limits.ts' }), 'The tree: git’s letter in the icon’s place, a folder’s count of changed files; a folder at its limit says how many more.'],
+  'Right-click a row': [changes({ files: { named, unchanged: ['plans.ts'] }, picked: 'checkout.ts', menu: sampleFiles.menu.path }), 'Open the diff, Open, Open with…, Copy path, and the piece’s own lines.'],
+  'A shell pane: nothing named': [changes({ files: { also: shell } }), 'No conversation names files: the changed ones alone.'],
+  'Nothing changed': [changes({ empty: { icon: 'lu-file', text: 'No uncommitted changes' } }), 'Changed with nothing to show.'],
+  'Not a repository: the tree only': [{ repository: false, tree: samplePlainTree }, 'Outside git there is only the tree; a folder it cannot list says so in its place.'],
+  'An empty folder': [tree({ tree: [], empty: { icon: 'lu-folder', text: 'No files' } }), 'The folder holds nothing.'],
+  'First read': [{ reading: true, repository: false }, 'The skeleton, once; later reads keep the rows and spin Refresh.'],
+  'The folder can’t be read': [changes({ failure: sampleFilesFailures.folder }), 'The folder’s own words, Refresh, and Explain to the agent.'],
+  'No folder for this pane': [{ repository: false, empty: { icon: 'lu-folder', text: 'This pane has no folder' } }, 'The pane in front has no folder.'],
+  'On another computer': [changes({ files: remote, scope: computer }), 'The computer’s name is the only scope line.'],
+  'Stale: devbox stopped answering': [changes({ files: remote, scope: 'Read 14:02 · devbox unreachable · next try 14:03', stale: true }), 'The last read stays, stepped down, with when it was read and the next try.'],
+  'Unreachable before the first read': [{ repository: false, scope: computer, failure: sampleFilesFailures.unreachable }, 'Nothing read yet: the computer’s words and Refresh.'],
+  'Narrow, 300': [changes({ look: 'narrow', files: { named, unchanged: ['rate-limit-buckets.ts'], also } }), 'The title steps down; the folder truncates before the name.'],
+};
 const stated = (views, draw) => ({
   args: { view: Object.keys(views)[0] },
   markup: ({ view }) => draw(views[view][0]),
@@ -67,6 +87,6 @@ const stated = (views, draw) => ({
 });
 const control = (views) => ({ view: { name: 'what it shows', control: { type: 'select' }, options: Object.keys(views) } });
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind] };
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));
