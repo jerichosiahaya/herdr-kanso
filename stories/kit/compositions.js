@@ -433,11 +433,14 @@ const agentActs = ({ state, parent }) => [...(state === 'none' ? [] : [
   ...(state === 'blocked' ? [] : [{ icon: 'lu-send', label: 'Send to another agent…', hint: '⌥⌘S' }]),
   { icon: 'lu-search', label: 'Find in conversation', hint: '⌘F' }, { icon: 'lu-moon', label: 'Sleep this agent' }]),
   ...(parent ? [{ icon: 'lu-undo', label: phrase('Send back to', parent) }] : [])];
-export const paneMenu = ({ name, state = 'none', pinned = false, zoomed = false, parent = null, program = false, armed = false, keyboard = false, out = [] }) => menu({ title: name, items: [
-  { icon: 'lu-columns-2', label: 'Split right', hint: '⌘D', selected: keyboard }, { icon: 'lu-rows-2', label: 'Split down', hint: '⌘⇧D' }, { icon: 'lu-columns-2', label: 'Split left', hint: '⌥⌘⇧D' },
-  { icon: 'lu-move-horizontal', label: 'Wider or narrower', hint: '⌘⇧↩' }, { icon: 'lu-pin', label: pinned ? 'Unpin' : 'Pin', hint: '⌥⌘P' },
-  zoomed ? { icon: 'lu-minimize-2', label: 'Unzoom' } : { icon: 'lu-maximize-2', label: 'Zoom' },
-  { separator: true }, ...agentActs({ state, parent }), { icon: 'lu-external-link', label: 'Open with…' },
-  { separator: true }, { icon: program ? 'lu-check' : null, label: 'Right-clicks go to the program' },
-  { separator: true }, { icon: 'lu-x', label: 'Close pane', hint: '⌘⇧W', verb: phrase('close', name), armed },
-  ...pieceLines].filter((item) => !out.includes(item.label)) });
+export const paneMenu = ({ name, state = 'none', pinned = false, zoomed = false, parent = null, program = false, armed = false, keyboard = false, out = [] }) => {
+  const kept = (items) => items.filter((item) => !out.includes(item.label));
+  return menu({ title: name, items: [
+    ...kept([{ icon: 'lu-columns-2', label: 'Split right', hint: '⌘D', selected: keyboard }, { icon: 'lu-rows-2', label: 'Split down', hint: '⌘⇧D' }, { icon: 'lu-columns-2', label: 'Split left', hint: '⌥⌘⇧D' },
+      { icon: 'lu-move-horizontal', label: 'Wider or narrower', hint: '⌘⇧↩' }, { icon: 'lu-pin', label: pinned ? 'Unpin' : 'Pin', hint: '⌥⌘P' },
+      zoomed ? { icon: 'lu-minimize-2', label: 'Unzoom' } : { icon: 'lu-maximize-2', label: 'Zoom' }]),
+    ...grouped(kept([...agentActs({ state, parent }), { icon: 'lu-external-link', label: 'Open with…' }])),
+    { separator: true }, { icon: program ? 'lu-check' : null, label: 'Right-clicks go to the program' },
+    ...grouped(kept([{ icon: 'lu-x', label: 'Close pane', hint: '⌘⇧W', verb: phrase('close', name), armed }])),
+    ...pieceLines] });
+};
