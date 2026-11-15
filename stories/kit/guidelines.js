@@ -85,6 +85,14 @@ export const guidelines = {
     ["Seijaku", "Optimistic.", "Add reads Added at once with the done mark; a refusal clears it and puts the failure block under that host: ssh's words, Sign in or Add, and Explain to the agent."],
     ["Kokō", "Only what is needed.", "A Mac, once added, says it asks before agents read Documents, with Open the setting on it. No hosts in the config: the server icon dim and one line; the field is the action."],
   ],
+  "Compositions/Open with menu": [
+    ["Kansō", "A use of Menu.", "The file or folder as its title; the editors that open it, terminal editors after the rule; the first three have a number key."],
+    ["Kokō", "A refusal stays where it happened.", "An editor that did not open keeps the blocked mark; a failed search leads with our words, the tool's words, Refresh and Explain."],
+  ],
+  "Compositions/New conversation menu": [
+    ["Kansō", "A use of Menu.", "The agents installed in the project, the last used marked, then Terminal, then In a new worktree. With several projects, + asks where first."],
+    ["Shizen", "Read while it opens.", "The agents breathe in their place until the computer answers; Terminal is there at once."],
+  ],
   "Compositions/Agent menu": [
     ["Kansō", "A use of Menu.", "The agent's or thread's name as its title; open it, name it, keep it, put it away, close it, then the piece lines. Snooze, Move and Copy each open their own Menu."],
     ["Kokō", "Only the way back when it is away.", "A snoozed thread offers Wake, a settled one Bring back, with Mark unread, Rename and Copy."],
@@ -265,7 +273,8 @@ export const guidelines = {
     ["Shizen", "Save follows code.", "⌘S or the button, never on its own. Esc closes any block."],
   ],
   "Primitives/Menu": [
-    ["Seijaku", "One menu.", "252 wide, radius 8, popover ground. Items 30 with icon 14, the key hint dim at the right, the heading dim, a rule between groups."],
+    ["Seijaku", "One menu.", "252 wide, radius 8, popover ground. Items 30 with icon 14, the key hint or value dim at the right, the heading dim, a rule between groups."],
+    ["Shizen", "Read in place.", "An item still being read breathes as a skeleton in its place; the rest of the menu is there at once."],
     ["Kansō", "Only actions for the item in focus.", "Every right-click, + and panel menu is this menu with its own items; none draws its own."],
     ["Kansō", "Armed for what cannot be undone.", "The item fills with accent and reads \"Press again to …\" for 4 s."],
   ],

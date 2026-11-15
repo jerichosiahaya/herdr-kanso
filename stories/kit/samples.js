@@ -163,3 +163,13 @@ export const sampleCapture = [
 export const sampleSnooze = [['In 1 hour', '15:02'], ['In 3 hours', '17:02'], ['This evening', '18:00'], ['Tomorrow', 'Thu 9:00'], ['Monday', 'Mon 9:00']];
 export const sampleMove = { projects: ['docs-site', 'reports'], home: 'acme-shop' };
 export const sampleCopy = { folder: '~/acme-shop-checkout', branch: 'checkout-v2', id: '9f2c…' };
+// The editors Open with finds for a file, a folder, a picture and a remote file, and the agents installed in a project.
+const editor = (name, extra = {}) => ({ name, ...extra });
+export const sampleEditors = {
+  file: [editor('Preview', { icon: 'lu-eye' }), editor('Cursor', { icon: 'lu-code' }), editor('Visual Studio Code', { icon: 'lu-code' }), editor('In a split', { terminal: true }), editor('Neovim', { terminal: true })],
+  folder: [editor('Cursor', { icon: 'lu-code' }), editor('Visual Studio Code', { icon: 'lu-code' }), editor('Zed', { icon: 'lu-code' }), editor('In a split', { terminal: true }), editor('Neovim', { terminal: true }), editor('Vim', { terminal: true })],
+  picture: [editor('Images', { icon: 'lu-image' }), editor('Preview', { icon: 'lu-eye' }), editor('Cursor', { icon: 'lu-code' })],
+  remote: [editor('Preview', { icon: 'lu-eye' }), editor('In a split', { terminal: true }), editor('Neovim', { terminal: true }), editor('Vim', { terminal: true })],
+};
+export const sampleTargetsOpened = { file: 'src/session.ts', folder: '~/acme', picture: 'screenshot.png', remote: 'devbox: ~/acme/src/session.ts' };
+export const sampleInstalled = [{ program: 'p-claude', name: 'Claude Code', last: true }, { program: 'p-codex', name: 'Codex' }];

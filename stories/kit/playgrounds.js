@@ -3,7 +3,7 @@ import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, inBar } from './frames.js';
-import { arrangementViews, dialogBodies, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, projectRefusals, sendReach, sleepCases, statedPages, stepperShown, tabActs, worktreeRefusals } from './states.js';
+import { arrangementViews, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, projectRefusals, sendReach, sleepCases, statedPages, stepperShown, tabActs, worktreeRefusals } from './states.js';
 import { appNotices, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
@@ -128,21 +128,11 @@ export const playgrounds = {
     markup: (args) => `<div class="kanso-panel">${markdown(args)}</div>`,
   },
   'Primitives/Menu': {
-    args: {
-      title: 'src/api/checkout.ts',
-      items: [
-        { label: 'Open the diff', icon: 'lu-git-pull-request' },
-        { label: 'Open', icon: 'lu-file', hint: '↵', selected: true },
-        { separator: true },
-        { label: 'Hide this section', icon: 'lu-eye-off' },
-        { label: 'Delete worktree', icon: 'lu-x', verb: 'delete', armed: false },
-      ],
-    },
+    ...statedPages['Primitives/Menu'],
     argTypes: {
       title: text('title'),
-      items: { name: 'items', control: { type: 'object' }, description: '{ label, icon, hint, badge, verb, armed, selected } or { separator: true }' },
+      items: { name: 'items', control: { type: 'object' }, description: '{ label, icon, hint, badge, mark, verb, armed, selected, loading } or { separator: true } or { heading }' },
     },
-    markup: menu,
   },
   'Primitives/Metric': {
     args: { value: '31%', unit: 'free of 16 GB · 2.4 GB swap', facts: '14 tasks | $2.94 a task | 9.1M tokens', loading: false },
@@ -163,6 +153,14 @@ export const playgrounds = {
       added: { name: 'after Add', control: { type: 'boolean' }, if: { arg: 'config' } },
       typed: text('typed'),
     },
+  },
+  'Compositions/Open with menu': {
+    ...statedPages['Compositions/Open with menu'],
+    argTypes: { situation: { ...select('situation', Object.keys(openWithCases)) } },
+  },
+  'Compositions/New conversation menu': {
+    ...statedPages['Compositions/New conversation menu'],
+    argTypes: { situation: { ...select('situation', [...Object.keys(newInCases), 'pick a project']) } },
   },
   'Compositions/Agent menu': {
     ...statedPages['Compositions/Agent menu'],

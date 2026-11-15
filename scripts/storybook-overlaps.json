@@ -793,5 +793,29 @@
       "Snoozed": "kit/Agent menu/Snoozed",
       "Thread": "kit/Agent menu/Thread"
     }
+  },
+  "open-with/OpenWith": {
+    "page": "Compositions/Open with menu",
+    "states": {
+      "Detection failed": "kit/Open with menu/Search refused",
+      "File": "kit/Open with menu/A file",
+      "Folder": "kit/Open with menu/A folder",
+      "Image": "kit/Open with menu/A picture",
+      "Keyboard": "kit/Open with menu/Keyboard",
+      "Looking": "kit/Open with menu/Reading",
+      "No editor": "kit/Open with menu/No editor",
+      "Open failed": "kit/Open with menu/Did not open",
+      "Remote": "kit/Open with menu/On devbox"
+    }
+  },
+  "spaces/NewConversation": {
+    "page": "Compositions/New conversation menu",
+    "states": {
+      "Loading programs": "kit/New conversation menu/Reading",
+      "No programs": "kit/New conversation menu/None installed",
+      "Probe failed": "kit/New conversation menu/Search refused",
+      "Programs": "kit/New conversation menu/Agents",
+      "Project picker": "kit/New conversation menu/Pick a project"
+    }
   }
 }

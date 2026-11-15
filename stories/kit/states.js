@@ -1,8 +1,8 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
-import { dialog, emptyState, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
+import { addComputer, agentMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { dialog, emptyState, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleArrangements, sampleCapture, sampleCopy, sampleMove, sampleSnooze, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleArrangements, sampleCapture, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
@@ -133,6 +133,36 @@ const arrangementCaptions = {
   'save this tab': 'The name, then each pane as it will come back.', overwrite: 'Overwrite on a row: the save names it and asks twice.',
   'capture reading': 'The panes and their commands are being read.', 'save refused': 'The store refused the write; the tab stays as it was.',
 };
+// Menu: the items of a worktree's file row, and each look an item can take.
+export const menuItems = [
+  { label: 'Open the diff', icon: 'lu-git-pull-request' }, { label: 'Open', icon: 'lu-file', hint: '↵' }, { separator: true },
+  { label: 'Hide this section', icon: 'lu-eye-off' }, { label: 'Delete worktree', icon: 'lu-x', verb: 'delete' },
+];
+const withItem = (index, look) => menuItems.map((item, at) => (at === index ? { ...item, ...look } : item));
+// Open with: what is opened, and what the editor search answered.
+export const openWithCases = {
+  'a file': { target: 'file' }, 'a folder': { target: 'folder' }, 'a picture': { target: 'picture' }, 'on devbox': { target: 'remote' },
+  keyboard: { target: 'file', keys: true },
+  reading: { reading: true },
+  'no editor': { none: 'No code editor found' },
+  'did not open': { target: 'file', failed: 'Cursor' },
+  'search refused': { failure: { text: "Couldn't look for editors", source: 'Process could not be started', fix: 'Refresh' } },
+};
+const openWithEditors = ({ target, keys, failed }) => (target ? sampleEditors[target].map((item, index) => ({ ...item, key: keys && index < 3 ? String(index + 1) : null, chosen: keys && !index, failed: item.name === failed })) : []);
+export const newInCases = {
+  agents: { agents: sampleInstalled }, reading: { reading: true }, 'none installed': { none: 'No agents found on devbox' },
+  'search refused': { failure: { text: "Can't list agents on devbox", source: 'ssh: connection timed out', fix: 'Refresh' } },
+};
+const openWithCaptions = {
+  'a file': 'The editors that open it; terminal editors after the rule.', 'a folder': 'Folders open in code editors and terminals.', 'a picture': 'Pictures open in Images first.',
+  'on devbox': 'On another computer, only what runs there.', keyboard: 'The first three have a number key.', reading: 'The editors are being looked for.',
+  'no editor': 'Nothing here opens it.', 'did not open': 'The chosen editor refused: its mark stays on it.', 'search refused': "The search failed: the tool's words, Refresh, Explain.",
+};
+const newInCaptions = {
+  agents: 'The agents installed there, the last one used marked.', reading: 'The agents are being read.', 'none installed': 'No agent there; Terminal still opens.',
+  'search refused': "The computer did not answer: the tool's words, Refresh, Explain.", 'pick a project': '+ on Status and Threads, with several projects: pick where first.',
+};
+const capitalized = (text) => text[0].toUpperCase() + text.slice(1);
 const worktreePlace = { here: '~/.kanso/worktrees/kansō-app-audit', devbox: 'devbox · ~/.kanso/worktrees/kansō-app-audit' };
 
 export const statedPages = {
@@ -152,6 +182,33 @@ export const statedPages = {
       { label: 'No footer', args: { title: 'Sleep acme-shop', body: 'nothing', notes: 'nothing to do', primary: '' }, caption: 'Nothing to press: Esc or a click outside closes it.' },
       { label: 'Loading', args: { loading: true }, caption: 'Each piece as its own skeleton until the content arrives.' },
     ],
+  },
+  'Primitives/Menu': {
+    args: { title: 'src/api/checkout.ts', items: menuItems },
+    markup: menu,
+    states: [
+      { label: 'At rest', args: {}, caption: 'A title, items with their icons, a rule between groups.' },
+      { label: 'Keyboard', args: { items: withItem(1, { selected: true }) }, caption: 'The item the keys are on, its key at the right.' },
+      { label: 'Armed', args: { items: withItem(4, { armed: true }) }, caption: 'What cannot be undone asks twice within 4 s.' },
+      { label: 'Values', args: { title: 'Snooze checkout', items: sampleSnooze.map(([label, hint]) => ({ label, hint })) }, caption: 'Each item with the value it gives.' },
+      { label: 'Headings', args: { items: [{ heading: 'This worktree' }, ...menuItems.slice(0, 2), { separator: true }, { heading: 'Show' }, menuItems[3]] }, caption: 'A dim heading names a group.' },
+      { label: 'A badge', args: { items: withItem(0, { badge: '2' }) }, caption: 'How many, on the item they belong to.' },
+      { label: 'A mark', args: { items: withItem(0, { mark: 'blocked' }) }, caption: 'The state of the thing the item opens.' },
+      { label: 'Reading', args: { items: [{ loading: true }, { loading: true }, ...menuItems.slice(2)] }, caption: 'Items still being read breathe in their place.' },
+    ],
+  },
+  'Compositions/Open with menu': {
+    args: { situation: 'a file' },
+    markup: ({ situation }) => {
+      const { target, keys, failed, ...rest } = openWithCases[situation];
+      return openWithMenu({ ...rest, target: target ? sampleTargetsOpened[target] : null, editors: openWithEditors({ target, keys, failed }), agent: sampleAgent });
+    },
+    states: Object.keys(openWithCases).map((situation) => ({ label: capitalized(situation), args: { situation }, caption: openWithCaptions[situation] })),
+  },
+  'Compositions/New conversation menu': {
+    args: { situation: 'agents' },
+    markup: ({ situation }) => (situation === 'pick a project' ? sampleAddMenu() : newInMenu({ project: 'acme-shop', agent: sampleAgent, ...newInCases[situation] })),
+    states: [...Object.keys(newInCases), 'pick a project'].map((situation) => ({ label: capitalized(situation), args: { situation }, caption: newInCaptions[situation] })),
   },
   'Compositions/Agent menu': {
     args: { on: 'an agent', pinned: false, away: 'no', armed: false, opened: 'none' },
@@ -180,7 +237,7 @@ export const statedPages = {
       return save ? saveArrangement({ title: 'Save this tab', scope: 'An arrangement for acme-shop', name: 'checkout and docs', panes: sampleCapture, agent: sampleAgent, ...save })
         : arrangements({ project: 'acme-shop', agent: sampleAgent, ...list });
     },
-    states: Object.keys(arrangementViews).map((view) => ({ label: view[0].toUpperCase() + view.slice(1), args: { view }, caption: arrangementCaptions[view] })),
+    states: Object.keys(arrangementViews).map((view) => ({ label: capitalized(view), args: { view }, caption: arrangementCaptions[view] })),
   },
   'Compositions/Prompt dialog': {
     args: { title: 'Rename checkout', scope: '', text: 'checkout', fallback: 'claude', action: 'Rename' },
@@ -242,7 +299,7 @@ export const statedPages = {
   'Compositions/Sleep dialog': {
     args: { situation: 'a project' },
     markup: ({ situation }) => sleepDialog({ agent: sampleAgent, ...sleepCases[situation] }),
-    states: Object.keys(sleepCases).map((situation) => ({ label: situation[0].toUpperCase() + situation.slice(1), args: { situation }, caption: sleepCaptions[situation] })),
+    states: Object.keys(sleepCases).map((situation) => ({ label: capitalized(situation), args: { situation }, caption: sleepCaptions[situation] })),
   },
   'Compositions/Add computer dialog': {
     args: { config: true, added: false, typed: '' },

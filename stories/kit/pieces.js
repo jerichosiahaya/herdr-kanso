@@ -105,6 +105,7 @@ export const menu = ({ title, items }) => {
   const rows = (Array.isArray(items) ? items : []).map((item) => {
     if (item.separator) return '<div class="kanso-menu__separator"></div>';
     if (item.heading) return `<div class="kanso-menu__heading">${escape(item.heading)}</div>`;
+    if (item.loading) return `<div class="kanso-menu__item kanso-skeleton--breathing" aria-busy="true">${bar('icon')}${bar('line')}</div>`;
     const lead = item.icon ? glyph(item.icon) : '<span class="kanso-menu__spacer"></span>';
     const classes = `kanso-menu__item${item.armed ? ' kanso-action--armed' : item.selected ? ' kanso-control--selected' : ''}`;
     const label = item.armed ? `Press again to ${escape(item.verb || String(item.label ?? '').toLowerCase())}` : escape(item.label ?? '');

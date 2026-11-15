@@ -177,6 +177,25 @@ export const snoozeMenu = ({ name, times }) => menu({ title: phrase('Snooze', na
 export const moveMenu = ({ name, projects, home }) => menu({ title: phrase('Move', name, 'to'), items: [...projects.map((label) => ({ label })), { separator: true }, { icon: 'lu-undo', label: phrase('Back to', home) }] });
 export const copyMenu = ({ folder, branch, id }) => menu({ title: 'Copy', items: [{ icon: 'lu-folder', label: 'Folder', hint: folder }, { icon: 'lu-git-branch', label: 'Branch', hint: branch }, { icon: 'lu-copy', label: 'Conversation id', hint: id }] });
 
+// A refusal inside a menu: our words with the blocked mark, the tool's words dim, the fix, then Explain.
+const failureItems = ({ text, source, fix }, agent) => [{ label: text, mark: 'blocked' }, { heading: source }, { icon: 'lu-refresh-cw', label: fix }, { icon: 'lu-bot', label: phrase('Explain to', agent) }];
+// Open with: the editors that can open the file or folder, terminal editors after the rule; a refusal leads with its mark.
+const editorItem = (editor) => ({ icon: editor.terminal ? 'lu-terminal' : editor.icon, label: editor.name, hint: editor.key, selected: editor.chosen, mark: editor.failed ? 'blocked' : null });
+export const openWithMenu = ({ target = null, editors = [], reading = false, none = null, failure = null, agent }) => menu({ title: target ? phrase('Open with ·', target) : 'Open with', items: [
+  ...(failure ? failureItems(failure, agent) : []),
+  ...(reading ? [{ loading: true }, { loading: true }] : []),
+  ...(none ? [{ heading: none }] : []),
+  ...editors.filter((editor) => !editor.terminal).map(editorItem),
+  ...(editors.some((editor) => editor.terminal) ? [{ separator: true }, ...editors.filter((editor) => editor.terminal).map(editorItem)] : []),
+] });
+// New in a project: the agents installed there, Terminal, then a new worktree; the agents read while the menu opens.
+export const newInMenu = ({ project, agents = [], reading = false, none = null, failure = null, agent }) => menu({ title: phrase('New in', project), items: [
+  ...(reading ? [{ loading: true }, { loading: true }] : agents.map(({ program, name, last }) => ({ icon: program, label: name, hint: last ? 'last' : null }))),
+  ...(none ? [{ heading: none }] : []),
+  ...(failure ? failureItems(failure, agent) : []),
+  { icon: 'lu-terminal', label: 'Terminal' }, { separator: true }, { icon: 'lu-git-branch', label: 'In a new worktree…' },
+] });
+
 export const activityMenu = () => menu({ title: 'While you were away', items: [{ icon: 'lu-x', label: 'Dismiss these' }, ...pieceLines] });
 
 // Edges: the panes past each side, one icon Button per pane, the panes of one column grouped; a click goes there, the name is the tooltip.

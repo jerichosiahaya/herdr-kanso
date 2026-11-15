@@ -1854,10 +1854,8 @@
         "coverage/spaces/ProjectMenu/Missing folder",
         "coverage/spaces/ProjectMenu/Open project",
         "coverage/spaces/ProjectMenu/Remove armed",
-        "proto/components-menu/Menu/Default",
-        "proto/components-panel-menu/PanelMenu/Default",
         "proto/components-pick-list/PickList/Default",
-        "kit/Menu/Default"
+        "kit/Primitives/Menu/At rest"
       ],
       "components": [
         "Compositions/Right-click menus",
@@ -2212,10 +2210,8 @@
         "coverage/spaces/ProjectMenu/Missing folder",
         "coverage/spaces/ProjectMenu/Open project",
         "coverage/spaces/ProjectMenu/Remove armed",
-        "proto/components-menu/Menu/Default",
-        "proto/components-panel-menu/PanelMenu/Default",
         "proto/components-pick-list/PickList/Default",
-        "kit/Menu/Default"
+        "kit/Primitives/Menu/At rest"
       ],
       "components": [
         "Compositions/The + menu",
@@ -2442,11 +2438,9 @@
         "coverage/spaces/ProjectMenu/Missing folder",
         "coverage/spaces/ProjectMenu/Open project",
         "coverage/spaces/ProjectMenu/Remove armed",
-        "proto/components-menu/Menu/Default",
-        "proto/components-panel-menu/PanelMenu/Default",
         "proto/components-pick-list/PickList/Default",
         "proto/layouts-right-click-any-piece/RightClickAnyPiece/Default",
-        "kit/Menu/Default"
+        "kit/Primitives/Menu/At rest"
       ],
       "components": [
         "Compositions/Menus of the bars and headers",
@@ -9419,7 +9413,7 @@
         "kit/Tab/Focus",
         "kit/Tab/Active",
         "kit/Tab/Disabled",
-        "kit/Menu/Default",
+        "kit/Primitives/Menu/At rest",
         "kit/Primitives/Dialog/At rest",
         "kit/Avatar/Image",
         "kit/Avatar/Small",
