@@ -8,13 +8,21 @@ import { iconButton } from "./ui-button.js";
 /** The most lines a multi-line field grows to before it scrolls. */
 export const FIELD_LINES = 10;
 
-/** A field's text. Create it in init or a handler, never in render. */
+const capped = (text = "", limit = null) => (limit ? [...text].slice(0, limit).join("") : text);
+
+/** A field's text. Create it in init or a handler, never in render. `limit`: the most characters it holds. */
 export class TextField {
-  constructor(options = {}, { multiline = false } = {}) {
+  constructor(options = {}, { multiline = false, limit = null } = {}) {
     this.multiline = multiline;
     this.focused = false;
-    this.state = multiline ? TextareaState.new(options) : InputState.new(options);
+    const start = limit ? { ...options, value: capped(options.value, limit) } : options;
+    this.state = multiline ? TextareaState.new(start) : InputState.new(start);
     if (multiline) this.state.set_auto_grow(1, FIELD_LINES);
+    // Herdr's text state has no length cap, so typing past the limit is cut back at once.
+    if (limit) this.state.on("change", () => {
+      const value = this.state.value();
+      if (capped(value, limit) !== value) this.state.set_value(capped(value, limit));
+    });
     // Herdr styles no focus on a text frame, so the ring follows these.
     this.state.on("focus", (_e, cx) => { this.focused = true; cx.notify(); });
     this.state.on("blur", (_e, cx) => { this.focused = false; cx.notify(); });

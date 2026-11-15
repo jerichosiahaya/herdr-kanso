@@ -6,7 +6,9 @@ import { load, chain, gpuiHost } from "./helpers.mjs";
 const textState = (kind) => ({
   new: (options = {}) => {
     const handlers = {}, grow = [];
-    return { kind, options, handlers, grow, on: (event, fn) => { handlers[event] = fn; return true; }, set_auto_grow: (...rows) => grow.push(rows), value: () => options.value ?? "" };
+    const text = { value: options.value ?? "" };
+    return { kind, options, handlers, grow, text, on: (event, fn) => { handlers[event] = fn; return true; }, set_auto_grow: (...rows) => grow.push(rows),
+      value: () => text.value, set_value: (next) => { text.value = next; } };
   },
 });
 const host = () => ({ ...gpuiHost(), Input: { new: () => chain("input") }, Textarea: { new: () => chain("textarea") }, InputState: textState("input"), TextareaState: textState("textarea") });
@@ -133,4 +135,15 @@ test("Inline renames in place: a badge tall, radius 4, 4 inside, no label and no
   assert.equal(one(editor, "pr"), G.xs);
   assert.equal(icon, undefined, "no action inside the line it renames");
   assert.equal(one(editor, "accessibility_label"), "Name", "the label is still spoken");
+});
+
+test("A field with a limit holds no more characters than the limit, from its first value to what is typed", async () => {
+  const { TextField } = await kit();
+  const name = new TextField({ value: "a".repeat(45) }, { limit: 40 });
+  assert.equal(name.value().length, 40, "a longer first value starts cut");
+  name.state.text.value = `${"b".repeat(39)}cde`;
+  name.state.handlers.change();
+  assert.equal(name.value(), `${"b".repeat(39)}c`, "typing past the limit is cut back");
+  const free = new TextField({ value: "x".repeat(45) });
+  assert.equal(free.value().length, 45, "no limit cuts nothing");
 });

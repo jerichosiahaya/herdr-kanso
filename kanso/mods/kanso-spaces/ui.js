@@ -10,6 +10,7 @@ export const T = { display: 48, page: 20, title: 15, card: 13.5, value: 12.5, bo
 export const ICON = 15;
 export const ICON_ROW = 14;
 export const ICON_INLINE = 12;
+export const DRAG_START = 4;
 export const SWITCH = { w: 28, h: 16, knob: 12 };
 export const SPIN = 900;
 export const OPACITY = { away: 0.55, held: 0.4, blockedWash: 0.4 };

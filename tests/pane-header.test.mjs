@@ -163,6 +163,18 @@ test("Pinned is a pin after the name, and the header itself is the handle: no gr
   assert.equal(free.store["strip.drag"].pane, "p1", "a press moved a few pixels picks the pane up");
 });
 
+test("A press released outside the header never picks the pane up when the pointer comes back", async () => {
+  const head = await header();
+  const root = head.view.render();
+  const move = (x) => handler(root, "on_mouse_move")({ position: { x, y: 10 }, local_position: { x, y: 10 }, bounds: { width: 400 } });
+  handler(root, "on_hover")(true, head.cx);
+  handler(root, "on_mouse_down")({ click_count: 1, position: { x: 10, y: 10 }, modifiers: {} }, head.cx);
+  handler(root, "on_hover")(false, head.cx);
+  handler(root, "on_hover")(true, head.cx);
+  move(40);
+  assert.equal(head.store["strip.drag"] ?? null, null);
+});
+
 test("Close asks twice while an agent is in the pane, and once for a terminal", async () => {
   const agent = await header();
   handler(agent.view.render(), "on_hover")(true, agent.cx);

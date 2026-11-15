@@ -14,7 +14,7 @@ import { tryOr, tryOrAsync, afterMount } from "./pure.js";
 import { FIND } from "./find-key.js";
 import { rollupState, headerHold, prFacts, prLine } from "./ghchecks.js";
 import { pieces, shown, runs, setPiece, STORE } from "./pieces.js";
-import { G, R, T, W, ICON, OPACITY, CLEAR, glyphOf, mix, tokens, washes } from "./ui.js";
+import { G, R, T, W, ICON, OPACITY, CLEAR, DRAG_START, glyphOf, mix, tokens, washes } from "./ui.js";
 import { mark } from "./ui-mark.js";
 import { iconButton, Armed } from "./ui-button.js";
 import { menu } from "./ui-menu.js";
@@ -100,8 +100,6 @@ const zoneOf = (e, fallback = "below") => {
 };
 const endDrag = () => { setShared("strip.drop", null); setShared("strip.drag", null); };
 
-// A press moves this far before the header picks its pane up, so a click still only focuses.
-const DRAG_START = G.xs;
 const folder = (cwd) => {
   if (!cwd) return "";
   return paths.shorten(cwd, home());
@@ -389,7 +387,7 @@ export default class Strip extends View {
 
   // Double-click renames in place; Enter or leaving the field keeps the name, Escape drops it, empty gives the program's name back.
   startRename(p, shown, cx) {
-    const text = new TextField({ value: shown });
+    const text = new TextField({ value: shown }, { limit: NAME_LIMIT });
     text.set_selected_range({ start: 0, end: shown.length });
     text.on("submit", (_e, cx) => this.endRename(p, shown, cx, true));
     text.on("blur", (_e, cx) => this.endRename(p, shown, cx, true));
@@ -403,7 +401,7 @@ export default class Strip extends View {
     const text = this.renaming;
     if (!text) return;
     this.renaming = null;
-    const name = text.value().trim().slice(0, NAME_LIMIT);
+    const name = text.value().trim();
     if (keep && name !== shown) hc(["label", p.terminal, `${NAME_LABEL}=${name}`]).catch(() => {});
     text.release();
     cx.notify();
@@ -451,17 +449,19 @@ export default class Strip extends View {
     const pane = p.pane;
     const close = (cx) => (agent ? this.armed.press("close", cx, () => run("pane.close", { pane })) : run("pane.close", { pane }));
     const pieceState = (state) => () => setShared(STORE, DIGEST_PIECES.reduce((map, id) => setPiece(map, id, state), pieces(shared)));
+    const pin = () => setShared("strip.req", { op: "pin", pane, n: nonce() });
+    const zoom = () => run("pane.zoom", { pane });
     return {
-      pin: () => setShared("strip.req", { op: "pin", pane, n: nonce() }),
-      unpin: () => setShared("strip.req", { op: "pin", pane, n: nonce() }),
+      pin,
+      unpin: pin,
       sleep: () => openSleep(p),
       send: () => openSend(p),
       "open-with": () => this.openWith(p),
       "split-right": () => this.act("pane.split", { direction: "right", pane }),
       "split-down": () => this.act("pane.split", { direction: "down", pane }),
       width: () => setShared("strip.req", { op: "width", pane, n: nonce() }),
-      zoom: () => run("pane.zoom", { pane }),
-      unzoom: () => run("pane.zoom", { pane }),
+      zoom,
+      unzoom: zoom,
       close,
       needed: pieceState("needed"),
       hide: pieceState("hide"),
@@ -526,28 +526,44 @@ export default class Strip extends View {
       .when(reading, (el) => el.child(pendingDot(`digest-pending-${pane}`, c)));
   }
 
+  // In the strip the selected pane is the one the strip remembers, so it stays marked while a side panel has the keyboard.
+  isSelected(p, strip) {
+    const remembered = strip ? shared(KEY)?.[p.tab]?.focus : null;
+    return remembered ? remembered === p.pane : p.focused || (strip && p.terminal && focused()?.terminal === p.terminal);
+  }
+
+  // Folder and branch where they differ from the project, and whether its computer is out of reach.
+  placeFacts(p, map) {
+    const space = spaces().find((s) => s.tabs.some((x) => x.id === p.tab));
+    return {
+      where: shown("header.place", true, map) ? placeOf(p, space, home()) : {},
+      away: Boolean(space?.machine) && machines().some((m) => m.name === space.machine && m.layout === "unavailable"),
+    };
+  }
+
+  // Where Sleep and Send go: out, into ⋯, or nowhere.
+  toolPlaces(p, all, on) {
+    const canSend = Boolean(p.terminal) && all.some((q) => q.pane !== p.pane && q.terminal && (q.program?.agent || q.status));
+    const canSleep = Boolean(p.terminal && p.tab && agents().some((x) => x.address === p.terminal));
+    return headerTools({ focused: on, status: p.status, canSend, canSleep });
+  }
+
   // What the header shows now: who it is, its states, what folds and what ⋯ holds.
   headFacts(p, all) {
     const pane = p.pane, st = p.status;
     const given = givenNames();
     const agent = Boolean(p.program?.agent || st);
     const name = paneLabel({ agent, cwd: p.cwd, given: given.get(p.terminal), name: nameOf(p, given) });
-    // In the strip the selected pane is the one the strip remembers, so it stays marked while a side panel has the keyboard.
     const strip = Boolean(props()?.strip);
-    const remembered = strip ? shared(KEY)?.[p.tab]?.focus : null;
-    const on = remembered ? remembered === pane : p.focused || (strip && p.terminal && focused()?.terminal === p.terminal);
+    const on = this.isSelected(p, strip);
     const drag = strip ? shared("strip.drag") : null;
     const drop = drag && drag.pane !== pane ? shared("strip.drop") : null;
     const pinned = Boolean((strip ? shared(KEY)?.[p.tab]?.cols ?? [] : []).find((k) => k.panes?.includes(pane))?.pin);
     const map = pieces(shared);
     const record = shared(DIGEST)?.[pane];
     const segments = agent ? digestSegments(record, { working: st === "working", map }) : [];
-    const space = spaces().find((s) => s.tabs.some((x) => x.id === p.tab));
-    const where = shown("header.place", true, map) ? placeOf(p, space, home()) : {};
-    const away = Boolean(space?.machine) && machines().some((m) => m.name === space.machine && m.layout === "unavailable");
-    const canSend = Boolean(p.terminal) && all.some((q) => q.pane !== pane && q.terminal && (q.program?.agent || q.status));
-    const canSleep = Boolean(p.terminal && p.tab && agents().some((x) => x.address === p.terminal));
-    const placed = headerTools({ focused: on, status: st, canSend, canSleep });
+    const { where, away } = this.placeFacts(p, map);
+    const placed = this.toolPlaces(p, all, on);
     const out = ["sleep", "send"].filter((key) => placed[key] === "out");
     const hover = (this.hovered || this.moreOpen) && !drag;
     const status = headerMark(st, away);
@@ -575,6 +591,8 @@ export default class Strip extends View {
     return el
       .on_hover((hovered, cx) => {
         this.hovered = hovered;
+        // No button state reaches a move, so a press that leaves the header is dropped: its release may land elsewhere.
+        if (!hovered) this.press = null;
         if (!hovered && shared("strip.drop")?.to === pane && shared("strip.drop")?.side !== "below") setShared("strip.drop", null);
         cx.notify();
       })
