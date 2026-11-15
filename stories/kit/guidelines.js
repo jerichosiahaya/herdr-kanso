@@ -79,6 +79,11 @@ export const guidelines = {
   "Primitives/Dawn": [
     ["Shizen", "One sky.", "The same colours in dark and light. The sun rises once on load; reduced motion shows the last frame."],
   ],
+  "Compositions/Add computer": [
+    ["Kansō", "Composed, nothing new.", "A Dialog: the hosts of ~/.ssh/config as Rows with Add, a Field for user@host, the failure block under a refused host. The word is computer, never machine."],
+    ["Seijaku", "Optimistic.", "Add reads Added at once with the done mark; a refusal clears it and leaves ssh's words, the fitting action (Sign in, or Add) and Explain to <agent>."],
+    ["Kokō", "One sentence when empty.", "No hosts in the config: one line, and the field is the action. A Mac, once added, says it asks before agents read Documents, with its setting one press away."],
+  ],
   "Compositions/Toolbar": [
     ["Kansō", "Icon buttons only.", "Large icon buttons, 4 apart: + alone on the left, then Sort, Search and Hide sidebar on the right. + says what it adds: Add project on Projects, New conversation on Status and Threads."],
     ["Seijaku", "Sort says when it is not the default.", "At its default order Sort is dim; any other order draws it like the other tools. A click opens its menu under it: the view's orders with the current one ticked, then what the sidebar shows."],

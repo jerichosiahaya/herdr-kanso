@@ -127,6 +127,14 @@ export const samplePanelHeader = {
 const ticked = (label, on) => ({ label, icon: on ? 'lu-check' : undefined });
 const sortShows = [ticked('What each agent is on', true), ticked('While you were away', true), ticked('Projects, Status and Threads', true)];
 const sortMenu = (title, orders, current, extra = []) => menu({ items: [{ heading: title }, ...orders.map((label) => ticked(label, label === current)), ...extra, { separator: true }, { heading: 'Show' }, ...sortShows] });
+// The hosts of a sample ~/.ssh/config, each in its own state, and the agent that explains a refusal.
+export const sampleHosts = [
+  { name: 'dark', target: 'jj@10.0.4.12' },
+  { name: 'mini', target: 'jj@mini.local', state: 'added', mac: true },
+  { name: 'vps', target: 'root@203.0.113.9', state: 'login', words: 'root@203.0.113.9: Permission denied (publickey,password).' },
+  { name: 'build', target: 'ci@build.internal', state: 'unreachable', words: 'ssh: connect to host build.internal port 22: Operation timed out' },
+];
+export const sampleAgent = 'Atlas';
 // The menu + opens on Status and Threads: a project to start in, then the other ways in, then another computer.
 export const sampleAddMenu = () => menu({ items: [{ heading: 'New conversation in' }, { label: 'kansō' }, { label: 'amtelser' }, { label: 'site', hint: 'dark' },
   { separator: true }, { label: 'New project with a conversation…', icon: 'lu-folder-plus' }, { label: 'Open a folder, no project…', icon: 'lu-file' }, { label: 'Add computer…', icon: 'lu-server' }] });

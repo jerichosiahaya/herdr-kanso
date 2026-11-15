@@ -21,6 +21,7 @@ export const descriptions = {
   Chart: 'Values over time, beside the measurement they explain.',
   Toast: 'A short notice shown only while the fact’s own home is out of view, with at most one action.',
   Header: 'The top of the sidebar: the window’s lights and the toolbar, open or collapsed.',
+  'Add computer': 'Another computer for your agents: a host from your ssh config, or one you type.',
   Toolbar: 'Icon buttons in a row, or stacked in the rail.',
   Dawn: 'The sky of Dawn Mode, behind the header.',
   'Sidebar header': 'The header at work: the pointer on a tool, the sort and what + opens.',

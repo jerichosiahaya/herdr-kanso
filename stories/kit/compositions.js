@@ -1,5 +1,5 @@
 // The kit's compositions: each one only calls pieces with its own props and draws no markup.
-import { avatar, button, chip, chord, dawn, diffText, facts, headerSegment, input, paneName, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './kit.js';
+import { avatar, button, chip, chord, dawn, dialog, diffText, emptyState, facts, headerSegment, input, paneName, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './kit.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
 // + names what it adds in the view on show.
@@ -64,6 +64,19 @@ export const sidebarFooter = ({ update = null } = {}) => stack({ variant: 'foote
 
 export const tile = ({ initial = null, tone = 'teal', status = 'none', count = 0, open = false }) => stack({ variant: 'rail tile', on: open },
   initial ? avatar({ initial, tone, size: 'md' }) : mark({ status, size: 'lg' }), count ? chip({ label: count, quiet: true, tone: status === 'blocked' ? 'blocked' : null }) : null);
+
+// Add computer: hosts from ~/.ssh/config, then a typed target; Add is optimistic and a refusal puts the failure block under its host.
+export const hostStates = ['ready', 'added', 'login', 'unreachable'];
+const hostFix = { login: 'Sign in', unreachable: 'Add' };
+const hostFailure = ({ name, state, words }, agent) => failureBlock({ text: state === 'login' ? phrase(name, 'needs a login') : phrase("Can't reach", name), source: words, fix: hostFix[state], agent });
+const hostRow = ({ name, target, state = 'ready', words, mac = false }, agent) => list(
+  row({ icon: 'lu-server', name, detail: target, mark: state === 'added' ? 'done' : 'none', meta: state === 'added' ? 'Added' : null, action: state === 'ready' ? { label: 'Add', kind: 'tonal' } : null }),
+  hostFix[state] ? hostFailure({ name, state, words }, agent) : null,
+  mac && state === 'added' ? row({ name: phrase(name, 'asks before agents read Documents'), depth: 1, dimmed: true, action: { label: 'Open the setting', kind: 'quiet' } }) : null);
+export const addComputer = ({ hosts = [], typed = null, agent } = {}) => dialog({
+  title: 'Add computer', value: typed, placeholder: 'user@host', primary: 'Add', state: typed ? 'default' : 'disabled', secondary: 'Close',
+  body: hosts.length ? list(row({ name: 'From ~/.ssh/config', heading: true }), hosts.map((host) => hostRow(host, agent))) : emptyState({ text: '~/.ssh/config lists no hosts' }),
+});
 
 // Status bar compositions: a computer stands in for its sidebar row; the rest are the bar's Menus and Buttons.
 export const computerItemStates = ['on', 'unreachable', 'pending'];

@@ -1,8 +1,8 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
 import { emptyState, failureBlock, keycap, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleSortMenus, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleHosts, sampleSortMenus, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
@@ -58,6 +58,17 @@ export const panelReads = {
 };
 
 export const statedPages = {
+  'Compositions/Add computer': {
+    args: { hosts: 'config', state: 'ready', typed: '' },
+    markup: ({ hosts, state, typed }) => addComputer({
+      hosts: { config: sampleHosts.map((host) => ({ ...host, state })), mixed: sampleHosts, none: [] }[hosts], typed, agent: sampleAgent }),
+    states: [
+      { label: 'Hosts', args: {}, caption: 'Opened from + → Add computer…: the hosts of ~/.ssh/config.' },
+      { label: 'Each host in its own state', args: { hosts: 'mixed' }, caption: 'Added at once; a refusal puts ssh’s words and the fitting action under that host.' },
+      { label: 'Typed', args: { typed: 'jj@studio.local' }, caption: 'A host ssh reaches but the config does not list; Enter adds.' },
+      { label: 'No hosts', args: { hosts: 'none' }, caption: 'The config lists none: the field is the action.' },
+    ],
+  },
   'Compositions/Toolbar': {
     args: { view: 'spaces', column: false, open: false, sorted: false, menu: false, add: false },
     markup: ({ menu: shown, add, ...args }) => {

@@ -1705,7 +1705,7 @@
     },
     {
       "page": "Compositions/Add computer",
-      "existing": false,
+      "existing": true,
       "boards": [
         "S15"
       ],

@@ -14,6 +14,19 @@ export const hypotheses = {
       back: 'the caret goes and the rail shows + and Show sidebar only, as today.',
     },
   ],
+  'Compositions/Add computer': [
+    {
+      change: 'Add computer opens kansō’s dialog listing the hosts of ~/.ssh/config, each with Add.',
+      today: 'Add computer opens Herdr’s own dialog, where the host is typed by hand.',
+      why: 'it connects another computer by its ssh target.',
+      question: 'why type a host the ssh config already names?',
+      believe: 'listing the configured hosts turns adding a computer into one press, and a refused host says why and what to do next in place.',
+      jobs: [['type a target', 'the field under the hosts, Enter adds'], ['see it connect', 'Added on its row at once, the done mark'], ['a refusal', 'the failure block under that host']],
+      wrong: 'most computers are still added from the field, or someone looks for a host the list does not show.',
+      try: 'Dawn Mode first.',
+      back: 'Add computer opens Herdr’s dialog again, as today.',
+    },
+  ],
   'Compositions/Edges': [
     {
       change: 'No minimap.',
