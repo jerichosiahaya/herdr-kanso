@@ -251,7 +251,7 @@ export const playgrounds = {
     markup: ({ os, key, hover, ...args }) => keyboardExplorer({ os, layer: keyLayer(os, args[`${os}Layer`]), picked: key, hover }),
   },
   'Compositions/Sidebar/Session row': {
-    args: { program: 'p-claude', name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: '', status: 'working', depth: 1, current: false, pinned: false, commands: 0, hover: false, focus: false, dimmed: false, step: '', stuck: false, pinnable: true, settle: false, refresh: false, drop: 'none', guide: 'none' },
+    args: { program: 'p-claude', name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: '', status: 'working', depth: 1, current: false, pinned: false, commands: 0, hover: false, focus: false, dimmed: false, step: '', stuck: false, pinnable: true, menu: true, selected: false, settle: false, refresh: false, drop: 'none', guide: 'none' },
     argTypes: {
       program: select('program', ['p-claude', 'p-codex', 'lu-terminal']),
       name: { name: 'name', control: { type: 'text' } },
@@ -269,6 +269,8 @@ export const playgrounds = {
       step: { name: 'step time', control: { type: 'text' } },
       stuck: { name: 'stuck', control: { type: 'boolean' } },
       pinnable: { name: 'pin tool', control: { type: 'boolean' } },
+      menu: { name: 'More tool', control: { type: 'boolean' } },
+      selected: { name: 'keyboard ring', control: { type: 'boolean' } },
       settle: { name: 'Settle tool', control: { type: 'boolean' } },
       refresh: { name: 'Refresh', control: { type: 'boolean' } },
       drop: select('drop line', ['none', 'before', 'after']),

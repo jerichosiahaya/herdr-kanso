@@ -2,7 +2,7 @@
 // Kept byte for byte by `npm run sync:share`: edit kanso-panel/ui-row.js.
 import { div, svg, image } from "gpui-kit";
 import { h_flex, v_flex } from "gpui-base";
-import { G, H, R, T, ICON_ROW, ICON_INLINE, CLEAR, OPACITY, glyphOf, mix, toneColor } from "./ui.js";
+import { G, H, R, T, ICON_ROW, ICON_INLINE, CLEAR, OPACITY, alpha, glyphOf, toneColor } from "./ui.js";
 import { button } from "./ui-button.js";
 import { chip } from "./ui-chip.js";
 import { glint as glinting } from "./ui-glint.js";
@@ -15,10 +15,11 @@ const indent = (depth) => G.sm * (depth + 1) + ICON_ROW * depth;
 const guideAt = (level) => indent(level) + ICON_ROW / 2;
 
 const glyph = (icon, side, ink) => svg(glyphOf(icon)).size(side).flex_none().text_color(ink);
-// A program's own art: tinted, or in its own colours.
-const leadOf = (icon, ink) => {
+// A program's own art: tinted, or in its own colours, faded with the row when dimmed.
+const leadOf = (icon, ink, dimmed) => {
   if (typeof icon === "string") return glyph(icon, ICON_ROW, ink);
-  return icon.tint ? svg(icon.icon).size(ICON_ROW).flex_none().text_color(ink) : image(icon.icon).w(ICON_ROW).h(ICON_ROW).flex_none();
+  const art = icon.tint ? svg(icon.icon).size(ICON_ROW).flex_none().text_color(ink) : image(icon.icon).w(ICON_ROW).h(ICON_ROW).flex_none();
+  return dimmed ? art.opacity(OPACITY.away) : art;
 };
 // A tool's press stays on the tool: the row under it does not run its own click.
 const alone = (onClick) => onClick && ((cx) => { cx.stop_propagation(); onClick(cx); });
@@ -55,7 +56,8 @@ const held = (el) => el.on_mouse_down("left", (_e, cx) => cx.stop_propagation())
 const tool = (id, c) => ({ label, onClick, ...rest }, i) => held(button(`${id}-tool-${i}`, label, alone(onClick), c, { kind: "icon", size: "sm", ...rest }));
 const actionOf = (id, c, { label, onClick, ...rest }) => held(button(`${id}-action`, label, alone(onClick), c, { size: "sm", ...rest }));
 
-const WASHES = { blocked: (c) => mix(c.blocked, c.background, OPACITY.blockedRow) };
+// Over whatever is under the row: the list, a slab, the pill.
+const WASHES = { blocked: (c) => alpha(c.blocked, OPACITY.blockedRow) };
 const groundOf = (c, { current, hover, title, wash }) => {
   if (current) return c.selected;
   if (hover && !title) return c.subtle;
@@ -128,7 +130,7 @@ export function row(id, c, {
   const height = heightOf({ title, second });
   const first = h_flex().w_full().min_w(0).items_center().gap(G.sm).when(Boolean(second && title), (el) => el.h(H.row)).children([
     ...start,
-    icon ? leadOf(icon, tone ? toneColor(c, tone) : ink) : null,
+    icon ? leadOf(icon, tone ? toneColor(c, tone) : ink, dimmed) : null,
     nameOf(`${id}-name`, c, { name, heading, title, ink, glint }),
     detailOf(c, id, detail),
     div().flex_1(),

@@ -35,11 +35,11 @@ test("A session shows its program, name, activity, how long on this step, time, 
   });
   assert.deepEqual(plain(props), {
     program: claude, name: "Atlas", status: "working", activity: "Reviewing step 01", step: { time: "14m", stuck: true }, time: "20m", place: "kansō", placeTip: "Can't read it",
-    depth: 1, guides: [], current: false, pinned: false, pinnable: false, commands: 0, commandsTip: null, tools: [], refresh: false, drop: null, hover: false, focus: false, dimmed: false,
+    depth: 1, guides: [], current: false, ground: false, pinned: false, pinnable: false, menu: false, commands: 0, commandsTip: null, tools: [], refresh: false, drop: null, hover: false, selected: false, dimmed: false,
   }, "a working session lists no commands, as today");
   const done = sessionProps({ ...atlas, status: "done", pin: 1, focused: true, address: "dark/t1" }, 1, { hovered: true, pin: () => {}, kbd: true }, { tasks: [{ command: "npm test", time: "2m" }], oneLine: true, activity: "x" });
   assert.equal(done.activity, null, "a narrow sidebar keeps one line");
-  assert.deepEqual([done.place, done.pinned, done.pinnable, done.current, done.hover, done.focus, done.commands, done.commandsTip], ["dark", true, true, true, true, true, 1, "npm test · 2m"]);
+  assert.deepEqual([done.place, done.pinned, done.pinnable, done.current, done.hover, done.selected, done.commands, done.commandsTip], ["dark", true, true, true, true, true, 1, "npm test · 2m"]);
   assert.equal(sessionProps({ ...atlas, address: "dark/t1" }, 1, null, { noMachine: true }).place, null);
 });
 
@@ -90,4 +90,44 @@ test("A session row is the Storybook composition drawn by the app kit, one line 
   assert.deepEqual([sessionHeight({}), sessionHeight({ activity: "x" })], [H.line, H.two]);
   assert.deepEqual(texts(two), ["Atlas", "2m", "!", "Run npm publish?"], "name, time, the blocked mark, the question");
   assert.ok(typeof sessionRow({ name: "Atlas" }) === "string", "the same composition draws the Storybook's markup");
+});
+
+test("The focused row paints no ground of its own: the list's pill is its ground and glides there; a waiting row keeps its wash only when it is not the focused one", async () => {
+  const { agentSession, tokens } = await sidebar();
+  const c = tokens(night);
+  const grounds = (el) => el.calls.filter((call) => call[0] === "bg").map((call) => call[1]);
+  assert.deepEqual(grounds(agentSession({ ...atlas, status: "idle", focused: true }, 1, c, { hovered: false }, {})), []);
+  assert.deepEqual(grounds(agentSession({ ...atlas, status: "blocked", focused: true }, 1, c, null, {})), [], "no wash under the pill");
+  const waiting = grounds(agentSession({ ...atlas, status: "blocked" }, 1, c, null, {}));
+  assert.equal(waiting.length, 1);
+  assert.match(waiting[0], /^#ca938b[0-9a-f]{2}$/, "the blocked colour at a share, over whatever is under the row");
+});
+
+test("Under the pointer a row shows only the tools it can run, and the keyboard's ring shows none and keeps the time", async () => {
+  const { agentSession, tokens } = await sidebar();
+  const c = tokens(night);
+  const toolTags = (el) => all(el).map((kid) => kid.tag).filter((tag) => /-tool-\d$/.test(tag ?? ""));
+  const noMenu = agentSession({ ...atlas, status: "idle", address: "s" }, 2, c, { hovered: true }, { time: "3m" });
+  assert.deepEqual(toolTags(noMenu), [], "no More without a menu, no pin without pinning");
+  assert.ok(texts(noMenu).includes("3m"), "with no tools the time stays");
+  const ringed = agentSession({ ...atlas, status: "idle", address: "s" }, 2, c, { kbd: true }, { time: "3m" });
+  assert.deepEqual(toolTags(ringed), []);
+  assert.ok(texts(ringed).includes("3m"));
+  assert.ok(ringed.calls.some((call) => call[0] === "border_color" && call[1] === c.accent), "the ring");
+  const menuOnly = agentSession({ ...atlas, status: "idle" }, 1, c, { hovered: true, menu: () => {} }, {});
+  assert.deepEqual(tips(menuOnly).filter((tip) => ["More", "Pin to the top"].includes(tip)), ["More"]);
+});
+
+test("A dozing or unreadable row fades its program's art, and the activity takes its status's tone, as before", async () => {
+  const { agentSession, tokens } = await sidebar();
+  const c = tokens(night);
+  const art = { icon: "programs/codex.png", tint: false };
+  const fade = (el) => all(el).find((kid) => kid.tag === "image").calls.filter((call) => call[0] === "opacity").map((call) => call[1]);
+  const { OPACITY } = await load("kanso-spaces/ui.js", ["OPACITY"], gpuiHost());
+  assert.deepEqual(fade(agentSession({ ...atlas, program: art, dozing: true }, 1, c, null, {})), [OPACITY.away]);
+  assert.deepEqual(fade(agentSession({ ...atlas, program: art, status: "idle" }, 1, c, null, { quiet: true })), [OPACITY.away]);
+  assert.deepEqual(fade(agentSession({ ...atlas, program: art, status: "idle" }, 1, c, null, {})), []);
+  for (const [status, tone] of [["blocked", "fg"], ["working", "muted"], ["asleep", "muted"], ["done", "dim"], ["idle", "dim"]]) {
+    assert.ok(sessionRow({ name: "a", status, activity: "x" }).includes(`kanso-text--${tone}`), status);
+  }
 });

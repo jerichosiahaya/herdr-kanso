@@ -2,14 +2,12 @@
 // Kept byte for byte by `npm run sync:share`: edit kanso-panel/ui-glint.js.
 import { div } from "gpui-kit";
 import { h_flex } from "gpui-base";
-import { shared } from "herdr";
-import { G, GLINT, GLINT_MS, GLINT_STAGGER, DOTS_MS, OPACITY } from "./ui.js";
+import { G, GLINT, GLINT_MS, GLINT_STAGGER, DOTS_MS, OPACITY, onBattery } from "./ui.js";
 
 const DOTS = ["", ".", "..", "..."];
 // Seven paces, so names side by side do not glint in step.
 const PACES = 7;
 const WINDOWS = [[GLINT.wide, OPACITY.glintFaint], [GLINT.mid, OPACITY.glintMid], [GLINT.narrow, 1]];
-const onBattery = () => shared("kanso.battery") === true;
 const paceOf = (seed) => GLINT_MS + ([...seed].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % PACES) * GLINT_STAGGER;
 
 // Each window slides one way while its copy of the text slides the other, so the lit letters stay in place.

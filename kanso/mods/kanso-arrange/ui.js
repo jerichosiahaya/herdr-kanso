@@ -1,5 +1,6 @@
 // Kanso's panel kit, the base every piece uses: sizes, colours and timing, by jlopezlira (https://github.com/jlopezlira/herdr-kanso). Apache-2.0.
 // Kept byte for byte by `npm run sync:share`: edit kanso-panel/ui.js. Each piece is its own ui-<piece>.js.
+import { shared } from "herdr";
 
 // Sizes generated from kanso/tokens.json by npm run build:ui-tokens.
 export const G = { hair: 2, xs: 4, sm: 8, md: 12, lg: 16, xl: 24 };
@@ -27,6 +28,8 @@ export const BREATH = { from: 0.35, to: 0.8, period: 1800 };
 export const PULSE = { from: 0.35, to: 1, period: 2400 };
 // A native loop: it keeps going behind other windows, where a still mark reads as a stalled agent.
 export const breathe = (el, policy = BREATH) => el.loop("opacity", policy);
+// A native loop redraws the whole window about 30 times a second, so on battery motion steps instead of gliding.
+export const onBattery = () => shared("kanso.battery") === true;
 export const ICONS = "mods/kanso-chrome/icons/";
 /** A name in kanso-chrome's icons, or a path. */
 export const glyphOf = (icon) => (icon.includes("/") ? icon : `${ICONS}${icon}.svg`);
@@ -69,7 +72,7 @@ export function mix(a, b, share) {
 
 const HEX = /^#[0-9a-f]{6}(?:[0-9a-f]{2})?$/i;
 // `hex` at `share` opacity: it lets the ground below show through.
-const alpha = (hex, share) => `${hex.slice(0, 7)}${Math.round(share * 255).toString(16).padStart(2, "0")}`;
+export const alpha = (hex, share) => `${hex.slice(0, 7)}${Math.round(share * 255).toString(16).padStart(2, "0")}`;
 const lightness = (hex) => [0, 1, 2].reduce((sum, i) => sum + parseInt(hex.slice(1 + 2 * i, 3 + 2 * i), 16), 0);
 /** The foreground washes w4, w7, w12, w14 at the light or the dark theme's shares; null without a #rrggbb foreground, so a caller keeps its opaque token. */
 export function washes(t = {}) {

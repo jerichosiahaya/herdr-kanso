@@ -154,6 +154,7 @@
 .kanso-state-line--pending{opacity:.8}
 .kanso-state-line__pending-dot{display:inline-block;flex:none;width:4px;height:4px;border-radius:50%;background:var(--muted);animation:ghost var(--k-skel-ms) ease-in-out infinite alternate}
 
+.kanso-control--dim .kanso-icon--program{opacity:var(--k-op-away)}
 .kanso-control--dim,.kanso-control--dim :is(.kanso-row__name,.kanso-row__task,.kanso-row__meta){color:var(--muted)}
 .kanso-control--selected.kanso-control--selected{outline:2px solid var(--accent);outline-offset:1px;color:var(--fg)}
 

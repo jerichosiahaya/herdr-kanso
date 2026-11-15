@@ -11,6 +11,7 @@ import { foldTail } from "./sidebar-rows.js";
 import { H } from "./ui.js";
 import { mark, MARK_SIZES } from "./ui-mark.js";
 import { sessionRow } from "./session-row.js";
+import { machineOf } from "./machines.js";
 
 export { NAME_LABEL };
 
@@ -337,21 +338,39 @@ const programOf = (a) => (a.program?.icon ? { icon: a.program.icon, tint: a.prog
 const TASK_TIP = 90;
 const tasksTip = (tasks) => tasks.map((x) => `${x.command.length > TASK_TIP ? `${x.command.slice(0, TASK_TIP - 1)}\u2026` : x.command} \u00b7 ${x.time}`).join("\n");
 
-// What the session row shows: `base` is the depth of a top-level row in this list, each sub-agent one deeper with its guides.
+// A sub-agent's tree lines (├ └ │), one per depth below `base`, as the row's guides.
+const guidesOf = (base, lines) => (lines.length ? [...Array.from({ length: base }, () => null), ...lines.map((l) => GUIDE_KIND[l] ?? null)] : []);
+
+// What the session row shows: `base` is the depth of a top-level row in this list, each sub-agent one deeper.
 export function sessionProps(a, base, row, more = {}) {
   const lines = more.lines ?? [];
   const two = twoLines(more);
-  const machine = a.address.includes("/") ? a.address.split("/")[0] : null;
   const tasks = a.status === "working" ? [] : more.tasks ?? [];
   return {
-    program: programOf(a), name: more.label ?? agentLabel(a), status: a.dozing ? "asleep" : a.status,
-    activity: two ? more.activity : null, step: two ? more.step ?? null : null, time: more.time ?? null,
-    place: more.directory ?? (more.noMachine ? null : machine), placeTip: more.wordTip ?? null,
-    depth: base + lines.length, guides: lines.length ? [...Array.from({ length: base }, () => null), ...lines.map((l) => GUIDE_KIND[l] ?? null)] : [],
-    current: Boolean(a.focused), pinned: a.pin != null, pinnable: Boolean(row?.pin),
-    commands: tasks.length, commandsTip: tasks.length ? tasksTip(tasks) : null,
-    tools: (row?.actions ?? []).map((x) => ({ icon: x.icon, label: x.tip })), refresh: Boolean(more.refresh),
-    drop: row?.drag?.target ?? null, hover: Boolean(row?.hovered), focus: Boolean(row?.kbd), dimmed: Boolean(more.quiet || a.dozing),
+    program: programOf(a),
+    name: more.label ?? agentLabel(a),
+    status: a.dozing ? "asleep" : a.status,
+    activity: two ? more.activity : null,
+    step: two ? more.step ?? null : null,
+    time: more.time ?? null,
+    place: more.directory ?? (more.noMachine ? null : machineOf(a.address)),
+    placeTip: more.wordTip ?? null,
+    depth: base + lines.length,
+    guides: guidesOf(base, lines),
+    // The list's pill is the focused row's ground, and it glides there.
+    current: Boolean(a.focused),
+    ground: false,
+    pinned: a.pin != null,
+    pinnable: Boolean(row?.pin),
+    menu: Boolean(row?.menu),
+    commands: tasks.length,
+    commandsTip: tasks.length ? tasksTip(tasks) : null,
+    tools: (row?.actions ?? []).map((x) => ({ icon: x.icon, label: x.tip })),
+    refresh: Boolean(more.refresh),
+    drop: row?.drag?.target ?? null,
+    hover: Boolean(row?.hovered),
+    selected: Boolean(row?.kbd),
+    dimmed: Boolean(more.quiet || a.dozing),
   };
 }
 
