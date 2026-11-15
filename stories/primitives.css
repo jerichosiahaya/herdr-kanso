@@ -177,8 +177,8 @@
 .kanso-button--solid:is(:hover,.kanso-control--hover){background-color:color-mix(in srgb,var(--solid) 88%,var(--bg));transition-duration:var(--k-hover-in);transition-timing-function:var(--k-ease-in)}
 .kanso-button--solid:is(:active,.kanso-control--active){background-color:color-mix(in srgb,var(--solid) 76%,var(--bg))}
 .kanso-button--tonal:not(.kanso-action--armed):is(:hover,.kanso-control--hover){background-color:var(--w12)}
-.kanso-button--icon.kanso-button--active{background:var(--w12);color:var(--fg)}
-.kanso-button--icon.kanso-button--active:is(:hover,.kanso-control--hover,:active,.kanso-control--active){background-color:var(--w12)}
+:is(.kanso-button--icon,.kanso-button--quiet).kanso-button--active{background:var(--w12);color:var(--fg)}
+:is(.kanso-button--icon,.kanso-button--quiet).kanso-button--active:is(:hover,.kanso-control--hover,:active,.kanso-control--active){background-color:var(--w12)}
 .kanso-button--icon.kanso-button--spinning .kanso-icon{color:var(--fg);animation:spin var(--k-spin-ms) linear infinite}
 :is(.kanso-button--solid.kanso-control--off,.kanso-button--icon.kanso-button--off){cursor:default}
 .kanso-button--icon.kanso-button--off{background:var(--w4);color:var(--dim);cursor:not-allowed}
@@ -227,6 +227,8 @@
 .kanso-tabs__dot{width:var(--k-sp-2);height:var(--k-sp-2);border-radius:50%;background:var(--blocked);flex:none}
 .kanso-tabs__tab--icon .kanso-tabs__dot{position:absolute;top:1px;right:1px;width:6px;height:6px}
 .kanso-tabs__close{color:var(--dim)}
+.kanso-tabs__label{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.kanso-tabs__insertion{display:block;flex:none;width:2px;height:var(--k-h-badge);border-radius:var(--k-r-sm);background:var(--accent)}
 .kanso-tabs__close:is(:hover,.kanso-control--hover){color:var(--fg)}
 .kanso-markdown{margin-top:var(--k-sp-3);font-size:var(--k-fs-name);line-height:var(--k-lh-body);color:var(--fg)}
 .kanso-markdown .kanso-markdown__heading{font-size:var(--k-fs-title);font-weight:var(--k-fw-strong);letter-spacing:-.01em;margin:0 0 var(--k-sp-2)}

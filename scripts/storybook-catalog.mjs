@@ -84,17 +84,17 @@ const primitive = {
 const protoPage = {
   'components-annotated-picture': 'Panels/Pins', 'components-choosing-the-channel': 'Compositions/Dawn Mode',
   'components-code': 'Primitives/Code', 'components-collapsed-rail': 'Layouts/Sidebar',
-  'components-dialog': 'Primitives/Dialog', 'components-edges-and-minimap': 'Compositions/Edge and Minimap',
+  'components-dialog': 'Primitives/Dialog', 'components-edges-and-minimap': 'Layouts/Edges',
   'components-find-in-the-conversation': 'Panels/Find', 'components-header-digest': 'Compositions/Pane header',
   'components-log': 'Primitives/Code', 'components-markdown-window': 'Panels/Markdown', 'components-markdown': 'Primitives/Markdown',
   'components-menu': 'Primitives/Menu', 'components-new-project': 'Primitives/Dialog', 'components-new-worktree': 'Primitives/Dialog',
-  'components-pane-header': 'Compositions/Pane header', 'components-pane-standing-in': 'Compositions/Bars', 'components-panel-menu': 'Primitives/Menu',
+  'components-pane-header': 'Compositions/Pane header', 'components-pane-standing-in': 'Layouts/Pane', 'components-panel-menu': 'Primitives/Menu',
   'components-pick-list': 'Primitives/Row', 'components-rename': 'Primitives/Dialog', 'components-settings-tabs': 'Panels/Settings',
   'components-shipped': 'Panels/Shipped', 'components-simulator-screen': 'Panels/Simulator',
   'components-status-bar-working': 'Layouts/Status bar', 'components-status-bar': 'Layouts/Status bar',
-  'components-system-notification': 'Compositions/Notifications', 'components-tab-bar': 'Compositions/Bars', 'components-tab-states': 'Primitives/Tab',
+  'components-system-notification': 'Compositions/Notifications', 'components-tab-bar': 'Layouts/Tab bar', 'components-tab-states': 'Primitives/Tab',
   'components-title-and-tools': 'Layouts/Sidebar header', 'components-while-you-were-away': 'Compositions/Activity', 'components-worktree-row-open': 'Primitives/Row',
-  'compositions-bars': 'Compositions/Bars', 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
+  'compositions-bars': 'Layouts/Pane', 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
   'compositions-menu-and-dialog': 'Primitives/Dialog', 'compositions-panel-pieces': 'Compositions/Panel shell',
   'compositions-sidebar-rows': 'Layouts/Sidebar', 'compositions-states': 'Compositions/State patterns',
   'layouts-sidebar-at-rest': 'Layouts/Sidebar', 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
@@ -114,7 +114,7 @@ const coveragePage = {
   Devices: 'Panels/Simulator', DeviceControls: 'Panels/Simulator', PictureState: 'Panels/Simulator', SleepDialog: 'Primitives/Dialog',
   Sidebar: 'Layouts/Sidebar', SidebarStatus: 'Layouts/Sidebar', SidebarThreads: 'Layouts/Sidebar', SidebarSort: 'Layouts/Sidebar', ProjectGit: 'Layouts/Sidebar',
   ProjectMenu: 'Compositions/Project menu', AgentMenu: 'Compositions/Agent menu', NewConversation: 'Primitives/Dialog', ProjectCreation: 'Primitives/Dialog', ComputerMenu: 'Compositions/Computer menu', Asleep: 'Layouts/Sidebar', NeedsQueue: 'Layouts/Sidebar', AwayEvents: 'Compositions/Activity', CreateWorktree: 'Primitives/Dialog',
-  Spend: 'Panels/Spend', SpendBreakdown: 'Panels/Spend', SpendSettings: 'Panels/Spend', SpendChart: 'Primitives/Chart', StatusStandIn: 'Layouts/Status bar', PaneTools: 'Compositions/Pane header', StripNavigation: 'Compositions/Bars', Tabs: 'Primitives/Tab', PanelToolbar: 'Compositions/Bars', Notice: 'Primitives/Toast', NoticeStack: 'Primitives/Toast',
+  Spend: 'Panels/Spend', SpendBreakdown: 'Panels/Spend', SpendSettings: 'Panels/Spend', SpendChart: 'Primitives/Chart', StatusStandIn: 'Layouts/Status bar', PaneTools: 'Compositions/Pane header', StripNavigation: 'Layouts/Edges', Tabs: 'Primitives/Tab', PanelToolbar: 'Layouts/Tab bar', Notice: 'Primitives/Toast', NoticeStack: 'Primitives/Toast',
 };
 
 export function pageFor(source, file, key) {

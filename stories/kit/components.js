@@ -7,7 +7,7 @@ export const escape = (text) => String(text).replace(/[&<>"]/g, (char) => `&#${c
 export const kinds = { solid: 'kanso-button--solid', tonal: 'kanso-button--tonal', quiet: 'kanso-button--quiet kanso-text--fg', icon: 'kanso-button--icon' };
 export const button = ({ label, kind = 'solid', size = 'md', icon = 'none', disabled = false, verb = '', armed = false, active = false, spin = false }) => {
   const classes = ['kanso-button', kinds[kind], size === 'md' ? '' : `kanso-button--${size}`, disabled ? 'kanso-control--off' : '', armed ? 'kanso-action kanso-action--armed' : '', active ? 'kanso-button--active' : '', spin ? 'kanso-button--spinning' : ''].filter(Boolean).join(' ');
-  const glyph = icon === 'none' ? (spin ? '<svg class="kanso-mark kanso-mark--working kanso-icon--inline"><use href="#e-work"/></svg>' : '') : `<svg class="kanso-icon"><use href="#${icon}"/></svg>`;
+  const glyph = icon === 'none' ? (spin ? '<svg class="kanso-mark kanso-mark--working kanso-icon--inline"><use href="#e-work"/></svg>' : '') : `<svg class="${icon.startsWith('p-') ? 'kanso-icon--program' : 'kanso-icon'}"><use href="#${icon}"/></svg>`;
   const text = kind === 'icon' ? '' : escape(label);
   const inner = armed ? `<span>${text}</span><span>Press again to ${escape(verb || label.toLowerCase())}</span>` : `${glyph}${text}`;
   return `<span class="${classes}" tabindex="0" title="${escape(label)}"${disabled ? ' aria-disabled="true"' : ''}${spin ? ' aria-busy="true"' : ''}>${inner}</span>`;
@@ -94,7 +94,7 @@ export const menu = ({ title, items }) => {
     const label = item.armed ? `Press again to ${escape(item.verb || String(item.label ?? '').toLowerCase())}` : escape(item.label ?? '');
     return `<div class="${classes}" role="menuitem" tabindex="0">${glyph}<span class="kanso-layout__grow">${label}</span>`
       + (item.badge ? `<span class="kanso-menu__badge">${escape(item.badge)}</span>` : '')
-      + (item.hint ? `<span class="kanso-menu__hint">${escape(item.hint)}</span>` : '') + '</div>';
+      + (item.hint ? `<span class="kanso-menu__hint">${escape(item.hint)}</span>` : '') + (item.mark ? mark({ status: item.mark }) : '') + '</div>';
   }).join('');
   return `<div class="kanso-menu kanso-popover" role="menu">${title ? `<div class="kanso-menu__heading">${escape(title)}</div>` : ''}${rows}</div>`;
 };
@@ -148,9 +148,11 @@ export const tabs = ({ items, value, size, track, disabled, icon, label: named }
   const on = item.key === value;
   const label = escape(item.label ?? '');
   const square = icon && !named;
-  return `<span class="kanso-tabs__tab${on ? ' kanso-tabs__tab--on' : ''}${square ? ' kanso-tabs__tab--icon' : ''}${item.armed ? ' kanso-action--armed' : ''}" role="tab" aria-selected="${on}" aria-label="${label}" tabindex="0" title="${square ? label : escape(item.tip ?? '')}" onclick="${choose}">`
-    + `${icon && item.icon ? glyph(item.icon) : ''}${named || !item.icon ? label : ''}${item.mark && !square ? mark({ status: item.mark, size: 13 }) : ''}`
-    + `${(item.dot || (square && item.mark === 'blocked')) && !on ? '<i class="kanso-tabs__dot"></i>' : ''}${on && item.closable && !square ? '<svg class="kanso-icon kanso-tabs__close"><use href="#lu-x"/></svg>' : ''}</span>`;
+  const states = [on && 'kanso-tabs__tab--on', square && 'kanso-tabs__tab--icon', item.armed && 'kanso-action--armed', item.pending && 'kanso-state-line--pending', item.held && 'kanso-control--held'].filter(Boolean).map((name) => ` ${name}`).join('');
+  const name = item.editing ? input({ text: item.label ?? '', label: item.label ?? '', icon: 'none', inline: true, selected: true, limit: 64 }) : `<span class="kanso-tabs__label">${label}</span>`;
+  return `${item.drop ? '<i class="kanso-tabs__insertion"></i>' : ''}<span class="kanso-tabs__tab${states}" role="tab" aria-selected="${on}" aria-label="${label}" tabindex="0" title="${square ? label : escape(item.tip ?? '')}" onclick="${choose}">`
+    + `${icon && item.icon ? glyph(item.icon) : ''}${named || !item.icon ? name : ''}${item.pending ? '<i class="kanso-state-line__pending-dot"></i>' : ''}${item.mark && !square ? mark({ status: item.mark }) : ''}`
+    + `${(item.dot || (square && item.mark === 'blocked')) && !on ? '<i class="kanso-tabs__dot"></i>' : ''}${on && item.closable && !square && !item.editing ? '<svg class="kanso-icon kanso-tabs__close"><use href="#lu-x"/></svg>' : ''}</span>`;
 }).join('')}</div>`;
 
 export const thumbnail = ({ image, label, selected, loading }) => `<span class="kanso-thumbnail${selected ? ' kanso-control--selected' : ''}${loading ? ' kanso-skeleton--shape' : ''}" role="button" aria-pressed="${selected}" aria-label="${escape(label)}" title="${escape(label)}" tabindex="0">${image && !loading ? `<img src="${escape(image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>`;
@@ -229,20 +231,17 @@ const inlineIcon = (name) => `<svg class="kanso-icon kanso-icon--inline"><use hr
 export const statusItem = ({ icon = '', mark: status = '', text = '', tone = '', pending = false, open = false } = {}) => `<span class="kanso-status-bar__item${tone ? ` kanso-text--${escape(tone)}` : ''}${pending ? ' kanso-state-line--pending' : ''}${open ? ' kanso-status-bar__item--open' : ''}">`
   + `${status ? mark({ status, size: 'sm' }) : icon ? inlineIcon(icon) : ''}${text === '' ? '' : `<span>${escape(String(text))}</span>`}${pending ? '<i class="kanso-state-line__pending-dot"></i>' : ''}</span>`;
 
+// The failure pattern on a bar: the blocked mark, our words, one small fix.
+export const failureLine = ({ text, fix, detail = '' }) => `<span class="kanso-state-line"${detail ? ` title="${escape(detail)}"` : ''}>${mark({ status: 'blocked' })}${escape(text)}${button({ label: fix, kind: 'tonal', size: 'sm' })}</span>`;
+
 export const computerItemStates = ['on', 'unreachable', 'pending'];
 // Unreachable is said in words with Refresh; folded, the name gives way to its icon.
 export const computerItem = ({ name, remote = true, state = 'on', folded = false }) => state === 'unreachable'
-  ? `<span class="kanso-state-line" title="ssh: connect to host ${escape(name)} port 22: Operation timed out">${mark({ status: 'blocked' })}Can't reach ${escape(name)}${button({ label: 'Refresh', kind: 'tonal', size: 'sm' })}</span>`
+  ? failureLine({ text: `Can't reach ${name}`, fix: 'Refresh', detail: `ssh: connect to host ${name} port 22: Operation timed out` })
   : statusItem({ icon: remote ? 'lu-server' : 'lu-monitor', text: folded ? '' : name, pending: state === 'pending' });
 
 export const needsItem = ({ name, question = '', more = 0 }) => `<span class="kanso-status-bar__item kanso-status-bar__needs">${mark({ status: 'blocked', size: 'sm' })}<span class="kanso-status-bar__name">${escape(name)}</span>`
   + `${question ? `<span class="kanso-status-bar__question">${escape(question)}</span>` : ''}${more ? `<span class="kanso-status-bar__more">+${more}</span>` : ''}</span>`;
-
-// One bar per column; the current one in foreground, one partly out of view outlined.
-export const minimap = ({ columns = [] } = {}) => `<span class="kanso-minimap">${columns.map(({ width = 24, current = false, partial = false }) => {
-  const tone = current ? 'kanso-content__summary' : partial ? 'kanso-control__outline' : '';
-  return `<i${tone ? ` class="${tone}"` : ''} style="width:${Number(width)}px"></i>`;
-}).join('')}</span>`;
 
 // Each panel item opens the bar's Menu: what it holds, its actions, the act that ends it, then the piece line.
 const hide = [{ separator: true }, { icon: 'lu-eye-off', label: 'Hide this' }];
@@ -260,9 +259,38 @@ export const statusPanels = ({ open = '' } = {}) => [
   statusItem({ icon: 'lu-git-pull-request', text: 2, open: open === 'reviews' }),
 ];
 
-// Panes per view; its keys are in the tooltips.
-export const stepper = ({ value = 2 } = {}) => `<span class="kanso-status-bar__stepper">${button({ label: 'Fewer panes per view ⌘⇧−', kind: 'icon', size: 'sm', icon: 'lu-minus' })}`
+// Panes per view; its keys are in the tooltips, Even out and the piece lines in its right-click Menu.
+export const stepper = ({ value = 2, open = false } = {}) => `<span class="kanso-status-bar__item kanso-status-bar__stepper${open ? ' kanso-status-bar__item--open' : ''}">${button({ label: 'Fewer panes per view ⌘⇧−', kind: 'icon', size: 'sm', icon: 'lu-minus' })}`
   + `<span class="kanso-status-bar__value">${Number(value)}</span>${button({ label: 'More panes per view ⌘⇧=', kind: 'icon', size: 'sm', icon: 'lu-plus' })}</span>`;
+export const stepperMenu = () => menu({ title: 'Panes per view', items: [{ icon: 'lu-move-horizontal', label: 'Even out', hint: '⌘⇧0' }, { separator: true },
+  { icon: 'lu-check', label: 'Only when needed' }, { icon: 'lu-eye-off', label: 'Hide this' }, { icon: 'lu-sliders-vertical', label: 'Settings for this…' }] });
+export const layoutPaused = () => failureLine({ text: 'Layout paused', fix: 'Resume', detail: 'layout write refused 3 times' });
+
+// Edges: the panes past each side, one icon Button per pane, the panes of one column grouped; a click goes there, the name is the tooltip.
+export const edge = ({ side = 'right', columns = [], drop = false } = {}) => `<div class="kanso-edge${drop ? ' kanso-edge--target' : ''}">`
+  + `<svg class="kanso-icon kanso-icon--row"><use href="#lu-chevron-${side}"/></svg>`
+  + columns.map((panes) => `<span class="kanso-edge__column">${panes.map(({ program = 'p-claude', name }) => button({ label: name, kind: 'icon', size: 'sm', icon: program })).join('')}</span>`).join('') + '</div>';
+
+// Tab bar: the Tab primitive for the tabs, icon Buttons for everything else.
+export const panelDoors = [
+  { key: 'files', label: 'Files', icon: 'lu-file' }, { key: 'spend', label: 'Spend', icon: 'lu-chart-column' }, { key: 'pr', label: 'PR', icon: 'lu-git-pull-request' },
+  { key: 'shipped', label: 'Shipped', icon: 'lu-trophy' }, { key: 'worktrees', label: 'Worktrees', icon: 'lu-git-fork' }, { key: 'ports', label: 'Ports', icon: 'lu-plug' },
+  { key: 'containers', label: 'Containers', icon: 'lu-container' }, { key: 'memory', label: 'Memory', icon: 'lu-memory-stick' }, { key: 'images', label: 'Images', icon: 'lu-image' },
+];
+const door = (icon, label, active = false) => button({ label, kind: 'icon', icon, active });
+const skeletonTab = '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tab-bar__skeleton"></span>';
+export const tabBarStates = ['connected', 'connecting', 'unreachable'];
+// Folded tabs go behind +N, a Menu with their marks; + and Arrange never fold.
+export const tabBar = ({ items = [], value = '', folded = [], overflow = false, panels = panelDoors, panel = '', state = 'connected', windows = false } = {}) => {
+  const list = state === 'connecting' ? skeletonTab + skeletonTab
+    : tabs({ items: items.map((item) => ({ closable: true, ...item })), value, size: 'md', disabled: state === 'unreachable', label: true });
+  const more = folded.length && state === 'connected' ? `<span class="kanso-tab-bar__more">${button({ label: `+${folded.length}`, kind: 'quiet', active: overflow })}`
+    + `${overflow ? `<span class="kanso-tab-bar__menu">${menu({ items: folded.map((item) => ({ label: item.label, mark: item.mark })) })}</span>` : ''}</span>` : '';
+  const tools = state === 'connected' ? door('lu-plus', 'New tab') + door('lu-panels-top-left', 'Arrange') : '';
+  const right = state === 'connected' ? panels.map((item) => door(item.icon, item.label, item.key === panel)).join('') : '';
+  const system = windows ? door('lu-minus', 'Minimize') + door('lu-square', 'Maximize') + door('lu-x', 'Close') : '';
+  return `<div class="kanso-tab-bar">${list}${more}${tools}<span class="kanso-layout__grow"></span><span class="kanso-tab-bar__doors">${right}${system}</span></div>`;
+};
 
 // Cells
 
@@ -294,6 +322,6 @@ export const sidebar = ({ collapsed = false, dawn: early = false, view = 'spaces
   ? `<aside class="kanso-rail">${header({ collapsed, dawn: early })}${switcher ? viewSwitch({ view, column: true, open }) : ''}<div class="kanso-rail__list">${tiles[view]()}</div><div class="kanso-rail__footer">${tool('lu-settings', 'Settings')}</div></aside>`
   : `<aside class="kanso-sidebar">${header({ dawn: early })}${switcher ? viewSwitch({ view }) : ''}<div class="kanso-sidebar__rows">${lists[view]()}</div>${sidebarFooter()}</aside>`;
 
-// Two halves around the fixed minimap slot; each half folds its own items.
+// Two halves around the fixed slot of panes per view; each half folds its own items.
 export const statusBar = ({ left = [], middle = '', right = [], popup = '' } = {}) => `<div class="kanso-status-bar kanso-status-bar--grid"><div class="kanso-status-bar__left">${left.join('')}</div>`
   + `<div class="kanso-status-bar__middle">${middle}</div><div class="kanso-status-bar__right">${right.join('')}</div>${popup ? `<div class="kanso-status-bar__popup">${popup}</div>` : ''}</div>`;

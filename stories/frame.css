@@ -58,3 +58,5 @@
 .kanso-story__frame > .kanso-toolbar:not(.kanso-toolbar--column) { inline-size: calc(256px - 2 * var(--k-sp-2)); }
 .kanso-story__frame > .kanso-dawn { position: relative; inline-size: 256px; }
 .kanso-story__popup-room { padding-top: calc(8 * var(--k-sp-8)); }
+.kanso-story__menu-room { padding-bottom: calc(6 * var(--k-sp-8)); }
+.kanso-story__strip { display: flex; justify-content: space-between; align-items: stretch; min-block-size: calc(4 * var(--k-sp-8)); }

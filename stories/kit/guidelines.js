@@ -127,10 +127,21 @@ export const guidelines = {
     ["Kansō", "The name and +1 never fold.", "The question gives way first when the bar narrows."],
   ],
   "Compositions/Status bar": [
-    ["Seijaku", "Two halves around the minimap.", "26 tall, 12 inside, 16 between items. The minimap and panes per view keep the fixed 180 slot; each half folds within its own width."],
+    ["Seijaku", "Two halves around panes per view.", "26 tall, 12 inside, 16 between items. Panes per view keeps the fixed 180 slot; each half folds within its own width. Layout paused takes the slot while the strip is stopped."],
     ["Kansō", "A stand-in, never a second copy.", "No working count: the rows and tiles say it. No palette key: keys live in tooltips and menus."],
-    ["Kansō", "At rest, nothing.", "Each fact shows only while its own home is out of view."],
+    ["Kansō", "At rest, only panes per view.", "Each fact shows only while its own home is out of view. No minimap: the edges say what is past each side."],
     ["Fukinsei", "Fold order, right half.", "Memory to \"8% free\", then servers, containers and reviews give way, then the question. Left: the computer becomes its icon."],
+  ],
+  "Compositions/Tab bar": [
+    ["Kansō", "Built from the kit.", "The tabs are the Tab primitive; new tab, Arrange, +N and the panel doors are icon Buttons; +N opens a Menu. Nothing is drawn twice."],
+    ["Kokō", "A mark only for Needs you.", "A tab out of view whose session waits carries the blocked mark; it leaves when the tab is chosen. No mark for working or finished: the rows and the pane headers say it."],
+    ["Seijaku", "48 tall, nothing filled at rest.", "Tabs 2 apart, 8 to new tab and Arrange; doors 2 apart, the last 12 from the edge. The open door and the chosen tab take the quiet fill."],
+    ["Shizen", "Nothing disappears.", "Tabs that do not fit fold behind +N; new tab, Arrange and the doors never fold. A door whose tool is missing on the computer is not drawn."],
+  ],
+  "Compositions/Edges": [
+    ["Kansō", "A stand-in for the panes out of view.", "One icon Button per pane past each side, at the side where it is; the panes of one column grouped. A click goes there; the name is the tooltip."],
+    ["Kokō", "No state dots.", "A waiting pane is said by the status bar's Needs you; the edge only says where."],
+    ["Shizen", "A drop target while dragging.", "A pane dragged over an edge washes it in accent 25%."],
   ],
   "Primitives/Key hint": [
     ["Seijaku", "One key look.", "24 high, radius 4, mono 11.5, border edge. Symbols, not words: ⌘ ⌃ ⌥ ⇧ ↵; Esc stays a word. At most 6 characters."],
