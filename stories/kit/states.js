@@ -401,7 +401,7 @@ export const statedPages = {
     ],
   },
   'Primitives/Row': {
-    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', detailTone: 'none', meta: '+14 −3', mark: 'none', second: '', heading: false, title: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false },
+    args: { icon: 'lu-file', letter: '', number: '', name: 'checkout.ts', detail: 'src/api', detailTone: 'none', meta: '+14 −3', mark: 'none', second: '', reason: null, path: '', verbs: [], level: undefined, open: false, heading: false, title: false, hero: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false, strong: false, late: false },
     markup: ({ tools, detail, detailTone, ...args }) => stack({ variant: 'panel' }, row({ ...args, detail: detailTone === 'none' ? detail : { text: detail, tone: detailTone }, actions: tools ? [{ icon: 'lu-pin', label: 'Pin' }, { icon: 'lu-ellipsis', label: 'More' }] : [] })),
     states: [
       { label: 'A file', args: {}, caption: 'Icon, name, a dim fact, the meta at the right.' },
