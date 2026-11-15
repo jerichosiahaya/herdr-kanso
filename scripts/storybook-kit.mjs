@@ -54,11 +54,10 @@ export function kitRecords(records) {
     ['kit/Header/Open', 'Expanded', header(), 'The lights; + on the left; sort, search and hide on the right.'],
     ['kit/Header/Collapsed', 'Collapsed', header({ collapsed: true }), 'The lights; show and + stacked in the rail.'],
     ['kit/Header/Dawn', 'Expanded, Dawn Mode', header({ dawn: true }), 'The dawn behind the lights and the tools.'],
-    ['kit/Header/Pill', 'Expanded, Dawn Mode pill', header({ dawn: true, mark: 'pill' }), 'The pill right of the lights, no sky.'],
     ['kit/Header/Dawn collapsed', 'Collapsed, Dawn Mode', header({ collapsed: true, dawn: true }), 'The dawn behind the lights, centred on the rail.'],
     ['kit/Toolbar/Row', 'Row', toolbar(), 'Sidebar open: + alone on the left, the rest on the right.'],
     ['kit/Toolbar/Column', 'Column', toolbar({ column: true }), 'Sidebar collapsed: stacked in the rail.'],
-  ]) if (html) results.push({ id, source: 'kit', page: id.startsWith('kit/Toolbar/') ? 'Compositions/Header/Toolbar' : 'Compositions/Header/Header', label, html: frame(html), caption });
+  ]) if (html) results.push({ id, source: 'kit', page: id.startsWith('kit/Toolbar/') ? 'Compositions/Toolbar' : 'Compositions/Header', label, html: frame(html), caption });
   const inSidebar = (html) => `<div class="kanso-sidebar">${html}</div>`, inRail = (html) => `<div class="kanso-rail">${html}</div>`;
   for (const [page, label, html, caption, id] of [
     ['Session row', 'Working', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' })), 'What it is on and for how long.'],
@@ -85,7 +84,8 @@ export function kitRecords(records) {
     ['Sidebar', 'Dawn collapsed', sidebar({ collapsed: true, dawn: true }), 'The rail, in Dawn Mode.', 'kit/Rail/Dawn'],
     ['Sidebar', 'Status', sidebar({ view: 'agents' }), 'Open on Status.', 'kit/Rail/Open'],
     ['Sidebar', 'Status collapsed', sidebar({ collapsed: true, view: 'agents' }), 'The rail on Status.', 'kit/Rail/Collapsed'],
-  ]) results.push({ id: id ?? `kit/${page}/${label}`, source: 'kit', page: `Compositions/Sidebar/${page}`, label, html: frame(html), caption });
+    ['Sidebar', 'Views menu', sidebar({ collapsed: true, menu: true }), 'The rail: its one view button opens Projects, Status and Threads.'],
+  ]) results.push({ id: id ?? `kit/${page}/${label}`, source: 'kit', page: page === 'Sidebar' ? 'Compositions/Sidebar' : `Compositions/Sidebar/${page}`, label, html: frame(html), caption });
   const choices = elements(byId('proto/components-choosing-the-channel/ChoosingTheChannel/Default'), 'kanso-update');
   const sky = elements(byId('proto/tokens-dawn/TheBand/Default'), 'kanso-dawn--preview')[0];
   const mark = elements(byId('proto/approved-dawn/Reference/12'), 'kanso-settings__piece-choice')[0];

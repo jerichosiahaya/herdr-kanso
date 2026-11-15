@@ -6,7 +6,7 @@ export const guidelines = {
     ["Seijaku", "Use a token, never a value.", "Every colour in a board or a mod is one of the tokens in the table. A new colour is added to the table, with its use and its rule, before anything uses it."],
     ["Fukinsei", "Three text levels:", "fg, muted and dim, told apart by size and place first and tone second."],
     ["Kokō", "One colour, one meaning.", "A state colour appears only on the thing in that state. Colour on anything that asks nothing is a defect."],
-    ["Shizen", "Washes come from the foreground:", "track 4%, hover 7%, selected 12%, active project 14%. Light uses the same steps; it never reaches pure white or black."],
+    ["Shizen", "Washes come from the foreground:", "track 4%, hover 7%, selected 12%, active project 14%; light 5, 9.5, 18 and 21%, so the steps read the same. Neither reaches pure white or black."],
   ],
   "Tokens/Contrast, light and dark": [
     ["Shizen", "Text passes 4.5:1", "on every surface it can sit on, including hover and selected. Marks, focus rings and control edges pass 3:1. Never lower contrast with opacity on text."],
@@ -77,26 +77,41 @@ export const guidelines = {
   "Primitives/Dawn": [
     ["Shizen", "One sky.", "The same colours in dark and light. The sun rises once on load; reduced motion shows the last frame."],
   ],
-  "Compositions/Header/Toolbar": [
+  "Compositions/Toolbar": [
     ["Kansō", "Icon buttons only.", "Large icon buttons, 8 apart. In a row the first may stand alone on the left; in the rail they stack, 12 apart."],
     ["Kansō", "Nothing disappears.", "In the rail, the tools that do not fit fold under a caret. Open, they stack below it on a quiet wash; the caret turns up."],
   ],
-  "Compositions/Header/Header": [
+  "Compositions/Header": [
     ["Seijaku", "Lights, then tools.", "Window controls in 48, the toolbar in 40. Collapsed, the header is the rail's width and the toolbar stacks."],
     ["Shizen", "Dawn sits behind.", "In Dawn Mode the sky fills the top behind the lights and the tools stay on top."],
   ],
   "Compositions/Sidebar/Session row": [
-    ["Kansō", "Two lines only while it matters.", "Working, needs you or an unread message add the activity and its age; finished, idle and terminals keep one line."],
-    ["Kokō", "The mark closes the row.", "Tools, the pin and the command count sit before the mark; under the pointer, pin and ⋯ take the age's place."],
+    ["Kansō","A Row at depth one, or two under its parent.","Program icon, the name glinting while it works, the activity as the second line, its age as meta, the mark last."],
+    ["Kokō","The mark closes the row.","The pin and the command count sit before the mark; under the pointer, pin and ⋯ take the age’s place."],
   ],
   "Compositions/Sidebar/Project row": [
-    ["Kansō", "Git only on project rows.", "Folder, branch and ↑↓ follow the name in dim; folded, the most urgent mark and how many replace them on the right."],
+    ["Kansō","A heading Row; git only here.","Folder, branch and ↑↓ follow the name in dim; folded, how many and the most urgent mark close the row."],
   ],
   "Compositions/Sidebar/Computer row": [
-    ["Kansō", "One button for what is wrong.", "Off shows power, unreachable shows Refresh; connected, its tools show under the pointer only."],
+    ["Kansō","A heading Row with one button for what is wrong.","Off shows power, unreachable shows Refresh; connected, its tools show under the pointer only."],
   ],
-  "Compositions/Sidebar/Sidebar": [
-    ["Kansō", "Built from the pieces above.", "Header, View switch, the rows of the chosen view and Footer. Collapsed, the rail keeps every tool, the views as icons and each row as a tile."],
+  "Compositions/Sidebar/Asleep": [
+    ["Kansō", "A heading Row with the moon.", "Folded, how many sleep; open, each one dimmed at depth one with Wake."],
+  ],
+  "Compositions/Sidebar/Section": [
+    ["Kokō", "A heading Row over its rows.", "Its mark when it has one, how many when folded."],
+  ],
+  "Compositions/Sidebar/View switch": [
+    ["Kansō", "Tab open, one button collapsed.", "Open, the three views on a track; collapsed, the current view’s icon opens a Menu of all three."],
+  ],
+  "Compositions/Sidebar/Tile": [
+    ["Kansō", "A group in the rail.", "An Avatar with the project’s initial, or the state’s Mark, and a quiet Chip with how many."],
+  ],
+  "Compositions/Sidebar/Footer": [
+    ["Kokō", "Rows with an icon.", "An update when there is one, then Settings and Add computer."],
+  ],
+  "Compositions/Sidebar": [
+    ["Kansō","Built from the pieces above.","Header, View switch, the rows of the chosen view and Footer. Collapsed, the rail keeps every tool, one view button with its menu and each group as a Tile."],
   ],
   "Primitives/Key hint": [
     ["Seijaku", "One key look.", "24 high, radius 4, mono 11.5, border edge. Symbols, not words: ⌘ ⌃ ⌥ ⇧ ↵; Esc stays a word. At most 6 characters."],
@@ -129,7 +144,8 @@ export const guidelines = {
   "Primitives/Row": [
     ["Seijaku", "One row.", "32 high, icon 14, name, an optional dim tail, the meta and the state mark at the right. Rows touch."],
     ["Kansō", "Two lines only while there is something to say.", "The second line is meta and ends in an ellipsis."],
-    ["Shizen", "State is tone.", "Hover w7, selected the shared accent ring, dimmed muted; a pending row is at 80% with the breathing dot until it is written."],
+    ["Shizen", "State is tone.", "Hover w7, current the selected fill, selected the shared accent ring, dimmed muted; a pending row is at 80% with the breathing dot until it is written."],
+    ["Kokō", "Depth and headings, not new rows.", "A heading is the name in strong; depth one and two indent by an icon, two with a w12 guide. Tools show on hover or focus and take the meta’s place; one button for what is wrong stays."],
     ["Kokō", "Every list uses this row.", "Files, ports, sessions, projects, computers and pick lists are this row with their own lead and meta."],
   ],
   "Primitives/Skeleton": [

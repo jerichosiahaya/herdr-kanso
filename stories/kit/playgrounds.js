@@ -1,6 +1,6 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { asleep, avatar, avatarSizes, computerRow, computerStates, dawnMarks, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, viewSwitch, views, button, card, code, dawn, dialog, escape, header, input, kinds, levels, mark, markSizes, markdown, marks, menu, metric, row, sides, skeletonOf, skeletonShapes, tabs, thumbnail, toast, toggle, toolbar, tooltip, windowControls } from './components.js';
+import { asleep, avatar, avatarSizes, chip, rowDepths, computerRow, computerStates, projectRow, section, sessionRow, sidebar, sidebarFooter, tile, viewSwitch, views, button, card, code, dawn, dialog, escape, header, input, kinds, levels, mark, markSizes, markdown, marks, menu, metric, row, sides, skeletonOf, skeletonShapes, tabs, thumbnail, toast, toggle, toolbar, tooltip, windowControls } from './components.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -25,18 +25,19 @@ export const playgrounds = {
     markup: button,
   },
   'Primitives/Avatar': {
-    args: { initial: 'S', image: '', size: 'md' },
+    args: { initial: 'S', image: '', size: 'md', tone: '' },
     argTypes: {
       initial: { name: 'Initial', control: { type: 'text' } },
       image: { name: 'Image URL', control: { type: 'text' } },
       size: select('Size', Object.keys(avatarSizes)),
+      tone: select('Tone', ['', 'teal', 'yellow', 'blue', 'violet', 'green', 'red']),
     },
     markup: avatar,
   },
   'Primitives/Chip': {
-    args: { label: '3 files' },
-    argTypes: { label: { name: 'Label', control: { type: 'text' } } },
-    markup: ({ label }) => `<span class="kanso-badge">${escape(label)}</span>`,
+    args: { label: '3 files', quiet: false },
+    argTypes: { label: { name: 'Label', control: { type: 'text' } }, quiet: { name: 'quiet', control: { type: 'boolean' } } },
+    markup: chip,
   },
   'Primitives/Code': {
     args: { text: 'export function bucket(customer) {\n  const plan = planOf(customer);\n  return { plan, tokens: LIMIT[plan] };\n}', kind: 'source', first: 11, line: 12 },
@@ -140,14 +141,14 @@ export const playgrounds = {
   },
   'Primitives/Window controls': { args: {}, argTypes: {}, markup: windowControls },
   'Primitives/Dawn': { args: {}, argTypes: {}, markup: () => dawn() },
-  'Compositions/Header/Toolbar': {
+  'Compositions/Toolbar': {
     args: { column: false, open: false },
     argTypes: { column: { name: 'column', control: { type: 'boolean' } }, open: { name: 'open', control: { type: 'boolean' }, if: { arg: 'column' } } },
     markup: toolbar,
   },
-  'Compositions/Header/Header': {
-    args: { collapsed: false, dawn: false, mark: 'artwork' },
-    argTypes: { collapsed: { name: 'collapsed', control: { type: 'boolean' } }, dawn: { name: 'Dawn Mode', control: { type: 'boolean' } }, mark: { ...select('mark', dawnMarks), if: { arg: 'dawn' } } },
+  'Compositions/Header': {
+    args: { collapsed: false, dawn: false },
+    argTypes: { collapsed: { name: 'collapsed', control: { type: 'boolean' } }, dawn: { name: 'Dawn Mode', control: { type: 'boolean' } } },
     markup: header,
   },
   'Compositions/Sidebar/Session row': {
@@ -216,7 +217,7 @@ export const playgrounds = {
     args: { initial: 'A', tone: 'teal', status: 'blocked', count: 4, open: false },
     argTypes: {
       initial: { name: 'initial', control: { type: 'text' } },
-      tone: select('tone', ['teal', 'yellow', 'muted']),
+      tone: select('tone', ['', 'teal', 'yellow', 'blue', 'violet', 'green', 'red']),
       status: select('mark', ['none', 'blocked', 'working', 'done', 'idle']),
       count: { name: 'count', control: { type: 'number', min: 0 } },
       open: { name: 'open', control: { type: 'boolean' } },
@@ -228,13 +229,14 @@ export const playgrounds = {
     argTypes: { update: { name: 'update', control: { type: 'text' } } },
     markup: (args) => `<div class="kanso-sidebar">${sidebarFooter(args)}</div>`,
   },
-  'Compositions/Sidebar/Sidebar': {
-    args: { collapsed: false, dawn: false, view: 'spaces', switcher: true },
+  'Compositions/Sidebar': {
+    args: { collapsed: false, dawn: false, view: 'spaces', switcher: true, menu: false },
     argTypes: {
       collapsed: { name: 'collapsed', control: { type: 'boolean' } },
       dawn: { name: 'Dawn Mode', control: { type: 'boolean' } },
       switcher: { name: 'view switch', control: { type: 'boolean' } },
       view: { name: 'view', control: { type: 'inline-radio' }, options: views.map((item) => item.key) },
+      menu: { name: 'views menu', control: { type: 'boolean' }, if: { arg: 'collapsed' } },
     },
     markup: sidebar,
   },
@@ -248,7 +250,7 @@ export const playgrounds = {
     markup: toggle,
   },
   'Primitives/Row': {
-    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', meta: '+14 −3', mark: 'none', second: '', selected: false, dimmed: false, pending: false },
+    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', meta: '+14 −3', mark: 'none', second: '', heading: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false },
     argTypes: {
       icon: select('icon', icons.concat(['p-claude', 'p-codex'])),
       name: { name: 'name', control: { type: 'text' } },
@@ -256,11 +258,17 @@ export const playgrounds = {
       meta: { name: 'meta', control: { type: 'text' } },
       mark: select('mark', ['none', ...Object.keys(marks)]),
       second: { name: 'second', control: { type: 'text' } },
+      heading: { name: 'heading', control: { type: 'boolean' } },
+      depth: { name: 'depth', control: { type: 'inline-radio' }, options: rowDepths },
+      tools: { name: 'tools on hover', control: { type: 'boolean' } },
+      current: { name: 'current', control: { type: 'boolean' } },
       selected: { name: 'selected', control: { type: 'boolean' } },
+      hover: { name: 'hover', control: { type: 'boolean' } },
+      focus: { name: 'focus', control: { type: 'boolean' } },
       dimmed: { name: 'dimmed', control: { type: 'boolean' } },
       pending: { name: 'pending', control: { type: 'boolean' } },
     },
-    markup: (args) => `<div class="kanso-panel">${row(args)}</div>`,
+    markup: ({ tools, ...args }) => `<div class="kanso-panel">${row({ ...args, actions: tools ? [{ icon: 'lu-pin', label: 'Pin' }, { icon: 'lu-ellipsis', label: 'More' }] : [] })}</div>`,
   },
   'Primitives/Skeleton': {
     args: { shape: 'row', count: 3 },

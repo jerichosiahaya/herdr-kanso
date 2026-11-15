@@ -248,8 +248,8 @@
 .kanso-sidebar__worktree.kanso-control--on{background:var(--w14)}
 .kanso-sidebar__worktree.kanso-control--on .kanso-worktree__name{color:var(--fg)}
 .kanso-sidebar__branch-line{position:relative;width:15px;align-self:stretch;flex:none}
-.kanso-sidebar__branch-line::before{content:"";position:absolute;left:7px;top:0;bottom:calc(100% - 16px);width:1px;background:var(--input)}
-.kanso-sidebar__branch-line::after{content:"";position:absolute;left:7px;top:16px;width:20px;height:1px;background:var(--input)}
+.kanso-sidebar__branch-line::before{content:"";position:absolute;left:7px;top:0;bottom:calc(100% - 16px);width:1px;background:var(--border)}
+.kanso-sidebar__branch-line::after{content:"";position:absolute;left:7px;top:16px;width:20px;height:1px;background:var(--border)}
 .kanso-sidebar__branch-line.kanso-tree__branch--middle::before{bottom:0}
 .kanso-sidebar__branch-line.kanso-tree__branch--first::before{top:-24px}
 .kanso-sidebar__family{border-radius:8px}
@@ -328,7 +328,7 @@
 .kanso-pane-strip{display:flex;gap:var(--k-sp-2);height:200px;background:var(--chrome);border-radius:var(--k-r-card);padding:var(--k-sp-2);box-sizing:border-box;box-shadow:0 0 0 1px var(--border)}
 .kanso-edge{width:28px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--k-sp-1);border-radius:var(--k-r-control);color:var(--muted);font-size:var(--k-fs-name);position:relative}
 .kanso-edge.kanso-edge--target{background:color-mix(in srgb,var(--accent) 25%,transparent);color:var(--fg)}
-.kanso-minimap__tile{width:20px;height:20px;border-radius:6px;background:var(--input);display:grid;place-items:center;flex:none}
+.kanso-minimap__tile{width:20px;height:20px;border-radius:6px;background:var(--w7);display:grid;place-items:center;flex:none}
 .kanso-minimap__tile .kanso-icon--program{width:12px;height:12px}
 .kanso-minimap__tile.kanso-row--hover{background:var(--selected);box-shadow:0 0 0 1px var(--border)}
 .kanso-status-bar__slot{width:180px;height:var(--k-h-bar);display:flex;align-items:center;justify-content:center;gap:var(--k-sp-hair);background:var(--chrome);border-radius:6px;box-shadow:0 0 0 1px var(--border);font-size:var(--k-fs-meta);color:var(--muted)}

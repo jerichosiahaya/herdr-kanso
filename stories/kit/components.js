@@ -18,9 +18,9 @@ export const windowControls = () => '<span class="kanso-window-controls"><i></i>
 export const dawn = ({ id = 'dawn' } = {}) => `<svg class="kanso-dawn kanso-dawn--rising" viewBox="0 0 256 56" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><defs><linearGradient id="${id}-sky" x1="0" y1="0" x2="0" y2="44" gradientUnits="userSpaceOnUse"><stop offset="0" style="stop-color:var(--dawn-top)"/><stop offset=".45" style="stop-color:var(--dawn-mid)"/><stop offset=".8" style="stop-color:var(--dawn-low)"/><stop offset="1" style="stop-color:var(--dawn-edge)"/></linearGradient><radialGradient id="${id}-glow" cx="124" cy="44" r="78" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 15.4) scale(1.65)"><stop offset="0" style="stop-color:var(--dawn-sun);stop-opacity:.85"/><stop offset=".35" style="stop-color:var(--dawn-edge);stop-opacity:.45"/><stop offset="1" style="stop-color:var(--dawn-edge);stop-opacity:0"/></radialGradient><linearGradient id="${id}-fade" x1="0" y1="44" x2="0" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0" style="stop-color:var(--dawn-edge);stop-opacity:.5"/><stop offset="1" style="stop-color:var(--chrome);stop-opacity:0"/></linearGradient><clipPath id="${id}-clip"><rect x="0" y="0" width="256" height="44"/></clipPath></defs><rect width="256" height="44" fill="url(#${id}-sky)"/><rect class="kanso-dawn__night" width="256" height="44" style="fill:var(--dawn-top)"/><g clip-path="url(#${id}-clip)"><rect class="kanso-dawn__glow" width="256" height="44" fill="url(#${id}-glow)"/><g class="kanso-dawn__stars" style="fill:var(--dawn-star)"><circle cx="14" cy="7" r=".7" opacity=".8"/><circle cx="44" cy="13" r=".5" opacity=".55"/><circle cx="212" cy="6" r=".6" opacity=".7"/><circle cx="240" cy="15" r=".5" opacity=".45"/><circle cx="84" cy="5" r=".45" opacity=".5"/></g><g class="kanso-dawn__clouds" style="stroke:var(--dawn-sun)" stroke-linecap="round" fill="none"><path d="M28 31h58" stroke-width="1.6" opacity=".55"/><path d="M52 36h30" stroke-width="1.2" opacity=".5"/><path d="M162 28h64" stroke-width="1.6" opacity=".5"/><path d="M176 34h30" stroke-width="1.2" opacity=".45"/><path d="M6 39h40" stroke-width="1" opacity=".4"/><path d="M214 40h36" stroke-width="1" opacity=".4"/></g><g class="kanso-dawn__sun"><circle cx="124" cy="44" r="10" style="fill:var(--dawn-sun)" opacity=".5"/><circle cx="124" cy="44" r="13" fill="none" style="stroke:var(--dawn-sun)" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="70 12" transform="rotate(-150 124 44)" class="kanso-dawn__circle"/></g></g><rect y="44" width="256" height="12" fill="url(#${id}-fade)"/><path class="kanso-dawn__horizon" d="M0 44.5H256" style="stroke:var(--dawn-sun)" stroke-width="1" opacity=".55"/></svg>`;
 
 export const avatarSizes = { sm: ' kanso-avatar--sm', md: '', lg: ' kanso-avatar--lg' };
-export const avatar = ({ initial, image, size }) => {
+export const avatar = ({ initial, image, size, tone }) => {
   const picture = image ? `<img src="${escape(image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : '';
-  return `<span class="kanso-avatar kanso-avatar--round${avatarSizes[size]}">${picture}${escape(initial.slice(0, 1))}</span>`;
+  return `<span class="kanso-avatar kanso-avatar--round${avatarSizes[size] ?? ""}${tone ? ` kanso-text--host-${escape(tone)}` : ""}">${picture}${escape(initial.slice(0, 1))}</span>`;
 };
 
 export const card = ({ author, image, age, body, loading }) => `<div class="kanso-card${loading ? ' kanso-skeleton--shape' : ''}"><div class="kanso-card__header">${avatar({ initial: author, image, size: 'md' })}<b>${escape(author)}</b><span class="kanso-layout__grow"></span><span class="kanso-text--dim">${escape(age)}</span></div><div class="kanso-prose">${escape(body)}</div></div>`;
@@ -114,14 +114,24 @@ export const marks = { working: 'e-work', blocked: 'e-blk', done: 'e-done', idle
 export const markSizes = { sm: ' kanso-icon--inline', md: '', lg: ' kanso-icon--control' };
 export const mark = ({ status, size = 'md' }) => `<svg class="kanso-mark kanso-mark--${status}${markSizes[size]}"><use href="#${marks[status]}"/></svg>`;
 
-export const row = ({ icon, name, detail, meta, mark: status, second, selected, dimmed, pending }) => {
+export const chip = ({ label, quiet = false, tone = '' }) => `<span class="kanso-badge${quiet ? ' kanso-badge--quiet' : ''}${tone ? ` kanso-text--${escape(tone)}` : ''}">${escape(String(label))}</span>`;
+const fact = (part) => typeof part === 'string' ? `<span>${escape(part)}</span>` : `${part.icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(part.icon)}"/></svg>` : ''}<span>${escape(part.text)}</span>`;
+const rowTool = (action) => button({ kind: 'icon', size: 'sm', ...action });
+export const rowDepths = [0, 1, 2];
+// `actions` show on hover or focus and take the meta's place; `action` is always shown.
+export const row = ({ icon = 'none', name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, depth = 0, glint, selected, current, dimmed, pending, hover, focus, actions = [], action }) => {
   const lead = icon === 'none' ? '' : glyph(icon);
-  const tail = `${detail ? `<span class="kanso-text--dim kanso-text--truncate">${escape(detail)}</span>` : ''}<span class="kanso-layout__grow"></span>`
-    + `${meta ? `<span class="kanso-row__meta">${escape(meta)}</span>` : ''}${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${status === 'none' ? '' : mark({ status })}`;
-  const states = `${selected ? ' kanso-control--selected' : ''}${dimmed ? ' kanso-control--dim' : ''}${pending ? ' kanso-state-line--pending' : ''}`;
+  const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;
+  const facts = [].concat(detail ?? []).filter(Boolean);
+  const tail = `${facts.length ? `<span class="kanso-row__detail">${facts.map(fact).join('')}</span>` : ''}<span class="kanso-layout__grow"></span>`
+    + `${meta ? `<span class="kanso-row__meta">${escape(meta)}</span>` : ''}${flag ? `<span class="kanso-row__flag">${glyph(flag)}</span>` : ''}`
+    + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}`
+    + `${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${!status || status === 'none' ? '' : mark({ status })}`;
+  const states = [second && 'kanso-row--two-lines', heading && 'kanso-row--heading', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
+    dimmed && 'kanso-control--dim', pending && 'kanso-state-line--pending', hover && 'kanso-control--hover', focus && 'kanso-control--focus'].filter(Boolean).map((name) => ` ${name}`).join('');
   return second
-    ? `<div class="kanso-row kanso-row--two-lines${states}" tabindex="0"><div class="kanso-content__primary">${lead}<span>${escape(name)}</span>${tail}</div><div class="kanso-content__secondary">${escape(second)}</div></div>`
-    : `<div class="kanso-row${states}" tabindex="0">${lead}<span>${escape(name)}</span>${tail}</div>`;
+    ? `<div class="kanso-row${states}" tabindex="0"><div class="kanso-content__primary">${lead}${label}${tail}</div><div class="kanso-content__secondary">${escape(second)}</div></div>`
+    : `<div class="kanso-row${states}" tabindex="0">${lead}${label}${tail}</div>`;
 };
 
 const bar = (shape) => `<span class="kanso-skeleton kanso-skeleton--${shape}"></span>`;
@@ -170,63 +180,55 @@ export const toolbar = ({ column = false, open = false } = {}) => column
   ? `<div class="kanso-toolbar kanso-toolbar--column">${tool('lu-panel-left', 'Show sidebar')}${tool('lu-plus', 'New')}${more(open)}</div>`
   : `<div class="kanso-toolbar">${tool('lu-plus', 'New')}<span class="kanso-layout__grow"></span>${tool('lu-arrow-up-down', 'Sort')}${tool('lu-search', 'Search')}${tool('lu-panel-left', 'Hide sidebar')}</div>`;
 
-// Sidebar rows: a leading icon, the name and what follows it, then tools, counts and the mark.
-const leading = (icon) => `<svg class="${icon.startsWith('p-') ? 'kanso-icon--program' : 'kanso-icon'} kanso-row__leading-icon"><use href="#${escape(icon)}"/></svg>`;
-const small = (icon, label) => button({ label, kind: 'icon', size: 'sm', icon });
-const folded = (status, count) => count ? `<span class="kanso-sidebar__count">${mark({ status })}${count}</span>` : '';
-const line = (classes, body) => `<div class="kanso-sidebar__row ${classes.filter(Boolean).join(' ')}" tabindex="0">${body}</div>`;
-const depths = ['', 'kanso-row--depth-one', 'kanso-row--depth-two kanso-row--child'];
+// Sidebar compositions: each one is the Row, Tab, Menu, Avatar, Mark, Chip or Button in its own configuration.
+const icon = (name, label) => ({ icon: name, label });
 
-export const sessionRow = ({ program = 'p-claude', name, activity = '', time = '', place = '', status = 'working', depth = 1, current = false, pinned = false, commands = 0, hover = false, focus = false, dimmed = false }) => {
-  const label = status === 'working' ? `<span class="kanso-text--glint">${escape(name)}</span>` : escape(name);
-  const text = activity
-    ? `<span class="kanso-sidebar__row-text"><span class="kanso-row__name">${label}</span><span class="kanso-row__activity">${escape(activity)}${time && !hover ? ` <span class="kanso-content__time">· ${escape(time)}</span>` : ''}</span></span>`
-    : `<span class="kanso-row__name">${label}</span>`;
-  const tail = `${place ? `<span class="kanso-row__directory">${escape(place)}</span>` : ''}${hover ? small('lu-pin', 'Pin to the top') + small('lu-ellipsis', 'More') : ''}`
-    + `${pinned && !hover ? '<svg class="kanso-icon"><use href="#lu-pin"/></svg>' : ''}${commands ? `<span class="kanso-row__command-count">${commands}</span>` : ''}${status === 'none' ? '' : mark({ status })}`;
-  const live = status === 'working' || status === 'blocked' || Boolean(activity);
-  return line(['kanso-agent', activity && 'kanso-row--double-line', depths[depth], live && 'kanso-row--live', status === 'blocked' && 'kanso-row--blocked', current && 'kanso-row--current',
-    dimmed && 'kanso-control--dim', hover && 'kanso-control--hover', focus && 'kanso-control--focus'], leading(program) + text + tail);
-};
+export const sessionRow = ({ program = 'p-claude', name, activity = '', time = '', place = '', status = 'working', depth = 1, current = false, pinned = false, commands = 0, hover = false, focus = false, dimmed = false }) => row({
+  icon: program, name, second: activity, detail: place, meta: time, mark: status, depth, current, dimmed, hover, focus,
+  glint: status === 'working', flag: pinned ? 'lu-pin' : '', chip: commands, actions: [icon('lu-pin', 'Pin to the top'), icon('lu-ellipsis', 'More')],
+});
 
-const gap = '<i class="kanso-content__gap"></i>';
-export const projectRow = ({ name, folder = '', branch = '', sync = '', open = false, status = 'blocked', count = 0, hover = false, focus = false }) => {
-  const task = folder || branch ? `<span class="kanso-row__task">${escape(folder)}${branch ? `${folder ? gap : ''}<svg class="kanso-icon"><use href="#lu-git-branch"/></svg><span class="kanso-content__secondary">${escape(branch)}</span>` : ''}${sync ? `${gap}<span class="kanso-content__secondary">${escape(sync)}</span>` : ''}</span>` : '';
-  const tools = hover ? small('lu-plus', `New agent in ${name}`) + small('lu-ellipsis', 'More') : '';
-  return line(['kanso-project', open && 'kanso-control--on', hover && 'kanso-control--hover', focus && 'kanso-control--focus'], `<span class="kanso-row__name">${escape(name)}</span>${task}<span class="kanso-layout__grow"></span>${tools || folded(status, count)}`);
-};
+export const projectRow = ({ name, folder = '', branch = '', sync = '', open = false, status = 'blocked', count = 0, hover = false, focus = false }) => row({
+  name, heading: true, current: open, hover, focus, detail: [folder, branch && { icon: 'lu-git-branch', text: branch }, sync],
+  mark: count ? status : 'none', meta: count ? String(count) : '', actions: [icon('lu-plus', `New agent in ${name}`), icon('lu-ellipsis', 'More')],
+});
 
 export const computerStates = ['on', 'off', 'unreachable'];
-export const computerRow = ({ name, remote = true, state = 'on', status = 'blocked', count = 0, hover = false, focus = false }) => {
-  const tools = state === 'off' ? small('lu-power', `Turn ${name} on`)
-    : state === 'unreachable' ? small('lu-refresh-cw', 'Refresh')
-    : hover && remote ? small('lu-power', 'Turn off') + small('lu-plus', `New project on ${name}`) + small('lu-arrow-right-left', 'Sync') : '';
-  return line(['kanso-row--machine', hover && 'kanso-control--hover', focus && 'kanso-control--focus'], `${leading(remote ? 'lu-server' : 'lu-monitor')}<span class="kanso-row__name">${escape(name)}</span><span class="kanso-layout__grow"></span>${tools || folded(status, count)}`);
-};
+export const computerRow = ({ name, remote = true, state = 'on', status = 'blocked', count = 0, hover = false, focus = false }) => row({
+  icon: remote ? 'lu-server' : 'lu-monitor', name, heading: true, hover, focus,
+  mark: count ? status : 'none', meta: count ? String(count) : '',
+  action: state === 'off' ? { kind: 'icon', ...icon('lu-power', `Turn ${name} on`) } : state === 'unreachable' ? { kind: 'icon', ...icon('lu-refresh-cw', 'Refresh') } : null,
+  actions: state === 'on' && remote ? [icon('lu-power', 'Turn off'), icon('lu-plus', `New project on ${name}`), icon('lu-arrow-right-left', 'Sync')] : [],
+});
 
-export const section = ({ title, status = 'none', count = 0 }) => `<div class="kanso-sidebar__section">${status === 'none' ? '' : mark({ status })}<span>${escape(title)}</span>${count ? `<span class="kanso-section__count">${count}</span>` : ''}<span class="kanso-layout__grow"></span></div>`;
+export const section = ({ title, status = 'none', count = 0 }) => row({ name: title, heading: true, mark: status, meta: count ? String(count) : '' });
+
+export const asleep = ({ names = [], open = false } = {}) => row({ name: 'Asleep', heading: true, mark: 'asleep', meta: open ? '' : String(names.length) })
+  + (open ? names.map((name) => row({ name, depth: 1, dimmed: true, action: { label: 'Wake', kind: 'quiet' } })).join('') : '');
 
 export const views = [
   { key: 'spaces', label: 'Projects', icon: 'lu-folder' },
   { key: 'agents', label: 'Status', icon: 'lu-activity' },
   { key: 'threads', label: 'Threads', icon: 'lu-message-square' },
 ];
-export const viewSwitch = ({ view = 'spaces', column = false } = {}) => `<div class="kanso-sidebar__view-switch">${tabs({ items: views, value: view, size: column ? 'md' : 'sm', track: true, icon: column, label: !column })}</div>`;
+// Collapsed, one button for the current view opens the menu of all three.
+export const viewSwitch = ({ view = 'spaces', column = false, open = false } = {}) => {
+  if (!column) return `<div class="kanso-sidebar__view-switch">${tabs({ items: views, value: view, size: 'sm', track: true, label: true })}</div>`;
+  const current = views.find((item) => item.key === view) ?? views[0];
+  const list = open ? `<div class="kanso-sidebar__view-menu">${menu({ items: views.map((item) => ({ ...item, selected: item.key === current.key })) })}</div>` : '';
+  return `<div class="kanso-sidebar__view-switch">${button({ label: current.label, kind: 'icon', size: 'lg', icon: current.icon, active: open })}${list}</div>`;
+};
 
-export const sidebarFooter = ({ update = '' } = {}) => `<div class="kanso-sidebar__footer kanso-sidebar__navigation">${update ? '<div class="kanso-sidebar__row kanso-row--interactive kanso-text--fg" tabindex="0"><svg class="kanso-icon kanso-icon--chrome"><use href="#lu-refresh-cw"/></svg><span class="kanso-row__name">' + escape(update) + '</span></div>' : ''}`
-  + ['lu-settings Settings', 'lu-server Add computer'].map((item) => { const [icon, ...label] = item.split(' '); return `<div class="kanso-sidebar__row kanso-row--interactive" tabindex="0"><svg class="kanso-icon kanso-icon--row"><use href="#${icon}"/></svg><span class="kanso-row__name">${label.join(' ')}</span></div>`; }).join('') + '</div>';
+export const sidebarFooter = ({ update = '' } = {}) => `<div class="kanso-sidebar__footer">${update ? row({ icon: 'lu-refresh-cw', name: update }) : ''}${row({ icon: 'lu-settings', name: 'Settings' })}${row({ icon: 'lu-server', name: 'Add computer' })}</div>`;
 
-export const asleep = ({ names = [], open = false } = {}) => line(['kanso-project'], `<span class="kanso-row__name">Asleep</span>${open ? '' : `<span class="kanso-row__directory">${names.length}</span>`}<span class="kanso-layout__grow"></span>`)
-  + (open ? names.map((name) => line(['kanso-row--depth-one', 'kanso-row--asleep'], `<span class="kanso-row__name">${escape(name)}</span><span class="kanso-layout__grow"></span>${button({ label: 'Wake', kind: 'quiet' })}`)).join('') : '');
+export const tile = ({ initial = '', tone = 'teal', status = 'none', count = 0, open = false }) => `<div class="kanso-rail__tile${open ? ' kanso-control--on' : ''}" tabindex="0">`
+  + `${initial ? avatar({ initial, tone, size: 'md' }) : mark({ status, size: 'lg' })}${count ? chip({ label: count, quiet: true, tone: status === 'blocked' ? 'blocked' : '' }) : ''}</div>`;
 
-export const tile = ({ initial = '', tone = 'teal', status = 'none', count = 0, open = false }) => `<div class="kanso-rail__row"><div class="kanso-rail__tile${open ? ' kanso-control--on' : ''}" tabindex="0">`
-  + `${initial ? `<span class="kanso-content__line kanso-text--host-${tone}">${escape(initial)}</span>` : mark({ status, size: 'lg' })}${count ? `<div class="kanso-content__actions${status === 'blocked' ? ' kanso-text--blocked' : ''}">${initial && status !== 'none' ? mark({ status }) : ''}${count}</div>` : ''}</div></div>`;
 
 // Cells
 
-export const dawnMarks = ['artwork', 'pill', 'hidden'];
-export const header = ({ collapsed = false, dawn: early = false, mark: shown = 'artwork', open = false } = {}) => `<div class="kanso-header${collapsed ? ' kanso-header--collapsed' : ''}">${early && shown === 'artwork' ? dawn() : ''}`
-  + `<div class="kanso-header__title">${windowControls()}${early && shown === 'pill' && !collapsed ? '<span class="kanso-badge kanso-badge--count kanso-header__pill">Dawn Mode</span>' : ''}</div>${toolbar({ column: collapsed, open })}</div>`;
+export const header = ({ collapsed = false, dawn: early = false, open = false } = {}) => `<div class="kanso-header${collapsed ? ' kanso-header--collapsed' : ''}">${early ? dawn() : ''}`
+  + `<div class="kanso-header__title">${windowControls()}</div>${toolbar({ column: collapsed, open })}</div>`;
 
 const group = (...rows) => `<div class="kanso-sidebar__row-group">${rows.join('')}</div>`;
 const lists = {
@@ -245,10 +247,10 @@ const lists = {
     + section({ title: 'Snoozed', count: 1 }) + section({ title: 'Settled', count: 4 }),
 };
 const tiles = {
-  spaces: () => tile({ initial: 'A', tone: 'teal', status: 'blocked', count: 4, open: true }) + tile({ initial: 'D', tone: 'yellow', status: 'working', count: 1 }) + tile({ initial: 'B', tone: 'muted', count: 1 }),
+  spaces: () => tile({ initial: 'A', tone: 'teal', status: 'blocked', count: 4, open: true }) + tile({ initial: 'D', tone: 'yellow', status: 'working', count: 1 }) + tile({ initial: 'B', tone: '', count: 1 }),
   agents: () => tile({ status: 'blocked', count: 1 }) + tile({ status: 'working', count: 3 }) + tile({ status: 'done', count: 2 }) + tile({ status: 'idle', count: 3 }),
   threads: () => tile({ status: 'blocked', count: 1 }) + tile({ status: 'working', count: 1 }) + tile({ status: 'done', count: 1 }),
 };
-export const sidebar = ({ collapsed = false, dawn: early = false, view = 'spaces', switcher = true } = {}) => collapsed
-  ? `<aside class="kanso-rail">${header({ collapsed, dawn: early })}${switcher ? viewSwitch({ view, column: true }) : ''}<div class="kanso-rail__list">${tiles[view]()}</div><div class="kanso-rail__footer">${tool('lu-settings', 'Settings')}</div></aside>`
+export const sidebar = ({ collapsed = false, dawn: early = false, view = 'spaces', switcher = true, menu: open = false } = {}) => collapsed
+  ? `<aside class="kanso-rail">${header({ collapsed, dawn: early })}${switcher ? viewSwitch({ view, column: true, open }) : ''}<div class="kanso-rail__list">${tiles[view]()}</div><div class="kanso-rail__footer">${tool('lu-settings', 'Settings')}</div></aside>`
   : `<aside class="kanso-sidebar">${header({ dawn: early })}${switcher ? viewSwitch({ view }) : ''}<div class="kanso-sidebar__rows">${lists[view]()}</div>${sidebarFooter()}</aside>`;

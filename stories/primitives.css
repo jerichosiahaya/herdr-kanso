@@ -3,6 +3,9 @@
 @keyframes ghost{from{opacity:.5}to{opacity:1}}
 @keyframes dgx-blink{50%{opacity:0}}
 
+:is(.kanso-row,.kanso-button,.kanso-tabs__tab,.kanso-switch,.kanso-switch i,.kanso-field,.kanso-menu__item,.kanso-thumbnail,.kanso-rail__tile){transition:all 320ms cubic-bezier(.4,0,.2,1) 100ms}
+@media (prefers-reduced-motion:reduce){:is(.kanso-row,.kanso-button,.kanso-tabs__tab,.kanso-switch,.kanso-switch i,.kanso-field,.kanso-menu__item,.kanso-thumbnail,.kanso-rail__tile),.kanso-row__actions,.kanso-row__meta,.kanso-row__flag{transition:none}}
+
 .kanso-caret{display:inline-block;flex:none;width:1px;height:14px;vertical-align:-2px;background:var(--fg);animation:dgx-blink 1.06s steps(1) infinite}
 
 .kanso-avatar{position:relative;overflow:hidden;display:grid;place-items:center;flex:none;width:var(--k-h-badge);height:var(--k-h-badge);border-radius:var(--k-r-sm);background:var(--w7);font-size:var(--k-fs-meta);color:var(--muted)}
@@ -13,6 +16,7 @@
 
 .kanso-badge{display:flex;align-items:center;height:var(--k-h-compact);padding:0 var(--k-sp-2);margin-right:0;border-radius:var(--k-r-control);background:var(--w7);font-size:var(--k-fs-meta);color:var(--fg);white-space:nowrap}
 .kanso-badge--count{display:inline-flex;height:var(--k-h-badge);margin-left:var(--k-sp-2);border-radius:var(--k-r-full);background:color-mix(in srgb,var(--dawn-sun) 22%,transparent);font-weight:var(--k-fw-medium)}
+.kanso-badge.kanso-badge--quiet{height:auto;padding:0;background:none;color:var(--dim)}
 
 .kanso-key{display:inline-flex;align-items:center;height:var(--k-h-compact);padding:0 var(--k-sp-2);border-radius:var(--k-r-sm);box-shadow:inset 0 0 0 1px var(--border);font:var(--k-fs-meta) var(--mono);letter-spacing:.1em;color:var(--muted)}
 .kanso-key--recording{animation:ghost 1.8s ease-in-out infinite alternate}
@@ -113,7 +117,22 @@
 .kanso-row--two-lines .kanso-content__primary{display:flex;align-items:baseline;gap:var(--k-sp-2);font-size:var(--k-fs-body);font-weight:var(--k-fw-regular);white-space:nowrap}
 .kanso-row--two-lines .kanso-content__secondary{display:flex;align-items:center;gap:var(--k-sp-2);margin-top:var(--k-sp-2);font-size:var(--k-fs-meta);font-weight:var(--k-fw-regular);color:var(--dim)}
 .kanso-row--two-lines .kanso-content__actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--k-sp-2);margin-top:var(--k-sp-2)}
-.kanso-row.kanso-control--hover{background:var(--hover)}
+.kanso-row:is(:hover,.kanso-control--hover){background:var(--hover)}
+.kanso-row:is(:focus-visible,.kanso-control--focus){outline:2px solid var(--accent);outline-offset:-2px}
+.kanso-row__name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kanso-row--heading .kanso-row__name{font-weight:var(--k-fw-strong);color:var(--fg)}
+.kanso-row--depth-1{padding-left:calc(var(--k-sp-2) * 2 + var(--k-ic-row))}
+.kanso-row--depth-2{position:relative;padding-left:calc(var(--k-sp-2) * 3 + var(--k-ic-row) * 2)}
+.kanso-row--depth-2::before{content:"";position:absolute;inset-block:0;left:calc(var(--k-sp-2) * 2 + var(--k-ic-row) * 1.5);width:1px;background:var(--w12)}
+.kanso-row__detail{display:flex;align-items:center;gap:var(--k-sp-1);min-width:0;overflow:hidden;white-space:nowrap;color:var(--dim)}
+.kanso-row__detail>span:not(:last-child){margin-right:var(--k-sp-1)}
+.kanso-row__flag{display:flex;color:var(--dim)}
+/* Tools take no line height, so hover changes colour and content, never the row's size. */
+.kanso-row__actions{display:none;align-items:center;align-self:center;gap:var(--k-sp-hair);margin-block:calc(-1 * var(--k-sp-1));transition:opacity 320ms cubic-bezier(.4,0,.2,1) 100ms,display 0s allow-discrete 100ms}
+.kanso-row__meta,.kanso-row__flag{transition:display 0s allow-discrete 100ms}
+.kanso-row:is(:hover,:focus-within,.kanso-control--hover,.kanso-control--focus) .kanso-row__actions{display:flex}
+@starting-style{.kanso-row:is(:hover,:focus-within,.kanso-control--hover,.kanso-control--focus) .kanso-row__actions{opacity:0}}
+.kanso-row:is(:hover,:focus-within,.kanso-control--hover,.kanso-control--focus) :is(.kanso-row__meta,.kanso-row__flag):has(~ .kanso-row__actions){display:none}
 .kanso-row.kanso-row--selected{background:var(--selected)}
 .kanso-row.kanso-row--selected:is(:hover,.kanso-control--hover,:active,.kanso-control--active){background-color:var(--selected)}
 .kanso-state-line--pending{opacity:.8}
