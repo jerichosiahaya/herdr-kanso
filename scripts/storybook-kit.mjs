@@ -1,6 +1,6 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
-import { asleep, computerRow, projectRow, section, sessionRow, tile, viewSwitch } from '../stories/kit/compositions.js';
+import { computerRow, projectRow, sessionRow, tile, viewSwitch } from '../stories/kit/compositions.js';
 import { dawn as dawnSky, input, row, windowControls } from '../stories/kit/pieces.js';
 import { statedPages } from '../stories/kit/states.js';
 import { inRail, inSidebar } from '../stories/kit/frames.js';
@@ -53,9 +53,6 @@ export function kitRecords(records) {
     ['Computer row', 'This computer', inSidebar(computerRow({ name: 'light', remote: false })), 'This computer first.'],
     ['Computer row', 'Off', inSidebar(computerRow({ name: 'dark', state: 'off' })), 'A choice, not a failure.'],
     ['Computer row', 'Unreachable', inSidebar(computerRow({ name: 'devbox', state: 'unreachable' })), 'Refresh as its button.'],
-    ['Asleep', 'Folded', inSidebar(asleep({ names: ['site', 'dojo'] })), 'One folded line, its count.'],
-    ['Asleep', 'Open', inSidebar(asleep({ names: ['site', 'dojo'], open: true })), 'The names dim, Wake at the right.'],
-    ['Section', 'Default', inSidebar(section({ title: 'Needs you', status: 'blocked' })), 'A heading in Status and Threads.'],
     ['View switch', 'Row', inSidebar(viewSwitch()), 'Sidebar open: the three views by name.'],
     ['View switch', 'Column', inRail(viewSwitch({ column: true })), 'Sidebar collapsed: the three views as icons.'],
     ['Tile', 'Project', inRail(tile({ initial: 'A', status: 'blocked', count: 4, open: true })), 'A project in the rail.'],

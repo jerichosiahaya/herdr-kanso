@@ -161,11 +161,9 @@ export const guidelines = {
   "Compositions/Sidebar/Computer row": [
     ["Kansō","A heading Row with one button for what is wrong.","Off shows power, unreachable shows Refresh; connected, its tools show under the pointer only."],
   ],
-  "Compositions/Sidebar/Asleep": [
-    ["Kansō", "A heading Row with the moon.", "Folded, how many sleep; open, each one dimmed at depth one with Wake."],
-  ],
   "Compositions/Sidebar/Section": [
     ["Kokō", "A heading Row over its rows.", "Its mark when it has one, how many when folded."],
+    ["Kansō", "Asleep is a Section with the moon.", "Folded, how many sleep; open, each one dimmed at depth one with Wake."],
   ],
   "Compositions/Sidebar/View switch": [
     ["Kansō", "Tab open, one button collapsed.", "Open, the three views on a track; collapsed, the current view’s icon opens a Menu of all three."],

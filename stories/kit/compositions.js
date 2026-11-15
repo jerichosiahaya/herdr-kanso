@@ -43,7 +43,7 @@ export const computerRow = ({ name, remote = true, state = 'on', status = 'block
 
 export const section = ({ title, status = 'none', count = 0 }) => row({ name: title, heading: true, mark: status, meta: count || null });
 
-export const asleep = ({ names = [], open = false, focus = null } = {}) => list(row({ name: 'Asleep', heading: true, mark: 'asleep', meta: open ? null : phrase(names.length) }),
+export const asleep = ({ names = [], open = false, focus = null } = {}) => list(section({ title: 'Asleep', status: 'asleep', count: open ? 0 : names.length }),
   open ? names.map((name) => row({ name, depth: 1, dimmed: true, focus: name === focus, action: { label: 'Wake', kind: 'quiet' } })) : null);
 // A rail group's list: each row with its project and mark, then the way to the project.
 export const railMenu = ({ title, rows = [], project = false }) => menu({ title, items: [

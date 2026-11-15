@@ -1,5 +1,5 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, sidebarFooter, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, sidebarFooter, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
 import { avatar, chip, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
@@ -391,6 +391,16 @@ export const statedPages = {
       { label: 'Expanded, Dawn Mode', args: { dawn: true }, id: 'kit/Header/Dawn', caption: 'The dawn behind the lights, the Dawn Mode pill right of them.' },
       { label: 'Collapsed, Dawn Mode', args: { collapsed: true, dawn: true }, id: 'kit/Header/Dawn collapsed', caption: 'The dawn behind the lights, centred on the rail; no room for the pill.' },
       { label: 'Dawn Mode, sky off', args: { dawn: true, art: false }, caption: 'The pill stays; it cannot be hidden.' },
+    ],
+  },
+  'Compositions/Sidebar/Section': {
+    args: { title: 'Needs you', status: 'blocked', count: 0, moon: false, open: false },
+    markup: ({ moon, open, ...args }) => inSidebar(moon ? asleep({ names: sampleAsleep, open }) : section(args)),
+    states: [
+      { label: 'With its mark', args: {}, id: 'kit/Section/Default', caption: 'A heading in Status and Threads.' },
+      { label: 'Folded', args: { title: 'Idle', status: 'none', count: 2 }, caption: 'How many, only while folded.' },
+      { label: 'Asleep, folded', args: { moon: true }, id: 'kit/Asleep/Folded', caption: 'The moon and how many sleep.' },
+      { label: 'Asleep, open', args: { moon: true, open: true }, id: 'kit/Asleep/Open', caption: 'Each one dimmed, one level in, Wake at the right.' },
     ],
   },
   'Compositions/Sidebar/Footer': {

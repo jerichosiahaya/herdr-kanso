@@ -1,6 +1,6 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, section, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, computerMenuStates, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatarSizes, button, card, code, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
@@ -406,15 +406,15 @@ export const playgrounds = {
     },
     markup: (args) => inSidebar(computerRow(args)),
   },
-  'Compositions/Sidebar/Asleep': {
-    args: { names: ['site', 'dojo'], open: false },
-    argTypes: { names: { name: 'names', control: { type: 'object' } }, open: flag('open') },
-    markup: (args) => inSidebar(asleep(args)),
-  },
   'Compositions/Sidebar/Section': {
-    args: { title: 'Needs you', status: 'blocked', count: 0 },
-    argTypes: { title: text('title'), status: select('mark', ['none', 'blocked']), count: { name: 'count', control: { type: 'number', min: 0 } } },
-    markup: (args) => inSidebar(section(args)),
+    ...statedPages['Compositions/Sidebar/Section'],
+    argTypes: {
+      moon: flag('Asleep'),
+      title: { ...text('title'), if: { arg: 'moon', truthy: false } },
+      status: { ...select('mark', ['none', 'blocked']), if: { arg: 'moon', truthy: false } },
+      count: { name: 'count', control: { type: 'number', min: 0 }, if: { arg: 'moon', truthy: false } },
+      open: { ...flag('open'), if: { arg: 'moon' } },
+    },
   },
   'Compositions/Sidebar/View switch': {
     args: { view: 'spaces', column: false },
