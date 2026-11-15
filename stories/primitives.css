@@ -425,3 +425,7 @@
 .kanso-share>.kanso-share__block{margin-top:var(--k-sp-6)}
 .kanso-share__block>.kanso-days{margin-top:var(--k-sp-3);gap:var(--k-sp-hair)}
 .kanso-share__footer>.kanso-mark{color:var(--muted)}
+.kanso-row.kanso-row--hero .kanso-row__name{font-size:var(--k-fs-section);font-weight:var(--k-fw-strong);line-height:var(--k-lh-tight);color:var(--fg);white-space:normal}
+.kanso-row--hero:is(:hover,.kanso-control--hover){background:none}
+.kanso-excerpt>.kanso-code{margin-block:var(--k-sp-1)}
+.kanso-row.kanso-row--hero{height:auto}

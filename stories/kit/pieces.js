@@ -112,10 +112,10 @@ const literal = (word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const matches = (query) => new RegExp(`(${query.trim().split(/\s+/).filter(Boolean).map(literal).join('|') || '(?!)'})`, 'gi');
 export const found = ({ text, query = '' }) => String(text).split(matches(query)).map((part, index) => index % 2 ? `<mark class="kanso-match">${escape(part)}</mark>` : escape(part)).join('');
 // A found line, the `current` one washed: who and when small on top, after any `lead` piece, the text at body size with the query marked.
-// A comment adds `where` (its path, mono) after who, `pending` until GitHub has it, and `depth` 1 for a reply.
-export const excerpt = ({ who, when = '', where = '', text, query = '', lead = '', current = false, pending = false, depth = 0 }) => `<div class="kanso-excerpt${current ? ' kanso-excerpt--current' : ''}${depth ? ' kanso-excerpt--reply' : ''}" tabindex="0">`
+// A comment adds `where` (its path, mono) after who, `pending` until GitHub has it, and `depth` 1 for a reply; a `snippet` (a code piece) sits between who and the text.
+export const excerpt = ({ who, when = '', where = '', text, query = '', lead = '', snippet = '', current = false, pending = false, depth = 0 }) => `<div class="kanso-excerpt${current ? ' kanso-excerpt--current' : ''}${depth ? ' kanso-excerpt--reply' : ''}" tabindex="0">`
   + `<div class="kanso-excerpt__who">${list(lead)}<span>${escape(who)}</span>${where ? `<span class="kanso-excerpt__where">${escape(where)}</span>` : ''}<span class="kanso-text--dim">${escape(when)}</span>${pending ? '<span class="kanso-text--dim">pending</span>' : ''}</div>`
-  + `<div class="kanso-excerpt__text">${found({ text, query })}</div></div>`;
+  + `${snippet}<div class="kanso-excerpt__text">${found({ text, query })}</div></div>`;
 
 const inline = (text) => escape(text).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
 // An edited table puts its `cell` [row, column] in focus, a remover over each column and after each row, and its own actions under it.
@@ -229,9 +229,10 @@ export const sentence = ({ text, tone = 'dim' }) => `<div class="kanso-sentence 
 const rowVerb = (verb) => verb.agent ? explainButton({ agent: verb.agent, size: 'sm' }) : button({ kind: 'quiet', size: 'sm', ...verb });
 // `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
 // The title form is a panel's heading: the name at title size, the second line its scope.
+// The `hero` form heads a page's subject (a PR's title): the name at section size, wrapping, its verdict as the second line.
 // `verbs` are a line of quiet word actions under it; `strong` puts the name in ink (unread, new); `meta` may be { text, tone }; `late` is its blocked tone.
 // `second` is words or facts; a picked row may add a `reason` { text, tone } that wraps and a mono `path`; `number` leads dim (#44).
-export const row = ({ icon = 'none', tone = '', letter, level, open, number, name, detail, meta, chip: count, flag, mark: status = 'none', second, reason, path, heading, title, depth = 0, glint, strong, late, selected, current, dimmed, pending, hover, focus, actions = [], action, verbs = [], start = [], tools = [], keys = [] }) => {
+export const row = ({ icon = 'none', tone = '', letter, level, open, number, name, detail, meta, chip: count, flag, mark: status = 'none', second, reason, path, heading, title, hero, depth = 0, glint, strong, late, selected, current, dimmed, pending, hover, focus, actions = [], action, verbs = [], start = [], tools = [], keys = [] }) => {
   const slot = letter ? fileLetter(letter) : icon === 'none' ? '' : glyph(icon, tone);
   const lead = `${list(start)}${level === undefined ? '' : fold(open)}${slot}${number ? `<span class="kanso-row__number">${escape(number)}</span>` : ''}`;
   const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;
@@ -242,7 +243,7 @@ export const row = ({ icon = 'none', tone = '', letter, level, open, number, nam
     + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}${list(tools)}${keys.map(keyHint).join('')}`
     + `${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${!status || status === 'none' ? '' : mark({ status })}`;
   const twoLines = Boolean(second || reason || path) || verbs.length > 0;
-  const states = [twoLines && 'kanso-row--two-lines', level !== undefined && 'kanso-row--tree', strong && 'kanso-row--strong', heading && 'kanso-row--heading', title && 'kanso-row--title', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
+  const states = [twoLines && 'kanso-row--two-lines', level !== undefined && 'kanso-row--tree', strong && 'kanso-row--strong', heading && 'kanso-row--heading', title && 'kanso-row--title', hero && 'kanso-row--hero', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
     dimmed && 'kanso-control--dim', pending && 'kanso-state-line--pending', hover && 'kanso-control--hover', focus && 'kanso-control--focus'].filter(Boolean).map((name) => ` ${name}`).join('');
   const opening = `<div class="kanso-row${states}" tabindex="0"${level === undefined ? '' : ` style="--k-level:${Number(level)}"`}>`;
   const under = `${second ? `<div class="kanso-content__secondary">${factLine(second)}</div>` : ''}${reason ? sentence(reason) : ''}`
@@ -443,6 +444,8 @@ export const bars = ({ bars: values = [], peak = null, low = [], part = [], labe
   + `<div class="kanso-bars__plot">${values.map((value, index) => `<span class="kanso-bars__bar${barState(value, index, peak, low)}" style="${share(value)}">`
     + `${part[index] ? `<span class="kanso-bars__part" style="${share(part[index])}"></span>` : ''}${labels[index] ? `<span class="kanso-bars__label">${escape(labels[index])}</span>` : ''}</span>`).join('')}</div>`
   + `${ticks.length ? `<div class="kanso-bars__ticks">${ticks.map((tick) => `<span>${escape(tick)}</span>`).join('')}</div>` : ''}</div>`;
+// A change against the last period, under a figure: up or down, then its words.
+export const delta = ({ text, up = true }) => `<div class="kanso-panel__delta">${up ? '↑' : '↓'} ${escape(text)}</div>`;
 // A thin track with its filled `share`.
 export const meter = ({ share: value = 0, label = '' }) => `<div class="kanso-meter" role="meter" aria-valuemin="0" aria-valuemax="1" aria-valuenow="${Number(value)}"${label ? ` aria-label="${escape(label)}"` : ''}><span class="kanso-meter__fill" style="${share(value)}"></span></div>`;
 // Days in week columns, each a level from 0 (none) to 4, or null where there is no day.
@@ -450,7 +453,6 @@ export const heatmap = ({ days = [] }) => `<div class="kanso-days">${days.map((l
 // The card a panel shares, drawn as the app makes it: a heading with its `right`, the `hero` figure, its `stats`, a `note`, then each block in `blocks` and the ensō foot.
 const shareLine = (title, right = '') => `<div class="kanso-share__header">${escape(title)}${right ? `<span>${escape(right)}</span>` : ''}</div>`;
 const shareStat = ({ value, unit }) => `<div><div class="kanso-content__value">${escape(value)}</div><div class="kanso-metric__unit">${escape(unit)}</div></div>`;
-const shareDelta = ({ text, up }) => `<div class="kanso-panel__delta">${up ? '↑' : '↓'} ${escape(text)}</div>`;
 const shareBlocks = {
   streak: ({ title, right, n, unit, days }) => `${shareLine(title, right)}${metric({ value: n, unit, size: 'sm' })}${heatmap({ days })}`,
   bars: ({ title, right, values, ticks }) => {
@@ -461,7 +463,7 @@ const shareBlocks = {
 };
 const shareBlock = (block) => `<div class="kanso-share__block">${shareBlocks[block.kind](block)}</div>`;
 export const shareCard = ({ title, subtitle = '', right = '', hero = {}, stats = [], note = '', blocks = [] }) => `<div class="kanso-share">${shareLine(title, right)}${subtitle ? sentence({ text: subtitle, tone: 'muted' }) : ''}`
-  + `${metric({ value: hero.big ?? '—', small: hero.small, unit: hero.unit })}${hero.label ? sentence({ text: hero.label, tone: 'muted' }) : ''}${hero.delta?.text ? shareDelta(hero.delta) : ''}`
+  + `${metric({ value: hero.big ?? '—', small: hero.small, unit: hero.unit })}${hero.label ? sentence({ text: hero.label, tone: 'muted' }) : ''}${hero.delta?.text ? delta(hero.delta) : ''}`
   + `${stats.length ? `<div class="kanso-panel__statistics">${stats.map(shareStat).join('')}</div>` : ''}${note ? sentence({ text: note, tone: 'muted' }) : ''}${blocks.map(shareBlock).join('')}`
   + `<div class="kanso-share__footer">${mark({ status: 'done', size: 'sm' })}kansō for Herdr</div></div>`;
 
