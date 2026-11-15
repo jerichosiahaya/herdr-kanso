@@ -1,8 +1,9 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
+import { sampleShipped } from './panel-samples.js';
 import { keyLayer, keyLayerMods, sampleShot, sampleScreens, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
@@ -266,6 +267,9 @@ const paneDigestOf = ({ files, commits, pr, github }) => ({ files, add: files * 
   pr: pr === 'none' ? null : { number: '#142', verdict: pr, tone: verdictTones[pr] ?? 'blocked' }, failure: github ? null : 'gh: HTTP 502: Bad Gateway (https://api.github.com/graphql)' });
 const panePlace = ({ elsewhere, reach }) => elsewhere ? { folder: reach === 'here' ? 'checkout-v2' : '~/checkout-v2', branch: 'limits-table' } : null;
 
+// The three charts one page draws: bars over a run, a meter's share, days in weeks.
+const charts = { bars, meter, heatmap };
+const { rhythm: shipRhythm } = sampleShipped;
 export const statedPages = {
   'Primitives/Avatar': {
     args: { initial: 'S', picture: 'none', size: 'md', tone: '', round: true },
@@ -545,6 +549,20 @@ export const statedPages = {
       { label: 'Stalled', args: { state: 'stalled' }, caption: 'The last picture, stepped down.' },
       { label: 'Rotated', args: { rotated: true }, caption: 'On its side.' },
       { label: 'Narrow', args: { narrow: true }, caption: 'In a narrow panel.' },
+    ],
+  },
+  'Primitives/Chart': {
+    args: { kind: 'bars', bars: shipRhythm.hours, peak: null, low: [], part: [], labels: [], ticks: shipRhythm.ticks, filled: false, share: 0.62, days: sampleShipped.week.days },
+    markup: ({ kind, ...args }) => stack({ variant: 'panel' }, charts[kind](args)),
+    states: [
+      { label: 'Bars', args: {}, caption: 'One hairline per period, its height the share of the highest; ticks under the run.' },
+      { label: 'Peak and low', args: { peak: shipRhythm.peak, low: [11] }, caption: 'The peak in the accent, a low in the blocked tone.' },
+      { label: 'Empty periods', args: { bars: shipRhythm.hours.map((value, index) => index % 5 ? value : 0) }, caption: 'A period with nothing keeps its place, in the border colour.' },
+      { label: 'A part', args: { part: shipRhythm.hours.map(() => 0.4) }, caption: 'A share stacked inside each bar, in the working tone.' },
+      { label: 'Filled', args: { filled: true, peak: shipRhythm.peak }, caption: 'Few bars share the width; the peak in ink.' },
+      { label: 'Values', args: { filled: true, bars: [0.4, 0.7, 1, 0.55], labels: ['$12', '$21', '$30', '$16'], ticks: ['Mon', 'Tue', 'Wed', 'Thu'], peak: 2 }, caption: 'Each value over its bar.' },
+      { label: 'Meter', args: { kind: 'meter' }, caption: 'A thin track and its filled share.' },
+      { label: 'Days', args: { kind: 'heatmap' }, caption: 'Days in week columns, five levels from none to most.' },
     ],
   },
   'Primitives/Skeleton': {

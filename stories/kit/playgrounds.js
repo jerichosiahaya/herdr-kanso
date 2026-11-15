@@ -617,6 +617,14 @@ export const playgrounds = {
       narrow: flag('narrow'),
     },
   },
+  'Primitives/Chart': {
+    ...statedPages['Primitives/Chart'],
+    argTypes: {
+      kind: select('kind', ['bars', 'meter', 'heatmap']),
+      filled: { ...flag('filled'), if: { arg: 'kind', eq: 'bars' } },
+      share: { name: 'share', control: { type: 'range', min: 0, max: 1, step: 0.01 }, if: { arg: 'kind', eq: 'meter' } },
+    },
+  },
   'Primitives/Skeleton': {
     ...statedPages['Primitives/Skeleton'],
     argTypes: {
