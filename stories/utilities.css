@@ -153,3 +153,5 @@
 .kanso-icon--row{inline-size:var(--k-ic-row);block-size:var(--k-ic-row)}
 .kanso-icon--control{inline-size:var(--k-ic-control);block-size:var(--k-ic-control)}
 .kanso-icon--chrome{inline-size:var(--k-ic-chrome);block-size:var(--k-ic-chrome)}
+.kanso-height--tab-bar{block-size:var(--k-h-tab-bar)}
+.kanso-height--strip{block-size:var(--k-h-strip)}

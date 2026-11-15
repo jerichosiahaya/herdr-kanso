@@ -5,6 +5,7 @@ import { Canvas, Controls, Markdown, Source } from '@storybook/addon-docs/blocks
 import { content, featuresFor, statesFor } from './catalog.js';
 import { descriptions } from './descriptions.js';
 import { guidelines, sections } from './guidelines.js';
+import { hypotheses } from './hypotheses.js';
 import { playgrounds } from './playgrounds.js';
 import { promptFor } from './prompt.js';
 import { FEATURE_LABEL, FEATURE_NOTE } from './features.js';
@@ -32,6 +33,9 @@ export function ComponentPage({ of, page }) {
     {stated && <h2>States</h2>}
     <Canvas of={of.Variants} />
     {(stated || playgrounds[page]) && <Controls of={of.Variants} />}
+    {playgrounds[page] && states.length > 0 && <details><summary>Every state, by name ({states.length})</summary>
+      <table><thead><tr><th>State</th><th>When shown</th></tr></thead><tbody>{states.map((state) => <tr key={state.id}><td>{state.label}</td><td>{content(state.caption)}</td></tr>)}</tbody></table>
+    </details>}
     {stated && <>
     <label className="kanso-docs__filter">Find a state<input className="kanso-field" type="search" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
     <p>{visible.length} of {states.length} variants</p>
@@ -43,6 +47,7 @@ export function ComponentPage({ of, page }) {
     </table></>}
     {(sections[page] ?? []).map(([title, text]) => <React.Fragment key={title}><h2>{title}</h2><Markdown>{text}</Markdown></React.Fragment>)}
     {guidelines[page] && <><h2>Design guidelines</h2><ul className="kanso-docs__guidelines">{guidelines[page].map(([principle, rule, detail]) => <li key={rule}><span className="kanso-docs__principle">{principle}</span> <b>{rule}</b> <Markdown options={{ forceInline: true }}>{detail}</Markdown></li>)}</ul></>}
+    {hypotheses[page] && <><h2>Hypotheses</h2><ul className="kanso-docs__guidelines">{hypotheses[page].map((item) => <Hypothesis key={item.change} {...item} />)}</ul></>}
     {notes.length > 0 && !playgrounds[page] && <><h2>Guidelines</h2>{notes.map((id) => <Markdown className="kanso-docs__note" key={id}>{content(id)}</Markdown>)}</>}
     <h2>Prompt for agents</h2>
     <button className="kanso-button kanso-button--solid" type="button" onClick={async () => { await navigator.clipboard.writeText(prompt); setCopied(true); }}>{copied ? 'Copied' : 'Copy prompt'}</button>
@@ -50,3 +55,16 @@ export function ComponentPage({ of, page }) {
     {gaps.length > 0 && <><h3>{FEATURE_LABEL}</h3><p>{FEATURE_NOTE}</p><ul>{gaps.map((feature) => <li key={feature.id}>{feature.label}: {content(feature.caption)} <code>{feature.location}</code></li>)}</ul></>}
   </article>;
 }
+
+// One hypothesis on the shared template; none has a signal yet, so each says Unproven.
+const Hypothesis = ({ change, today, why, question, believe, jobs, wrong, try: first, back }) => <li>
+  <b>{change}</b> Unproven.<br />
+  <em>Today</em> {today}<br />
+  <em>Why it is there</em> {why}<br />
+  <em>Question</em> {question}<br />
+  <em>We believe</em> {believe}<br />
+  <em>Each job goes to</em> {jobs.map(([job, home]) => `${job}: ${home}`).join('; ')}.<br />
+  <em>Wrong if</em> {wrong}<br />
+  <em>Try</em> {first}<br />
+  <em>Return</em> {back}
+</li>;
