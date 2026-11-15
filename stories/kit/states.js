@@ -1,9 +1,9 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence, well, shareCard } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence, well, shareCard, dojoGrid, dojoText, dojoProgress, dojoLevel } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
-import { sampleFind, sampleShare, sampleShipped } from './panel-samples.js';
+import { sampleDojo, sampleFind, sampleShare, sampleShipped } from './panel-samples.js';
 import { keyLayer, keyLayerMods, sampleShot, sampleScreens, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
@@ -270,6 +270,9 @@ const panePlace = ({ elsewhere, reach }) => elsewhere ? { folder: reach === 'her
 // A comment's three lines of code, with the one it talks about lit; a found turn from the conversation.
 const sampleSnippet = { text: 'export function bucket(customer) {\n  const plan = planOf(customer);\n  return { plan, tokens: LIMIT[plan] };', kind: 'source', first: 11, line: 12, comment: 0 };
 const [, foundHit] = sampleFind.days[0][1];
+// The dōjō's two boards and where a level sits on its path.
+const dojoBoards = { grid: dojoGrid, text: (spot) => dojoText({ ...spot, lines: sampleDojo.code }) };
+const levelState = (n, current) => n < current ? 'done' : n === current ? 'current' : 'next';
 // The three charts one page draws: bars over a run, a meter's share, days in weeks.
 const charts = { bars, meter, heatmap };
 const { rhythm: shipRhythm } = sampleShipped;
@@ -609,6 +612,19 @@ export const statedPages = {
       { label: 'A change', args: { card: 'Spend' }, caption: 'The change on last period under the figure.' },
       { label: 'A subtitle', args: { card: 'Dōjō' }, caption: 'What it is, under the heading; a streak and a list.' },
       { label: 'Every block', args: { card: 'Shipped' }, caption: 'A smaller figure beside the big one; the streak, the records and the hours.' },
+    ],
+  },
+  'Primitives/Dojo board': {
+    args: { board: 'grid', at: [11, 3], target: [14, 6], best: [], key: '', progress: { score: 45, time: '38s', streak: 2, moves: 2, best: 5, done: 4 }, current: 3, focus: false },
+    markup: ({ board, progress, current, focus, ...spot }) => board === 'path' ? stack({ variant: 'panel' }, stack({ variant: 'dojo path' }, sampleDojo.levels.map(({ n, name, best }) => dojoLevel({ n, name, best: n < current ? best : '', state: levelState(n, current), focus: focus && n === current }))))
+      : stack({ variant: 'dojo board' }, dojoProgress(progress), dojoBoards[board](spot)),
+    states: [
+      { label: 'A round', args: {}, caption: 'The count over the board: score, time, streak, moves against the best, one segment per target; the cursor in ink, the target ringed.' },
+      { label: 'A miss', args: { at: [11, 4], best: [[12, 4], [13, 4], [14, 4], [14, 5]], key: 'l', progress: { score: 45, time: '51s', streak: 0, moves: 8, best: 5, missed: true, done: 4 } }, caption: 'The moves in working ink; the best way there drawn, its first cell showing the key that starts it.' },
+      { label: 'A text', args: { board: 'text', at: [2, 2], target: [17, 2], progress: { score: 30, time: '22s', streak: 1, moves: 1, best: 2, done: 2 } }, caption: 'Code one character to a cell, for the levels that move by words and letters.' },
+      { label: 'Before a move', args: { progress: { done: 0 } }, caption: 'No moves yet; the first segment lit.' },
+      { label: 'The path', args: { board: 'path' }, caption: 'Each level with its keys, the done ones with their best, the current one ringed.' },
+      { label: 'Moving along the path', args: { board: 'path', focus: true }, caption: '[ and ] move the ring.' },
     ],
   },
   'Primitives/Skeleton': {

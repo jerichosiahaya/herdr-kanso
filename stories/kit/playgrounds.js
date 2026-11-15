@@ -650,6 +650,14 @@ export const playgrounds = {
     ...statedPages['Primitives/Share card'],
     argTypes: { card: { name: 'panel', control: { type: 'inline-radio' }, options: ['Ports', 'Memory', 'Spend', 'Dōjō', 'Shipped'] } },
   },
+  'Primitives/Dojo board': {
+    ...statedPages['Primitives/Dojo board'],
+    argTypes: {
+      board: { name: 'board', control: { type: 'inline-radio' }, options: ['grid', 'text', 'path'] },
+      current: { name: 'current level', control: { type: 'number', min: 1, max: 9 }, if: { arg: 'board', eq: 'path' } },
+      ...pick('focus'),
+    },
+  },
   'Primitives/Skeleton': {
     ...statedPages['Primitives/Skeleton'],
     argTypes: {
