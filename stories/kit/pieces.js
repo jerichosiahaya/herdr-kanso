@@ -67,18 +67,21 @@ const shape = (markup) => markup.replace(' kanso-text--fg', '').replace(/class="
 const words = (text, skeleton) => skeleton ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(text)}</span>` : escape(text);
 // A dialog: its title with its `tools` after it, an optional scope, the body its use composes, notes, then Cancel before the one primary.
 // The window size is the Settings and Help window.
-const dialogSizes = { md: '', window: ' kanso-dialog--window' };
+// The find size is a titleless popover: its field in the header's place, the results under a rule.
+const dialogSizes = { md: '', window: ' kanso-dialog--window', find: ' kanso-dialog--find' };
 export const dialog = ({ title, tools = '', size = 'md', scope, body = '', notes = [], primary, kind = 'solid', state = 'default', secondary, loading = false }) => {
   const action = (label, look, emphasis) => (loading ? shape : String)(button({ label, kind: emphasis, ...(loading ? {} : { disabled: look === 'disabled', spin: look === 'loading', armed: look === 'armed' }) }));
   const footer = primary || secondary ? `<div class="kanso-dialog__footer">${secondary ? action(secondary, 'default', 'quiet') : ''}${primary ? action(primary, state, kind) : ''}</div>` : '';
-  return `<div class="kanso-dialog${dialogSizes[size]} kanso-popover" role="dialog"><div class="kanso-dialog__header"><span class="kanso-dialog__title">${words(title, loading)}</span>${list(tools)}</div>`
+  const header = title || tools.length ? `<div class="kanso-dialog__header">${title ? `<span class="kanso-dialog__title">${words(title, loading)}</span>` : ''}${list(tools)}</div>` : '';
+  return `<div class="kanso-dialog${dialogSizes[size]} kanso-popover" role="dialog">${header}`
     + (scope ? `<div class="kanso-dialog__scope">${words(scope, loading)}</div>` : '')
     + (body ? `<div class="kanso-dialog__body">${body}</div>` : '')
     + notes.map(({ text, tone: look = 'dim' }) => `<div class="kanso-dialog__note${look === 'dim' ? '' : ` kanso-dialog__note--${look}`}">${words(text, loading)}</div>`).join('')
     + footer + '</div>';
 };
 
-export const input = ({ text: value = '', label: placeholder, icon = 'none', action = '', choose = false, focus = false, error, disabled, multiline, inline: rename, selected, loading, limit = 80 }) => {
+// A find field leads with its `lead` icon and keeps a `count` slot and its drawn `tools` after the text.
+export const input = ({ text: value = '', label: placeholder, icon = 'none', lead = 'none', count = null, tools = [], action = '', choose = false, focus = false, error, disabled, multiline, inline: rename, selected, loading, limit = 80 }) => {
   const editable = !disabled && !loading && !choose;
   const enter = multiline ? '' : ` onkeydown="if (event.key === 'Enter') event.preventDefault()"`;
   const cap = ` onbeforeinput="if (event.inputType.startsWith('insert') && this.innerText.length >= ${limit}) event.preventDefault()"`;
@@ -88,8 +91,17 @@ export const input = ({ text: value = '', label: placeholder, icon = 'none', act
   const wordTool = value || choose ? button({ label: action, kind: 'tonal', size: 'sm' }) : '';
   const tool = rename ? '' : action ? wordTool : iconTool;
   const classes = `kanso-field${multiline ? ' kanso-field--multiline' : ''}${rename ? ' kanso-field--inline' : ''}${loading ? ' kanso-skeleton--shape' : `${error ? ' kanso-field--invalid' : ''}${disabled ? ' kanso-control--off' : ''}${focus ? ' kanso-control--focus' : ''}`}`;
-  return `<div class="${classes}"${disabled ? ' aria-disabled="true"' : ''}>${text}${tool}</div>`;
+  const after = `${count === null ? '' : `<span class="kanso-field__count">${escape(count)}</span>`}${list(tools)}`;
+  return `<div class="${classes}"${disabled ? ' aria-disabled="true"' : ''}>${lead === 'none' ? '' : glyph(lead)}${text}${tool}${after}</div>`;
 };
+
+// The query's words marked in a line of text, one match look kit-wide.
+const literal = (word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const matches = (query) => new RegExp(`(${query.trim().split(/\s+/).filter(Boolean).map(literal).join('|') || '(?!)'})`, 'gi');
+export const found = ({ text, query = '' }) => String(text).split(matches(query)).map((part, index) => index % 2 ? `<mark class="kanso-match">${escape(part)}</mark>` : escape(part)).join('');
+// A found line, the `current` one washed: who and when small on top, after any `lead` piece, the text at body size with the query marked.
+export const excerpt = ({ who, when = '', text, query = '', lead = '', current = false }) => `<div class="kanso-excerpt${current ? ' kanso-excerpt--current' : ''}" tabindex="0">`
+  + `<div class="kanso-excerpt__who">${list(lead)}<span>${escape(who)}</span><span class="kanso-text--dim">${escape(when)}</span></div><div class="kanso-excerpt__text">${found({ text, query })}</div></div>`;
 
 const inline = (text) => escape(text).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
 const cells = (row, tag) => `<tr>${row.split('|').slice(1, -1).map((cell) => `<${tag}>${inline(cell.trim())}</${tag}>`).join('')}</tr>`;
