@@ -1,6 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, asleep, paneFolds, paneHeader, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, asleep, paneFolds, paneHeader, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItem, computerItemStates, computerRow, computerStates, failureMenu, header, panelDoors, projectRow, section, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { sessionRow } from './session-row.js';
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, inBar } from './frames.js';
 import { edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, statedPages, stepperShown, tabActs } from './states.js';
