@@ -15,11 +15,11 @@ export const stepperShown = ['rest', 'hover', 'menu'];
 // Each item the bar can show, in its own half and at its fold.
 export const statusItems = {
   Computer: ({ state, folded, open }) => ({ left: [computerItem({ name: 'devbox', state, folded, open })] }),
-  'Needs you': ({ folded, more }) => ({ right: [needsItem({ name: 'cart-ui', question: folded ? '' : question, more })] }),
+  'Needs you': ({ folded, more, open }) => ({ right: [needsItem({ name: 'cart-ui', question: folded ? '' : question, more, open })] }),
   Memory: (args) => ({ right: [memoryItem(args)] }),
   'Servers, containers, reviews': () => ({ right: statusPanels() }),
   'Working count': ({ open }) => ({ right: [statusItem({ mark: 'working', text: 3, open })] }),
-  'Command palette': () => ({ right: [paletteDoor()] }),
+  'Command palette': ({ open }) => ({ right: [paletteDoor({ open })] }),
 };
 // Each item's right-click Menu, as board B10 draws it.
 const statusItemMenus = {
