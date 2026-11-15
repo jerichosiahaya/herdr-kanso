@@ -1,5 +1,5 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, chip, explainButton, sentence } from './kit.js';
+import { band, bars, button, chord, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, explainButton, sentence, well } from './kit.js';
 import { channelSettings, keyboardExplorer, newWorktree, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
@@ -399,11 +399,11 @@ export const preview = ({ look = 'panel', stale = false, ...props }) => panel({ 
 
 // Pull requests: what waits on you, then each project's open ones; one opens on its verdict, and its files, a check's log and a new one are pages of the panel.
 const pullTones = { review: 'working', failing: 'blocked', failed: 'blocked', blocked: 'working', changes: 'blocked', draft: 'dim', approved: 'done', running: 'dim', merged: 'dim', closed: 'dim', passed: 'dim' };
-const toned = (label) => chip({ label, quiet: true, tone: pullTones[label] });
+const toned = (text) => ({ text, tone: pullTones[text] });
 const quietAct = (label) => button({ label, kind: 'quiet', size: 'sm' });
 const tonalAct = (label) => button({ label, kind: 'tonal', size: 'sm' });
 const line = (...items) => stack({ variant: 'line' }, items);
-const pullRow = (picked) => ({ number, title, state, second = null }) => row({ name: phrase(number, title), second, current: number === picked, tools: [toned(state)] });
+const pullRow = (picked) => ({ number, title, state, second = null }) => row({ number, name: title, second, current: number === picked, meta: toned(state) });
 const branchRow = ({ name, computer = null, second, action = null, commits = [] }) => list(
   row({ icon: 'lu-git-branch', name, detail: computer, second, selected: true, action: action ? { label: action, kind: 'quiet' } : null }),
   commits.map((commit) => row({ name: commit, depth: 1, dimmed: true })));
@@ -416,9 +416,9 @@ const pullList = ({ groups = [], picked = null, tab = null, counts = null, readi
 };
 
 // One pull request: its title and GitHub's verdict, what the verdict rests on, the one or two acts it allows, then the conversation and the details.
-const checkRow = ({ name, state, time = null }) => (state === 'running' ? row({ name, mark: 'working', meta: time }) : row({ name, meta: time, tools: [toned(state)] }));
+const checkRow = ({ name, state, time = null }) => row({ name, mark: state === 'running' ? 'working' : 'none', meta: { ...toned(state), text: facts(state, time) } });
 const verdictBody = ({ heading: head = null, lines = [], files = null, log = null, checks = [], more = null }) => (head || lines.length || files || log || checks.length
-  ? stack({ variant: 'column' }, head ? row({ name: head, strong: true }) : null, lines.map(([name, value]) => row({ name, detail: value })),
+  ? well({ heading: head }, lines.map(([name, value]) => row({ name, detail: value })),
     [files, log].filter(Boolean).map((text) => code({ text, kind: 'log', first: 1 })), checks.map(checkRow), dimLine(more))
   : null);
 const pullActs = {
@@ -434,17 +434,17 @@ const pullActs = {
   reopen: () => tonalAct('Reopen'),
   send: ({ agent }) => tonalAct(phrase('Send to', agent)),
 };
-const comment = ({ who, when, text, where = null, pending = false }) => excerpt({ who: where ? phrase(who, where) : who, when: pending ? phrase(when, '· pending') : when, text });
+const comment = (depth) => (said) => excerpt({ ...said, depth });
 const field = ({ label, text = null, multiline = false }) => input({ label, text: text ?? undefined, icon: 'lu-send', focus: Boolean(text), multiline });
 // A thread: the first comment with its lines, the replies, then Reply, Resolve and Explain to the agent; a reply waits, refused or offline, with its text kept.
-const thread = ({ where, snippet, first, replies = [], answer = null, agentAnswer = null, answered = null }, { agent, typing = null, refused = null, offline = null, explained = null }) => stack({ variant: 'column' },
-  comment({ ...first, where }), code(snippet), replies.map(comment), answered ? row({ icon: 'lu-bot', name: answered, dimmed: true }) : null,
-  answer ? comment(answer) : null, field({ label: 'Reply', text: agentAnswer ?? typing }), refused ? failureBlock(refused) : null, dimLine(offline),
+const thread = ({ where, snippet, first, replies = [], answer = null, agentAnswer = null, answered = null }, { agent, typing = null, refused = null, offline = null, explained = null }) => well({},
+  comment(0)({ ...first, where }), code(snippet), replies.map(comment(1)), answered ? row({ icon: 'lu-bot', name: answered, dimmed: true }) : null,
+  answer ? comment(1)(answer) : null, field({ label: 'Reply', text: agentAnswer ?? typing }), refused ? failureBlock(refused) : null, dimLine(offline),
   line(quietAct('Resolve'), typing || agentAnswer ? null : explainButton({ agent, size: 'sm' }), explained ? row({ name: explained, dimmed: true }) : null));
 const conversation = ({ thread: talk = null, resolved = null, approved = null, said = null, agent, ...state }) => list(heading('Conversation'),
   resolved ? row({ icon: 'lu-check', name: resolved.name, detail: resolved.detail, action: { label: 'Undo', kind: 'quiet' } }) : null,
   talk ? thread(talk, { agent, ...state }) : null, approved ? row({ icon: 'lu-check', name: approved.name, meta: approved.meta, dimmed: true }) : null,
-  said ? stack({ variant: 'column' }, comment(said)) : null, field({ label: 'Comment' }));
+  said ? well({}, comment(0)(said)) : null, field({ label: 'Comment' }));
 const review = ({ changed, count, draft }) => list(heading('Files'), changed.map(fileRow(null)), heading('Your review', { meta: count }),
   stack({ variant: 'column' }, field({ label: 'Review', text: draft, multiline: true }), line(tonalAct('Approve'), quietAct('Request changes'), quietAct('Comment'))));
 const peopleRow = ([name, value]) => row({ name, detail: value });
@@ -456,9 +456,10 @@ const detailsBody = ({ description = null, people = [], checks = [], files = [],
   heading('Files'), files.map(fileRow(null)), diffFailed ? failureBlock(diffFailed) : null, cut ? list(quietAct(cut.more), dimLine(cut.note)) : null);
 const detailsFold = ({ summary, open = false, ...body }) => list(row({ level: 0, open, name: 'Details', meta: open ? null : summary }), open ? detailsBody(body) : null);
 const othersBlock = ({ label, pulls }) => list(heading(label), pulls.map(pullRow(null)), quietAct('Open the list'));
+const verdictTitle = (name, { text, tone }) => row({ title: true, name, second: { text, tone } });
 const pullBody = ({ title, verdict, acts = [], agent, armed = false, refused = null, sent = null, review: asked = null, message = null, talk = null, others = null, details = null, closing = true, reading = false }) => (reading
-  ? list(row({ name: title, strong: true }), toned(verdict.text), skeletonOf({ shape: 'line', count: 3 }))
-  : list(row({ name: title, strong: true }), chip({ label: verdict.text, quiet: true, tone: verdict.tone }), verdictBody(verdict),
+  ? list(verdictTitle(title, verdict), skeletonOf({ shape: 'line', count: 3 }))
+  : list(verdictTitle(title, verdict), verdictBody(verdict),
     acts.length ? line(acts.map((act) => pullActs[act]({ agent, armed }))) : null, refused ? failureBlock(refused) : null, sent ? line(dimLine(sent), quietAct('Full log')) : null,
     message ? stack({ variant: 'column' }, row({ name: message.to, strong: true }), markdown({ source: message.text })) : null,
     asked ? review(asked) : null, talk ? conversation({ agent, ...talk }) : null, others ? othersBlock(others) : null,
@@ -467,8 +468,8 @@ const pullBody = ({ title, verdict, acts = [], agent, armed = false, refused = n
 // A file's diff: a line takes a comment where it is, a thread sits on its line; a long diff shows 400 lines at a time.
 const diffInline = {
   comment: ({ draft }) => list(field({ label: 'Comment', text: draft }), line(button({ label: 'Comment', size: 'sm' }))),
-  pending: ({ note, draft }) => list(comment({ ...note, pending: true }), field({ label: 'Comment', text: draft }), line(button({ label: 'Add to review', size: 'sm' }))),
-  thread: ({ note, replies }) => stack({ variant: 'column' }, comment(note), dimLine(replies), field({ label: 'Reply' })),
+  pending: ({ note, draft }) => list(comment(0)({ ...note, pending: true }), field({ label: 'Comment', text: draft }), line(button({ label: 'Add to review', size: 'sm' }))),
+  thread: ({ note, replies }) => well({}, comment(0)(note), dimLine(replies), field({ label: 'Reply' })),
 };
 const diffBody = ({ text = null, chunks = [], between = null, empty, reading, failure, more = null, next = null, ...inline }) => textOr({ reading, failure, empty }, () => {
   const [top = text, ...rest] = chunks;
