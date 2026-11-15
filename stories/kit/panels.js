@@ -1,6 +1,6 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { button, chord, dialog, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
-import { channelSettings, keyboardExplorer, shortcutRow } from './compositions.js';
+import { bars, button, chord, dialog, facts, menu, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap } from './kit.js';
+import { channelSettings, keyboardExplorer, panel, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
 export const settingsPages = [{ key: 'pieces', label: 'What shows' }, { key: 'keys', label: 'Keys' }, { key: 'news', label: 'What’s new' }, { key: 'credits', label: 'Credits' }];
@@ -81,3 +81,79 @@ const findBody = ({ agent, query, days = [], at = null, open = false, turn, read
 export const conversationFind = ({ count, ...found }) => dialog({
   size: 'find', tools: findField(found.query, { label: 'Find in the conversation', focus: true, count, tools: findArrows(Boolean(count)) }), body: list(findBody(found)),
 });
+
+// Files: Changed or All files beside the title; a remote computer, or the stale line, is its only scope.
+const fileViews = [{ key: 'changed', label: 'Changed' }, { key: 'all', label: 'All files' }];
+const fileRow = (picked) => ({ name, folder, stat, letter }) => row({ name, letter, detail: folder, meta: stat, current: name === picked });
+const changedList = ({ named = [], unchanged = [], also = [], picked = null }) => (named.length || unchanged.length
+  ? list(named.map(fileRow(picked)), unchanged.length ? row({ name: 'Named, unchanged', detail: unchanged, dimmed: true }) : null, also.length ? row({ name: 'Also changed', heading: true }) : null, also.map(fileRow(picked)))
+  : also.map(fileRow(picked)));
+const treeRow = (picked) => ({ name, level, open, count = null, letter = null, more = null, failure = null }) => {
+  if (failure) return failureBlock(failure);
+  if (more) return row({ name: more, level, dimmed: true });
+  return row({ name, level, open, letter, icon: open === undefined ? 'lu-file' : 'lu-folder', chip: count, current: name === picked });
+};
+const filesBody = ({ view, files = {}, tree = [], picked = null, reading = false, failure = null, empty = null }) => {
+  if (failure) return failureBlock(failure);
+  if (reading) return skeletonOf({ shape: 'row', count: 5 });
+  if (empty) return emptyState(empty);
+  return view === 'changed' ? changedList({ ...files, picked }) : tree.map(treeRow(picked));
+};
+const fileMenu = (path) => menu({ title: path, items: [{ icon: 'lu-git-pull-request', label: 'Open the diff' }, { icon: 'lu-file', label: 'Open', hint: '↵' }, { icon: 'lu-external-link', label: 'Open with…' }, { icon: 'lu-copy', label: 'Copy path' }, ...pieceLines] });
+// `repository` false is a folder outside git: the tree only. `scope` is the remote computer or the stale line.
+const filesPanel = ({ view = 'changed', repository = true, scope = null, stale = false, look = 'panel', ...body }) => panel({ look, stale, header: panelHeader({
+  title: 'Files', second: scope,
+  tools: [repository ? tabs({ items: fileViews, value: view, size: 'sm' }) : null, panelRefresh({ reading: body.reading || stale })],
+}) }, filesBody({ view: repository ? view : 'all', ...body }));
+// A right-clicked row's menu opens beside the panel.
+export const files = ({ menu: path = null, ...props }) => (path ? stack({ variant: 'columns' }, filesPanel(props), fileMenu(path)) : filesPanel(props));
+
+// Share: a panel's header menu; its title says what leaves.
+const shareTargets = ['Post to X', 'Post to LinkedIn', 'Post to Bluesky'];
+export const shareMenu = ({ leaves }) => menu({ title: leaves, items: [...shareTargets.map((label) => ({ label })), { separator: true }, { label: 'Save image' }] });
+const shareButton = () => button({ label: 'Share', kind: 'icon', icon: 'lu-share' });
+
+// Ports: one line per server, no pane first; the picked one shows its command, folder and age, and its words.
+const stopVerb = ({ armed, stopping }) => (stopping ? { label: 'Stopping…', disabled: true } : { label: 'Stop', armed, verb: 'stop' });
+const browserVerb = (narrow) => ({ label: narrow ? 'Open' : 'Open in the browser' });
+const verbsOf = ({ pane }, { narrow, ...stop }) => (pane
+  ? [{ label: phrase('Go to', pane) }, browserVerb(narrow), stopVerb(stop)]
+  : [{ ...stopVerb(stop), kind: stop.armed ? 'quiet' : 'solid' }, browserVerb(narrow)]);
+const serverRow = ({ picked, refused, narrow, armed, stopping, reach }) => (item) => {
+  const open = item.port === picked;
+  return list(row({
+    name: item.port, detail: item.pane ?? item.what, meta: item.size, current: open,
+    second: open && !narrow ? facts(item.command, item.folder, item.age) : null,
+    verbs: open ? verbsOf(item, { narrow, armed, stopping }).map((verb) => ({ ...verb, disabled: verb.disabled || !reach })) : [],
+  }), open && refused ? failureBlock(refused) : null);
+};
+const noPaneHeading = ({ count, hover, armed }) => row({ name: 'No pane', heading: true, action: hover ? { label: phrase('Stop', count), kind: 'quiet', armed, verb: 'stop every one' } : null });
+const historyFold = (open) => row({ name: 'History', level: 0, open });
+const historyRow = ({ name, ports, when, ran, peak, how }) => row({ name, meta: peak, second: facts(ports, when, ran, how) });
+const historyLists = (lists) => {
+  const shown = lists.filter(({ rows }) => rows.length);
+  const [first] = shown;
+  return list(shown.length > 1 ? tabs({ items: shown, value: first.key, size: 'sm' }) : row({ name: first.label, heading: true }),
+    first.rows.map(historyRow), first.more ? button({ label: phrase('Show', first.more, 'more'), kind: 'quiet', size: 'sm' }) : null);
+};
+const guardLine = (said) => setting({ label: said, control: button({ label: 'Turn on the guard', kind: 'quiet', size: 'sm' }) });
+const history = ({ open = false, ranges, range, most, summary, guard = null, lists = [], ...chart }) => (open
+  ? list(historyFold(true), guard ? guardLine(guard) : null, guard && !chart.bars ? null : list(
+    stack({ variant: 'line' }, tabs({ items: ranges, value: range ?? ranges[0].key, size: 'sm' }), row({ name: most, dimmed: true })),
+    bars(chart), row({ name: facts(...summary), dimmed: true }), historyLists(lists)))
+  : historyFold(false));
+const portsBody = ({ servers, picked = null, refused = null, armed = false, stopping = false, heading = {}, reach = true, look, reading = false, failure = null, unattributed = null, history: past }) => {
+  if (failure) return failureBlock(failure);
+  if (reading) return skeletonOf({ shape: 'list row', count: 3 });
+  const { noPane = [], inPanes = [] } = servers;
+  const each = serverRow({ picked, refused, armed, stopping, reach, narrow: look === 'narrow' });
+  return list(
+    noPane.length || inPanes.length ? null : emptyState({ icon: 'lu-plug', text: 'No servers listening' }),
+    noPane.length ? list(noPaneHeading({ count: noPane.length, ...heading }), noPane.map(each)) : null,
+    inPanes.map(each), unattributed ? setting(unattributed) : null, past ? history(past) : null);
+};
+// `scope` is the remote computer, or the stale line; `share` opens the header's Share menu beside the panel.
+const portsPanel = ({ scope = null, stale = false, look = 'panel', ...body }) => panel({ look, stale, header: panelHeader({
+  title: 'Ports', second: scope, tools: [shareButton(), panelRefresh({ reading: body.reading || stale })],
+}) }, portsBody({ look, ...body, reach: !stale }));
+export const ports = ({ share = false, ...props }) => (share ? stack({ variant: 'columns' }, portsPanel(props), shareMenu({ leaves: 'Counts and sizes only' })) : portsPanel(props));

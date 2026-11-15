@@ -124,16 +124,16 @@
   "panel/Files": {
     "page": "Panels/Files",
     "states": {
-      "Tree": "panels/files/FilesAtRestNow/Default",
-      "Changed": "panels/files/FilesChangedOpenedFromTheDigest/Default",
-      "Loading": "panels/files/FilesFirstRead/Default",
-      "No changes": "panels/files/FilesNothingChanged/Default",
-      "No folder": "panels/files/FilesNoFolderForThisPane/Default",
-      "Read failed": "panels/files/FilesErrorTheFoldersOwnWords/Default",
-      "Stale": "panels/files/FilesStaleDevboxStoppedAnswering/Default",
-      "Keyboard": "panels/files/FilesRightClickARow/Default",
-      "No files": "panels/files/FilesNofiles/Default",
-      "Limit": "panels/files/FilesLimit/Default"
+      "Tree": "kit/Panels/Files/All files, with marks",
+      "Changed": "kit/Panels/Files/Changed, opened from the digest",
+      "Loading": "kit/Panels/Files/First read",
+      "No changes": "kit/Panels/Files/Nothing changed",
+      "No folder": "kit/Panels/Files/No folder for this pane",
+      "Read failed": "kit/Panels/Files/The folder can’t be read",
+      "Stale": "kit/Panels/Files/Stale: devbox stopped answering",
+      "Keyboard": "kit/Panels/Files/All files, with marks",
+      "No files": "kit/Panels/Files/An empty folder",
+      "Limit": "kit/Panels/Files/All files, with marks"
     }
   },
   "panel/Preview": {
@@ -206,26 +206,26 @@
   "panel/Ports": {
     "page": "Panels/Ports",
     "states": {
-      "No pane": "panels/ports/PortsRestTwoWithNoPaneTwoInPanes/Default",
-      "In pane": "panels/ports/PortsInAPaneSelectedAStopRefusedOnItsRow/Default",
-      "Stop armed": "panels/ports/PortsArmedOneStopPending/Default",
-      "Stopping": "panels/ports/PortsArmedOneStopPending/Default",
-      "Loading": "panels/ports/PortsFirstRead/Default",
-      "Empty": "panels/ports/PortsEmpty/Default",
-      "Read failed": "panels/ports/PortsAReadFailed/Default",
-      "Remote stale": "panels/ports/FeatureComputers/Unreachable",
-      "Force stop": "panels/ports/PortsForcestop/Default",
-      "Bulk stop": "panels/ports/PortsBulkstop/Default"
+      "No pane": "kit/Panels/Ports/At rest: two with no pane, two in panes",
+      "In pane": "kit/Panels/Ports/A pane’s server picked",
+      "Stop armed": "kit/Panels/Ports/Stop armed",
+      "Stopping": "kit/Panels/Ports/Stopping",
+      "Loading": "kit/Panels/Ports/First read",
+      "Empty": "kit/Panels/Ports/Empty",
+      "Read failed": "kit/Panels/Ports/A read failed",
+      "Remote stale": "kit/Panels/Ports/Another computer, unreachable",
+      "Force stop": "kit/Panels/Ports/A stop refused, on its row",
+      "Bulk stop": "kit/Panels/Ports/Stop every one with no pane"
     }
   },
   "panel/PortHistory": {
     "page": "Panels/Ports",
     "states": {
-      "Chart": "panels/ports/PortsHistoryOpenShareFromTheHeader/Default",
-      "History groups": "panels/ports/PortsHistoryOpenShareFromTheHeader/Default",
-      "Guard off": "panels/ports/PortHistoryGuardoff/Default",
-      "Unreadable": "panels/ports/PortHistoryUnreadable/Default",
-      "History stopped": "panels/ports/PortHistoryHistorystopped/Default"
+      "Chart": "kit/Panels/Ports/History open",
+      "History groups": "kit/Panels/Ports/History open",
+      "Guard off": "kit/Panels/Ports/History off",
+      "Unreadable": "kit/Panels/Ports/History unreadable",
+      "History stopped": "kit/Panels/Ports/History stopped"
     }
   },
   "panel/PullRequest": {
@@ -665,7 +665,7 @@
   "panel/HistoryChart/Ports": {
     "page": "Panels/Ports",
     "states": {
-      "Ports": "panels/ports/PortsHistoryOpenShareFromTheHeader/Default"
+      "Ports": "kit/Panels/Ports/History open"
     }
   },
   "panel/HistoryChart/Disk freed": {

@@ -72,7 +72,7 @@ export const descriptions = {
   PR: 'Pull requests with checks, reviews, diffs and conversation.',
   Worktrees: 'Repository checkouts to open, create, repair or remove.',
   Shipped: 'Contribution totals for a chosen period, with a share card.',
-  Ports: 'Listening services and the panes that own them.',
+  Ports: 'What listens on a port, the ones with no pane first, each one a press from stopping; History behind a fold.',
   Containers: 'Docker projects, containers and disk use, where Docker is installed.',
   Memory: 'Free memory, per-session use and the memory guard on supported computers.',
   Spend: 'Plan value and session cost for the selected period.',

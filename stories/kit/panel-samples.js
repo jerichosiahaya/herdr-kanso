@@ -81,3 +81,55 @@ export const sampleFind = {
   turn: 'The 429 now carries Retry-After, in seconds, from the bucket’s refill time. limits.ts exports refillIn(customer) and checkout.ts sets the header before it returns. Tests: 21 passed.',
   missing: '~/.claude/projects/acme-shop/4f2a.jsonl: no such file',
 };
+
+// Files: what checkout changed in acme-shop; `letter` is git's, modified has none; `stat` opens the diff.
+const changed = (name, folder, stat, letter = 'M') => ({ name, folder, stat, letter });
+export const sampleFiles = {
+  named: [changed('limits.ts', 'src/api', '+22', 'A'), changed('checkout.ts', 'src/api', '+14 −3')],
+  unchanged: ['plans.ts', 'Cart.tsx', 'limits.md'],
+  also: [changed('limits.test.ts', 'src/api', '+6 −4')],
+  shell: [changed('RetryIn.tsx', 'src/web', '+22', 'A')],
+  remote: { named: [changed('limits.ts', 'src/api', '+22', 'A'), changed('checkout.ts', 'src/api', '+14 −3')], unchanged: [], also: [changed('limits.test.ts', 'src/api', '+6 −4')] },
+  computer: 'devbox',
+  menu: { path: 'src/api/checkout.ts' },
+};
+// The tree as All files draws it: each entry its level; a folder open or not, with its count of changed files.
+const folder = (name, level, open, count = null) => ({ name, level, open, count });
+const file = (name, level, letter = null) => ({ name, level, letter });
+export const sampleTree = [folder('.github', 0, false), folder('docs', 0, false), folder('src', 0, true, '3'), folder('api', 1, true, '3'),
+  file('checkout.ts', 2, 'M'), file('limits.test.ts', 2, 'M'), file('limits.ts', 2, 'A'), file('plans.ts', 2), folder('web', 1, false),
+  folder('fixtures', 0, true), file('orders-0001.json', 1), { more: '1,214 more not listed', level: 1 }, file('package.json', 0)];
+export const samplePlainTree = [folder('private', 0, true), { failure: { text: 'Can’t list this folder', source: 'EACCES: permission denied, scandir \'/Users/jj/notes/private\'', fix: 'Refresh' }, level: 1 },
+  file('rate-limits.md', 0), file('standup.md', 0)];
+export const sampleFilesFailures = {
+  folder: { text: 'Can’t list ~/acme-shop', source: 'EACCES: permission denied, scandir \'/Users/jj/acme-shop\'', fix: 'Refresh', agent: 'checkout' },
+  unreachable: { text: 'Can’t reach devbox', source: 'ssh: connect to host devbox port 22: Operation timed out', fix: 'Refresh' },
+};
+
+// Ports: what listens, with no pane first; a pane's server is named by its pane.
+const server = (port, what, size, command, folder, age, pane = null) => ({ port, what, size, command, folder, age, pane });
+export const samplePorts = {
+  noPane: [server(':6006', 'storybook', '388 MB', 'storybook dev -p 6006', '~/acme-shop-cart', '2 h'), server(':3001', 'next', '214 MB', 'next dev -p 3001', '~/acme-shop-docs', '5 h')],
+  inPanes: [server(':4000', 'tsx', '146 MB', 'tsx watch src/server.ts', '~/acme-shop', '1 h', 'checkout'), server(':5173', 'vite', '182 MB', 'vite --port 5173', '~/acme-shop', '40 min', 'web')],
+  remote: { noPane: [server(':8000', 'uvicorn', '96 MB', 'uvicorn app:api --port 8000', '~/billing', '3 h')], inPanes: [server(':5432', 'postgres', '64 MB', 'postgres -D data', '~/billing', '1 d', 'migrate')] },
+  computer: 'devbox',
+  refused: { text: 'Couldn’t stop :6006', source: 'kill 48213: still listening on :6006 after SIGTERM', fix: 'Force stop', agent: 'checkout' },
+  failure: { text: 'Can’t read ports', source: 'lsof: unknown option -F', fix: 'Refresh', agent: 'checkout' },
+  unattributed: { label: 'Some servers cannot be attributed', note: 'Working directories require a Herdr API on Windows.' },
+};
+// Ports · History: servers at once over the range, the part with no pane, then what opened and ended.
+const opened = (name, ports, when, ran, peak, how = null) => ({ name, ports, when, ran, peak, how });
+export const samplePortHistory = {
+  ranges: [{ key: 'day', label: '24 h' }, { key: 'week', label: '7 days' }, { key: 'month', label: '30 days' }],
+  bars: [0.3, 0.4, 0.25, 0.5, 0.45, 0.6, 0.35, 0.5, 0.7, 0.55, 0.4, 1, 0.6, 0.45, 0.5, 0.65, 0.4, 0.55, 0.3, 0.5, 0.45, 0.6, 0.4, 0.35],
+  part: [0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.3, 0, 0, 0.4, 0, 0, 0, 0.2, 0, 0, 0, 0, 0, 0.2, 0, 0],
+  peak: 11,
+  ticks: ['Wed', 'now'],
+  most: 'peak 6 at once',
+  summary: ['4 stopped by you', '3 left with no pane'],
+  lists: [
+    { key: 'opened', label: 'Opened today', rows: [opened('storybook', ':6006', 'opened 09:12', 'ran 2 h', '388 MB', 'no pane'), opened('vite', ':5173', 'opened 13:20', 'ran 40 min', '182 MB')], more: 4 },
+    { key: 'ended', label: 'Recently ended', rows: [opened('next', ':3002', 'ended 11:40', 'ran 3 h', '240 MB', 'stopped by you')], more: 0 },
+  ],
+  said: { off: 'No history', bad: 'History unreadable', stale: 'History stopped at 14:02' },
+};

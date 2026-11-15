@@ -1,6 +1,21 @@
 // The panels' design guidelines and hypotheses, on the same templates as every page.
 
 export const panelGuidelines = {
+  'Panels/Ports': [
+    ['Kansō', 'One line per server.', 'Port, what runs it in one word or its pane’s name, and size. No pane first, under its own heading; the servers in a pane follow, each named by its pane. No scope line: only a remote computer’s name, or the stale line.'],
+    ['Kokō', 'The picked row says the rest.', 'On hover or selection: command, folder and age, then its words. With no pane, Stop is the one primary; in a pane, Go to its pane comes first and all three are quiet. Under 340 the command folds away and Open in the browser becomes Open.'],
+    ['Shizen', 'Stop asks again.', 'Stop and Stop 2 on the No pane heading arm for 4 s. A refused stop is the Failure block under its row, with Force stop and Explain to the agent. The status bar’s :6006 no pane opens here with that row picked.'],
+    ['Seijaku', 'History stays folded.', 'History opens on its range, servers at once with the part that had no pane, what you stopped, then what opened and ended. With no collector it says so and offers to turn the guard on; the live list never waits for it. Share is in the header: counts and sizes only.'],
+    ['Kokō', 'The focused project’s computer is read.', 'Out of reach, the last read stays stepped down and Stop waits. In front: one lsof and ps every 30 s; behind or closed, none. Remote: one listener read every 60 s, ps only when the ports change. History is one file read when opened.'],
+  ],
+  'Panels/Files': [
+    ['Kansō', 'Changed or All files, and nothing else at rest.', 'The title, Changed and All files as Tabs, then Refresh. Folder and branch live in the pane header, so there is no scope line; only a remote computer, or the stale line, takes it. Outside a repository there is only the tree.'],
+    ['Kokō', 'What the agent named comes first.', 'For an agent pane with a conversation, the files it named, newest first; a named file that changed carries its stat and is not listed again. Named files that did not change sit on one dim line. Also changed holds the rest. Hiding the piece stops the transcript read.'],
+    ['Kokō', 'Each row carries its own facts.', 'No totals. git’s letter sits where the file icon goes: A and D dim, U blocked, modified none. A folder shows how many changed files it holds. The stat opens the diff; the row opens the file in Preview.'],
+    ['Shizen', 'Keys and the right-click.', 'j k move, Enter opens, Esc returns to the pane. Right-click: Open the diff, Open, Open with…, Copy path, then the piece’s own lines.'],
+    ['Seijaku', 'Limits and failures in place.', 'The 500-per-folder cap is a dim row inside the folder it cut. An unreadable folder says so in its place. The first read is the skeleton; later reads keep the rows and spin Refresh. A computer out of reach keeps the last read stepped down, with when it was read.'],
+    ['Kokō', 'Remote reads only what is open.', 'Here, a folder watch. On another computer, one tree read per open folder, then one stat every 5 s in front, 30 s after three quiet reads, none hidden.'],
+  ],
   'Panels/Find': [
     ['Fukinsei', 'Next to what it searches.', '⌘F opens it under the focused pane’s header, right-aligned, 420 wide. ⌘F again selects the query; Esc closes it and gives the keyboard back to the pane. A plain shell gets the terminal’s own search.'],
     ['Kokō', 'The field, the count, Previous and Next.', 'The count says where you are, 2 of 3. ↑ and ↓ or the arrows move between matches; they are dim while there is nothing to move to. The query is kept per conversation.'],
@@ -20,6 +35,54 @@ export const panelGuidelines = {
 };
 
 export const panelHypotheses = {
+  'Panels/Ports': [
+    {
+      change: 'A row is one line, and the facts and actions come with the pointer.',
+      today: 'each row shows the full command, folder, age and its program icon; No pane carries a dot; History shows its chart and summary at rest.',
+      why: 'everything known about a server, at a glance.',
+      question: 'what does someone read before deciding to stop a server, other than its port, name and size?',
+      believe: 'port, name and size pick the row; the command and folder confirm it once picked, so the rest can wait for the pointer.',
+      jobs: [['which server', 'port and what runs it'], ['how heavy', 'size'], ['command, folder, age', 'the picked row’s second line'], ['stop or open', 'the picked row’s words'], ['the history', 'History, opened']],
+      wrong: 'someone stops the wrong server, or opens rows one by one to find one.',
+      try: 'Dawn Mode first.',
+      back: 'the second line and the program icon return at rest.',
+    },
+    {
+      change: 'Ports reads the focused project’s computer, not every computer at once.',
+      today: 'each connected computer’s servers sit under its name, this computer first; an unreachable one is a line.',
+      why: 'one place for every server everywhere.',
+      question: 'when someone opens Ports, is it about the project in front of them?',
+      believe: 'the servers of the computer you are working on answer the visit, and one computer read keeps remote use cheap.',
+      jobs: [['this project’s servers', 'the list'], ['another computer’s', 'focus a project there'], ['an unreachable computer', 'the stale line']],
+      wrong: 'someone looks for a server on another computer and switches projects to find it.',
+      try: 'Dawn Mode first.',
+      back: 'each computer gets its section again.',
+    },
+  ],
+  'Panels/Files': [
+    {
+      change: 'Changed lists the files the agent named first, and every row carries its stat.',
+      today: 'Changed is the tree filtered to changed files, each with git’s letter; nothing says which files the agent worked on.',
+      why: 'git knows what changed; the conversation was not read.',
+      question: 'when an agent finishes, which files does someone open first?',
+      believe: 'the ones it named, with how much each changed, answer what did it touch before reading any diff; the rest stay one heading below.',
+      jobs: [['see what changed', 'Changed, every row with its stat'], ['see what the agent touched', 'its named files first'], ['the whole tree', 'All files']],
+      wrong: 'someone opens Also changed first, or the named list misses files the agent changed.',
+      try: 'Dawn Mode first.',
+      back: 'Changed lists the changed files only, as today; the transcript read stops.',
+    },
+    {
+      change: 'Right-click opens a menu, and the header loses the folder name.',
+      today: 'right-click opens Open with at once; the header shows the root folder’s name at its right; the cap is one line under the list.',
+      why: 'one action per click, and where the files come from.',
+      question: 'what else do people do with a file than open it with another app?',
+      believe: 'Open the diff and Copy path are as common as Open with, and the pane header already names the folder; the cap reads best inside the folder it cut.',
+      jobs: [['open with another app', 'Open with… in the menu'], ['the diff', 'Open the diff, or the stat'], ['the path', 'Copy path'], ['which folder', 'the pane header'], ['the cap', 'a dim row in its folder']],
+      wrong: 'someone looks for the folder name in the panel, or misses the one-click Open with.',
+      try: 'Dawn Mode first.',
+      back: 'right-click opens Open with again and the header shows the folder.',
+    },
+  ],
   'Panels/Find': [
     {
       change: 'A conversation that cannot be read becomes the Failure block, and no matches the empty state.',
