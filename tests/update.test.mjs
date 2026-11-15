@@ -215,9 +215,10 @@ test("The footer is as tall as the rows it shows: one switched off in Kanso's se
   assert.equal(footerPx(new Set(), null), 88, "Settings and Add computer");
   assert.equal(footerPx(new Set(), "3.31.0"), 120);
   assert.equal(footerPx(new Set(), null, "words"), 88, "a refusal shows only under an update row");
-  const block = Math.ceil(stateBlockPx({ why: "words", fixes: [{ label: "Update" }] }));
-  assert.equal(footerPx(new Set(), "3.31.0", "words"), 120 + 2 + block + 8, "the kit's block, a hair under its row and 8 above the next");
-  assert.equal(footerPx(new Set(), "3.31.0", "words", false), 120, "in the rail no block is drawn, so none is fitted");
+  const block = Math.ceil(stateBlockPx({ why: "words", fixes: [{ label: "Update" }] }, 2));
+  assert.equal(footerPx(new Set(), "3.31.0", "words"), 120 + 2 + block + 8, "the kit's block with our words on two lines, a hair under its row and 8 above the next");
+  assert.equal(footerPx(new Set(), "3.31.0", "words", false), 126, "in the rail three squares of 34 a hair apart, 8 above and 12 below, and no block");
+  assert.equal(footerPx(new Set(["footer.machine"]), null, null, false), 54, "one square");
 });
 
 test("A refused update makes room for its block in the open footer, and gives it back in the rail", async (t) => {
@@ -231,7 +232,7 @@ test("A refused update makes room for its block in the open footer, and gives it
   assert.ok(f.resizes.at(-1) > 120, "the block fits under the update row");
   f.store["sidebar.collapsed"] = true;
   f.updater.fit();
-  assert.equal(f.resizes.at(-1), 120, "the rail draws no block");
+  assert.equal(f.resizes.at(-1), 126, "the rail fits its squares and draws no block");
 });
 
 test("A refused update keeps the tool's words for the footer, and an update that lands clears them", async (t) => {

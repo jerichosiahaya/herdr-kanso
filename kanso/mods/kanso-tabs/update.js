@@ -6,7 +6,7 @@ import { sameVolume, updateHost, windowsInstallScript, windowsLaunchScript, wind
 import { exec, readTextFile, appHome, shared, setShared, notify, layout, run, writeTextFile } from "herdr";
 import { tryOr, tryOrAsync } from "./pure.js";
 import { stateBlockPx } from "./ui-state.js";
-import { footerHeight, footerRows, refusalBlock } from "./footer-model.js";
+import { COLLAPSED, MACHINE_PIECE, REFUSAL_LINES, footerHeight, footerRows, railHeight, refusalBlock } from "./footer-model.js";
 import { pieces, runs, shown, hiddenSet } from "./pieces.js";
 import { channelOf, compareReleases, hostInstall, installedRelease, newestTag, offerRelease, parseRelease } from "./release.js";
 import { alreadyUpdating, checkFailed, installFailed, updateAvailable, updated, upToDate } from "./notices.js";
@@ -39,17 +39,17 @@ const RECOVER_MS = 5 * 60 * 1000;
 const BUSY = 75;
 // Under Herdr's home: the lock, and per install its staging folder, pid, log and outcome.
 const UPDATES = ".kanso-updates";
-// The footer is as tall as its rows; a refused update's block counts only while the sidebar is open.
+// The footer is as tall as its rows, or its squares in the rail; a refused update's block counts only while open.
 const FOOTER = "sidebar-footer";
-const REFUSED_PX = stateBlockPx(refusalBlock("words"));
-export const footerPx = (hidden, update, refused = null, open = true) => footerHeight(
-  footerRows({ update, machine: !hidden.has("footer.machine") }).length,
-  update && refused && open ? REFUSED_PX : 0,
-);
+const REFUSED_PX = stateBlockPx(refusalBlock("words"), REFUSAL_LINES);
+export const footerPx = (hidden, update, refused = null, open = true) => {
+  const rows = footerRows({ update, machine: !hidden.has(MACHINE_PIECE) }).length;
+  return open ? footerHeight(rows, update && refused ? REFUSED_PX : 0) : railHeight(rows);
+};
 // Every size this sets, now or before the account chip left (84 and 36 a row), so one you sized yourself stays.
 const LEGACY_BASE_PX = 84, LEGACY_ROW_PX = 36;
 const legacy = (px) => px >= LEGACY_BASE_PX + LEGACY_ROW_PX && px <= LEGACY_BASE_PX + LEGACY_ROW_PX * 5 && (px - LEGACY_BASE_PX) % LEGACY_ROW_PX === 0;
-const SIZES = new Set([1, 2, 3].flatMap((rows) => [footerHeight(rows), footerHeight(rows, REFUSED_PX)]));
+const SIZES = new Set([1, 2, 3].flatMap((rows) => [footerHeight(rows), footerHeight(rows, REFUSED_PX), railHeight(rows)]));
 const OURS = (px) => legacy(px) || SIZES.has(px);
 
 function findNode(node, id) {
@@ -336,7 +336,7 @@ export class Updater {
       const channel = this.channel();
       const changed = this.seenChannel != null && this.seenChannel !== channel;
       this.seenChannel = channel;
-      const now = JSON.stringify([pieces(shared), this.state().latest ?? null, channel, this.refused(), shared("sidebar.collapsed") === true]);
+      const now = JSON.stringify([pieces(shared), this.state().latest ?? null, channel, this.refused(), shared(COLLAPSED) === true]);
       if (now !== this.hiddenSeen) { this.hiddenSeen = now; this.fit(); }
       if (changed) cx.spawn((cx) => this.check(cx, true));
     });
@@ -348,7 +348,7 @@ export class Updater {
     if (!found) return;
     const { size } = found;
     const hidden = tryOr(() => hiddenSet(pieces(shared)), new Set());
-    const want = footerPx(hidden, this.available(), this.refused(), shared("sidebar.collapsed") !== true);
+    const want = footerPx(hidden, this.available(), this.refused(), shared(COLLAPSED) !== true);
     if (size !== want && OURS(size)) run("layout.resize", { id: FOOTER, px: want });
   }
 

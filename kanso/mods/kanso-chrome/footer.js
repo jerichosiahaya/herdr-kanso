@@ -13,7 +13,7 @@ const chromeGlyph = (icon, ink) => svg(glyphOf(icon)).size(ICON_CHROME).flex_non
 
 const line = (c, { key, icon, name, quiet, onClick }) => row(`footer-${key}`, c, {
   start: [chromeGlyph(icon, inkOf(c, quiet))], name, dimmed: quiet, onClick,
-}).text_size(T.card);
+}).text_size(T.card); // the kit row has no size: the Storybook's row has none either
 
 const square = (c, { key, icon, name, quiet, onClick }) => h_flex().id(`footer-${key}`).size(CHROME_SQUARE).flex_none()
   .items_center().justify_center().rounded(R.control).cursor_pointer().tooltip(name)

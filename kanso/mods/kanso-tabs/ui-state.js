@@ -21,8 +21,8 @@ const EDGE = 1;
 const LEADING = 1.5;
 const EVIDENCE_PX = T.mono * LEADING * 2;
 
-/** The tallest a `stateBlock` with these parts draws: a fixed-size home makes room with it. */
-export const stateBlockPx = ({ why = null, fixes = [] } = {}) => 2 * (EDGE + G.md) + T.card * LEADING
+/** The tallest a `stateBlock` with these parts draws when our words wrap to `lines`: a fixed-size home makes room with it. */
+export const stateBlockPx = ({ why = null, fixes = [] } = {}, lines = 1) => 2 * (EDGE + G.md) + T.card * LEADING * lines
   + (why ? G.xs + EVIDENCE_PX : 0) + (fixes.length ? 2 * G.xs + H.control : 0);
 
 /** Failure, block: a blocked edge; the mark and our words, the source's words at most two lines, then the fixes: first solid, the rest tonal.

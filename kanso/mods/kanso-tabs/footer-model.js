@@ -1,8 +1,12 @@
 // The sidebar footer as data: its rows in their words, its sizes, and the Settings menu's entries.
-import { G, H } from "./ui.js";
+import { G, H, CHROME_SQUARE } from "./ui.js";
 import { parseRelease } from "./release.js";
 
 export const KANSO_SETTINGS = "kanso-tabs.settings";
+export const COLLAPSED = "sidebar.collapsed";
+export const MACHINE_PIECE = "footer.machine";
+// At the sidebar's narrowest our words can wrap once; the block is fitted for that.
+export const REFUSAL_LINES = 2;
 export const ROW = Object.freeze({ update: "kanso-update", settings: "settings", machine: "machine" });
 export const ITEM = Object.freeze({ kanso: "kanso", herdr: "herdr", updateHerdr: "update-herdr" });
 
@@ -27,6 +31,9 @@ export const footerRows = ({ update = null, busy = false, machine = true } = {})
 /** The open footer's height: its rows, and `refusedPx` (a refused update's block, or 0) with its margins. */
 export const footerHeight = (rows, refusedPx = 0) => PAD.top + rows * H.line + PAD.bottom
   + (refusedPx ? REFUSAL.above + Math.ceil(refusedPx) + REFUSAL.below : 0);
+
+/** The rail footer's height: its squares, a hair apart. */
+export const railHeight = (rows) => PAD.top + rows * CHROME_SQUARE + (rows - 1) * PAD.railGap + PAD.railBottom;
 
 /** A refused update's failure block: our words, the tool's, and Update to try again. */
 export const refusalBlock = (why, retry = null) => ({ what: "kansō didn't update", why, fixes: [{ label: "Update", onClick: retry }] });

@@ -77,6 +77,7 @@ test("A failure block's height is read from the block's own sizes, so a fixed-si
   assert.equal(stateBlockPx(parts), drawn);
   assert.equal(evidence, arg(why, "text_size") * arg(why, "line_height") * 2, "the source's words at most two lines");
   assert.equal(stateBlockPx({ what: parts.what }), 2 * (edge + arg(block, "p")) + words, "the words alone");
+  assert.equal(stateBlockPx(parts, 2), drawn + words, "our words wrapped to a second line");
 });
 
 test("A failure with neither slot is the words alone", async () => {

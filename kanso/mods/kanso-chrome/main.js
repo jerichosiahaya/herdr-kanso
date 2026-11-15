@@ -13,7 +13,7 @@ import { outOfMemory } from "./notices.js";
 import { glyphs } from "./marks.js";
 import { tokens } from "./ui.js";
 import { Armed } from "./ui-button.js";
-import { ROW, ITEM, footerRows, settingsChord, settingsEntries } from "./footer-model.js";
+import { ROW, ITEM, COLLAPSED, footerRows, settingsChord, settingsEntries } from "./footer-model.js";
 import { sidebarFooter } from "./footer.js";
 
 const SAMPLE_MS = 120_000;
@@ -118,7 +118,7 @@ export default class WorkspaceChrome extends View {
     const t = theme();
     // The title bar holds the window's own lights, nothing else.
     if (!props()?.footer) return div().size_full().bg(t.chrome);
-    const collapsed = shared("sidebar.collapsed") === true;
+    const collapsed = shared(COLLAPSED) === true;
     return sidebarFooter(tokens(t), { collapsed, rows: this.rows(), settings: this.settingsMenu(), refused: this.refusal() });
   }
 }

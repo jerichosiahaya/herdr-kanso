@@ -40,7 +40,8 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
       settings; while Herdr has an update waiting, "Update Herdr to X",
       pressed twice to restart Herdr into it.
     - Collapsed, each item is a centred 34 square, icon 17, with its label
-      as a tooltip; the gear opens the same menu.
+      as a tooltip; the gear opens the same menu. The footer fits them: 54
+      for one, 36 more each, 12 below.
     - Kanso's own release (`update.js`). What's new
       chooses Stable (default) or Early. Stable offers a newer `vX.Y.Z`.
       Early offers the newest beta, rc or stable, never an older one.
@@ -172,13 +173,17 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
     `foreground` focused; a stacked column shows one 2px bar per pane. Click a pill to go there. After the pills, a tiny
     "− n +" control: fewer or more panes per view, and the number itself
     evens the columns out to 1/n.
-    `kanso-status`, text 11.5 `muted`:
-    - Left: computer icon, "This computer" or a name you give it, then the branch.
-      Unreachable: "<name> · unreachable" in `blocked`; a click retries.
+    `kanso-status`, text 11.5 `muted`, 12 inside, 16 between items, 8 from an
+    icon or mark to its words. Each item stands in for a home out of sight:
+    - Left, only while the sidebar is folded: computer icon and "This computer"
+      or a name you give it; connecting, at 80% with a breathing dot. No branch:
+      the pane header and the sidebar carry it. Unreachable, even with the
+      sidebar open: the blocked mark, "Can't reach <name>" and a small Refresh.
     - Right, while someone waits: mark, name, question (260) and +N; a click
       runs `kanso-spaces.needs-you.next`. "Memory N% free" in `blocked` when
-      under the guard's floor; a click opens Memory. Then the working count
-      and "⌘⇧P".
+      under the guard's floor; a click opens Memory. While an agent works, the
+      working mark and how many; a click opens Status. Then the palette, an
+      icon button with its key in the tooltip.
 - **Themes**: `kanso` (dark) and `kanso-day` (light), in `themes/`.
   - Dark: background `#1b1b19`, foreground `#d8d4cb`, chrome and canvas
     `#161615`, border `#272725`, input `#353430`, muted `#949086`, dim
@@ -225,7 +230,8 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
     the collapsed rail shows it.
   - Done: the circle closed, in `done`.
   - Idle: a thin even ring in `idle` at 70%, on sidebar rows (and in the
-    status bar when nothing works); nothing on the tab or header.
+    status bar when its working count is always shown and nothing works);
+    nothing on the tab or header.
   - The 7px corner dots on the strip's edge tabs stay dots: a badge.
 - **Motion**, native, and never stopped behind other windows (a still ring
   there reads as a stalled agent; what the window saves behind others is
