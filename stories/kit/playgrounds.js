@@ -14,6 +14,8 @@ const inSidebar = (markup) => stack({ variant: 'sidebar frame' }, markup), inRai
 const select = (name, options) => ({ name, control: { type: 'select' }, options });
 const text = (name) => ({ name, control: { type: 'text' } });
 const flag = (name) => ({ name, control: { type: 'boolean' } });
+// The Agent menu's controls an asleep row has none of.
+const agentAwake = { arg: 'on', neq: 'an asleep row' };
 // Controls several pages share, each named once.
 const shared = {
   title: text('title'), scope: text('scope'), name: text('name'),
@@ -209,11 +211,11 @@ export const playgrounds = {
   'Compositions/Agent menu': {
     ...statedPages['Compositions/Agent menu'],
     argTypes: {
-      on: { name: 'on', control: { type: 'inline-radio' }, options: ['an agent', 'a thread'] },
-      pinned: flag('pinned'),
+      on: { name: 'on', control: { type: 'inline-radio' }, options: ['an agent', 'a thread', 'an asleep row'] },
+      pinned: { ...flag('pinned'), if: agentAwake },
       away: { name: 'put away', control: { type: 'inline-radio' }, options: ['no', 'snoozed', 'settled'], if: { arg: 'on', eq: 'a thread' } },
-      armed: flag('close armed'),
-      opened: { name: 'opened', control: { type: 'inline-radio' }, options: ['none', 'Snooze', 'Move to project', 'Copy'] },
+      armed: { ...flag('close armed'), if: agentAwake },
+      opened: { name: 'opened', control: { type: 'inline-radio' }, options: ['none', 'Snooze', 'Move to project', 'Copy'], if: agentAwake },
     },
   },
   'Compositions/Arrangements dialog': {

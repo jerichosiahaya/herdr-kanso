@@ -92,6 +92,17 @@ export const hypotheses = {
       try: 'Dawn Mode first.',
       back: 'the items return to today’s order, without Sleep its tab and the piece lines.',
     },
+    {
+      change: 'An asleep row’s menu wakes its whole group by name and adds Everything asleep…, which opens Sleep.',
+      today: 'Wake, or Wake it and N more of its tab, and Copy conversation id, under its name and since when.',
+      why: 'bring one sleeping agent back, or the tab it slept with.',
+      question: 'why must someone leave the row to see or wake everything else that is asleep?',
+      believe: 'the group named in the item and one door to Sleep let someone wake the right set without hunting for it.',
+      jobs: [['wake this agent', 'Wake'], ['wake the rest of its tab', 'Wake all of its group'], ['copy its id', 'Copy conversation id'], ['see everything asleep', 'Everything asleep…']],
+      wrong: 'someone wakes a whole group when they meant one agent, or never opens Everything asleep….',
+      try: 'Dawn Mode first.',
+      back: 'the menu returns to Wake, Wake it and N more, and Copy conversation id.',
+    },
   ],
   'Compositions/Add computer dialog': [
     {

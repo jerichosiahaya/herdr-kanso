@@ -170,6 +170,10 @@ export const agentMenu = ({ name, thread = null, pinned = false, away = null, ar
   { separator: true }, { icon: 'lu-moon', label: 'Sleep this agent' }, { icon: 'lu-moon', label: 'Sleep its tab' },
   { separator: true }, { icon: 'lu-x', label: 'Close agent', verb: phrase('close', name), armed },
   ...pieceLines] });
+// An asleep row's menu: its way back, its id, then everything asleep.
+export const asleepMenu = ({ title, more = 0, group }) => menu({ title, items: [
+  { icon: 'lu-sun', label: 'Wake' }, ...(more ? [{ icon: 'lu-sun', label: phrase('Wake all', more, group) }] : []),
+  { icon: 'lu-copy', label: 'Copy conversation id' }, { separator: true }, { icon: 'lu-moon', label: 'Everything asleep…' }] });
 export const snoozeMenu = ({ name, times }) => menu({ title: phrase('Snooze', name), items: times.map(([label, hint]) => ({ label, hint })) });
 export const moveMenu = ({ name, projects, home }) => menu({ title: phrase('Move', name, 'to'), items: [...projects.map((label) => ({ label })), { separator: true }, { icon: 'lu-undo', label: phrase('Back to', home) }] });
 export const copyMenu = ({ folder, branch, id }) => menu({ title: 'Copy', items: [{ icon: 'lu-folder', label: 'Folder', hint: folder }, { icon: 'lu-git-branch', label: 'Branch', hint: branch }, { icon: 'lu-copy', label: 'Conversation id', hint: id }] });

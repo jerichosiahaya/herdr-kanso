@@ -118,6 +118,7 @@ export const guidelines = {
     ["Kansō", "A use of Menu.", "The agent's or thread's name as its title; open it, name it, keep it, put it away, close it, then the piece lines. Snooze, Move and Copy each open their own Menu."],
     ["Kokō", "Only the way back when it is away.", "A snoozed thread offers Wake, a settled one Bring back, with Mark unread, Rename and Copy."],
     ["Seijaku", "Close asks twice.", "Close agent arms for 4 s; the agent's name is in the second press."],
+    ["Kokō", "An asleep row leads with Wake.", "Its title says since when; Wake, Wake all of its group, Copy conversation id, then Everything asleep…, which opens Sleep."],
   ],
   "Compositions/Arrangements dialog": [
     ["Kansō", "A use of Dialog.", "Each arrangement a Row; one from another project shows that project as its fact. The chosen Row shows Overwrite and Delete; Delete asks twice. Save this tab is the one primary, tonal."],

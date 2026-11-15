@@ -1,9 +1,9 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
 import { dialog, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inSettings, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 
@@ -350,7 +350,7 @@ export const statedPages = {
   'Compositions/Agent menu': {
     args: { on: 'an agent', pinned: false, away: 'no', armed: false, opened: 'none' },
     markup: ({ on, pinned, away, armed, opened }) => ({
-      none: () => agentMenu({ name: 'checkout', thread: on === 'a thread' ? 'Rate limit' : null, pinned, away: away === 'no' ? null : away, armed }),
+      none: () => on === 'an asleep row' ? asleepMenu(sampleAsleepRow) : agentMenu({ name: 'checkout', thread: on === 'a thread' ? 'Rate limit' : null, pinned, away: away === 'no' ? null : away, armed }),
       Snooze: () => snoozeMenu({ name: 'checkout', times: sampleSnooze }),
       'Move to project': () => moveMenu({ name: 'checkout', ...sampleMove }),
       Copy: () => copyMenu(sampleCopy),
@@ -362,6 +362,7 @@ export const statedPages = {
       { label: 'Thread', args: { on: 'a thread' }, caption: 'On Threads: the thread’s title, and Settle.' },
       { label: 'Snoozed', args: { on: 'a thread', away: 'snoozed' }, caption: 'Only its way back: Wake.' },
       { label: 'Settled', args: { on: 'a thread', away: 'settled' }, caption: 'Only its way back: Bring back.' },
+      { label: 'Asleep row', args: { on: 'an asleep row' }, caption: 'Its way back first; Everything asleep… opens Sleep.' },
       { label: 'Snooze', args: { opened: 'Snooze' }, caption: 'Each time with when it ends.' },
       { label: 'Move to project', args: { opened: 'Move to project' }, caption: 'The other projects, then back home.' },
       { label: 'Copy', args: { opened: 'Copy' }, caption: 'Each fact with its value.' },
