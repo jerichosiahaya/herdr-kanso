@@ -1,5 +1,5 @@
 // The panels: each one only calls pieces and compositions with its own props and draws no markup.
-import { band, bars, button, chord, device, deviceScreen, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, explainButton, sentence, well } from './kit.js';
+import { band, bars, button, chord, device, deviceScreen, dialog, facts, keyHint, mark, markdown, menu, metric, note, pieceLines, emptyState, excerpt, failureBlock, input, list, phrase, picture, pin, release, row, setting, skeletonOf, stack, tabs, toggle, windowMap, code, explainButton, sentence, well, delta, heatmap, shareCard } from './kit.js';
 import { channelSettings, keyboardExplorer, newWorktree, notice, panel, panelBack, panelClose, panelHeader, panelRefresh, shortcutRow } from './compositions.js';
 
 // Settings: one window, its four pages as Tabs beside the title; Esc closes it.
@@ -111,7 +111,7 @@ export const files = ({ menu: path = null, ...props }) => withBeside(filesPanel(
 // Share: a panel's header menu; its title says what leaves.
 const shareTargets = ['Post to X', 'Post to LinkedIn', 'Post to Bluesky'];
 export const shareMenu = ({ leaves }) => menu({ title: leaves, items: [...shareTargets.map((label) => ({ label })), { separator: true }, { label: 'Save image' }] });
-const shareButton = () => button({ label: 'Share', kind: 'icon', icon: 'lu-share' });
+const shareButton = ({ disabled = false } = {}) => button({ label: 'Share', kind: 'icon', icon: 'lu-share', disabled });
 // What opens beside a panel: its Share menu, a notice, a dialog.
 const withBeside = (drawn, beside) => (beside ? stack({ variant: 'columns' }, drawn, beside) : drawn);
 // The first read is the skeleton; a refusal is the Failure block in its place.
@@ -567,3 +567,31 @@ const worktreesPanel = ({ phase = null, scope = null, stale = false, look = 'pan
 }) }, worktreesBody({ look, reach: !stale, ...body }));
 export const worktrees = ({ share = false, notice: said = null, creating = null, ...props }) => withBeside(worktreesPanel(props),
   share ? shareMenu({ leaves: 'Totals only' }) : said ? notice(said) : creating ? newWorktree(creating) : null);
+
+// Shipped: the period's number, how it compares and what it counts, a new best, each repository; Records, When you ship and Computers fold at the foot.
+const periodLine = (when) => stack({ variant: 'line' }, periodTabs(when), stepper(when.past));
+const countLine = (counted) => sentence({ text: facts(...counted.map(({ value, unit }) => phrase(value, unit))) });
+// The streak on the count line opens the year of days under it.
+const shippedHero = ({ hero, delta: compared = null, counts: counted, contributions = null, ever = null, days = [], calendar = false }, pointer) => list(
+  metric(hero), compared ? delta(compared) : null, countLine(counted), calendar ? heatmap({ days }) : null, pointer === 'number' ? sentence({ text: facts(contributions, ever) }) : null);
+const newMark = { text: 'new', tone: 'accent' };
+const recordRow = ({ name, value, unit, detail, fresh }) => row({ name, detail: fresh ? newMark : null, meta: phrase(value, unit), second: detail });
+const shipRow = (pointer) => ({ name, lines, commits }) => row({ name, meta: lines, hover: name === pointer, second: name === pointer ? commits : null });
+const shipRepos = ({ count, rows, more = 0 }, { rest = [], expanded, pointer }) => list(heading('By repository', { meta: count }),
+  [...rows, ...(expanded ? rest : [])].map(shipRow(pointer)), expanded ? quiet({ label: 'Show fewer' }) : moreRows(more));
+// A fold at the foot: its line, and what it holds when open.
+const footFold = (open, fold, drawn) => list(historyFold(open, fold), open ? drawn() : null);
+const shipFolds = ({ records = null, rhythm = null, computers = null, open = [] }) => list(
+  records ? footFold(open.includes('records'), { name: 'Records', meta: records.count }, () => records.rows.map(recordRow)) : null,
+  rhythm ? footFold(open.includes('rhythm'), { name: 'When you ship', meta: rhythm.note }, () => bars({ bars: rhythm.hours, peak: rhythm.peak, ticks: rhythm.ticks, filled: true })) : null,
+  computers ? footFold(open.includes('computers'), { name: 'Computers', meta: computers.count }, () => computers.rows.map(({ name, lines, commits }) => row({ name, meta: facts(commits, lines) }))) : null);
+const shippedBody = ({ best = null, repos = null, rest, expanded = false, pointer = null, phase = null, stopped = null, ...shown }) => list(
+  shippedHero(shown, pointer), phase ? sentence({ text: phase }) : null, stopped ? failureBlock(stopped) : null,
+  best ? recordRow({ ...best, detail: null }) : null, repos ? shipRepos(repos, { rest, expanded, pointer }) : null, shipFolds(shown));
+// `gate` is GitHub out of reach before anything is read; `scope` the stale line; `empty` a period with nothing in it.
+const shippedPanel = ({ label, period, periods, past = false, gate = null, scope = null, stale = false, reading = false, empty = null, look = 'panel', ...body }) => panel({ look, stale, header: panelHeader({
+  title: 'Shipped', second: scope ?? label, tools: [shareButton({ disabled: reading || Boolean(gate) }), panelRefresh({ reading: reading || stale || Boolean(body.phase) })],
+}) }, gate ? emptyState(gate) : list(periodLine({ periods, period, past }), waiting({ reading }) ?? (empty ? emptyState(empty) : shippedBody(body))));
+// Share opens its menu beside the panel, `card` the card it makes; a new record is a notice.
+export const shipped = ({ share = null, card = null, notice: said = null, ...props }) => withBeside(shippedPanel(props),
+  share ? shareMenu({ leaves: share }) : card ? shareCard(card) : said ? notice(said) : null);

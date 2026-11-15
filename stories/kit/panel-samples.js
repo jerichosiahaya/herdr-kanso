@@ -563,3 +563,69 @@ export const samplePins = {
     copy: { text: 'Couldn’t copy to devbox', source: 'scp: devbox: Connection timed out', fix: 'Send' },
   },
 };
+
+// Shipped: this week, +12,480 lines over 11 repositories, a 12-day streak and a new best day; `facts` count the period, `ever` is since joining GitHub.
+const shipRepo = (name, add, del, commits) => ({ name, lines: `${add} ${del}`, commits: `${commits} commits` });
+const counted = (...pairs) => pairs.map(([value, unit]) => ({ value, unit }));
+const shipRecord = (name, value, unit, detail, fresh = false) => ({ name, value, unit, detail, fresh });
+const shipHours = [2, 1, 1, 1, 2, 4, 6, 10, 14, 18, 21, 17, 15, 20, 31, 50, 35, 23, 15, 10, 7, 5, 4, 3];
+const shipDays = Array.from({ length: 7 * 26 }, (_, day) => [0, 1, 2, 4, 3, 1, 0, 2, 3, 1, 4][(day * 7 + Math.floor(day / 5)) % 11]);
+export const sampleShipped = {
+  periods: [{ key: 'day', label: 'Day' }, { key: 'week', label: 'Week' }, { key: 'month', label: 'Month' }, { key: 'year', label: 'Year' }],
+  week: {
+    period: 'week', label: 'This week',
+    hero: { value: '+12,480', small: '−3,210', unit: 'lines' }, delta: { text: '18% on last week', up: true },
+    counts: counted(['9', 'PRs merged'], ['112', 'commits'], ['6', 'reviews'], ['12', 'days in a row']),
+    contributions: '340 contributions this week', ever: '1,204 pull requests merged, +412,300 lines and 9,870 commits in 64 repositories since you joined GitHub in 2014.',
+    best: shipRecord('Best day', '+2,904', 'lines', 'Tue 11 Nov', true), days: shipDays,
+    repos: { count: '11', more: 8, rows: [shipRepo('acme-shop', '+7,120', '−1,840', 61), shipRepo('relay', '+2,980', '−720', 28), shipRepo('billing', '+1,640', '−410', 18)] },
+    rest: [shipRepo('docs', '+240', '−80', 4), shipRepo('cli', '+180', '−60', 2), shipRepo('search', '+120', '−40', 2), shipRepo('infra', '+90', '−30', 1), shipRepo('site', '+60', '−20', 1), shipRepo('mobile', '+30', '−10', 1), shipRepo('herdr-kanso', '+12', '−4', 1), shipRepo('notes', '+8', '−2', 1)],
+  },
+  day: {
+    period: 'day', label: 'Yesterday', past: true,
+    hero: { value: '31', unit: 'contributions' }, delta: { text: '12% on the day before', up: false },
+    counts: counted(['2', 'PRs merged'], ['24', 'commits'], ['1', 'review']),
+    repos: { count: 'this week', rows: [shipRepo('acme-shop', '+7,120', '−1,840', 61), shipRepo('relay', '+2,980', '−720', 28)] },
+  },
+  past: {
+    period: 'week', label: 'Last week', past: true,
+    hero: { value: '+10,576', small: '−2,720', unit: 'lines' }, delta: { text: '9% on the week before', up: true },
+    counts: counted(['7', 'PRs merged'], ['94', 'commits'], ['4', 'reviews']),
+    repos: { count: '2', rows: [shipRepo('acme-shop', '+7,120', '−1,840', 52), shipRepo('relay', '+3,456', '−880', 42)] },
+  },
+  addingUp: { hero: { value: '+4,310', unit: 'lines so far' }, counts: counted(['9', 'PRs merged'], ['112', 'commits'], ['6', 'reviews']) },
+  phases: {
+    first: 'Adding up: GitHub’s sums, 14 repositories to go. The first time takes a few minutes; after that only what changed is read.',
+    again: 'Updating: this computer’s repositories, 3 to go.',
+  },
+  records: {
+    count: '3', streak: { value: '12', unit: 'days in a row', longest: 'longest 28 days' },
+    rows: [shipRecord('Best day', '+2,904', 'lines', 'Tue 11 Nov', true), shipRecord('Best week', '+12,480', 'lines', 'week of 9 Nov 2026'), shipRecord('Longest streak', '28', 'days', 'to 3 Oct 2026')],
+  },
+  rhythm: {
+    note: 'mostly afternoons', ticks: ['00', '06', '12', '18', '23'], peak: shipHours.indexOf(Math.max(...shipHours)),
+    counts: shipHours, hours: shipHours.map((count) => count / Math.max(...shipHours)),
+  },
+  computers: { count: '2', rows: [{ name: 'This Mac', lines: '+8,420 −2,100', commits: '72 commits' }, { name: 'devbox', lines: '+4,060 −1,110', commits: '40 commits' }] },
+  empty: { label: 'Sun 2 Nov', period: 'day', past: true, empty: { icon: 'lu-trophy', text: 'Nothing shipped' } },
+  signedOut: { icon: 'lu-git-pull-request', text: 'Not signed in to GitHub', action: 'Sign in' },
+  noCli: { icon: 'lu-git-pull-request', text: 'GitHub CLI not installed', action: 'cli.github.com' },
+  offline: 'Read 13:40 · GitHub not answering · next try 14:07',
+  stopped: { text: 'Adding up stopped', source: 'GitHub: 502 Bad Gateway while reading relay', fix: 'Refresh' },
+  noSqlite: { text: 'Adding up stopped', source: 'sqlite3 not found: install it to keep Shipped’s statistics', fix: 'Refresh' },
+  leaves: 'Totals only, no names',
+};
+// The card Share makes of this week: totals, the streak, the records and the hours, never a repository or a computer.
+const { week: shipWeek, records: shipBests, rhythm: shipRhythm } = sampleShipped;
+export const sampleShippedCard = {
+  title: 'Shipped', right: shipWeek.label, stats: shipWeek.counts, note: shipWeek.ever,
+  hero: { big: shipWeek.hero.value, small: shipWeek.hero.small, unit: shipWeek.hero.unit, delta: shipWeek.delta },
+  blocks: [
+    { kind: 'streak', title: 'Streak', right: shipBests.streak.longest, n: shipBests.streak.value, unit: shipBests.streak.unit, days: shipWeek.days },
+    { kind: 'list', title: 'Records', rows: shipBests.rows },
+    { kind: 'bars', title: 'When you ship', right: shipRhythm.note, values: shipRhythm.counts, ticks: shipRhythm.ticks },
+  ],
+};
+export const sampleShippedNotices = {
+  'New record': { state: 'done', home: 'shipped', text: 'New record: best day', detail: '+2,904 lines · Tue 11 Nov' },
+};

@@ -1,8 +1,8 @@
 // The panels' named states: each one a preset of its panel's props, the catalog draws its record from it.
-import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel } from './panels.js';
+import { containers, conversationFind, files, markdownWindow, memory, ports, settings, spend, preview, pulls, worktrees, pinPanel, shipped } from './panels.js';
 import { phrase } from './kit.js';
 import { keyLayer, sampleScreens, sampleShot } from './samples.js';
-import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins } from './panel-samples.js';
+import { sampleContainers, sampleDisk, sampleMemory, sampleMemoryNotices, sampleAreas, sampleFiles, sampleFilesFailures, sampleFind, samplePlainTree, samplePortHistory, samplePorts, sampleTree, sampleCustomPanel, sampleFound, sampleHerdrKeys, sampleHidden, sampleKeyGroups, sampleMaintainers, sampleMarkdown, samplePlaces, sampleReleases, sampleSpend, sampleWorktrees, sampleWorktreeNotices, sampleShipped, sampleShippedCard, sampleShippedNotices, sampleTaken, samplePreview, samplePull, samplePullPages, samplePulls, samplePins } from './panel-samples.js';
 
 // A notice's state: the panel at rest with the notice beside it.
 const noticesOf = (notices, draw) => Object.fromEntries(Object.entries(notices).map(([name, said]) => [phrase('Notice:', name), [draw({ notice: said }), 'On screen a toast; away, the computer’s notification with the same words.']]));
@@ -321,6 +321,35 @@ export const worktreesViews = {
   'New worktree from here': [atRest({ creating: sampleWorktrees.creating }), 'The New worktree dialog, on the repository picked.'],
   ...noticesOf(sampleWorktreeNotices, atRest),
 };
+// Shipped: this week; each state is what a period, the pointer, a fold or a read changes.
+const { periods: shipPeriods, week: thisWeek, records: shipRecords, rhythm: shipRhythm, computers: shipComputers } = sampleShipped;
+const shipping = (extra) => ({ periods: shipPeriods, ...thisWeek, records: shipRecords, rhythm: shipRhythm, computers: shipComputers, ...extra });
+const shipFirst = { periods: shipPeriods, period: thisWeek.period, label: thisWeek.label };
+export const shippedViews = {
+  'At rest: this week, +12,480 lines': [shipping({}), 'The number with what was taken away, how it compares and what it counts; a new best; each repository; Records, When you ship and Computers folded.'],
+  'Pointer on the number': [shipping({ pointer: 'number' }), 'The contributions and what you shipped since joining GitHub.'],
+  'Pointer on a repository': [shipping({ pointer: 'acme-shop' }), 'Its commits under it.'],
+  'Every repository': [shipping({ expanded: true }), 'Show fewer folds them back to three.'],
+  'A day: contributions': [shipping({ ...sampleShipped.day, best: null }), 'A day leads with contributions; its repositories are its week’s.'],
+  'A past period': [shipping({ ...sampleShipped.past, best: null }), 'Both arrows and Back to now; the totals are that period’s.'],
+  'The streak, clicked': [shipping({ calendar: true }), 'A year of days under the count line, each one’s contributions with the pointer.'],
+  'Records, open': [shipping({ open: ['records'] }), 'Each best with when it was set, the new one marked; the longest streak is one.'],
+  'When you ship and Computers, open': [shipping({ open: ['rhythm', 'computers'] }), 'A bar an hour, the busiest marked; each computer’s commits and lines.'],
+  'No records yet': [shipping({ best: null, records: null }), 'No Records fold until there is a best.'],
+  'First read': [{ ...shipFirst, reading: true }, 'The skeleton under the period; Share waits.'],
+  'Still adding up': [{ ...shipFirst, ...sampleShipped.addingUp, phase: sampleShipped.phases.first }, 'The lines so far and how far the first read is; no comparison and no records until every repository is in.'],
+  'Updating': [shipping({ phase: sampleShipped.phases.again }), 'The last totals stay; one quiet line says what is read.'],
+  'Adding up stopped': [shipping({ stopped: sampleShipped.stopped }), 'GitHub’s words under the number; the last totals stay.'],
+  'No sqlite3': [shipping({ stopped: sampleShipped.noSqlite, best: null, repos: null, records: null, rhythm: null, computers: null }), 'What to install; GitHub’s own counts stay.'],
+  'Nothing in this period': [{ ...shipFirst, ...sampleShipped.empty }, 'One quiet line; the period stays switchable.'],
+  'Not signed in to GitHub': [{ ...shipFirst, gate: sampleShipped.signedOut }, 'Sign in, in place of the panel.'],
+  'GitHub CLI not installed': [{ ...shipFirst, gate: sampleShipped.noCli }, 'Where to get it, in place of the panel.'],
+  'GitHub not answering': [shipping({ stale: true, scope: sampleShipped.offline }), 'The last read stays, stepped down, with when it tries again.'],
+  'Narrow, 300': [shipping({ look: 'narrow' }), 'The number and the rows stay; the facts wrap.'],
+  'Share: what leaves, then where': [shipping({ share: sampleShipped.leaves }), 'Totals only, no names.'],
+  'The card it makes': [shipping({ card: sampleShippedCard }), 'Totals, the streak, the records and the hours; never a repository or a computer. 1200 wide, shown at half.'],
+  ...noticesOf(sampleShippedNotices, shipping),
+};
 // Preview: limits.ts as Files opens it, then limits.md; each state is what an edit, a save or a read changes.
 const { code, edit, markdown: note, log, binary, gone, shot, pictured, huge, pins } = samplePreview;
 // The pins once their notes are typed.
@@ -497,6 +526,6 @@ const pinsViews = {
   'Copy to devbox refused': [onDevice(scopes.devbox, iosPins.slice(0, 1), { send: { refused: pinRefusals.copy } }), 'Proposed: the copy’s words, the pins kept, and Send again.'],
 };
 
-const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel] };
+const panels = { 'Panels/Settings': [settingsViews, settings], 'Panels/Find': [findViews, conversationFind], 'Panels/Files': [filesViews, files], 'Panels/Ports': [portsViews, ports], 'Panels/Markdown': [markdownViews, markdownWindow], 'Panels/Containers': [containersViews, containers], 'Panels/Memory': [memoryViews, memory], 'Panels/Spend': [spendViews, spend], 'Panels/Worktrees': [worktreesViews, worktrees], 'Panels/Shipped': [shippedViews, shipped], 'Panels/Preview': [previewViews, preview], 'Panels/PR': [pullsViews, pulls], 'Panels/Pins': [pinsViews, pinPanel] };
 export const panelPages = Object.fromEntries(Object.entries(panels).map(([page, [views, draw]]) => [page, stated(views, draw)]));
 export const panelPlaygrounds = Object.fromEntries(Object.entries(panels).map(([page, [views]]) => [page, { ...panelPages[page], argTypes: control(views) }]));

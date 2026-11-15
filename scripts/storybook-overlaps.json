@@ -373,16 +373,16 @@
   "panel/Shipped": {
     "page": "Panels/Shipped",
     "states": {
-      "Loading": "panels/shipped/ShippedFirstRead/Default",
-      "Adding up": "panels/shipped/ShippedStillAddingUp/Default",
-      "Sync failed": "panels/shipped/ShippedGitHubNotAnswering/Default",
-      "Empty period": "panels/shipped/ShippedNothingInThisPeriod/Default",
-      "Records": "panels/shipped/ShippedThisWeek/Default",
-      "Past period": "panels/shipped/ShippedPastperiod/Default",
-      "No records": "panels/shipped/ShippedNorecords/Default",
-      "Repositories": "panels/shipped/ShippedRepositories/Default",
-      "Rhythm": "panels/shipped/ShippedRhythm/Default",
-      "Updating": "panels/shipped/ShippedUpdating/Default"
+      "Loading": "kit/Panels/Shipped/First read",
+      "Adding up": "kit/Panels/Shipped/Still adding up",
+      "Sync failed": "kit/Panels/Shipped/Adding up stopped",
+      "Empty period": "kit/Panels/Shipped/Nothing in this period",
+      "Records": "kit/Panels/Shipped/Records, open",
+      "Past period": "kit/Panels/Shipped/A past period",
+      "No records": "kit/Panels/Shipped/No records yet",
+      "Repositories": "kit/Panels/Shipped/Every repository",
+      "Rhythm": "kit/Panels/Shipped/When you ship and Computers, open",
+      "Updating": "kit/Panels/Shipped/Updating"
     }
   },
   "panel/Share": {
@@ -681,13 +681,13 @@
   "panel/HistoryChart/Shipping hours": {
     "page": "Panels/Shipped",
     "states": {
-      "Shipping hours": "panels/shipped/HistoryChartShipping hoursShippinghours/Default"
+      "Shipping hours": "kit/Panels/Shipped/When you ship and Computers, open"
     }
   },
   "panel/HistoryChart/Shipped days": {
     "page": "Panels/Shipped",
     "states": {
-      "Shipped days": "panels/shipped/HistoryChartShipped daysShippeddays/Default"
+      "Shipped days": "kit/Panels/Shipped/The streak, clicked"
     }
   },
   "prompt/Prompt": {
