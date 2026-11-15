@@ -157,7 +157,7 @@ test("Every notice the app sends today is a state and a home the notifications k
 });
 
 test("The pane header folds its facts in the order the fold list names, and ⋯ takes the tools that fold", async () => {
-  const { paneFolds, paneHeader, paneMenu } = await import("../stories/kit/compositions.js");
+  const { paneFolds, paneHeader, paneMenu, paneOut } = await import("../stories/kit/compositions.js");
   const place = { folder: "checkout-v2", branch: "limits-table" };
   const at = (step) => paneHeader({ name: "checkout", place, hover: true, fold: paneFolds.indexOf(step) });
   assert.match(at("nothing"), /checkout-v2/);
@@ -166,8 +166,9 @@ test("The pane header folds its facts in the order the fold list names, and ⋯ 
   assert.doesNotMatch(at("branch"), /limits-table/);
   assert.match(at("branch"), /Split right/);
   assert.doesNotMatch(at("tools into ⋯"), /Split right/);
-  assert.doesNotMatch(paneMenu({ name: "checkout", fold: paneFolds.indexOf("branch") }), /Split right/);
-  assert.match(paneMenu({ name: "checkout", fold: paneFolds.indexOf("tools into ⋯") }), /Split right/);
+  const behindMore = (step) => paneMenu({ name: "checkout", out: paneOut({ state: "none", focused: false, fold: paneFolds.indexOf(step) }) });
+  assert.doesNotMatch(behindMore("branch"), /Split right/);
+  assert.match(behindMore("tools into ⋯"), /Split right/);
 });
 
 test("A shortcut row at rest draws without a taken key", async () => {

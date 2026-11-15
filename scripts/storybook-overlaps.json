@@ -849,5 +849,15 @@
       "Host update": "kit/Settings menu/Herdr update",
       "Restart armed": "kit/Settings menu/Restart armed"
     }
+  },
+  "menu/PaneMenu": {
+    "page": "Compositions/Pane menu",
+    "states": {
+      "Rest": "kit/Pane menu/At rest",
+      "Keyboard": "kit/Pane menu/Keyboard",
+      "Pinned": "kit/Pane menu/Pinned",
+      "Child terminal": "kit/Pane menu/A terminal from a conversation",
+      "Program menu": "kit/Pane menu/Right-clicks to the program"
+    }
   }
 }

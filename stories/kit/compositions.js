@@ -424,14 +424,20 @@ export const paneHeader = ({ program = 'p-claude', name, state = 'none', focused
   paneDigest(digest, fold, state === 'working'),
   pinned ? headerSegment({ icon: 'lu-pin', tone: 'dim', title: 'Pinned' }) : null,
   grow(),
-  paneTools({ name, state, focused, hover: hover || open, armed, fold, more: open ? paneMenu({ name, state, focused, pinned, zoomed, fold }) : null }),
+  paneTools({ name, state, focused, hover: hover || open, armed, fold, more: open ? paneMenu({ name, state, pinned, zoomed, out: paneOut({ state, focused, fold }) }) : null }),
   reach === 'unreachable' || !paneMarks[state] ? null : mark({ status: paneMarks[state] }));
-// ⋯ holds what is not out: pin, sleep, send, open with, split down, zoom, and the tools folded away.
-export const paneMenu = ({ name, state = 'none', focused = false, pinned = false, zoomed = false, fold = 0 }) => menu({ title: name, items: [
-  { icon: 'lu-pin', label: pinned ? 'Unpin' : 'Pin' },
-  ...(state === 'none' || restsOut({ state, focused }) ? [] : [{ icon: 'lu-moon', label: 'Sleep this agent' }]),
-  ...(state === 'blocked' || restsOut({ state, focused }) ? [] : [{ icon: 'lu-send', label: 'Send to another agent' }]),
-  { icon: 'lu-external-link', label: 'Open with…' }, { icon: 'lu-rows-2', label: 'Split down' }, zoomed ? { icon: 'lu-minimize-2', label: 'Unzoom' } : { icon: 'lu-maximize-2', label: 'Zoom' },
-  ...(shown(fold, 'tools into ⋯') ? [] : [{ icon: 'lu-columns-2', label: 'Split right' }, { icon: 'lu-move-horizontal', label: 'Wider or narrower' }]),
-  ...(shown(fold, 'close into ⋯') ? [] : [{ icon: 'lu-x', label: 'Close' }]),
-  ...pieceLines] });
+// One pane menu, on right-click and on ⋯: splits, pin, zoom, what an agent can do, where right-clicks go, close; ⋯ leaves out what the header already shows.
+export const paneOut = ({ state, focused, fold }) => [...(restsOut({ state, focused }) ? ['Sleep this agent', 'Send to another agent…'] : []),
+  ...(shown(fold, 'tools into ⋯') ? ['Split right', 'Wider or narrower'] : []), ...(shown(fold, 'close into ⋯') ? ['Close pane'] : [])];
+const agentActs = ({ state, parent }) => [...(state === 'none' ? [] : [
+  ...(state === 'blocked' ? [] : [{ icon: 'lu-send', label: 'Send to another agent…', hint: '⌥⌘S' }]),
+  { icon: 'lu-search', label: 'Find in conversation', hint: '⌘F' }, { icon: 'lu-moon', label: 'Sleep this agent' }]),
+  ...(parent ? [{ icon: 'lu-undo', label: phrase('Send back to', parent) }] : [])];
+export const paneMenu = ({ name, state = 'none', pinned = false, zoomed = false, parent = null, program = false, armed = false, keyboard = false, out = [] }) => menu({ title: name, items: [
+  { icon: 'lu-columns-2', label: 'Split right', hint: '⌘D', selected: keyboard }, { icon: 'lu-rows-2', label: 'Split down', hint: '⌘⇧D' }, { icon: 'lu-columns-2', label: 'Split left', hint: '⌥⌘⇧D' },
+  { icon: 'lu-move-horizontal', label: 'Wider or narrower', hint: '⌘⇧↩' }, { icon: 'lu-pin', label: pinned ? 'Unpin' : 'Pin', hint: '⌥⌘P' },
+  zoomed ? { icon: 'lu-minimize-2', label: 'Unzoom' } : { icon: 'lu-maximize-2', label: 'Zoom' },
+  { separator: true }, ...agentActs({ state, parent }), { icon: 'lu-external-link', label: 'Open with…' },
+  { separator: true }, { icon: program ? 'lu-check' : null, label: 'Right-clicks go to the program' },
+  { separator: true }, { icon: 'lu-x', label: 'Close pane', hint: '⌘⇧W', verb: phrase('close', name), armed },
+  ...pieceLines].filter((item) => !out.includes(item.label)) });

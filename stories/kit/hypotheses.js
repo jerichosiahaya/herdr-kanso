@@ -66,6 +66,19 @@ export const hypotheses = {
       back: 'the menu returns to the agents, Terminal and In a new worktree, with last.',
     },
   ],
+  'Compositions/Pane menu': [
+    {
+      change: 'Right-click and ⋯ open one pane menu, with each key, Find in conversation, Sleep and Zoom in it.',
+      today: 'right-click lists the splits, Pin, Send right-clicks to pane, Open with, Send to an agent and Close pane; ⋯ on the header holds Pin, Sleep, Send, Open with, Split down and Zoom.',
+      why: 'every act on one pane from where the pointer is.',
+      question: 'why must someone learn two menus for one pane, and look up its keys elsewhere?',
+      believe: 'one menu with its keys is learned once, and the keys are learned from it.',
+      jobs: [['every act of both menus', 'stays, in the one menu'], ['the keys', 'at the right of each act'], ['what the header shows', 'left out of ⋯ only']],
+      wrong: 'the menu grows past a short pane, or someone misses an act ⋯ left out.',
+      try: 'Dawn Mode first.',
+      back: 'right-click and ⋯ keep their own items, as today.',
+    },
+  ],
   'Compositions/Agent menu': [
     {
       change: 'The agent menu adds Sleep its tab and the piece lines, and groups its items: open and name, keep, put away, close.',

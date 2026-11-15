@@ -1,5 +1,5 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, agentMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
 import { dialog, emptyState, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleArrangements, sampleAsleep, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
@@ -267,6 +267,19 @@ export const statedPages = {
       { label: 'At rest', args: {}, caption: 'Settings in the footer, or the gear in the rail.' },
       { label: 'Herdr update', args: { update: true }, caption: 'Herdr has an update waiting: a third item, here only.' },
       { label: 'Restart armed', args: { update: true, armed: true }, caption: 'The update restarts Herdr, so it asks twice within 4 s.' },
+    ],
+  },
+  'Compositions/Pane menu': {
+    args: { name: 'checkout', state: 'working', pinned: false, zoomed: false, parent: false, program: false, armed: false, keyboard: false },
+    markup: ({ parent, ...args }) => paneMenu({ ...args, parent: parent ? 'checkout' : null }),
+    states: [
+      { label: 'At rest', args: {}, caption: 'Right-click a pane, or ⋯ on its header.' },
+      { label: 'Keyboard', args: { keyboard: true }, caption: 'The list keys move through the items; each act has its own key at the right.' },
+      { label: 'Pinned', args: { pinned: true }, caption: 'Pin becomes Unpin.' },
+      { label: 'A terminal from a conversation', args: { name: 'tests', state: 'none', parent: true }, caption: 'A terminal opened from checkout can go back to it.' },
+      { label: 'Without a program, on devbox', args: { name: 'web · devbox', state: 'none', pinned: true }, caption: 'Only what a plain terminal can do.' },
+      { label: 'Right-clicks to the program', args: { program: true }, caption: 'Ticked: right-clicks go to the program; ⋯ still opens this menu.' },
+      { label: 'Close armed', args: { armed: true }, caption: 'Close asks twice within 4 s, naming the pane.' },
     ],
   },
   'Compositions/Agent menu': {

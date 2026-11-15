@@ -190,6 +190,13 @@ export const playgrounds = {
     ...statedPages['Compositions/Settings menu'],
     argTypes: { update: flag('Herdr update waiting'), armed: { ...flag('restart armed'), if: { arg: 'update' } } },
   },
+  'Compositions/Pane menu': {
+    ...statedPages['Compositions/Pane menu'],
+    argTypes: {
+      name: text('title'), state: select('agent', paneStates), pinned: flag('pinned'), zoomed: flag('zoomed'), parent: flag('opened from a conversation'),
+      program: flag('right-clicks to the program'), armed: flag('close armed'), keyboard: flag('keyboard'),
+    },
+  },
   'Compositions/Agent menu': {
     ...statedPages['Compositions/Agent menu'],
     argTypes: {

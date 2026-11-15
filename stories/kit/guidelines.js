@@ -108,6 +108,11 @@ export const guidelines = {
     ["Kansō", "A use of Menu.", "Settings as its title; kansō settings with its key, Herdr settings."],
     ["Kokō", "Herdr's update here only.", "When Herdr has an update, a third item; it restarts Herdr, so it asks twice within 4 s."],
   ],
+  "Compositions/Pane menu": [
+    ["Kansō", "One menu, two doors.", "Right-click a pane or ⋯ on its header: the same Menu, the pane's name as its title. ⋯ leaves out what the header already shows."],
+    ["Kokō", "Only what the pane holds.", "Splits, Pin and Zoom always; Send, Find and Sleep only with an agent, Send never while it waits on you; Send back only for a terminal opened from a conversation."],
+    ["Seijaku", "Keys at the right, Close asks twice.", "Each act shows its key. Close pane arms for 4 s with the pane's name. Right-clicks go to the program is ticked when on."],
+  ],
   "Compositions/Agent menu": [
     ["Kansō", "A use of Menu.", "The agent's or thread's name as its title; open it, name it, keep it, put it away, close it, then the piece lines. Snooze, Move and Copy each open their own Menu."],
     ["Kokō", "Only the way back when it is away.", "A snoozed thread offers Wake, a settled one Bring back, with Mark unread, Rename and Copy."],

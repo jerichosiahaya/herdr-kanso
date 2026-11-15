@@ -27,6 +27,7 @@ export const descriptions = {
   'Computer menu': 'What you can do to one computer, from its row.',
   'Project menu': 'What you can do to one project, from its row: start in it, open a worktree, put it away.',
   'Settings menu': 'Where Settings in the footer leads: kansō’s, Herdr’s, and Herdr’s update.',
+  'Pane menu': 'What you can do to one pane, on right-click or from ⋯ on its header.',
   'Agent menu': 'What you can do to one agent or thread, from its row.',
   'Arrangements dialog': 'The tab layouts kept for a project: open one, overwrite it, or save this tab.',
   'Prompt dialog': 'One question and one field: a new name, a note.',

@@ -7269,33 +7269,6 @@
       ]
     },
     {
-      "page": "Compositions/Pane menu",
-      "existing": false,
-      "boards": [
-        "B10"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-bars-menus/Reference/1",
-        "coverage/menu/PaneMenu/Child terminal",
-        "coverage/menu/PaneMenu/Keyboard",
-        "coverage/menu/PaneMenu/Pinned",
-        "coverage/menu/PaneMenu/Program menu",
-        "coverage/menu/PaneMenu/Rest"
-      ],
-      "components": [
-        "Primitives/Menu"
-      ],
-      "features": [
-        "coverage/menu/PaneMenu"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-bars-menus/Reference/1"
-      ]
-    },
-    {
       "page": "Panels/History chart",
       "existing": false,
       "boards": [],
