@@ -8,8 +8,8 @@ import { systemApi } from "./platform-system.js";
 // Modified by jlopezlira (Kanso, https://github.com/jlopezlira/herdr-kanso): renamed from mn-spaces; a fixed 76px rail when collapsed (resizable only when open), space avatars in the theme's hues, a breathing dot instead of a spinner, background polling slowed when the window is behind.
 // Modified by Iván Campaña (https://github.com/icampana): layout writers set the tree only when it is Kanso's, so a switch from another layout never saves that layout into kanso.json.
 
-import { View, div, svg, image } from "gpui-kit";
-import { v_flex, h_flex, Popover, v_virtual_list, VirtualListScrollHandle, Scrollbar, ScrollHandle } from "gpui-base";
+import { View, div, svg } from "gpui-kit";
+import { v_flex, h_flex, v_virtual_list, VirtualListScrollHandle, Scrollbar, ScrollHandle } from "gpui-base";
 import { agentRow, agentFold, agentLabel, AGENT_PAD, FLUSH, NESTED, renameTerminal, statusMark, SETTLED_LABEL, SNOOZE_LABEL, UNREAD_LABEL, THREAD_LABEL, settledOf, snoozedUntil, isUnread, woke, backFromSettled, threadSections, snoozePresets, THREAD_ORDERS, STATUS_ORDERS, withTerminals, NAME_LABEL, PIN_LABEL, ORDERS, DEFAULT_ORDER, orderSessions, moved, nest, track, elapsed, activityOf, bySection, duration, trackSteps, stepOf, tasksOf, said, FOLD, FOLD_MS, pill, agentRowH, mostUrgent } from "./agents.js";
 import { ThreadLocator, findThreads, pidsOf, aliveIn, aliveDue, ALIVE_MS, ALIVE_BEHIND_MS } from "./threads.js";
 import { Panel, sameSeen } from "./panel.js";
@@ -35,6 +35,9 @@ import { skeleton } from "./ui-skeleton.js";
 import { stateEmpty, pendingDot } from "./ui-state.js";
 import { segmented } from "./ui-tab.js";
 import { mark } from "./ui-mark.js";
+import { menu } from "./kit.js";
+import { toolbar } from "./ui-toolbar.js";
+import { header } from "./ui-sidebar-header.js";
 import { pieces, shown, runs, asksPs, setPiece, pieceOf, STORE } from "./pieces.js";
 import { machineRecord, canRestore, addArgs, rmArgs, loginLine, hcError, needsLogin, heldNames, connectedNames, machinePhase, powerId, machineOf, visibleSpaces, visibleAgents, pollKeys, machineState, machineHot, machineTip, machineVisible, machineInk, listedMachines } from "./machines.js";
 import { Names } from "./alias.js";
@@ -217,7 +220,7 @@ export default class Spaces extends View {
       try { if (await this.panel.load()) this.applyPrefs(); this.panelReady = true; } catch { /* tried again from keepSeen; the copy stays meanwhile */ }
       cx.notify();
     });
-    this.orderOpen = false;
+    this.orderOpen = null;
     this.threads = null; // terminal -> its conversation (threads.js), once read
     // A pre-2.7 hide choice moves into the pieces map once.
     for (const [key, id] of [["switch", "sidebar.switch"], ["activity", "sidebar.activity"]]) {
@@ -1667,7 +1670,7 @@ export default class Spaces extends View {
   setOrder(key, value, cx) {
     this[key] = value;
     this.panel.set(`spaces.${key}`, key === "threadGroup" ? (value ? "on" : "off") : value);
-    this.orderOpen = false;
+    this.orderOpen = null;
     cx.notify();
   }
 
@@ -1768,29 +1771,41 @@ export default class Spaces extends View {
     });
   }
 
-  orderPicker(t) {
-    const view = this.showSwitch === false ? "spaces" : this.view;
-    const { orders, current, key, head, plain } = sortOf(view, this, { ORDERS, STATUS_ORDERS, THREAD_ORDERS, DEFAULT_ORDER });
-    const trigger = div().id("spaces-order").size(28).flex_none().rounded(6).flex().items_center().justify_center().cursor_pointer()
-      .text_color(plain ? t.dim : t.muted).tooltip(`Sort: ${orders[current]}`)
-      .hover((s) => s.bg(t.hover).text_color(t.foreground))
-      .child(svg("mods/kanso-chrome/icons/sort.svg").size(14));
-    const tick = (on) => (el) => el.when(on, (el) => el.child(div().text_size(11).child("\u2713")));
-    const line = (id, text, on, act) => h_flex().id(id).h(30).px(8).gap(8).items_center().rounded(6).cursor_pointer().text_size(12.5)
-      .text_color(on ? t.foreground : t.muted).hover((s) => s.bg(t.hover).text_color(t.foreground))
-      .on_click((_e, cx) => act(cx)).child(div().flex_1().child(text)).map(tick(on));
-    const title = (text) => div().h(26).px(8).flex().items_center().text_size(11.5).text_color(t.dim).child(text);
-    return Popover.new("spaces-order-popover").trigger(trigger).anchor("top_left")
-      .open(this.orderOpen).on_open_change((open, cx) => { this.orderOpen = open; cx.notify(); })
-      .content(v_flex().w(232).p(5).gap(1).rounded(10).bg(t.popover).border_1().border_color(t.border)
-        .child(title(head))
-        .children(Object.keys(orders).map((mode) => line(`spaces-order-${mode}`, orders[mode], mode === current, (cx) => this.setOrder(key, mode, cx))))
-        .when(view === "threads", (el) => el.child(line("spaces-group", "Grouped by project", this.threadGroup, (cx) => this.setOrder("threadGroup", !this.threadGroup, cx))))
-        .child(div().mx(8).my(5).h(1).bg(t.border))
-        .child(title("Show"))
-        .child(line("spaces-show-activity", "What each agent is on", this.showActivity !== false, (cx) => this.setShown("activity", this.showActivity === false, cx)))
-        .child(line("spaces-show-away", RETURN_LABEL, this.showAway !== false, (cx) => this.setShown("away", this.showAway === false, cx)))
-        .child(line("spaces-show-switch", "Projects, Status and Threads", this.showSwitch !== false, (cx) => this.setShown("switch", this.showSwitch === false, cx))));
+  // The Sort menu: the view's orders, the current one ticked, then what the sidebar shows.
+  sortMenu(c, view) {
+    const { orders, current, key, head } = sortOf(view, this, { ORDERS, STATUS_ORDERS, THREAD_ORDERS, DEFAULT_ORDER });
+    const ticked = (label, on, onClick) => ({ label, icon: on ? "check" : null, onClick });
+    const grouped = view === "threads" ? [ticked("Grouped by project", this.threadGroup, (cx) => this.setOrder("threadGroup", !this.threadGroup, cx))] : [];
+    return menu({ items: [
+      { heading: head },
+      ...Object.keys(orders).map((mode) => ticked(orders[mode], mode === current, (cx) => this.setOrder(key, mode, cx))),
+      ...grouped,
+      { separator: true },
+      { heading: "Show" },
+      ticked("What each agent is on", this.showActivity !== false, (cx) => this.setShown("activity", this.showActivity === false, cx)),
+      ticked(RETURN_LABEL, this.showAway !== false, (cx) => this.setShown("away", this.showAway === false, cx)),
+      ticked("Projects, Status and Threads", this.showSwitch !== false, (cx) => this.setShown("switch", this.showSwitch === false, cx)),
+    ] })("spaces-order-menu", c);
+  }
+
+  // The header's Toolbar: + names what it adds in this view; collapsed, Sort and Search fold under the caret.
+  tools(c, view, collapsed) {
+    const { orders, current, plain } = sortOf(view, this, { ORDERS, STATUS_ORDERS, THREAD_ORDERS, DEFAULT_ORDER });
+    const form = collapsed ? "rail" : "bar";
+    // Sort's menu stays with the form it opened in, and in the rail with the caret open; anywhere else it is shut for good.
+    const sortOpen = this.orderOpen === form && (!collapsed || this.toolsOpen === true);
+    if (!sortOpen) this.orderOpen = null;
+    return toolbar("spaces-tools", c, {
+      view, column: collapsed, open: this.toolsOpen === true, sorted: !plain,
+      sortOpen, sortTip: `Sort: ${orders[current]}`, sortMenu: () => this.sortMenu(c, view),
+      on: {
+        add: () => (view === "spaces" ? this.addProject() : this.newConversationMenu()),
+        sort: (open, cx) => { this.orderOpen = open ? form : null; cx.notify(); },
+        search: () => run("mod.open", { name: "picker" }),
+        sidebar: () => this.toggleRail(),
+        more: (cx) => { this.toolsOpen = !this.toolsOpen; cx.notify(); },
+      },
+    });
   }
 
   grouped(t, collapsed, sp, ps, ctx) {
@@ -2305,7 +2320,7 @@ export default class Spaces extends View {
     const items = Object.keys(VIEWS).map((key) => ({ key, label: VIEWS[key].label, icon: collapsed ? VIEWS[key].icon : null, dot: asks && key === "agents", tip: tipOf(key) }));
     const pick = (view, cx) => { this.setView(view, cx); cx.notify(); };
     return collapsed
-      ? segmented("rail-view", items, this.view, pick, tokens(t), { collapsed }).mt(4)
+      ? segmented("rail-view", items, this.view, pick, tokens(t), { collapsed }).self_center().mt(4)
       : segmented("spaces-view", items, this.view, pick, tokens(t)).mx(18).mt(4).mb(14);
   }
 
@@ -2498,12 +2513,6 @@ export default class Spaces extends View {
     const sp = visibleSpaces(spaces(), this.offNames());
     const ps = panes();
     this.assignColors(sp);
-    const quiet = (id, icon, tip, action) => div().id(id).size(32).flex_none().flex().items_center().justify_center().rounded(6)
-      .text_color(t.muted).cursor_pointer().tooltip(tip)
-      .hover((s) => s.bg(t.foreground + "12").text_color(t.foreground))
-      .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
-      .on_click(action)
-      .child(svg(`mods/kanso-chrome/icons/${icon}.svg`).size(17));
     const active = sp.find((p) => p.active);
     // Read once per draw: each read copies every record.
     const map = pieces(shared);
@@ -2525,30 +2534,13 @@ export default class Spaces extends View {
     const queue = this.refreshNeeds(sp, read.terms, asleep);
     this.seenNow = this.seen(sp, ctx);
     this.seenAt = ctx.now; // when it was seen: a later write of it is no newer
-    // In Projects, + adds a project; in Status and Threads, it starts a conversation in a project you pick.
-    const plus = view === "spaces"
-      ? quiet("space-new", "plus", "Add project", () => this.addProject())
-      : quiet("space-new", "plus", "New conversation", () => this.newConversationMenu());
-    const hide = quiet("sidebar-toggle", "sidebar", collapsed ? "Show sidebar" : "Hide sidebar", () => this.toggleRail());
-    const search = quiet("search", "search", "Search", () => run("mod.open", { name: "picker" }));
-    // Collapsed, Herdr's mark sits here; open, kanso-chrome draws it in the top bar.
-    const brand = image("frame/welcome/herdr.png").size(20).rounded(6).flex_none();
-    // Collapsed, stacked so two buttons never sit on top of each other.
-    const add = collapsed
-      ? v_flex().w_full().pt(8).gap(6).items_center().child(brand).child(plus).child(hide).when(switchShown, (el) => el.child(this.viewSwitch(t, sp, true)))
-      : h_flex().h(40).px(10).gap(4).items_center()
-        .child(plus)
-        .child(div().flex_1())
-        .child(this.orderPicker(t))
-        .child(search)
-        .child(hide);
     const root = v_flex().id("spaces-root").track_focus(this.handle).size_full().min_h(0).bg(t.chrome).text_size(13)
       .on_key_down((e, cx) => this.listKeyDown(e, cx))
       .on_size_change((size, cx) => this.sized(size.width, cx))
       // A pane held in the strip and let go here goes back where it was.
       .on_mouse_up("left", () => { if (shared("strip.drag")) { setShared("strip.drop", null); setShared("strip.drag", null); } })
-      .child(add)
-      .when(!collapsed && switchShown, (el) => el.child(this.viewSwitch(t, sp)))
+      .child(header("spaces-header", { collapsed }, this.tools(tokens(t), view, collapsed)))
+      .when(switchShown, (el) => el.child(this.viewSwitch(t, sp, collapsed)))
       .when(shown("sidebar.needs", queue.rows.length > 0 || this.needsEmpty, map), (el) => el.child(queueControl(t, queue, collapsed, this.needsEmpty && !queue.rows.length, (cx) => this.toggleNeeds(cx))))
       .child(this.needsOpen && shown("sidebar.needs", true, map) ? this.needsList(t, queue, read.now) : this.list(t, collapsed, view, [
         ...(!collapsed ? this.returnRows(t, active) : []),

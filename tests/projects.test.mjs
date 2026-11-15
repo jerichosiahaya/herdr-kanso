@@ -144,7 +144,7 @@ test("the top + adds a project in Projects and starts a conversation in Threads;
   const calls = [], overlays = [];
   const registry = [{ id: "p-fury", name: "fury", folder: "/Users/me/fury", machine: "", agent: "codex", missing: false }];
   const { Spaces } = await load("kanso-spaces/main.js", ["Spaces"], {
-    div: node, svg: node, image: node, h_flex: node, v_flex: node, Button: { new: node }, Popover: { new: node },
+    div: node, svg: node, image: node, h_flex: node, v_flex: node, Button: { new: (x) => node().id(x) }, Popover: { new: node },
     ORDERS: { updated: "Updated" }, DEFAULT_ORDER: "updated", NAME_LABEL: "kanso.name", PIN_LABEL: "kanso.pin",
     orderSessions: (l) => l, withTerminals: () => [], terminals: () => [], nest: () => [], bySection: () => [],
     track: () => null, elapsed: () => null, activityOf: () => null, agentLabel: () => "", duration: () => "", findThreads: async () => ({}),
@@ -158,13 +158,13 @@ test("the top + adds a project in Projects and starts a conversation in Threads;
     knownAgents: async () => [{ key: "claude", name: "Claude Code", installed: true, run: ["claude"] }, { key: "codex", name: "Codex", installed: true, run: ["codex"] }],
   });
   const view = new Spaces();
-  Object.assign(view, { view: "spaces", git: {}, shown: new Set(["sp-agile"]), born: {}, custom: {}, order: "updated", machines: [], folded: new Set(), agentsFolded: new Set(), orderPicker: node });
+  Object.assign(view, { view: "spaces", git: {}, shown: new Set(["sp-agile"]), born: {}, custom: {}, order: "updated", machines: [], folded: new Set(), agentsFolded: new Set() });
   view.render();
-  handlers["on_click:space-new"]({}, { stop_propagation() {}, notify() {} });
+  handlers["on_click:spaces-tools-add"]({}, { stop_propagation() {}, notify() {} });
   assert.deepEqual(overlays.at(-1), { kind: "dialog", props: { newProject: { start: false } } }, "in Projects, the top + asks a new project's name and folder");
   view.view = "threads";
   view.render();
-  handlers["on_click:space-new"]({}, { stop_propagation() {}, notify() {} });
+  handlers["on_click:spaces-tools-add"]({}, { stop_propagation() {}, notify() {} });
   assert.deepEqual(overlays.at(-1), { kind: "popup", props: { newConversation: true } }, "in Threads, it asks which project the conversation is in");
   view.view = "spaces";
   view.render();

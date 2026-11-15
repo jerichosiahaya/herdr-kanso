@@ -14,22 +14,26 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
 - **Sidebar**, theme `chrome` (`#161615` dark, `#e3dfd6` light).
   - **Top strip**, 48 tall: the macOS traffic lights (at `[12, 16]`) and,
     at its right end (14 in), Herdr's mark: its icon
-    (`frame/welcome/herdr.png`, 20, radius 6) and "Herdr" (13, semibold,
+    (`frame/welcome/herdr.png`, 20, radius 4) and "Herdr" (13, semibold,
     `foreground`). It drags the window.
-    Collapsed, the strip is empty and the mark sits lower, over the rail's
-    buttons.
+    Collapsed, the strip is empty and the kit's Herdr mark (20, radius 4)
+    heads the rail's toolbar.
   - **Spaces** (`kanso-spaces`), filling the middle.
-    - Open (256 wide): a 40-tall row with a + (New project) at the left, and
-      Search and Hide sidebar at the right. Each is a 32 square with a 17 icon
-      in `muted` that turns `foreground` on hover over a `foreground`+`12`
-      wash.
+    - Open (256 wide): the Toolbar, a 40-tall row with + at the left (Add
+      project on Projects, New conversation on Status and Threads), and Sort,
+      Search and Hide sidebar at the right, 4 apart. Each is the kit's large
+      icon button, a 32 square with a 17 icon in `muted`. Sort is `dim` at
+      its default order; its menu (the orders, the current one ticked, then
+      Show) opens under it.
     - Space rows are 36 tall, radius 8: name 13.5 semibold, repo, branch
       and counts 11.5. + stays on the active project; + and … on hover.
       ↓N asks twice, then Pulling…; ↑N goes to the project and opens the
       panel. Active `foreground`+`14`, hover `foreground`+`0c`.
     - Worktree spaces nest under their repo on 1px `input` guide lines.
     - Agents under a space: icon 15, title 12.5, status mark.
-    - Collapsed (76 wide): the + and Hide buttons, stacked, then one mark
+    - Collapsed (76 wide): Herdr's mark, then + and Show sidebar, stacked 8
+      apart, and a caret whose Sort and Search open below it on a `w4` wash
+      (Sort's menu opens beside it); then the view switch and one mark
       per group (project, status, shelf): a project's initial in its color,
       no square (else an icon), under it the most urgent state and count.
       A click lists the group in a popup (click goes; asleep: wake menu).
