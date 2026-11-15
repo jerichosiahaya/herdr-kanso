@@ -1,5 +1,5 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, sidebarFooter, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, sidebarFooter, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
 import { avatar, chip, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
@@ -380,6 +380,17 @@ export const statedPages = {
       { label: 'Not kept', args: { tabs: 1, worktrees: false, kept: false }, caption: 'An open folder that is not a project yet.' },
       { label: 'Folder missing', args: { tabs: 0, missing: true }, caption: 'Its folder is gone: find it, or remove the project.' },
       { label: 'Gone', args: { gone: true }, caption: 'The project left while the menu was open.' },
+    ],
+  },
+  'Compositions/Header': {
+    args: { collapsed: false, dawn: false, art: true },
+    markup: header,
+    states: [
+      { label: 'Expanded', args: {}, id: 'kit/Header/Open', caption: 'The lights; + on the left; sort, search and hide on the right.' },
+      { label: 'Collapsed', args: { collapsed: true }, id: 'kit/Header/Collapsed', caption: 'The lights; + and show stacked in the rail, Sort and Search under a caret.' },
+      { label: 'Expanded, Dawn Mode', args: { dawn: true }, id: 'kit/Header/Dawn', caption: 'The dawn behind the lights, the Dawn Mode pill right of them.' },
+      { label: 'Collapsed, Dawn Mode', args: { collapsed: true, dawn: true }, id: 'kit/Header/Dawn collapsed', caption: 'The dawn behind the lights, centred on the rail; no room for the pill.' },
+      { label: 'Dawn Mode, sky off', args: { dawn: true, art: false }, caption: 'The pill stays; it cannot be hidden.' },
     ],
   },
   'Compositions/Sidebar/Footer': {

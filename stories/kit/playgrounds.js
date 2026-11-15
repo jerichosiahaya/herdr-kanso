@@ -1,6 +1,6 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, header, panelDoors, projectRow, section, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, section, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatarSizes, button, card, code, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
@@ -280,20 +280,17 @@ export const playgrounds = {
     },
   },
   'Compositions/Header': {
-    args: { collapsed: false, dawn: false, art: true },
+    ...statedPages['Compositions/Header'],
     argTypes: { collapsed: flag('collapsed'), dawn: flag('Dawn Mode'),
       art: { name: 'Dawn sky', control: { type: 'boolean' }, if: { arg: 'dawn' } } },
-    markup: header,
   },
   'Compositions/Dawn Mode': {
-    args: { channel: 'dawn', art: true, collapsed: false },
+    args: { channel: 'dawn', art: true },
     argTypes: {
       channel: { name: 'channel', control: { type: 'inline-radio' }, options: channels.map((item) => item.key) },
       art: { name: 'Dawn sky', control: { type: 'boolean' }, if: { arg: 'channel', eq: 'dawn' } },
-      collapsed: flag('collapsed'),
     },
-    markup: ({ channel, art, collapsed }) => captioned('Sidebar header', header({ collapsed, dawn: channel === 'dawn', art }))
-      + captioned('Settings · Updates', inSettings(channelSettings({ channel, art }))),
+    markup: (args) => captioned('Settings · Updates', inSettings(channelSettings(args))),
   },
   'Compositions/Notifications': {
     args: { example: 'your own', state: 'failed', home: 'agent', text: 'Can\'t reach devbox', act: 'Refresh', detail: 'ssh: connect to host devbox port 22: Connection refused', place: 'window on screen', stacked: 1 },

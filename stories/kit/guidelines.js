@@ -149,6 +149,7 @@ export const guidelines = {
   "Compositions/Header": [
     ["Seijaku", "Lights, then tools.", "Window controls in 48, the toolbar in 40. Collapsed, the header is the rail's width and the toolbar stacks."],
     ["Shizen", "Dawn sits behind.", "In Dawn Mode the sky fills the top behind the lights and the tools stay on top."],
+    ["Kokō", "The pill always says it.", "In the open header, a Chip saying Dawn Mode at the right of the title row, always the night of the sky with light words, in dark and light; it cannot be hidden. The Dawn sky behind the lights is on by default and can be turned off. Collapsed, the rail is too narrow for the pill; the sky stays."],
   ],
   "Compositions/Sidebar/Session row": [
     ["Kansō","A Row at depth one, or two under its parent.","Program icon, the name glinting while it works, the activity as the second line, its age as meta, the mark last."],
@@ -200,7 +201,7 @@ export const guidelines = {
   ],
   "Compositions/Dawn Mode": [
     ["Kokō", "Two modes, named everywhere.", "Stable Mode and Dawn Mode. Dawn Mode gets builds first; Stable Mode shows nothing."],
-    ["Kokō", "The pill always says it.", "In the open header, a Chip saying Dawn Mode at the right of the title row, always the night of the sky with light words, in dark and light; it cannot be hidden. The Dawn sky behind the lights is on by default and can be turned off. Collapsed, the rail is too narrow for the pill; the sky stays."],
+    ["Kokō", "Its mark is the Header's.", "The pill and the sky are states of Compositions/Header; this page holds the switch."],
     ["Shizen", "The sun rises once.", "When the window opens in Dawn Mode or on switching to it, 2.6 s, then still. Reduced motion shows the last frame. Every copy plays together."],
     ["Kokō", "One press switches.", "Settings · Updates: Stable Mode or Dawn Mode as Tabs on a track. Dawn Mode says it can break, with Star on GitHub; the Dawn sky switch follows."],
   ],

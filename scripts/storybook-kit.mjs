@@ -1,6 +1,6 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
-import { asleep, computerRow, header, projectRow, section, sessionRow, tile, viewSwitch } from '../stories/kit/compositions.js';
+import { asleep, computerRow, projectRow, section, sessionRow, tile, viewSwitch } from '../stories/kit/compositions.js';
 import { dawn as dawnSky, input, row, windowControls } from '../stories/kit/pieces.js';
 import { statedPages } from '../stories/kit/states.js';
 import { inRail, inSidebar } from '../stories/kit/frames.js';
@@ -38,20 +38,11 @@ export function kitRecords(records) {
   if (armed) add('Button', 'Armed', armed, 'A second press within four seconds confirms an irreversible action.');
   const button = first('kanso-button'), working = first('kanso-mark--working');
   if (button && working) add('Button', 'Loading', button.replace(/>[\s\S]*<\/([a-z]+)>$/, ` aria-busy="true">${working}Working…</$1>`), 'The action is waiting for its result.');
-  const headerRecord = originals.find((record) => record.id.includes('layouts-sidebar-header-three-ways/'));
-  const headers = headerRecord ? elements(headerRecord.html, 'kanso-sidebar--header-preview') : [];
-  const pillHeader = headers.find((html) => html.includes('kanso-badge--count'));
   const byId = (id) => originals.find((record) => record.id === id)?.html ?? '';
   add('Window controls', 'Default', windowControls(), 'The three lights, where the system draws them.');
   add('Dawn', 'Default', dawnSky(), 'The sky of Dawn Mode; the sun rises once on load.');
   add('Row', 'Toned fact', row({ icon: 'lu-container', name: 'postgres', detail: { text: 'unhealthy', tone: 'blocked' }, meta: '412 MB' }), 'Proposed. A fact that is a verdict leads with its dot and takes its tone: a container’s health, a worktree’s verdict, a PR’s state, a port’s owner.');
   add('Field', 'Word action', input({ text: 'jj@studio.local', label: 'user@host', action: 'Add', limit: 80 }), 'Proposed. The action is a word; it shows once something is typed.');
-  for (const [id, label, html, caption] of [
-    ['kit/Header/Open', 'Expanded', header(), 'The lights; + on the left; sort, search and hide on the right.'],
-    ['kit/Header/Collapsed', 'Collapsed', header({ collapsed: true }), 'The lights; + and show stacked in the rail, Sort and Search under a caret.'],
-    ['kit/Header/Dawn', 'Expanded, Dawn Mode', header({ dawn: true }), 'The dawn behind the lights and the tools.'],
-    ['kit/Header/Dawn collapsed', 'Collapsed, Dawn Mode', header({ collapsed: true, dawn: true }), 'The dawn behind the lights, centred on the rail.'],
-  ]) if (html) results.push({ id, source: 'kit', page: 'Compositions/Header', label, html: frame(html), caption });
   for (const [page, label, html, caption, id] of [
     ['Session row', 'Working', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' })), 'What it is on and for how long.'],
     ['Session row', 'Needs you', inSidebar(sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' })), 'The question, in foreground.'],
@@ -75,8 +66,6 @@ export function kitRecords(records) {
   const sky = elements(byId('proto/tokens-dawn/TheBand/Default'), 'kanso-dawn--preview')[0];
   const mark = elements(byId('proto/approved-dawn/Reference/12'), 'kanso-settings__piece-choice')[0];
   for (const [label, html, caption, id] of [
-    ['Pill', pillHeader, 'Dawn Mode, right of the lights.'],
-    ['Hidden / Stable Mode', headers.at(-1), 'No mark. Stable Mode always shows this.'],
     ['Sunrise', sky && `${sky}<button class="kanso-dawn__replay" type="button">Play the sunrise</button>`, 'Once on open and on switch, 2.6 s. Reduced motion shows the last frame.'],
     ['Channel mark', mark && `<div class="kanso-update">${mark}</div>`, 'Artwork, Pill or Hidden.'],
     ['Switch row · Stable Mode', choices[0], 'One press switches.'],
