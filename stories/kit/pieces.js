@@ -339,6 +339,7 @@ export const stacks = {
   panel: { block: 'kanso-panel', states: ['narrow', 'window', 'stale'] },
   timeline: { block: 'kanso-update__timeline' },
   columns: { block: 'kanso-layout kanso-layout--columns' },
+  column: { block: 'kanso-layout kanso-layout--column' },
   line: { block: 'kanso-layout kanso-layout--line' },
   'panel header': { block: 'kanso-panel-header', states: ['bar'] },
 };

@@ -298,6 +298,7 @@
 .kanso-dialog--window{width:860px}
 .kanso-dialog--window .kanso-dialog__title{flex:none}
 .kanso-layout--columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--k-sp-3);align-items:start}
+.kanso-layout--column{display:flex;flex-direction:column;min-width:0}
 .kanso-layout--line{display:flex;align-items:center;gap:var(--k-sp-3)}
 .kanso-settings__window-map{display:grid;padding:6px;box-sizing:border-box;grid-template-columns:80px 8px 1fr 6px 84px;grid-template-rows:24px 2px 17px 3px 140px 8px 26px;grid-template-areas:"sidebar . tab-bar tab-bar tab-bar" "sidebar . . . ." "sidebar . pane-header . panels" "sidebar . . . panels" "sidebar . body . panels" "sidebar . . . ." "sidebar . status-bar status-bar status-bar"}
 .kanso-settings__window-map>:is(.kanso-settings__area--sidebar,.kanso-settings__area--tab-bar,.kanso-settings__area--pane-header,.kanso-settings__area--body,.kanso-settings__area--panels,.kanso-settings__area--notifications,.kanso-settings__area--status-bar){position:static}
