@@ -79,6 +79,14 @@ test("A piece inside a shared row is drawn by that row, with its own id and the 
   assert.deepEqual(drawn(inner), drawn(row("r-tools-0", c, { name: "tail" })));
 });
 
+test("A shared row takes no piece, one piece or a list of them before its icon and at its end, as the Storybook's row does", async () => {
+  const { row, tokens, app } = await kits();
+  const c = tokens(night);
+  assert.deepEqual(drawn(app.row({ name: "t", title: true, start: null, tools: undefined })("r", c)), drawn(row("r", c, { name: "t", title: true })));
+  const single = app.row({ name: "t", start: app.row({ name: "back" }), tools: [[app.row({ name: "a" })], false, app.row({ name: "b" })] })("r", c);
+  assert.deepEqual(["r-start-0", "r-tools-0", "r-tools-1"].filter((id) => ids(single).includes(id)), ["r-start-0", "r-tools-0", "r-tools-1"]);
+});
+
 test("The Storybook's shared kit is its pieces, and the app's has only Storybook pieces", (t) => {
   assert.deepEqual(Object.keys(storybookKit).sort(), Object.keys(storybookPieces).sort());
   const app = exportedNames(readFileSync(new URL("../kanso/mods/kanso-panel/kit.js", import.meta.url), "utf8"));

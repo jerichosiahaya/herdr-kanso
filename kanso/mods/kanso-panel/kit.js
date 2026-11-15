@@ -5,7 +5,8 @@ const HANDLERS = ["on", "onClick", "onHover", "onKey", "focusHandle"];
 const appIcon = (icon) => icon?.replace(/^lu-/, "");
 const withIcon = (part) => (part?.icon ? { ...part, icon: appIcon(part.icon) } : part);
 const keyOf = ({ icon, label }) => (icon ? appIcon(icon) : label);
-const drawn = (id, c, slot) => (part, i) => (typeof part === "function" ? part(`${id}-${slot}-${i}`, c) : part);
+const parts = (slot) => [slot].flat(Infinity).filter((part) => part !== null && part !== undefined && part !== false);
+const drawn = (id, c, name, slot) => parts(slot).map((part, i) => (typeof part === "function" ? part(`${id}-${name}-${i}`, c) : part));
 
 const given = (more) => {
   const unknown = Object.keys(more).filter((key) => !HANDLERS.includes(key));
@@ -14,18 +15,21 @@ const given = (more) => {
 };
 
 const wired = (on) => (tool) => (tool && on[keyOf(tool)] ? { ...tool, onClick: on[keyOf(tool)] } : tool);
-const unmatched = (on, tools) => Object.keys(on).filter((key) => !tools.some((tool) => tool && keyOf(tool) === key));
 
-export const row = ({ icon, flag, detail, action, actions = [], start = [], tools = [], ...props }) => (id, c, more = {}) => {
-  const { on: raw = {}, ...handlers } = given(more);
+const withHandlers = (id, raw, actions, action) => {
   const on = Object.fromEntries(Object.entries(raw).map(([key, fn]) => [appIcon(key), fn]));
-  const own = actions.map(withIcon), lone = withIcon(action);
-  const missing = unmatched(on, [...own, lone]);
+  const own = parts(actions).map(withIcon);
+  const lone = withIcon(action);
+  const missing = Object.keys(on).filter((key) => ![...own, lone].some((tool) => tool && keyOf(tool) === key));
   if (missing.length) throw new Error(`kit: ${id} has no tool ${missing.join(", ")}`);
+  return { actions: own.map(wired(on)), action: wired(on)(lone) };
+};
+
+export const row = ({ icon, flag, detail, action, actions, start, tools, ...props }) => (id, c, more = {}) => {
+  const { on = {}, ...handlers } = given(more);
   return drawRow(id, c, {
-    ...props, ...handlers, icon: appIcon(icon), flag: appIcon(flag),
+    ...props, ...handlers, ...withHandlers(id, on, actions, action), icon: appIcon(icon), flag: appIcon(flag),
     detail: Array.isArray(detail) ? detail.map(withIcon) : withIcon(detail),
-    actions: own.map(wired(on)), action: wired(on)(lone),
-    start: start.map(drawn(id, c, "start")), tools: tools.map(drawn(id, c, "tools")),
+    start: drawn(id, c, "start", start), tools: drawn(id, c, "tools", tools),
   });
 };
