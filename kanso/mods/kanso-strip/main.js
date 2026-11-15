@@ -6,17 +6,22 @@ import { paths } from "./platform-paths.js";
 // The mod's copies (header, edge, ruler, drop card) talk to the controller through shared "strip.req", "strip.intent", "strip.drag" and "strip.drop".
 
 import { View, div, svg } from "gpui-kit";
-import { h_flex, v_flex, HoverCard } from "gpui-base";
-import { spaces, panes, agents, focused, layout, run, shared, setShared, theme, nextCommand, props, openOverlay, home, exec, notify, window } from "herdr";
+import { h_flex, v_flex, HoverCard, Popover } from "gpui-base";
+import { spaces, panes, agents, machines, focused, layout, run, hc, shared, setShared, theme, nextCommand, props, openOverlay, home, exec, notify, window } from "herdr";
 import { programIcon, givenNames, nameOf, NAME_LABEL, onBattery } from "./marks.js";
 import { STRIP_INTENT, isKansoTree, walkLayout, paintLayout, changeLayout, commitLayout } from "./layout.js";
 import { tryOr, tryOrAsync, afterMount } from "./pure.js";
 import { FIND } from "./find-key.js";
 import { rollupState, headerHold, prFacts, prLine } from "./ghchecks.js";
-import { pieces, shown, runs } from "./pieces.js";
-import { H, tokens, washes } from "./ui.js";
+import { pieces, shown, runs, setPiece, STORE } from "./pieces.js";
+import { G, R, T, W, ICON, OPACITY, CLEAR, DRAG_START, glyphOf, mix, tokens, washes } from "./ui.js";
 import { mark } from "./ui-mark.js";
-import { iconButton } from "./ui-button.js";
+import { iconButton, Armed } from "./ui-button.js";
+import { menu } from "./ui-menu.js";
+import { field, TextField } from "./ui-field.js";
+import { stateLine, pendingDot, PENDING } from "./ui-state.js";
+import { headerSegment } from "./ui-header.js";
+import { NAME_LIMIT, ENTRIES, DIGEST_PIECES, PIECE_GROUP, shownAt, foldFor, headerWidths, headerTools, hoverTools, menuEntries, placeOf, paneLabel, headerMark, prTitle } from "./header-model.js";
 
 // Panes the view holds at once (st.n, 1 to 8): a new column takes 1/n of the view.
 const N_MAX = 8;
@@ -48,9 +53,6 @@ const SETTLE = 250; // ms without the dragged sizes changing before the strip ad
 
 const GAP = 6; // the soft gutter between panes, in the frame's tone: no lines
 const RADIUS = 8;
-const TOOL = H.icon;
-const TOOL_GAP = 10;
-const TOOLS_EASE = { duration: 160, easing: "ease-out" };
 const TAB_BLOCK = {
   id: "main", type: "block", background: "chrome",
   content: { tab: "active", pane: {
@@ -98,8 +100,6 @@ const zoneOf = (e, fallback = "below") => {
 };
 const endDrag = () => { setShared("strip.drop", null); setShared("strip.drag", null); };
 
-const PROMPT_W = 420;
-const BADGE_MAX_W = 220;
 const folder = (cwd) => {
   if (!cwd) return "";
   return paths.shorten(cwd, home());
@@ -126,19 +126,26 @@ export function digestPr(view) {
   return facts ? { ...facts, checks: checksOf(view.statusCheckRollup), hold: headerHold(view) } : null;
 }
 
-// `run(cmd, args)` resolves with stdout, or null when the command fails.
+// gh says this when the branch has no pull request: an answer, not a failure.
+const NO_PR = /no pull requests found/i;
+const stdout = (r) => (r?.code === 0 ? r.stdout : null);
+const ghWords = (r) => String(r?.stderr ?? "").trim().split("\n")[0] || `gh exited with ${r?.code}`;
+
+// `run(cmd, args, cwd)` resolves with { code, stdout, stderr }. `failure` is gh's words when it could not answer.
 export async function readDigest(cwd, run, want = {}) {
   const gitOn = want.git !== false, prOn = want.pr !== false;
   if (!gitOn && !prOn) return null;
   const pull = async () => {
-    const out = await run("gh", ["pr", "view", "--json", PR_FIELDS], cwd);
-    return tryOr(() => digestPr(out ? JSON.parse(out) : null));
+    const r = await run("gh", ["pr", "view", "--json", PR_FIELDS], cwd);
+    const out = stdout(r);
+    if (out != null) return { pr: tryOr(() => digestPr(JSON.parse(out))), failure: null };
+    return { pr: null, failure: NO_PR.test(r?.stderr ?? "") ? null : ghWords(r) };
   };
   if (!gitOn) {
-    const pr = await pull();
-    return pr ? { files: 0, add: 0, del: 0, ahead: 0, pushed: false, pr } : null;
+    const read = await pull();
+    return read.pr || read.failure ? { files: 0, add: 0, del: 0, ahead: 0, pushed: false, ...read } : null;
   }
-  const git = (...args) => run("git", ["-C", cwd, ...args]);
+  const git = (...args) => run("git", ["-C", cwd, ...args]).then(stdout);
   if ((await git("rev-parse", "--is-inside-work-tree"))?.trim() !== "true") return null;
   const [status, stat, upstream, branch] = await Promise.all([
     git("status", "--porcelain"), git("diff", "--shortstat", "HEAD"),
@@ -148,8 +155,14 @@ export async function readDigest(cwd, run, want = {}) {
   // Without an upstream, ahead of the default branch.
   const aheadOfBase = async () => { const base = await git("rev-list", "--count", "origin/HEAD..HEAD"); return base == null ? 0 : Number(base.trim()) || 0; };
   const ahead = pushed ? Number(upstream.trim()) || 0 : await aheadOfBase();
-  const pr = prOn && branch?.trim() ? await pull() : null;
-  return { files, ...parseShortstat(stat), ahead, pushed, pr };
+  const read = prOn && branch?.trim() ? await pull() : { pr: null, failure: null };
+  return { files, ...parseShortstat(stat), ahead, pushed, ...read };
+}
+
+/** A read GitHub did not answer keeps the pull request it last named, with gh's words; with none named, there is nothing to say. */
+export function settleDigest(was, read) {
+  if (!read) return null;
+  return read.failure && was?.pr ? { ...read, pr: was.pr } : { ...read, failure: null };
 }
 
 const words = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -164,8 +177,6 @@ const readNote = (working, at) => {
   const clock = working ? readClock(at) : null;
   return clock ? ` · read ${clock}` : "";
 };
-
-const DOTS = new Set(["blocked", "working", "done"]);
 
 export function digestSegments(d, { working = false, map = null } = {}) {
   if (!d) return [];
@@ -186,11 +197,13 @@ export function digestSegments(d, { working = false, map = null } = {}) {
   } : null;
   const pr = prOn && openPr ? {
     kind: "pr", number: `#${openPr.number}`, numberTone: "muted",
-    verdict: line?.text ?? null, verdictTone: line?.tone ?? null, dot: DOTS.has(line?.tone) ? line.tone : null, tone: line?.tone ?? null,
+    verdict: line?.text ?? null, verdictTone: line?.tone ?? null, tone: line?.tone ?? null,
     tip: line?.text ?? `Pull request #${openPr.number}`,
     open: { panel: "pr", section: line?.section ?? null, check: line?.check ?? null },
   } : null;
-  return [files, commits, pr].filter((part) => part);
+  // GitHub not answering is the failure line in the pull request's place, until a refresh is in flight.
+  const failed = pr && d.failure && !d.reading ? { kind: "failure", text: `Can't read #${openPr.number}`, tip: d.failure } : null;
+  return [files, commits, failed ?? pr].filter((part) => part);
 }
 
 export function digestOpen(segment, cwd) {
@@ -198,14 +211,6 @@ export function digestOpen(segment, cwd) {
   if (!open?.panel) return null;
   if (open.panel === "files") return { panel: "files", changed: true, cwd: cwd ?? null };
   return { panel: "pr", section: open.section ?? null, check: open.check ?? null };
-}
-
-export function headerTools({ focused, status, canSend, canSleep }) {
-  const rest = Boolean(focused) && (status === "done" || status === "idle");
-  return {
-    sleep: canSleep ? (rest ? "shown" : "hover") : "hidden",
-    send: canSend && status !== "blocked" ? (rest ? "shown" : "hover") : "hidden",
-  };
 }
 
 const openSend = (p) => openOverlay({ mod: "kanso-send", kind: "dialog", width: 520, props: { pane: p.pane } });
@@ -219,7 +224,14 @@ export default class Strip extends View {
   init(_props, cx) {
     const p = props() ?? {};
     this.kind = p.edge ? "edge" : p.ruler ? "ruler" : p.drop ? "drop" : p.pane ? "head" : "controller";
-    if (this.kind === "head") this.hovered = false;
+    if (this.kind === "head") {
+      this.hovered = false;
+      this.moreOpen = false;
+      this.renaming = null; // the inline name field while renaming
+      this.press = null; // where a press that may become a drag started
+      this.width = null;
+      this.armed = new Armed();
+    }
     if (this.kind !== "controller") return;
 
     this.state = JSON.parse(JSON.stringify(shared(KEY) ?? {}));
@@ -373,23 +385,31 @@ export default class Strip extends View {
     return all.find((p) => p.pane === props()?.pane);
   }
 
-  rename(p, shown) {
-    openOverlay({ mod: "kanso-prompt", kind: "dialog", width: PROMPT_W, props: {
-      title: "Rename terminal", value: shown, hint: "Empty: the name the program gives it",
-      label: { terminal: p.terminal, key: NAME_LABEL } } });
+  // Double-click renames in place; Enter or leaving the field keeps the name, Escape drops it, empty gives the program's name back.
+  startRename(p, shown, cx) {
+    const text = new TextField({ value: shown }, { limit: NAME_LIMIT });
+    text.set_selected_range({ start: 0, end: shown.length });
+    text.on("submit", (_e, cx) => this.endRename(p, shown, cx, true));
+    text.on("blur", (_e, cx) => this.endRename(p, shown, cx, true));
+    this.renaming = text;
+    text.focus();
+    cx.timer.after(0, () => this.renaming?.focus());
+    cx.notify();
   }
 
-  badge(t, text, iconPath, on) {
-    return h_flex().flex_shrink(1).min_w(0).max_w(BADGE_MAX_W).gap(4).items_center().text_size(11.5).text_color(on ? t.muted : t.dim)
-      .when(Boolean(iconPath), (el) => el.child(svg(iconPath).size(12).flex_none()))
-      .child(div().min_w(0).truncate().child(text));
+  endRename(p, shown, cx, keep) {
+    const text = this.renaming;
+    if (!text) return;
+    this.renaming = null;
+    const name = text.value().trim();
+    if (keep && name !== shown) hc(["label", p.terminal, `${NAME_LABEL}=${name}`]).catch(() => {});
+    text.release();
+    cx.notify();
   }
 
-  // In the strip a split records where the new pane goes, and zoom cycles the column's width.
+  // In the strip a split records where the new pane goes.
   act(command, args) {
-    const pane = props()?.pane;
-    if (props()?.strip && command === "pane.split") setShared("strip.intent", { dir: args.direction, from: pane, at: Date.now() });
-    if (props()?.strip && command === "pane.zoom") { setShared("strip.req", { op: "width", pane, n: nonce() }); return; }
+    if (props()?.strip && command === "pane.split") setShared("strip.intent", { dir: args.direction, from: props()?.pane, at: Date.now() });
     run(command, args);
   }
 
@@ -404,22 +424,18 @@ export default class Strip extends View {
     openOverlay({ mod: "open-with", kind: "popup", width: 340, props: { folder: p.cwd, machine: space?.machine ?? null } });
   }
 
-  grip(t, pane) {
-    const held = shared("strip.drag")?.pane === pane;
-    return div().id(`grip-${pane}`).w(18).h_full().flex_none().flex().items_center().justify_center().cursor_grab()
-      .tooltip("Hold and drag onto another pane to move this one there")
-      .text_color(held ? t.foreground : t.dim)
-      .hover((h) => h.text_color(t.foreground))
-      .on_mouse_down("left", (e, cx) => { cx.stop_propagation(); setShared("strip.drag", { pane, at: Date.now() }); })
-      // A press elsewhere while this pane is still held: it was let go where nothing took it.
-      .on_mouse_down_out(() => { const d = shared("strip.drag"); if (d?.pane === pane && Date.now() - d.at > 300) endDrag(); })
-      .child(svg("mods/kanso-chrome/icons/grip-vertical.svg").size(14));
+  // The header is the handle: a press held and moved a few pixels picks the pane up.
+  pressMove(e, pane) {
+    const from = this.press;
+    if (!from || shared("strip.drag")) return;
+    if (Math.hypot(e.position.x - from.x, e.position.y - from.y) < DRAG_START) return;
+    this.press = null;
+    setShared("strip.drag", { pane, at: Date.now() });
   }
 
   // The header is the top of the drop card: the middle means "above" here, the card below has the zone for "below".
   dragMove(e, pane) {
     const width = e.bounds?.width || this.width || 0;
-    if (width) this.width = width;
     const d = shared("strip.drag");
     if (!d || d.pane === pane || !width) return;
     const x = e.local_position.x;
@@ -428,41 +444,190 @@ export default class Strip extends View {
     if (cur?.to !== pane || cur.side !== side) setShared("strip.drop", { to: pane, side });
   }
 
-  tool(t, id, icon, tip, command, args, on = false) {
-    return iconButton(id, icon, tip, (cx) => {
-      cx.stop_propagation();
-      if (typeof command === "function") command();
-      else this.act(command, args);
-    }, tokens(t), { active: on });
+  // What each tool and ⋯ entry does; close asks twice while an agent is in the pane.
+  actions(p, { name, agent }) {
+    const pane = p.pane;
+    const close = (cx) => (agent ? this.armed.press("close", cx, () => run("pane.close", { pane })) : run("pane.close", { pane }));
+    const pieceState = (state) => () => setShared(STORE, DIGEST_PIECES.reduce((map, id) => setPiece(map, id, state), pieces(shared)));
+    const pin = () => setShared("strip.req", { op: "pin", pane, n: nonce() });
+    const zoom = () => run("pane.zoom", { pane });
+    return {
+      pin,
+      unpin: pin,
+      sleep: () => openSleep(p),
+      send: () => openSend(p),
+      "open-with": () => this.openWith(p),
+      "split-right": () => this.act("pane.split", { direction: "right", pane }),
+      "split-down": () => this.act("pane.split", { direction: "down", pane }),
+      width: () => setShared("strip.req", { op: "width", pane, n: nonce() }),
+      zoom,
+      unzoom: zoom,
+      close,
+      needed: pieceState("needed"),
+      hide: pieceState("hide"),
+      settings: () => openOverlay({ mod: "kanso-settings", kind: "dialog", width: 860, height: 680, props: { page: "pieces", find: PIECE_GROUP } }),
+      refresh: () => setShared(DIGEST, { ...(shared(DIGEST) ?? {}), [pane]: { ...shared(DIGEST)?.[pane], reading: true } }),
+      rename: (cx) => this.startRename(p, name, cx),
+    };
   }
 
-  digestBar(t, p, segments, strip) {
-    const pane = p.pane;
-    return h_flex().id(`digest-${pane}`).flex_shrink(1).min_w(0).gap(8).items_center()
-      .children(segments.map((seg) => this.digestSegment(t, p, seg, strip)));
+  tool(c, pane, key, does, { armed = false, verb = null } = {}) {
+    const [icon, label] = ENTRIES[key];
+    return iconButton(`ph-${key}-${pane}`, icon, label, (cx) => { cx.stop_propagation(); does[key](cx); }, c, { armed, verb });
   }
 
-  digestSegment(t, p, seg, strip) {
+  // ⋯ opens its Menu under itself, right-aligned to it; while it is open the tools stay out.
+  more(c, pane, { name, entries, does }) {
+    const trigger = iconButton(`ph-more-${pane}`, "ellipsis", "More", null, c, { active: this.moreOpen });
+    const close = (cx) => { this.moreOpen = false; cx.notify(); };
+    const item = (key) => (key === "separator" ? { separator: true } : {
+      icon: ENTRIES[key][0], label: ENTRIES[key][1],
+      armed: key === "close" && this.armed.is("close"), verb: key === "close" ? `close ${name}` : null,
+      onClick: (cx) => { does[key](cx); if (key !== "close" || !this.armed.is("close")) close(cx); },
+    });
+    const pop = Popover.new(`ph-menu-${pane}`).trigger(trigger).anchor("top_right").open(this.moreOpen)
+      .on_open_change((open, cx) => { this.moreOpen = open; cx.notify(); });
+    return this.moreOpen ? pop.content(menu(`ph-menu-list-${pane}`, { title: name, items: entries.map(item) }, c)) : pop;
+  }
+
+  // Sleep and Send when they rest out; under the pointer the tools this fold keeps, then ⋯.
+  tools(c, p, { name, out, hover, entries, fold, strip, does }) {
     const pane = p.pane;
-    const ink = seg.kind === "pr" ? t.muted : t[seg.tone];
-    return h_flex().id(`digest-${seg.kind}-${pane}`).flex_none().gap(4).items_center().px(4).py(2).rounded(6)
-      .text_size(11.5).text_color(ink).whitespace_nowrap().cursor_pointer().tooltip(seg.tip)
-      .hover((s) => s.bg(t.hover))
-      .on_click((_e, cx) => {
-        cx.stop_propagation();
-        const open = digestOpen(seg, p.cwd);
-        if (!open) return;
-        run("pane.focus", strip && p.terminal ? { terminal: p.terminal } : { pane });
-        const stamped = { ...open, at: Date.now() };
-        commitLayout({ panel: { id: open.panel, type: "block", content: { mod: "kanso-panel", props: stamped } } });
+    const armed = this.armed.is("close");
+    return h_flex().id(`ph-tools-${pane}`).flex_none().items_center().gap(G.hair)
+      .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
+      .children(out.map((key) => this.tool(c, pane, key, does)))
+      .when(hover, (el) => el
+        .children(hoverTools({ fold, strip }).map((key) => this.tool(c, pane, key, does, key === "close" ? { armed, verb: `close ${name}` } : {})))
+        .child(this.more(c, pane, { name, entries, does })));
+  }
+
+  // The digest: files, commits not on GitHub, then the pull request, or the failure line in its place; a refresh in flight is pending.
+  digestBar(c, p, segments, { fold, working, reading, strip, does }) {
+    const pane = p.pane;
+    const open = (seg) => () => {
+      const to = digestOpen(seg, p.cwd);
+      if (!to) return;
+      run("pane.focus", strip && p.terminal ? { terminal: p.terminal } : { pane });
+      commitLayout({ panel: { id: to.panel, type: "block", content: { mod: "kanso-panel", props: { ...to, at: Date.now() } } } });
+    };
+    const tone = working ? "dim" : null;
+    const piece = (seg) => {
+      if (seg.kind === "failure") return stateLine(`digest-failure-${pane}`, mark(c, { status: "blocked" }), seg.text, c, { label: "Refresh", onClick: does.refresh }).tooltip(seg.tip);
+      if (seg.kind === "pr") return shownAt(fold, "PR") ? headerSegment(`digest-pr-${pane}`, { act: open(seg), title: prTitle(segments, fold),
+        parts: [{ text: seg.number, tone: "muted" }, shownAt(fold, "verdict word") && seg.verdict ? { text: `· ${seg.verdict}`, tone: seg.verdictTone } : null] }, c) : null;
+      const step = seg.kind === "files" ? "files" : "commits";
+      return shownAt(fold, step) ? headerSegment(`digest-${seg.kind}-${pane}`, { act: open(seg), tone, title: seg.tip,
+        parts: [{ text: seg.count }, seg.diff ? { text: seg.diff, tone: seg.diffTone } : null] }, c) : null;
+    };
+    return h_flex().id(`digest-${pane}`).flex_shrink(1).min_w(0).overflow_hidden().gap(G.sm).items_center().text_size(T.body).text_color(c.muted)
+      .when(reading, (el) => el.opacity(PENDING))
+      .children(segments.map(piece).filter(Boolean))
+      .when(reading, (el) => el.child(pendingDot(`digest-pending-${pane}`, c)));
+  }
+
+  // In the strip the selected pane is the one the strip remembers, so it stays marked while a side panel has the keyboard.
+  isSelected(p, strip) {
+    const remembered = strip ? shared(KEY)?.[p.tab]?.focus : null;
+    return remembered ? remembered === p.pane : p.focused || (strip && p.terminal && focused()?.terminal === p.terminal);
+  }
+
+  // Folder and branch where they differ from the project, and whether its computer is out of reach.
+  placeFacts(p, map) {
+    const space = spaces().find((s) => s.tabs.some((x) => x.id === p.tab));
+    return {
+      where: shown("header.place", true, map) ? placeOf(p, space, home()) : {},
+      away: Boolean(space?.machine) && machines().some((m) => m.name === space.machine && m.layout === "unavailable"),
+    };
+  }
+
+  // Where Sleep and Send go: out, into ⋯, or nowhere.
+  toolPlaces(p, all, on) {
+    const canSend = Boolean(p.terminal) && all.some((q) => q.pane !== p.pane && q.terminal && (q.program?.agent || q.status));
+    const canSleep = Boolean(p.terminal && p.tab && agents().some((x) => x.address === p.terminal));
+    return headerTools({ focused: on, status: p.status, canSend, canSleep });
+  }
+
+  // What the header shows now: who it is, its states, what folds and what ⋯ holds.
+  headFacts(p, all) {
+    const pane = p.pane, st = p.status;
+    const given = givenNames();
+    const agent = Boolean(p.program?.agent || st);
+    const name = paneLabel({ agent, cwd: p.cwd, given: given.get(p.terminal), name: nameOf(p, given) });
+    const strip = Boolean(props()?.strip);
+    const on = this.isSelected(p, strip);
+    const drag = strip ? shared("strip.drag") : null;
+    const drop = drag && drag.pane !== pane ? shared("strip.drop") : null;
+    const pinned = Boolean((strip ? shared(KEY)?.[p.tab]?.cols ?? [] : []).find((k) => k.panes?.includes(pane))?.pin);
+    const map = pieces(shared);
+    const record = shared(DIGEST)?.[pane];
+    const segments = agent ? digestSegments(record, { working: st === "working", map }) : [];
+    const { where, away } = this.placeFacts(p, map);
+    const placed = this.toolPlaces(p, all, on);
+    const out = ["sleep", "send"].filter((key) => placed[key] === "out");
+    const hover = (this.hovered || this.moreOpen) && !drag;
+    const status = headerMark(st, away);
+    const sized = headerWidths({ name, place: where, digest: segments, pinned, out: out.length, hover, mark: Boolean(status) });
+    const fold = foldFor(this.width ?? Infinity, sized.base, sized.widths);
+    return {
+      name, agent, strip, on, drag, pinned, record, segments, where, away, out, hover, status, fold,
+      side: drop?.to === pane ? drop.side : null,
+      entries: menuEntries({ strip, pinned, zoomed: p.zoomed, tools: placed, fold, canOpen: Boolean(p.cwd) }),
+      keyboard: on && strip && shared("strip.keys") === pane,
+    };
+  }
+
+  // Where a held pane would land on this header: its left or right half, or both for "above".
+  dropZones(t, side) {
+    const zone = (lit) => div().flex_1().h_full().when(lit, (d) => d.bg(t.accent + "40"));
+    return h_flex().absolute().inset_0().rounded_t(R.card).overflow_hidden()
+      .child(zone(side === "before" || side === "above"))
+      .child(zone(side === "after" || side === "above"));
+  }
+
+  // Hover, size, rename keys, the press that may become a drag, the drop, the wheel and the click that focuses.
+  headEvents(el, p, { name, strip, pinned, side }, does) {
+    const pane = p.pane, movable = strip && !pinned;
+    return el
+      .on_hover((hovered, cx) => {
+        this.hovered = hovered;
+        // No button state reaches a move, so a press that leaves the header is dropped: its release may land elsewhere.
+        if (!hovered) this.press = null;
+        if (!hovered && shared("strip.drop")?.to === pane && shared("strip.drop")?.side !== "below") setShared("strip.drop", null);
+        cx.notify();
       })
-      .when(seg.kind !== "pr", (el) => el
-        .child(div().flex_none().child(seg.count))
-        .when(Boolean(seg.diff), (el) => el.child(div().flex_none().text_color(t[seg.diffTone]).child(seg.diff))))
-      .when(seg.kind === "pr", (el) => el
-        .when(Boolean(seg.dot), (el) => el.child(div().size(6).flex_none().rounded_full().bg(t[seg.dot])))
-        .child(div().flex_none().text_color(t[seg.numberTone]).child(seg.number))
-        .when(Boolean(seg.verdict), (el) => el.child(div().flex_none().text_color(t[seg.verdictTone]).child(`· ${seg.verdict}`))));
+      .on_size_change((sz, cx) => {
+        const width = Math.round(sz.width);
+        if (width === this.width) return;
+        this.width = width;
+        cx.notify();
+      })
+      .on_key_down((e, cx) => { if (this.renaming && e.key === "escape") { this.endRename(p, name, cx, false); cx.stop_propagation(); } })
+      .on_mouse_down("left", (e, cx) => {
+        if (shared("strip.keys")) setShared("strip.keys", null);
+        if (e.click_count === 2 && p.terminal) { this.press = null; does.rename(cx); return; }
+        if (shared("strip.drag")) endDrag();
+        else if (movable) this.press = e.position;
+      })
+      .when(strip, (el) => el
+        .on_scroll_wheel((e) => this.wheelReq(e))
+        .on_mouse_move((e) => { this.pressMove(e, pane); this.dragMove(e, pane); })
+        .on_mouse_up("left", () => {
+          this.press = null;
+          const d = shared("strip.drag");
+          if (!d) return;
+          if (d.pane !== pane) setShared("strip.req", { op: "move", pane: d.pane, to: pane, side: side ?? "above", n: nonce() });
+          endDrag();
+        }))
+      .on_click(() => { if (!this.renaming) run("pane.focus", strip && p.terminal ? { terminal: p.terminal } : { pane }); });
+  }
+
+  // The name, or the field that renames it in place.
+  headName(c, pane, name) {
+    return this.renaming
+      ? div().id(`ph-rename-${pane}`).flex_shrink(1).min_w(0).on_mouse_down("left", (_e, cx) => cx.stop_propagation()).on_click((_e, cx) => cx.stop_propagation())
+        .child(field(`ph-name-${pane}`, this.renaming, c, { inline: true, spoken: "Name" }))
+      : div().flex_shrink(1).min_w(0).max_w(W.paneName).truncate().font_medium().child(name);
   }
 
   renderHead() {
@@ -470,102 +635,29 @@ export default class Strip extends View {
     const all = panes(); // read once: each read copies every pane
     const p = this.me(all);
     if (!p) return div();
-    const name = nameOf(p, givenNames());
-    const pic = programIcon(p.program, 15, t.muted);
-    const st = p.status;
     const pane = p.pane;
-    // In the strip the selected pane is the one the strip remembers, so it stays marked while a side panel has the keyboard.
-    const strip = Boolean(props()?.strip);
-    const remembered = strip ? shared(KEY)?.[p.tab]?.focus : null;
-    const on = remembered ? remembered === pane : p.focused || (strip && p.terminal && focused()?.terminal === p.terminal);
-    const drag = strip ? shared("strip.drag") : null;
-    const drop = drag && drag.pane !== pane ? shared("strip.drop") : null;
-    const side = drop?.to === pane ? drop.side : null;
-    const ink = on || st === "blocked";
-    const cols = strip ? shared(KEY)?.[p.tab]?.cols ?? [] : [];
-    const col = cols.findIndex((k) => k.panes?.includes(pane));
-    const pinned = Boolean(cols[col]?.pin);
-    const pin = () => setShared("strip.req", { op: "pin", pane, n: nonce() });
-    const map = pieces(shared);
-    const segments = digestSegments(shared(DIGEST)?.[pane], { working: st === "working", map });
-    const place = shown("header.place", true, map);
-    const canSend = Boolean(p.terminal) && all.some((q) => q.pane !== pane && q.terminal && (q.program?.agent || q.status));
-    return h_flex().id(`pane-head-${pane}`).size_full().pl(14).pr(6).gap(10).items_center().text_size(12.5).relative()
-      .rounded_t(RADIUS)
-      .when(pinned && st !== "blocked", (el) => el.bg(t.accent + (on ? "40" : "24")))
-      .when(st === "blocked", (el) => el.bg(t.blocked + "66")
-        .child(div().absolute().left_0().bottom_0().w_full().h(2).bg(t.blocked).when(!onBattery(), (d) => d.loop("opacity", { from: 0.45, to: 1, period: 1600 }))))
-      .when(on && !pinned && st !== "blocked", (el) => el.bg(t.selected))
-      .when(Boolean(side), (el) => el.child(h_flex().absolute().inset_0().rounded_t(RADIUS)
-        .child(div().flex_1().h_full().when(side === "before" || side === "above", (d) => d.bg(t.accent + "40").rounded_tl(RADIUS).when(side === "above", (d) => d.rounded_tr(RADIUS))))
-        .child(div().flex_1().h_full().when(side === "after" || side === "above", (d) => d.bg(t.accent + "40").rounded_tr(RADIUS)))))
-      .when(Boolean(drag) && drag.pane === pane, (el) => el.opacity(0.4))
-      .when(Boolean(drag), (el) => el.cursor_grabbing())
-      .on_hover((hovered, cx) => {
-        this.hovered = hovered;
-        if (!hovered && shared("strip.drop")?.to === pane && shared("strip.drop")?.side !== "below") setShared("strip.drop", null);
-        cx.notify();
-      })
-      .on_size_change((sz) => { this.width = sz.width; })
-      .on_mouse_down("left", (e) => {
-        if (e.click_count === 2 && p.terminal) { this.rename(p, name); return; }
-        if (!strip) return;
-        if (e.modifiers.control && !pinned) setShared("strip.drag", { pane, at: Date.now() });
-        else if (shared("strip.drag")) endDrag();
-      })
-      .when(strip, (el) => el
-        .on_scroll_wheel((e) => this.wheelReq(e))
-        .on_mouse_move((e) => this.dragMove(e, pane))
-        .on_mouse_up("left", () => {
-          const d = shared("strip.drag");
-          if (!d) return;
-          if (d.pane !== pane) setShared("strip.req", { op: "move", pane: d.pane, to: pane, side: side ?? "above", n: nonce() });
-          endDrag();
-        }))
-      .on_click(() => run("pane.focus", strip && p.terminal ? { terminal: p.terminal } : { pane }))
-      .when(Boolean(pic), (el) => el.child(pic.opacity(ink ? 1 : 0.75)))
-      .child(div().flex_none().truncate().max_w(260).text_size(12.5).when(ink, (el) => el.font_medium()).text_color(ink ? t.foreground : t.muted).child(name))
-      .when(Boolean(p.cwd) && place, (el) => el.child(this.badge(t, folder(p.cwd), null, ink)))
-      .when(Boolean(p.branch) && place, (el) => el.child(this.badge(t, p.branch, "mods/kanso-chrome/icons/branch.svg", ink)))
-      .when(segments.length > 0, (el) => el.child(this.digestBar(t, p, segments, strip)))
-      .when(pinned && !this.hovered, (el) => el.child(svg("mods/kanso-chrome/icons/pin.svg").size(12).flex_none().text_color(t.dim)))
+    const f = this.headFacts(p, all);
+    const does = this.actions(p, f);
+    const blocked = p.status === "blocked";
+    const row = h_flex().id(`pane-head-${pane}`).size_full().pl(G.md).pr(G.sm).gap(G.sm).items_center().text_size(T.value).text_color(c.text).relative()
+      .rounded_t(R.card).border_2().border_color(f.keyboard ? c.accent : CLEAR)
+      .when(f.on && !blocked, (el) => el.bg(c.selected))
+      .when(blocked, (el) => el.bg(mix(c.blocked, c.background, OPACITY.blockedWash)))
+      .when(f.away, (el) => el.opacity(OPACITY.away))
+      .when(f.drag?.pane === pane, (el) => el.opacity(OPACITY.held))
+      .when(f.strip && !f.pinned, (el) => el.cursor_grab())
+      .when(Boolean(f.drag), (el) => el.cursor_grabbing())
+      .when(Boolean(f.side), (el) => el.child(this.dropZones(t, f.side)));
+    return this.headEvents(row, p, f, does)
+      .child(programIcon(p.program, ICON, c.muted) ?? svg(glyphOf("terminal")).size(ICON).flex_none().text_color(c.muted))
+      .child(this.headName(c, pane, f.name))
+      .when(Boolean(f.where.folder) && shownAt(f.fold, "folder"), (el) => el.child(headerSegment(`ph-folder-${pane}`, { icon: "folder", parts: [{ text: folder(f.where.folder) }] }, c)))
+      .when(Boolean(f.where.branch) && shownAt(f.fold, "branch"), (el) => el.child(headerSegment(`ph-branch-${pane}`, { icon: "branch", parts: [{ text: f.where.branch }] }, c)))
+      .when(f.segments.length > 0, (el) => el.child(this.digestBar(c, p, f.segments, { fold: f.fold, working: p.status === "working", reading: Boolean(f.record?.reading), strip: f.strip, does })))
+      .when(f.pinned, (el) => el.child(headerSegment(`ph-pinned-${pane}`, { icon: "pin", tone: "dim", title: "Pinned" }, c)))
       .child(div().flex_1())
-      .child(this.tools(t, p, { strip, pinned, canSend, pin, shown: this.hovered && !drag, status: st, focused: on }))
-      .when(st === "working", (el) => el.child(mark(c, { status: "working" })))
-      .when(st === "blocked", (el) => el.child(h_flex().flex_none().gap(6).items_center().text_size(11.5).font_medium().text_color(t.foreground)
-        .child(mark(c, { status: "blocked" })).child("Needs you")))
-      .when(st === "done", (el) => el.child(mark(c, { status: "done" })))
-      .when(strip && !pinned, (el) => el.child(this.grip(t, pane)));
-  }
-
-  // The tools group is always in the row, 0 wide and clear until hovered, so it eases open natively and the state mark never moves.
-  tools(t, p, { strip, pinned, canSend, pin, shown, status, focused }) {
-    const pane = p.pane;
-    const canSleep = Boolean(p.terminal && p.tab && agents().some((x) => x.address === p.terminal));
-    const place = headerTools({ focused, status, canSend, canSleep });
-    const sleep = place.sleep === "hidden" ? null : this.tool(t, `ph-zz-${pane}`, "moon", "Sleep this agent", () => openSleep(p));
-    const send = place.send === "hidden" ? null : this.tool(t, `ph-s-${pane}`, "send", "Send to another agent", () => openSend(p));
-    const hover = [
-      strip ? this.tool(t, `ph-p-${pane}`, "pin", "Pin", pin, null, pinned) : null,
-      place.sleep === "hover" ? sleep : null,
-      place.send === "hover" ? send : null,
-      p.cwd ? this.tool(t, `ph-o-${pane}`, "open-with", "Open with…", () => this.openWith(p)) : null,
-      this.tool(t, `ph-r-${pane}`, "split-right", "Split right", "pane.split", { direction: "right", pane }),
-      this.tool(t, `ph-d-${pane}`, "split-down", "Split down", "pane.split", { direction: "down", pane }),
-      this.tool(t, `ph-z-${pane}`, p.zoomed ? "unzoom" : "zoom", p.zoomed ? "Unzoom" : "Zoom", "pane.zoom", { pane }),
-      this.tool(t, `ph-x-${pane}`, "close", "Close", "pane.close", { pane }),
-    ].filter(Boolean);
-    const pinnedTools = [place.sleep === "shown" ? sleep : null, place.send === "shown" ? send : null].filter(Boolean);
-    const wide = hover.length * TOOL + Math.max(0, hover.length - 1) * TOOL_GAP;
-    const group = h_flex().id(`ph-tools-${pane}`).flex_none().h_full().items_center().gap(TOOL_GAP).overflow_hidden()
-      .w(shown ? wide : 0).opacity(shown ? 1 : 0)
-      .transition("width", TOOLS_EASE).transition("opacity", TOOLS_EASE)
-      // The row puts its gap on both sides of the group; closed, one of them is taken back.
-      .when(!pinnedTools.length || !shown, (el) => el.ml(-TOOL_GAP))
-      .children(hover);
-    return pinnedTools.length
-      ? h_flex().id(`ph-rest-${pane}`).flex_none().h_full().items_center().gap(TOOL_GAP).children([...pinnedTools, group])
-      : group;
+      .child(this.tools(c, p, { ...f, does }))
+      .when(Boolean(f.status), (el) => el.child(mark(c, { status: f.status })));
   }
 
   tab() {
@@ -693,7 +785,9 @@ export default class Strip extends View {
       if (!p.terminal || !p.cwd || !p.status) continue;
       const was = this.lastStatus.get(p.pane);
       this.lastStatus.set(p.pane, p.status);
-      if (p.status !== "working" && (was === "working" || (was === undefined && !(p.pane in store))) && !this.digesting.has(p.pane)) this.digest(p, cx);
+      const stopped = p.status !== "working" && (was === "working" || (was === undefined && !(p.pane in store)));
+      // A header's Refresh marks its record reading; the read starts here.
+      if ((stopped || store[p.pane]?.reading) && !this.digesting.has(p.pane)) this.digest(p, cx);
     }
     const live = new Set(all.map((p) => p.pane));
     const gone = new Set(Object.keys(store).filter((id) => !live.has(id)));
@@ -707,14 +801,16 @@ export default class Strip extends View {
     if (!want.git && !want.pr) return;
     this.digesting.add(p.pane);
     const on = spaces().find((s) => s.tabs.some((x) => x.id === p.tab))?.machine ?? null;
-    const run = (cmd, args, cwd) => exec(cmd, args, { cwd, on }).then((r) => (r.code === 0 ? r.stdout : null)).catch(() => null);
+    const run = (cmd, args, cwd) => exec(cmd, args, { cwd, on }).catch((e) => ({ code: -1, stdout: "", stderr: String(e?.message ?? e) }));
     cx.spawn(async () => {
       try {
         const d = await readDigest(p.cwd, run, want);
         const live = panes().find((q) => q.pane === p.pane);
-        // It went back to work meanwhile: what it left is no longer the news.
-        if (!live || live.status === "working") return;
-        setShared(DIGEST, { ...(shared(DIGEST) ?? {}), [p.pane]: d ? { ...d, at: Date.now() } : null });
+        const was = shared(DIGEST)?.[p.pane];
+        // It went back to work meanwhile: what it left is no longer the news, unless someone asked for this read.
+        if (!live || (live.status === "working" && !was?.reading)) return;
+        const settled = settleDigest(was, d);
+        setShared(DIGEST, { ...(shared(DIGEST) ?? {}), [p.pane]: settled ? { ...settled, at: Date.now() } : null });
       } finally { this.digesting.delete(p.pane); }
     });
   }
@@ -755,7 +851,10 @@ export default class Strip extends View {
     const st = tab && this.state[tab];
     if (!st) return;
     const next = this.commandOn(st, name, panes().filter((p) => p.tab === tab));
-    if (next !== st) this.commit(tab, next);
+    if (next === st) return;
+    this.commit(tab, next);
+    // Focus the keyboard moved draws the accent ring around its header, until a header is pressed.
+    if (next.focus !== st.focus) setShared("strip.keys", next.focus ?? null);
   }
 
   commandOn(st, name, ps) {

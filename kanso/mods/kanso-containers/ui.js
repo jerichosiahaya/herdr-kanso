@@ -5,12 +5,15 @@
 export const G = { hair: 2, xs: 4, sm: 8, md: 12, lg: 16, xl: 24 };
 export const H = { control: 30, compact: 24, icon: 26, row: 40, line: 32, badge: 20 };
 export const R = { sm: 4, control: 6, card: 8 };
+export const W = { paneName: 256, paneSegment: 224, menu: 252 };
 export const T = { display: 48, page: 20, title: 15, card: 13.5, value: 12.5, body: 11.5, mono: 11.5 };
 export const ICON = 15;
 export const ICON_ROW = 14;
 export const ICON_INLINE = 12;
+export const DRAG_START = 4;
 export const SWITCH = { w: 28, h: 16, knob: 12 };
 export const SPIN = 900;
+export const OPACITY = { away: 0.55, held: 0.4, blockedWash: 0.4 };
 export const WASHES = { dark: { w4: 0.04, w7: 0.07, w12: 0.12, w14: 0.14 }, light: { w4: 0.05, w7: 0.095, w12: 0.18, w14: 0.21 } };
 // End of the generated sizes.
 export const EASE = { duration: 180, easing: "ease-out" };

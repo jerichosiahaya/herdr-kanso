@@ -4,7 +4,8 @@ import assert from "node:assert/strict";
 import { load, clone } from "./helpers.mjs";
 
 const gh = () => load("kanso-panel/ghchecks.js", ["prLine", "prFacts", "headerHold"]);
-const strip = () => load("kanso-strip/main.js", ["digestSegments", "digestOpen", "headerTools", "readClock", "digestPr"]);
+const strip = () => load("kanso-strip/main.js", ["digestSegments", "digestOpen", "readClock", "digestPr"]);
+const model = () => load("kanso-strip/header-model.js", ["headerTools"]);
 const panel = () => load("kanso-panel/pr.js", ["sectionIndex", "checksFirst"]);
 
 const run = (name, conclusion, status = "COMPLETED") => ({ __typename: "CheckRun", name, status, conclusion });
@@ -72,7 +73,6 @@ test("each segment's words, colour and click, and nothing that cannot act", asyn
   assert.equal(idle[1].tip, "1 commit not on GitHub");
   assert.equal(idle[2].verdict, "test / unit failed");
   assert.equal(idle[2].verdictTone, "blocked");
-  assert.equal(idle[2].dot, "blocked");
   assert.equal(idle[2].numberTone, "muted");
   assert.equal(idle[2].number, "#41");
   const working = clone(digestSegments({ files: 1, add: 0, del: 0, ahead: 3, at, pr: { number: 142, state: "OPEN", mergeStateStatus: "BLOCKED", reviewDecision: "REVIEW_REQUIRED", fail: 0, pending: 0 } }, { working: true }));
@@ -83,17 +83,14 @@ test("each segment's words, colour and click, and nothing that cannot act", asyn
   assert.equal(working[1].tip, "3 commits not on GitHub · read 14:02");
   assert.equal(working[2].tone, "working");
   assert.equal(working[2].verdict, "review required");
-  assert.equal(working[2].dot, "working");
   assert.equal(working[2].tip, "review required");
   const draft = clone(digestSegments({ pr: { number: 7, state: "OPEN", isDraft: true, mergeStateStatus: "DRAFT" } }));
   assert.equal(draft[0].verdict, "draft");
   assert.equal(draft[0].verdictTone, "dim");
-  assert.equal(draft[0].dot, null);
   const ready = clone(digestSegments({ pr: { number: 141, state: "OPEN", mergeStateStatus: "CLEAN", fail: 0, pending: 0 } }));
   assert.equal(ready.length, 1);
   assert.equal(ready[0].number, "#141");
   assert.equal(ready[0].verdict, null);
-  assert.equal(ready[0].dot, null);
   assert.equal(ready[0].tip, "Pull request #141");
   assert.equal(/ready/i.test(ready[0].tip), false);
   assert.deepEqual(clone(digestSegments({ files: 0, ahead: 0, pr: null })), []);
@@ -116,17 +113,17 @@ test("each segment's words, colour and click, and nothing that cannot act", asyn
   assert.equal(digestSegments({ pr: stored })[0].verdict, "review required");
 });
 
-test("Sleep and Send stay on a finished focused pane, and a blocked pane has no Send", async () => {
-  const { headerTools } = await strip();
+test("Sleep and Send stay out on a finished focused pane, wait in ⋯ otherwise, and a blocked pane has no Send", async () => {
+  const { headerTools } = await model();
   const both = { canSend: true, canSleep: true };
-  assert.deepEqual(clone(headerTools({ focused: true, status: "done", ...both })), { sleep: "shown", send: "shown" });
-  assert.deepEqual(clone(headerTools({ focused: true, status: "idle", ...both })), { sleep: "shown", send: "shown" });
-  assert.deepEqual(clone(headerTools({ focused: true, status: "working", ...both })), { sleep: "hover", send: "hover" });
-  assert.deepEqual(clone(headerTools({ focused: true, status: "blocked", ...both })), { sleep: "hover", send: "hidden" });
-  assert.deepEqual(clone(headerTools({ focused: false, status: "done", ...both })), { sleep: "hover", send: "hover" });
-  assert.deepEqual(clone(headerTools({ focused: false, status: "blocked", ...both })), { sleep: "hover", send: "hidden" });
+  assert.deepEqual(clone(headerTools({ focused: true, status: "done", ...both })), { sleep: "out", send: "out" });
+  assert.deepEqual(clone(headerTools({ focused: true, status: "idle", ...both })), { sleep: "out", send: "out" });
+  assert.deepEqual(clone(headerTools({ focused: true, status: "working", ...both })), { sleep: "menu", send: "menu" });
+  assert.deepEqual(clone(headerTools({ focused: true, status: "blocked", ...both })), { sleep: "menu", send: "hidden" });
+  assert.deepEqual(clone(headerTools({ focused: false, status: "done", ...both })), { sleep: "menu", send: "menu" });
+  assert.deepEqual(clone(headerTools({ focused: false, status: "blocked", ...both })), { sleep: "menu", send: "hidden" });
   assert.deepEqual(clone(headerTools({ focused: true, status: "done", canSend: false, canSleep: false })), { sleep: "hidden", send: "hidden" });
-  assert.deepEqual(clone(headerTools({ focused: true, status: "idle", canSend: false, canSleep: true })), { sleep: "shown", send: "hidden" });
+  assert.deepEqual(clone(headerTools({ focused: true, status: "idle", canSend: false, canSleep: true })), { sleep: "out", send: "hidden" });
 });
 
 test("the pull request panel lands on the named section and shows the failed check first", async () => {

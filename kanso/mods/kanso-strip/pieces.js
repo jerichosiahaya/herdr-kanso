@@ -136,7 +136,7 @@ export function loadPieces(shared, setShared) {
 export function filterPieces(query, list = PIECES) {
   const q = String(query ?? "").trim().toLowerCase();
   if (!q) return list.slice();
-  return list.filter((row) => row.label.toLowerCase().includes(q) || row.id.toLowerCase().includes(q));
+  return list.filter((row) => [row.label, row.id, row.group].some((text) => text.toLowerCase().includes(q)));
 }
 
 export function groupsOf(list) {
