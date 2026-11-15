@@ -37,7 +37,9 @@ export const avatar = ({ initial, image, size, tone, round = true }) => {
   return `<span class="kanso-avatar${round ? ' kanso-avatar--round' : ''}${avatarSizes[size] ?? ""}${tone ? ` kanso-text--host-${escape(tone)}` : ""}">${picture}${escape(initial.slice(0, 1))}</span>`;
 };
 
-export const card = ({ author, image, age, body, loading }) => `<div class="kanso-card${loading ? ' kanso-skeleton--shape' : ''}"><div class="kanso-card__header">${avatar({ initial: author, image, size: 'md' })}<b>${escape(author)}</b>${grow()}<span class="kanso-text--dim">${escape(age)}</span></div><div class="kanso-prose">${escape(body)}</div></div>`;
+// The inset surface (a verdict's body, a thread, a review), its `heading` in ink first.
+export const well = ({ heading = '', loading = false } = {}, ...children) => `<div class="kanso-card${loading ? ' kanso-skeleton--shape' : ''}">${heading ? `<div class="kanso-card__header"><b>${escape(heading)}</b></div>` : ''}${list(children)}</div>`;
+export const card = ({ author, image, age, body, loading }) => well({ loading }, `<div class="kanso-card__header">${avatar({ initial: author, image, size: 'md' })}<b>${escape(author)}</b>${grow()}<span class="kanso-text--dim">${escape(age)}</span></div><div class="kanso-prose">${escape(body)}</div>`);
 
 const syntax = /("[^"\n]*"|'[^'\n]*'|`[^`]*`)|\b(\d+)\b|\b(import|from|export|default|function|const|let|var|return|if|else|for|while|async|await|new|class)\b/g;
 const highlight = (line) => {
@@ -51,14 +53,24 @@ const highlight = (line) => {
 };
 const signs = { '+': 'added', '-': 'deleted', '@': 'hunk' };
 const failure = /\b(fail(ed|ure)?|error|exception)\b|^\s*>/i;
-export const code = ({ text, kind, first, line }) => {
-  const rows = text.split('\n').map((source, index) => {
+// A diff numbers its kept and added lines from `first`, a hunk restarting the count at its +start; a deleted line and a hunk have none.
+const diffNumbers = (sources, first) => sources.reduce(({ next, out }, source) => {
+  const sign = signs[source[0]];
+  if (sign === 'hunk') return { next: Number(source.match(/\+(\d+)/)?.[1] ?? next), out: [...out, null] };
+  return sign === 'deleted' ? { next, out: [...out, null] } : { next: next + 1, out: [...out, next] };
+}, { next: first, out: [] }).out;
+// `line` is lit; `comment` puts the + that comments on that line in its gutter.
+const gutter = (number, comment) => number !== null && number === comment ? button({ label: 'Comment on this line', kind: 'icon', size: 'sm', icon: 'lu-plus' }) : number ?? '';
+export const code = ({ text, kind, first, line, comment }) => {
+  const sources = text.split('\n');
+  const numbers = kind === 'diff' ? diffNumbers(sources, first) : sources.map((_, index) => first + index);
+  const rows = sources.map((source, index) => {
     const sign = kind === 'diff' ? signs[source[0]] : undefined;
-    const classes = ['kanso-code__line', sign ? `kanso-code__line--${sign}` : '', first + index === line ? 'kanso-control--on' : ''].filter(Boolean).join(' ');
+    const classes = ['kanso-code__line', sign ? `kanso-code__line--${sign}` : '', numbers[index] !== null && numbers[index] === line ? 'kanso-control--on' : ''].filter(Boolean).join(' ');
     if (sign === 'hunk') return `<div class="${classes}">${escape(source)}</div>`;
     if (kind === 'log') return `<div class="${classes}"><span class="kanso-code__number"></span><span class="kanso-code__sign"> </span>${failure.test(source) ? `<span class="kanso-text--blocked">${escape(source)}</span>` : escape(source)}</div>`;
     const body = sign || (kind === 'diff' && source[0] === ' ') ? source.slice(1) : source;
-    return `<div class="${classes}"><span class="kanso-code__number">${first + index}</span><span class="kanso-code__sign">${sign === 'added' ? '+' : sign === 'deleted' ? '-' : ' '}</span><span class="kanso-code__text">${kind === 'source' ? highlight(body) : escape(body)}</span></div>`;
+    return `<div class="${classes}"><span class="kanso-code__number">${gutter(numbers[index], comment)}</span><span class="kanso-code__sign">${sign === 'added' ? '+' : sign === 'deleted' ? '-' : ' '}</span><span class="kanso-code__text">${kind === 'source' ? highlight(body) : escape(body)}</span></div>`;
   }).join('');
   return `<div class="kanso-code">${rows}</div>`;
 };
@@ -100,8 +112,10 @@ const literal = (word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const matches = (query) => new RegExp(`(${query.trim().split(/\s+/).filter(Boolean).map(literal).join('|') || '(?!)'})`, 'gi');
 export const found = ({ text, query = '' }) => String(text).split(matches(query)).map((part, index) => index % 2 ? `<mark class="kanso-match">${escape(part)}</mark>` : escape(part)).join('');
 // A found line, the `current` one washed: who and when small on top, after any `lead` piece, the text at body size with the query marked.
-export const excerpt = ({ who, when = '', text, query = '', lead = '', current = false }) => `<div class="kanso-excerpt${current ? ' kanso-excerpt--current' : ''}" tabindex="0">`
-  + `<div class="kanso-excerpt__who">${list(lead)}<span>${escape(who)}</span><span class="kanso-text--dim">${escape(when)}</span></div><div class="kanso-excerpt__text">${found({ text, query })}</div></div>`;
+// A comment adds `where` (its path, mono) after who, `pending` until GitHub has it, and `depth` 1 for a reply.
+export const excerpt = ({ who, when = '', where = '', text, query = '', lead = '', current = false, pending = false, depth = 0 }) => `<div class="kanso-excerpt${current ? ' kanso-excerpt--current' : ''}${depth ? ' kanso-excerpt--reply' : ''}" tabindex="0">`
+  + `<div class="kanso-excerpt__who">${list(lead)}<span>${escape(who)}</span>${where ? `<span class="kanso-excerpt__where">${escape(where)}</span>` : ''}<span class="kanso-text--dim">${escape(when)}</span>${pending ? '<span class="kanso-text--dim">pending</span>' : ''}</div>`
+  + `<div class="kanso-excerpt__text">${found({ text, query })}</div></div>`;
 
 const inline = (text) => escape(text).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
 // An edited table puts its `cell` [row, column] in focus, a remover over each column and after each row, and its own actions under it.
@@ -209,6 +223,8 @@ const letterTones = { A: 'dim', D: 'dim', U: 'blocked', M: '' };
 const fileLetter = (letter) => `<span class="kanso-row__letter${letterTones[letter] ? ` kanso-text--${letterTones[letter]}` : ''}">${letter === 'M' ? '' : escape(letter)}</span>`;
 // A tree row sits at its `level` and leads with its fold: a folder's chevron, `open` or not, or an empty slot for a file.
 const fold = (open) => `<span class="kanso-row__fold">${open === undefined ? '' : inlineIcon(open ? 'lu-chevron-down' : 'lu-chevron-right')}</span>`;
+// A sentence that wraps, dim or in a `tone`: what a picked row or an armed act would lose.
+export const sentence = ({ text, tone = 'dim' }) => `<div class="kanso-sentence kanso-text--${escape(tone)}">${escape(text)}</div>`;
 // A verb { agent } is Explain to that agent.
 const rowVerb = (verb) => verb.agent ? explainButton({ agent: verb.agent, size: 'sm' }) : button({ kind: 'quiet', size: 'sm', ...verb });
 // `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
@@ -229,7 +245,7 @@ export const row = ({ icon = 'none', tone = '', letter, level, open, number, nam
   const states = [twoLines && 'kanso-row--two-lines', level !== undefined && 'kanso-row--tree', strong && 'kanso-row--strong', heading && 'kanso-row--heading', title && 'kanso-row--title', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
     dimmed && 'kanso-control--dim', pending && 'kanso-state-line--pending', hover && 'kanso-control--hover', focus && 'kanso-control--focus'].filter(Boolean).map((name) => ` ${name}`).join('');
   const opening = `<div class="kanso-row${states}" tabindex="0"${level === undefined ? '' : ` style="--k-level:${Number(level)}"`}>`;
-  const under = `${second ? `<div class="kanso-content__secondary">${factLine(second)}</div>` : ''}${reason ? `<div class="kanso-row__reason${reason.tone ? ` kanso-text--${escape(reason.tone)}` : ''}">${escape(reason.text)}</div>` : ''}`
+  const under = `${second ? `<div class="kanso-content__secondary">${factLine(second)}</div>` : ''}${reason ? sentence(reason) : ''}`
     + `${path ? `<div class="kanso-row__path">${escape(path)}</div>` : ''}${verbs.length ? `<div class="kanso-content__actions">${verbs.map(rowVerb).join('')}</div>` : ''}`;
   return twoLines ? `${opening}<div class="kanso-content__primary">${lead}${label}${tail}</div>${under}</div>` : `${opening}${lead}${label}${tail}</div>`;
 };
