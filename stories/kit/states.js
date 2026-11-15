@@ -349,7 +349,7 @@ export const statedPages = {
   },
   'Compositions/Agent menu': {
     args: { on: 'an agent', pinned: false, away: 'no', armed: false, opened: 'none' },
-    markup: ({ on, pinned, away, armed, opened }) => ({
+    markup: ({ on, pinned, away, armed, opened = 'none' }) => ({
       none: () => on === 'an asleep row' ? asleepMenu(sampleAsleepRow) : agentMenu({ name: 'checkout', thread: on === 'a thread' ? 'Rate limit' : null, pinned, away: away === 'no' ? null : away, armed }),
       Snooze: () => snoozeMenu({ name: 'checkout', times: sampleSnooze }),
       'Move to project': () => moveMenu({ name: 'checkout', ...sampleMove }),
