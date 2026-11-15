@@ -35,6 +35,7 @@
     "toggle": "toggleSwitch"
   },
   "props": {
+    "avatar": { "storybook": ["round"] },
     "button": { "storybook": ["label"], "app": ["color", "small", "spoken"] },
     "chip": { "storybook": ["pill"] },
     "input": { "storybook": ["action", "choose", "focus", "limit", "loading", "multiline", "selected", "text"], "app": ["iconTip", "onIcon", "spoken"] },

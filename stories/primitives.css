@@ -48,9 +48,11 @@
 
 .kanso-menu{width:var(--k-w-menu);padding:var(--k-sp-1);box-sizing:border-box;border-radius:var(--k-r-card)}
 .kanso-menu__heading{display:flex;align-items:center;gap:var(--k-sp-2);padding:var(--k-sp-2) var(--k-sp-2) var(--k-sp-1);font-size:var(--k-fs-meta);color:var(--dim)}
+.kanso-menu__scroll{max-height:calc(var(--k-rows) * var(--k-h-control));overflow-y:auto}
 .kanso-menu__separator{height:1px;margin:var(--k-sp-1);background:var(--border)}
 .kanso-menu__item{display:flex;align-items:center;gap:var(--k-sp-2);height:var(--k-h-control);padding:0 var(--k-sp-2);border-radius:var(--k-r-control);font-size:var(--k-fs-body);color:var(--fg)}
 .kanso-menu__item .kanso-icon{color:var(--muted)}
+.kanso-menu__item.kanso-control--off{color:var(--dim);background:none;cursor:default}
 .kanso-menu__item.kanso-control--hover{background:var(--w7)}
 .kanso-menu__spacer{flex:none;width:var(--k-ic-row);height:var(--k-ic-row)}
 .kanso-menu__hint{margin-left:auto;font-size:var(--k-fs-meta);color:var(--dim)}

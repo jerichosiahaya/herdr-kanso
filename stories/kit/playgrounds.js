@@ -137,7 +137,9 @@ export const playgrounds = {
     argTypes: {
       title: text('title'),
       values: flag('items with values'),
+      apps: { ...flag('apps with their pictures'), if: { arg: 'values', truthy: false } },
       headings: { ...flag('groups with headings'), if: { arg: 'values', truthy: false } },
+      run: flag('a run that scrolls'),
       keys: { ...flag('keyboard on an item'), if: { arg: 'values', truthy: false } },
       armed: { ...flag('Delete armed'), if: { arg: 'values', truthy: false } },
       badge: { ...flag('a count on an item'), if: { arg: 'values', truthy: false } },

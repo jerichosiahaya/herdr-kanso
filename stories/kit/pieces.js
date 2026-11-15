@@ -29,9 +29,10 @@ export const windowControls = () => '<span class="kanso-window-controls"><i></i>
 export const dawn = ({ id = 'dawn' } = {}) => `<svg class="kanso-dawn kanso-dawn--rising" viewBox="0 0 256 56" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><defs><linearGradient id="${id}-sky" x1="0" y1="0" x2="0" y2="44" gradientUnits="userSpaceOnUse"><stop offset="0" style="stop-color:var(--dawn-top)"/><stop offset=".45" style="stop-color:var(--dawn-mid)"/><stop offset=".8" style="stop-color:var(--dawn-low)"/><stop offset="1" style="stop-color:var(--dawn-edge)"/></linearGradient><radialGradient id="${id}-glow" cx="124" cy="44" r="78" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 15.4) scale(1.65)"><stop offset="0" style="stop-color:var(--dawn-sun);stop-opacity:.85"/><stop offset=".35" style="stop-color:var(--dawn-edge);stop-opacity:.45"/><stop offset="1" style="stop-color:var(--dawn-edge);stop-opacity:0"/></radialGradient><linearGradient id="${id}-fade" x1="0" y1="44" x2="0" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0" style="stop-color:var(--dawn-edge);stop-opacity:.5"/><stop offset="1" style="stop-color:var(--chrome);stop-opacity:0"/></linearGradient><clipPath id="${id}-clip"><rect x="0" y="0" width="256" height="44"/></clipPath></defs><rect width="256" height="44" fill="url(#${id}-sky)"/><rect class="kanso-dawn__night" width="256" height="44" style="fill:var(--dawn-top)"/><g clip-path="url(#${id}-clip)"><rect class="kanso-dawn__glow" width="256" height="44" fill="url(#${id}-glow)"/><g class="kanso-dawn__stars" style="fill:var(--dawn-star)"><circle cx="14" cy="7" r=".7" opacity=".8"/><circle cx="44" cy="13" r=".5" opacity=".55"/><circle cx="212" cy="6" r=".6" opacity=".7"/><circle cx="240" cy="15" r=".5" opacity=".45"/><circle cx="84" cy="5" r=".45" opacity=".5"/></g><g class="kanso-dawn__clouds" style="stroke:var(--dawn-sun)" stroke-linecap="round" fill="none"><path d="M28 31h58" stroke-width="1.6" opacity=".55"/><path d="M52 36h30" stroke-width="1.2" opacity=".5"/><path d="M162 28h64" stroke-width="1.6" opacity=".5"/><path d="M176 34h30" stroke-width="1.2" opacity=".45"/><path d="M6 39h40" stroke-width="1" opacity=".4"/><path d="M214 40h36" stroke-width="1" opacity=".4"/></g><g class="kanso-dawn__sun"><circle cx="124" cy="44" r="10" style="fill:var(--dawn-sun)" opacity=".5"/><circle cx="124" cy="44" r="13" fill="none" style="stroke:var(--dawn-sun)" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="70 12" transform="rotate(-150 124 44)" class="kanso-dawn__circle"/></g></g><rect y="44" width="256" height="12" fill="url(#${id}-fade)"/><path class="kanso-dawn__horizon" d="M0 44.5H256" style="stroke:var(--dawn-sun)" stroke-width="1" opacity=".55"/></svg>`;
 
 export const avatarSizes = { sm: ' kanso-avatar--sm', md: '', lg: ' kanso-avatar--lg' };
-export const avatar = ({ initial, image, size, tone }) => {
+// `round: false` is a tile, an app's picture or its letter.
+export const avatar = ({ initial, image, size, tone, round = true }) => {
   const picture = image ? `<img src="${escape(image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : '';
-  return `<span class="kanso-avatar kanso-avatar--round${avatarSizes[size] ?? ""}${tone ? ` kanso-text--host-${escape(tone)}` : ""}">${picture}${escape(initial.slice(0, 1))}</span>`;
+  return `<span class="kanso-avatar${round ? ' kanso-avatar--round' : ''}${avatarSizes[size] ?? ""}${tone ? ` kanso-text--host-${escape(tone)}` : ""}">${picture}${escape(initial.slice(0, 1))}</span>`;
 };
 
 export const card = ({ author, image, age, body, loading }) => `<div class="kanso-card${loading ? ' kanso-skeleton--shape' : ''}"><div class="kanso-card__header">${avatar({ initial: author, image, size: 'md' })}<b>${escape(author)}</b>${grow()}<span class="kanso-text--dim">${escape(age)}</span></div><div class="kanso-prose">${escape(body)}</div></div>`;
@@ -105,21 +106,24 @@ export const markdown = ({ source, block, state }) => `<div class="kanso-markdow
 
 // A heading's `mark` sits at its right, the state of what it names; a `failure` item is the failure pattern in the menu's place.
 const menuHeading = (text, status) => `<div class="kanso-menu__heading">${status ? `${grow(escape(text))}${mark({ status, size: 'sm' })}` : escape(text)}</div>`;
-export const menu = ({ title, items }) => {
-  const rows = (Array.isArray(items) ? items : []).map((item) => {
-    if (item.separator) return '<div class="kanso-menu__separator"></div>';
-    if (item.failure) return failureBlock(item.failure);
-    if (item.heading) return menuHeading(item.heading, item.mark);
-    if (item.loading) return `<div class="kanso-menu__item kanso-skeleton--breathing" aria-busy="true">${bar('icon')}${bar('line')}</div>`;
-    const lead = item.icon ? glyph(item.icon) : '<span class="kanso-menu__spacer"></span>';
-    const classes = `kanso-menu__item${item.armed ? ' kanso-action--armed' : item.selected ? ' kanso-control--selected' : ''}`;
-    const label = item.armed ? `Press again to ${escape(item.verb || String(item.label ?? '').toLowerCase())}` : escape(item.label ?? '');
-    return `<div class="${classes}" role="menuitem" tabindex="0">${lead}${grow(label)}`
-      + (item.badge ? `<span class="kanso-menu__badge">${escape(item.badge)}</span>` : '')
-      + (item.hint ? `<span class="kanso-menu__hint">${escape(item.hint)}</span>` : '') + (item.mark ? mark({ status: item.mark }) : '') + '</div>';
-  }).join('');
-  return `<div class="kanso-menu kanso-popover" role="menu">${title ? menuHeading(title) : ''}${rows}</div>`;
+// An item leads with its icon, or an app's picture or letter as a tile; a `disabled` item is dim and does nothing.
+const menuLead = (item) => item.picture || item.letter ? avatar({ initial: item.letter ?? '', image: item.picture, size: 'sm', tone: item.tone, round: false })
+  : item.icon ? glyph(item.icon) : '<span class="kanso-menu__spacer"></span>';
+const menuItem = (item) => {
+  const classes = `kanso-menu__item${item.armed ? ' kanso-action--armed' : item.selected ? ' kanso-control--selected' : ''}${item.disabled ? ' kanso-control--off' : ''}`;
+  const label = item.armed ? `Press again to ${escape(item.verb || String(item.label ?? '').toLowerCase())}` : escape(item.label ?? '');
+  return `<div class="${classes}" role="menuitem" tabindex="${item.disabled ? -1 : 0}"${item.disabled ? ' aria-disabled="true"' : ''}>${menuLead(item)}${grow(label)}`
+    + (item.badge ? `<span class="kanso-menu__badge">${escape(item.badge)}</span>` : '')
+    + (item.hint ? `<span class="kanso-menu__hint">${escape(item.hint)}</span>` : '') + (item.mark ? mark({ status: item.mark }) : '') + '</div>';
 };
+// A `scroll` run shows `rows` items, the rest scroll inside the menu.
+const menuEntry = (item) => item.separator ? '<div class="kanso-menu__separator"></div>'
+  : item.failure ? failureBlock(item.failure)
+  : item.heading ? menuHeading(item.heading, item.mark)
+  : item.scroll ? `<div class="kanso-menu__scroll" style="--k-rows:${Number(item.rows ?? 4)}">${item.scroll.map(menuEntry).join('')}</div>`
+  : item.loading ? `<div class="kanso-menu__item kanso-skeleton--breathing" aria-busy="true">${bar('icon')}${bar('line')}</div>`
+  : menuItem(item);
+export const menu = ({ title, items }) => `<div class="kanso-menu kanso-popover" role="menu">${title ? menuHeading(title) : ''}${(Array.isArray(items) ? items : []).map(menuEntry).join('')}</div>`;
 
 export const metric = ({ value, unit, facts = '', loading = false }) => {
   const piece = (text, element) => `<span class="${element}${loading ? ' kanso-skeleton--shape kanso-skeleton--text' : ''}">${escape(text)}</span>`;

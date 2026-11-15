@@ -171,6 +171,10 @@ export const sampleEditors = {
   picture: [editor('Images', { icon: 'lu-image' }), editor('Preview', { icon: 'lu-eye' }), editor('Cursor', { icon: 'lu-code' })],
   remote: [editor('Preview', { icon: 'lu-eye' }), editor('In a split', { terminal: true }), editor('Neovim', { terminal: true }), editor('Vim', { terminal: true })],
 };
+// Open with on a remote folder: each editor as its app's picture or letter; one that cannot open a remote folder only says so.
+export const sampleApps = [{ label: 'Cursor', letter: 'C', tone: 'blue' }, { label: 'Zed', letter: 'Z', tone: 'teal' }, { label: 'Xcode', letter: 'X', tone: 'violet', disabled: true, hint: 'local only' }];
+// Every project, more than a menu shows at once.
+export const sampleProjectRun = ['acme-shop', 'docs-site', 'reports', 'kansō', 'site', 'dojo', 'api', 'mobile'];
 export const sampleTargetsOpened = { file: 'src/session.ts', folder: '~/acme', picture: 'screenshot.png', remote: 'devbox: ~/acme/src/session.ts' };
 export const sampleInstalled = [{ program: 'p-claude', name: 'Claude Code', last: true }, { program: 'p-codex', name: 'Codex' }];
 // A project's worktrees as its menu lists them, and its tabs asleep.
