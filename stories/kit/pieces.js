@@ -198,8 +198,10 @@ export const markSizes = { sm: ' kanso-icon--inline', md: '', lg: ' kanso-icon--
 export const mark = ({ status, size = 'md' }) => `<svg class="kanso-mark kanso-mark--${status}${markSizes[size]}"><use href="#${marks[status]}"/></svg>`;
 
 export const chip = ({ label, quiet = false, pill = false, tone = '' }) => `<span class="kanso-badge${quiet ? ' kanso-badge--quiet' : ''}${pill ? ' kanso-badge--pill' : ''}${tone ? ` kanso-text--${escape(tone)}` : ''}">${escape(String(label))}</span>`;
-// A fact with a `tone` leads with its dot and its words take the tone.
-const fact = (part) => typeof part === 'string' ? `<span>${escape(part)}</span>` : `${part.icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(part.icon)}"/></svg>` : ''}${part.tone ? dot(part.tone) : ''}<span${part.tone ? ` class="kanso-text--${escape(part.tone)}"` : ''}>${escape(part.text)}</span>`;
+// A fact is words or { icon, text, tone }; its words take the tone. In a row's detail a toned fact leads with its dot.
+const fact = (part) => typeof part === 'string' ? `<span>${escape(part)}</span>` : `${part.icon ? `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(part.icon)}"/></svg>` : ''}<span${part.tone ? ` class="kanso-text--${escape(part.tone)}"` : ''}>${escape(part.text)}</span>`;
+const detailFact = (part) => `${part.tone ? dot(part.tone) : ''}${fact(part)}`;
+const factLine = (parts) => [].concat(parts).filter(Boolean).map(fact).join('<span>·</span>');
 const rowTool = (action) => button({ kind: 'icon', size: 'sm', ...action });
 export const rowDepths = [0, 1, 2];
 // A file's git `letter` takes the icon's slot; modified keeps the slot empty so names align.
@@ -207,25 +209,28 @@ const letterTones = { A: 'dim', D: 'dim', U: 'blocked', M: '' };
 const fileLetter = (letter) => `<span class="kanso-row__letter${letterTones[letter] ? ` kanso-text--${letterTones[letter]}` : ''}">${letter === 'M' ? '' : escape(letter)}</span>`;
 // A tree row sits at its `level` and leads with its fold: a folder's chevron, `open` or not, or an empty slot for a file.
 const fold = (open) => `<span class="kanso-row__fold">${open === undefined ? '' : inlineIcon(open ? 'lu-chevron-down' : 'lu-chevron-right')}</span>`;
-const rowVerb = (verb) => button({ kind: 'quiet', size: 'sm', ...verb });
+// A verb { agent } is Explain to that agent.
+const rowVerb = (verb) => verb.agent ? explainButton({ agent: verb.agent, size: 'sm' }) : button({ kind: 'quiet', size: 'sm', ...verb });
 // `actions` show on hover or focus and take the meta's place; `action` and the drawn `tools` are always shown; `keys` are the row's key hints, last.
 // The title form is a panel's heading: the name at title size, the second line its scope.
 // `verbs` are a line of quiet word actions under it; `strong` puts the name in ink (unread, new); `meta` may be { text, tone }; `late` is its blocked tone.
-export const row = ({ icon = 'none', tone = '', letter, level, open, name, detail, meta, chip: count, flag, mark: status = 'none', second, heading, title, depth = 0, glint, strong, late, selected, current, dimmed, pending, hover, focus, actions = [], action, verbs = [], start = [], tools = [], keys = [] }) => {
+// `second` is words or facts; a picked row may add a `reason` { text, tone } that wraps and a mono `path`; `number` leads dim (#44).
+export const row = ({ icon = 'none', tone = '', letter, level, open, number, name, detail, meta, chip: count, flag, mark: status = 'none', second, reason, path, heading, title, depth = 0, glint, strong, late, selected, current, dimmed, pending, hover, focus, actions = [], action, verbs = [], start = [], tools = [], keys = [] }) => {
   const slot = letter ? fileLetter(letter) : icon === 'none' ? '' : glyph(icon, tone);
-  const lead = `${list(start)}${level === undefined ? '' : fold(open)}${slot}`;
+  const lead = `${list(start)}${level === undefined ? '' : fold(open)}${slot}${number ? `<span class="kanso-row__number">${escape(number)}</span>` : ''}`;
   const label = `<span class="kanso-row__name${glint ? ' kanso-text--glint' : ''}">${escape(name)}</span>`;
   const facts = [].concat(detail ?? []).filter(Boolean);
   const metaFact = meta && { ...(typeof meta === 'object' ? meta : { text: meta }), ...(late && { tone: 'blocked' }) };
-  const tail = `${facts.length ? `<span class="kanso-row__detail">${facts.map(fact).join('')}</span>` : ''}${grow()}`
+  const tail = `${facts.length ? `<span class="kanso-row__detail">${facts.map(detailFact).join('')}</span>` : ''}${grow()}`
     + `${metaFact ? `<span class="kanso-row__meta${metaFact.tone ? ` kanso-text--${escape(metaFact.tone)}` : ''}">${escape(metaFact.text)}</span>` : ''}${flag ? `<span class="kanso-row__flag">${glyph(flag)}</span>` : ''}`
     + `${actions.length ? `<span class="kanso-row__actions">${actions.map(rowTool).join('')}</span>` : ''}${count ? chip({ label: count }) : ''}${action ? button({ size: 'sm', ...action }) : ''}${list(tools)}${keys.map(keyHint).join('')}`
     + `${pending ? '<span class="kanso-state-line__pending-dot"></span>' : ''}${!status || status === 'none' ? '' : mark({ status })}`;
-  const twoLines = Boolean(second) || verbs.length > 0;
+  const twoLines = Boolean(second || reason || path) || verbs.length > 0;
   const states = [twoLines && 'kanso-row--two-lines', level !== undefined && 'kanso-row--tree', strong && 'kanso-row--strong', heading && 'kanso-row--heading', title && 'kanso-row--title', depth && `kanso-row--depth-${depth}`, selected && 'kanso-control--selected', current && 'kanso-row--selected',
     dimmed && 'kanso-control--dim', pending && 'kanso-state-line--pending', hover && 'kanso-control--hover', focus && 'kanso-control--focus'].filter(Boolean).map((name) => ` ${name}`).join('');
   const opening = `<div class="kanso-row${states}" tabindex="0"${level === undefined ? '' : ` style="--k-level:${Number(level)}"`}>`;
-  const under = `${second ? `<div class="kanso-content__secondary">${escape(second)}</div>` : ''}${verbs.length ? `<div class="kanso-content__actions">${verbs.map(rowVerb).join('')}</div>` : ''}`;
+  const under = `${second ? `<div class="kanso-content__secondary">${factLine(second)}</div>` : ''}${reason ? `<div class="kanso-row__reason${reason.tone ? ` kanso-text--${escape(reason.tone)}` : ''}">${escape(reason.text)}</div>` : ''}`
+    + `${path ? `<div class="kanso-row__path">${escape(path)}</div>` : ''}${verbs.length ? `<div class="kanso-content__actions">${verbs.map(rowVerb).join('')}</div>` : ''}`;
   return twoLines ? `${opening}<div class="kanso-content__primary">${lead}${label}${tail}</div>${under}</div>` : `${opening}${lead}${label}${tail}</div>`;
 };
 
