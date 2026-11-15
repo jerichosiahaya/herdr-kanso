@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { avatar, dialog, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { avatar, dialog, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inSettings, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -252,6 +252,19 @@ export const statedPages = {
       { label: 'Large', args: { size: 'lg' }, caption: 'On a card or a header.' },
       { label: 'A computer', args: { initial: 'D', tone: 'teal' }, caption: 'A computer’s initial in its own colour, in the rail.' },
       { label: 'Tile', args: { initial: 'Z', round: false, size: 'sm' }, caption: 'An app’s picture or letter, square, in a menu.' },
+    ],
+  },
+  'Primitives/Mark': {
+    args: { status: 'working', size: 'md' },
+    markup: mark,
+    states: [
+      { label: 'Working', args: {}, caption: 'The ensō spins while the item works.' },
+      { label: 'Blocked', args: { status: 'blocked' }, caption: 'The item waits for someone.' },
+      { label: 'Done', args: { status: 'done' }, caption: 'The item finished.' },
+      { label: 'Idle', args: { status: 'idle' }, caption: 'The item is open and quiet.' },
+      { label: 'Asleep', args: { status: 'asleep' }, caption: 'The moon, in muted ink.' },
+      { label: 'Small', args: { size: 'sm' }, caption: 'Inside a line or a count.' },
+      { label: 'Large', args: { size: 'lg' }, caption: 'In an activity line.' },
     ],
   },
   'Primitives/Dialog': {

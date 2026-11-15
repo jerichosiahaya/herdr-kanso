@@ -19,7 +19,7 @@ export function kitRecords(records) {
     ['Field', 'kanso-field', ['Default', 'Hover', 'Focus', 'Disabled', 'Failure']],
     ['Segmented', 'kanso-segmented', ['Default', 'Hover', 'Focus', 'Disabled']],
     ['Switch', 'kanso-switch', ['Default', 'On', 'Hover', 'Focus', 'Active', 'Disabled']],
-    ['Mark', 'kanso-mark', ['Default']], ['Chip', 'kanso-badge', ['Default']],
+    ['Chip', 'kanso-badge', ['Default']],
     ['Row', 'kanso-row', ['Default', 'Hover', 'Focus', 'Active', 'Dimmed'], 'compositions-panel-pieces/SectionAndRows/'],
     ['Tab', 'kanso-tab', ['Default', 'Hover', 'Focus', 'Active', 'Disabled']],
     ['Skeleton', 'kanso-skeleton__list', ['Loading'], 'panels/files/FilesFirstRead/'], ['Drag handle', 'kanso-grip', ['Default']], ['Key hint', 'kanso-key', ['Default']],
@@ -33,10 +33,6 @@ export function kitRecords(records) {
       const html = modifier ? source.replace(/class="([^"]*)"/, (_, classes) => `class="${classes} ${modifier}"${label === 'Disabled' ? ' aria-disabled="true"' : ''}`) : source;
       add(name, label, html, `${label} appearance of the shared ${name.toLowerCase()}.`);
     }
-  }
-  for (const state of ['working', 'blocked', 'done', 'idle']) {
-    const html = first(`kanso-mark--${state}`);
-    if (html) add('Mark', state[0].toUpperCase() + state.slice(1), html, `The owning item is ${state}.`);
   }
   const armed = first('kanso-action--armed');
   if (armed) add('Button', 'Armed', armed, 'A second press within four seconds confirms an irreversible action.');
