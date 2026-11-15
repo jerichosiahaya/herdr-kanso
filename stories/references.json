@@ -8717,57 +8717,6 @@
       ]
     },
     {
-      "page": "Compositions/Agent menu",
-      "existing": false,
-      "boards": [
-        "S18"
-      ],
-      "status": "Approved reference",
-      "guidelines": [],
-      "records": [
-        "proto/approved-sidebar-menus/Reference/1",
-        "proto/approved-sidebar-menus/Reference/2",
-        "proto/approved-sidebar-menus/Reference/3",
-        "proto/approved-sidebar-menus/Reference/4",
-        "proto/approved-sidebar-menus/Reference/5",
-        "proto/approved-sidebar-menus/Reference/6",
-        "proto/approved-sidebar-menus/Reference/7",
-        "proto/approved-sidebar-menus/Reference/8",
-        "proto/approved-sidebar-menus/Reference/9",
-        "proto/approved-sidebar-menus/Reference/10",
-        "proto/approved-sidebar-menus/Reference/11",
-        "coverage/spaces/AgentMenu/Agent",
-        "coverage/spaces/AgentMenu/Close armed",
-        "coverage/spaces/AgentMenu/Copy picker",
-        "coverage/spaces/AgentMenu/Move picker",
-        "coverage/spaces/AgentMenu/Pinned",
-        "coverage/spaces/AgentMenu/Settled",
-        "coverage/spaces/AgentMenu/Snooze picker",
-        "coverage/spaces/AgentMenu/Snoozed",
-        "coverage/spaces/AgentMenu/Thread"
-      ],
-      "components": [
-        "Primitives/Menu"
-      ],
-      "features": [
-        "coverage/spaces/AgentMenu"
-      ],
-      "proposedPredicates": [],
-      "approvedRecords": [
-        "proto/approved-sidebar-menus/Reference/1",
-        "proto/approved-sidebar-menus/Reference/2",
-        "proto/approved-sidebar-menus/Reference/3",
-        "proto/approved-sidebar-menus/Reference/4",
-        "proto/approved-sidebar-menus/Reference/5",
-        "proto/approved-sidebar-menus/Reference/6",
-        "proto/approved-sidebar-menus/Reference/7",
-        "proto/approved-sidebar-menus/Reference/8",
-        "proto/approved-sidebar-menus/Reference/9",
-        "proto/approved-sidebar-menus/Reference/10",
-        "proto/approved-sidebar-menus/Reference/11"
-      ]
-    },
-    {
       "page": "Compositions/Asleep",
       "existing": false,
       "boards": [

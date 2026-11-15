@@ -27,6 +27,19 @@ export const hypotheses = {
       back: 'Sleep shows Cancel and Arrangements shows Close again, as today.',
     },
   ],
+  'Compositions/Agent menu': [
+    {
+      change: 'The agent menu adds Sleep its tab and the piece lines, and groups its items: open and name, keep, put away, close.',
+      today: 'Open, Pin, Snooze, Sleep this agent, Mark unread, Rename, Move to project, Copy and Close agent, in one run.',
+      why: 'every act on one agent from its row.',
+      question: 'why must someone find the tab to sleep it, or open Settings to hide what the row says, when they are already on the agent?',
+      believe: 'grouped by what the act does, the menu is read in one glance, and the tab and the row piece are one press away from the agent.',
+      jobs: [['every act of today', 'stays, in its group'], ['sleep the whole tab', 'Sleep its tab'], ['hide or tune the row piece', 'the piece lines at the end']],
+      wrong: 'someone looks for an act in the wrong group, or the menu grows past the screen on a short window.',
+      try: 'Dawn Mode first.',
+      back: 'the items return to today’s order, without Sleep its tab and the piece lines.',
+    },
+  ],
   'Compositions/Add computer dialog': [
     {
       change: 'Add computer opens kansō’s dialog listing the hosts of ~/.ssh/config, each with Add.',

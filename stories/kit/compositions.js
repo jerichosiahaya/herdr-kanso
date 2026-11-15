@@ -162,6 +162,21 @@ const awayRow = (hover, focus) => ({ icon: lead, tone = null, subject, fact: wha
 export const activity = ({ events = [], max = 4, hover = -1, focus = -1 } = {}) => events.length ? stack({ variant: 'away' },
   row({ name: 'While you were away', heading: true, action: { label: 'Dismiss these', kind: 'icon', icon: 'lu-x' } }),
   events.slice(0, max).map(awayRow(hover, focus)), events.length > max ? button({ label: phrase(plus(events.length - max), 'more'), kind: 'quiet', size: 'sm' }) : null) : null;
+// An agent's menu: open it, name it, keep it, put it away, then the piece lines. A thread can also settle;
+// a settled or snoozed thread offers only its way back. Snooze, Move and Copy each open their own Menu.
+export const agentMenu = ({ name, thread = null, pinned = false, away = null, armed = false }) => menu({ title: thread ?? name, items: away ? [
+  { icon: away === 'snoozed' ? 'lu-clock' : 'lu-check', label: away === 'snoozed' ? 'Wake' : 'Bring back' }, { label: 'Mark unread' }, { label: 'Rename…' }, { icon: 'lu-copy', label: 'Copy…' },
+] : [
+  { icon: 'lu-chevron-right', label: 'Open' }, { label: 'Rename…' }, { icon: 'lu-pin', label: pinned ? 'Unpin' : 'Pin to the top' }, { label: 'Mark unread' },
+  ...(thread ? [{ icon: 'lu-check', label: 'Settle' }] : []),
+  { icon: 'lu-clock', label: 'Snooze…' }, { label: 'Move to project…' }, { icon: 'lu-copy', label: 'Copy…' },
+  { separator: true }, { icon: 'lu-moon', label: 'Sleep this agent' }, { icon: 'lu-moon', label: 'Sleep its tab' },
+  { separator: true }, { icon: 'lu-x', label: 'Close agent', verb: phrase('close', name), armed },
+  ...pieceLines] });
+export const snoozeMenu = ({ name, times }) => menu({ title: phrase('Snooze', name), items: times.map(([label, hint]) => ({ label, hint })) });
+export const moveMenu = ({ name, projects, home }) => menu({ title: phrase('Move', name, 'to'), items: [...projects.map((label) => ({ label })), { separator: true }, { icon: 'lu-undo', label: phrase('Back to', home) }] });
+export const copyMenu = ({ folder, branch, id }) => menu({ title: 'Copy', items: [{ icon: 'lu-folder', label: 'Folder', hint: folder }, { icon: 'lu-git-branch', label: 'Branch', hint: branch }, { icon: 'lu-copy', label: 'Conversation id', hint: id }] });
+
 export const activityMenu = () => menu({ title: 'While you were away', items: [{ icon: 'lu-x', label: 'Dismiss these' }, ...pieceLines] });
 
 // Edges: the panes past each side, one icon Button per pane, the panes of one column grouped; a click goes there, the name is the tooltip.

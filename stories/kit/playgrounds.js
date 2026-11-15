@@ -164,6 +164,16 @@ export const playgrounds = {
       typed: text('typed'),
     },
   },
+  'Compositions/Agent menu': {
+    ...statedPages['Compositions/Agent menu'],
+    argTypes: {
+      on: { name: 'on', control: { type: 'inline-radio' }, options: ['an agent', 'a thread'] },
+      pinned: flag('pinned'),
+      away: { name: 'put away', control: { type: 'inline-radio' }, options: ['no', 'snoozed', 'settled'], if: { arg: 'on', eq: 'a thread' } },
+      armed: flag('close armed'),
+      opened: { name: 'opened', control: { type: 'inline-radio' }, options: ['none', 'Snooze', 'Move to project', 'Copy'] },
+    },
+  },
   'Compositions/Arrangements dialog': {
     ...statedPages['Compositions/Arrangements dialog'],
     argTypes: { view: { name: 'what it shows', control: { type: 'select' }, options: Object.keys(arrangementViews) } },

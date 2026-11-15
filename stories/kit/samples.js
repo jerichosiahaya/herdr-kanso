@@ -159,3 +159,7 @@ export const sampleCapture = [
   { icon: 'lu-terminal', name: 'web', detail: 'pnpm dev' },
   { icon: 'lu-terminal', name: 'zsh', detail: '~/acme-shop' },
 ];
+// What the agent menu's second Menus offer for checkout, as the approved board names them.
+export const sampleSnooze = [['In 1 hour', '15:02'], ['In 3 hours', '17:02'], ['This evening', '18:00'], ['Tomorrow', 'Thu 9:00'], ['Monday', 'Mon 9:00']];
+export const sampleMove = { projects: ['docs-site', 'reports'], home: 'acme-shop' };
+export const sampleCopy = { folder: '~/acme-shop-checkout', branch: 'checkout-v2', id: '9f2c…' };

@@ -779,5 +779,19 @@
       "Read failed": "kit/Arrangements dialog/Read refused",
       "Saved": "kit/Arrangements dialog/Saved"
     }
+  },
+  "spaces/AgentMenu": {
+    "page": "Compositions/Agent menu",
+    "states": {
+      "Agent": "kit/Agent menu/Agent",
+      "Close armed": "kit/Agent menu/Close armed",
+      "Copy picker": "kit/Agent menu/Copy",
+      "Move picker": "kit/Agent menu/Move to project",
+      "Pinned": "kit/Agent menu/Pinned",
+      "Settled": "kit/Agent menu/Settled",
+      "Snooze picker": "kit/Agent menu/Snooze",
+      "Snoozed": "kit/Agent menu/Snoozed",
+      "Thread": "kit/Agent menu/Thread"
+    }
   }
 }

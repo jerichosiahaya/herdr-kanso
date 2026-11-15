@@ -1,8 +1,8 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { addComputer, agentMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
 import { dialog, emptyState, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleArrangements, sampleCapture, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleArrangements, sampleCapture, sampleCopy, sampleMove, sampleSnooze, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
@@ -151,6 +151,26 @@ export const statedPages = {
       { label: 'A refusal', args: { notes: 'a refusal' }, caption: 'The reason in blocked under the body.' },
       { label: 'No footer', args: { title: 'Sleep acme-shop', body: 'nothing', notes: 'nothing to do', primary: '' }, caption: 'Nothing to press: Esc or a click outside closes it.' },
       { label: 'Loading', args: { loading: true }, caption: 'Each piece as its own skeleton until the content arrives.' },
+    ],
+  },
+  'Compositions/Agent menu': {
+    args: { on: 'an agent', pinned: false, away: 'no', armed: false, opened: 'none' },
+    markup: ({ on, pinned, away, armed, opened }) => ({
+      none: () => agentMenu({ name: 'checkout', thread: on === 'a thread' ? 'Rate limit' : null, pinned, away: away === 'no' ? null : away, armed }),
+      Snooze: () => snoozeMenu({ name: 'checkout', times: sampleSnooze }),
+      'Move to project': () => moveMenu({ name: 'checkout', ...sampleMove }),
+      Copy: () => copyMenu(sampleCopy),
+    })[opened](),
+    states: [
+      { label: 'Agent', args: {}, caption: 'Right-click or ⋯ on an agent.' },
+      { label: 'Close armed', args: { armed: true }, caption: 'Close asks twice within 4 s.' },
+      { label: 'Pinned', args: { pinned: true }, caption: 'Pin to the top becomes Unpin.' },
+      { label: 'Thread', args: { on: 'a thread' }, caption: 'On Threads: the thread’s title, and Settle.' },
+      { label: 'Snoozed', args: { on: 'a thread', away: 'snoozed' }, caption: 'Only its way back: Wake.' },
+      { label: 'Settled', args: { on: 'a thread', away: 'settled' }, caption: 'Only its way back: Bring back.' },
+      { label: 'Snooze', args: { opened: 'Snooze' }, caption: 'Each time with when it ends.' },
+      { label: 'Move to project', args: { opened: 'Move to project' }, caption: 'The other projects, then back home.' },
+      { label: 'Copy', args: { opened: 'Copy' }, caption: 'Each fact with its value.' },
     ],
   },
   'Compositions/Arrangements dialog': {
