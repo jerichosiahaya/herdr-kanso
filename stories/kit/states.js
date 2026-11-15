@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { avatar, chip, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { avatar, button, chip, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -296,6 +296,28 @@ export const statedPages = {
       { label: 'A word', args: { text: 'Esc' }, caption: 'Esc stays a word.' },
       { label: 'Faint', args: { faint: true }, caption: 'The key says nothing now.' },
       { label: 'Recording', args: { recording: true }, caption: 'A new shortcut is being pressed.' },
+    ],
+  },
+  'Primitives/Button': {
+    args: { label: 'Create', kind: 'solid', size: 'md', icon: 'none', disabled: false, armed: false, verb: '', active: false, spin: false, hover: false, focus: false, pressed: false },
+    markup: button,
+    states: [
+      { label: 'Solid', args: {}, caption: 'The one main action.' },
+      { label: 'Tonal', args: { kind: 'tonal', label: 'Explain' }, caption: 'A supporting action beside the solid one.' },
+      { label: 'Quiet', args: { kind: 'quiet', label: 'Cancel' }, caption: 'Cancel in a dialog, a word on a row.' },
+      { label: 'Icon', args: { kind: 'icon', icon: 'lu-refresh-cw', label: 'Refresh' }, caption: 'A tool named by its tooltip.' },
+      { label: 'Small', args: { size: 'sm', label: 'Open' }, caption: 'On a row, a toast or a header.' },
+      { label: 'Small icon', args: { kind: 'icon', size: 'sm', icon: 'lu-x', label: 'Close' }, caption: 'A row tool.' },
+      { label: 'Large icon', args: { kind: 'icon', size: 'lg', icon: 'lu-plus', label: 'New' }, caption: 'A sidebar tool.' },
+      { label: 'With a mark', args: { kind: 'tonal', size: 'sm', icon: 'p-claude', label: 'Claude' }, caption: 'A program button carries its mark.' },
+      { label: 'Selected', args: { kind: 'icon', icon: 'lu-sliders-vertical', label: 'Filter', active: true }, caption: 'A tool that is on.' },
+      { label: 'Hover', args: { hover: true }, caption: 'The pointer is over it.' },
+      { label: 'Pressed', args: { pressed: true }, caption: 'Held down.' },
+      { label: 'Focus', args: { focus: true }, caption: 'One ring for every control.' },
+      { label: 'Disabled', args: { disabled: true }, caption: 'Nothing to do yet.' },
+      { label: 'Armed', args: { label: 'Remove', verb: 'remove checkout', armed: true }, caption: 'An irreversible action asks twice, for four seconds.' },
+      { label: 'Armed icon', args: { kind: 'icon', icon: 'lu-x', label: 'Close', verb: 'close checkout', armed: true }, caption: 'The question moves to its tooltip.' },
+      { label: 'Working', args: { label: 'Working…', spin: true }, caption: 'The action waits for its result.' },
     ],
   },
   'Primitives/Mark': {

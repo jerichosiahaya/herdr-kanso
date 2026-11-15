@@ -33,7 +33,7 @@ const osArg = { name: 'computer', control: { type: 'inline-radio' }, options: ke
 
 export const playgrounds = {
   'Primitives/Button': {
-    args: { label: 'Create', kind: 'solid', size: 'md', icon: 'none', disabled: false, armed: false, verb: '', active: false, spin: false },
+    ...statedPages['Primitives/Button'],
     argTypes: {
       label: text('label'),
       kind: select('kind', Object.keys(kinds)),
@@ -44,8 +44,10 @@ export const playgrounds = {
       verb: { name: 'verb', control: { type: 'text' }, if: { arg: 'armed' } },
       active: flag('active'),
       spin: flag('spin'),
+      hover: flag('hover'),
+      focus: flag('focus'),
+      pressed: flag('pressed'),
     },
-    markup: button,
   },
   'Primitives/Avatar': {
     ...statedPages['Primitives/Avatar'],

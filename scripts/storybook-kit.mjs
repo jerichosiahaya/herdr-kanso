@@ -16,7 +16,6 @@ export function kitRecords(records) {
   const add = (name, label, html, caption) => results.push({ id: `kit/${name}/${label}`, source: 'kit', page: `Primitives/${name === 'Segmented' ? 'Tab' : name}`, label, html: frame(html), caption });
   const first = (className, prefer = 'compositions-controls/') => [...originals.filter((record) => record.id.includes(prefer)), ...originals].flatMap((record) => elements(record.html, className))[0];
   const definitions = [
-    ['Button', 'kanso-button', ['Default', 'Hover', 'Focus', 'Active', 'Disabled', 'Dimmed']],
     ['Field', 'kanso-field', ['Default', 'Hover', 'Focus', 'Disabled', 'Failure']],
     ['Segmented', 'kanso-segmented', ['Default', 'Hover', 'Focus', 'Disabled']],
     ['Switch', 'kanso-switch', ['Default', 'On', 'Hover', 'Focus', 'Active', 'Disabled']],
@@ -34,10 +33,6 @@ export function kitRecords(records) {
       add(name, label, html, `${label} appearance of the shared ${name.toLowerCase()}.`);
     }
   }
-  const armed = first('kanso-action--armed');
-  if (armed) add('Button', 'Armed', armed, 'A second press within four seconds confirms an irreversible action.');
-  const button = first('kanso-button'), working = first('kanso-mark--working');
-  if (button && working) add('Button', 'Loading', button.replace(/>[\s\S]*<\/([a-z]+)>$/, ` aria-busy="true">${working}Working…</$1>`), 'The action is waiting for its result.');
   const byId = (id) => originals.find((record) => record.id === id)?.html ?? '';
   add('Window controls', 'Default', windowControls(), 'The three lights, where the system draws them.');
   add('Dawn', 'Default', dawnSky(), 'The sky of Dawn Mode; the sun rises once on load.');

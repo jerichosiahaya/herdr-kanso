@@ -55,7 +55,7 @@
   },
   "props": {
     "avatar": { "storybook": ["round"] },
-    "button": { "storybook": ["label"], "app": ["color", "small", "spoken"] },
+    "button": { "storybook": ["focus", "hover", "label", "pressed"], "app": ["color", "small", "spoken"] },
     "chip": { "storybook": ["pill"] },
     "headerSegment": { "storybook": ["open"] },
     "input": { "storybook": ["action", "choose", "count", "focus", "lead", "limit", "loading", "multiline", "selected", "text", "tools"], "app": ["iconTip", "onIcon", "spoken"] },
