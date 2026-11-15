@@ -17,3 +17,5 @@ export const inSettings = (markup) => `<div class="kanso-story__slice kanso-stor
 // A piece in the open sidebar's width, or in the rail's.
 export const inSidebar = (markup) => stack({ variant: 'sidebar frame' }, markup);
 export const inRail = (markup) => stack({ variant: 'rail frame' }, markup);
+// A header at the top of a pane.
+export const inPane = (markup) => `<div class="kanso-pane kanso-story__pane">${markup}</div>`;

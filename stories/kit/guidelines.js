@@ -218,6 +218,7 @@ export const guidelines = {
     ["Shizen", "The header is the handle.", "Drag it to move the pane; a click focuses it; double-click renames it in place. GitHub not answering is the failure line in place of the pull request."],
     ["Kansō", "A terminal is a pane too.", "A pane with no agent shows the terminal icon and its command, or Terminal when it has no project, with no digest. Focus moved by the keyboard adds the accent ring around the header."],
     ["Kansō", "Narrow, it folds in order.", "Folder, branch, the tools into ⋯ (close stays), commits, files, the verdict word, the pull request, then close; the name truncates last. The program and the mark never fold; a folded fact stays in the pull request's tooltip."],
+    ["Shizen", "Right-click what you mean.", "Folder or branch: Copy path, Copy branch name, Open with…, then Hide this and Settings. Files or commits: Open the diff, Push the commits…, then the piece lines. The Menu opens under what was clicked; ⋯ keeps the pane's acts."],
   ],
   "Compositions/Panel": [
     ["Kansō", "Only the container.", "A width, the stale state, the header it is given and the body. It adds nothing of its own: each panel brings its header and its tools."],

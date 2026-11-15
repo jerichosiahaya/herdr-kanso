@@ -1,10 +1,10 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
-import { activity, activityMenu, computerMenuStates, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
+import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms, paneRightClicks, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, panelDoors, projectRow, sessionRow, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
 import { avatarSizes, button, card, code, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, captioned, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
-import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
+import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
 import { appNotices, footerUpdates, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, sidebarMoments, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
@@ -315,8 +315,7 @@ export const playgrounds = {
     },
   },
   'Compositions/Pane header': {
-    args: { program: 'p-claude', name: 'checkout', state: 'working', focused: true, keyboard: false, hover: false, menu: false, pinned: false, zoomed: false, reach: 'here', held: false, armed: false, renaming: false,
-      elsewhere: false, files: 3, commits: 2, pr: 'test / unit failed', github: true, fold: 0 },
+    ...statedPages['Compositions/Pane header'],
     argTypes: {
       ...pick('program', 'name'),
       state: select('state', paneStates),
@@ -324,6 +323,7 @@ export const playgrounds = {
       keyboard: flag('focus from the keyboard'),
       hover: flag('pointer on it'),
       menu: flag('⋯ open'),
+      rightClick: select('right-click', paneRightClicks),
       pinned: flag('pinned'),
       zoomed: { name: 'zoomed', control: { type: 'boolean' }, if: { arg: 'menu' } },
       reach: { name: 'computer', control: { type: 'inline-radio' }, options: paneReaches },
@@ -333,15 +333,9 @@ export const playgrounds = {
       elsewhere: flag('folder differs from the tab'),
       files: { name: 'files changed', control: { type: 'number', min: 0 } },
       commits: { name: 'commits not on GitHub', control: { type: 'number', min: 0 } },
-      pr: { name: 'pull request', control: { type: 'select' }, options: ['none', 'ready', 'checks running', 'test / unit failed', 'changes requested', 'conflicts with main', 'behind main'] },
+      pr: { name: 'pull request', control: { type: 'select' }, options: paneVerdicts },
       github: { name: 'GitHub answers', control: { type: 'boolean' }, if: { arg: 'pr', neq: 'none' } },
       fold: { name: 'folded', control: { type: 'select', labels: Object.fromEntries(paneFolds.map((label, step) => [step, label])) }, options: paneFolds.map((_, step) => step) },
-    },
-    markup: ({ files, commits, pr, github, elsewhere, ...args }) => {
-      const tone = { ready: 'done', 'checks running': 'working', 'behind main': 'working' }[pr] ?? 'blocked';
-      const digest = { files, add: files * 14, del: files * 2, commits, pr: pr === 'none' ? null : { number: '#142', verdict: pr, tone }, failure: github ? null : 'gh: HTTP 502: Bad Gateway (https://api.github.com/graphql)' };
-      const place = elsewhere ? { folder: args.reach === 'here' ? 'checkout-v2' : '~/checkout-v2', branch: 'limits-table' } : null;
-      return `<div class="kanso-pane kanso-story__pane">${paneHeader({ ...args, digest, place })}</div>`;
     },
   },
   'Compositions/Keyboard/Key': {

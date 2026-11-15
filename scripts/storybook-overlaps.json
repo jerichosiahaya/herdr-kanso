@@ -868,5 +868,17 @@
     "states": {
       "Asleep menu": "kit/Agent menu/Asleep row"
     }
+  },
+  "strip/PaneTools": {
+    "page": "Compositions/Pane header",
+    "states": {
+      "Close armed": "kit/Pane header/Close armed",
+      "Hover": "kit/Pane header/Pointer on it",
+      "Keyboard": "kit/Pane header/Focus from the keyboard",
+      "No project": "kit/Pane header/A terminal",
+      "Pinned": "kit/Pane header/Pinned",
+      "Terminal": "kit/Pane header/A terminal",
+      "Working": "kit/Pane header/Focused, working"
+    }
   }
 }

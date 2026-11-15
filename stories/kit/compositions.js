@@ -422,9 +422,9 @@ const shown = (fold, step) => fold < paneFolds.indexOf(step);
 const paneMarks = { working: 'working', blocked: 'blocked', done: 'done' };
 const paneTool = (icon, label) => button({ label, kind: 'icon', size: 'sm', icon });
 const counted = (count, one, many) => phrase(count, count === 1 ? one : many);
-const paneDigest = ({ files = 0, add = 0, del = 0, commits = 0, pr = null, failure = null }, fold, working) => stack({ variant: 'pane digest' },
-  files && shown(fold, 'files') ? headerSegment({ act: true, tone: working ? 'dim' : null, title: 'Open the diff', parts: [{ text: counted(files, 'file', 'files') }, { text: diffText({ add, del }), tone: 'dim' }] }) : null,
-  commits && shown(fold, 'commits') ? headerSegment({ act: true, tone: working ? 'dim' : null, title: phrase(counted(commits, 'commit', 'commits'), 'not on GitHub'), parts: [{ text: counted(commits, 'commit', 'commits') }] }) : null,
+const paneDigest = ({ files = 0, add = 0, del = 0, commits = 0, pr = null, failure = null }, fold, working, opened) => stack({ variant: 'pane digest' },
+  files && shown(fold, 'files') ? headerSegment({ act: true, open: opened === 'files', tone: working ? 'dim' : null, title: 'Open the diff', parts: [{ text: counted(files, 'file', 'files') }, { text: diffText({ add, del }), tone: 'dim' }] }) : null,
+  commits && shown(fold, 'commits') ? headerSegment({ act: true, open: opened === 'commits', tone: working ? 'dim' : null, title: phrase(counted(commits, 'commit', 'commits'), 'not on GitHub'), parts: [{ text: counted(commits, 'commit', 'commits') }] }) : null,
   pr && failure ? failureLine({ text: phrase('Can\'t read', pr.number), fix: 'Refresh', detail: failure }) : null,
   pr && !failure && shown(fold, 'PR') ? headerSegment({ act: true, parts: [{ text: pr.number, tone: 'muted' }, shown(fold, 'verdict word') && pr.verdict ? { text: phrase('·', pr.verdict), tone: pr.tone } : null],
     title: facts(shown(fold, 'commits') || !commits ? null : counted(commits, 'commit', 'commits'), shown(fold, 'files') || !files ? null : counted(files, 'file', 'files'), pr.verdict) }) : null);
@@ -436,17 +436,34 @@ const paneTools = ({ name, state, focused, hover, armed, fold, more }) => stack(
   hover && shown(fold, 'tools into ⋯') ? [paneTool('lu-columns-2', 'Split right'), paneTool('lu-move-horizontal', 'Wider or narrower')] : null,
   hover && shown(fold, 'close into ⋯') ? button({ label: 'Close', kind: 'icon', size: 'sm', icon: 'lu-x', armed, verb: phrase('close', name) }) : null,
   hover ? stack({ variant: 'pane more' }, button({ label: 'More', kind: 'icon', size: 'sm', icon: 'lu-ellipsis', active: Boolean(more) }), more ? stack({ variant: 'pane menu' }, more) : null) : null);
-export const paneHeader = ({ program = 'p-claude', name, state = 'none', focused = false, keyboard = false, hover = false, pinned = false, zoomed = false, menu: open = false, reach = 'here', held = false, armed = false, renaming = false, place = null, digest = {}, fold = 0 }) => stack(
-  { variant: 'pane header', focus: focused, keyboard, blocked: state === 'blocked', unreachable: reach === 'unreachable', held },
-  glyph(program),
-  renaming ? input({ text: name, label: 'Name', inline: true, selected: true, limit: paneNameLimit }) : paneName({ name }),
-  place?.folder && shown(fold, 'folder') ? headerSegment({ icon: 'lu-folder', parts: [{ text: place.folder }] }) : null,
-  place?.branch && shown(fold, 'branch') ? headerSegment({ icon: 'lu-git-branch', parts: [{ text: place.branch }] }) : null,
-  paneDigest(digest, fold, state === 'working'),
-  pinned ? headerSegment({ icon: 'lu-pin', tone: 'dim', title: 'Pinned' }) : null,
-  grow(),
-  paneTools({ name, state, focused, hover: hover || open, armed, fold, more: open ? paneMenu({ name, state, pinned, zoomed, out: paneOut({ state, focused, fold }) }) : null }),
-  reach === 'unreachable' || !paneMarks[state] ? null : mark({ status: paneMarks[state] }));
+// Right-click on the folder or branch, or on files or commits: that piece's own acts, then its piece lines (board B10).
+const segmentMenus = {
+  'folder or branch': () => pieceMenu({ title: 'Folder and branch', needed: false,
+    items: [{ icon: 'lu-copy', label: 'Copy path' }, { icon: 'lu-copy', label: 'Copy branch name' }, { icon: 'lu-external-link', label: 'Open with…' }] }),
+  'files or commits': ({ commits = 0 }) => pieceMenu({ title: 'Files and commits',
+    items: [{ icon: 'lu-file', label: 'Open the diff' }, ...(commits ? [{ icon: 'lu-git-pull-request', label: phrase('Push', counted(commits, 'commit…', 'commits…')) }] : [])] }),
+};
+export const paneRightClicks = ['none', ...Object.keys(segmentMenus)];
+// The segment a right-click opened: the first of its pair still shown.
+const openedSegment = ({ rightClick, place, digest, fold }) => ({
+  'folder or branch': [place?.folder && 'folder', place?.branch && 'branch'],
+  'files or commits': [digest.files && 'files', digest.commits && 'commits'],
+})[rightClick]?.find((step) => step && shown(fold, step)) ?? null;
+export const paneHeader = ({ program = 'p-claude', name, state = 'none', focused = false, keyboard = false, hover = false, pinned = false, zoomed = false, menu: open = false, rightClick = 'none', reach = 'here', held = false, armed = false, renaming = false, place = null, digest = {}, fold = 0 }) => {
+  const opened = openedSegment({ rightClick, place, digest, fold });
+  return stack(
+    { variant: 'pane header', focus: focused, keyboard, blocked: state === 'blocked', unreachable: reach === 'unreachable', held },
+    glyph(program),
+    renaming ? input({ text: name, label: 'Name', inline: true, selected: true, limit: paneNameLimit }) : paneName({ name }),
+    place?.folder && shown(fold, 'folder') ? headerSegment({ icon: 'lu-folder', open: opened === 'folder', parts: [{ text: place.folder }] }) : null,
+    place?.branch && shown(fold, 'branch') ? headerSegment({ icon: 'lu-git-branch', open: opened === 'branch', parts: [{ text: place.branch }] }) : null,
+    paneDigest(digest, fold, state === 'working', opened),
+    pinned ? headerSegment({ icon: 'lu-pin', tone: 'dim', title: 'Pinned' }) : null,
+    grow(),
+    paneTools({ name, state, focused, hover: hover || open, armed, fold, more: open ? paneMenu({ name, state, pinned, zoomed, out: paneOut({ state, focused, fold }) }) : null }),
+    reach === 'unreachable' || !paneMarks[state] ? null : mark({ status: paneMarks[state] }),
+    opened ? stack({ variant: 'pane menu' }, segmentMenus[rightClick](digest)) : null);
+};
 // One pane menu, on right-click and on ⋯: splits, pin, zoom, what an agent can do, where right-clicks go, close; ⋯ leaves out what the header already shows.
 export const paneOut = ({ state, focused, fold }) => [...(restsOut({ state, focused }) ? ['Sleep this agent', 'Send to another agent…'] : []),
   ...(shown(fold, 'tools into ⋯') ? ['Split right', 'Wider or narrower'] : []), ...(shown(fold, 'close into ⋯') ? ['Close pane'] : [])];

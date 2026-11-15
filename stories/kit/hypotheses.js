@@ -243,6 +243,17 @@ export const hypotheses = {
   ],
   'Compositions/Pane header': [
     {
+      change: 'Right-clicking the folder or branch, or the files or commits, opens that piece’s Menu: its own acts, then Hide this, Settings for this… and, for files and commits, Only when needed.',
+      today: 'a click on files opens the changed files and on commits the push; the folder and branch take no click; Open with… and the piece lines for files, commits and the pull request together are in ⋯.',
+      why: 'copy a path or a branch name, push, or quiet one fact of the header.',
+      question: 'why go to ⋯, Settings or a terminal to act on a fact the header already shows?',
+      believe: 'the acts where the fact is cut the trips to ⋯ and Settings, and hiding one piece no longer hides the pull request with it.',
+      jobs: [['copy the path or branch', 'Copy path, Copy branch name'], ['open the folder elsewhere', 'Open with…, and ⋯ as today'], ['the diff', 'Open the diff, and the click as today'], ['push', 'Push the commits…, and the click as today'], ['hide or quiet it', 'Hide this, Only when needed, and ⋯ as today'], ['the rest', 'Settings for this…']],
+      wrong: 'nobody right-clicks the header in a month of Dawn Mode.',
+      try: 'Dawn Mode first.',
+      back: 'right-click does nothing there, as today.',
+    },
+    {
       change: 'Waiting is said by the wash and the mark; no breathing bar, no words.',
       today: 'a header that waits for you is washed in the blocked colour, has a bar breathing along its foot, the blocked mark and the words Needs you.',
       why: 'it makes the pane that waits easy to find among many, and says that it waits.',

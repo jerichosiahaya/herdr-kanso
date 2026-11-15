@@ -39,6 +39,7 @@
 .kanso-pane-header__segment{display:flex;flex:none;align-items:center;gap:var(--k-sp-2);padding:var(--k-sp-hair) var(--k-sp-1);border-radius:var(--k-r-sm);white-space:nowrap}
 .kanso-pane-header__segment--act{cursor:pointer}
 .kanso-pane-header__segment--act:is(:hover,.kanso-control--hover){background:var(--w12)}
+.kanso-pane-header__segment--open{anchor-name:--kanso-pane-segment;background:var(--w12)}
 .kanso-pane-header__segment>span{overflow:hidden;text-overflow:ellipsis;max-width:var(--k-w-pane-segment)}
 .kanso-pane-header .kanso-state-line{flex:none}
 .kanso-pane-header>.kanso-grip{margin:0 var(--k-sp-hair)}
@@ -47,6 +48,7 @@
 .kanso-pane-header__tools:empty{display:none}
 .kanso-pane-header__more{position:relative;display:flex}
 .kanso-pane-header__menu{position:absolute;top:calc(100% + var(--k-sp-1));right:0;z-index:1;cursor:default}
+.kanso-pane-header>.kanso-pane-header__menu{top:calc(anchor(--kanso-pane-segment bottom) + var(--k-sp-1));right:auto;left:anchor(--kanso-pane-segment left)}
 /* Its states: focus is the ground, blocked the wash, the keyboard's focus the ring, out of reach faded, held while it moves. */
 .kanso-pane-header.kanso-pane-header--focus{background:var(--selected)}
 .kanso-pane-header.kanso-pane-header--blocked{background:color-mix(in srgb,var(--blocked) var(--k-wash-blocked),transparent)}

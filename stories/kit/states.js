@@ -1,7 +1,7 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
 import { avatar, chip, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
-import { atWidth, captioned, inBar, inRail, inSettings, inSidebar, inSlice } from './frames.js';
+import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
@@ -256,6 +256,13 @@ const statePlaces = {
 // What an avatar is given to show: nothing but its initial, a picture, or a picture that cannot load.
 export const avatarPictures = { none: '', 'a picture': 'https://images.placeholders.dev/96x96', 'one that cannot load': 'https://invalid.example/avatar.png' };
 
+// The pane header's sample: the pull request's verdict, whether GitHub answers, and the folder when it differs from the tab's.
+export const paneVerdicts = ['none', 'ready', 'checks running', 'test / unit failed', 'changes requested', 'conflicts with main', 'behind main'];
+const verdictTones = { ready: 'done', 'checks running': 'working', 'behind main': 'working' };
+const paneDigestOf = ({ files, commits, pr, github }) => ({ files, add: files * 14, del: files * 2, commits,
+  pr: pr === 'none' ? null : { number: '#142', verdict: pr, tone: verdictTones[pr] ?? 'blocked' }, failure: github ? null : 'gh: HTTP 502: Bad Gateway (https://api.github.com/graphql)' });
+const panePlace = ({ elsewhere, reach }) => elsewhere ? { folder: reach === 'here' ? 'checkout-v2' : '~/checkout-v2', branch: 'limits-table' } : null;
+
 export const statedPages = {
   'Primitives/Avatar': {
     args: { initial: 'S', picture: 'none', size: 'md', tone: '', round: true },
@@ -435,6 +442,31 @@ export const statedPages = {
       { label: 'At rest', args: {}, caption: 'Settings in the footer, or the gear in the rail.' },
       { label: 'Herdr update', args: { update: true }, caption: 'Herdr has an update waiting: a third item, here only.' },
       { label: 'Restart armed', args: { update: true, armed: true }, caption: 'The update restarts Herdr, so it asks twice within 4 s.' },
+    ],
+  },
+  'Compositions/Pane header': {
+    args: { program: 'p-claude', name: 'checkout', state: 'working', focused: true, keyboard: false, hover: false, menu: false, rightClick: 'none', pinned: false, zoomed: false, reach: 'here', held: false, armed: false, renaming: false,
+      elsewhere: false, files: 3, commits: 2, pr: 'test / unit failed', github: true, fold: 0 },
+    markup: ({ files, commits, pr, github, elsewhere, ...args }) => inPane(paneHeader({ ...args, digest: paneDigestOf({ files, commits, pr, github }), place: panePlace({ elsewhere, reach: args.reach }) })),
+    states: [
+      { label: 'Focused, working', args: {}, caption: 'The selected ground; the working mark; the files, commits and pull request after the name.' },
+      { label: 'Not focused', args: { focused: false }, caption: 'The same facts on the plain ground.' },
+      { label: 'Waiting for you', args: { state: 'blocked' }, caption: 'The blocked wash and the blocked mark.' },
+      { label: 'Finished', args: { state: 'done', pr: 'ready' }, caption: 'The done mark; Sleep and Send stay out while it is focused.' },
+      { label: 'Pointer on it', args: { hover: true }, caption: 'Split right, wider or narrower, close and ⋯.' },
+      { label: 'Focus from the keyboard', args: { keyboard: true }, caption: 'The accent ring around the header.' },
+      { label: 'Close armed', args: { hover: true, armed: true }, caption: 'A pane with a session asks twice within 4 s.' },
+      { label: 'Pinned', args: { pinned: true }, caption: 'A pin after the name.' },
+      { label: 'A terminal', args: { program: 'lu-terminal', name: 'npm run dev', state: 'none', files: 0, commits: 0, pr: 'none' }, caption: 'The terminal icon and its command, no digest; Terminal when it has no project.' },
+      { label: 'Folder differs from the tab', args: { elsewhere: true }, caption: 'The folder and branch after the name, only when they differ from the project.' },
+      { label: 'GitHub does not answer', args: { github: false }, caption: 'The failure line with Refresh in place of the pull request.' },
+      { label: 'Out of reach', args: { reach: 'unreachable' }, caption: 'A computer out of reach: the header at 55%, no mark.' },
+      { label: 'Renaming', args: { renaming: true }, caption: 'Double-click renames in place, the name selected.' },
+      { label: 'Held to move', args: { held: true }, caption: 'The header is the handle.' },
+      { label: 'Narrow', args: { elsewhere: true, fold: 5 }, caption: 'Folder, branch, the tools, commits and files fold first; the pull request’s tooltip keeps them.' },
+      { label: '⋯ open', args: { menu: true }, caption: 'The pane menu under ⋯, leaving out what the header shows.' },
+      { label: 'Right-click folder or branch', args: { elsewhere: true, rightClick: 'folder or branch' }, caption: 'Copy path, Copy branch name, Open with…, then Hide this and Settings.' },
+      { label: 'Right-click files or commits', args: { rightClick: 'files or commits' }, caption: 'Open the diff, Push the commits…, then the piece lines.' },
     ],
   },
   'Compositions/Pane menu': {
