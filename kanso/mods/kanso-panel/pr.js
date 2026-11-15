@@ -7,7 +7,7 @@ import { v_flex, h_flex, Button, Popover, TextView, ScrollHandle } from "gpui-ba
 import { exec, notify, run, theme, setShared, shared, window, layout, focused, panes, terminals, props } from "herdr";
 import { location, key, diffRows, monoFont, tilde, failure, said, failNote } from "./lib.js";
 import { walkLayout } from "./layout.js";
-import { G, H, R, T, breathe, tokens, toneColor } from "./ui.js";
+import { G, H, R, T, breathe, tokens } from "./ui.js";
 import { Armed, button, quietLink, iconButton } from "./ui-button.js";
 import { TextField } from "./ui-field.js";
 import { menu } from "./ui-menu.js";
@@ -20,7 +20,7 @@ import { deliver, isAgent } from "./deliver.js";
 import { nameOf, givenNames } from "./marks.js";
 import { verdictOf, failedLog, sendText, sendStep } from "./pr-verdict.js";
 import { VIEW } from "./pr-body.js";
-import { drawHero, drawEmpty, footOf, listedRow, heroPieces } from "./pr-view.js";
+import { drawHero, drawEmpty, footOf, listedRow, prRow, heroPieces } from "./pr-view.js";
 import { readyProviders } from "./pr-providers.js";
 import { groupInbox, inboxLabel, isNew, limitLine, mergeInbox, refreshInbox, seenSql, recordPrFacts } from "./pr-inbox.js";
 import { prMemory } from "./panel-state.js";
@@ -33,6 +33,7 @@ import { CALL_MS, TICK_MS, ageOf, authFresh, heldView, logDue, needsPermission, 
 const keepsFacts = () => awayShown(pieces(shared));
 
 const ICON = "mods/kanso-chrome/icons/";
+const INBOX_TONES = { Draft: "dim", "Changes requested": "blocked", "Review required": "working", Approved: "done" };
 const FIELDS = "number,title,body,state,isDraft,url,author,baseRefName,headRefName,mergeable,mergeStateStatus,reviewDecision,statusCheckRollup,latestReviews,reviewRequests,assignees,labels,additions,deletions,changedFiles,commits,files,updatedAt,mergedAt,closedAt";
 const THREADS = "query($o:String!,$r:String!,$n:Int!){repository(owner:$o,name:$r){pullRequest(number:$n){reviewThreads(first:100){nodes{isResolved isOutdated path line comments(first:1){totalCount nodes{author{login} body url}}}}}}}";
 // assignableUsers is GitHub's own picker list and, unlike `collaborators`, needs no push access to read.
@@ -734,12 +735,12 @@ export class PullRequest {
     return m && this.permissionRepo === `${m[1]}/${m[2]}` ? this.permission : null;
   }
 
-  rowState(p, c) {
+  rowState(p) {
     const sum = summaryOf(checksIn(p.statusCheckRollup));
     const gate = p.mergeStateStatus || p.mergeable === "CONFLICTING" || p.isDraft
       ? mergeReadiness(p, { permission: this.rowPermission(p), checks: sum }) : null;
     const shown = gate && !gate.awaitingPermission ? gate : listHold(p, sum);
-    return { text: shown.text, color: toneColor(c, shown.tone) };
+    return { text: shown.text, tone: shown.tone };
   }
 
   canSwitch() {
@@ -1136,10 +1137,9 @@ export class PullRequest {
       .when(files.length < pr.changedFiles, (el) => el.child(div().pt(G.sm).text_size(11).text_color(c.dim).child(`GitHub lists the first ${files.length} of ${pr.changedFiles} files.`)));
   }
 
-  inboxState(item, c) {
+  inboxState(item) {
     const text = inboxLabel(item);
-    const color = { Draft: c.dim, "Changes requested": c.red, "Review required": c.yellow, Approved: c.green }[text] ?? c.dim;
-    return { text, color };
+    return { text, tone: INBOX_TONES[text] ?? "dim" };
   }
 
   openInboxItem(item, cx) {
@@ -1154,19 +1154,8 @@ export class PullRequest {
     const mine = new Set((this.inbox?.logins ?? [this.inbox?.login]).filter(Boolean).map((name) => name.toLowerCase()));
     const firsts = groups.map((_, g) => groups.slice(0, g).reduce((n, group) => n + group.rows.length, 0));
     const row = (item, i) => {
-      const state = this.inboxState(item, c);
       const meta = [`#${item.number}`, item.author && mine.has(String(item.author).toLowerCase()) ? "you" : item.author, item.updatedAt ? ago(item.updatedAt) : "", isNew(item) ? "new" : ""].filter(Boolean).join(" · ");
-      return Button.new(`pr-in-${i}`).w_full().px(G.md).py(10).rounded(6).cursor_pointer()
-        .hover((s) => s.bg(c.subtle))
-        .accessibility_label(`#${item.number} ${item.title}`)
-        .on_click((_e, cx) => this.openInboxItem(item, cx))
-        .child(v_flex().w_full().min_w(0).gap(4)
-          .child(div().w_full().min_w(0).text_size(14).line_height(1.35).text_color(c.text).child(item.title))
-          .child(div().w_full().truncate().text_size(11.5).text_color(c.dim).child(meta))
-          .child(h_flex().w_full().gap(G.sm).items_center()
-            .child(div().size(6).flex_none().rounded_full().bg(state.color))
-            .child(div().text_size(12).text_color(state.color === c.dim ? c.muted : state.color).child(state.text))
-            .when(item.additions != null, (el) => el.child(div().text_size(12).text_color(c.dim).child(`+${item.additions} −${item.deletions}`)))));
+      return prRow(`pr-in-${i}`, c, item, { meta, state: this.inboxState(item), onClick: (cx) => this.openInboxItem(item, cx) });
     };
     return v_flex().w_full().gap(G.lg)
       .child(segmented("pr-inbox", [{ key: "needs", label: "Needs you" }, { key: "yours", label: "Yours" }], tab, (key, cx) => { this.inboxTab = key; cx.notify(); }, c))
