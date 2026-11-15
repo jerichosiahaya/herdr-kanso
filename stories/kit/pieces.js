@@ -234,6 +234,38 @@ export const tabs = ({ items, value, size, track, disabled, icon, label: named }
     + `${(item.dot || (square && item.mark === 'blocked')) && !on ? '<i class="kanso-tabs__dot"></i>' : ''}${on && item.closable && !square && !item.editing ? '<svg class="kanso-icon kanso-tabs__close"><use href="#lu-x"/></svg>' : ''}</span>`;
 }).join('')}</div>`;
 
+// Where a pin, a note or a touch sits over a picture or a screen, in percent of it.
+const spotAt = ([x, y], size = []) => ` style="--k-x:${Number(x)}%;--k-y:${Number(y)}%${size.length ? `;--k-w:${Number(size[0])}%;--k-h:${Number(size[1])}%` : ''}"`;
+// A numbered pin: inline as a row's lead, placed `at` a point, or ringing a `region` [x, y, w, h]; `pending` has no note yet.
+export const pin = ({ n = '', at, region, pending = false }) => {
+  const spot = region ? [0, 0] : at;
+  const badge = `<span class="kanso-annotation${pending ? ' kanso-annotation--inactive' : ''}${spot ? ' kanso-annotation--placed' : ''}"${spot ? spotAt(spot) : ''}>${escape(String(n))}</span>`;
+  return region ? `<span class="kanso-annotation__region"${spotAt(region, region.slice(2))}>${badge}</span>` : badge;
+};
+// A pin's note beside it; `typing` shows the caret, an empty note its placeholder.
+export const note = ({ text = '', at = [0, 0], typing = false }) => `<div class="kanso-annotation__note"${spotAt(at)}>${text ? escape(text) : '<span class="kanso-text--dim">Note</span>'}${typing ? '<span class="kanso-caret"></span>' : ''}</div>`;
+const pinLayer = (pins, look = '') => pins.length ? `<div class="kanso-annotation__layer${look}">${list(pins)}</div>` : '';
+
+// A sample app on a device's screen: its status line, title, lines (a `held` line washed, a `hint` value dim) and its primary action.
+const screenLine = ({ label, value, held, hint }) => `<div class="kanso-simulator__line${held ? ' kanso-simulator__line--held' : ''}"><span>${escape(label)}</span><span${hint ? ' class="kanso-text--dim"' : ''}>${escape(value)}</span></div>`;
+export const deviceScreen = ({ time, signal, title, lines = [], primary }) => `<div class="kanso-simulator__app"><div class="kanso-content__time"><span>${escape(time)}</span><span>${escape(signal)}</span></div>`
+  + `<div class="kanso-content__text">${escape(title)}</div><div class="kanso-simulator__lines">${lines.map(screenLine).join('')}</div>${primary ? `<div class="kanso-simulator__payment">${escape(primary)}</div>` : ''}</div>`;
+export const deviceStates = ['on', 'off', 'booting', 'stalled'];
+// A device's frame around its `screen`: `off` the empty frame with Boot, `booting` its breathing blank, `stalled` the last picture stepped down.
+// `frozen` rings it while pinning, `focus` while touches and keys go to it, `touch` [x, y] the point being pressed; `pins` sit over the screen.
+export const device = ({ state = 'on', frozen, focus, touch, rotated, narrow, pins = [] }, screen = '') => {
+  const shape = `${rotated ? ' kanso-simulator--rotated' : ''}${narrow ? ' kanso-simulator--narrow' : ''}`;
+  if (state === 'off') return `<div class="kanso-simulator__frame${shape}">${button({ label: 'Boot' })}</div>`;
+  if (state === 'booting') return `<div class="kanso-simulator__frame kanso-simulator__frame--booting kanso-skeleton--breathing${shape}" aria-busy="true"></div>`;
+  const states = `${shape}${frozen ? ' kanso-simulator--frozen' : ''}${focus ? ' kanso-control--focus' : ''}${state === 'stalled' ? ' kanso-simulator--stalled' : ''}`;
+  return `<div class="kanso-simulator${states}"><div class="kanso-simulator__screen">${screen}</div>${touch ? pinLayer([pin({ at: touch, pending: true })], ' kanso-annotation__layer--touch') : ''}${pinLayer(pins)}</div>`;
+};
+export const pictureStates = ['shown', 'loading', 'held'];
+// A picture sized to its panel: `shown` with its `pins` over it, `loading` its breathing shape, `held` the slot with the one `action` that brings it.
+export const picture = ({ image = '', state = 'shown', action = '', pins = [] }) => state === 'loading' ? '<div class="kanso-picture__loading kanso-skeleton kanso-skeleton--breathing" aria-busy="true"></div>'
+  : state === 'held' ? `<div class="kanso-picture__loading">${button({ label: action })}</div>`
+  : `<div class="kanso-picture">${image}${pinLayer(pins)}</div>`;
+
 export const thumbnail = ({ image, label, selected, loading }) => `<span class="kanso-thumbnail${selected ? ' kanso-control--selected' : ''}${loading ? ' kanso-skeleton--shape' : ''}" role="button" aria-pressed="${selected}" aria-label="${escape(label)}" title="${escape(label)}" tabindex="0">${image && !loading ? `<img src="${escape(image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>`;
 
 export const levels = { error: 'blocked', warning: 'working', success: 'done', info: 'accent' };
@@ -400,6 +432,7 @@ export const stacks = {
   'pane body': { block: 'kanso-pane__body' },
   'pane placeholder': { block: 'kanso-pane__placeholder' },
   'pane drop ruler': { block: 'kanso-pane__drop-ruler' },
+  'device tools': { block: 'kanso-panel__tools' },
   panel: { block: 'kanso-panel', states: ['narrow', 'window', 'stale'] },
   timeline: { block: 'kanso-update__timeline' },
   columns: { block: 'kanso-layout kanso-layout--columns' },

@@ -240,3 +240,12 @@ export const sampleInstalled = [{ program: 'p-claude', name: 'Claude Code', last
 // A project's worktrees as its menu lists them, and its tabs asleep.
 export const sampleWorktrees = [{ branch: 'checkout-v2', place: 'kansō' }, { branch: 'cart-retry', place: '~/acme-shop-cart' }];
 export const sampleAsleep = ['checkout', 'docs', 'billing'];
+// A captured window as a picture shows it: its bar, and the 429 card the agent hit.
+const shotText = (y, ink, size, text, weight = 'regular') => `<text x="160" y="${y}" text-anchor="middle" style="fill:var(--${ink});font-weight:var(--k-fw-${weight});font-size:var(--k-fs-${size});font-family:var(--ui)">${text}</text>`;
+export const sampleShot = `<svg viewBox="0 0 320 200" aria-hidden="true"><rect width="320" height="200" style="fill:var(--raised)"/><rect width="320" height="18" style="fill:var(--w7)"/>${[10, 20, 30].map((cx) => `<circle cx="${cx}" cy="9" r="3" style="fill:var(--input)"/>`).join('')}`
+  + `<rect x="40" y="5" width="160" height="8" rx="4" style="fill:var(--w12)"/><rect x="70" y="52" width="180" height="96" rx="8" style="fill:var(--bg)"/>${shotText(92, 'blocked', 'name', '429', 'strong')}${shotText(110, 'fg', 'meta', 'Too many requests')}${shotText(126, 'muted', 'meta', 'Try again in 2 s')}</svg>`;
+// The sample app on a device: checkout with its held price, on iOS and on Android.
+export const sampleScreens = {
+  ios: { time: '9:41', signal: '●●●', title: 'Checkout', lines: [{ label: 'Trail runner, 42', value: '$64' }, { label: 'Wool socks ×2', value: '$12' }, { label: 'Shipping', value: '$8' }, { label: 'Held for', value: '09:42', held: true }], primary: 'Pay $84.00' },
+  android: { time: '14:06', signal: '▲ ■', title: 'acme shop', lines: [{ label: 'Search', value: 'running shoes', hint: true }, { label: 'Trail runner', value: '$64' }, { label: 'Road runner', value: '$58' }, { label: 'Wool socks', value: '$6' }], primary: 'Add to cart' },
+};
