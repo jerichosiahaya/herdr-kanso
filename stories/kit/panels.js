@@ -438,7 +438,7 @@ const comment = (depth) => (said) => excerpt({ ...said, depth });
 const field = ({ label, text = null, multiline = false }) => input({ label, text: text ?? undefined, icon: 'lu-send', focus: Boolean(text), multiline });
 // A thread: the first comment with its lines, the replies, then Reply, Resolve and Explain to the agent; a reply waits, refused or offline, with its text kept.
 const thread = ({ where, snippet, first, replies = [], answer = null, agentAnswer = null, answered = null }, { agent, typing = null, refused = null, offline = null, explained = null }) => well({},
-  comment(0)({ ...first, where }), code(snippet), replies.map(comment(1)), answered ? row({ icon: 'lu-bot', name: answered, dimmed: true }) : null,
+  comment(0)({ ...first, where, snippet: code(snippet) }), replies.map(comment(1)), answered ? row({ icon: 'lu-bot', name: answered, dimmed: true }) : null,
   answer ? comment(1)(answer) : null, field({ label: 'Reply', text: agentAnswer ?? typing }), refused ? failureBlock(refused) : null, dimLine(offline),
   line(quietAct('Resolve'), typing || agentAnswer ? null : explainButton({ agent, size: 'sm' }), explained ? row({ name: explained, dimmed: true }) : null));
 const conversation = ({ thread: talk = null, resolved = null, approved = null, said = null, agent, ...state }) => list(heading('Conversation'),
@@ -456,7 +456,7 @@ const detailsBody = ({ description = null, people = [], checks = [], files = [],
   heading('Files'), files.map(fileRow(null)), diffFailed ? failureBlock(diffFailed) : null, cut ? list(quietAct(cut.more), dimLine(cut.note)) : null);
 const detailsFold = ({ summary, open = false, ...body }) => list(row({ level: 0, open, name: 'Details', meta: open ? null : summary }), open ? detailsBody(body) : null);
 const othersBlock = ({ label, pulls }) => list(heading(label), pulls.map(pullRow(null)), quietAct('Open the list'));
-const verdictTitle = (name, { text, tone }) => row({ title: true, name, second: { text, tone } });
+const verdictTitle = (name, { text, tone }) => row({ hero: true, name, second: { text, tone } });
 const pullBody = ({ title, verdict, acts = [], agent, armed = false, refused = null, sent = null, review: asked = null, message = null, talk = null, others = null, details = null, closing = true, reading = false }) => (reading
   ? list(verdictTitle(title, verdict), skeletonOf({ shape: 'line', count: 3 }))
   : list(verdictTitle(title, verdict), verdictBody(verdict),
