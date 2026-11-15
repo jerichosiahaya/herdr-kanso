@@ -191,12 +191,12 @@ export const menu = ({ title, items }) => `<div class="kanso-menu kanso-popover"
 
 // `size` sm is the value at title size, on one line at row width.
 // `tone` puts the value in a state's ink (low free memory); a `second` line sits under the unit, both beside the value, and takes the tone too.
-export const metric = ({ value, unit, second = '', facts = '', loading = false, size = 'md', tone = '' }) => {
+export const metric = ({ value, unit, small = '', second = '', facts = '', loading = false, size = 'md', tone = '' }) => {
   const piece = (text, element) => `<span class="${element}${loading ? ' kanso-skeleton--shape kanso-skeleton--text' : ''}">${escape(text)}</span>`;
   const list = facts.split('|').map((fact) => fact.trim()).filter(Boolean);
   const ink = tone ? ` kanso-text--${escape(tone)}` : '';
   const beside = second ? `<span class="kanso-metric__beside">${piece(unit, 'kanso-metric__unit')}${piece(second, `kanso-metric__second${ink}`)}</span>` : unit ? piece(unit, 'kanso-metric__unit') : '';
-  return `<div class="kanso-metric${size === 'sm' ? ' kanso-metric--sm' : ''}${second ? ' kanso-metric--beside' : ''}">${piece(value, `kanso-metric__value${ink}`)}${beside}</div>`
+  return `<div class="kanso-metric${size === 'sm' ? ' kanso-metric--sm' : ''}${second ? ' kanso-metric--beside' : ''}">${piece(value, `kanso-metric__value${ink}`)}${small ? piece(small, 'kanso-metric__small') : ''}${beside}</div>`
     + (list.length ? `<div class="kanso-panel__facts">${list.map((fact) => loading ? `<span class="kanso-skeleton--shape kanso-skeleton--text">${escape(fact)}</span>` : `<span>${escape(fact)}</span>`).join('')}</div>` : '');
 };
 
@@ -447,6 +447,23 @@ export const bars = ({ bars: values = [], peak = null, low = [], part = [], labe
 export const meter = ({ share: value = 0, label = '' }) => `<div class="kanso-meter" role="meter" aria-valuemin="0" aria-valuemax="1" aria-valuenow="${Number(value)}"${label ? ` aria-label="${escape(label)}"` : ''}><span class="kanso-meter__fill" style="${share(value)}"></span></div>`;
 // Days in week columns, each a level from 0 (none) to 4, or null where there is no day.
 export const heatmap = ({ days = [] }) => `<div class="kanso-days">${days.map((level) => `<span class="kanso-days__day${level === null ? ' kanso-days__day--none' : ` kanso-days__day--${Number(level)}`}"></span>`).join('')}</div>`;
+// The card a panel shares, drawn as the app makes it: a heading with its `right`, the `hero` figure, its `stats`, a `note`, then each block in `blocks` and the ensō foot.
+const shareLine = (title, right = '') => `<div class="kanso-share__header">${escape(title)}${right ? `<span>${escape(right)}</span>` : ''}</div>`;
+const shareStat = ({ value, unit }) => `<div><div class="kanso-content__value">${escape(value)}</div><div class="kanso-metric__unit">${escape(unit)}</div></div>`;
+const shareDelta = ({ text, up }) => `<div class="kanso-panel__delta">${up ? '↑' : '↓'} ${escape(text)}</div>`;
+const shareBlocks = {
+  streak: ({ title, right, n, unit, days }) => `${shareLine(title, right)}${metric({ value: n, unit, size: 'sm' })}${heatmap({ days })}`,
+  bars: ({ title, right, values, ticks }) => {
+    const highest = Math.max(...values);
+    return `${shareLine(title, right)}${bars({ bars: values.map((value) => value / highest), ticks, peak: values.indexOf(highest), filled: true })}`;
+  },
+  list: ({ title, rows }) => `${shareLine(title)}${list(rows.map(({ name, detail, value, unit }) => row({ name, detail, meta: [value, unit].filter(Boolean).join(' ') })))}`,
+};
+const shareBlock = (block) => `<div class="kanso-share__block">${shareBlocks[block.kind](block)}</div>`;
+export const shareCard = ({ title, subtitle = '', right = '', hero = {}, stats = [], note = '', blocks = [] }) => `<div class="kanso-share">${shareLine(title, right)}${subtitle ? sentence({ text: subtitle, tone: 'muted' }) : ''}`
+  + `${metric({ value: hero.big ?? '—', small: hero.small, unit: hero.unit })}${hero.label ? sentence({ text: hero.label, tone: 'muted' }) : ''}${hero.delta?.text ? shareDelta(hero.delta) : ''}`
+  + `${stats.length ? `<div class="kanso-panel__statistics">${stats.map(shareStat).join('')}</div>` : ''}${note ? sentence({ text: note, tone: 'muted' }) : ''}${blocks.map(shareBlock).join('')}`
+  + `<div class="kanso-share__footer">${mark({ status: 'done', size: 'sm' })}kansō for Herdr</div></div>`;
 
 export const tabSkeleton = () => '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tab-bar__skeleton"></span>';
 

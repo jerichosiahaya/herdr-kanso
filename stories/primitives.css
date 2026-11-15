@@ -418,3 +418,10 @@
 .kanso-control--on>.kanso-keyboard__arrow{color:inherit}
 .kanso-keyboard__finger{position:absolute;top:calc(100% + var(--k-sp-1));left:50%;transform:translateX(-50%);font-size:var(--k-fs-meta);color:var(--dim);white-space:nowrap}
 .kanso-keyboard__row:has(.kanso-keyboard__finger){margin-bottom:var(--k-sp-4)}
+.kanso-metric__small{font-size:var(--k-fs-title);color:var(--muted)}
+.kanso-share .kanso-panel__statistics{gap:var(--k-sp-3) var(--k-sp-8)}
+.kanso-share>.kanso-metric{margin-top:var(--k-sp-6)}
+.kanso-share>.kanso-sentence{margin-top:var(--k-sp-3)}
+.kanso-share>.kanso-share__block{margin-top:var(--k-sp-6)}
+.kanso-share__block>.kanso-days{margin-top:var(--k-sp-3);gap:var(--k-sp-hair)}
+.kanso-share__footer>.kanso-mark{color:var(--muted)}
