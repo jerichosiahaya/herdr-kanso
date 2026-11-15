@@ -1,5 +1,7 @@
 // The kit with the Storybook's signatures: a piece takes its props and returns a drawing, `(id, c, more) => element`.
 import { row as drawRow } from "./ui-row.js";
+import { button as drawButton } from "./ui-button.js";
+import { menu as drawMenu } from "./ui-menu.js";
 
 const HANDLERS = ["on", "onClick", "onHover", "onKey", "focusHandle"];
 const appIcon = (icon) => icon?.replace(/^lu-/, "");
@@ -32,4 +34,16 @@ export const row = ({ icon, flag, detail, action, actions, start, tools, ...prop
     detail: Array.isArray(detail) ? detail.map(withIcon) : withIcon(detail),
     start: drawn(id, c, "start", start), tools: drawn(id, c, "tools", tools),
   });
+};
+
+// `icon: "none"` is the Storybook's no icon; app-only props, such as `color`, pass through as the row's do.
+export const button = ({ label, icon = "none", ...props }) => (id, c, more = {}) => {
+  const { onClick = null } = given(more);
+  return drawButton(id, label, onClick, c, { ...props, icon: icon === "none" ? null : appIcon(icon) });
+};
+
+// Each item carries its own `onClick`: a menu's items are data, not tools.
+export const menu = ({ title = null, items = [] }) => (id, c, more = {}) => {
+  given(more);
+  return drawMenu(id, { title, items: items.map(withIcon) }, c);
 };

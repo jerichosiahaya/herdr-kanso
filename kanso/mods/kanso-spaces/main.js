@@ -8,7 +8,7 @@ import { systemApi } from "./platform-system.js";
 // Modified by jlopezlira (Kanso, https://github.com/jlopezlira/herdr-kanso): renamed from mn-spaces; a fixed 76px rail when collapsed (resizable only when open), space avatars in the theme's hues, a breathing dot instead of a spinner, background polling slowed when the window is behind.
 // Modified by Iván Campaña (https://github.com/icampana): layout writers set the tree only when it is Kanso's, so a switch from another layout never saves that layout into kanso.json.
 
-import { View, div, svg } from "gpui-kit";
+import { View, div, svg, image } from "gpui-kit";
 import { v_flex, h_flex, v_virtual_list, VirtualListScrollHandle, Scrollbar, ScrollHandle } from "gpui-base";
 import { agentRow, agentFold, agentLabel, AGENT_PAD, FLUSH, NESTED, renameTerminal, statusMark, SETTLED_LABEL, SNOOZE_LABEL, UNREAD_LABEL, THREAD_LABEL, settledOf, snoozedUntil, isUnread, woke, backFromSettled, threadSections, snoozePresets, THREAD_ORDERS, STATUS_ORDERS, withTerminals, NAME_LABEL, PIN_LABEL, ORDERS, DEFAULT_ORDER, orderSessions, moved, nest, track, elapsed, activityOf, bySection, duration, trackSteps, stepOf, tasksOf, said, FOLD, FOLD_MS, pill, agentRowH, mostUrgent } from "./agents.js";
 import { ThreadLocator, findThreads, pidsOf, aliveIn, aliveDue, ALIVE_MS, ALIVE_BEHIND_MS } from "./threads.js";
@@ -35,7 +35,7 @@ import { skeleton } from "./ui-skeleton.js";
 import { stateEmpty, pendingDot } from "./ui-state.js";
 import { segmented } from "./ui-tab.js";
 import { mark } from "./ui-mark.js";
-import { menu } from "./ui-menu.js";
+import { menu } from "./kit.js";
 import { toolbar } from "./ui-toolbar.js";
 import { header } from "./ui-sidebar-header.js";
 import { pieces, shown, runs, asksPs, setPiece, pieceOf, STORE } from "./pieces.js";
@@ -1776,7 +1776,7 @@ export default class Spaces extends View {
     const { orders, current, key, head } = sortOf(view, this, { ORDERS, STATUS_ORDERS, THREAD_ORDERS, DEFAULT_ORDER });
     const ticked = (label, on, onClick) => ({ label, icon: on ? "check" : null, onClick });
     const grouped = view === "threads" ? [ticked("Grouped by project", this.threadGroup, (cx) => this.setOrder("threadGroup", !this.threadGroup, cx))] : [];
-    return menu("spaces-order-menu", { items: [
+    return menu({ items: [
       { heading: head },
       ...Object.keys(orders).map((mode) => ticked(orders[mode], mode === current, (cx) => this.setOrder(key, mode, cx))),
       ...grouped,
@@ -1785,7 +1785,7 @@ export default class Spaces extends View {
       ticked("What each agent is on", this.showActivity !== false, (cx) => this.setShown("activity", this.showActivity === false, cx)),
       ticked(RETURN_LABEL, this.showAway !== false, (cx) => this.setShown("away", this.showAway === false, cx)),
       ticked("Projects, Status and Threads", this.showSwitch !== false, (cx) => this.setShown("switch", this.showSwitch === false, cx)),
-    ] }, c);
+    ] })("spaces-order-menu", c);
   }
 
   // The header's Toolbar: + names what it adds in this view; collapsed, Sort and Search fold under the caret.
@@ -2530,12 +2530,14 @@ export default class Spaces extends View {
     const queue = this.refreshNeeds(sp, read.terms, asleep);
     this.seenNow = this.seen(sp, ctx);
     this.seenAt = ctx.now; // when it was seen: a later write of it is no newer
+    // Collapsed, Herdr's mark sits here; open, kanso-chrome draws it in the top bar.
+    const brand = image("frame/welcome/herdr.png").size(20).rounded(6).flex_none();
     const root = v_flex().id("spaces-root").track_focus(this.handle).size_full().min_h(0).bg(t.chrome).text_size(13)
       .on_key_down((e, cx) => this.listKeyDown(e, cx))
       .on_size_change((size, cx) => this.sized(size.width, cx))
       // A pane held in the strip and let go here goes back where it was.
       .on_mouse_up("left", () => { if (shared("strip.drag")) { setShared("strip.drop", null); setShared("strip.drag", null); } })
-      .child(header("spaces-header", { collapsed }, this.tools(tokens(t), view, collapsed)))
+      .child(header("spaces-header", { collapsed, mark: collapsed ? brand : null }, this.tools(tokens(t), view, collapsed)))
       .when(switchShown, (el) => el.child(this.viewSwitch(t, sp, collapsed)))
       .when(shown("sidebar.needs", queue.rows.length > 0 || this.needsEmpty, map), (el) => el.child(queueControl(t, queue, collapsed, this.needsEmpty && !queue.rows.length, (cx) => this.toggleNeeds(cx))))
       .child(this.needsOpen && shown("sidebar.needs", true, map) ? this.needsList(t, queue, read.now) : this.list(t, collapsed, view, [

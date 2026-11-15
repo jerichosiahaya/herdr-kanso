@@ -3,7 +3,8 @@
 import { v_flex } from "gpui-base";
 import { G, H } from "./ui.js";
 
-/** `toolbar`: the drawn Toolbar, in its column form when `collapsed`. */
-export const header = (id, { collapsed = false }, toolbar) => v_flex().id(id).w_full().flex_none().px(G.sm).pb(G.xs)
-  .when(collapsed, (el) => el.items_center().pt(G.hair))
+/** `toolbar`: the drawn Toolbar, in its column form when `collapsed`. `mark`: what leads the rail, drawn by the caller. */
+export const header = (id, { collapsed = false, mark = null }, toolbar) => v_flex().id(id).w_full().flex_none().px(G.sm).pb(G.xs)
+  .when(collapsed, (el) => el.items_center().gap(G.sm).pt(G.hair))
+  .when(Boolean(mark), (el) => el.child(mark))
   .child(collapsed ? toolbar : toolbar.h(H.row));

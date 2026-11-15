@@ -14,7 +14,6 @@ const kit = async () => ({
   ...await load("kanso-panel/ui-toolbar.js", ["toolbar", "addLabels"], host()),
   ...await load("kanso-panel/ui-sidebar-header.js", ["header"], host()),
   ...await load("kanso-panel/ui-menu.js", ["menu"], host()),
-  ...await load("kanso-panel/ui-herdr-mark.js", ["herdrMark"], host()),
 });
 const night = { background: "#1b1b19", foreground: "#d8d4cb", hover: "#232321", selected: "#2b2b28", dim: "#6b6860", muted: "#949086", accent: "#7d9cd4", popover: "#222220", border: "#33332f" };
 const calls = (el, name) => el.calls.filter((call) => call[0] === name);
@@ -73,11 +72,11 @@ test("Sort's menu hangs under it in a row and beside it in a column, and only wh
   assert.deepEqual(changes, [true]);
 });
 
-test("Collapsed, Herdr's mark heads the column, + and Show sidebar stay 8 apart and Sort and Search fold under a caret that opens on a quiet wash", async () => {
+test("Collapsed, + and Show sidebar stay 8 apart and Sort and Search fold under a caret that opens on a quiet wash", async () => {
   const { toolbar, tokens, G, R } = await kit();
   const c = tokens(night);
   const shut = toolbar("t", c, { column: true });
-  assert.deepEqual(tags(shut), ["image", "t-add", "t-sidebar", "t-group"]);
+  assert.deepEqual(tags(shut), ["t-add", "t-sidebar", "t-group"]);
   assert.equal(arg(shut, "gap"), G.sm);
   assert.equal(arg(byTag(shut, "t-sidebar"), "tooltip"), "Show sidebar");
   const group = byTag(shut, "t-group");
@@ -101,25 +100,18 @@ test("Each tool runs what it names", async () => {
   assert.deepEqual(hits, ["add", "search", "sidebar", "more"]);
 });
 
-test("The Header holds the Toolbar 40 tall with 8 at its sides; collapsed, it centres the column", async () => {
+test("The Header holds the Toolbar 40 tall with 8 at its sides; collapsed, it centres the column under the mark it is given", async () => {
   const { header, G, H } = await kit();
   const open = header("h", {}, chain("bar"));
   assert.deepEqual([arg(open, "px"), arg(open, "pb")], [G.sm, G.xs]);
   assert.equal(arg(open.kids[0], "h"), H.row);
   assert.equal(H.row, 40);
-  const rail = header("h", { collapsed: true }, chain("bar"));
-  assert.deepEqual(tags(rail), ["bar"]);
+  const rail = header("h", { collapsed: true, mark: chain("mark") }, chain("bar"));
+  assert.deepEqual(tags(rail), ["mark", "bar"]);
+  assert.equal(arg(rail, "gap"), G.sm);
   assert.equal(calls(rail, "items_center").length, 1);
   assert.equal(arg(rail, "pt"), G.hair);
-  assert.equal(calls(rail.kids[0], "h").length, 0, "the column takes its own height");
-});
-
-test("Herdr's mark is the host's own picture at a badge's size, its corners the small radius", async () => {
-  const { herdrMark, H, R } = await kit();
-  const el = herdrMark();
-  assert.equal(arg(el, "image"), "frame/welcome/herdr.png");
-  assert.deepEqual([arg(el, "size"), arg(el, "rounded")], [H.badge, R.sm]);
-  assert.equal(H.badge, 20);
+  assert.equal(calls(rail.kids[1], "h").length, 0, "the column takes its own height");
 });
 
 test("A Menu heading item is drawn like its title, so the Sort menu can name its orders and what it shows", async () => {
@@ -133,8 +125,7 @@ test("A Menu heading item is drawn like its title, so the Sort menu can name its
   assert.deepEqual(arg(menu("t", { title: "Show", items: [] }, c).kids[0], "child"), "Show");
 });
 
-test("The Toolbar, the Header and Herdr's mark draw no literal size", () => {
-  assert.deepEqual(numberArguments("kanso-panel/ui-herdr-mark.js"), []);
+test("The Toolbar and the Header draw no literal size", () => {
   assert.deepEqual(numberArguments("kanso-panel/ui-toolbar.js"), []);
   assert.deepEqual(numberArguments("kanso-panel/ui-sidebar-header.js"), []);
 });

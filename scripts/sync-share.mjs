@@ -71,7 +71,7 @@ const COMMON = [
 
 // Platform modules and the panels' kit (ui.js, one ui-<piece>.js per piece, and kit.js for shared compositions): a mod gets only the ones it imports.
 const PLATFORM = "kanso/mods/kanso-panel/";
-const sharedFile = (name) => /^(?:(?:platform|ui)(?:-[\w-]+)?|kit)\.js$/.test(name);
+export const sharedFile = (name) => /^(?:(?:platform|ui)(?:-[\w-]+)?|kit)\.js$/.test(name);
 const imports = (text) => [...text.matchAll(/^import\s+(?:(?:\{[^}]*\}|\w+|\*\s+as\s+\w+)\s+from\s+)?["']\.\/([^"']+)["'];/gm)].map((match) => match[1]);
 
 export function sharedDependencies(modules, canonical) {
