@@ -30,7 +30,9 @@ the branch's rules.
 
 ### Changed
 
+- Each mod carries only the pieces of the panel kit it uses, so a change to one piece reaches only the mods that draw it. (#276)
 - Every Storybook page shows one status, Ready, In review, Proposal or Old look, at its top and as a sidebar filter tag, and its names carry no internal codes.
+- Storybook draws the keyboard for Mac, Windows and Linux from kansō's own keys, with each key, a picked key and a shortcut row in every state; notifications from what happened and where you are; and the pane header in every state, with its ⋯ menu under its button. Design changes carry a hypothesis written from today's app.
 - The Containers panel asks Docker only what can have changed: the container list every 5 seconds, their details when it changes, images, volumes and disk use once a minute, after an action and when a container appears or goes, and Docker's memory limit and context when the panel opens or comes forward, on Read again, when Docker comes back and when another context is chosen. About a quarter as many processes while it is open. (#263)
 - Draw the missing Worktrees, Preview, Markdown and Simulator feature states in Storybook.
 - Draw the missing Share, Shipped, Containers, Ports, Find, Images and Files states in Storybook.
@@ -56,6 +58,7 @@ the branch's rules.
 
 ### Fixed
 
+- In the collapsed sidebar, a group's state mark and the marks in its menu are drawn at the kit's small and row sizes, 12px and 14px, instead of one pixel smaller. (#277)
 - An agent's state mark in the tab bar, the header strip and beside the sidebar's sleeping conversations is 14px, the size of every other icon in a row, instead of one pixel smaller. (#267)
 - Tab groups match their design: the chosen tab is raised on a track of the lightest text wash with no tint, another tab under the pointer takes a light wash and brightens its label, and quiet buttons use the muted text colour. (#266)
 - Secondary text, hints, field edges and idle marks are easier to read in both themes, and the light theme takes the design's final colours: every text meets 4.5:1 and every edge and mark 3:1 on each surface it sits on. (#265)
