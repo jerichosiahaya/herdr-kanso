@@ -576,6 +576,10 @@ export const playgrounds = {
       overflow: flag('folded menu open'),
     },
   },
+  'Layouts/Window': {
+    ...statedPages['Layouts/Window'],
+    argTypes: { collapsed: flag('sidebar collapsed'), menu: { name: 'a menu on a row', control: { type: 'boolean' }, if: { arg: 'collapsed', truthy: false } }, panel: flag('a panel open') },
+  },
   'Primitives/Switch': {
     args: { checked: false, label: 'Toggle', disabled: false },
     argTypes: {

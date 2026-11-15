@@ -1,9 +1,9 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
-import { dialog, emptyState, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
+import { addComputer, agentMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
+import { dialog, emptyState, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
 import { panelPages } from './panel-states.js';
-import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleProjectRun, sampleArrangements, sampleAsleep, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleTargets, statusMenus, statusPanels } from './samples.js';
+import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleProjectRun, sampleArrangements, sampleAsleep, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
@@ -13,17 +13,22 @@ export const needsShown = { none: null, question: needsItem({ name: 'cart-ui', q
 export const memoryShown = { none: null, word: statusItem({ text: 'Memory 8% free', tone: 'blocked' }), folded: statusItem({ text: '8% free', tone: 'blocked' }) };
 export const stepperShown = ['rest', 'hover', 'menu'];
 
-const statusBar = ({ width, computer, paused, stepper: middle, needs, memory, panels, open }) => {
+// The status bar's halves for its controls; the page frames them at a width, the window places them as they are.
+const statusParts = ({ computer, paused, stepper: middle, needs, memory, panels, open }) => {
   const menuOpen = !paused && middle === 'menu';
-  const popup = menuOpen ? stepperMenu() : panels && open !== 'none' ? statusMenus[open]() : '';
-  const bar = inBar(width, {
+  return {
     left: computer === 'none' ? [] : [computerItem({ name: 'devbox', state: computer })],
     middle: paused ? layoutPaused() : stepper({ hover: middle === 'hover', open: menuOpen }),
     right: [needsShown[needs], memoryShown[memory], ...(panels ? statusPanels({ open }) : []), paletteDoor()].filter(Boolean),
-    popup,
-  });
-  return popup ? `<div class="kanso-story__popup-room">${bar}</div>` : bar;
+    popup: menuOpen ? stepperMenu() : panels && open !== 'none' ? statusMenus[open]() : '',
+  };
 };
+const statusStory = ({ width, ...args }) => {
+  const parts = statusParts(args);
+  const bar = inBar(width, parts);
+  return parts.popup ? `<div class="kanso-story__popup-room">${bar}</div>` : bar;
+};
+const statusArgs = { width: 1040, computer: 'none', paused: false, stepper: 'rest', needs: 'question', memory: 'none', panels: false, open: 'none' };
 
 const tabItems = (value) => [{ key: 'checkout', label: 'checkout' }, { key: 'cart-ui', label: 'cart-ui', mark: value === 'cart-ui' ? '' : 'blocked' }, { key: 'tests', label: 'tests' }];
 export const tabActs = {
@@ -189,6 +194,22 @@ const computerRefusals = {
 };
 const capitalized = (text) => text[0].toUpperCase() + text.slice(1);
 const worktreePlace = { here: '~/.kanso/worktrees/kansō-app-audit', devbox: 'devbox · ~/.kanso/worktrees/kansō-app-audit' };
+
+const panelArgs = { title: samplePanel.title, scope: samplePanel.scope, header: 'page', state: 'ready', look: 'panel', content: 'rows', last: 'rest' };
+const panelStory = ({ title, scope, header, state, look, content, last }) => {
+  const { reading = false, stale = false, scope: read = scope, body } = panelReads[state];
+  const start = look === 'window' ? [panelBack()] : [];
+  return panel({ look, stale, header: panelHeader({ title, form: header, start, second: read, tools: [samplePanel.tool(), panelRefresh({ reading })] }) }, body(panelContents[content](last)));
+};
+
+// The window: each region is its composition at rest; a panel opens beside the panes and lights its door.
+const windowPane = ({ name, lines }) => stack({ variant: 'pane' }, paneHeader({ name, state: 'idle', focused: true }), stack({ variant: 'pane body' }, terminal({ lines })));
+const windowLayout = ({ collapsed, menu, panel: open }) => stack({ variant: 'window', rest: true },
+  sampleSidebar({ collapsed, rowMenu: menu && !collapsed ? agentMenu({ name: sampleWindow.menuOn }) : null }),
+  stack({ variant: 'window workspace' },
+    tabBar({ items: sampleWindow.tabs, value: sampleWindow.pane.name, panel: open ? sampleWindow.door : null }),
+    stack({ variant: 'window panes' }, windowPane(sampleWindow.pane), open ? panelStory(panelArgs) : null),
+    statusBar(statusParts({ ...statusArgs, needs: 'none' }))));
 
 export const statedPages = {
   'Primitives/Dialog': {
@@ -408,12 +429,8 @@ export const statedPages = {
     ],
   },
   'Compositions/Panel': {
-    args: { title: samplePanel.title, scope: samplePanel.scope, header: 'page', state: 'ready', look: 'panel', content: 'rows', last: 'rest' },
-    markup: ({ title, scope, header, state, look, content, last }) => {
-      const { reading = false, stale = false, scope: read = scope, body } = panelReads[state];
-      const start = look === 'window' ? [panelBack()] : [];
-      return panel({ look, stale, header: panelHeader({ title, form: header, start, second: read, tools: [samplePanel.tool(), panelRefresh({ reading })] }) }, body(panelContents[content](last)));
-    },
+    args: panelArgs,
+    markup: panelStory,
     states: [
       { label: 'At rest', args: {}, caption: 'The read is fresh.' },
       { label: 'Period and the number', args: { content: 'period and the number' }, caption: 'The panel counts over a period.' },
@@ -467,8 +484,8 @@ export const statedPages = {
     ],
   },
   'Compositions/Status bar': {
-    args: { width: 1040, computer: 'none', paused: false, stepper: 'rest', needs: 'question', memory: 'none', panels: false, open: 'none' },
-    markup: statusBar,
+    args: statusArgs,
+    markup: statusStory,
     states: [
       { label: 'At rest', args: { needs: 'none' }, caption: 'Nothing to say; panes per view keeps its slot.' },
       { label: 'Panes per view menu', args: { needs: 'none', stepper: 'menu' }, caption: 'Right-click: Even out, then the piece lines.' },
@@ -541,4 +558,14 @@ export const statedPages = {
     states: [{ label: 'Rest', args: {}, caption: 'One action and its keys.' }],
   },
   ...panelPages,
+  'Layouts/Window': {
+    args: { collapsed: false, menu: false, panel: false },
+    markup: windowLayout,
+    states: [
+      { label: 'At rest', args: {}, caption: 'The sidebar, the tab bar, the panes and the status bar, each at rest; selection is one wash on the project, the tab and the focused pane.' },
+      { label: 'A menu on a row', args: { menu: true }, caption: 'Right-click or ⋯ on a row opens its menu under it, over the rows below; nothing else moves.' },
+      { label: 'A panel open', args: { panel: true }, caption: 'The panel opens beside the panes and lights its door; the panes give it room.' },
+      { label: 'Sidebar collapsed', args: { collapsed: true }, caption: 'The sidebar folds to its rail; the work keeps the width.' },
+    ],
+  },
 };

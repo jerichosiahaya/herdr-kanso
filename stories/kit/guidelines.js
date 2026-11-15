@@ -272,6 +272,12 @@ export const guidelines = {
     ["Seijaku", "48 tall, nothing filled at rest.", "Tabs 2 apart, 8 to new tab and Arrange; doors 2 apart, the last 12 from the edge. The open door and the chosen tab take the quiet fill."],
     ["Shizen", "Nothing disappears.", "Tabs that do not fit fold behind +N; new tab, Arrange and the doors never fold. A door whose tool is missing on the computer is not drawn."],
   ],
+  "Layouts/Window": [
+    ["Kansō", "Composed, never redrawn.", "Each region is its own composition at rest: the Sidebar, the Tab bar, a Pane header over its terminal, a Panel and the Status bar. A change to one shows here."],
+    ["Seijaku", "The app's regions and sizes.", "The sidebar 256 wide; the tab bar 48 over the panes; a panel 368 beside them, only while open; the status bar 26 across the work. Panes 8 apart."],
+    ["Kokō", "One selection.", "One wash on the active project, its tab and the focused pane's header."],
+    ["Shizen", "Room is given, not taken.", "Opening a panel narrows the panes and collapsing the sidebar widens them; only a menu lies over another region."],
+  ],
   "Compositions/Edges": [
     ["Kansō", "A stand-in for the panes out of view.", "One icon Button per pane past each side, at the side where it is; the panes of one column grouped. A click goes there; the name is the tooltip."],
     ["Kokō", "No state dots.", "A waiting pane is said by the status bar's Needs you; the edge only says where: hovering Needs you gives its pane the active fill, or +N when it is folded."],

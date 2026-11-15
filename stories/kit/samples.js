@@ -7,9 +7,9 @@ import { LIST_LAYER, describe, layer } from '../../kanso/mods/kanso-help/keymap.
 
 const group = (...rows) => stack({ variant: 'row group' }, ...rows);
 export const sampleRows = {
-  spaces: () => [
+  spaces: ({ rowMenu = null } = {}) => [
     group(computerRow({ name: 'light', remote: false })),
-    group(projectRow({ name: 'prjct' }), sessionRow({ program: 'lu-terminal', name: 'Orion', status: 'idle' })),
+    group(projectRow({ name: 'prjct' }), sessionRow({ program: 'lu-terminal', name: 'Orion', status: 'idle', hover: Boolean(rowMenu) }), rowMenu ? stack({ variant: 'row menu' }, rowMenu) : null),
     group(projectRow({ name: 'amtelser' }), sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' })),
     group(projectRow({ name: 'kansō', folder: 'herdr-kanso', branch: 'main', sync: '↓12', open: true }), sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' }),
       sessionRow({ name: 'Juno', status: 'idle', depth: 2, current: true }), sessionRow({ program: 'p-codex', name: 'Iris', status: 'done', depth: 2 })),
@@ -32,7 +32,20 @@ export const sampleTiles = {
   agents: () => [tile({ status: 'blocked', count: 1 }), tile({ status: 'working', count: 3 }), tile({ status: 'done', count: 2 }), tile({ status: 'idle', count: 3 })],
   threads: () => [tile({ status: 'blocked', count: 1 }), tile({ status: 'working', count: 1 }), tile({ status: 'done', count: 1 })],
 };
-export const sampleSidebar = ({ view = 'spaces', ...args } = {}) => sidebar({ ...args, view, rows: sampleRows[view](), tiles: sampleTiles[view]() });
+// A row's open menu hangs under Orion, the row it was opened on.
+export const sampleSidebar = ({ view = 'spaces', rowMenu = null, ...args } = {}) => sidebar({ ...args, view, rows: sampleRows[view]({ rowMenu }), tiles: sampleTiles[view]() });
+
+// The window at rest: the open project's tabs, its focused agent and what that agent's terminal shows, and the panel door it opens.
+export const sampleWindow = {
+  tabs: [{ key: 'Atlas', label: 'Atlas' }, { key: 'Juno', label: 'Juno' }],
+  pane: { name: 'Juno', lines: [
+    [{ text: '❯', tone: 'muted' }, ' Add the limits table to /admin'], '',
+    [{ text: '●', tone: 'done' }, ' Read(src/admin/limits.ts)'], [{ text: '●', tone: 'done' }, ' Update(src/admin/limits.ts)'], '  The table reads each plan’s limits.', '',
+    [{ text: '✻ Brewed for 38s', tone: 'dim' }],
+  ] },
+  door: 'worktrees',
+  menuOn: 'Orion',
+};
 
 // Sample status bar content: what each panel item holds when its Menu opens.
 const hide = [{ separator: true }, { icon: 'lu-eye-off', label: 'Hide this' }];
