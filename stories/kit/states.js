@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
-import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, sampleShot, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -460,6 +460,17 @@ export const statedPages = {
       { label: 'Renaming', args: { items: barTabs('renaming'), value: 'checkout' }, caption: 'The name in place, selected.' },
       { label: 'Renamed, waiting', args: { items: barTabs('renamed, waiting'), value: 'checkout' }, caption: 'At 80% with a breathing dot until confirmed.' },
       { label: 'Dragging', args: { items: barTabs('dragging'), value: 'checkout' }, caption: 'The held tab on the pressed wash; the accent bar where it lands.' },
+    ],
+  },
+  'Primitives/Thumbnail': {
+    args: { image: sampleShot, label: 'cart-countdown.png', selected: false, loading: false, focus: false },
+    markup: thumbnail,
+    states: [
+      { label: 'At rest', args: {}, caption: 'The picture cropped to fill the square.' },
+      { label: 'Selected', args: { selected: true }, caption: 'The shared accent ring outside; nothing moves.' },
+      { label: 'Focus', args: { focus: true }, caption: 'The one ring.' },
+      { label: 'Loading', args: { loading: true }, caption: 'The square breathes until the picture comes.' },
+      { label: 'No picture', args: { image: '' }, caption: 'A picture that cannot load leaves the raised square; the name is its tooltip.' },
     ],
   },
   'Primitives/Skeleton': {

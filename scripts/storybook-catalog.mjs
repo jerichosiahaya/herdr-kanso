@@ -78,8 +78,8 @@ const primitive = {
   ButtonsFourKinds: null, ButtonsOnALine: null, ActionRows: null, ButtonWithAMark: null, Armed: null,
   FocusRing: null, HoverSelectedPressed: null, Tooltip: 'Tooltip', ChromeAndBarButtons: null,
   FileRow: null, PortRow: null, RowActions: null, SettingRow: null, SettingRowWithAValue: null, FindRow: null,
-  Card: null, Metric: null, ThumbnailStrip: 'Thumbnail', SkeletonTwoLines: null, Loading: null,
-  Toast: 'Toast', ToastWithItsSource: 'Toast', Snippet: null, Reply: null, Picture: 'Thumbnail',
+  Card: null, Metric: null, ThumbnailStrip: null, SkeletonTwoLines: null, Loading: null,
+  Toast: 'Toast', ToastWithItsSource: 'Toast', Snippet: null, Reply: null, Picture: null,
 };
 // The panel pieces drawn on their own panel's page.
 const panelPiece = { HeroAndVerdict: 'Panels/PR', InATab: 'Panels/Worktrees', MemoryMetricAndChart: 'Panels/Memory', PlanAndSpend: 'Panels/Spend' };

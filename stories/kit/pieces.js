@@ -343,7 +343,7 @@ export const dragHandle = ({ state = 'rest' } = {}) => `<svg class="kanso-icon k
 
 // `image` is a picture's URL, or its art drawn inline as picture() takes it.
 const thumbArt = (image) => image.startsWith('<') ? image : `<img src="${escape(image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`;
-export const thumbnail = ({ image, label, selected, loading }) => `<span class="kanso-thumbnail${selected ? ' kanso-control--selected' : ''}${loading ? ' kanso-skeleton--shape' : ''}" role="button" aria-pressed="${selected}" aria-label="${escape(label)}" title="${escape(label)}" tabindex="0">${image && !loading ? thumbArt(image) : ''}</span>`;
+export const thumbnail = ({ image, label, selected, loading, focus = false }) => `<span class="${['kanso-thumbnail', selected && 'kanso-control--selected', loading && 'kanso-skeleton--shape', ...liveStates({ focus })].filter(Boolean).join(' ')}" role="button" aria-pressed="${selected}" aria-label="${escape(label)}" title="${escape(label)}" tabindex="0">${image && !loading ? thumbArt(image) : ''}</span>`;
 
 export const levels = { error: 'blocked', warning: 'working', success: 'done', info: 'accent' };
 const lead = (level) => level === 'error' ? mark({ status: 'blocked' })
