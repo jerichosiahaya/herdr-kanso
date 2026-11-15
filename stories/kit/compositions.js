@@ -167,7 +167,7 @@ const pieceLinesFor = (needed) => pieceLines.filter(({ label }) => needed || lab
 export const pieceMenu = ({ title, items = [], needed = true }) => menu({ title, items: [...items, ...pieceLinesFor(needed)].filter((item, index) => index > 0 || !item.separator) });
 export const stepperMenu = () => menu({ title: 'Panes per view', items: [{ icon: 'lu-move-horizontal', label: 'Even out', hint: '⌘⇧0' }, ...pieceLines] });
 // The command palette's only pointer door; its key is in the tooltip.
-export const paletteDoor = () => button({ label: 'Command palette ⌘⇧P', kind: 'icon', size: 'sm', icon: 'lu-command' });
+export const paletteDoor = ({ open = false } = {}) => statusItem({ tool: { label: 'Command palette ⌘⇧P', icon: 'lu-command' }, open });
 export const layoutPaused = () => failureLine({ text: 'Layout paused', fix: 'Resume', detail: 'layout write refused 3 times' });
 
 // While you were away: what nothing in view says, four rows then +N more; nothing new takes no space.

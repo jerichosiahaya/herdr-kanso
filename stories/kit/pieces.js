@@ -323,8 +323,11 @@ export const plus = (count) => `+${count}`;
 
 // Status bar pieces: each item is a Mark or an icon with its words, in the bar's meta size.
 const inlineIcon = (name) => `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(name)}"/></svg>`;
-export const statusItem = ({ icon = '', mark: status = '', text = '', tone = '', pending = false, open = false } = {}) => `<span class="kanso-status-bar__item${tone ? ` kanso-text--${escape(tone)}` : ''}${pending ? ' kanso-state-line--pending' : ''}${open ? ' kanso-status-bar__item--open' : ''}">`
-  + `${status ? mark({ status, size: 'sm' }) : icon ? inlineIcon(icon) : ''}${text === '' || text === null ? '' : `<span>${escape(String(text))}</span>`}${pending ? '<i class="kanso-state-line__pending-dot"></i>' : ''}</span>`;
+// An `open` item anchors the Menu or popup over it.
+const itemOpen = (open) => open ? ' kanso-status-bar__item--open' : '';
+// A `tool` item is one small button, as the palette's door.
+export const statusItem = ({ icon = '', mark: status = '', text = '', tone = '', pending = false, open = false, tool } = {}) => `<span class="kanso-status-bar__item${tone ? ` kanso-text--${escape(tone)}` : ''}${pending ? ' kanso-state-line--pending' : ''}${itemOpen(open)}">`
+  + `${tool ? button({ kind: 'icon', size: 'sm', ...tool }) : ''}${status ? mark({ status, size: 'sm' }) : icon ? inlineIcon(icon) : ''}${text === '' || text === null ? '' : `<span>${escape(String(text))}</span>`}${pending ? '<i class="kanso-state-line__pending-dot"></i>' : ''}</span>`;
 
 // The failure pattern on a bar: the blocked mark, our words that truncate first, one small tonal fix that stays.
 export const failureLine = ({ text, fix, detail = '' }) => `<span class="kanso-state-line"${detail ? ` title="${escape(detail)}"` : ''}>${mark({ status: 'blocked' })}<span class="kanso-text--truncate">${escape(text)}</span>${button({ label: fix, kind: 'tonal', size: 'sm' })}</span>`;
@@ -335,11 +338,11 @@ export const failureBlock = ({ text, source = '', fix, agent = '' }) => `<div cl
 export const emptyState = ({ icon = '', text, action = '' }) => `<div class="kanso-state-empty">${icon ? glyph(icon) : ''}<div class="kanso-content__text">${escape(text)}</div>${action ? button({ label: action, kind: 'tonal' }) : ''}</div>`;
 export const statePatterns = ['failure', 'empty', 'pending', 'loading'];
 
-export const needsItem = ({ name, question = '', more = 0 }) => `<span class="kanso-status-bar__item kanso-status-bar__needs">${mark({ status: 'blocked', size: 'sm' })}<span class="kanso-status-bar__name">${escape(name)}</span>`
+export const needsItem = ({ name, question = '', more = 0, open = false }) => `<span class="kanso-status-bar__item kanso-status-bar__needs${itemOpen(open)}">${mark({ status: 'blocked', size: 'sm' })}<span class="kanso-status-bar__name">${escape(name)}</span>`
   + `${question ? `<span class="kanso-status-bar__question">${escape(question)}</span>` : ''}${more ? `<span class="kanso-status-bar__more">${plus(more)}</span>` : ''}</span>`;
 
 // Panes per view: the number at rest, − and + on hover; its keys are in the tooltips.
-export const stepper = ({ value = 2, open = false, hover = false } = {}) => `<span class="kanso-status-bar__item kanso-status-bar__stepper${open ? ' kanso-status-bar__item--open' : ''}${hover ? ' kanso-control--hover' : ''}">${button({ label: 'Fewer panes per view ⌘⇧−', kind: 'icon', size: 'sm', icon: 'lu-minus' })}`
+export const stepper = ({ value = 2, open = false, hover = false } = {}) => `<span class="kanso-status-bar__item kanso-status-bar__stepper${itemOpen(open)}${hover ? ' kanso-control--hover' : ''}">${button({ label: 'Fewer panes per view ⌘⇧−', kind: 'icon', size: 'sm', icon: 'lu-minus' })}`
   + `<span class="kanso-status-bar__value" title="${Number(value)} per view · scroll to change, click to even out">${Number(value)}</span>${button({ label: 'More panes per view ⌘⇧=', kind: 'icon', size: 'sm', icon: 'lu-plus' })}</span>`;
 
 // A terminal's output: each line a list of parts, a part plain words or { text, tone }.
