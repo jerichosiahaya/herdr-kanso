@@ -1,6 +1,8 @@
 import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
-import { asleep, computerItem, computerRow, dawn as dawnSky, edge, header, layoutPaused, needsItem, projectRow, section, sessionRow, sidebar, sidebarFooter, statusBar, statusItem, statusMenus, statusPanels, stepper, stepperMenu, tabBar, tile, toolbar, viewSwitch, windowControls } from '../stories/kit/components.js';
+import { asleep, computerItem, computerRow, edge, header, layoutPaused, projectRow, section, sessionRow, sidebarFooter, statusBar, stepperMenu, tabBar, tile, toolbar, viewSwitch } from '../stories/kit/compositions.js';
+import { dawn as dawnSky, needsItem, stack, statusItem, stepper, windowControls } from '../stories/kit/pieces.js';
+import { sampleSidebar, statusMenus, statusPanels } from '../stories/kit/samples.js';
 export { elements } from './storybook-markup.mjs';
 
 export function kitRecords(records) {
@@ -58,7 +60,7 @@ export function kitRecords(records) {
     ['kit/Toolbar/Row', 'Row', toolbar(), 'Sidebar open: + alone on the left, the rest on the right.'],
     ['kit/Toolbar/Column', 'Column', toolbar({ column: true }), 'Sidebar collapsed: stacked in the rail.'],
   ]) if (html) results.push({ id, source: 'kit', page: id.startsWith('kit/Toolbar/') ? 'Compositions/Toolbar' : 'Compositions/Header', label, html: frame(html), caption });
-  const inSidebar = (html) => `<div class="kanso-sidebar">${html}</div>`, inRail = (html) => `<div class="kanso-rail">${html}</div>`;
+  const inSidebar = (html) => stack({ variant: 'sidebar frame' }, html), inRail = (html) => stack({ variant: 'rail frame' }, html);
   for (const [page, label, html, caption, id] of [
     ['Session row', 'Working', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' })), 'What it is on and for how long.'],
     ['Session row', 'Needs you', inSidebar(sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' })), 'The question, in foreground.'],
@@ -78,13 +80,13 @@ export function kitRecords(records) {
     ['Tile', 'Status', inRail(tile({ status: 'working', count: 3 })), 'A state in the rail.'],
     ['Footer', 'Default', inSidebar(sidebarFooter()), 'Settings and Add computer.'],
     ['Footer', 'Update', inSidebar(sidebarFooter({ update: 'Update kansō to 3.31.0' })), 'An update adds a row on top.'],
-    ['Sidebar', 'Open', sidebar(), 'Header, views, rows and footer.'],
-    ['Sidebar', 'Collapsed', sidebar({ collapsed: true }), 'The rail.'],
-    ['Sidebar', 'Dawn', sidebar({ dawn: true }), 'Open, in Dawn Mode.'],
-    ['Sidebar', 'Dawn collapsed', sidebar({ collapsed: true, dawn: true }), 'The rail, in Dawn Mode.', 'kit/Rail/Dawn'],
-    ['Sidebar', 'Status', sidebar({ view: 'agents' }), 'Open on Status.', 'kit/Rail/Open'],
-    ['Sidebar', 'Status collapsed', sidebar({ collapsed: true, view: 'agents' }), 'The rail on Status.', 'kit/Rail/Collapsed'],
-    ['Sidebar', 'Views menu', sidebar({ collapsed: true, menu: true }), 'The rail: its one view button opens Projects, Status and Threads.'],
+    ['Sidebar', 'Open', sampleSidebar(), 'Header, views, rows and footer.'],
+    ['Sidebar', 'Collapsed', sampleSidebar({ collapsed: true }), 'The rail.'],
+    ['Sidebar', 'Dawn', sampleSidebar({ dawn: true }), 'Open, in Dawn Mode.'],
+    ['Sidebar', 'Dawn collapsed', sampleSidebar({ collapsed: true, dawn: true }), 'The rail, in Dawn Mode.', 'kit/Rail/Dawn'],
+    ['Sidebar', 'Status', sampleSidebar({ view: 'agents' }), 'Open on Status.', 'kit/Rail/Open'],
+    ['Sidebar', 'Status collapsed', sampleSidebar({ collapsed: true, view: 'agents' }), 'The rail on Status.', 'kit/Rail/Collapsed'],
+    ['Sidebar', 'Views menu', sampleSidebar({ collapsed: true, menu: true }), 'The rail: its one view button opens Projects, Status and Threads.'],
   ]) results.push({ id: id ?? `kit/${page}/${label}`, source: 'kit', page: page === 'Sidebar' ? 'Compositions/Sidebar' : `Compositions/Sidebar/${page}`, label, html: frame(html), caption });
   const inBar = (width, parts) => `<div class="kanso-story__bar" style="width:${width}px">${statusBar(parts)}</div>`;
   const full = (width, parts = {}) => inBar(width, { middle: stepper(), ...parts });

@@ -24,9 +24,14 @@ the branch's rules.
 
 ## [Unreleased]
 
+### Added
+
+- Cmd+Shift+Up and Cmd+Shift+Down go to the agent above or below in the sidebar, across tabs and projects; Cmd+Shift+Left and Cmd+Shift+Right go back and forward through the agents you visited, as in a browser. On Windows, Ctrl+Shift with the arrows.
+
 ### Changed
 
 - Every Storybook page shows one status, Ready, In review, Proposal or Old look, at its top and as a sidebar filter tag, and its names carry no internal codes.
+- The Containers panel asks Docker only what can have changed: the container list every 5 seconds, their details when it changes, images, volumes and disk use once a minute, after an action and when a container appears or goes, and Docker's memory limit and context when the panel opens or comes forward, on Read again, when Docker comes back and when another context is chosen. About a quarter as many processes while it is open. (#263)
 - Draw the missing Worktrees, Preview, Markdown and Simulator feature states in Storybook.
 - Draw the missing Share, Shipped, Containers, Ports, Find, Images and Files states in Storybook.
 - Draw the remaining missing states in Storybook: arrangements from other projects, the Save and Overwrite headings, what an update did to your keys and layout, the Windows update failures, servers that cannot be attributed, a missing sqlite3, a pull request's files cut off, and a pin with no agent to send to.
@@ -41,7 +46,7 @@ the branch's rules.
 - Storybook pages say what each piece is in one sentence and keep only the rules a drawing cannot show; its notes for contributors are one short guide.
 - Storybook opens on one Start page: why the kit exists, links to its reference pages, and the seven principles kansō follows.
 - Sidebar rows match their designs: an open project or computer shows no chevron, and folded it shows its most urgent mark and how many; a click on the current project folds it, and the count unfolds it. (#230)
-- A project shows + and the menu under the pointer, a detached checkout shows its commit, a kept project with a missing folder says Not found with Locate, and a project's name edits in place. (#230)
+- A project shows + and the menu under the pointer, a detached checkout shows its commit, and a kept project with a missing folder says Not found with Locate. (#230)
 - The behind and ahead counts say what a press does: pull from the upstream, or open the PR panel. (#230)
 - Session rows lead with the terminal icon when the program has none, put the time after what the session is on, keep a pin before the mark, and give a sub-session that needs you its own line. (#230)
 - In Status and Threads a session shows its project after its name, and its computer when it is not this one; only Needs you carries a mark, and a section shows its count once folded. (#230)
@@ -51,6 +56,14 @@ the branch's rules.
 
 ### Fixed
 
+- An agent's state mark in the tab bar, the header strip and beside the sidebar's sleeping conversations is 14px, the size of every other icon in a row, instead of one pixel smaller. (#267)
+- Tab groups match their design: the chosen tab is raised on a track of the lightest text wash with no tint, another tab under the pointer takes a light wash and brightens its label, and quiet buttons use the muted text colour. (#266)
+- Secondary text, hints, field edges and idle marks are easier to read in both themes, and the light theme takes the design's final colours: every text meets 4.5:1 and every edge and mark 3:1 on each surface it sits on. (#265)
+- Hover fills, tree guide lines and the minimap's columns no longer use the edge colour, so they stay light and readable when the edge colour gets darker: buttons in the sidebar and kansō settings hover in the hover colour, the strip's tiles for panes beyond its edge and the tree guides are see-through washes of the text colour that show on any ground, and the minimap's columns not on screen use the dim text colour. (#270)
+- Ports lists the servers on every connected computer, each under its computer's name with this one first, and Open, Go to its pane and Stop act on the computer the server runs on. A computer out of reach is one line saying why, it is asked less often while it keeps failing, and this computer's list never waits for it.
+- Double-clicking a project's name opens the rename dialog again, instead of a field in the row where Esc could reach the agent and stop it.
+- The border between the sidebar and the first pane has one drag, the sidebar's: the first pane no longer shows a resize handle there that moved nothing. The first pane grows to the right, and the panes after it keep both edges.
+- kansō's keys (Cmd+B, Cmd+D, Cmd+J and the rest, Ctrl on Windows and Linux) work again after kansō updates itself, without restarting Herdr.
 - Storybook gives approved designs and features such as Open with, Sleep and Arrangements their own pages, with shared reference drawings and additional states marked Proposed.
 - Storybook draws all missing Sidebar and Activity feature states with the shared kit, including queues, sleeping conversations, Git controls and activity overflow.
 - Storybook draws missing Settings and Memory feature states with the shared kit and source-linked coverage.
