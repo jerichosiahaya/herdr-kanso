@@ -1,6 +1,19 @@
 // A design hypothesis for each thing the app shows today that a page drops, hides, moves or changes, in the user's terms.
 // Today rests on the running app; every job gets a new home or the hypothesis stops; with no signal yet it is unproven.
 export const hypotheses = {
+  'Compositions/Toolbar': [
+    {
+      change: 'Sort and Search come to the collapsed sidebar, under a caret.',
+      today: 'collapsed, the sidebar shows + and Show sidebar only; Sort and Search are there only when it is open.',
+      why: 'a collapsed sidebar has room for one column of buttons.',
+      question: 'why must someone open the sidebar to change its order or to search, when the rail already shows the rows that order sorts?',
+      believe: 'folding Sort and Search under one caret keeps the rail as quiet as today and lets someone sort or search without opening the sidebar.',
+      jobs: [['+ and Show sidebar', 'stay where they are'], ['Sort', 'under the caret, with its menu'], ['Search', 'under the caret, and its key as today']],
+      wrong: 'nobody opens the caret, or someone opens the caret looking for something else.',
+      try: 'Dawn Mode first.',
+      back: 'the caret goes and the rail shows + and Show sidebar only, as today.',
+    },
+  ],
   'Compositions/Edges': [
     {
       change: 'No minimap.',

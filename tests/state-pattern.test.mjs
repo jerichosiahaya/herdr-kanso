@@ -3,7 +3,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { load, chain, gpuiHost } from "./helpers.mjs";
 
-const kit = async () => ({ ...await load("kanso-panel/ui.js", ["tokens", "G", "H", "R", "T", "ICON_ROW", "BREATH"], gpuiHost()), ...await load("kanso-panel/ui-state.js", ["stateEmpty", "stateBlock", "stateLine", "pendingDot", "PENDING"], gpuiHost()) });
+const kit = async () => ({ ...await load("kanso-panel/ui.js", ["tokens", "G", "H", "R", "T", "ICON_ROW", "BREATH"], gpuiHost()), ...await load("kanso-panel/ui-state.js", ["stateEmpty", "stateBlock", "stateBlockPx", "stateLine", "pendingDot", "PENDING"], gpuiHost()) });
 const night = { background: "#1b1b19", foreground: "#d8d4cb", hover: "#232321", selected: "#2b2b28", solid: "#d8d4cb", solid_foreground: "#161615", dim: "#6b6860", muted: "#949086", blocked: "#d5674f" };
 
 const calls = (el, name) => el.calls.filter((call) => call[0] === name);
@@ -61,6 +61,23 @@ test("A failure block is a blocked edge, our words, the source's words, then the
   arg(fix, "on_click")({}, {});
   arg(rest, "on_click")({}, {});
   assert.deepEqual(done, ["refresh", "sign"]);
+});
+
+test("A failure block's height is read from the block's own sizes, so a fixed-size home can make room for it", async () => {
+  const { stateBlock, stateBlockPx, tokens } = await kit();
+  const parts = { what: "kansō didn't update", why: "the download failed", fixes: [{ label: "Update", onClick: () => {} }] };
+  const block = stateBlock("refused", { mark: chain("mark"), ...parts }, tokens(night));
+  const holding = (words) => find(block, (el) => calls(el, "child").some((call) => call[1] === words));
+  const [what, why, fix] = [holding(parts.what), holding(parts.why), buttons(block)[0]];
+  const fixes = find(block, (el) => el.kids.includes(fix));
+  const edge = calls(block, "border_1").length;
+  const words = arg(what, "text_size") * arg(what, "line_height");
+  const evidence = arg(why, "max_h");
+  const drawn = 2 * (edge + arg(block, "p")) + words + arg(block, "gap") + evidence + arg(block, "gap") + arg(fixes, "pt") + arg(fix, "h");
+  assert.equal(stateBlockPx(parts), drawn);
+  assert.equal(evidence, arg(why, "text_size") * arg(why, "line_height") * 2, "the source's words at most two lines");
+  assert.equal(stateBlockPx({ what: parts.what }), 2 * (edge + arg(block, "p")) + words, "the words alone");
+  assert.equal(stateBlockPx(parts, 2), drawn + words, "our words wrapped to a second line");
 });
 
 test("A failure with neither slot is the words alone", async () => {

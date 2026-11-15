@@ -39,15 +39,15 @@ test("A finished row says its last words and not the header digest", async () =>
 test("An update draws no dot on the gear or the footer", async () => {
   const drawn = paint();
   const host = {
-    div: drawn.node, svg: drawn.node, image: drawn.node, h_flex: drawn.node, v_flex: drawn.node, Button: { new: drawn.node },
+    div: drawn.node, svg: drawn.node, image: drawn.node, h_flex: drawn.node, v_flex: drawn.node, Button: { new: drawn.node }, Popover: { new: drawn.node },
     theme, run: () => {}, openOverlay: () => {}, home: () => "/Users/me", window: () => ({ platform: "macos" }),
   };
   const { WorkspaceChrome } = await load("kanso-chrome/main.js", ["WorkspaceChrome"], {
     ...host, props: () => ({ footer: true }), shared: () => null, setShared: () => {},
-    updates: () => ({ app: { ready: true } }), agents: () => [],
+    updates: () => ({ app: { ready: "0.1.16" } }), keys: () => [], settings: () => ({}),
   });
   const footer = new WorkspaceChrome();
-  footer.updater = { available: () => "3.31.0", busy: false, install() {} };
+  footer.updater = { available: () => "3.31.0", busy: false, refused: () => null, install() {} };
   footer.render();
   const { Tabs } = await load("kanso-tabs/main.js", ["Tabs"], {
     ...host, spaces: () => [{ id: "s", active: true, tabs: [] }], panes: () => [], layout: () => null,
@@ -58,7 +58,8 @@ test("An update draws no dot on the gear or the footer", async () => {
   tabs.render();
   assert.equal(drawn.marks.some((mark) => mark.size === 6 && mark.round), false);
   assert.ok(drawn.texts.includes("Update kansō to 3.31.0"));
-  assert.ok(drawn.texts.includes("Settings · update ready"));
+  assert.ok(drawn.texts.includes("Settings"));
+  assert.equal(drawn.texts.some((words) => words.includes("update ready")), false, "Herdr's update waits in the Settings menu");
 });
 
 test("A waiting question is one sentence, cut at 200", async () => {

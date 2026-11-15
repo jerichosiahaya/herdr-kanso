@@ -33,18 +33,23 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
       per group (project, status, shelf): a project's initial in its color,
       no square (else an icon), under it the most urgent state and count.
       A click lists the group in a popup (click goes; asleep: wake menu).
-  - **Footer** (`kanso-chrome`, `footer: true`), 156 tall, bottom-aligned:
-    - Settings (gear) and Add computer (server icon), 34 tall, icon 17.
-    - An 8 space.
-    - An account chip: a 32 avatar (28 when collapsed) with the home folder
-      name's first letter, then the name and "N agents".
-    - Collapsed, each item is a centred square with its label as a tooltip.
+  - **Footer** (`kanso-chrome`, `footer: true`), 88 tall, bottom-aligned:
+    - Settings (gear) and Add computer (server icon), kit rows of 32, icon
+      17, text 13.5, muted; 8 above and 16 below.
+    - Settings opens one menu: kansō settings (with its key) and Herdr
+      settings; while Herdr has an update waiting, "Update Herdr to X",
+      pressed twice to restart Herdr into it.
+    - Collapsed, each item is a centred 34 square, icon 17, with its label
+      as a tooltip; the gear opens the same menu. The footer fits them: 54
+      for one, 36 more each, 12 below.
     - Kanso's own release (`update.js`). What's new
       chooses Stable (default) or Early. Stable offers a newer `vX.Y.Z`.
       Early offers the newest beta, rc or stable, never an older one.
       The row "Update kansō to X" (refresh icon) names
-      that tag; the footer grows to 192 while it shows (back to 156
-      after; a size you set is kept). `version.json` stays `X.Y.Z`; the
+      that tag ("Update to X" for a beta); the footer grows to 120 while it
+      shows (back to 88 after; a size you set is kept). A refused install
+      keeps the row and puts the kit's failure block under it, the tool's
+      words and Update. `version.json` stays `X.Y.Z`; the
       download uses the tag and the check wants `X.Y.Z`. The tab bar
       reads tags (`git ls-remote`) on start, every 5 min (if on) and on
       `kanso-tabs.check`; one 30 s toast names the tag and runs
@@ -501,7 +506,7 @@ Left to right, then top to bottom. Sizes are px at zoom 1.
   - `sidebar` (column, `chrome`, 256 px, min 200, max 480):
     - `brand`: block `kanso-chrome` (Herdr's mark), 48 px, `window_drag`.
     - `spaces`: block `kanso-spaces`.
-    - `sidebar-footer`: block `kanso-chrome` with `{footer: true}`, 156 px.
+    - `sidebar-footer`: block `kanso-chrome` with `{footer: true}`, 156 px in the file and fitted to its rows at start: 56 for Settings, 32 more each for Add computer and a kansō update, and room for a refused update's block while the sidebar is open.
   - `work` (column, padding 6, gap 4):
     - `inset` (column, no fill, no border):
       - `tabs`: block `kanso-tabs`, 48 px, `window_drag`.
