@@ -1,7 +1,7 @@
 // Pages whose story is built from Storybook controls instead of drawn states.
 import sprite from '../proto-sprite.svg?raw';
 import { activity, activityMenu, computerMenuStates, asleep, paneFolds, paneHeader, panelHeaderForms, panelLooks, paneReaches, paneStates, noticeHomes, noticePlaces, noticeStates, systemMessage, toastStack, heldChord, keyboard, keyboardExplorer, keyboards, keyboardSystems, keyNames, shortcutRowStates, channelSettings, channels, computerItemStates, computerRow, computerStates, header, panelDoors, projectRow, section, sessionRow, sidebarFooter, tabBarStates, tile, toolbar, views, viewSwitch } from './compositions.js';
-import { avatarSizes, button, card, code, dawn, dialog, escape, input, keycapStates, keyHint, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
+import { avatarSizes, button, card, code, dawn, dialog, escape, input, keycapStates, kinds, levels, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, captioned, inSettings, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
 import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, worktreeRefusals } from './states.js';
@@ -113,13 +113,12 @@ export const playgrounds = {
     markup: input,
   },
   'Primitives/Key hint': {
-    args: { text: '⌘↵', faint: false, recording: false },
+    ...statedPages['Primitives/Key hint'],
     argTypes: {
       text: { name: 'text', control: { type: 'text', maxLength: 6 } },
       faint: flag('faint'),
       recording: flag('recording'),
     },
-    markup: ({ text, faint, recording }) => keyHint({ text: text.slice(0, 6), faint, recording }),
   },
   'Primitives/Mark': {
     ...statedPages['Primitives/Mark'],

@@ -1,6 +1,6 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar } from './compositions.js';
-import { avatar, chip, dialog, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
+import { avatar, chip, dialog, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs, terminal, toast } from './pieces.js';
 import { atWidth, captioned, inBar, inSettings, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { keyLayer, keyLayerMods, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -269,6 +269,17 @@ export const statedPages = {
       { label: 'Quiet', args: { label: '4', quiet: true }, caption: 'A count with no ground, on a rail tile.' },
       { label: 'Quiet, needs you', args: { label: '4', quiet: true, tone: 'blocked' }, caption: 'A tile’s count when one of its items waits for someone.' },
       { label: 'Pill', args: { label: 'Dawn Mode', pill: true }, caption: 'The channel’s name beside the window lights.' },
+    ],
+  },
+  'Primitives/Key hint': {
+    args: { text: '⌘↵', faint: false, recording: false },
+    markup: ({ text, ...args }) => keyHint({ ...args, text: text.slice(0, 6) }),
+    states: [
+      { label: 'A chord', args: {}, caption: 'Symbols beside the action they run.' },
+      { label: 'Three keys', args: { text: '⌃⇧,' }, caption: 'Modifiers first, as the computer writes them.' },
+      { label: 'A word', args: { text: 'Esc' }, caption: 'Esc stays a word.' },
+      { label: 'Faint', args: { faint: true }, caption: 'The key says nothing now.' },
+      { label: 'Recording', args: { recording: true }, caption: 'A new shortcut is being pressed.' },
     ],
   },
   'Primitives/Mark': {
