@@ -570,11 +570,12 @@ export const playgrounds = {
     markup: toggle,
   },
   'Primitives/Row': {
-    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', meta: '+14 −3', mark: 'none', second: '', heading: false, title: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false },
+    args: { icon: 'lu-file', name: 'checkout.ts', detail: 'src/api', detailTone: 'none', meta: '+14 −3', mark: 'none', second: '', heading: false, title: false, depth: 0, tools: false, current: false, selected: false, hover: false, focus: false, dimmed: false, pending: false },
     argTypes: {
       icon: select('icon', icons.concat(['p-claude', 'p-codex'])),
       name: text('name'),
       detail: text('detail'),
+      detailTone: select('detail tone', ['none', ...Object.values(levels)]),
       meta: text('meta'),
       mark: select('mark', ['none', ...Object.keys(marks)]),
       second: text('second'),
@@ -587,7 +588,7 @@ export const playgrounds = {
       ...pick('hover', 'focus', 'dimmed'),
       pending: flag('pending'),
     },
-    markup: ({ tools, ...args }) => `<div class="kanso-panel">${row({ ...args, actions: tools ? [{ icon: 'lu-pin', label: 'Pin' }, { icon: 'lu-ellipsis', label: 'More' }] : [] })}</div>`,
+    markup: ({ tools, detail, detailTone, ...args }) => `<div class="kanso-panel">${row({ ...args, detail: detailTone === 'none' ? detail : { text: detail, tone: detailTone }, actions: tools ? [{ icon: 'lu-pin', label: 'Pin' }, { icon: 'lu-ellipsis', label: 'More' }] : [] })}</div>`,
   },
   'Primitives/Skeleton': {
     args: { shape: 'row', count: 3 },
