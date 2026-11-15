@@ -341,7 +341,7 @@ export const stacks = {
   window: { block: 'kanso-window', states: ['rest'] },
   'window workspace': { block: 'kanso-window__workspace' },
   'window panes': { block: 'kanso-window__panes' },
-  pane: { block: 'kanso-pane', states: ['focus', 'drop-preview'] },
+  pane: { block: 'kanso-pane', states: ['focus', 'drop-preview', 'gone'] },
   'pane body': { block: 'kanso-pane__body' },
   'pane placeholder': { block: 'kanso-pane__placeholder' },
   'pane drop ruler': { block: 'kanso-pane__drop-ruler' },

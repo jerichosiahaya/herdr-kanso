@@ -322,3 +322,4 @@
 .kanso-update__timeline-release--here{padding-bottom:var(--k-sp-2)}
 .kanso-update__timeline-release:last-child{padding-bottom:0}
 .kanso-layout--line>.kanso-field{flex:1}
+.kanso-pane--gone .kanso-terminal,.kanso-pane--gone .kanso-terminal span{color:var(--muted)!important}
