@@ -306,6 +306,32 @@ export const picture = ({ image = '', state = 'shown', action = '', pins = [] })
   : state === 'held' ? `<div class="kanso-picture__loading">${button({ label: action })}</div>`
   : `<div class="kanso-picture">${image}${pinLayer(pins)}</div>`;
 
+// A dōjō spot is [column, row] on the grid or [character, line] in a text; the cursor sits `at` it, the `target` is ringed.
+const sameSpot = (a, b) => Boolean(a && b) && a[0] === b[0] && a[1] === b[1];
+const spotState = (spot, at, target) => sameSpot(spot, at) ? ' kanso-cell--current' : sameSpot(spot, target) ? ' kanso-cell--goal' : '';
+// The dōjō's grid of `cols` by `rows`; after a miss, the `best` way to the target, its first cell showing the `key` that starts it.
+export const dojoGrid = ({ cols = 18, rows = 8, at = [0, 0], target = null, best = [], key = '' }) => {
+  const cell = (spot) => {
+    const state = spotState(spot, at, target), way = best.findIndex((step) => sameSpot(step, spot));
+    if (state) return `<i class="kanso-dojo__cell${state}">${state === ' kanso-cell--goal' ? '<b></b>' : ''}</i>`;
+    return way < 0 ? '<i class="kanso-dojo__cell"></i>' : `<i class="kanso-dojo__cell kanso-dojo__cell--path">${way === 0 && key ? `<em>${escape(key)}</em>` : ''}</i>`;
+  };
+  return `<div class="kanso-dojo__grid" style="--k-cols:${Number(cols)}">${Array.from({ length: cols * rows }, (_, n) => cell([n % cols, Math.floor(n / cols)])).join('')}</div>`;
+};
+// A text level: its `lines` one character to a cell, the cursor `at` [character, line], the `target` ringed.
+const character = (char, state) => `<i class="kanso-dojo__character${state}">${char === ' ' ? '&nbsp;' : escape(char)}</i>`;
+export const dojoText = ({ lines = [], at = [0, 0], target = null }) => `<div class="kanso-dojo__text">${lines.map((line, y) => `<div class="kanso-dojo__line">${[...line].map((char, x) => character(char, spotState([x, y], at, target))).join('')}</div>`).join('')}</div>`;
+// A round's count over the board: score, time and streak, the `moves` so far against the `best` (working ink once `missed`), then one segment per target, the `done` ones in ink and the next lit.
+const movesLine = (moves, best, missed) => `<span class="kanso-section__count"><b${missed ? ' class="kanso-text--working"' : ''}>${Number(moves)}</b> move${moves === 1 ? '' : 's'} · this one takes ${Number(best)} at best</span>`;
+const segment = (index, done) => `<i${index < done ? ' class="kanso-dojo__segment--done"' : index === done ? ' class="kanso-dojo__segment--current"' : ''}></i>`;
+export const dojoProgress = ({ score = 0, time = '0s', streak = 0, moves = null, best = 0, missed = false, done = 0, targets = 10 }) => `<div class="kanso-dojo__statistics"><span>score <b>${Number(score)}</b></span><span>${escape(time)}</span><span>streak <b>${Number(streak)}</b></span>${grow()}${moves === null ? '' : movesLine(moves, best, missed)}</div>`
+  + `<div class="kanso-dojo__progress-strip">${Array.from({ length: targets }, (_, index) => segment(index, done)).join('')}</div>`;
+export const dojoLevelStates = ['next', 'done', 'current'];
+// One level on the dōjō's path: its number and keys, a `done` one filled with its best, the `current` one ringed; `focus` while ] and [ move along.
+const levelClass = { next: '', done: ' kanso-row--done', current: ' kanso-control--current' };
+export const dojoLevel = ({ n, name, best = '', state = 'next', focus = false }) => `<div class="kanso-dojo__level${levelClass[state]}${focus ? ' kanso-control--focus' : ''}"><span class="kanso-level__node"></span>`
+  + `<span class="kanso-dojo__name"><span class="kanso-annotation--inactive">${escape(String(n))}</span>${escape(name)}</span><span class="kanso-content__secondary">${escape(String(best))}</span></div>`;
+
 export const thumbnail = ({ image, label, selected, loading }) => `<span class="kanso-thumbnail${selected ? ' kanso-control--selected' : ''}${loading ? ' kanso-skeleton--shape' : ''}" role="button" aria-pressed="${selected}" aria-label="${escape(label)}" title="${escape(label)}" tabindex="0">${image && !loading ? `<img src="${escape(image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>`;
 
 export const levels = { error: 'blocked', warning: 'working', success: 'done', info: 'accent' };
@@ -338,10 +364,11 @@ export const setting = ({ label, control, note, link }) => `<div class="kanso-se
 // A key hint: the chord beside the action it runs; faint when it says nothing now, recording while a key is captured.
 export const keyHint = ({ text, faint = false, recording = false }) => `<span class="kanso-key${faint ? ' kanso-text--dim' : ''}${recording ? ' kanso-key--recording kanso-ring--accent kanso-text--accent' : ''}">${escape(text)}</span>`;
 
-// One key of the keyboard map; `units` is its width in keys.
-const keycapClass = { free: '', herdr: ' kanso-keyboard__key--available', kanso: ' kanso-keyboard__key--bound', held: ' kanso-control--held', picked: ' kanso-control--on' };
+// One key of the keyboard map; `units` is its width in keys, `arrow` the way it moves, `finger` the one that presses it; `hint` rings the key to try.
+const keycapClass = { free: '', herdr: ' kanso-keyboard__key--available', kanso: ' kanso-keyboard__key--bound', held: ' kanso-control--held', picked: ' kanso-control--on', hint: ' kanso-keyboard__key--hint' };
 export const keycapStates = Object.keys(keycapClass);
-export const keycap = ({ label, units = 1, state = 'free', hover = false }) => `<span class="kanso-keyboard__key${keycapClass[state]}${hover ? ' kanso-control--hover' : ''}" role="button" tabindex="0"${units === 1 ? '' : ` style="--k-units:${Number(units)}"`}>${escape(label ?? '')}</span>`;
+const keyNotes = (arrow, finger) => `${arrow ? `<small class="kanso-keyboard__arrow">${escape(arrow)}</small>` : ''}${finger ? `<span class="kanso-keyboard__finger">${escape(finger)}</span>` : ''}`;
+export const keycap = ({ label, units = 1, state = 'free', hover = false, arrow = '', finger = '' }) => `<span class="kanso-keyboard__key${keycapClass[state]}${hover ? ' kanso-control--hover' : ''}" role="button" tabindex="0"${units === 1 ? '' : ` style="--k-units:${Number(units)}"`}>${escape(label ?? '')}${keyNotes(arrow, finger)}</span>`;
 
 // The picked key: its chord, what it does or Nothing, its layer, then the acts on it.
 export const keyPicked = ({ chord, meaning = null, layer = null, actions = [] }) => `<div class="kanso-keyboard__selection"><span class="kanso-keyboard__chord">${escape(chord)}</span>`
@@ -477,6 +504,14 @@ export const stacks = {
   'pane placeholder': { block: 'kanso-pane__placeholder' },
   'pane drop ruler': { block: 'kanso-pane__drop-ruler' },
   'device tools': { block: 'kanso-panel__tools' },
+  dojo: { block: 'kanso-dojo' },
+  'dojo header': { block: 'kanso-dojo__header' },
+  'dojo body': { block: 'kanso-dojo__body' },
+  'dojo path': { block: 'kanso-dojo__path' },
+  'dojo main': { block: 'kanso-dojo__main' },
+  'dojo board': { block: 'kanso-dojo__board' },
+  'dojo talk': { block: 'kanso-dojo__conversation' },
+  'dojo feedback': { block: 'kanso-dojo__feedback', states: ['success', 'missed'] },
   panel: { block: 'kanso-panel', states: ['narrow', 'window', 'stale'] },
   timeline: { block: 'kanso-update__timeline' },
   columns: { block: 'kanso-layout kanso-layout--columns' },

@@ -404,3 +404,17 @@
 .kanso-simulator--rotated .kanso-simulator__line{flex:1}
 .kanso-picture{position:relative}
 .kanso-picture>:is(svg,img){display:block;width:100%}
+
+.kanso-dojo__grid{grid-template-columns:repeat(var(--k-cols),minmax(0,34px))}
+.kanso-dojo__grid>.kanso-dojo__cell{width:auto;height:auto;aspect-ratio:1}
+.kanso-dojo__cell.kanso-dojo__cell--path{background:var(--w12)}
+.kanso-dojo__progress-strip>.kanso-dojo__segment--done{background:var(--fg)}
+.kanso-dojo__progress-strip>.kanso-dojo__segment--current{background:color-mix(in srgb,var(--fg) 40%,transparent)}
+.kanso-dojo__feedback--success{box-shadow:0 0 0 1px color-mix(in srgb,var(--done) 60%,transparent)}
+.kanso-dojo__feedback--missed{box-shadow:0 0 0 1px color-mix(in srgb,var(--working) 60%,transparent)}
+.kanso-keyboard__key{position:relative}
+.kanso-keyboard__key.kanso-keyboard__key--hint{box-shadow:inset 0 0 0 2px var(--accent);color:var(--fg)}
+.kanso-keyboard__arrow{position:absolute;right:var(--k-sp-1);top:var(--k-sp-hair);font-size:var(--k-fs-meta);color:var(--muted)}
+.kanso-control--on>.kanso-keyboard__arrow{color:inherit}
+.kanso-keyboard__finger{position:absolute;top:calc(100% + var(--k-sp-1));left:50%;transform:translateX(-50%);font-size:var(--k-fs-meta);color:var(--dim);white-space:nowrap}
+.kanso-keyboard__row:has(.kanso-keyboard__finger){margin-bottom:var(--k-sp-4)}
