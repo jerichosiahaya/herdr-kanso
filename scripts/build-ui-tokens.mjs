@@ -16,6 +16,7 @@ const PICK = {
   ICON_ROW: "k-ic-row",
   ICON_INLINE: "k-ic-inline",
   ICON_CHROME: "k-ic-chrome",
+  CHROME_SQUARE: "k-h-pane",
   DRAG_START: "k-drag-start",
   SWITCH: { w: "k-sw-w", h: "k-sw-h", knob: "k-sw-knob" },
 };

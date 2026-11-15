@@ -11,6 +11,7 @@ export const ICON = 15;
 export const ICON_ROW = 14;
 export const ICON_INLINE = 12;
 export const ICON_CHROME = 17;
+export const CHROME_SQUARE = 34;
 export const DRAG_START = 4;
 export const SWITCH = { w: 28, h: 16, knob: 12 };
 export const SPIN = 900;

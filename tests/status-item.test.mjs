@@ -28,7 +28,10 @@ test("An item is its icon or mark at the inline size, 8 to its words", async () 
   assert.deepEqual(first(icon, "gap"), [G.sm]);
   assert.deepEqual(first(kids(icon)[0], "size"), [ICON_INLINE]);
   assert.deepEqual(first(kids(icon)[1], "child"), ["devbox"]);
-  assert.equal(calls(icon, "flex_none").length, 1);
+  assert.equal(calls(icon, "flex_none").length, 0, "a long name shrinks and trims");
+  assert.equal(calls(icon, "flex_initial").length, 1);
+  assert.deepEqual(first(icon, "min_w"), [0]);
+  assert.equal(calls(kids(icon)[1], "truncate").length, 1);
   assert.equal(calls(icon, "on_click").length, 0, "no click without somewhere to go");
   const counted = statusItem("working", c, { mark: "working", text: 2 });
   assert.deepEqual(first(kids(counted)[0], "size"), [ICON_INLINE]);
@@ -53,7 +56,7 @@ test("A clickable item gets the wash under the pointer; one in a state keeps its
 });
 
 test("A pending item is drawn at once at the pending opacity with a breathing dot, and an open one on the 12% wash", async () => {
-  const { statusItem, tokens, PENDING } = await kit();
+  const { statusItem, tokens, PENDING, R, G } = await kit();
   const c = tokens(night);
   const pending = statusItem("computer", c, { icon: "server", text: "devbox", pending: true });
   assert.deepEqual(first(pending, "opacity"), [PENDING]);
@@ -61,7 +64,11 @@ test("A pending item is drawn at once at the pending opacity with a breathing do
   assert.deepEqual(first(dot, "id"), ["computer-pending"]);
   assert.equal(calls(dot, "loop").length, 1);
   assert.equal(calls(statusItem("computer", c, { icon: "server", text: "devbox" }), "opacity").length, 0);
-  assert.deepEqual(first(statusItem("servers", c, { icon: "plug", open: true }), "bg"), [c.w12]);
+  const open = statusItem("servers", c, { icon: "plug", open: true });
+  assert.deepEqual(first(open, "bg"), [c.w12]);
+  assert.deepEqual(first(open, "rounded"), [R.sm], "the open wash sits on the same inset ground as the hover");
+  assert.deepEqual(first(open, "mx"), [-G.xs]);
+  assert.deepEqual(first(open, "px"), [G.xs]);
 });
 
 test("Needs you is the blocked mark, the name, the question trimmed to its width and +N; the name and +N never fold", async () => {
@@ -79,6 +86,8 @@ test("Needs you is the blocked mark, the name, the question trimmed to its width
   assert.deepEqual(first(more, "child"), ["+1"]);
   assert.deepEqual(first(more, "text_color"), [c.dim]);
   assert.equal(calls(more, "flex_none").length, 1);
+  assert.equal(calls(question, "text_color").length, 0, "the question follows the item: muted at rest");
+  assert.deepEqual(hoverOf(el), [["bg", c.w7], ["text_color", c.text]], "and foreground under the pointer");
   const alone = needsItem("needs-you", c, { name: "cart-ui" });
   assert.equal(kids(alone).length, 2, "no question and nobody else: mark and name");
 });

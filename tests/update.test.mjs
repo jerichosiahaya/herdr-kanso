@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { load, context, exec, nativePlatform, temporary, clone } from "./helpers.mjs";
+import { load, context, exec, nativePlatform, temporary, clone, gpuiHost } from "./helpers.mjs";
 import { test, dropChild, trackedSpawn, quote, windowsOnly, updater, fixture, version, small, tree, stages, hostFor } from "./update-harness.mjs";
 
 test("Kanso's newest release comes from the vX.Y.Z tags, not from Herdr", async () => {
@@ -207,10 +207,43 @@ test("The footer is as tall as the rows it shows: one switched off in Kanso's se
   const { cx, drain } = context();
   cx.timer = { every() {} };
   f.updater.start(cx); await drain();
-  assert.deepEqual(f.resizes, [156], "3.9.1's taller footer comes back to Update and Settings");
+  assert.deepEqual(f.resizes, [88], "3.9.1's taller footer comes back to Update and Settings");
   const { footerPx } = await updater({ shared: () => null });
-  assert.equal(footerPx(new Set(), false), 156);
-  assert.equal(footerPx(new Set(["footer.machine"]), false), 120);
+  const { stateBlockPx } = await load("kanso-chrome/ui-state.js", ["stateBlockPx"], gpuiHost());
+  assert.equal(footerPx(new Set(["footer.machine"]), null), 56, "one row: 8 above, 32, 16 below");
+  assert.equal(footerPx(new Set(["footer.machine"]), "3.31.0"), 88, "an update is a row on top");
+  assert.equal(footerPx(new Set(), null), 88, "Settings and Add computer");
+  assert.equal(footerPx(new Set(), "3.31.0"), 120);
+  assert.equal(footerPx(new Set(), null, "words"), 88, "a refusal shows only under an update row");
+  const block = Math.ceil(stateBlockPx({ why: "words", fixes: [{ label: "Update" }] }, 2));
+  assert.equal(footerPx(new Set(), "3.31.0", "words"), 120 + 2 + block + 8, "the kit's block with our words on two lines, a hair under its row and 8 above the next");
+  assert.equal(footerPx(new Set(), "3.31.0", "words", false), 126, "in the rail three squares of 34 a hair apart, 8 above and 12 below, and no block");
+  assert.equal(footerPx(new Set(["footer.machine"]), null, null, false), 54, "one square");
+});
+
+test("A refused update makes room for its block in the open footer, and gives it back in the rail", async (t) => {
+  const f = await fixture(t);
+  const { cx, drain } = context();
+  cx.timer = { every() {} };
+  f.updater.start(cx); await drain();
+  assert.deepEqual(f.resizes, [120], "Update, Settings and Add computer");
+  f.updater.refuse("the download failed");
+  f.updater.fit();
+  assert.ok(f.resizes.at(-1) > 120, "the block fits under the update row");
+  f.store["sidebar.collapsed"] = true;
+  f.updater.fit();
+  assert.equal(f.resizes.at(-1), 126, "the rail fits its squares and draws no block");
+});
+
+test("A refused update keeps the tool's words for the footer, and an update that lands clears them", async (t) => {
+  const f = await fixture(t);
+  const { cx } = context();
+  f.updater.refuse("git ls-remote: Could not resolve host: github.com");
+  assert.equal(f.updater.refused(), "git ls-remote: Could not resolve host: github.com");
+  await f.updater.report(cx, "error", "the download failed");
+  assert.equal(f.updater.refused(), "the download failed");
+  await f.updater.report(cx, "ok", "");
+  assert.equal(f.updater.refused(), null);
 });
 
 test("A mod that did not load for want of memory asks for a restart, however the runtime words it", async () => {

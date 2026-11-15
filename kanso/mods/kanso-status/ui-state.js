@@ -2,7 +2,7 @@
 // Kept byte for byte by `npm run sync:share`: edit kanso-panel/ui-state.js.
 import { div, svg } from "gpui-kit";
 import { h_flex, v_flex } from "gpui-base";
-import { G, R, T, ICON_ROW, breathe, glyphOf } from "./ui.js";
+import { G, H, R, T, ICON_ROW, breathe, glyphOf } from "./ui.js";
 import { button } from "./ui-button.js";
 
 /** A reversible action, done: what happened, and Undo at the end of its line. */
@@ -16,13 +16,22 @@ export const stateEmpty = (id, icon, words, c, action = null) => v_flex().id(id)
   .child(div().w_full().text_center().text_size(T.value).text_color(c.muted).child(words))
   .when(Boolean(action), (el) => el.child(button(`${id}-action`, action?.label, action?.onClick, c, { kind: "tonal" })));
 
+// The block's own sizes: its edge (border_1), its leading, and the source's words at most two lines.
+const EDGE = 1;
+const LEADING = 1.5;
+const EVIDENCE_PX = T.mono * LEADING * 2;
+
+/** The tallest a `stateBlock` with these parts draws when our words wrap to `lines`: a fixed-size home makes room with it. */
+export const stateBlockPx = ({ why = null, fixes = [] } = {}, lines = 1) => 2 * (EDGE + G.md) + T.card * LEADING * lines
+  + (why ? G.xs + EVIDENCE_PX : 0) + (fixes.length ? 2 * G.xs + H.control : 0);
+
 /** Failure, block: a blocked edge; the mark and our words, the source's words at most two lines, then the fixes: first solid, the rest tonal.
  * `fixes`: [{ label, onClick }]; `font`: the evidence's mono family. */
 export function stateBlock(id, { mark, what, why = null, fixes = [], font = null }, c) {
-  const evidence = div().w_full().max_h(T.mono * 3).overflow_hidden().text_size(T.mono).line_height(1.5).text_color(c.muted).tooltip(why ?? "").child(why ?? "");
+  const evidence = div().w_full().max_h(EVIDENCE_PX).overflow_hidden().text_size(T.mono).line_height(LEADING).text_color(c.muted).tooltip(why ?? "").child(why ?? "");
   return v_flex().id(id).w_full().p(G.md).gap(G.xs).rounded(R.card).border_1().border_color(c.blocked)
     .child(h_flex().w_full().min_w(0).items_center().gap(G.sm).child(mark)
-      .child(div().flex_1().min_w(0).text_size(T.card).font_medium().text_color(c.text).child(what)))
+      .child(div().flex_1().min_w(0).text_size(T.card).line_height(LEADING).font_medium().text_color(c.text).child(what)))
     .when(Boolean(why), (el) => el.child(h_flex().w_full().pl(ICON_ROW + G.sm).child(font ? evidence.font_family(font) : evidence)))
     .when(fixes.length > 0, (el) => el.child(h_flex().w_full().pl(ICON_ROW + G.sm).pt(G.xs).gap(G.sm)
       .children(fixes.map((f, i) => button(`${id}-fix-${i}`, f.label, f.onClick, c, { kind: i ? "tonal" : "solid" }).flex_1()))));
