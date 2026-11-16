@@ -780,8 +780,6 @@
     "kit/Panel/Stale",
     "kit/Panel/One-line rows",
     "proto/components-shipped/Shipped/Default",
-    "proto/components-status-bar-working/StatusBarWorking/Default",
-    "proto/components-status-bar/StatusBar/Default",
     "proto/components-system-notification/SystemNotification/Default",
     "proto/components-tab-bar/TabBar/Default",
     "proto/components-while-you-were-away/WhileYouWereAway/Default",

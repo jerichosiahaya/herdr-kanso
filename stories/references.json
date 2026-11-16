@@ -2069,9 +2069,7 @@
         "coverage/status/StatusStandIn/Offscreen waiting",
         "coverage/status/StatusStandIn/Quiet",
         "coverage/status/StatusStandIn/Several waiting",
-        "coverage/status/StatusStandIn/Visible home",
-        "proto/components-status-bar-working/StatusBarWorking/Default",
-        "proto/components-status-bar/StatusBar/Default"
+        "coverage/status/StatusStandIn/Visible home"
       ],
       "components": [
         "Compositions/Status bar"

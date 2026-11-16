@@ -939,5 +939,15 @@
     "states": {
       "Column controls": "kit/Status bar/Panes per view menu"
     }
+  },
+  "status/StatusStandIn": {
+    "page": "Compositions/Status bar",
+    "states": {
+      "Quiet": "kit/Status bar/At rest",
+      "Visible home": "kit/Status bar/At rest",
+      "Offscreen waiting": "kit/Status bar/Needs you",
+      "Several waiting": "kit/Status bar/Needs you",
+      "Low memory": "kit/Status bar/Memory low"
+    }
   }
 }

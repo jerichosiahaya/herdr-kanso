@@ -192,7 +192,7 @@ export const guidelines = {
   ],
   "Compositions/Status bar": [
     ["Seijaku", "Two halves around panes per view.", "26 tall, 12 inside, 16 between items. Panes per view keeps the fixed 180 slot; each half folds within its own width. Layout paused takes the slot while the strip is stopped."],
-    ["Kansō", "A stand-in, never a second copy.", "No working count: the rows and tiles say it. The palette is an icon Button, its key in the tooltip: keys live in tooltips and menus."],
+    ["Kansō", "A stand-in, never a second copy.", "The working count says how many work, while any do; the rows and tiles say which. The palette is an icon Button, its key in the tooltip: keys live in tooltips and menus."],
     ["Kansō", "At rest, panes per view and the palette.", "The number of panes per view, its − and + on hover; the palette door. Each other fact shows only while its own home is out of view. No minimap: the edges say what is past each side."],
     ["Shizen", "Nothing jumps.", "An item fades in over the hover timing; its neighbours keep their places in their own half."],
     ["Kokō", "Panes per view without the buttons.", "The wheel over the number changes it, a click evens out; the tooltip says both."],
