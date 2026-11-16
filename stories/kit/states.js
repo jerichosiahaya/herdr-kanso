@@ -1,7 +1,7 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, channelSettings, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
 import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence, well, shareCard, dojoGrid, dojoText, dojoProgress, dojoLevel } from './pieces.js';
-import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
+import { atWidth, besideStrip, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { sampleDojo, sampleFind, sampleShare, sampleShipped } from './panel-samples.js';
 import { keyLayer, keyLayerMods, sampleShot, sampleScreens, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -1055,13 +1055,16 @@ export const statedPages = {
       const edges = side === 'both'
         ? edge({ side: 'left', columns: [[first]], drop }) + edge({ columns: edgeColumns(rest, stacked), drop, overflow })
         : edge({ side, columns: edgeColumns(list, stacked), drop, overflow });
-      return `<div class="kanso-story__strip${side === 'right' ? ' kanso-story__strip--end' : ''}">${edges}</div>`;
+      return besideStrip(side, edges);
     },
     states: [
       { label: 'One left, three right', args: { side: 'both', panes: 4 }, caption: 'A tile per pane past each side; a click goes there, the name is its tooltip. No state dots.' },
       { label: 'A stacked column', args: { stacked: true }, caption: 'The panes of one column stay together.' },
+      { label: 'Needs you hovered', args: { waiting: 'nearest' }, caption: 'Its pane takes the active fill; the edge says where, the status bar says why.' },
       { label: 'Dragging past the edge', args: { panes: 1, drop: true }, caption: 'A pane dragged over an edge washes it in accent.' },
-      { label: 'Ten beyond', args: { panes: 10 }, caption: 'Every pane keeps its tile.' },
+      { label: 'Ten beyond', args: { panes: 10 }, caption: 'Four columns show; the farthest six fold behind +6.' },
+      { label: 'Ten beyond, Needs you hovered', args: { panes: 10, waiting: 'farthest' }, caption: 'The waiting pane is folded: +6 takes the active fill.' },
+      { label: 'Ten beyond, +6 open', args: { panes: 10, overflow: true }, caption: 'A Menu of the folded panes, icon and name; a click goes there.' },
     ],
   },
   'Compositions/Keyboard/Key': {

@@ -158,6 +158,17 @@ export const hypotheses = {
   ],
   'Compositions/Edges': [
     {
+      change: 'No state dots on the edges, and no card on hover: a pane’s name is its tooltip, and past four columns the farthest fold behind +N, a Menu.',
+      today: 'each tile carries a dot, breathing while it works or waits, still when it finished; past eight tiles a +N in text; hovering an edge opens a card naming each pane beyond it, with its dot.',
+      why: 'see which pane out of view works, waits or finished, and which is which, without going there.',
+      question: 'why say a pane’s state twice, at the edge and on its row in the sidebar and the status bar’s Needs you?',
+      believe: 'the edge saying only where, and Needs you lighting its pane, lets people reach a waiting pane as fast as before with fewer moving marks.',
+      jobs: [['a pane waits', 'Needs you in the status bar; hovering it lights the pane or +N'], ['a pane works or finished', 'its row in the sidebar'], ['which pane is which', 'the tooltip, and the +N Menu with icons and names'], ['go there', 'a click, as today']],
+      wrong: 'someone misses a waiting pane that is out of view, or hovers the edges to find which pane is which.',
+      try: 'Dawn Mode first.',
+      back: 'the dots and the card come back as they were.',
+    },
+    {
       change: 'No minimap.',
       today: 'the status bar draws one mark per column, brighter for the column in front, pinned or in view. A click goes to that column, the wheel over it slides the view, and it can be switched off.',
       why: 'it says how many columns there are, which one is in front, which are pinned; it takes you to a column; it slides the view.',

@@ -9,6 +9,8 @@ const width = (value) => {
 };
 export const atWidth = (value, markup) => `<div class="kanso-story__bar ${width(value)}">${markup}</div>`;
 export const inStrip = (value, markup) => `<div class="kanso-story__strip ${width(value)}">${markup}</div>`;
+// The edges at the sides of a strip; one on the right sits at its end.
+export const besideStrip = (side, markup) => `<div class="kanso-story__strip${side === 'right' ? ' kanso-story__strip--end' : ''}">${markup}</div>`;
 export const inBar = (value, parts) => atWidth(value, statusBar(parts));
 // A place's name over its drawing; a slice of the sidebar; a slice of Settings.
 export const captioned = (place, markup) => `<p class="kanso-story__caption">${place}</p>${markup}`;

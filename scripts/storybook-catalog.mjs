@@ -86,7 +86,7 @@ const panelPiece = { HeroAndVerdict: 'Panels/PR', InATab: 'Panels/Worktrees', Me
 const protoPage = {
   'components-annotated-picture': 'Panels/Pins', 'components-choosing-the-channel': null,
   'components-code': null, 'components-collapsed-rail': null,
-  'components-dialog': null, 'components-edges-and-minimap': 'Compositions/Edges',
+  'components-dialog': null, 'components-edges-and-minimap': null,
   'components-find-in-the-conversation': 'Panels/Find', 'components-header-digest': null,
   'components-log': null, 'components-markdown-window': 'Panels/Markdown', 'components-markdown': null,
   'components-menu': null, 'components-new-project': null, 'components-new-worktree': null,

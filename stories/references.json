@@ -2102,9 +2102,7 @@
         "Remote: 0."
       ],
       "records": [
-        "proto/approved-bars-edges/Reference/1",
-        "proto/components-edges-and-minimap/Edge/Default",
-        "proto/components-edges-and-minimap/MinimapSlot/Default"
+        "proto/approved-bars-edges/Reference/1"
       ],
       "components": [
         "Compositions/Edges"

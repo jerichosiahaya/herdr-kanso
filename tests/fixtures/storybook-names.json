@@ -779,8 +779,6 @@
     "kit/Panel/Selected, removal armed",
     "kit/Panel/Stale",
     "kit/Panel/One-line rows",
-    "proto/components-edges-and-minimap/Edge/Default",
-    "proto/components-edges-and-minimap/MinimapSlot/Default",
     "proto/components-shipped/Shipped/Default",
     "proto/components-status-bar-working/StatusBarWorking/Default",
     "proto/components-status-bar/StatusBar/Default",

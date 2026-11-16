@@ -918,5 +918,26 @@
       "Save failed": "kit/Panels/Dojo/The round could not be kept",
       "Stopped": "kit/Panels/Dojo/End round: not counted"
     }
+  },
+  "strip/StripNavigation": {
+    "page": "Compositions/Edges",
+    "states": {
+      "Offscreen edge": "kit/Edges/Needs you hovered",
+      "Several offscreen": "kit/Edges/One left, three right",
+      "Narrow": "kit/Edges/One left, three right",
+      "Dragging": "kit/Edges/Dragging past the edge"
+    }
+  },
+  "strip/StripNavigation/Layout paused": {
+    "page": "Compositions/Status bar",
+    "states": {
+      "Layout paused": "kit/Status bar/Layout paused"
+    }
+  },
+  "strip/StripNavigation/Column controls": {
+    "page": "Compositions/Status bar",
+    "states": {
+      "Column controls": "kit/Status bar/Panes per view menu"
+    }
   }
 }
