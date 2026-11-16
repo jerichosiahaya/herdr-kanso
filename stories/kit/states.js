@@ -12,6 +12,7 @@ const question = 'Run pnpm add react-countdown@2.3?';
 export const needsShown = { none: null, question: needsItem({ name: 'cart-ui', question, more: 1 }), folded: needsItem({ name: 'cart-ui', more: 1 }) };
 const memoryItem = ({ folded = false, open = false }) => statusItem({ text: folded ? '8% free' : 'Memory 8% free', tone: 'blocked', open });
 export const memoryShown = { none: null, word: memoryItem({}), folded: memoryItem({ folded: true }) };
+const workingItem = ({ open = false }) => statusItem({ mark: 'working', text: 3, open });
 export const stepperShown = ['rest', 'hover', 'menu'];
 // Each item the bar can show, in its own half and at its fold.
 export const statusItems = {
@@ -19,7 +20,7 @@ export const statusItems = {
   'Needs you': ({ folded, more, open }) => ({ right: [needsItem({ name: 'cart-ui', question: folded ? '' : question, more, open })] }),
   Memory: (args) => ({ right: [memoryItem(args)] }),
   'Servers, containers, reviews': () => ({ right: statusPanels() }),
-  'Working count': ({ open }) => ({ right: [statusItem({ mark: 'working', text: 3, open })] }),
+  'Working count': (args) => ({ right: [workingItem(args)] }),
   'Command palette': ({ open }) => ({ right: [paletteDoor({ open })] }),
 };
 // Each item's right-click Menu, as board B10 draws it.
@@ -32,18 +33,18 @@ const statusItemMenus = {
 };
 
 // The status bar's halves for its controls; the page frames them at a width, the window places them as they are.
-const statusParts = ({ computer, paused, stepper: middle, needs, memory, panels, open }) => {
+const statusParts = ({ computer, paused, stepper: middle, needs, memory, working, panels, open }) => {
   const menuOpen = !paused && middle === 'menu';
   return {
     left: computer === 'none' ? [] : [computerItem({ name: 'devbox', state: computer })],
     middle: paused ? layoutPaused() : stepper({ hover: middle === 'hover', open: menuOpen }),
-    right: [needsShown[needs], memoryShown[memory], ...(panels ? statusPanels({ open }) : []), paletteDoor()].filter(Boolean),
+    right: [needsShown[needs], memoryShown[memory], working ? workingItem({}) : null, ...(panels ? statusPanels({ open }) : []), paletteDoor()].filter(Boolean),
     popup: menuOpen ? stepperMenu() : panels && open !== 'none' ? statusMenus[open]() : '',
   };
 };
 const withPopup = (width, parts) => parts.popup ? `<div class="kanso-story__popup-room">${inBar(width, parts)}</div>` : inBar(width, parts);
 const statusStory = ({ width, ...args }) => withPopup(width, statusParts(args));
-const statusArgs = { width: 1040, computer: 'none', paused: false, stepper: 'rest', needs: 'question', memory: 'none', panels: false, open: 'none' };
+const statusArgs = { width: 1040, computer: 'none', paused: false, stepper: 'rest', needs: 'question', memory: 'none', working: false, panels: false, open: 'none' };
 
 const tabItems = (value) => [{ key: 'checkout', label: 'checkout' }, { key: 'cart-ui', label: 'cart-ui', mark: value === 'cart-ui' ? '' : 'blocked' }, { key: 'tests', label: 'tests' }];
 export const tabActs = {
@@ -1017,6 +1018,7 @@ export const statedPages = {
       { label: 'Unreachable', args: { computer: 'unreachable', needs: 'none' }, caption: "devbox can't be reached and its row is out of sight." },
       { label: 'Needs you', args: {}, caption: 'While the waiting row is out of view; +1 for the others out of view.' },
       { label: 'Memory low', args: { needs: 'none', memory: 'word' }, caption: 'This computer is low on memory and Memory is closed.' },
+      { label: 'At work', args: { needs: 'none', working: true }, caption: 'How many work, while any do; a click opens Status. Its hypothesis proposes dropping it.' },
       { label: 'Servers, containers and reviews', args: { width: 520, needs: 'none', panels: true }, caption: 'Each its icon and how many need a look; gone while its panel is open.' },
       { label: 'Servers open', args: { width: 520, needs: 'none', panels: true, open: 'servers' }, caption: 'The server with no pane: open, copy, stop.' },
       { label: 'Containers open', args: { width: 520, needs: 'none', panels: true, open: 'containers' }, caption: 'The stopped container: start, logs, remove.' },

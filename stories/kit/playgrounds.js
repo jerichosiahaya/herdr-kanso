@@ -493,6 +493,7 @@ export const playgrounds = {
       stepper: { name: 'panes per view', control: { type: 'inline-radio' }, options: stepperShown, if: { arg: 'paused', truthy: false } },
       needs: { name: 'needs you', control: { type: 'inline-radio' }, options: Object.keys(needsShown) },
       memory: { name: 'memory low', control: { type: 'inline-radio' }, options: Object.keys(memoryShown) },
+      working: flag('working count'),
       panels: flag('servers, containers, reviews'),
       open: { ...select('open', ['none', ...Object.keys(statusMenus)]), if: { arg: 'panels' } },
     },
