@@ -189,7 +189,7 @@ test("Clicking a tool runs that tool once and not the row", async () => {
   assert.deepEqual(hits, ["more"]);
 });
 
-test("The row takes its click, hover, keyboard and focus from the caller, and wires none it is not given", async () => {
+test("The row takes its click, hover, keyboard and focus from the caller, wires none it is not given, and is a button when it acts", async () => {
   const { row, tokens } = await kit();
   const c = tokens(night);
   const onHover = () => {}, onKey = () => {}, focusHandle = { is_focused: () => false };
@@ -200,6 +200,10 @@ test("The row takes its click, hover, keyboard and focus from the caller, and wi
   assert.equal(one(wired, "on_key_down"), onKey);
   assert.equal(one(wired, "track_focus"), focusHandle);
   assert.deepEqual(styled(wired, "focus"), [["border_color", c.accent]]);
+  assert.equal(wired.tag, "h_flex", "a handle drives it, so it stays a plain row");
+  const pressable = row("r", c, { name: "Juno", onClick: () => {} });
+  assert.equal(pressable.tag, "r", "a row that acts is a Button: Tab reaches it, Enter and Space press it");
+  assert.deepEqual(styled(pressable, "focus"), [["border_color", c.accent]]);
   const bare = row("r", c, { name: "Juno" });
   for (const name of ["on_click", "cursor_pointer", "on_hover", "on_key_down", "track_focus", "focus"]) assert.equal(calls(bare, name).length, 0, name);
 });

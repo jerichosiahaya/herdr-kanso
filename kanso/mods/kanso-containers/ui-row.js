@@ -1,7 +1,7 @@
 // Kanso's panel kit: the row, one named item in a list with its facts, its mark and its tools. Apache-2.0.
 // Kept byte for byte by `npm run sync:share`: edit kanso-panel/ui-row.js.
 import { div, svg } from "gpui-kit";
-import { h_flex, v_flex } from "gpui-base";
+import { h_flex, v_flex, Button } from "gpui-base";
 import { G, H, R, T, ICON_ROW, ICON_INLINE, CLEAR, glyphOf, toneColor } from "./ui.js";
 import { button } from "./ui-button.js";
 import { chip } from "./ui-chip.js";
@@ -97,11 +97,15 @@ const guideOf = (c, depth) => (depth > 1 ? div().absolute().top_0().bottom_0().l
 // A tree row steps in by `level`; any other by its `depth`.
 const leftOf = (level, depth) => (level === null ? indent(depth) : G.sm + G.lg * level);
 
+// A row that acts is a Button: Tab reaches it, Enter and Space press it, a screen reader calls it a button. One a handle already drives stays plain.
+const rootOf = (id, { onClick, focusHandle }) => (onClick && !focusHandle ? Button.new(id).flex() : h_flex().id(id));
+
 const wire = (el, c, { onClick, onHover, onKey, focusHandle }) => el
   .when(Boolean(onClick), (e) => e.cursor_pointer().on_click((_e, cx) => onClick(cx)))
   .when(Boolean(onHover), (e) => e.on_hover(onHover))
   .when(Boolean(onKey), (e) => e.on_key_down(onKey))
-  .when(Boolean(focusHandle), (e) => e.track_focus(focusHandle).focus((s) => s.border_color(c.accent)));
+  .when(Boolean(focusHandle), (e) => e.track_focus(focusHandle))
+  .when(Boolean(onClick || focusHandle), (e) => e.focus((s) => s.border_color(c.accent)));
 
 // `start`, `tools`: drawn elements before the icon and always at the end; `actions`: tools shown with `hover` or `focus`; `keys`: key hint props.
 // `level` makes it a tree row, `open` its folder's fold; `verbs`: quiet word actions on a line under it.
@@ -128,7 +132,7 @@ export function row(id, c, {
     mark(c, { status }),
   ].filter(Boolean));
   // The ring is a border kept clear at rest, so a focus or a pick never moves the content.
-  return wire(h_flex().id(id).relative().min_w(0).mx(-G.sm).items_center().rounded(R.control)
+  return wire(rootOf(id, { onClick, focusHandle }).relative().min_w(0).mx(-G.sm).items_center().rounded(R.control)
     .border_2().border_color(ringOf(c, { selected, focus }))
     .pl(leftOf(level, depth) - G.hair).pr(G.sm - G.hair).text_size(T.value).text_color(ink)
     .when(under && !title, (el) => el.py(G.sm - G.hair))
