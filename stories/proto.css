@@ -151,8 +151,6 @@
 .kanso-menu__item.kanso-menu__item--dim{color:var(--dim)}
 .kanso-menu__item .kanso-segmented{margin-left:auto;height:var(--k-h-compact)}
 .kanso-story__bars-stage{position:relative;padding:16px;border-radius:12px;background:var(--chrome);box-shadow:0 0 0 1px var(--border);box-sizing:border-box}
-.kanso-file__status{font:500 11.5px var(--mono);width:14px;flex:none;text-align:center}
-.kanso-file__spacer{width:14px;flex:none}
 .kanso-code__conflict{display:flex;align-items:center;gap:var(--k-sp-2);margin:var(--k-sp-3) calc(-1 * var(--k-sp-4)) 0;padding:8px 16px;background:color-mix(in srgb,var(--blocked) 10%,transparent);font-size:12.5px;flex-wrap:wrap}
 .kanso-code__conflict .kanso-content__text{flex:1 1 100%;min-width:0}
 .kanso-diff{margin:var(--k-sp-3) calc(-1 * var(--k-sp-4)) 0}
