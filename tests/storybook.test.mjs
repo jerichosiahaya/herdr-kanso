@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { expand } from "../scripts/storybook-catalog.mjs";
-import { compositionErrors, lint, storyFiles, structureErrors } from "../scripts/lint-storybook.mjs";
+import { compositionErrors, lint, primitiveErrors, storyFiles, structureErrors } from "../scripts/lint-storybook.mjs";
 import { statusOf, statusTags } from "../stories/kit/status.js";
 import { rules } from "../stories/kit/rules.js";
 
@@ -16,6 +16,14 @@ const files = storyFiles("stories");
 
 test("Every page follows the structure lint", () => {
   assert.deepEqual(lint(), []);
+});
+
+test("An element drawn outside a primitive is listed with its page, element and class", () => {
+  const html = '<div class="kanso-story"><span class="kanso-row kanso-text--dim"><b>ok</b></span><div class="kanso-keyboard__row"><i></i></div><p class="kanso-text--dim">raw</p></div>';
+  assert.deepEqual(primitiveErrors([{ page: "Panels/Dojo", html }], new Set(["kanso-row"]), new Set(["kanso-text--dim"])), [
+    "Panels/Dojo: <div> kanso-keyboard__row is not a primitive",
+    "Panels/Dojo: <p> raw markup outside a primitive",
+  ]);
 });
 
 test("A composition that draws its own markup fails the lint", () => {

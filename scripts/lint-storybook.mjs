@@ -1,9 +1,10 @@
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { posix } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { SECTIONS, expand } from './storybook-catalog.mjs';
 import { explainErrors } from './storybook-components.mjs';
+import { markupElements } from './storybook-markup.mjs';
 import { gapDocument, overlapFor } from './storybook-coverage.mjs';
 import { STORYBOOK_CLASSES, cssSelectors, markupClasses, selectorClasses } from './import-proto.mjs';
 import { descriptions } from '../stories/kit/descriptions.js';
@@ -12,6 +13,11 @@ import { STATUSES, statusTags } from '../stories/kit/status.js';
 const STORY_FILE = /\.stories\.(?:js|jsx|mjs|ts|tsx)$/;
 const BEM = /^kanso-[a-z0-9]+(?:-[a-z0-9]+)*(__[a-z0-9-]+)?(--[a-z0-9-]+)?$/;
 const CODE = /\b(?:[SBPQDI]\d{1,2}[a-e]?)\b|proto\/|approved-/;
+// Report mode: primitive violations are listed in stories/PRIMITIVES-TODO.md (`--todo` rewrites it); true once it lists none, so each one fails.
+export const PRIMITIVES_ENFORCED = false;
+const PRIMITIVES_TODO = 'stories/PRIMITIVES-TODO.md';
+const FRAME = /^kanso-(?:story|docs)(?:__|--|$)/;
+const SWATCH = /^kanso-(?:tokens(?:__|--|$)|icon__)/;
 
 export function storyFiles(root = 'stories') {
   return Object.fromEntries(readdirSync(root, { recursive: true, withFileTypes: true }).filter((file) => file.isFile() && (STORY_FILE.test(file.name) || /\.(mdx|json)$/.test(file.name))).map((file) => {
@@ -108,6 +114,35 @@ export function compositionErrors(source, path = 'stories/kit/compositions.js') 
   return rules.filter(([found]) => found).map(([, rule]) => `${path}: ${rule} in a composition`);
 }
 
+// Every element a page draws comes from a primitive: a class primitives.css owns, a token from utilities.css, or the frame around the story.
+export function primitiveErrors(records, owned, tokens) {
+  const pageErrors = ({ page, html }) => {
+    const kit = (name) => !FRAME.test(name) && !tokens.has(name);
+    const drawn = (node) => node.classes.filter((name) => name && kit(name));
+    const own = (node) => drawn(node).filter((name) => !(page.startsWith('Tokens/') && SWATCH.test(name)));
+    const inside = (node) => Boolean(node.parent) && (drawn(node.parent).length > 0 || inside(node.parent));
+    return markupElements(html).flatMap((node) => {
+      const names = own(node);
+      const foreign = names.filter((name) => !owned.has(name)).map((name) => `<${node.tag}> ${name} is not a primitive`);
+      return drawn(node).length || inside(node) || node.classes.some((name) => FRAME.test(name)) ? foreign : [`<${node.tag}> raw markup outside a primitive`];
+    }).map((error) => `${page}: ${error}`);
+  };
+  return [...new Set(records.filter((record) => record.html !== undefined && !record.fragment).flatMap(pageErrors))];
+}
+
+export function primitivesDocument(errors) {
+  const pages = Map.groupBy(errors, (error) => error.slice(0, error.indexOf(': ')));
+  const sections = [...pages].sort(([a, left], [b, right]) => right.length - left.length || a.localeCompare(b))
+    .map(([page, list]) => [`## ${page} (${list.length})`, '', ...list.map((error) => `- ${error.slice(page.length + 2)}`), ''].join('\n'));
+  return ['# Primitives to do', '', 'Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.', '', `Total: ${errors.length}`, '', ...sections].join('\n');
+}
+
+const sheetClasses = (css) => new Set(cssSelectors(css).flatMap(selectorClasses));
+export const primitiveReport = (root = '.') => {
+  const read = (file) => readFileSync(join(root, file), 'utf8');
+  return primitiveErrors(expand(JSON.parse(read('stories/catalog.json'))), sheetClasses(read('stories/primitives.css')), sheetClasses(read('stories/utilities.css')));
+};
+
 export function lint(root = '.') {
   const catalog = JSON.parse(readFileSync(join(root, 'stories/catalog.json'), 'utf8'));
   const errors = structureErrors(storyFiles(join(root, 'stories')), catalog, readFileSync(join(root, 'stories/kit/ComponentPage.jsx'), 'utf8'));
@@ -123,10 +158,14 @@ export function lint(root = '.') {
   ];
   for (const [source, names] of classes) for (const name of names) if (!BEM.test(name) && !STORYBOOK_CLASSES.has(name)) errors.push(`${source}: ${name} is not kanso BEM`);
   if (!canvas) errors.push('.storybook/preview.js: frame classes not found');
+  if (PRIMITIVES_ENFORCED) errors.push(...primitiveReport(root));
   return errors;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+  const primitives = primitiveReport();
+  if (process.argv.includes('--todo')) writeFileSync(PRIMITIVES_TODO, primitivesDocument(primitives));
+  if (!PRIMITIVES_ENFORCED) console.log(`${primitives.length} elements outside a primitive, listed in ${PRIMITIVES_TODO}`);
   const errors = lint();
   if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
   else console.log('Storybook structure passed');
