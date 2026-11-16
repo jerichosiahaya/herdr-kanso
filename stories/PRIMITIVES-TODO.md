@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 1403 elements, 165 distinct
+Total: 1299 elements, 156 distinct
 
 ## Panels/Find (15)
 
@@ -22,12 +22,11 @@ Total: 1403 elements, 165 distinct
 - <div> kanso-search__excerpt--full is not a primitive
 - <span> kanso-notification__code is not a primitive
 
-## Primitives/Dialog (14)
+## Primitives/Dialog (13)
 
 - <div> raw markup outside a primitive
 - <span> raw markup outside a primitive
 - <div> kanso-sleep__tab-heading is not a primitive
-- <svg> kanso-icon--narrow is not a primitive
 - <span> kanso-credit__avatar is not a primitive
 - <span> kanso-credit__avatar--person is not a primitive
 - <div> kanso-window--preview is not a primitive
@@ -69,10 +68,9 @@ Total: 1403 elements, 165 distinct
 - <div> raw markup outside a primitive
 - <div> kanso-code__conflict is not a primitive
 
-## Layouts/Sidebar (10)
+## Layouts/Sidebar (9)
 
 - <span> kanso-project__counts is not a primitive
-- <svg> kanso-icon--narrow is not a primitive
 - <div> kanso-agent__text is not a primitive
 - <div> kanso-rail__brand is not a primitive
 - <div> kanso-rail__top is not a primitive
@@ -82,10 +80,9 @@ Total: 1403 elements, 165 distinct
 - <div> kanso-rail__footer is not a primitive
 - <div> kanso-rail__views is not a primitive
 
-## Compositions/Edges (8)
+## Compositions/Edges (7)
 
 - <div> kanso-edge is not a primitive
-- <span> kanso-minimap__tile is not a primitive
 - <span> kanso-tooltip__anchor is not a primitive
 - <div> raw markup outside a primitive
 - <div> kanso-edge--target is not a primitive
@@ -149,14 +146,6 @@ Total: 1403 elements, 165 distinct
 - <div> kanso-menu__item--busy is not a primitive
 - <div> raw markup outside a primitive
 
-## Primitives/Menu (5)
-
-- <div> raw markup outside a primitive
-- <div> kanso-menu__item--dim is not a primitive
-- <div> kanso-tab-bar is not a primitive
-- <span> kanso-tab__name is not a primitive
-- <svg> kanso-icon--narrow is not a primitive
-
 ## Compositions/Notifications (4)
 
 - <div> raw markup outside a primitive
@@ -164,25 +153,12 @@ Total: 1403 elements, 165 distinct
 - <span> kanso-notification__icon is not a primitive
 - <div> kanso-notification__code is not a primitive
 
-## Compositions/Status bar (4)
+## Primitives/Menu (4)
 
-- <span> kanso-minimap is not a primitive
-- <svg> kanso-icon--narrow is not a primitive
-- <span> kanso-tooltip__anchor is not a primitive
-- <span> kanso-minimap--rest is not a primitive
-
-## Panels/Settings (4)
-
-- <span> kanso-credit__avatar is not a primitive
-- <span> kanso-credit__avatar--person is not a primitive
 - <div> raw markup outside a primitive
-- <svg> kanso-icon--narrow is not a primitive
-
-## Compositions/Keyboard (3)
-
-- <svg> kanso-icon--narrow is not a primitive
-- <div> raw markup outside a primitive
-- <span> raw markup outside a primitive
+- <div> kanso-menu__item--dim is not a primitive
+- <div> kanso-tab-bar is not a primitive
+- <span> kanso-tab__name is not a primitive
 
 ## Compositions/Pane header (3)
 
@@ -196,11 +172,11 @@ Total: 1403 elements, 165 distinct
 - <div> kanso-header__title is not a primitive
 - <div> kanso-rail__footer is not a primitive
 
-## Compositions/State patterns (3)
+## Compositions/Status bar (3)
 
-- <div> kanso-window--preview is not a primitive
-- <svg> kanso-icon--narrow is not a primitive
-- <div> raw markup outside a primitive
+- <span> kanso-minimap is not a primitive
+- <span> kanso-tooltip__anchor is not a primitive
+- <span> kanso-minimap--rest is not a primitive
 
 ## Panels/Memory (3)
 
@@ -208,15 +184,31 @@ Total: 1403 elements, 165 distinct
 - <svg> kanso-notification__icon is not a primitive
 - <div> kanso-notification__code is not a primitive
 
+## Panels/Settings (3)
+
+- <span> kanso-credit__avatar is not a primitive
+- <span> kanso-credit__avatar--person is not a primitive
+- <div> raw markup outside a primitive
+
 ## Primitives/Tab (3)
 
 - <div> kanso-tab-bar--rest is not a primitive
 - <span> kanso-tooltip__anchor is not a primitive
 - <span> kanso-tab__tip is not a primitive
 
+## Compositions/Keyboard (2)
+
+- <div> raw markup outside a primitive
+- <span> raw markup outside a primitive
+
 ## Compositions/Sidebar/Footer (2)
 
 - <div> kanso-rail__footer is not a primitive
+- <div> raw markup outside a primitive
+
+## Compositions/State patterns (2)
+
+- <div> kanso-window--preview is not a primitive
 - <div> raw markup outside a primitive
 
 ## Panels/Images (2)
@@ -277,10 +269,6 @@ Total: 1403 elements, 165 distinct
 ## Primitives/Code (1)
 
 - <div> kanso-diff is not a primitive
-
-## Primitives/Row (1)
-
-- <svg> kanso-icon--narrow is not a primitive
 
 ## Tokens/Type (1)
 

@@ -5,6 +5,16 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Icon */
+.kanso-icon{width:var(--k-ic-control);height:var(--k-ic-control);flex:none;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.kanso-icon--narrow{width:13px;height:14px}
+.kanso-activity__row .kanso-mark,.kanso-activity__row .kanso-icon{margin-top:var(--k-sp-hair)}
+.kanso-agent .kanso-icon--program{align-self:flex-start;margin-top:var(--k-sp-2)}
+.kanso-action--armed .kanso-icon,.kanso-action--armed .kanso-icon--program,.kanso-menu__item.kanso-action--armed .kanso-icon{color:var(--accentfg)!important}
+.kanso-icon--sidebar-program{width:14px;height:14px}
+.kanso-minimap__tile .kanso-icon--program{width:var(--k-ic-inline);height:var(--k-ic-inline)}
+.kanso-icon--program{width:var(--k-ic-control);height:var(--k-ic-control);flex:none;display:block}
+
 /* File */
 .kanso-file__status{font:500 11.5px var(--mono);width:14px;flex:none;text-align:center}
 .kanso-file__spacer{width:14px;flex:none}
