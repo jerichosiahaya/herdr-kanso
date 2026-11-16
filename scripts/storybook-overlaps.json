@@ -788,5 +788,143 @@
       "1 · acme is already one of your projects": "proto/approved-bars-toasts/Reference/1",
       "3 · feat/checkout already had a worktree": "proto/approved-bars-toasts/Reference/1"
     }
+  },
+  "spaces/AgentMenu": {
+    "page": "Layouts/Context menus",
+    "states": {
+      "Agent": "proto/approved-sidebar-menus/Reference/1",
+      "Close armed": "proto/approved-sidebar-menus/Reference/2",
+      "Snooze picker": "proto/approved-sidebar-menus/Reference/3",
+      "Copy picker": "proto/approved-sidebar-menus/Reference/4",
+      "Move picker": "proto/approved-sidebar-menus/Reference/5"
+    }
+  },
+  "spaces/ProjectMenu": {
+    "page": "Layouts/Context menus",
+    "states": {
+      "Open project": "proto/approved-sidebar-menus/Reference/6",
+      "Remove armed": "proto/approved-sidebar-menus/Reference/7",
+      "Asleep": "proto/approved-sidebar-menus/Reference/9"
+    }
+  },
+  "spaces/ComputerMenu": {
+    "page": "Layouts/Context menus",
+    "states": {
+      "Connected": "proto/approved-sidebar-menus/Reference/8",
+      "Sync on": "proto/approved-sidebar-menus/Reference/8"
+    }
+  },
+  "menu/PaneMenu": {
+    "page": "Layouts/Context menus",
+    "states": {
+      "Rest": "proto/approved-bars-menus/Reference/1",
+      "Pinned": "proto/approved-bars-menus/Reference/1",
+      "Program menu": "proto/approved-bars-menus/Reference/1"
+    }
+  },
+  "help/KeyboardExplorer": {
+    "page": "Compositions/Keyboard",
+    "states": {
+      "Lists": "proto/approved-dialogs-keys/Reference/1",
+      "Modifier layer": "proto/approved-dialogs-keys/Reference/1",
+      "Picked key": "proto/approved-dialogs-keys/Reference/1",
+      "Unbound": "proto/approved-dialogs-keys/Reference/1"
+    }
+  },
+  "help/Help": {
+    "page": "Compositions/Keyboard",
+    "states": {
+      "Keys": "proto/approved-dialogs-help/Reference/1",
+      "Guide": "proto/approved-dialogs-help/Reference/3",
+      "Dōjō invitation": "proto/approved-dialogs-help/Reference/3"
+    }
+  },
+  "help/Guide": {
+    "page": "Compositions/Keyboard",
+    "states": {
+      "Every list and menu": "proto/approved-dialogs-help/Reference/3",
+      "Panels": "proto/approved-dialogs-help/Reference/3",
+      "Sleep and Arrangements": "proto/approved-dialogs-help/Reference/3",
+      "The sidebar": "proto/approved-dialogs-help/Reference/3",
+      "The strip": "proto/approved-dialogs-help/Reference/3",
+      "Your setup": "proto/approved-dialogs-help/Reference/3"
+    }
+  },
+  "arrange/Arrangements": {
+    "page": "Panels/Arrangements",
+    "states": {
+      "Saved": "proto/approved-dialogs-arrange/Reference/1",
+      "Delete armed": "proto/approved-dialogs-arrange/Reference/1",
+      "Opening": "proto/approved-dialogs-arrange/Reference/1",
+      "Empty": "proto/approved-dialogs-arrange/Reference/1"
+    }
+  },
+  "arrange/SaveArrangement": {
+    "page": "Primitives/Dialog",
+    "states": {
+      "Save": "panels/dialog/FeatureSaveArrangement/Save header",
+      "Overwrite": "panels/dialog/FeatureSaveArrangement/Overwrite header"
+    }
+  },
+  "open-with/OpenWith": {
+    "page": "Primitives/Dialog",
+    "states": {
+      "Folder": "proto/approved-dialogs-openwith/Reference/1",
+      "File": "proto/approved-dialogs-openwith/Reference/1",
+      "Remote": "proto/approved-dialogs-openwith/Reference/1",
+      "Keyboard": "proto/approved-dialogs-openwith/Reference/1",
+      "Looking": "proto/approved-dialogs-openwith/Reference/1",
+      "No editor": "proto/approved-dialogs-openwith/Reference/1"
+    }
+  },
+  "sleep/SleepDialog": {
+    "page": "Primitives/Dialog",
+    "states": {
+      "Agent": "proto/approved-dialogs-sleep/Reference/1",
+      "Tab": "proto/approved-dialogs-sleep/Reference/1",
+      "Project": "proto/approved-dialogs-sleep/Reference/1",
+      "Blocked": "proto/approved-dialogs-sleep/Reference/1",
+      "Reading": "proto/approved-dialogs-sleep/Reference/1",
+      "Sleeping": "proto/approved-dialogs-sleep/Reference/1",
+      "Waking": "proto/approved-dialogs-sleep/Reference/1"
+    }
+  },
+  "send/SendDialog": {
+    "page": "Primitives/Dialog",
+    "states": {
+      "Ready": "proto/approved-dialogs-send/Reference/1",
+      "Project selected": "proto/approved-dialogs-send/Reference/1",
+      "Sending": "proto/approved-dialogs-send/Reference/1",
+      "Refused": "proto/approved-dialogs-send/Reference/1",
+      "Unavailable target": "proto/approved-dialogs-send/Reference/1",
+      "No matches": "proto/approved-dialogs-send/Reference/1",
+      "No agents": "proto/approved-dialogs-send/Reference/1",
+      "Empty message": "proto/approved-dialogs-send/Reference/1",
+      "Search": "proto/approved-dialogs-send/Reference/1"
+    }
+  },
+  "spaces/NewConversation": {
+    "page": "Primitives/Dialog",
+    "states": {
+      "Programs": "proto/approved-sidebar-new/Reference/1",
+      "Loading programs": "proto/approved-sidebar-new/Reference/2",
+      "No programs": "proto/approved-sidebar-new/Reference/3"
+    }
+  },
+  "spaces/ProjectCreation": {
+    "page": "Primitives/Dialog",
+    "states": {
+      "Choose folder": "proto/approved-sidebar-new/Reference/5",
+      "Already project": "proto/approved-sidebar-new/Reference/7",
+      "Create failed": "proto/approved-sidebar-new/Reference/8",
+      "Creating": "proto/approved-sidebar-new/Reference/9"
+    }
+  },
+  "spaces/CreateWorktree": {
+    "page": "Primitives/Dialog",
+    "states": {
+      "New branch": "proto/approved-sidebar-new/Reference/11",
+      "Failed": "proto/approved-sidebar-new/Reference/13"
+    }
   }
 }

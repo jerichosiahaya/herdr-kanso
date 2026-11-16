@@ -107,7 +107,7 @@ const coveragePage = {
   ContainerList: 'Panels/Containers', ContainerRow: 'Panels/Containers', ComposeProject: 'Panels/Containers', ContainerDisk: 'Panels/Containers',
   Practice: 'Panels/Dojo', PracticeFeedback: 'Panels/Dojo', PracticeResult: 'Panels/Dojo', PracticePet: 'Panels/Dojo',
   Memory: 'Panels/Memory', MemoryAgent: 'Panels/Memory', MemoryRecovery: 'Panels/Memory', MemoryHistory: 'Panels/Memory', MemoryChart: 'Primitives/Chart', SystemNotice: 'Compositions/Notifications',
-  Help: 'Panels/Help', Guide: 'Panels/Help', KeyboardExplorer: 'Compositions/Keyboard', MarkdownFiles: 'Panels/Markdown', MarkdownReview: 'Panels/Markdown',
+  Help: 'Compositions/Keyboard', Guide: 'Compositions/Keyboard', KeyboardExplorer: 'Compositions/Keyboard', MarkdownFiles: 'Panels/Markdown', MarkdownReview: 'Panels/Markdown',
   PaneMenu: 'Compositions/Pane menu', OpenWith: 'Primitives/Dialog', Files: 'Panels/Files', Preview: 'Panels/Preview', MarkdownEditing: 'Panels/Preview', ConversationFind: 'Panels/Find',
   Images: 'Panels/Images', Ports: 'Panels/Ports', PortHistory: 'Panels/Ports', PullRequest: 'Panels/PR', PullRequestContext: 'Panels/PR', PullRequestList: 'Panels/PR', PullRequestDetails: 'Panels/PR', PullRequestPicker: 'Panels/PR',
   WorktreeVerdict: 'Panels/Worktrees', Worktrees: 'Panels/Worktrees', WorktreeHistory: 'Panels/Worktrees', Shipped: 'Panels/Shipped', Share: 'Panels/Share', VerdictBody: 'Panels/PR', CodeLimits: 'Primitives/Code', HistoryChart: 'Primitives/Chart', ActionNotice: 'Primitives/Toast', ShareCard: 'Panels/Share',
