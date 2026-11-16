@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 1223 elements, 144 distinct
+Total: 1150 elements, 132 distinct
 
 ## Panels/Find (15)
 
@@ -51,18 +51,6 @@ Total: 1223 elements, 144 distinct
 - <div> kanso-card--hover is not a primitive
 - <div> raw markup outside a primitive
 - <div> kanso-code__conflict is not a primitive
-
-## Layouts/Sidebar (9)
-
-- <span> kanso-project__counts is not a primitive
-- <div> kanso-agent__text is not a primitive
-- <div> kanso-rail__brand is not a primitive
-- <div> kanso-rail__top is not a primitive
-- <div> kanso-rail__list is not a primitive
-- <div> kanso-rail__row is not a primitive
-- <div> kanso-rail__separator is not a primitive
-- <div> kanso-rail__footer is not a primitive
-- <div> kanso-rail__views is not a primitive
 
 ## Compositions/Edges (7)
 
@@ -150,12 +138,6 @@ Total: 1223 elements, 144 distinct
 - <span> kanso-tooltip__anchor is not a primitive
 - <div> raw markup outside a primitive
 
-## Compositions/Sidebar (3)
-
-- <div> kanso-rail__list is not a primitive
-- <div> kanso-header__title is not a primitive
-- <div> kanso-rail__footer is not a primitive
-
 ## Compositions/Status bar (3)
 
 - <span> kanso-minimap is not a primitive
@@ -185,15 +167,15 @@ Total: 1223 elements, 144 distinct
 - <div> raw markup outside a primitive
 - <span> raw markup outside a primitive
 
-## Compositions/Sidebar/Footer (2)
-
-- <div> kanso-rail__footer is not a primitive
-- <div> raw markup outside a primitive
-
 ## Compositions/State patterns (2)
 
 - <div> kanso-window--preview is not a primitive
 - <div> raw markup outside a primitive
+
+## Layouts/Sidebar (2)
+
+- <span> kanso-project__counts is not a primitive
+- <div> kanso-agent__text is not a primitive
 
 ## Panels/Images (2)
 
@@ -214,13 +196,13 @@ Total: 1223 elements, 144 distinct
 
 - <div> kanso-header__title is not a primitive
 
-## Compositions/Sidebar/Asleep (1)
+## Compositions/Sidebar (1)
 
-- <div> kanso-rail__list is not a primitive
+- <div> kanso-header__title is not a primitive
 
-## Compositions/Sidebar/Tile (1)
+## Compositions/Sidebar/Footer (1)
 
-- <div> kanso-rail__list is not a primitive
+- <div> raw markup outside a primitive
 
 ## Layouts/Pane (1)
 

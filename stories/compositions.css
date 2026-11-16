@@ -8,7 +8,6 @@
 .kanso-header__title>.kanso-badge--pill{position:relative;margin-left:auto}
 
 /* Sidebar: the header, the view switch, the rows of the chosen view and the footer; collapsed, the rail with tiles. */
-.kanso-rail{anchor-name:--kanso-rail}
 
 /* Pane header: program, name, digest, toolbar, grip. */
 /* Its states: focus is the ground, blocked the wash, the keyboard's focus the ring, out of reach faded, held while it moves. */
