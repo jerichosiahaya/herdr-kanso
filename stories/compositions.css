@@ -67,9 +67,8 @@
 .kanso-status-bar__more{flex:none;color:var(--dim)}
 .kanso-status-bar--grid .kanso-status-bar__middle{gap:var(--k-sp-3)}
 .kanso-status-bar__item.kanso-status-bar__stepper{gap:var(--k-sp-hair)}
-.kanso-status-bar__stepper>.kanso-button{display:none;transition:opacity var(--k-hover-ms) var(--k-hover-ease) var(--k-hover-delay),display 0s allow-discrete var(--k-hover-delay)}
-.kanso-status-bar__stepper:is(:hover,:focus-within,.kanso-control--hover,.kanso-status-bar__item--open)>.kanso-button{display:grid}
-@starting-style{.kanso-status-bar__stepper:is(:hover,:focus-within,.kanso-control--hover)>.kanso-button{opacity:0}}
+.kanso-status-bar__stepper>.kanso-button{visibility:hidden;opacity:0;transition:opacity var(--k-hover-ms) var(--k-hover-ease) var(--k-hover-delay),visibility 0s linear var(--k-hover-delay)}
+.kanso-status-bar__stepper:is(:hover,:focus-within,.kanso-control--hover,.kanso-status-bar__item--open)>.kanso-button{visibility:visible;opacity:1}
 .kanso-status-bar__value{min-width:1ch;text-align:center;color:var(--fg)}
 .kanso-status-bar__item.kanso-status-bar__item--open{anchor-name:--kanso-status-item;margin:0 calc(-1 * var(--k-sp-1));padding:var(--k-sp-hair) var(--k-sp-1);border-radius:var(--k-r-sm);background:var(--w12)}
 .kanso-status-bar__popup{position:absolute;bottom:calc(anchor(--kanso-status-item top) + var(--k-sp-1));right:anchor(--kanso-status-item right);z-index:1}
