@@ -2,7 +2,7 @@
 
 These features exist in the app and stay available; they await a design.
 
-103 feature states await design. Each page lists its own under Not designed yet.
+96 feature states await design. Each page lists its own under Not designed yet.
 
 | Module | State | Source |
 | --- | --- | --- |
@@ -90,21 +90,14 @@ These features exist in the app and stay available; they await a design.
 | Primitives/Dialog | Create Worktree · Remote | kanso/mods/kanso-spaces/main.js:1503 |
 | Primitives/Dialog | New Conversation · Probe failed | kanso/mods/kanso-spaces/main.js:399 |
 | Primitives/Dialog | New Conversation · Project picker | kanso/mods/kanso-spaces/main.js:399 |
-| Primitives/Field | Multiline Prompt · Editing | kanso/mods/kanso-prompt-editor/main.js:30 |
 | Primitives/Field | Multiline Prompt · Hint | kanso/mods/kanso-prompt-editor/main.js:30 |
-| Primitives/Tab | Tabs · Close | kanso/mods/kanso-tabs/main.js:339 |
 | Primitives/Tab | Tabs · Context menu | kanso/mods/kanso-tabs/main.js:339 |
-| Primitives/Tab | Tabs · Inactive | kanso/mods/kanso-tabs/main.js:339 |
 | Primitives/Tab | Tabs · Reorder | kanso/mods/kanso-tabs/main.js:339 |
-| Primitives/Tab | Tabs · Selected | kanso/mods/kanso-tabs/main.js:339 |
 | Primitives/Tab | Tabs · Unmeasured | kanso/mods/kanso-tabs/main.js:339 |
 | Primitives/Tab | Tabs · Zoomed | kanso/mods/kanso-tabs/main.js:339 |
-| Primitives/Toast | Notice · Failure | kanso/mods/kanso-toast/main.js:33 |
 | Primitives/Toast | Notice · Information | kanso/mods/kanso-toast/main.js:33 |
 | Primitives/Toast | Notice · Long source | kanso/mods/kanso-toast/main.js:33 |
-| Primitives/Toast | Notice · Success | kanso/mods/kanso-toast/main.js:33 |
 | Primitives/Toast | Notice · Warning | kanso/mods/kanso-toast/main.js:33 |
-| Primitives/Toast | Notice · With action | kanso/mods/kanso-toast/main.js:33 |
 | Primitives/Toast | Notice Stack · Different actions | kanso/mods/kanso-toast/main.js:35 |
 | Primitives/Toast | Notice Stack · Duplicate coalesced | kanso/mods/kanso-toast/main.js:35 |
 | Primitives/Toast | Notice Stack · Expired | kanso/mods/kanso-toast/main.js:35 |

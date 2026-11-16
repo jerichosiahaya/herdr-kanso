@@ -926,5 +926,27 @@
       "New branch": "proto/approved-sidebar-new/Reference/11",
       "Failed": "proto/approved-sidebar-new/Reference/13"
     }
+  },
+  "tabs/Tabs": {
+    "page": "Primitives/Tab",
+    "states": {
+      "Selected": "proto/components-tab-states/TabStates/Default",
+      "Inactive": "proto/components-tab-states/TabStates/Default",
+      "Close": "proto/components-tab-states/TabStates/Default"
+    }
+  },
+  "prompt-editor/MultilinePrompt": {
+    "page": "Primitives/Field",
+    "states": {
+      "Editing": "proto/compositions-controls/Field/Default"
+    }
+  },
+  "toast/Notice": {
+    "page": "Primitives/Toast",
+    "states": {
+      "Success": "proto/compositions-bars/ToastWithItsSource/Default",
+      "With action": "proto/compositions-bars/ToastWithItsSource/Default",
+      "Failure": "proto/compositions-states/Toast/Default"
+    }
   }
 }
