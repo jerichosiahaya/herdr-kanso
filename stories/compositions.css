@@ -11,26 +11,7 @@
 .kanso-rail{anchor-name:--kanso-rail}
 
 /* Pane header: program, name, digest, toolbar, grip. */
-.kanso-pane-header{display:flex;flex:none;align-items:center;gap:var(--k-sp-2);height:var(--k-h-pane);padding:0 var(--k-sp-2) 0 var(--k-sp-3);box-sizing:border-box;border-radius:var(--k-r-card) var(--k-r-card) 0 0;font-size:var(--k-fs-body);white-space:nowrap;cursor:grab}
-.kanso-pane-header__name{flex:0 1 auto;min-width:0;max-width:var(--k-w-pane-name);overflow:hidden;text-overflow:ellipsis;font-weight:var(--k-fw-medium);color:var(--fg)}
-.kanso-pane-header__digest{display:flex;flex:0 1 auto;align-items:center;gap:var(--k-sp-2);min-width:0;overflow:hidden;font-size:var(--k-fs-meta);color:var(--muted)}
-.kanso-pane-header__segment{display:flex;flex:none;align-items:center;gap:var(--k-sp-2);padding:var(--k-sp-hair) var(--k-sp-1);border-radius:var(--k-r-sm);white-space:nowrap}
-.kanso-pane-header__segment--act{cursor:pointer}
-.kanso-pane-header__segment--act:is(:hover,.kanso-control--hover){background:var(--w12)}
-.kanso-pane-header__segment>span{overflow:hidden;text-overflow:ellipsis;max-width:var(--k-w-pane-segment)}
-.kanso-pane-header .kanso-state-line{flex:none}
-.kanso-pane-header>.kanso-grip{margin:0 var(--k-sp-hair)}
-.kanso-pane-header>.kanso-field--inline{flex:0 1 auto;min-width:0}
-.kanso-pane-header__tools{display:flex;flex:none;align-items:center;gap:var(--k-sp-hair)}
-.kanso-pane-header__tools:empty{display:none}
-.kanso-pane-header__more{position:relative;display:flex}
-.kanso-pane-header__menu{position:absolute;top:calc(100% + var(--k-sp-1));right:0;z-index:1;cursor:default}
 /* Its states: focus is the ground, blocked the wash, the keyboard's focus the ring, out of reach faded, held while it moves. */
-.kanso-pane-header.kanso-pane-header--focus{background:var(--selected)}
-.kanso-pane-header.kanso-pane-header--blocked{background:color-mix(in srgb,var(--blocked) var(--k-wash-blocked),transparent)}
-.kanso-pane-header--keyboard{outline:var(--k-sp-hair) solid var(--accent);outline-offset:calc(-1 * var(--k-sp-hair))}
-.kanso-pane-header--unreachable{opacity:var(--k-op-away)}
-.kanso-pane-header--held{opacity:var(--k-op-held);cursor:grabbing}
 
 /* Status bar: two halves around the fixed minimap slot; items 16 apart, icons and marks 14 with 8 to their words. */
 @starting-style{.kanso-status-bar--grid .kanso-status-bar__item{opacity:0}}
