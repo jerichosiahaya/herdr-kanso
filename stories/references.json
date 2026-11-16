@@ -1765,7 +1765,6 @@
         "coverage/tabs/Tabs/Selected",
         "coverage/tabs/Tabs/Unmeasured",
         "coverage/tabs/Tabs/Zoomed",
-        "proto/components-tab-bar/TabBar/Default",
         "kit/Primitives/Tab/At rest",
         "kit/Primitives/Tab/Hover",
         "kit/Primitives/Tab/Focus",
@@ -1816,8 +1815,7 @@
         "coverage/tabs/PanelToolbar/Custom panel",
         "coverage/tabs/PanelToolbar/Opened",
         "coverage/tabs/PanelToolbar/Reordering",
-        "coverage/tabs/PanelToolbar/Settings",
-        "proto/components-tab-bar/TabBar/Default"
+        "coverage/tabs/PanelToolbar/Settings"
       ],
       "components": [
         "Compositions/Tab bar"

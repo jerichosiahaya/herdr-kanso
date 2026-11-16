@@ -1,5 +1,5 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, channelSettings, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
+import { addComputer, channelSettings, panelDoors, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
 import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence, well, shareCard, dojoGrid, dojoText, dojoProgress, dojoLevel } from './pieces.js';
 import { atWidth, besideStrip, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice, withMenuRoom } from './frames.js';
 import { panelPages } from './panel-states.js';
@@ -12,7 +12,6 @@ const question = 'Run pnpm add react-countdown@2.3?';
 export const needsShown = { none: null, question: needsItem({ name: 'cart-ui', question, more: 1 }), folded: needsItem({ name: 'cart-ui', more: 1 }) };
 const memoryItem = ({ folded = false, open = false }) => statusItem({ text: folded ? '8% free' : 'Memory 8% free', tone: 'blocked', open });
 export const memoryShown = { none: null, word: memoryItem({}), folded: memoryItem({ folded: true }) };
-const workingItem = ({ open = false }) => statusItem({ mark: 'working', text: 3, open });
 export const stepperShown = ['rest', 'hover', 'menu'];
 // Each item the bar can show, in its own half and at its fold.
 export const statusItems = {
@@ -20,7 +19,7 @@ export const statusItems = {
   'Needs you': ({ folded, more, open }) => ({ right: [needsItem({ name: 'cart-ui', question: folded ? '' : question, more, open })] }),
   Memory: (args) => ({ right: [memoryItem(args)] }),
   'Servers, containers, reviews': () => ({ right: statusPanels() }),
-  'Working count': (args) => ({ right: [workingItem(args)] }),
+  'Working count': ({ open }) => ({ right: [statusItem({ mark: 'working', text: 3, open })] }),
   'Command palette': ({ open }) => ({ right: [paletteDoor({ open })] }),
 };
 // Each item's right-click Menu, as board B10 draws it.
@@ -33,18 +32,18 @@ const statusItemMenus = {
 };
 
 // The status bar's halves for its controls; the page frames them at a width, the window places them as they are.
-const statusParts = ({ computer, paused, stepper: middle, needs, memory, working, panels, open }) => {
+const statusParts = ({ computer, paused, stepper: middle, needs, memory, panels, open }) => {
   const menuOpen = !paused && middle === 'menu';
   return {
     left: computer === 'none' ? [] : [computerItem({ name: 'devbox', state: computer })],
     middle: paused ? layoutPaused() : stepper({ hover: middle === 'hover', open: menuOpen }),
-    right: [needsShown[needs], memoryShown[memory], working ? workingItem({}) : null, ...(panels ? statusPanels({ open }) : []), paletteDoor()].filter(Boolean),
+    right: [needsShown[needs], memoryShown[memory], ...(panels ? statusPanels({ open }) : []), paletteDoor()].filter(Boolean),
     popup: menuOpen ? stepperMenu() : panels && open !== 'none' ? statusMenus[open]() : '',
   };
 };
 const withPopup = (width, parts) => parts.popup ? `<div class="kanso-story__popup-room">${inBar(width, parts)}</div>` : inBar(width, parts);
 const statusStory = ({ width, ...args }) => withPopup(width, statusParts(args));
-const statusArgs = { width: 1040, computer: 'none', paused: false, stepper: 'rest', needs: 'question', memory: 'none', working: false, panels: false, open: 'none' };
+const statusArgs = { width: 1040, computer: 'none', paused: false, stepper: 'rest', needs: 'question', memory: 'none', panels: false, open: 'none' };
 
 const tabItems = (value) => [{ key: 'checkout', label: 'checkout' }, { key: 'cart-ui', label: 'cart-ui', mark: value === 'cart-ui' ? '' : 'blocked' }, { key: 'tests', label: 'tests' }];
 export const tabActs = {
@@ -56,6 +55,9 @@ export const tabActs = {
   'long name': ([first, second, third]) => [first, second, { ...third, label: 'retry-after-header-for-cart-and-checkout' }],
 };
 const foldedTabs = ['perf', 'web', 'e2e', 'storybook', 'seed-data'];
+// The doors a computer offers: every tool, none needing gh or Docker, or one more panel that brings no icon.
+export const doorSets = { 'every tool': panelDoors, 'no gh or Docker': panelDoors.filter(({ key }) => !['pr', 'containers'].includes(key)), 'a panel with no icon': [...panelDoors, { key: 'deployments', label: 'Deployments' }] };
+const doorMove = { held: 'memory', over: 'ports' };
 // The sidebar's views with one changed tab; a tab bar's tabs after an act, each closable.
 const viewTabs = (change) => views.map((item, index) => index === 1 ? { ...item, ...change } : item);
 const barTabs = (act) => tabActs[act](tabItems('checkout')).map((item) => ({ closable: true, ...item }));
@@ -1015,27 +1017,29 @@ export const statedPages = {
       { label: 'Unreachable', args: { computer: 'unreachable', needs: 'none' }, caption: "devbox can't be reached and its row is out of sight." },
       { label: 'Needs you', args: {}, caption: 'While the waiting row is out of view; +1 for the others out of view.' },
       { label: 'Memory low', args: { needs: 'none', memory: 'word' }, caption: 'This computer is low on memory and Memory is closed.' },
-      { label: 'At work', args: { needs: 'none', working: true }, caption: 'How many work, while any do; a click opens Status.' },
       { label: 'Servers, containers and reviews', args: { width: 520, needs: 'none', panels: true }, caption: 'Each its icon and how many need a look; gone while its panel is open.' },
       { label: 'Servers open', args: { width: 520, needs: 'none', panels: true, open: 'servers' }, caption: 'The server with no pane: open, copy, stop.' },
       { label: 'Containers open', args: { width: 520, needs: 'none', panels: true, open: 'containers' }, caption: 'The stopped container: start, logs, remove.' },
       { label: 'Reviews open', args: { width: 520, needs: 'none', panels: true, open: 'reviews' }, caption: 'Each pull request waiting for you; a click opens it in PR.' },
-      { label: 'Everything, 1200', args: { width: 1200, memory: 'word', working: true, panels: true }, caption: 'Every item at once.' },
+      { label: 'Everything, 1200', args: { width: 1200, memory: 'word', panels: true }, caption: 'Every item at once.' },
       { label: 'Everything, 1040', args: { memory: 'folded', panels: true }, caption: 'The question shrinks; Memory loses its word.' },
       { label: 'Everything, 760', args: { width: 760, memory: 'folded' }, caption: 'Servers, containers and reviews give way.' },
       { label: 'Everything, 520', args: { width: 520, needs: 'folded', memory: 'folded' }, caption: 'The question is gone.' },
     ],
   },
   'Compositions/Tab bar': {
-    args: { width: 1040, value: 'checkout', tab: 'at rest', panel: 'none', state: 'connected', folded: 0, overflow: false, windows: false, menu: 'none' },
-    markup: ({ width, value, tab, folded, overflow, menu: right, ...args }) => {
+    args: { width: 1040, value: 'checkout', tab: 'at rest', panel: 'none', doors: 'every tool', moving: false, state: 'connected', folded: 0, overflow: false, windows: false, menu: 'none' },
+    markup: ({ width, value, tab, doors, moving, folded, overflow, menu: right, ...args }) => {
       const menu = tabMenus[right]?.(tabItems(value)[0].label) ?? null;
-      const bar = atWidth(width, tabBar({ ...args, value, overflow, menu, items: tabActs[tab](tabItems(value)), folded: foldedTabs.slice(0, folded).map((label) => ({ label })) }));
+      const bar = atWidth(width, tabBar({ ...args, ...(moving ? doorMove : {}), panels: doorSets[doors], value, overflow, menu, items: tabActs[tab](tabItems(value)), folded: foldedTabs.slice(0, folded).map((label) => ({ label })) }));
       return (overflow && folded) || menu ? withMenuRoom(bar) : bar;
     },
     states: [
       { label: 'At rest', args: {}, caption: 'Only a tab out of view whose session waits carries a mark; none for working or finished. Closed doors paint nothing.' },
       { label: 'Panel open', args: { panel: 'pr' }, caption: 'The open door on the quiet fill.' },
+      { label: 'Without gh or Docker', args: { doors: 'no gh or Docker' }, caption: 'A door whose tool the computer lacks is not drawn: no PR, no Containers.' },
+      { label: 'A panel with no icon', args: { doors: 'a panel with no icon' }, caption: 'A panel that brings no icon shows its name as its door.' },
+      { label: 'Moving a door', args: { moving: true }, caption: 'The held door on the pressed wash; the door it lands before takes the hover wash.' },
       { label: 'Close armed', args: { tab: 'close armed' }, caption: 'A tab holding a session: the first press arms for 4 s.' },
       { label: 'Renaming', args: { tab: 'renaming' }, caption: 'Double-click renames in place, the name selected.' },
       { label: 'Renamed on devbox, waiting', args: { tab: 'renamed, waiting' }, caption: 'At 80% with a breathing dot until confirmed.' },

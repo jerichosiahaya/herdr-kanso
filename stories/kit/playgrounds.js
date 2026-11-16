@@ -4,7 +4,7 @@ import { activity, activityMenu, computerMenuStates, paneFolds, panelHeaderForms
 import { avatarSizes, pictureStates, dialog, escape, keycapStates, kinds, levels, marks, markSizes, menu, rowDepths, sides, skeletonShapes, stack, statePatterns, dragHandleStates, deviceStates } from './pieces.js';
 import { barWidths, inRail, inSidebar, inSlice } from './frames.js';
 import { panelPlaygrounds } from './panel-states.js';
-import { arrangementViews, avatarPictures, dialogBodies, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
+import { arrangementViews, avatarPictures, dialogBodies, doorSets, newInCases, openWithCases, dialogNotes, edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, paneMoments, paneVerdicts, projectRefusals, sendReach, sleepCases, statedPages, statusItems, stepperShown, tabActs, tabMenus, worktreeRefusals } from './states.js';
 import { appNotices, footerUpdates, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, sidebarMoments, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
@@ -493,7 +493,6 @@ export const playgrounds = {
       stepper: { name: 'panes per view', control: { type: 'inline-radio' }, options: stepperShown, if: { arg: 'paused', truthy: false } },
       needs: { name: 'needs you', control: { type: 'inline-radio' }, options: Object.keys(needsShown) },
       memory: { name: 'memory low', control: { type: 'inline-radio' }, options: Object.keys(memoryShown) },
-      working: flag('working count'),
       panels: flag('servers, containers, reviews'),
       open: { ...select('open', ['none', ...Object.keys(statusMenus)]), if: { arg: 'panels' } },
     },
@@ -534,6 +533,8 @@ export const playgrounds = {
       value: { name: 'chosen tab', control: { type: 'inline-radio' }, options: ['checkout', 'cart-ui', 'tests'] },
       tab: select('a tab', Object.keys(tabActs)),
       panel: select('open door', ['none', ...panelDoors.map((item) => item.key)]),
+      doors: { name: 'doors', control: { type: 'inline-radio' }, options: Object.keys(doorSets) },
+      moving: flag('a door moved'),
       state: { name: 'computer', control: { type: 'inline-radio' }, options: tabBarStates },
       folded: { name: 'folded tabs', control: { type: 'number', min: 0, max: 5 } },
       overflow: { name: 'folded menu open', control: { type: 'boolean' }, if: { arg: 'folded' } },

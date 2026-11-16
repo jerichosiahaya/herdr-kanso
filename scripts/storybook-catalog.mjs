@@ -94,7 +94,7 @@ const protoPage = {
   'components-pick-list': null, 'components-rename': null, 'components-settings-tabs': 'Panels/Settings',
   'components-shipped': 'Panels/Shipped', 'components-simulator-screen': 'Panels/Simulator',
   'components-status-bar-working': null, 'components-status-bar': null,
-  'components-system-notification': 'Compositions/Notifications', 'components-tab-bar': 'Compositions/Tab bar', 'components-tab-states': null,
+  'components-system-notification': 'Compositions/Notifications', 'components-tab-bar': null, 'components-tab-states': null,
   'components-title-and-tools': null, 'components-while-you-were-away': 'Compositions/Activity', 'components-worktree-row-open': null,
   'compositions-bars': null, 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
   'compositions-menu-and-dialog': null, 'compositions-panel-pieces': 'Compositions/Panel',

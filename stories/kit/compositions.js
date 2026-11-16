@@ -273,20 +273,22 @@ export const panelDoors = [
   { key: 'containers', label: 'Containers', icon: 'lu-container' }, { key: 'memory', label: 'Memory', icon: 'lu-memory-stick' }, { key: 'images', label: 'Images', icon: 'lu-image' },
 ];
 const door = (icon, label, active = false) => button({ label, kind: 'icon', icon, active });
+// A panel's door is its icon; a panel that brings none shows its name. Held while moved, the door it lands on takes the hover wash.
+const panelDoor = ({ icon, label }, look) => icon ? button({ label, kind: 'icon', icon, ...look }) : button({ label, kind: 'quiet', ...look });
 export const tabBarStates = ['connected', 'connecting', 'unreachable'];
 // Folded tabs go behind +N, a Menu with their marks; + and Arrange never fold.
 // A tab's right-click Menu: rename, a new tab, sleep, close armed in place for the agents it holds, then the piece lines.
 export const tabMenu = ({ name, agents = 0, armed = false }) => pieceMenu({ title: name, items: [
   { icon: 'lu-pencil', label: 'Rename' }, { icon: 'lu-plus', label: 'New tab', hint: '⌘T' }, { icon: 'lu-moon', label: 'Sleep this tab…' },
   { separator: true }, { icon: 'lu-x', label: 'Close tab', hint: '⌘W', verb: phrase('close', agents, 'agents'), armed }], needed: false });
-export const tabBar = ({ items = [], value = null, folded = [], overflow = false, panels = panelDoors, panel = null, state = 'connected', windows = false, menu: open = null } = {}) => {
+export const tabBar = ({ items = [], value = null, folded = [], overflow = false, panels = panelDoors, panel = null, held = null, over = null, state = 'connected', windows = false, menu: open = null } = {}) => {
   const connected = state === 'connected';
   const tabList = state === 'connecting' ? [tabSkeleton(), tabSkeleton()]
     : tabs({ items: items.map((item) => ({ closable: true, ...item })), value, size: 'md', disabled: state === 'unreachable', label: true });
   const more = folded.length && connected ? stack({ variant: 'tab bar more' }, button({ label: plus(folded.length), kind: 'quiet', active: overflow }),
     overflow ? stack({ variant: 'tab bar menu' }, menu({ items: folded.map((item) => ({ label: item.label, mark: item.mark })) })) : null) : null;
   const tools = connected ? [door('lu-plus', 'New tab'), door('lu-panels-top-left', 'Arrange')] : null;
-  const right = connected ? panels.map((item) => door(item.icon, item.label, item.key === panel)) : null;
+  const right = connected ? panels.map((item) => panelDoor(item, { active: item.key === panel, pressed: item.key === held, hover: item.key === over })) : null;
   const system = windows ? [door('lu-minus', 'Minimize'), door('lu-square', 'Maximize'), door('lu-x', 'Close')] : null;
   return stack({ variant: 'tab bar' }, tabList, more, tools, grow(), stack({ variant: 'tab bar doors' }, right, system), open ? stack({ variant: 'tab bar menu' }, open) : null);
 };

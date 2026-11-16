@@ -949,5 +949,21 @@
       "Several waiting": "kit/Status bar/Needs you",
       "Low memory": "kit/Status bar/Memory low"
     }
+  },
+  "tabs/PanelToolbar": {
+    "page": "Compositions/Tab bar",
+    "states": {
+      "Available": "kit/Tab bar/At rest",
+      "Opened": "kit/Tab bar/Panel open",
+      "Capability absent": "kit/Tab bar/Without gh or Docker",
+      "Custom panel": "kit/Tab bar/A panel with no icon",
+      "Reordering": "kit/Tab bar/Moving a door"
+    }
+  },
+  "tabs/PanelToolbar/Settings": {
+    "page": "Compositions/Sidebar/Footer",
+    "states": {
+      "Settings": "kit/Sidebar/Footer/Settings open"
+    }
   }
 }
