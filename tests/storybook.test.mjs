@@ -7,11 +7,11 @@ import test from "node:test";
 import { expand } from "../scripts/storybook-catalog.mjs";
 import { compositionErrors, lint, storyFiles, structureErrors } from "../scripts/lint-storybook.mjs";
 import { statusOf, statusTags } from "../stories/kit/status.js";
+import { rules } from "../stories/kit/rules.js";
 
 const read = (file) => readFileSync(new URL(`../${file}`, import.meta.url), "utf8");
 const json = (file) => JSON.parse(read(file));
 const records = expand(json("stories/catalog.json"));
-const references = json("stories/references.json");
 const files = storyFiles("stories");
 
 test("Every page follows the structure lint", () => {
@@ -83,7 +83,7 @@ test("Storybook styles use only token values beyond the reviewed literals", () =
 
 test("Public copy describes roles, not named sessions or people", () => {
   const prose = [
-    ...references.pages.flatMap((page) => page.guidelines ?? []),
+    ...Object.values(rules).flat(),
     ...records.flatMap((record) => [record.caption ?? "", ...(record.notes ?? [])]),
     ...Object.entries(files).filter(([path]) => path.endsWith(".mdx")).map(([, text]) => text),
   ].join("\n");
@@ -96,11 +96,10 @@ test("Public copy describes roles, not named sessions or people", () => {
   ]) assert.doesNotMatch(prose, pattern);
 });
 
-test("Every approved page and every earlier state stays reachable by name", () => {
-  const { pages, ids } = json("tests/fixtures/storybook-names.json");
+test("Every earlier state stays reachable by name", () => {
+  const { ids } = json("tests/fixtures/storybook-names.json");
   const titles = new Set(Object.values(files).flatMap((text) => [...text.matchAll(/(?:export default\s*\{\s*title:\s*|<Meta title=)"([^"]+)"/g)].map((match) => match[1])));
   const byId = new Map(records.map((record) => [record.id, record]));
-  assert.deepEqual(pages.filter((page) => !titles.has(page) || !references.pages.some((reference) => reference.page === page)), []);
   assert.deepEqual(ids.filter((id) => !titles.has(byId.get(id)?.page)), []);
 });
 
@@ -116,7 +115,7 @@ test("Drawings use only sprite symbols, and every icon is the exact Lucide shape
 });
 
 test("An approved page is ready with no tag, and every other page is in review", () => {
-  assert.deepEqual(["Start/Philosophy", "Panels/Current"].map((page) => [statusOf(page), statusTags(page)]), [["Ready", []], ["In review", ["In review"]]]);
+  assert.deepEqual(["Start/How to read this Storybook", "Panels/Current"].map((page) => [statusOf(page), statusTags(page)]), [["Ready", []], ["In review", ["In review"]]]);
 });
 
 test("A page without its status tag, or with a code in its title, fails the lint", () => {

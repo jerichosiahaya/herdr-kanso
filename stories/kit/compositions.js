@@ -26,7 +26,7 @@ const icon = (name, label) => ({ icon: name, label });
 export const sessionRow = ({ program = 'p-claude', name, activity = null, time = null, place = null, status = 'working', depth = 1, current = false, pinned = false, commands = 0, hover = false, focus = false, dimmed = false }) => {
   const when = hover ? null : time;
   return row({
-    icon: program, name, second: activity && [activity, when].filter(Boolean).join(' · '), detail: place, meta: activity ? null : when, mark: status, depth, current, dimmed, hover, focus,
+    icon: program, name, second: when && activity ? phrase(activity, '·', when) : activity, detail: place, meta: activity ? null : when, mark: status, depth, current, dimmed, hover, focus,
     glint: status === 'working', flag: pinned ? 'lu-pin' : null, chip: commands, actions: [icon('lu-pin', 'Pin to the top'), icon('lu-ellipsis', 'More')],
   });
 };
