@@ -2,21 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 879 elements, 89 distinct
-
-## Compositions/Tab bar (11)
-
-- <span> kanso-tooltip__anchor is not a primitive
-- <i> kanso-tab-bar__insertion is not a primitive
-- <div> kanso-tab-bar is not a primitive
-- <span> kanso-prototype__label is not a primitive
-- <span> kanso-tab__name is not a primitive
-- <div> kanso-tab-bar--rest is not a primitive
-- <div> kanso-tabs--md is not a primitive
-- <span> kanso-tab-bar__doors is not a primitive
-- <span> kanso-tab-bar__more is not a primitive
-- <span> kanso-tab-bar__menu is not a primitive
-- <span> kanso-tab-bar__skeleton is not a primitive
+Total: 837 elements, 79 distinct
 
 ## Panels/PR (8)
 
@@ -56,6 +42,13 @@ Total: 879 elements, 89 distinct
 - <div> kanso-share__footer is not a primitive
 - <div> raw markup outside a primitive
 
+## Compositions/Tab bar (4)
+
+- <span> kanso-tooltip__anchor is not a primitive
+- <span> kanso-prototype__label is not a primitive
+- <span> kanso-tab__name is not a primitive
+- <div> kanso-tabs--md is not a primitive
+
 ## Layouts/Context menus (4)
 
 - <div> raw markup outside a primitive
@@ -76,29 +69,11 @@ Total: 879 elements, 89 distinct
 - <span> kanso-tooltip__anchor is not a primitive
 - <span> kanso-minimap--rest is not a primitive
 
-## Layouts/Window (3)
-
-- <div> kanso-tab-bar--rest is not a primitive
-- <span> kanso-minimap is not a primitive
-- <span> kanso-minimap--rest is not a primitive
-
 ## Primitives/Dialog (3)
 
 - <div> raw markup outside a primitive
 - <span> raw markup outside a primitive
 - <div> kanso-sleep__tab-heading is not a primitive
-
-## Primitives/Menu (3)
-
-- <div> raw markup outside a primitive
-- <div> kanso-tab-bar is not a primitive
-- <span> kanso-tab__name is not a primitive
-
-## Primitives/Tab (3)
-
-- <div> kanso-tab-bar--rest is not a primitive
-- <span> kanso-tooltip__anchor is not a primitive
-- <span> kanso-tab__tip is not a primitive
 
 ## Compositions/Keyboard (2)
 
@@ -114,6 +89,11 @@ Total: 879 elements, 89 distinct
 
 - <span> kanso-project__counts is not a primitive
 - <div> kanso-agent__text is not a primitive
+
+## Layouts/Window (2)
+
+- <span> kanso-minimap is not a primitive
+- <span> kanso-minimap--rest is not a primitive
 
 ## Panels/Find (2)
 
@@ -134,6 +114,16 @@ Total: 879 elements, 89 distinct
 
 - <span> kanso-annotation__region is not a primitive
 - <div> kanso-annotation__note is not a primitive
+
+## Primitives/Menu (2)
+
+- <div> raw markup outside a primitive
+- <span> kanso-tab__name is not a primitive
+
+## Primitives/Tab (2)
+
+- <span> kanso-tooltip__anchor is not a primitive
+- <span> kanso-tab__tip is not a primitive
 
 ## Compositions/Header (1)
 

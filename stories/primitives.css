@@ -5,6 +5,19 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Tab bar */
+.kanso-tab-bar{height:var(--k-h-tab-bar);flex:none;display:flex;align-items:center;gap:var(--k-sp-1);padding:0 var(--k-sp-1) 0 var(--k-sp-2)}
+.kanso-tab-bar__insertion{width:2px;height:var(--k-h-badge);border-radius:var(--k-r-sm);background:var(--accent);flex:none;display:block;margin:0 calc(-1 * var(--k-sp-1)) 0 calc(-1 * var(--k-sp-hair))}
+.kanso-tab-bar--rest{height:var(--k-h-tab-bar);flex:none;display:flex;align-items:center;gap:var(--k-sp-1)}
+.kanso-tab-bar{position:relative;display:flex;align-items:center;gap:var(--k-sp-2);height:var(--k-h-tab-bar);padding:0 var(--k-sp-3);box-sizing:border-box}
+.kanso-tab-bar>.kanso-tabs{gap:var(--k-sp-hair);min-width:0}
+.kanso-tab-bar .kanso-tabs__label{max-width:var(--k-w-tab-label)}
+.kanso-tab-bar__doors{display:flex;align-items:center;gap:var(--k-sp-hair)}
+.kanso-tab-bar__skeleton{width:var(--k-w-tab-skeleton);height:var(--k-h-icon);border-radius:var(--k-r-control)}
+.kanso-tab-bar__skeleton+.kanso-tab-bar__skeleton{width:var(--k-w-tab-skeleton-short)}
+.kanso-tab-bar__more{position:relative}
+.kanso-tab-bar__menu{position:absolute;top:calc(100% + var(--k-sp-1));left:0;z-index:1}
+
 /* Credit */
 .kanso-credit{display:flex;align-items:center;gap:var(--k-sp-2);height:50px;margin:0 calc(-1 * var(--k-sp-2));padding:0 var(--k-sp-2);border-radius:var(--k-r-control)}
 .kanso-credit.kanso-control--hover{background:var(--w7)}

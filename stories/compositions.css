@@ -17,14 +17,6 @@
 @starting-style{.kanso-status-bar__stepper:is(:hover,:focus-within,.kanso-control--hover)>.kanso-button{opacity:0}}
 
 /* Tab bar: the project's tabs, + and Arrange, then the panel doors; 48 tall, nothing filled at rest. */
-.kanso-tab-bar{position:relative;display:flex;align-items:center;gap:var(--k-sp-2);height:var(--k-h-tab-bar);padding:0 var(--k-sp-3);box-sizing:border-box}
-.kanso-tab-bar>.kanso-tabs{gap:var(--k-sp-hair);min-width:0}
-.kanso-tab-bar .kanso-tabs__label{max-width:var(--k-w-tab-label)}
-.kanso-tab-bar__doors{display:flex;align-items:center;gap:var(--k-sp-hair)}
-.kanso-tab-bar__skeleton{width:var(--k-w-tab-skeleton);height:var(--k-h-icon);border-radius:var(--k-r-control)}
-.kanso-tab-bar__skeleton+.kanso-tab-bar__skeleton{width:var(--k-w-tab-skeleton-short)}
-.kanso-tab-bar__more{position:relative}
-.kanso-tab-bar__menu{position:absolute;top:calc(100% + var(--k-sp-1));left:0;z-index:1}
 
 /* Edges: the panes past each side of the strip, grouped by column. */
 .kanso-edge__column{display:flex;flex-direction:column;align-items:center;gap:var(--k-sp-hair)}

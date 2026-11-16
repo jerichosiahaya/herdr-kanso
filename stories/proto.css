@@ -27,7 +27,6 @@
 .kanso-agent__time{font-size:11.5px;color:var(--dim);width:28px;text-align:right;flex:none}
 .kanso-machine .kanso-machine__name{font-size:13.5px;font-weight:500;color:var(--muted)}
 .kanso-machine .kanso-machine__status{font-size:11.5px}
-.kanso-tab-bar{height:48px;flex:none;display:flex;align-items:center;gap:var(--k-sp-1);padding:0 4px 0 8px}
 .kanso-tab.kanso-control--on{background:var(--w12);color:var(--fg)}
 .kanso-tab--panel.kanso-control--on{background:var(--w12);color:var(--fg)}
 .kanso-terminal{flex:1;padding:12px;font:12.5px/1.72 var(--mono);color:var(--fg);overflow:hidden;white-space:pre}
@@ -83,7 +82,6 @@
 .kanso-story__bars-row{display:flex;gap:var(--k-sp-4);align-items:flex-start;width:max-content}
 .kanso-tab--hover{background:var(--w7)!important;color:var(--fg)!important}
 .kanso-tab__name{padding:0 var(--k-sp-2);font-size:var(--k-fs-body)}
-.kanso-tab-bar__insertion{width:2px;height:var(--k-h-badge);border-radius:var(--k-r-sm);background:var(--accent);flex:none;display:block;margin:0 calc(-1 * var(--k-sp-1)) 0 calc(-1 * var(--k-sp-hair))}
 .kanso-tab--held{opacity:.4}
 .kanso-tab--dim{color:var(--muted)}
 .kanso-tab--off{color:var(--input)!important}
@@ -169,7 +167,6 @@
 .kanso-section{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--k-sp-3);padding:var(--k-sp-6) 0 var(--k-sp-2);font-size:var(--k-fs-section)}
 .kanso-activity--rest{background:var(--raised);border-radius:var(--k-r-card);box-shadow:0 0 0 1px var(--border);padding:var(--k-sp-1);margin-top:var(--k-sp-3)}
 .kanso-activity--rest .kanso-activity__more{height:var(--k-h-row);display:flex;align-items:center;padding-left:calc(var(--k-sp-2) + var(--k-ic-control) + var(--k-sp-2));font-size:var(--k-fs-body);color:var(--muted)}
-.kanso-tab-bar--rest{height:48px;flex:none;display:flex;align-items:center;gap:var(--k-sp-1)}
 .kanso-tab--rest{height:var(--k-h-icon);display:flex;align-items:center;gap:var(--k-sp-2);padding:0 var(--k-sp-3);border-radius:var(--k-r-control);font-size:var(--k-fs-body);color:var(--muted)}
 .kanso-tab--rest.kanso-control--on{background:var(--w12);color:var(--fg)}
 .kanso-tab--rest svg{width:var(--k-ic-control);height:var(--k-ic-control);flex:none;margin:0;opacity:.8}
