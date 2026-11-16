@@ -631,7 +631,7 @@ const CLASSES = {
   "press": "kanso-control--pressed",
   "prow": "kanso-row",
   "prow2": "kanso-row--two-lines",
-  "ptr": "kanso-story__pointer",
+  "ptr": "kanso-pointer",
   "q": "kanso-content__note",
   "ql": "kanso-button kanso-button--quiet",
   "qt": "kanso-segmented--tabs",

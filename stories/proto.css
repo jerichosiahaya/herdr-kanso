@@ -27,7 +27,6 @@
 .kanso-segmented--options span{gap:var(--k-sp-2);height:26px;padding:0 8px;border-radius:6px;font-size:12.5px;color:var(--dim);display:flex;align-items:center;white-space:nowrap}
 .kanso-segmented--options .kanso-control--on{background:var(--raised);box-shadow:inset 0 0 0 1px var(--border);color:var(--fg);font-weight:500}
 .kanso-story__stage{position:relative;padding:18px;border-radius:12px;background:var(--chrome);box-shadow:0 0 0 1px var(--border)}
-.kanso-story__pointer{position:absolute;width:14px;height:20px}
 .kanso-section .kanso-row__name{font-size:var(--k-fs-meta)}
 .kanso-section--collapsible .kanso-row__detail{font-size:var(--k-fs-meta)}
 .kanso-segmented{display:flex;gap:var(--k-sp-hair);padding:var(--k-sp-hair);border-radius:var(--k-r-card);background:var(--w4);height:var(--k-h-control);box-sizing:border-box;flex:none}

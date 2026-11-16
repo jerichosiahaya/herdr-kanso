@@ -967,8 +967,9 @@
 .kanso-row>.kanso-button--quiet{margin-left:auto}
 .kanso-row>.kanso-button--quiet~.kanso-button--quiet{margin-left:0}
 
-/* Layout: a slot that takes the free space. */
+/* Layout: a slot that takes the free space, and a row that centres its items. */
 .kanso-layout__grow{flex:1}
+.kanso-layout__row{display:flex;align-items:center}
 
 /* Text: one line that truncates, glints, shimmers, dims, or takes a computer colour. */
 .kanso-text--shimmer{background:linear-gradient(90deg,var(--muted) 0 34%,var(--fg) 44%,var(--fg) 50%,var(--muted) 62% 100%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:shim 2.6s linear infinite alternate}
@@ -1439,3 +1440,15 @@
 .kanso-panel-header--bar .kanso-row__name{font-size:var(--k-fs-name)}
 .kanso-panel-header--bar>.kanso-row--title{height:var(--k-h-header);align-content:center}
 .kanso-panel-header--bar .kanso-row--title .kanso-content__primary{height:auto}
+
+/* Table: a head and rows on one grid; moves and counts set the columns. */
+.kanso-table :is(.kanso-table__head,.kanso-table__row){display:grid;gap:var(--k-sp-4)}
+.kanso-table__head{padding-bottom:var(--k-sp-2);font-size:var(--k-fs-meta);color:var(--dim)}
+.kanso-table__row{padding:var(--k-sp-2) 0;border-top:var(--k-w-line) solid var(--border);font-size:var(--k-fs-body);line-height:var(--k-lh-body)}
+.kanso-table__row--total{line-height:inherit;font-weight:var(--k-fw-strong)}
+.kanso-table__code{font:var(--k-fs-mono) var(--mono);color:var(--dim)}
+.kanso-table--moves :is(.kanso-table__head,.kanso-table__row){grid-template-columns:300px 190px 1fr}
+.kanso-table--counts :is(.kanso-table__head,.kanso-table__row){grid-template-columns:220px repeat(4,90px) 1fr;gap:var(--k-sp-3)}
+
+/* Pointer: the mouse pointer placed over a piece. */
+.kanso-pointer{position:absolute;width:var(--k-ic-row);height:var(--k-ic-empty)}
