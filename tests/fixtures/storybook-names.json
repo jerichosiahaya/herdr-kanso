@@ -795,7 +795,7 @@
     "kit/Panel/Window",
     "proto/layouts-sidebar-header-three-ways/SidebarHeaderThreeWays/Default",
     "proto/tokens-dawn/TheBand/Default",
-    "proto/tokens-icons/TheWholeSet/Default",
+    "tokens/Icons/The whole set",
     "tokens/Colour",
     "tokens/Icons",
     "tokens/Motion",

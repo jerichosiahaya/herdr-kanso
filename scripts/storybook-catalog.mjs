@@ -101,7 +101,7 @@ const protoPage = {
   'compositions-sidebar-features': null, 'compositions-sidebar-rows': null, 'compositions-states': null,
   'layouts-sidebar-at-rest': null, 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
   'layouts-window-at-rest': null, 'layouts-right-click-any-piece': null, 'layouts-hjkl-dojo': null,
-  'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': 'Compositions/Dawn Mode', 'tokens-icons': 'Tokens/Icons', 'tokens-type': 'Tokens/Type',
+  'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': 'Compositions/Dawn Mode', 'tokens-icons': null, 'tokens-type': 'Tokens/Type',
 };
 // Of a source routed to null, the stories a page still draws from.
 const protoKept = { 'compositions-sidebar-features': { AwayEvents: 'Compositions/Activity' } };

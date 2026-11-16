@@ -401,7 +401,8 @@ export const facts = (...parts) => parts.filter(Boolean).join(' · ');
 export const plus = (count) => `+${count}`;
 
 // Status bar pieces: each item is a Mark or an icon with its words, in the bar's meta size.
-const inlineIcon = (name) => `<svg class="kanso-icon kanso-icon--inline"><use href="#${escape(name)}"/></svg>`;
+const sizedIcon = (name, size) => `<svg class="kanso-icon kanso-icon--${escape(size)}"><use href="#${escape(name)}"/></svg>`;
+const inlineIcon = (name) => sizedIcon(name, 'inline');
 // An `open` item anchors the Menu or popup over it.
 const itemOpen = (open) => open ? ' kanso-status-bar__item--open' : '';
 // A `tool` item is one small button, as the palette's door.
@@ -556,3 +557,32 @@ export const stack = ({ variant, on = false, ...flags }, ...children) => {
   const classes = [block, ...states.filter((state) => flags[state]).map((state) => `${block}--${state}`), on ? 'kanso-control--on' : ''].filter(Boolean).join(' ');
   return `<${tag} class="${classes}"${focusable ? ' tabindex="0"' : ''}>${list(children)}</${tag}>`;
 };
+
+// A token reference: per row its drawn `example`, its mono `names` (a { theme: value } cell shows each theme's value) and its plain `use`.
+const tokenCell = (cell) => typeof cell === 'string' ? escape(cell) : Object.entries(cell).map(([theme, value]) => `<span class="kanso-tokens__value kanso-tokens__value--${escape(theme)}">${escape(value)}</span>`).join('');
+const tokenRow = ({ example, names = [], use = '' }) => `<tr><td class="kanso-tokens__example">${example}</td>${names.map((cell) => `<td class="kanso-tokens__name">${tokenCell(cell)}</td>`).join('')}<td>${escape(use)}</td></tr>`;
+export const tokenTable = ({ head = [], rows = [] }) => `<table class="kanso-tokens"><thead><tr><th></th>${head.map((cell) => `<th>${escape(cell)}</th>`).join('')}</tr></thead><tbody>${rows.map(tokenRow).join('')}</tbody></table>`;
+// What a token looks like in use: its `group`, the `kind` and `step` of its name, or the `fore` colour on a `surface` for contrast.
+const wash = () => '<span class="kanso-tokens__wash"></span>';
+const motionExamples = {
+  hover: wash,
+  ease: wash,
+  arm: () => '<span class="kanso-tokens__arm"></span>',
+  skel: () => '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tokens__skeleton"></span>',
+  spin: () => mark({ status: 'working' }),
+  glint: () => '<span class="kanso-text--glint">checkout</span>',
+};
+const tokenExamples = {
+  colour: ({ step }) => `<span class="kanso-tokens__swatch ${step === 'shadow' ? 'kanso-shadow' : `kanso-fill--${escape(step)}`}"></span>`,
+  contrast: ({ fore, surface, text }) => `<span class="kanso-tokens__contrast ${text ? 'kanso-text' : 'kanso-ring'}--${escape(fore)} kanso-fill--${escape(surface)}">${text ? 'Aa' : ''}</span>`,
+  type: ({ kind, step }) => kind === 'lh' ? `<span class="kanso-tokens__lines kanso-leading--${escape(step)}">Two lines<br>of text</span>` : `<span class="kanso-${kind === 'fw' ? 'weight' : 'type'}--${escape(step)}">Aa Quiet sessions</span>`,
+  space: ({ step }) => `<span class="kanso-tokens__space kanso-gap--${escape(step)}"><i></i><i></i></span>`,
+  radius: ({ step }) => `<span class="kanso-tokens__radius kanso-radius--${escape(step)}"></span>`,
+  height: ({ step }) => `<span class="kanso-tokens__height kanso-height--${escape(step)}"></span>`,
+  switch: () => toggle({ checked: true, label: 'Switch' }),
+  icon: ({ step }) => sizedIcon('lu-bot', step),
+  motion: ({ kind }) => (motionExamples[kind] ?? motionExamples.glint)(),
+};
+export const tokenExample = ({ group, ...name }) => tokenExamples[group]?.(name) ?? '';
+// Every icon in use, its Lucide id and what it means.
+export const iconSet = ({ icons = {} }) => `<div class="kanso-icon__examples">${Object.entries(icons).map(([id, meaning]) => `<div class="kanso-icon__example">${sizedIcon(id, 'chrome')}<div><div class="kanso-icon__name">${escape(id)}</div><div class="kanso-icon__description">${escape(meaning)}</div></div></div>`).join('')}</div>`;

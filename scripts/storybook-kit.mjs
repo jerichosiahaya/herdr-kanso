@@ -1,7 +1,9 @@
-import { elements, escapeMarkup as escape, frame } from './storybook-markup.mjs';
+import { elements, frame } from './storybook-markup.mjs';
 import { THEMES, colour, contrast } from './tokens.mjs';
 import { computerRow, projectRow, sessionRow, tile, viewSwitch } from '../stories/kit/compositions.js';
 import { statedPages } from '../stories/kit/states.js';
+import { iconSet, tokenExample, tokenTable } from '../stories/kit/pieces.js';
+import { iconMeanings } from '../stories/kit/icons.js';
 import { inRail, inSidebar } from '../stories/kit/frames.js';
 export { elements } from './storybook-markup.mjs';
 
@@ -42,38 +44,28 @@ export function kitRecords(records) {
   return results;
 }
 
+const tokenRecord = (name, page, caption, table) => ({ id: `tokens/${name}`, source: 'tokens', page, label: 'Reference', caption, html: frame(tokenTable(table)) });
 const contrastRecord = (tokens) => {
   const surfaces = ['canvas', 'chrome', 'bg', 'raised', 'popover', 'hover', 'selected'];
   const pairs = [...['fg', 'muted', 'dim'].flatMap((text) => surfaces.map((surface) => [text, surface, 4.5])), ...['input', 'focus', 'working', 'blocked', 'done', 'idle'].map((edge) => [edge, 'bg', 3])];
-  const sample = ([fore, surface, min]) => min === 4.5 ? `<span class="kanso-tokens__contrast kanso-text--${fore} kanso-fill--${surface}">Aa</span>` : `<span class="kanso-tokens__contrast kanso-ring--${fore} kanso-fill--${surface}"></span>`;
-  const ratio = ([fore, surface]) => THEMES.map((theme) => `<span class="kanso-tokens__value kanso-tokens__value--${theme}">${contrast(colour(tokens, theme, fore), colour(tokens, theme, surface)).toFixed(1)}:1</span>`).join('');
-  const html = `<table class="kanso-tokens"><thead><tr><th></th><th>Colour</th><th>On</th><th>Ratio</th><th>Minimum</th></tr></thead><tbody>${pairs.map((pair) => `<tr><td class="kanso-tokens__example">${sample(pair)}</td><td class="kanso-tokens__name">--${pair[0]}</td><td class="kanso-tokens__name">--${pair[1]}</td><td class="kanso-tokens__name">${ratio(pair)}</td><td>${pair[2]}:1</td></tr>`).join('')}</tbody></table>`;
-  return { id: 'tokens/Contrast', source: 'tokens', page: 'Tokens/Contrast, light and dark', label: 'Reference', caption: 'Ratios from kanso/tokens.json.', html: frame(html) };
+  const ratio = (fore, surface) => Object.fromEntries(THEMES.map((theme) => [theme, `${contrast(colour(tokens, theme, fore), colour(tokens, theme, surface)).toFixed(1)}:1`]));
+  return tokenRecord('Contrast', 'Tokens/Contrast, light and dark', 'Ratios from kanso/tokens.json.', { head: ['Colour', 'On', 'Ratio', 'Minimum'],
+    rows: pairs.map(([fore, surface, min]) => ({ example: tokenExample({ group: 'contrast', fore, surface, text: min === 4.5 }), names: [`--${fore}`, `--${surface}`, ratio(fore, surface)], use: `${min}:1` })) });
 };
+const colourRows = (tokens) => {
+  const names = [...new Set(Object.values(tokens.colour).flatMap((values) => values.map((row) => row.name)))];
+  const value = (theme, n) => tokens.colour[theme].find((row) => row.name === n);
+  return names.map((n) => ({ example: tokenExample({ group: 'colour', step: n }), names: [`--${n}`, Object.fromEntries(Object.keys(tokens.colour).map((theme) => [theme, value(theme, n)?.value ?? '']))], use: (value('dark', n) ?? value('light', n)).role }));
+};
+const role = (text) => text.replace(/:? ?ui\.js [\w.]+/g, '').replace(/ ?\(\d+ merged here\)/g, '').replace(/^4-based$/, 'base step').trim();
+const groupRows = (tokens, keys) => keys.flatMap((group) => tokens[group].map(({ name: n, value, role: use }) => {
+  const [, kind, step] = /^k-(\w+)-(.+)$/.exec(n);
+  return { example: tokenExample({ group, kind, step }), names: [`--${n}`, String(value)], use: role(use) };
+}));
 
 export function tokenRecords(tokens) {
   const groups = { Colour: ['colour'], Type: ['type'], Spacing: ['space', 'height', 'switch'], Radius: ['radius'], Motion: ['motion'], Icons: ['icon'] };
-  return Object.entries(groups).map(([name, keys]) => {
-    if (keys[0] === 'colour') {
-      const names = [...new Set(Object.values(tokens.colour).flatMap((values) => values.map((row) => row.name)))];
-      const value = (theme, n) => tokens.colour[theme].find((row) => row.name === n);
-      const html = `<table class="kanso-tokens"><thead><tr><th></th><th>Token</th><th>Value</th><th>Use</th></tr></thead><tbody>${names.map((n) => `<tr><td><span class="kanso-tokens__swatch ${n === 'shadow' ? 'kanso-shadow' : `kanso-fill--${escape(n)}`}"></span></td><td class="kanso-tokens__name">--${escape(n)}</td><td class="kanso-tokens__name">${Object.keys(tokens.colour).map((theme) => `<span class="kanso-tokens__value kanso-tokens__value--${theme}">${escape(value(theme, n)?.value ?? '')}</span>`).join('')}</td><td>${escape((value('dark', n) ?? value('light', n)).role)}</td></tr>`).join('')}</tbody></table>`;
-      return { id: `tokens/${name}`, source: 'tokens', page: `Tokens/${name}`, label: 'Reference', caption: 'Values and roles from kanso/tokens.json.', html: frame(html) };
-    }
-    const rows = keys.flatMap((key) => tokens[key].map((row) => ({ ...row, group: key })));
-    const sample = ({ group, name: n }) => {
-      const [, kind, step] = /^k-(\w+)-(.+)$/.exec(n);
-      if (group === 'type') return kind === 'lh' ? `<span class="kanso-tokens__lines kanso-leading--${step}">Two lines<br>of text</span>` : `<span class="kanso-${kind === 'fw' ? 'weight' : 'type'}--${step}">Aa Quiet sessions</span>`;
-      if (group === 'space') return `<span class="kanso-tokens__space kanso-gap--${step}"><i></i><i></i></span>`;
-      if (group === 'radius') return `<span class="kanso-tokens__radius kanso-radius--${step}"></span>`;
-      if (group === 'height') return `<span class="kanso-tokens__height kanso-height--${step}"></span>`;
-      if (group === 'switch') return '<span class="kanso-switch kanso-control--on"><i></i></span>';
-      if (group === 'icon') return `<svg class="kanso-icon kanso-icon--${step}" aria-hidden="true"><use href="#lu-bot"/></svg>`;
-      if (group === 'motion') return /^k-(hover|ease)-/.test(n) ? '<span class="kanso-tokens__wash"></span>' : n === 'k-arm-ms' ? '<span class="kanso-tokens__arm"></span>' : n === 'k-skel-ms' ? '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tokens__skeleton"></span>' : n === 'k-spin-ms' ? '<svg class="kanso-mark kanso-mark--working"><use href="#e-work"/></svg>' : '<span class="kanso-text--glint">checkout</span>';
-      return '';
-    };
-    const role = (text) => text.replace(/:? ?ui\.js [\w.]+/g, '').replace(/ ?\(\d+ merged here\)/g, '').replace(/^4-based$/, 'base step').trim();
-    const html = `<table class="kanso-tokens"><thead><tr><th></th><th>Token</th><th>Value</th><th>Use</th></tr></thead><tbody>${rows.map((row) => `<tr><td class="kanso-tokens__example">${sample(row)}</td><td class="kanso-tokens__name">--${escape(row.name)}</td><td class="kanso-tokens__name">${escape(row.value)}</td><td>${escape(role(row.role))}</td></tr>`).join('')}</tbody></table>`;
-    return { id: `tokens/${name}`, source: 'tokens', page: `Tokens/${name}`, label: 'Reference', caption: 'Values and roles from kanso/tokens.json.', html: frame(html) };
-  }).concat(contrastRecord(tokens));
+  return Object.entries(groups).map(([name, keys]) => tokenRecord(name, `Tokens/${name}`, 'Values and roles from kanso/tokens.json.',
+    { head: ['Token', 'Value', 'Use'], rows: keys[0] === 'colour' ? colourRows(tokens) : groupRows(tokens, keys) }))
+    .concat(contrastRecord(tokens), { id: 'tokens/Icons/The whole set', source: 'tokens', page: 'Tokens/Icons', label: 'The whole set', caption: 'Every icon in use, its Lucide name and what it means. Nothing outside this list.', html: frame(iconSet({ icons: iconMeanings })) });
 }
