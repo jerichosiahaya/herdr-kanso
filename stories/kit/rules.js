@@ -81,6 +81,13 @@ export const rules = {
     "Separators come from groups; rows that cannot act are not drawn.",
     "Keys: j k gg G Enter Esc; nothing is chosen until you move.",
   ],
+  "Layouts/Practice": [
+    "The best path appears only after a miss, with the hint the game computes after 2 s.",
+    "Over the best, the live move count turns working.",
+    "Esc once arms leaving for 3 s in Hachi's bubble; a round ended early is not counted.",
+    "After 20 s with no round, Hachi sleeps.",
+    "In light, Hachi's outline, eyes and nose take the art's own dark ink.",
+  ],
   "Layouts/Sidebar": [
     "A row keeps its height and a name its width on hover, focus and state change.",
     "Find matches name, step, branch or folder, includes other computers, and Enter goes to the first match.",
@@ -130,6 +137,14 @@ export const rules = {
     "A click drops a pin, a drag draws a region; Enter keeps the note, Backspace on an empty note removes it.",
     "To a session on another computer the frame is copied first.",
   ],
+  "Panels/Ports": [
+    "Stop arms in accent for 4 s; a stop that did not take says so in blocked and offers Force stop.",
+    "The status bar's port with no pane opens here with that row selected and Stop focused.",
+    "The focused project's computer decides what is read; unreachable keeps the last read dimmed with Stop disabled.",
+    "Under 340 wide the command hides and Open in the browser becomes Open.",
+    "Open and in front: one lsof and ps every 30 s; behind or closed, none; another computer, one remote read every 60 s.",
+    "History stays closed at rest and is read once when it opens.",
+  ],
   "Panels/PR": [
     "Lists open pull requests that concern you; a merge is an event in While you were away.",
     "Groups follow the sidebar's project order, the front pane's project first.",
@@ -151,6 +166,12 @@ export const rules = {
     "A switch acts at once, pending until the shared state is written.",
     "Switching channel arms.",
     "One read of the changelog and the tags on open or Refresh.",
+  ],
+  "Panels/Share": [
+    "One menu from the header's share icon in Ports, Memory, Spend and the dōjō; its header is the privacy fact.",
+    "The icon shows only when there is something to share.",
+    "While the image is made its row says so and the others dim; the result is a toast.",
+    "Nothing runs until chosen; then a local render, and the post opens in the browser.",
   ],
   "Panels/Shipped": [
     "One GitHub read per period on open or Refresh; line sums from git, then incremental; no poll.",
