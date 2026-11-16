@@ -1305,6 +1305,7 @@
 .kanso-code--source .kanso-control--current{display:block;background:var(--w4)}
 .kanso-code__number{flex:none;width:34px;padding-right:var(--k-sp-2);text-align:right;color:var(--dim)}
 .kanso-code__sign{flex:none;width:14px;color:var(--dim)}
+.kanso-code__text{flex:1;min-width:0}
 .kanso-code__line.kanso-code__line--added{background:color-mix(in srgb,var(--done) 13%,transparent)}
 .kanso-code__line.kanso-code__line--deleted{background:color-mix(in srgb,var(--blocked) 13%,transparent)}
 .kanso-code__line.kanso-code__line--hunk{padding-left:var(--k-sp-4);background:var(--w4);color:var(--dim)}
