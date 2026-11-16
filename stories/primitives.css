@@ -5,6 +5,17 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Menu */
+.kanso-menu__item.kanso-action--armed .kanso-action.kanso-action--armed{background:transparent!important}
+:is(.kanso-menu__heading,.kanso-section .kanso-row__name){color:var(--dim)}
+.kanso-menu__item.kanso-menu__item--dim{color:var(--dim)}
+.kanso-menu__item .kanso-segmented{margin-left:auto;height:var(--k-h-compact)}
+.kanso-menu__check{width:14px;flex:none;color:var(--fg)}
+.kanso-menu__item.kanso-menu__item--busy{color:var(--dim)}
+.kanso-menu__description{color:var(--dim);font-size:var(--k-fs-meta);margin-left:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kanso-menu .kanso-field{margin:0 0 var(--k-sp-1)}
+.kanso-menu__note{padding:0 var(--k-sp-1) var(--k-sp-1)}
+
 /* Search */
 .kanso-search{width:420px;background:var(--canvas);border-radius:var(--k-r-card);box-shadow:var(--shadow),0 0 0 var(--k-w-line) var(--border);overflow:hidden;flex:none}
 .kanso-search__bar{padding:var(--k-sp-2)}

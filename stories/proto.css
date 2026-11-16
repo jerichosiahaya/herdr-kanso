@@ -71,7 +71,6 @@
 .kanso-action.kanso-action--armed>span:first-child{visibility:hidden}
 .kanso-action.kanso-action--armed>span+span{visibility:visible}
 .kanso-actions>.kanso-button--quiet.kanso-action,.kanso-actions>.kanso-button--quiet.kanso-action--armed{height:var(--k-h-control);padding:0 var(--k-sp-3);margin-left:0}
-.kanso-menu__item.kanso-action--armed .kanso-action.kanso-action--armed{background:transparent!important}
 :is(.kanso-segmented,.kanso-segmented--options,.kanso-segmented--sidebar) .kanso-control--on:is(:is(:hover,.kanso-control--hover),:is(:active,.kanso-control--active)){background-color:var(--w12)}
 .kanso-tab.kanso-control--on:is(:is(:hover,.kanso-control--hover),:is(:active,.kanso-control--active)){background-color:var(--w12)}
 .kanso-project.kanso-control--on:is(:is(:hover,.kanso-control--hover),:is(:active,.kanso-control--active)){background-color:var(--w14)}
@@ -82,7 +81,6 @@
 .kanso-state-line>.kanso-button--tonal{margin-left:var(--k-sp-1);height:var(--k-h-compact);padding:0 var(--k-sp-2);font-size:var(--k-fs-meta)}
 :is(.kanso-state-line,.kanso-toast)>.kanso-button--tonal{margin-left:var(--k-sp-1);height:var(--k-h-compact);padding:0 var(--k-sp-2);font-size:var(--k-fs-meta);flex:none}
 .kanso-agent__name{font-size:var(--k-fs-name);font-weight:var(--k-fw-medium)}
-:is(.kanso-menu__heading,.kanso-section .kanso-row__name){color:var(--dim)}
 .kanso-state-line>.kanso-mark{width:var(--k-ic-inline);height:var(--k-ic-inline);flex:none}
 .kanso-story__bars-frame{background:var(--chrome);border-radius:8px;box-shadow:0 0 0 1px var(--border);box-sizing:border-box}
 .kanso-story__bars-cell{display:flex;align-items:center;gap:var(--k-sp-1);padding:var(--k-sp-2);background:var(--chrome);border-radius:8px;box-shadow:0 0 0 1px var(--border);width:max-content;box-sizing:border-box}
@@ -111,8 +109,6 @@
 .kanso-notification .kanso-content__text span{margin-left:auto;font-size:var(--k-fs-meta);font-weight:400;color:var(--dim)}
 .kanso-notification .kanso-content__secondary{font-size:var(--k-fs-body);color:var(--muted);margin-top:var(--k-sp-1)}
 .kanso-notification__code{font:11.5px var(--mono);color:var(--fg)}
-.kanso-menu__item.kanso-menu__item--dim{color:var(--dim)}
-.kanso-menu__item .kanso-segmented{margin-left:auto;height:var(--k-h-compact)}
 .kanso-story__bars-stage{position:relative;padding:16px;border-radius:12px;background:var(--chrome);box-shadow:0 0 0 1px var(--border);box-sizing:border-box}
 .kanso-code__conflict{display:flex;align-items:center;gap:var(--k-sp-2);margin:var(--k-sp-3) calc(-1 * var(--k-sp-4)) 0;padding:8px 16px;background:color-mix(in srgb,var(--blocked) 10%,transparent);font-size:12.5px;flex-wrap:wrap}
 .kanso-code__conflict .kanso-content__text{flex:1 1 100%;min-width:0}
@@ -122,9 +118,6 @@
 .kanso-metadata__row .kanso-content__value{display:flex;flex-wrap:wrap;gap:var(--k-sp-1);align-items:center;flex:1;min-width:0}
 .kanso-metadata__person{display:inline-flex;align-items:center;gap:var(--k-sp-2);white-space:nowrap}
 .kanso-metadata__label{height:24px;padding:0 8px;border-radius:6px;background:var(--w7);font-size:11.5px;display:inline-flex;align-items:center;gap:var(--k-sp-2);white-space:nowrap}
-.kanso-menu__check{width:14px;flex:none;color:var(--fg)}
-.kanso-menu__item.kanso-menu__item--busy{color:var(--dim)}
-.kanso-menu__description{color:var(--dim);font-size:11.5px;margin-left:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kanso-heatmap{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,8px);grid-auto-columns:8px;gap:var(--k-sp-1);margin-top:var(--k-sp-3)}
 .kanso-heatmap i{border-radius:2px;background:var(--w7);display:block}
 .kanso-heatmap .kanso-content__primary{background:color-mix(in srgb,var(--fg) 25%,transparent)}
@@ -135,8 +128,6 @@
 .kanso-share .kanso-share__header{display:flex;align-items:baseline;justify-content:space-between;font-size:15px;font-weight:600}
 .kanso-share .kanso-share__header span{font-size:12.5px;font-weight:400;color:var(--dim)}
 .kanso-share .kanso-share__footer{display:flex;align-items:center;gap:var(--k-sp-2);margin-top:var(--k-sp-4);font-size:11.5px;color:var(--dim)}
-.kanso-menu .kanso-field{margin:0 0 var(--k-sp-1)}
-.kanso-menu__note{padding:0 4px 4px}
 .kanso-card.kanso-card--hover{box-shadow:inset 0 0 0 1px var(--border)}
 .kanso-annotation{width:16px;height:16px;border-radius:50%;background:var(--accent);color:var(--accentfg);font-size:11.5px;font-weight:600;display:grid;place-items:center;flex:none}
 .kanso-annotation.kanso-annotation--inactive{background:var(--input);color:var(--fg)}
