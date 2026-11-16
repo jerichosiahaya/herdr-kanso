@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { descriptions } from '../stories/kit/descriptions.js';
 import { content, featuresFor, statesFor } from '../stories/kit/catalog.js';
 import { promptFor } from '../stories/kit/prompt.js';
+import { rules } from '../stories/kit/rules.js';
 import { FEATURE_LABEL, FEATURE_NOTE } from '../stories/kit/features.js';
 import { guidelines, prompts, sections } from '../stories/kit/guidelines.js';
 import { statusOf } from "../stories/kit/status.js";
@@ -25,7 +26,7 @@ for (const entry of Object.values(index.entries).filter((entry) => entry.type ==
     ...states.flatMap((state) => [`### ${state.label}`, content(state.caption), ...(state.location ? [`Source: ${state.location}`] : []), ...(state.spec ?? []).map(([label, value]) => `- **${content(label)}**: ${content(value)}`), ...state.coverage.map((feature) => `- ${feature.label}: ${content(feature.caption)} (${feature.location})`)]),
     ...(sections[doc.title] ?? []).flatMap(([title, text]) => [`## ${title}`, text]),
     ...(guidelines[doc.title] ? ['## Design guidelines', ...guidelines[doc.title].map(([principle, rule, detail]) => `- ${principle} **${rule}** ${detail}`)] : []),
-    ...(notes.length ? ['## Guidelines', ...notes] : []), '## Prompt for agents', '```text\n' + promptFor(doc.title, states) + '\n```',
+    ...(notes.length || rules[doc.title] ? ['## Guidelines', ...notes, ...(rules[doc.title] ?? []).map((rule) => `- ${rule}`)] : []), '## Prompt for agents', '```text\n' + promptFor(doc.title, states) + '\n```',
     ...(featuresFor(doc.title).some((feature) => feature.gap) ? [`### ${FEATURE_LABEL}`, FEATURE_NOTE, ...featuresFor(doc.title).filter((feature) => feature.gap).map((feature) => `- ${feature.label}: ${content(feature.caption)} (${feature.location})`)] : []),
   ].join('\n\n');
 }

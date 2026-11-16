@@ -6,6 +6,7 @@ import { guidelines, sections } from './guidelines.js';
 import { hypotheses } from './hypotheses.js';
 import { playgrounds } from './playgrounds.js';
 import { promptFor } from './prompt.js';
+import { rules } from './rules.js';
 import { FEATURE_LABEL, FEATURE_NOTE } from './features.js';
 import { PageStatus } from './PageStatus.jsx';
 
@@ -45,7 +46,10 @@ export function ComponentPage({ of, page }) {
     {(sections[page] ?? []).map(([title, text]) => <React.Fragment key={title}><h2>{title}</h2><Markdown>{text}</Markdown></React.Fragment>)}
     {guidelines[page] && <><h2>Design guidelines</h2><ul className="kanso-docs__guidelines">{guidelines[page].map(([principle, rule, detail]) => <li key={rule}><span className="kanso-docs__principle">{principle}</span> <b>{rule}</b> <Markdown options={{ forceInline: true }}>{detail}</Markdown></li>)}</ul></>}
     {hypotheses[page] && <><h2>Hypotheses</h2><ul className="kanso-docs__guidelines">{hypotheses[page].map((item) => <Hypothesis key={item.change} {...item} />)}</ul></>}
-    {notes.length > 0 && !playgrounds[page] && <><h2>Guidelines</h2>{notes.map((id) => <Markdown className="kanso-docs__note" key={id}>{content(id)}</Markdown>)}</>}
+    {(rules[page] || (notes.length > 0 && !playgrounds[page])) && <><h2>Guidelines</h2>
+      {!playgrounds[page] && notes.map((id) => <Markdown className="kanso-docs__note" key={id}>{content(id)}</Markdown>)}
+      {rules[page] && <ul className="kanso-docs__guidelines">{rules[page].map((rule) => <li key={rule}><Markdown options={{ forceInline: true }}>{rule}</Markdown></li>)}</ul>}
+    </>}
     <h2>Prompt for agents</h2>
     <button className="kanso-button kanso-button--solid" type="button" onClick={async () => { await navigator.clipboard.writeText(prompt); setCopied(true); }}>{copied ? 'Copied' : 'Copy prompt'}</button>
     <Source code={prompt} language="text" />
