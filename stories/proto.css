@@ -210,19 +210,9 @@
 .kanso-card.kanso-card--hover{box-shadow:inset 0 0 0 1px var(--border)}
 .kanso-annotation{width:16px;height:16px;border-radius:50%;background:var(--accent);color:var(--accentfg);font-size:11.5px;font-weight:600;display:grid;place-items:center;flex:none}
 .kanso-annotation.kanso-annotation--inactive{background:var(--input);color:var(--fg)}
-.kanso-simulator{border-radius:30px;padding:8px;background:var(--raised);box-shadow:inset 0 0 0 1px var(--border);width:max-content;margin:var(--k-sp-4) auto 0;position:relative}
-.kanso-simulator__screen{border-radius:24px;overflow:hidden;background:var(--canvas);position:relative}
-.kanso-simulator__app{position:absolute;inset:0;padding:32px 12px 12px;font-size:11.5px;color:var(--fg);display:flex;flex-direction:column;gap:var(--k-sp-2)}
-.kanso-simulator__app .kanso-content__text{font-size:15px;font-weight:600}
-.kanso-simulator__app .kanso-simulator__line{background:var(--raised);border-radius:8px;padding:8px 8px;display:flex;justify-content:space-between}
-.kanso-simulator__app .kanso-simulator__payment{margin-top:auto;height:32px;border-radius:8px;background:var(--solid);color:var(--solidfg);display:grid;place-items:center;font-size:12.5px;font-weight:500}
-.kanso-simulator__overlay{position:absolute;inset:8px}
-.kanso-simulator__overlay .kanso-annotation{position:absolute;margin:calc(-1 * var(--k-sp-2)) 0 0 calc(-1 * var(--k-sp-2));z-index:2}
-.kanso-simulator--frozen{box-shadow:inset 0 0 0 1px var(--border),0 0 0 2px var(--focus,var(--accent))}
 .kanso-annotation__region{position:absolute;border:1.5px solid var(--accent);border-radius:4px;background:color-mix(in srgb,var(--accent) 10%,transparent);box-sizing:border-box}
 .kanso-annotation__region .kanso-annotation{left:0;top:0}
 .kanso-annotation__note{position:absolute;z-index:3;width:168px;min-height:30px;box-sizing:border-box;background:var(--popover);border-radius:6px;box-shadow:var(--shadow),0 0 0 1px var(--accent);padding:4px 8px;font-size:12.5px;line-height:1.5;color:var(--fg);display:flex;align-items:center;gap:var(--k-sp-2)}
-.kanso-simulator__frame{border-radius:30px;box-shadow:inset 0 0 0 1px var(--border);margin:var(--k-sp-4) auto 0;display:grid;place-items:center}
 .kanso-section .kanso-segmented--options{margin-left:auto}
 .kanso-credit{display:flex;align-items:center;gap:var(--k-sp-2);height:50px;margin:0 calc(-1 * var(--k-sp-2));padding:0 8px;border-radius:6px}
 .kanso-credit.kanso-control--hover{background:var(--w7)}
@@ -339,21 +329,6 @@
 .kanso-thumbnail i{position:absolute;left:5px;right:5px;height:3px;border-radius:4px;background:var(--input);display:block}
 .kanso-thumbnail i.kanso-brand__wordmark{height:6px;background:color-mix(in srgb,var(--working) 45%,var(--raised))}
 .kanso-section .kanso-segmented{margin-left:auto}
-.kanso-simulator__screen.kanso-simulator__screen--annotating{cursor:crosshair}
-.kanso-simulator__note-layer{position:absolute;inset:var(--k-sp-2);pointer-events:none}
-.kanso-simulator__note-layer>*{pointer-events:auto}
-.kanso-simulator__note-point{width:var(--k-h-badge);height:var(--k-h-badge);border-radius:var(--k-r-full);background:var(--solid);color:var(--solidfg);font-size:var(--k-fs-meta);font-weight:var(--k-fw-medium);display:inline-grid;place-items:center;flex:none;box-shadow:0 0 0 2px var(--bg);font-variant-numeric:tabular-nums;cursor:pointer}
-.kanso-simulator__note-layer>.kanso-simulator__note-point{position:absolute;margin:calc(var(--k-h-badge) / -2) 0 0 calc(var(--k-h-badge) / -2)}
-.kanso-simulator__note-point.kanso-control--hover,.kanso-simulator__note-point:is(:hover,.kanso-control--hover){background-color:var(--solid);box-shadow:0 0 0 2px var(--bg),0 0 0 6px var(--w12)}
-.kanso-simulator__note-point.kanso-row--selected{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--fg)}
-.kanso-simulator__note-editor{position:absolute;left:var(--k-sp-1);right:var(--k-sp-1);margin-top:var(--k-sp-3);background:var(--popover);border-radius:var(--k-r-card);box-shadow:var(--shadow),0 0 0 1px var(--border);padding:var(--k-sp-1)}
-.kanso-simulator__note-editor .kanso-field{margin:0}
-.kanso-simulator__notes{margin-top:var(--k-sp-4)}
-.kanso-simulator__notes .kanso-row .kanso-row__name{flex:1;min-width:0;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kanso-simulator__notes .kanso-row .kanso-button--icon{visibility:hidden;width:var(--k-h-compact);height:var(--k-h-compact)}
-.kanso-simulator__notes .kanso-row:is(:hover,.kanso-control--hover) .kanso-button--icon{visibility:visible}
-.kanso-simulator__notes>.kanso-actions{margin-top:var(--k-sp-3)}
-.kanso-simulator__note-hint{margin:0;font-size:var(--k-fs-meta);color:var(--muted);text-align:center}
 .kanso-control--hover{background-color:var(--hover)}
 :where(button,input,select,textarea)[class*="kanso-"]{appearance:none;border:0;background:none;margin:0;padding:0;font:inherit;color:inherit;text-align:inherit;cursor:pointer}
 a{color:inherit}

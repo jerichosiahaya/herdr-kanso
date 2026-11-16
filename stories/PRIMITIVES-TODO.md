@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 2759 elements, 292 distinct
+Total: 2293 elements, 270 distinct
 
 ## Panels/PR (23)
 
@@ -92,9 +92,8 @@ Total: 2759 elements, 292 distinct
 - <div> kanso-pane__drop-ruler is not a primitive
 - <div> kanso-pane--ghost is not a primitive
 
-## Panels/Preview (15)
+## Panels/Preview (14)
 
-- <div> kanso-simulator__overlay is not a primitive
 - <div> kanso-annotation__region is not a primitive
 - <div> kanso-annotation__note is not a primitive
 - <div> kanso-code__conflict is not a primitive
@@ -172,21 +171,6 @@ Total: 2759 elements, 292 distinct
 - <div> kanso-prototype__toolbar is not a primitive
 - <span> kanso-prototype__label is not a primitive
 
-## Panels/Simulator (12)
-
-- <div> kanso-simulator is not a primitive
-- <div> kanso-simulator__screen is not a primitive
-- <div> kanso-simulator__line is not a primitive
-- <div> kanso-simulator__payment is not a primitive
-- <div> kanso-simulator__screen--annotating is not a primitive
-- <div> kanso-simulator__note-layer is not a primitive
-- <span> kanso-simulator__note-point is not a primitive
-- <div> kanso-simulator__notes is not a primitive
-- <div> kanso-simulator__frame is not a primitive
-- <button> kanso-explain is not a primitive
-- <div> kanso-simulator__note-editor is not a primitive
-- <p> kanso-simulator__note-hint is not a primitive
-
 ## Layouts/Sidebar (10)
 
 - <span> kanso-project__counts is not a primitive
@@ -245,17 +229,6 @@ Total: 2759 elements, 292 distinct
 - <div> kanso-code__conflict is not a primitive
 - <button> kanso-explain is not a primitive
 
-## Panels/Pins (8)
-
-- <div> kanso-simulator is not a primitive
-- <div> kanso-simulator--frozen is not a primitive
-- <div> kanso-simulator__screen is not a primitive
-- <div> kanso-simulator__line is not a primitive
-- <div> kanso-simulator__payment is not a primitive
-- <div> kanso-simulator__overlay is not a primitive
-- <span> kanso-annotation__region is not a primitive
-- <div> kanso-annotation__note is not a primitive
-
 ## Compositions/State patterns (6)
 
 - <div> kanso-window--preview is not a primitive
@@ -264,15 +237,6 @@ Total: 2759 elements, 292 distinct
 - <button> kanso-explain is not a primitive
 - <svg> kanso-icon--narrow is not a primitive
 - <div> raw markup outside a primitive
-
-## Panels/Containers (6)
-
-- <button> kanso-explain is not a primitive
-- <i> kanso-brand__wordmark is not a primitive
-- <div> kanso-simulator is not a primitive
-- <div> kanso-simulator__screen is not a primitive
-- <div> kanso-simulator__line is not a primitive
-- <div> kanso-simulator__payment is not a primitive
 
 ## Panels/Share (6)
 
@@ -381,6 +345,16 @@ Total: 2759 elements, 292 distinct
 - <span> kanso-tooltip__anchor is not a primitive
 - <span> kanso-tab__tip is not a primitive
 
+## Panels/Containers (2)
+
+- <button> kanso-explain is not a primitive
+- <i> kanso-brand__wordmark is not a primitive
+
+## Panels/Pins (2)
+
+- <span> kanso-annotation__region is not a primitive
+- <div> kanso-annotation__note is not a primitive
+
 ## Panels/Spend (2)
 
 - <button> kanso-explain is not a primitive
@@ -420,6 +394,10 @@ Total: 2759 elements, 292 distinct
 - <div> kanso-header__title is not a primitive
 
 ## Panels/Ports (1)
+
+- <button> kanso-explain is not a primitive
+
+## Panels/Simulator (1)
 
 - <button> kanso-explain is not a primitive
 
