@@ -2,26 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 1662 elements, 182 distinct
-
-## Primitives/Dialog (16)
-
-- <div> raw markup outside a primitive
-- <span> raw markup outside a primitive
-- <div> kanso-sleep__tab-heading is not a primitive
-- <svg> kanso-icon--narrow is not a primitive
-- <div> kanso-markdown__document is not a primitive
-- <div> kanso-markdown__section is not a primitive
-- <span> kanso-credit__avatar is not a primitive
-- <span> kanso-credit__avatar--person is not a primitive
-- <div> kanso-window--preview is not a primitive
-- <div> kanso-window__stub is not a primitive
-- <div> kanso-arrangement__pane is not a primitive
-- <div> kanso-arrangement__agent is not a primitive
-- <div> kanso-arrangement__command is not a primitive
-- <div> kanso-arrangement__meta is not a primitive
-- <div> kanso-arrangement is not a primitive
-- <div> kanso-arrangement__column is not a primitive
+Total: 1521 elements, 172 distinct
 
 ## Panels/Find (15)
 
@@ -58,6 +39,23 @@ Total: 1662 elements, 182 distinct
 - <div> raw markup outside a primitive
 - <div> kanso-code__conflict is not a primitive
 
+## Primitives/Dialog (14)
+
+- <div> raw markup outside a primitive
+- <span> raw markup outside a primitive
+- <div> kanso-sleep__tab-heading is not a primitive
+- <svg> kanso-icon--narrow is not a primitive
+- <span> kanso-credit__avatar is not a primitive
+- <span> kanso-credit__avatar--person is not a primitive
+- <div> kanso-window--preview is not a primitive
+- <div> kanso-window__stub is not a primitive
+- <div> kanso-arrangement__pane is not a primitive
+- <div> kanso-arrangement__agent is not a primitive
+- <div> kanso-arrangement__command is not a primitive
+- <div> kanso-arrangement__meta is not a primitive
+- <div> kanso-arrangement is not a primitive
+- <div> kanso-arrangement__column is not a primitive
+
 ## Compositions/Tab bar (12)
 
 - <span> kanso-tooltip__anchor is not a primitive
@@ -72,20 +70,6 @@ Total: 1662 elements, 182 distinct
 - <span> kanso-tab-bar__more is not a primitive
 - <span> kanso-tab-bar__menu is not a primitive
 - <span> kanso-tab-bar__skeleton is not a primitive
-
-## Panels/Preview (11)
-
-- <div> kanso-annotation__region is not a primitive
-- <div> kanso-annotation__note is not a primitive
-- <div> kanso-code__conflict is not a primitive
-- <div> raw markup outside a primitive
-- <span> kanso-file__status is not a primitive
-- <span> kanso-file__spacer is not a primitive
-- <div> kanso-card--hover is not a primitive
-- <i> kanso-heatmap__cell--empty is not a primitive
-- <div> kanso-markdown__document is not a primitive
-- <div> kanso-markdown__section is not a primitive
-- <div> kanso-markdown__editor is not a primitive
 
 ## Layouts/Sidebar (10)
 
@@ -111,6 +95,17 @@ Total: 1662 elements, 182 distinct
 - <span> kanso-edge__column is not a primitive
 - <span> kanso-edge__more is not a primitive
 
+## Panels/Preview (8)
+
+- <div> kanso-annotation__region is not a primitive
+- <div> kanso-annotation__note is not a primitive
+- <div> kanso-code__conflict is not a primitive
+- <div> raw markup outside a primitive
+- <span> kanso-file__status is not a primitive
+- <span> kanso-file__spacer is not a primitive
+- <div> kanso-card--hover is not a primitive
+- <i> kanso-heatmap__cell--empty is not a primitive
+
 ## Layouts/Context menus (7)
 
 - <div> raw markup outside a primitive
@@ -130,16 +125,6 @@ Total: 1662 elements, 182 distinct
 - <div> kanso-arrangement__agent is not a primitive
 - <div> kanso-arrangement__command is not a primitive
 - <div> kanso-arrangement__meta is not a primitive
-
-## Panels/Markdown (7)
-
-- <div> raw markup outside a primitive
-- <div> kanso-markdown__document is not a primitive
-- <div> kanso-markdown__section is not a primitive
-- <div> kanso-markdown__editor is not a primitive
-- <div> kanso-markdown__grid is not a primitive
-- <span> kanso-markdown__grid-heading is not a primitive
-- <div> kanso-code__conflict is not a primitive
 
 ## Layouts/Window (6)
 
@@ -248,6 +233,11 @@ Total: 1662 elements, 182 distinct
 
 - <div> kanso-annotation__note is not a primitive
 - <i> kanso-brand__wordmark is not a primitive
+
+## Panels/Markdown (2)
+
+- <div> raw markup outside a primitive
+- <div> kanso-code__conflict is not a primitive
 
 ## Panels/Pins (2)
 

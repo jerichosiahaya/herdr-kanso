@@ -198,22 +198,6 @@
 .kanso-arrangement__agent svg{display:inline-block;vertical-align:-3px;margin-right:var(--k-sp-2)}
 .kanso-arrangement__pane .kanso-arrangement__command{font:11.5px var(--mono);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kanso-arrangement__pane .kanso-arrangement__meta{font-size:11.5px;color:var(--dim)}
-.kanso-markdown__document{margin-top:var(--k-sp-4);display:flex;flex-direction:column;gap:var(--k-sp-3);color:var(--fg);font-size:13.5px;line-height:1.6}
-.kanso-markdown__section{padding:2px 8px;margin:0 calc(-1 * var(--k-sp-2));border-radius:6px}
-.kanso-markdown__section.kanso-control--hover{background:var(--w7)}
-.kanso-markdown__section h1{font-size:20px;font-weight:600;margin:0;letter-spacing:-.01em;line-height:1.3}
-.kanso-markdown__section h2{font-size:15px;font-weight:600;margin:0}
-.kanso-markdown__section p{margin:0}
-.kanso-markdown__section ul{margin:0;padding-left:16px}
-.kanso-markdown__section code{font:11.5px var(--mono);background:var(--w7);border-radius:4px;padding:0px 4px}
-.kanso-markdown__section pre{margin:0;font:11.5px/1.6 var(--mono);background:var(--canvas);border-radius:6px;padding:8px 8px;color:var(--muted);white-space:pre}
-.kanso-markdown__editor{border-radius:6px;box-shadow:inset 0 0 0 1px var(--accent);background:var(--raised);padding:8px;font:12.5px/1.6 var(--mono);color:var(--fg);white-space:pre-wrap;margin:0 calc(-1 * var(--k-sp-2))}
-.kanso-markdown__grid{display:grid;border-radius:6px;box-shadow:inset 0 0 0 1px var(--input);overflow:hidden;font-size:12.5px;margin:0 calc(-1 * var(--k-sp-2))}
-.kanso-markdown__grid>span{padding:4px 8px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);white-space:nowrap}
-.kanso-markdown__grid>span.kanso-markdown__grid-heading{background:var(--raised);font-weight:600}
-.kanso-markdown__grid>span.kanso-control--on{box-shadow:inset 0 0 0 1px var(--accent)}
-.kanso-markdown__status{display:flex;align-items:center;gap:var(--k-sp-3);font-size:11.5px;color:var(--blocked);margin-top:var(--k-sp-3);padding:8px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.kanso-markdown__status .kanso-markdown__status-text{flex:1}
 .kanso-contrast__pair{display:grid;grid-template-columns:repeat(2,600px);gap:var(--k-sp-4)}
 .kanso-contrast__column{background:var(--chrome);border-radius:12px;padding:16px 16px 16px;box-shadow:0 0 0 1px var(--border)}
 .kanso-contrast__column .kanso-story__caption{color:var(--muted)}

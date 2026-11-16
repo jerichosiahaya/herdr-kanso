@@ -5,6 +5,24 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Markdown */
+.kanso-markdown__document{margin-top:var(--k-sp-4);display:flex;flex-direction:column;gap:var(--k-sp-3);color:var(--fg);font-size:var(--k-fs-name);line-height:1.6}
+.kanso-markdown__section{padding:var(--k-sp-hair) var(--k-sp-2);margin:0 calc(-1 * var(--k-sp-2));border-radius:var(--k-r-control)}
+.kanso-markdown__section.kanso-control--hover{background:var(--w7)}
+.kanso-markdown__section h1{font-size:var(--k-fs-title);font-weight:600;margin:0;letter-spacing:-.01em;line-height:1.3}
+.kanso-markdown__section h2{font-size:var(--k-fs-section);font-weight:600;margin:0}
+.kanso-markdown__section p{margin:0}
+.kanso-markdown__section ul{margin:0;padding-left:var(--k-sp-4)}
+.kanso-markdown__section code{font:var(--k-fs-mono) var(--mono);background:var(--w7);border-radius:var(--k-r-sm);padding:0px var(--k-sp-1)}
+.kanso-markdown__section pre{margin:0;font:11.5px/1.6 var(--mono);background:var(--canvas);border-radius:var(--k-r-control);padding:var(--k-sp-2) var(--k-sp-2);color:var(--muted);white-space:pre}
+.kanso-markdown__editor{border-radius:var(--k-r-control);box-shadow:inset 0 0 0 var(--k-w-line) var(--accent);background:var(--raised);padding:var(--k-sp-2);font:12.5px/1.6 var(--mono);color:var(--fg);white-space:pre-wrap;margin:0 calc(-1 * var(--k-sp-2))}
+.kanso-markdown__grid{display:grid;border-radius:var(--k-r-control);box-shadow:inset 0 0 0 var(--k-w-line) var(--input);overflow:hidden;font-size:var(--k-fs-body);margin:0 calc(-1 * var(--k-sp-2))}
+.kanso-markdown__grid>span{padding:var(--k-sp-1) var(--k-sp-2);border-right:var(--k-w-line) solid var(--border);border-bottom:var(--k-w-line) solid var(--border);white-space:nowrap}
+.kanso-markdown__grid>span.kanso-markdown__grid-heading{background:var(--raised);font-weight:600}
+.kanso-markdown__grid>span.kanso-control--on{box-shadow:inset 0 0 0 var(--k-w-line) var(--accent)}
+.kanso-markdown__status{display:flex;align-items:center;gap:var(--k-sp-3);font-size:var(--k-fs-meta);color:var(--blocked);margin-top:var(--k-sp-3);padding:var(--k-sp-2) 0;border-top:var(--k-w-line) solid var(--border);border-bottom:var(--k-w-line) solid var(--border)}
+.kanso-markdown__status .kanso-markdown__status-text{flex:1}
+
 /* Review */
 .kanso-review__comment .kanso-field{margin-top:0}
 .kanso-review__line{display:flex;gap:var(--k-sp-2);font-size:var(--k-fs-body);line-height:1.5;margin-top:var(--k-sp-hair)}
