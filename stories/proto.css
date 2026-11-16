@@ -163,18 +163,11 @@
 .kanso-control--hover{background-color:var(--hover)}
 :where(button,input,select,textarea)[class*="kanso-"]{appearance:none;border:0;background:none;margin:0;padding:0;font:inherit;color:inherit;text-align:inherit;cursor:pointer}
 a{color:inherit}
-.kanso-prototype__theme-control{border-collapse:collapse;font-size:12.5px;width:100%;max-width:1180px}
-.kanso-prototype__theme-control th{text-align:left;font-weight:600;font-size:11px;color:var(--dim);padding:6px 14px 6px 0;border-bottom:1px solid var(--border)}
-.kanso-prototype__theme-control td{padding:6px 14px 6px 0;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
-.kanso-prototype__theme-control td a{text-decoration:none;color:var(--fg)}
-.kanso-prototype__theme-control td a:is(:hover,.kanso-control--hover){text-decoration:underline}
 .kanso-segmented .kanso-control--on,.kanso-segmented .kanso-control--on,.kanso-segmented .kanso-control--on{background:var(--w12);box-shadow:none;color:var(--fg);font-weight:var(--k-fw-medium)}
 .kanso-tab--rest.kanso-control--on:is(:is(:hover,.kanso-control--hover),:is(:active,.kanso-control--active)){background-color:var(--w12)}
 section[data-reference-board^="panels-a-"] .kanso-panel,[data-reference-board="pr"] .kanso-panel,[data-reference-board="pr-light"] .kanso-panel{overflow:hidden;height:auto!important;padding:16px}
 section[data-reference-board^="panels-a-"] .kanso-panel>*,[data-reference-board="pr"] .kanso-panel>*,[data-reference-board="pr-light"] .kanso-panel>*{flex-shrink:0}
 @media (max-width:960px){body{padding-left:clamp(16px,4vw,56px)}}
-.kanso-prototype__theme-control td{vertical-align:middle}
-.kanso-button--icon.kanso-prototype__label{width:auto;padding:0 var(--k-sp-2);display:flex;align-items:center;gap:var(--k-sp-1);font-size:var(--k-fs-body)}
 .kanso-control--held{background-color:var(--selected)}
 .kanso-log{font:var(--k-fs-mono)/var(--k-lh-code) var(--mono);color:var(--muted);white-space:pre;overflow:hidden;margin-top:var(--k-sp-3)}
 .kanso-tab__tip{left:0;top:calc(100% + var(--k-sp-1))}

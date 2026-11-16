@@ -5,6 +5,15 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Prototype */
+.kanso-prototype__theme-control{border-collapse:collapse;font-size:var(--k-fs-body);width:100%;max-width:1180px}
+.kanso-prototype__theme-control th{text-align:left;font-weight:600;font-size:11px;color:var(--dim);padding:6px 14px 6px 0;border-bottom:var(--k-w-line) solid var(--border)}
+.kanso-prototype__theme-control td{padding:6px 14px 6px 0;border-bottom:var(--k-w-line) solid var(--border);color:var(--muted);vertical-align:top}
+.kanso-prototype__theme-control td a{text-decoration:none;color:var(--fg)}
+.kanso-prototype__theme-control td a:is(:hover,.kanso-control--hover){text-decoration:underline}
+.kanso-prototype__theme-control td{vertical-align:middle}
+.kanso-button--icon.kanso-prototype__label{width:auto;padding:0 var(--k-sp-2);display:flex;align-items:center;gap:var(--k-sp-1);font-size:var(--k-fs-body)}
+
 /* Diff */
 .kanso-diff{margin:var(--k-sp-3) calc(-1 * var(--k-sp-4)) 0}
 
