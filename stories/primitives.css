@@ -5,6 +5,21 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Pane */
+.kanso-pane{flex:1;min-width:0;background:var(--bg);border-radius:var(--k-r-card);display:flex;flex-direction:column;overflow:hidden}
+.kanso-pane.kanso-control--focus{outline:var(--k-w-line) solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:calc(-1 * var(--k-w-line))}
+.kanso-pane__drop-zone{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--accent) 25%,transparent)}
+.kanso-pane--focus{outline:var(--k-w-line) solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:0}
+.kanso-pane-strip{display:flex;gap:var(--k-sp-2);height:200px;background:var(--chrome);border-radius:var(--k-r-card);padding:var(--k-sp-2);box-sizing:border-box;box-shadow:0 0 0 var(--k-w-line) var(--border)}
+.kanso-pane__placeholder{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--k-sp-2);font-size:var(--k-fs-name);color:var(--muted);min-width:0;min-height:0}
+.kanso-pane__placeholder .kanso-icon--program{width:var(--k-h-compact);height:var(--k-h-compact)}
+.kanso-pane__placeholder.kanso-pane--ghost{background:color-mix(in srgb,var(--accent) 25%,transparent);color:var(--fg);font-weight:500}
+.kanso-pane--drop-preview{width:196px;height:168px;display:flex;flex-direction:column;flex:none}
+.kanso-pane__body{flex:1;display:flex;min-height:0}
+.kanso-pane__body.kanso-content__value{flex-direction:column}
+.kanso-pane__drop-ruler{height:8px;flex:none}
+.kanso-pane__drop-ruler.kanso-control--on{background:color-mix(in srgb,var(--accent) 25%,transparent)}
+
 /* Pane header */
 .kanso-pane-header{display:flex;flex:none;align-items:center;gap:var(--k-sp-2);height:var(--k-h-pane);padding:0 var(--k-sp-2) 0 var(--k-sp-3);box-sizing:border-box;border-radius:var(--k-r-card) var(--k-r-card) 0 0;font-size:var(--k-fs-body);white-space:nowrap;cursor:grab}
 .kanso-pane-header__name{flex:0 1 auto;min-width:0;max-width:var(--k-w-pane-name);overflow:hidden;text-overflow:ellipsis;font-weight:var(--k-fw-medium);color:var(--fg)}

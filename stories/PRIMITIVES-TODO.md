@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 1931 elements, 227 distinct
+Total: 1874 elements, 209 distinct
 
 ## Panels/PR (22)
 
@@ -29,25 +29,6 @@ Total: 1931 elements, 227 distinct
 - <div> raw markup outside a primitive
 - <div> kanso-code__conflict is not a primitive
 
-## Panels/Find (16)
-
-- <div> kanso-search__bar is not a primitive
-- <span> kanso-search__input is not a primitive
-- <div> kanso-window--preview is not a primitive
-- <div> kanso-pane--focus is not a primitive
-- <div> kanso-terminal is not a primitive
-- <div> kanso-search is not a primitive
-- <div> raw markup outside a primitive
-- <span> kanso-search__input--placeholder is not a primitive
-- <span> kanso-tab--off is not a primitive
-- <div> kanso-search__results is not a primitive
-- <div> kanso-search__day is not a primitive
-- <div> kanso-search__author is not a primitive
-- <div> kanso-search__excerpt is not a primitive
-- <span> kanso-search__match is not a primitive
-- <div> kanso-search__excerpt--full is not a primitive
-- <span> kanso-notification__code is not a primitive
-
 ## Primitives/Dialog (16)
 
 - <div> raw markup outside a primitive
@@ -66,6 +47,24 @@ Total: 1931 elements, 227 distinct
 - <div> kanso-arrangement__meta is not a primitive
 - <div> kanso-arrangement is not a primitive
 - <div> kanso-arrangement__column is not a primitive
+
+## Panels/Find (15)
+
+- <div> kanso-search__bar is not a primitive
+- <span> kanso-search__input is not a primitive
+- <div> kanso-window--preview is not a primitive
+- <div> kanso-terminal is not a primitive
+- <div> kanso-search is not a primitive
+- <div> raw markup outside a primitive
+- <span> kanso-search__input--placeholder is not a primitive
+- <span> kanso-tab--off is not a primitive
+- <div> kanso-search__results is not a primitive
+- <div> kanso-search__day is not a primitive
+- <div> kanso-search__author is not a primitive
+- <div> kanso-search__excerpt is not a primitive
+- <span> kanso-search__match is not a primitive
+- <div> kanso-search__excerpt--full is not a primitive
+- <span> kanso-notification__code is not a primitive
 
 ## Panels/Preview (13)
 
@@ -98,34 +97,6 @@ Total: 1931 elements, 227 distinct
 - <span> kanso-tab-bar__menu is not a primitive
 - <span> kanso-tab-bar__skeleton is not a primitive
 
-## Compositions/Edges (11)
-
-- <div> kanso-pane-strip is not a primitive
-- <div> kanso-edge is not a primitive
-- <span> kanso-minimap__tile is not a primitive
-- <div> kanso-pane is not a primitive
-- <div> kanso-pane--focus is not a primitive
-- <span> kanso-tooltip__anchor is not a primitive
-- <div> raw markup outside a primitive
-- <div> kanso-edge--target is not a primitive
-- <span> kanso-minimap is not a primitive
-- <span> kanso-edge__column is not a primitive
-- <span> kanso-edge__more is not a primitive
-
-## Compositions/Pane header (11)
-
-- <div> kanso-window--preview is not a primitive
-- <div> kanso-pane--focus is not a primitive
-- <span> kanso-tooltip__anchor is not a primitive
-- <span> kanso-pane__drop-zone is not a primitive
-- <div> raw markup outside a primitive
-- <div> kanso-pane is not a primitive
-- <div> kanso-pane--drop-preview is not a primitive
-- <div> kanso-pane__body is not a primitive
-- <div> kanso-pane__placeholder is not a primitive
-- <div> kanso-pane__drop-ruler is not a primitive
-- <div> kanso-pane--ghost is not a primitive
-
 ## Primitives/Row (11)
 
 - <div> kanso-worktree is not a primitive
@@ -153,6 +124,17 @@ Total: 1931 elements, 227 distinct
 - <div> kanso-rail__footer is not a primitive
 - <div> kanso-rail__views is not a primitive
 
+## Compositions/Edges (8)
+
+- <div> kanso-edge is not a primitive
+- <span> kanso-minimap__tile is not a primitive
+- <span> kanso-tooltip__anchor is not a primitive
+- <div> raw markup outside a primitive
+- <div> kanso-edge--target is not a primitive
+- <span> kanso-minimap is not a primitive
+- <span> kanso-edge__column is not a primitive
+- <span> kanso-edge__more is not a primitive
+
 ## Layouts/Context menus (7)
 
 - <div> raw markup outside a primitive
@@ -162,16 +144,6 @@ Total: 1931 elements, 227 distinct
 - <use> raw markup outside a primitive
 - <div> kanso-prototype__toolbar is not a primitive
 - <span> kanso-prototype__label is not a primitive
-
-## Layouts/Window (7)
-
-- <div> kanso-window__workspace is not a primitive
-- <div> kanso-tab-bar--rest is not a primitive
-- <div> kanso-window__panes is not a primitive
-- <div> kanso-pane is not a primitive
-- <div> kanso-terminal is not a primitive
-- <span> kanso-minimap is not a primitive
-- <span> kanso-minimap--rest is not a primitive
 
 ## Panels/Arrangements (7)
 
@@ -193,14 +165,14 @@ Total: 1931 elements, 227 distinct
 - <span> kanso-markdown__grid-heading is not a primitive
 - <div> kanso-code__conflict is not a primitive
 
-## Layouts/Pane (6)
+## Layouts/Window (6)
 
-- <div> kanso-pane is not a primitive
-- <div> kanso-pane--drop-preview is not a primitive
-- <div> kanso-tab--held is not a primitive
-- <div> kanso-pane__body is not a primitive
-- <div> kanso-pane__placeholder is not a primitive
-- <div> kanso-pane__drop-ruler is not a primitive
+- <div> kanso-window__workspace is not a primitive
+- <div> kanso-tab-bar--rest is not a primitive
+- <div> kanso-window__panes is not a primitive
+- <div> kanso-terminal is not a primitive
+- <span> kanso-minimap is not a primitive
+- <span> kanso-minimap--rest is not a primitive
 
 ## Panels/Share (6)
 
@@ -262,6 +234,12 @@ Total: 1931 elements, 227 distinct
 - <svg> kanso-icon--narrow is not a primitive
 - <div> raw markup outside a primitive
 - <span> raw markup outside a primitive
+
+## Compositions/Pane header (3)
+
+- <div> kanso-window--preview is not a primitive
+- <span> kanso-tooltip__anchor is not a primitive
+- <div> raw markup outside a primitive
 
 ## Compositions/Sidebar (3)
 
@@ -330,6 +308,10 @@ Total: 1931 elements, 227 distinct
 ## Compositions/Sidebar/Tile (1)
 
 - <div> kanso-rail__list is not a primitive
+
+## Layouts/Pane (1)
+
+- <div> kanso-tab--held is not a primitive
 
 ## Layouts/Practice (1)
 
