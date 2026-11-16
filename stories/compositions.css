@@ -3,9 +3,6 @@
 /* Toolbar: icon buttons in a row; collapsed, a column where a caret holds Sort and Search; Sort is dim at its default. */
 
 /* Header: the window's lights and the sidebar's tools; Dawn Mode draws its sky behind them. */
-.kanso-header{position:relative;display:flex;flex-direction:column;flex:none;overflow:hidden;padding:0 var(--k-sp-2) var(--k-sp-1);background:var(--chrome)}
-.kanso-header__title{display:flex;align-items:center;height:48px;padding-left:var(--k-sp-1)}
-.kanso-header__title>.kanso-badge--pill{position:relative;margin-left:auto}
 
 /* Sidebar: the header, the view switch, the rows of the chosen view and the footer; collapsed, the rail with tiles. */
 

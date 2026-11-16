@@ -5,6 +5,11 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Header */
+.kanso-header{position:relative;display:flex;flex-direction:column;flex:none;overflow:hidden;padding:0 var(--k-sp-2) var(--k-sp-1);background:var(--chrome)}
+.kanso-header__title{display:flex;align-items:center;height:var(--k-h-tab-bar);padding-left:var(--k-sp-1)}
+.kanso-header__title>.kanso-badge--pill{position:relative;margin-left:auto}
+
 /* Prototype */
 .kanso-prototype__theme-control{border-collapse:collapse;font-size:var(--k-fs-body);width:100%;max-width:1180px}
 .kanso-prototype__theme-control th{text-align:left;font-weight:600;font-size:11px;color:var(--dim);padding:6px 14px 6px 0;border-bottom:var(--k-w-line) solid var(--border)}

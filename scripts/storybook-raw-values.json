@@ -267,7 +267,6 @@
   {"source":"stories/primitives.css","value":"raw width:14px"},
   {"source":"stories/primitives.css","value":"raw width:480px"},
   {"source":"stories/primitives.css","value":"raw width:340px"},
-  {"source":"stories/compositions.css","value":"raw height:48px"},
   {"source":"stories/compositions.css","value":"raw box-shadow:0 0 0 1px var(--border)"},
   {"source":"stories/proto.css","value":"raw padding:2px 2px 12px"},
   {"source":"stories/proto.css","value":"raw font:400 12.5px/1.3 var(--ui)"},
