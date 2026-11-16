@@ -196,13 +196,6 @@
 .kanso-heatmap .kanso-content__secondary{background:color-mix(in srgb,var(--fg) 45%,transparent)}
 .kanso-heatmap .kanso-content__actions{background:color-mix(in srgb,var(--fg) 68%,transparent)}
 .kanso-heatmap .kanso-heatmap__cell--empty{background:transparent}
-.kanso-chart__bars{display:flex;align-items:flex-end;gap:var(--k-sp-hair);height:50px;margin-top:var(--k-sp-1)}
-.kanso-chart__bars i{flex:1;background:color-mix(in srgb,var(--fg) 28%,transparent);border-radius:2px;display:block;min-height:2px}
-.kanso-chart__bars i.kanso-chart__bar--peak{background:var(--fg)}
-.kanso-chart__bars i.kanso-control__outline{background:var(--w7)}
-.kanso-chart__ticks{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);margin-top:var(--k-sp-1)}
-.kanso-chart__range{height:4px;border-radius:2px;background:var(--w7);margin-top:var(--k-sp-2)}
-.kanso-chart__range i{display:block;height:100%;border-radius:2px;background:color-mix(in srgb,var(--fg) 50%,transparent)}
 .kanso-share{width:600px;background:var(--canvas);border-radius:12px;padding:32px;box-sizing:border-box;box-shadow:0 0 0 1px var(--border)}
 .kanso-share .kanso-share__header{display:flex;align-items:baseline;justify-content:space-between;font-size:15px;font-weight:600}
 .kanso-share .kanso-share__header span{font-size:12.5px;font-weight:400;color:var(--dim)}
@@ -234,12 +227,6 @@
 .kanso-review__comment .kanso-prose{margin-top:var(--k-sp-1)}
 .kanso-review__add{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:4px;background:var(--solid);color:var(--solidfg);font:600 11.5px/1 var(--ui);vertical-align:middle}
 .kanso-card.kanso-card--hover{box-shadow:inset 0 0 0 1px var(--border)}
-.kanso-chart{display:flex;justify-content:space-between;align-items:flex-end;height:72px;margin-top:var(--k-sp-4)}
-.kanso-chart i{width:2px;display:flex;flex-direction:column;justify-content:flex-end;background:color-mix(in srgb,var(--muted) 55%,transparent);}
-.kanso-chart i.kanso-chart__bar--peak{width:3px;background:var(--accent)}
-.kanso-chart i.kanso-chart__bar--low{background:color-mix(in srgb,var(--blocked) 70%,transparent)}
-.kanso-chart i b{display:block;background:var(--working)}
-.kanso-chart__axis{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);margin-top:var(--k-sp-1)}
 .kanso-annotation{width:16px;height:16px;border-radius:50%;background:var(--accent);color:var(--accentfg);font-size:11.5px;font-weight:600;display:grid;place-items:center;flex:none}
 .kanso-annotation.kanso-annotation--inactive{background:var(--input);color:var(--fg)}
 .kanso-picture--annotated{position:relative;border-radius:6px;overflow:hidden;margin-top:var(--k-sp-3);background:var(--raised);box-shadow:0 0 0 1px var(--border)}
@@ -533,8 +520,3 @@ section[data-reference-board^="panels-a-"] .kanso-panel>*,[data-reference-board=
 .kanso-review__line+.kanso-review__line{margin-top:var(--k-sp-1)}
 .kanso-review__line .kanso-review__key{color:var(--dim);flex:none;min-width:0}
 .kanso-review__snippet+.kanso-prose{margin-top:var(--k-sp-3)}
-.kanso-chart--spend{height:calc(var(--k-sp-4) * 6);margin-top:var(--k-sp-6)}
-.kanso-chart--spend i{position:relative;font-style:normal;background:var(--muted)}
-.kanso-chart--spend i.kanso-chart__bar--peak{background:var(--fg)}
-.kanso-chart--spend i.kanso-chart__bar--empty{background:var(--border)}
-.kanso-chart__value{position:absolute;bottom:calc(100% + var(--k-sp-1));left:50%;transform:translateX(-50%);font-size:var(--k-fs-meta);color:var(--fg);white-space:nowrap}

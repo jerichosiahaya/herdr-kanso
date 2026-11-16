@@ -5,6 +5,26 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Chart */
+.kanso-chart__bars{display:flex;align-items:flex-end;gap:var(--k-sp-hair);height:50px;margin-top:var(--k-sp-1)}
+.kanso-chart__bars i{flex:1;background:color-mix(in srgb,var(--fg) 28%,transparent);border-radius:2px;display:block;min-height:2px}
+.kanso-chart__bars i.kanso-chart__bar--peak{background:var(--fg)}
+.kanso-chart__bars i.kanso-control__outline{background:var(--w7)}
+.kanso-chart__ticks{display:flex;justify-content:space-between;font-size:var(--k-fs-meta);color:var(--dim);margin-top:var(--k-sp-1)}
+.kanso-chart__range{height:4px;border-radius:2px;background:var(--w7);margin-top:var(--k-sp-2)}
+.kanso-chart__range i{display:block;height:100%;border-radius:2px;background:color-mix(in srgb,var(--fg) 50%,transparent)}
+.kanso-chart{display:flex;justify-content:space-between;align-items:flex-end;height:72px;margin-top:var(--k-sp-4)}
+.kanso-chart i{width:2px;display:flex;flex-direction:column;justify-content:flex-end;background:color-mix(in srgb,var(--muted) 55%,transparent);}
+.kanso-chart i.kanso-chart__bar--peak{width:3px;background:var(--accent)}
+.kanso-chart i.kanso-chart__bar--low{background:color-mix(in srgb,var(--blocked) 70%,transparent)}
+.kanso-chart i b{display:block;background:var(--working)}
+.kanso-chart__axis{display:flex;justify-content:space-between;font-size:var(--k-fs-meta);color:var(--dim);margin-top:var(--k-sp-1)}
+.kanso-chart--spend{height:calc(var(--k-sp-4) * 6);margin-top:var(--k-sp-6)}
+.kanso-chart--spend i{position:relative;font-style:normal;background:var(--muted)}
+.kanso-chart--spend i.kanso-chart__bar--peak{background:var(--fg)}
+.kanso-chart--spend i.kanso-chart__bar--empty{background:var(--border)}
+.kanso-chart__value{position:absolute;bottom:calc(100% + var(--k-sp-1));left:50%;transform:translateX(-50%);font-size:var(--k-fs-meta);color:var(--fg);white-space:nowrap}
+
 /* Status bar: the bar, its left, middle and right slots, items, counts, needs, question, stepper, popup and rest state. */
 .kanso-status-bar .kanso-status-bar__item{display:flex;align-items:center;gap:var(--k-sp-2);min-width:0}
 .kanso-status-bar .kanso-state-line{flex:none}
