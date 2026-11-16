@@ -5,6 +5,9 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Diff */
+.kanso-diff{margin:var(--k-sp-3) calc(-1 * var(--k-sp-4)) 0}
+
 /* Brand */
 .kanso-brand{display:flex;align-items:center;gap:var(--k-sp-2);font-size:var(--k-fs-name);font-weight:600}
 .kanso-brand__mark{width:var(--k-h-badge);height:var(--k-h-badge);border-radius:var(--k-r-control);background:var(--w12);display:grid;place-items:center;color:var(--muted)}

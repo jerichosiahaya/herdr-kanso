@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 626 elements, 48 distinct
+Total: 611 elements, 46 distinct
 
 ## Compositions/Tab bar (4)
 
@@ -17,12 +17,6 @@ Total: 626 elements, 48 distinct
 - <use> raw markup outside a primitive
 - <div> kanso-prototype__toolbar is not a primitive
 - <span> kanso-prototype__label is not a primitive
-
-## Panels/PR (3)
-
-- <div> kanso-diff is not a primitive
-- <div> kanso-card--hover is not a primitive
-- <div> raw markup outside a primitive
 
 ## Primitives/Dialog (3)
 
@@ -54,6 +48,11 @@ Total: 626 elements, 48 distinct
 
 - <div> raw markup outside a primitive
 - <span> kanso-tab--off is not a primitive
+
+## Panels/PR (2)
+
+- <div> kanso-card--hover is not a primitive
+- <div> raw markup outside a primitive
 
 ## Panels/Preview (2)
 
@@ -133,10 +132,6 @@ Total: 626 elements, 48 distinct
 ## Panels/Worktrees (1)
 
 - <div> raw markup outside a primitive
-
-## Primitives/Code (1)
-
-- <div> kanso-diff is not a primitive
 
 ## Tokens/Type (1)
 
