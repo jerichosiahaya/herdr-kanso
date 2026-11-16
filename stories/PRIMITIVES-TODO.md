@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 1023 elements, 113 distinct
+Total: 969 elements, 102 distinct
 
 ## Compositions/Tab bar (11)
 
@@ -39,34 +39,6 @@ Total: 1023 elements, 113 distinct
 - <span> kanso-edge__column is not a primitive
 - <span> kanso-edge__more is not a primitive
 
-## Primitives/Dialog (7)
-
-- <div> raw markup outside a primitive
-- <span> raw markup outside a primitive
-- <div> kanso-sleep__tab-heading is not a primitive
-- <span> kanso-credit__avatar is not a primitive
-- <span> kanso-credit__avatar--person is not a primitive
-- <div> kanso-window--preview is not a primitive
-- <div> kanso-window__stub is not a primitive
-
-## Layouts/Context menus (6)
-
-- <div> raw markup outside a primitive
-- <div> kanso-window--preview is not a primitive
-- <div> kanso-window__stub is not a primitive
-- <use> raw markup outside a primitive
-- <div> kanso-prototype__toolbar is not a primitive
-- <span> kanso-prototype__label is not a primitive
-
-## Layouts/Window (6)
-
-- <div> kanso-window__workspace is not a primitive
-- <div> kanso-tab-bar--rest is not a primitive
-- <div> kanso-window__panes is not a primitive
-- <div> kanso-terminal is not a primitive
-- <span> kanso-minimap is not a primitive
-- <span> kanso-minimap--rest is not a primitive
-
 ## Panels/Preview (6)
 
 - <div> kanso-annotation__region is not a primitive
@@ -85,14 +57,6 @@ Total: 1023 elements, 113 distinct
 - <div> kanso-share__footer is not a primitive
 - <div> raw markup outside a primitive
 
-## Panels/Find (5)
-
-- <div> kanso-window--preview is not a primitive
-- <div> kanso-terminal is not a primitive
-- <div> raw markup outside a primitive
-- <span> kanso-tab--off is not a primitive
-- <span> kanso-notification__code is not a primitive
-
 ## Panels/Shipped (5)
 
 - <i> kanso-heatmap__cell--empty is not a primitive
@@ -101,6 +65,14 @@ Total: 1023 elements, 113 distinct
 - <div> kanso-share__footer is not a primitive
 - <div> raw markup outside a primitive
 
+## Primitives/Dialog (5)
+
+- <div> raw markup outside a primitive
+- <span> raw markup outside a primitive
+- <div> kanso-sleep__tab-heading is not a primitive
+- <span> kanso-credit__avatar is not a primitive
+- <span> kanso-credit__avatar--person is not a primitive
+
 ## Compositions/Notifications (4)
 
 - <div> raw markup outside a primitive
@@ -108,17 +80,30 @@ Total: 1023 elements, 113 distinct
 - <span> kanso-notification__icon is not a primitive
 - <div> kanso-notification__code is not a primitive
 
-## Compositions/Pane header (3)
+## Layouts/Context menus (4)
 
-- <div> kanso-window--preview is not a primitive
-- <span> kanso-tooltip__anchor is not a primitive
 - <div> raw markup outside a primitive
+- <use> raw markup outside a primitive
+- <div> kanso-prototype__toolbar is not a primitive
+- <span> kanso-prototype__label is not a primitive
 
 ## Compositions/Status bar (3)
 
 - <span> kanso-minimap is not a primitive
 - <span> kanso-tooltip__anchor is not a primitive
 - <span> kanso-minimap--rest is not a primitive
+
+## Layouts/Window (3)
+
+- <div> kanso-tab-bar--rest is not a primitive
+- <span> kanso-minimap is not a primitive
+- <span> kanso-minimap--rest is not a primitive
+
+## Panels/Find (3)
+
+- <div> raw markup outside a primitive
+- <span> kanso-tab--off is not a primitive
+- <span> kanso-notification__code is not a primitive
 
 ## Panels/Memory (3)
 
@@ -149,9 +134,9 @@ Total: 1023 elements, 113 distinct
 - <div> raw markup outside a primitive
 - <span> raw markup outside a primitive
 
-## Compositions/State patterns (2)
+## Compositions/Pane header (2)
 
-- <div> kanso-window--preview is not a primitive
+- <span> kanso-tooltip__anchor is not a primitive
 - <div> raw markup outside a primitive
 
 ## Layouts/Sidebar (2)
@@ -183,6 +168,10 @@ Total: 1023 elements, 113 distinct
 - <div> kanso-header__title is not a primitive
 
 ## Compositions/Sidebar/Footer (1)
+
+- <div> raw markup outside a primitive
+
+## Compositions/State patterns (1)
 
 - <div> raw markup outside a primitive
 
