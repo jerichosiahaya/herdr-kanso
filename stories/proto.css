@@ -1072,8 +1072,6 @@ section[data-reference-board^="panels-a-"] .kanso-panel>*,[data-reference-board=
 .kanso-worktree__summary{font-size:var(--k-fs-meta)}
 .kanso-worktree--open .kanso-worktree__path{font-family:var(--mono)}
 .kanso-worktree__actions>.kanso-button--quiet{background:transparent}
-:where(span.kanso-skeleton){height:9px}
-:where(.kanso-content__primary>span.kanso-skeleton){height:11px}
 .kanso-story__frame:not(.kanso-panel){padding:0;background:none;box-shadow:none}
 .kanso-panel--fit .kanso-panel{overflow:hidden;height:auto!important}
 .kanso-panel--fit .kanso-panel>*{flex-shrink:0}

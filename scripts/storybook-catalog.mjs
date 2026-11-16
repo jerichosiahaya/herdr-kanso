@@ -169,7 +169,7 @@ export function generate(root = '.') {
   const records = expand(catalog);
   const pages = pagesOf(records);
   const cssFile = join(root, 'stories/proto.css');
-  if (existsSync(cssFile)) writeFileSync(cssFile, normalizeCss(readFileSync(cssFile, 'utf8'), { kit: true }));
+  if (existsSync(cssFile)) writeFileSync(cssFile, normalizeCss(readFileSync(cssFile, 'utf8')));
   const out = join(root, 'stories/components');
   rmSync(out, { recursive: true, force: true });
   mkdirSync(out, { recursive: true });
