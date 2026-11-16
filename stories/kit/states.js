@@ -1,5 +1,5 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { addComputer, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
+import { addComputer, channelSettings, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
 import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence, well, shareCard, dojoGrid, dojoText, dojoProgress, dojoLevel } from './pieces.js';
 import { atWidth, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
 import { panelPages } from './panel-states.js';
@@ -992,6 +992,15 @@ export const statedPages = {
       { label: 'Memory, right-click', args: { item: 'Memory', menu: true }, caption: 'Open Memory, Hide this and Settings: it shows only when low.' },
       { label: 'Working count, right-click', args: { item: 'Working count', menu: true }, caption: 'Show them, then the piece lines.' },
       { label: 'Command palette, right-click', args: { item: 'Command palette', menu: true }, caption: 'Hide this and Settings only.' },
+    ],
+  },
+  'Compositions/Dawn Mode': {
+    args: { channel: 'dawn', art: true },
+    markup: (args) => captioned('Settings · Updates', inSettings(channelSettings(args))),
+    states: [
+      { label: 'Stable Mode', args: { channel: 'stable' }, id: 'kit/Dawn Mode/Switch row · Stable Mode', caption: 'Nothing more shows; one press switches.' },
+      { label: 'Dawn Mode', args: {}, id: 'kit/Dawn Mode/Switch row · Dawn Mode', caption: 'It says it can break, with Star on GitHub; the Dawn sky switch follows.' },
+      { label: 'Dawn Mode, sky off', args: { art: false }, caption: 'The sky behind the lights is off; the pill in the header stays.' },
     ],
   },
   'Compositions/Status bar': {

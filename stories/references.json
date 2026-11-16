@@ -949,7 +949,6 @@
         "coverage/strip/PaneTools/Pinned",
         "coverage/strip/PaneTools/Terminal",
         "coverage/strip/PaneTools/Working",
-        "proto/layouts-sidebar-header-three-ways/SidebarHeaderThreeWays/Default",
         "kit/Header/Open",
         "kit/Header/Collapsed",
         "kit/Header/Dawn"
@@ -1894,7 +1893,6 @@
         "coverage/strip/PaneTools/Pinned",
         "coverage/strip/PaneTools/Terminal",
         "coverage/strip/PaneTools/Working",
-        "proto/layouts-sidebar-header-three-ways/SidebarHeaderThreeWays/Default",
         "kit/Header/Open",
         "kit/Header/Collapsed",
         "kit/Header/Dawn"
@@ -1932,7 +1930,6 @@
         "coverage/strip/PaneTools/Pinned",
         "coverage/strip/PaneTools/Terminal",
         "coverage/strip/PaneTools/Working",
-        "proto/layouts-sidebar-header-three-ways/SidebarHeaderThreeWays/Default",
         "kit/Header/Open",
         "kit/Header/Collapsed",
         "kit/Header/Dawn"
@@ -1970,7 +1967,6 @@
         "coverage/strip/PaneTools/Pinned",
         "coverage/strip/PaneTools/Terminal",
         "coverage/strip/PaneTools/Working",
-        "proto/layouts-sidebar-header-three-ways/SidebarHeaderThreeWays/Default",
         "kit/Header/Open",
         "kit/Header/Collapsed",
         "kit/Header/Dawn"
@@ -3551,8 +3547,7 @@
       ],
       "records": [
         "proto/approved-dialogs-herdr/Reference/1",
-        "proto/approved-dialogs-herdr/Reference/2",
-        "proto/components-choosing-the-channel/ChoosingTheChannel/Default"
+        "proto/approved-dialogs-herdr/Reference/2"
       ],
       "components": [
         "Panels/Settings"
@@ -3590,8 +3585,7 @@
         "proto/approved-dialogs-settings-screens/Reference/9",
         "proto/approved-dialogs-settings-screens/Reference/10",
         "proto/approved-dialogs-settings-screens/Reference/11",
-        "proto/approved-dialogs-settings-screens/Reference/12",
-        "proto/components-choosing-the-channel/ChoosingTheChannel/Default"
+        "proto/approved-dialogs-settings-screens/Reference/12"
       ],
       "components": [
         "Panels/Settings"

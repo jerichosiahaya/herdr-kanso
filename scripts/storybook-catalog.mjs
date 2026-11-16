@@ -84,7 +84,7 @@ const primitive = {
 // The panel pieces drawn on their own panel's page.
 const panelPiece = { HeroAndVerdict: 'Panels/PR', InATab: 'Panels/Worktrees', MemoryMetricAndChart: 'Panels/Memory', PlanAndSpend: 'Panels/Spend' };
 const protoPage = {
-  'components-annotated-picture': 'Panels/Pins', 'components-choosing-the-channel': 'Compositions/Dawn Mode',
+  'components-annotated-picture': 'Panels/Pins', 'components-choosing-the-channel': null,
   'components-code': null, 'components-collapsed-rail': null,
   'components-dialog': null, 'components-edges-and-minimap': 'Compositions/Edges',
   'components-find-in-the-conversation': 'Panels/Find', 'components-header-digest': null,
@@ -99,9 +99,9 @@ const protoPage = {
   'compositions-bars': null, 'compositions-controls': 'Primitives/Button', 'compositions-files-and-pr': 'Panels/PR',
   'compositions-menu-and-dialog': null, 'compositions-panel-pieces': 'Compositions/Panel',
   'compositions-sidebar-features': null, 'compositions-sidebar-rows': null, 'compositions-states': null,
-  'layouts-sidebar-at-rest': null, 'layouts-sidebar-header-three-ways': 'Compositions/Dawn Mode',
+  'layouts-sidebar-at-rest': null, 'layouts-sidebar-header-three-ways': null,
   'layouts-window-at-rest': null, 'layouts-right-click-any-piece': null, 'layouts-hjkl-dojo': null,
-  'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': 'Compositions/Dawn Mode', 'tokens-icons': null, 'tokens-type': 'Tokens/Type',
+  'tokens-colour-and-wash': 'Tokens/Colour', 'tokens-dawn': null, 'tokens-icons': null, 'tokens-type': 'Tokens/Type',
 };
 // Of a source routed to null, the stories a page still draws from.
 const protoKept = { 'compositions-sidebar-features': { AwayEvents: 'Compositions/Activity' } };
@@ -170,7 +170,7 @@ export function generate(root = '.') {
   const originals = mergeCoverage([...retained.filter((record) => !regenerated.has(record.id)), ...drawings].map((record) => record.html === undefined ? record : normalizeComponent(record)), statedRecords());
   const tokenFile = join(root, 'kanso/tokens.json');
   const tokens = existsSync(tokenFile) ? read(tokenFile) : null;
-  const catalog = pack([...originals, ...kitRecords(originals).map(normalizeComponent), ...(tokens ? tokenRecords(tokens) : [])]);
+  const catalog = pack([...originals, ...kitRecords().map(normalizeComponent), ...(tokens ? tokenRecords(tokens) : [])]);
   writeFileSync(file, serialize(catalog));
   writeFileSync(join(root, 'stories/GAPS.md'), gapDocument(expand(catalog)));
   const records = expand(catalog);
