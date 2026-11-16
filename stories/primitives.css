@@ -5,6 +5,11 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Tooltip */
+.kanso-tooltip__anchor{position:absolute;white-space:nowrap;z-index:2}
+.kanso-tooltip__anchor .kanso-tooltip{margin:0}
+.kanso-tokens__example .kanso-tooltip{margin:var(--k-sp-2) 0 0;align-self:flex-start}
+
 /* Tab */
 .kanso-tab.kanso-control--on{background:var(--w12);color:var(--fg)}
 .kanso-tab--panel.kanso-control--on{background:var(--w12);color:var(--fg)}

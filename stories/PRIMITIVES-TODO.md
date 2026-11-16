@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 579 elements, 36 distinct
+Total: 571 elements, 31 distinct
 
 ## Layouts/Context menus (3)
 
@@ -16,25 +16,10 @@ Total: 579 elements, 36 distinct
 - <span> raw markup outside a primitive
 - <div> kanso-sleep__tab-heading is not a primitive
 
-## Compositions/Edges (2)
-
-- <span> kanso-tooltip__anchor is not a primitive
-- <div> raw markup outside a primitive
-
 ## Compositions/Keyboard (2)
 
 - <div> raw markup outside a primitive
 - <span> raw markup outside a primitive
-
-## Compositions/Pane header (2)
-
-- <span> kanso-tooltip__anchor is not a primitive
-- <div> raw markup outside a primitive
-
-## Compositions/Tab bar (2)
-
-- <span> kanso-tooltip__anchor is not a primitive
-- <div> kanso-tabs--md is not a primitive
 
 ## Layouts/Sidebar (2)
 
@@ -51,7 +36,15 @@ Total: 579 elements, 36 distinct
 - <div> raw markup outside a primitive
 - <div> kanso-card--hover is not a primitive
 
+## Compositions/Edges (1)
+
+- <div> raw markup outside a primitive
+
 ## Compositions/Notifications (1)
+
+- <div> raw markup outside a primitive
+
+## Compositions/Pane header (1)
 
 - <div> raw markup outside a primitive
 
@@ -63,9 +56,9 @@ Total: 579 elements, 36 distinct
 
 - <div> raw markup outside a primitive
 
-## Compositions/Status bar (1)
+## Compositions/Tab bar (1)
 
-- <span> kanso-tooltip__anchor is not a primitive
+- <div> kanso-tabs--md is not a primitive
 
 ## Layouts/Practice (1)
 
@@ -106,10 +99,6 @@ Total: 579 elements, 36 distinct
 ## Primitives/Menu (1)
 
 - <div> raw markup outside a primitive
-
-## Primitives/Tab (1)
-
-- <span> kanso-tooltip__anchor is not a primitive
 
 ## Tokens/Type (1)
 
