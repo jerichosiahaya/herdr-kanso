@@ -86,28 +86,6 @@
 .kanso-away>.kanso-button--quiet{align-self:flex-start}
 
 /* Keyboard: the map of one layer beside the picked key. A key is a row tall; a wider key spans its units and the gaps between them. */
-.kanso-keyboard__layout{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--k-sp-4);margin-top:var(--k-sp-4);align-items:start}
-.kanso-keyboard{display:flex;flex-direction:column;gap:var(--k-sp-1);padding:var(--k-sp-3);border-radius:var(--k-r-card);background:var(--canvas);width:max-content}
-.kanso-keyboard__row{display:flex;gap:var(--k-sp-1)}
-.kanso-keyboard__key{--k-units:1;position:relative;inline-size:calc(var(--k-h-row) * var(--k-units) + var(--k-sp-1) * (var(--k-units) - 1));height:var(--k-h-row);border-radius:var(--k-r-control);background:var(--w4);color:var(--dim);font-size:var(--k-fs-meta);display:flex;align-items:center;justify-content:center;box-sizing:border-box;flex:none;white-space:nowrap;cursor:default;transition:box-shadow var(--k-hover-out) var(--k-ease-out)}
-.kanso-keyboard__key:is(:hover,.kanso-control--hover){box-shadow:inset 0 0 0 1px var(--accent);transition-duration:var(--k-hover-in);transition-timing-function:var(--k-ease-in)}
-.kanso-keyboard__key:focus-visible{outline:var(--k-sp-hair) solid var(--accent);outline-offset:var(--k-sp-hair)}
-.kanso-keyboard__key.kanso-keyboard__key--bound{background:var(--w12);color:var(--fg)}
-.kanso-keyboard__key.kanso-keyboard__key--available{background:var(--w7);color:var(--muted)}
-.kanso-keyboard__key:is(.kanso-keyboard__key--held,.kanso-control--held){box-shadow:inset 0 0 0 1px var(--muted);color:var(--fg)}
-.kanso-keyboard__key.kanso-control--on{background:var(--solid);color:var(--solidfg);font-weight:var(--k-fw-medium)}
-.kanso-keyboard__key.kanso-keyboard__key--lit{background:var(--solid);color:var(--solidfg);box-shadow:none}
-.kanso-keyboard__key.kanso-keyboard__key--hint{box-shadow:inset 0 0 0 2px var(--accent)}
-.kanso-keyboard__corner{position:absolute;right:var(--k-sp-1);top:var(--k-sp-hair);font-size:var(--k-fs-meta);color:var(--muted)}
-.kanso-keyboard__key--lit .kanso-keyboard__corner{color:var(--solidfg)}
-.kanso-keyboard__finger{position:absolute;top:calc(100% + var(--k-sp-1));left:50%;translate:-50% 0;font-size:var(--k-fs-meta);color:var(--dim)}
-.kanso-keyboard__row:has(.kanso-keyboard__finger)+.kanso-keyboard__row{margin-top:var(--k-sp-4)}
-.kanso-keyboard__selection{display:flex;flex-direction:column;gap:var(--k-sp-1);min-width:0}
-.kanso-keyboard__chord{font-size:var(--k-fs-title);font-weight:var(--k-fw-medium);letter-spacing:var(--k-ls-tight)}
-.kanso-keyboard__meaning{font-size:var(--k-fs-body);color:var(--fg);line-height:var(--k-lh-tight)}
-.kanso-keyboard__meaning.kanso-text--muted{color:var(--muted)}
-.kanso-keyboard__layer{font-size:var(--k-fs-meta);color:var(--dim)}
-.kanso-keyboard__selection>.kanso-actions{display:flex;flex-wrap:wrap;margin-top:var(--k-sp-1);gap:var(--k-sp-2)}
 
 /* Notifications: toasts stack at the corner, the newest at the bottom. */
 .kanso-toasts{display:flex;flex-direction:column;align-items:flex-end;gap:var(--k-sp-2)}
