@@ -5,6 +5,27 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Tab */
+.kanso-tab.kanso-control--on{background:var(--w12);color:var(--fg)}
+.kanso-tab--panel.kanso-control--on{background:var(--w12);color:var(--fg)}
+.kanso-tab.kanso-control--on:is(:is(:hover,.kanso-control--hover),:is(:active,.kanso-control--active)){background-color:var(--w12)}
+.kanso-tab--hover{background:var(--w7)!important;color:var(--fg)!important}
+.kanso-tab__name{padding:0 var(--k-sp-2);font-size:var(--k-fs-body)}
+.kanso-tab--held{opacity:.4}
+.kanso-tab--dim{color:var(--muted)}
+.kanso-tab--off{color:var(--input)!important}
+.kanso-tab{height:var(--k-h-icon);padding:0 var(--k-sp-3);border-radius:var(--k-r-control);display:flex;gap:var(--k-sp-2);align-items:center;font-size:var(--k-fs-body);color:var(--muted)}
+.kanso-tab--panel{height:var(--k-h-icon);min-width:var(--k-h-icon);box-sizing:border-box;display:grid;place-items:center;color:var(--muted);border-radius:var(--k-r-control);font-size:var(--k-fs-body)}
+.kanso-tab--panel.kanso-tab__name{display:flex;align-items:center;gap:var(--k-sp-1)}
+.kanso-tab--rest{height:var(--k-h-icon);display:flex;align-items:center;gap:var(--k-sp-2);padding:0 var(--k-sp-3);border-radius:var(--k-r-control);font-size:var(--k-fs-body);color:var(--muted)}
+.kanso-tab--rest.kanso-control--on{background:var(--w12);color:var(--fg)}
+.kanso-tab--rest svg{width:var(--k-ic-control);height:var(--k-ic-control);flex:none;margin:0;opacity:.8}
+.kanso-tab--rest.kanso-control--on svg{opacity:1}
+.kanso-tab--rest .kanso-content__body{width:var(--k-ic-inline);height:var(--k-ic-inline);color:var(--dim)}
+.kanso-tab--rest.kanso-control--on:is(:is(:hover,.kanso-control--hover),:is(:active,.kanso-control--active)){background-color:var(--w12)}
+.kanso-tab__tip{left:0;top:calc(100% + var(--k-sp-1))}
+.kanso-story__bar:has(.kanso-tab__tip){padding-bottom:var(--k-sp-8)}
+
 /* Header */
 .kanso-header{position:relative;display:flex;flex-direction:column;flex:none;overflow:hidden;padding:0 var(--k-sp-2) var(--k-sp-1);background:var(--chrome)}
 .kanso-header__title{display:flex;align-items:center;height:var(--k-h-tab-bar);padding-left:var(--k-sp-1)}

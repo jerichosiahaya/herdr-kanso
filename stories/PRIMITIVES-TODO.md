@@ -2,13 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 592 elements, 41 distinct
-
-## Compositions/Tab bar (3)
-
-- <span> kanso-tooltip__anchor is not a primitive
-- <span> kanso-tab__name is not a primitive
-- <div> kanso-tabs--md is not a primitive
+Total: 579 elements, 36 distinct
 
 ## Layouts/Context menus (3)
 
@@ -37,15 +31,15 @@ Total: 592 elements, 41 distinct
 - <span> kanso-tooltip__anchor is not a primitive
 - <div> raw markup outside a primitive
 
+## Compositions/Tab bar (2)
+
+- <span> kanso-tooltip__anchor is not a primitive
+- <div> kanso-tabs--md is not a primitive
+
 ## Layouts/Sidebar (2)
 
 - <span> kanso-project__counts is not a primitive
 - <div> kanso-agent__text is not a primitive
-
-## Panels/Find (2)
-
-- <div> raw markup outside a primitive
-- <span> kanso-tab--off is not a primitive
 
 ## Panels/PR (2)
 
@@ -56,16 +50,6 @@ Total: 592 elements, 41 distinct
 
 - <div> raw markup outside a primitive
 - <div> kanso-card--hover is not a primitive
-
-## Primitives/Menu (2)
-
-- <div> raw markup outside a primitive
-- <span> kanso-tab__name is not a primitive
-
-## Primitives/Tab (2)
-
-- <span> kanso-tooltip__anchor is not a primitive
-- <span> kanso-tab__tip is not a primitive
 
 ## Compositions/Notifications (1)
 
@@ -83,10 +67,6 @@ Total: 592 elements, 41 distinct
 
 - <span> kanso-tooltip__anchor is not a primitive
 
-## Layouts/Pane (1)
-
-- <div> kanso-tab--held is not a primitive
-
 ## Layouts/Practice (1)
 
 - <div> kanso-prototype--new is not a primitive
@@ -96,6 +76,10 @@ Total: 592 elements, 41 distinct
 - <div> raw markup outside a primitive
 
 ## Panels/Files (1)
+
+- <div> raw markup outside a primitive
+
+## Panels/Find (1)
 
 - <div> raw markup outside a primitive
 
@@ -118,6 +102,14 @@ Total: 592 elements, 41 distinct
 ## Panels/Worktrees (1)
 
 - <div> raw markup outside a primitive
+
+## Primitives/Menu (1)
+
+- <div> raw markup outside a primitive
+
+## Primitives/Tab (1)
+
+- <span> kanso-tooltip__anchor is not a primitive
 
 ## Tokens/Type (1)
 
