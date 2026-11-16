@@ -1342,9 +1342,6 @@
   "scripts/storybook-components.mjs": 1,
   "stories/proto.css": 1
  },
- "cfc6659044b4": {
-  "scripts/storybook-kit.mjs": 2
- },
  "457bc7b9aab2": {
   "scripts/sync-mods.mjs": 1,
   "scripts/sync-share.mjs": 1
