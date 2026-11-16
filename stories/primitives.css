@@ -5,6 +5,19 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Picture */
+.kanso-picture{margin-top:var(--k-sp-3);border-radius:var(--k-r-card);overflow:hidden;background:var(--canvas);display:block;width:100%}
+.kanso-picture__loading{margin-top:var(--k-sp-3);border-radius:var(--k-r-card);background:var(--canvas);aspect-ratio:16/10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--k-sp-3)}
+.kanso-picture__loading .kanso-row__detail{font-size:var(--k-fs-body);color:var(--dim)}
+.kanso-picture--annotated{position:relative;border-radius:var(--k-r-control);overflow:hidden;margin-top:var(--k-sp-3);background:var(--raised);box-shadow:0 0 0 var(--k-w-line) var(--border)}
+.kanso-picture--annotated .kanso-annotation{position:absolute;margin:calc(-1 * var(--k-sp-2)) 0 0 calc(-1 * var(--k-sp-2))}
+.kanso-picture__content{padding:var(--k-sp-3) var(--k-sp-3);font-size:var(--k-fs-meta);color:var(--fg);line-height:1.3}
+.kanso-picture__content .kanso-picture__banner{margin:var(--k-sp-3) 0 var(--k-sp-2);padding:var(--k-sp-1) var(--k-sp-2);border-radius:var(--k-r-sm);background:color-mix(in srgb,var(--working) 24%,var(--raised));font-weight:500}
+.kanso-picture__content .kanso-picture__line{display:flex;justify-content:space-between;padding:var(--k-sp-1) 0;border-bottom:var(--k-w-line) solid var(--border)}
+.kanso-picture__content .kanso-picture__total{display:flex;justify-content:space-between;margin-top:var(--k-sp-2);font-weight:600}
+.kanso-picture__content .kanso-picture__action{margin-top:var(--k-sp-3);height:24px;border-radius:var(--k-r-sm);background:var(--solid);color:var(--solidfg);display:grid;place-items:center;font-weight:500}
+.kanso-picture__thumbnails{display:flex;gap:var(--k-sp-1);margin-top:var(--k-sp-3)}
+
 /* Toolbar */
 .kanso-toolbar{display:flex;flex:none;align-items:center;gap:var(--k-sp-1);color:var(--muted)}
 .kanso-toolbar.kanso-toolbar--column{flex-direction:column;gap:var(--k-sp-2)}
