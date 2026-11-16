@@ -1,5 +1,5 @@
 // The kit's compositions: each one only calls pieces with its own props and draws no markup.
-import { avatar, button, chip, chord, dawn, diffText, dojoCell, dojoCharacter, dojoFeedback, dojoKey, dojoLevel, dojoProgress, dojoRecord, dojoStatistics, dojoSummary, dojoTitle, facts, headerSegment, input, keyLegend, paneName, setting, sleepLabel, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, mascot, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './kit.js';
+import { avatar, button, chip, chord, dawn, diffText, dojoCell, dojoCharacter, dojoFeedback, dojoLevel, dojoProgress, dojoRecord, dojoStatistics, dojoSummary, dojoTitle, facts, headerSegment, input, keyLegend, paneName, setting, sleepLabel, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, mascot, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './kit.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
 // + names what it adds in the view on show.
@@ -282,6 +282,9 @@ export const paneMenu = ({ name, state = 'none', focused = false, pinned = false
   ...(shown(fold, 'close into ⋯') ? [] : [{ icon: 'lu-x', label: 'Close' }]),
   ...pieceLines] });
 
+// A key of the dōjō: lit while pressed, hinted when next, bound when the level uses it.
+const dojoKey = ({ label, on, lit, hint, small, finger }) => keycap({ label, state: lit ? 'lit' : on ? 'kanso' : 'free', hint, corner: small, finger, inert: true });
+
 // The dōjō: the path of levels, the board or the result, Hachi and his line, then the keyboard with the level's keys.
 const dojoHeader = ({ title, level, name, share, shared, end, leave }) => stack({ variant: 'dojo header' }, dojoTitle({ title, level, name }), grow(),
   share ? button({ label: 'Share', kind: 'icon', icon: 'lu-share', active: shared }) : null, end ? button(end) : null, button(leave));
@@ -296,5 +299,5 @@ export const dojo = ({ header, path, play, result, pixels, sleep, feedback, keys
   stack({ variant: 'dojo body' }, dojoPath(path), stack({ variant: 'dojo main' },
     result ? dojoResult(result) : dojoPlay(play),
     stack({ variant: 'dojo conversation' }, mascot({ pixels }), sleep ? sleepLabel({ text: sleep }) : null, dojoFeedback(feedback)),
-    stack({ variant: 'dojo keyboard' }, keys.map((keyRow) => stack({ variant: 'dojo key row' }, keyRow.map(dojoKey)))))),
+    stack({ variant: 'keyboard', staggered: true }, keys.map((keyRow) => stack({ variant: 'keyboard row' }, keyRow.map(dojoKey)))))),
   share ? stack({ variant: 'dojo menu' }, menu(share)) : null);

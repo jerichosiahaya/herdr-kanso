@@ -221,9 +221,14 @@ export const statedPages = {
     ],
   },
   'Compositions/Keyboard/Key': {
-    args: { label: 'H', units: 1, state: 'kanso', hover: false },
+    args: { label: 'H', units: 1, state: 'kanso', hover: false, hint: false, corner: '', finger: '' },
     markup: (args) => stack({ variant: 'keyboard' }, stack({ variant: 'keyboard row' }, keycap(args))),
-    states: [{ label: 'kansō key', args: {}, caption: 'A key that does a kansō action.' }],
+    states: [
+      { label: 'kansō key', args: {}, caption: 'A key that does a kansō action.' },
+      { label: 'Pressed', args: { state: 'lit' }, caption: 'The key just pressed, in solid ink.' },
+      { label: 'Next key', args: { hint: true }, caption: 'An accent ring marks the key to press next.' },
+      { label: 'With a glyph and a finger', args: { corner: '←', finger: 'index' }, caption: 'A glyph in the corner and the finger that presses it, under the key.' },
+    ],
   },
   'Compositions/Keyboard/Picked key': {
     args: { os: 'mac', ...layerDefaults, key: 'h' },

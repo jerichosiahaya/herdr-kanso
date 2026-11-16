@@ -235,6 +235,9 @@ export const playgrounds = {
       units: { name: 'width in keys', control: { type: 'inline-radio' }, options: [...new Set(Object.values(keyboards).flatMap(({ rows }) => rows.flat().map(([, units = 1]) => units)))].sort((a, b) => a - b) },
       state: select('state', keycapStates),
       hover: { name: 'hover', control: { type: 'boolean' } },
+      hint: { name: 'next key', control: { type: 'boolean' } },
+      corner: { name: 'corner glyph', control: { type: 'text', maxLength: 2 } },
+      finger: { name: 'finger', control: { type: 'text', maxLength: 8 } },
     },
   },
   'Compositions/Keyboard/Picked key': {

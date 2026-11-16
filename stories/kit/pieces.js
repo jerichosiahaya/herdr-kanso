@@ -207,10 +207,11 @@ export const setting = ({ label, control, note, link }) => `<div class="kanso-se
 // A key hint: the chord beside the action it runs; faint when it says nothing now, recording while a key is captured.
 export const keyHint = ({ text, faint = false, recording = false }) => `<span class="kanso-key${faint ? ' kanso-text--dim' : ''}${recording ? ' kanso-key--recording kanso-ring--accent kanso-text--accent' : ''}">${escape(text)}</span>`;
 
-// One key of the keyboard map; `units` is its width in keys.
-const keycapClass = { free: '', herdr: ' kanso-keyboard__key--available', kanso: ' kanso-keyboard__key--bound', held: ' kanso-control--held', picked: ' kanso-control--on' };
+// One key of the keyboard map; `units` is its width in keys. A lit key is pressed, a hinted one is the next to press; the corner glyph and the finger sit on the key.
+const keycapClass = { free: '', herdr: ' kanso-keyboard__key--available', kanso: ' kanso-keyboard__key--bound', held: ' kanso-control--held', picked: ' kanso-control--on', lit: ' kanso-keyboard__key--lit' };
 export const keycapStates = Object.keys(keycapClass);
-export const keycap = ({ label, units = 1, state = 'free', hover = false }) => `<span class="kanso-keyboard__key${keycapClass[state]}${hover ? ' kanso-control--hover' : ''}" role="button" tabindex="0"${units === 1 ? '' : ` style="--k-units:${Number(units)}"`}>${escape(label ?? '')}</span>`;
+export const keycap = ({ label, units = 1, state = 'free', hover = false, hint = false, corner = '', finger = '', inert = false }) => `<span class="kanso-keyboard__key${keycapClass[state]}${hint ? ' kanso-keyboard__key--hint' : ''}${hover ? ' kanso-control--hover' : ''}"${inert ? '' : ' role="button" tabindex="0"'}${units === 1 ? '' : ` style="--k-units:${Number(units)}"`}>${escape(label ?? '')}`
+  + `${corner ? `<span class="kanso-keyboard__corner">${escape(corner)}</span>` : ''}${finger ? `<span class="kanso-keyboard__finger">${escape(finger)}</span>` : ''}</span>`;
 
 // The picked key: its chord, what it does or Nothing, its layer, then the acts on it.
 export const keyPicked = ({ chord, meaning = null, layer = null, actions = [] }) => `<div class="kanso-keyboard__selection"><span class="kanso-keyboard__chord">${escape(chord)}</span>`
@@ -270,8 +271,6 @@ const inks = { O: 'outline', F: 'fur', C: 'cream', D: 'light', K: 'eye', N: 'nos
 export const mascot = ({ pixels }) => `<div class="kanso-dojo__mascot">${pixels.flat().map((ink) => `<i class="${inks[ink] ? `kanso-mascot__pixel--${inks[ink]}` : ''}"></i>`).join('')}</div>`;
 export const dojoTones = { none: '', success: ' kanso-feedback--success', missed: ' kanso-feedback--missed', armed: ' kanso-button kanso-button--quiet kanso-action--armed' };
 export const dojoFeedback = ({ text, tone = 'none' }) => `<div class="kanso-dojo__feedback${dojoTones[tone]}">${escape(text)}</div>`;
-export const dojoKey = ({ label, on = false, lit = false, hint = false, small = '', finger = '' }) => `<span class="kanso-dojo__key${on ? ' kanso-control--on' : ''}${lit ? ' kanso-key--lit' : ''}${hint ? ' kanso-key--hint' : ''}">`
-  + `${escape(label)}${small ? `<small>${escape(small)}</small>` : ''}${finger ? `<span class="kanso-content__summary">${escape(finger)}</span>` : ''}</span>`;
 export const dojoRecord = ({ value, unit, record = '' }) => `<div class="kanso-dojo__result-heading">${metric({ value, unit })}${record ? `<span class="kanso-dojo__record">${escape(record)}</span>` : ''}</div>`;
 export const dojoSummary = ({ text }) => `<div class="kanso-dojo__result-label">${escape(text)}</div>`;
 export const sleepLabel = ({ text }) => `<span class="kanso-dojo__sleep-label">${escape(text)}</span>`;
@@ -311,7 +310,7 @@ export const stacks = {
   'tab bar menu': { block: 'kanso-tab-bar__menu', tag: 'span' },
   'tab bar doors': { block: 'kanso-tab-bar__doors', tag: 'span' },
   away: { block: 'kanso-away', tag: 'section' },
-  keyboard: { block: 'kanso-keyboard' },
+  keyboard: { block: 'kanso-keyboard', states: ['staggered'] },
   'keyboard row': { block: 'kanso-keyboard__row' },
   'keyboard layout': { block: 'kanso-keyboard__layout' },
   toasts: { block: 'kanso-toasts' },
@@ -333,8 +332,6 @@ export const stacks = {
   'dojo text': { block: 'kanso-dojo__text' },
   'dojo line': { block: 'kanso-dojo__line' },
   'dojo conversation': { block: 'kanso-dojo__conversation' },
-  'dojo keyboard': { block: 'kanso-dojo__keyboard' },
-  'dojo key row': { block: 'kanso-dojo__key-row' },
   'dojo result keys': { block: 'kanso-dojo__result-keys' },
   'dojo menu': { block: 'kanso-dojo__menu' },
 };
