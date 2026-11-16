@@ -48,10 +48,6 @@
 .kanso-section--collapsible .kanso-row__detail{color:var(--dim);font-size:12.5px;margin-left:auto}
 .kanso-state-line--error{font-size:12.5px;color:var(--blocked);margin-top:var(--k-sp-3);display:flex;gap:var(--k-sp-2);align-items:center}
 .kanso-section .kanso-row__name{font-size:12.5px;color:var(--dim)}
-.kanso-dialog--settings{width:860px;background:var(--popover);border-radius:8px;padding:var(--k-sp-6);box-sizing:border-box;box-shadow:var(--shadow),0 0 0 1px var(--border)}
-.kanso-dialog__heading{display:flex;align-items:center;gap:var(--k-sp-6)}
-.kanso-dialog--settings>.kanso-actions{margin-top:var(--k-sp-4)}
-.kanso-dialog__heading .kanso-content__text{font-size:15px;font-weight:600}
 .kanso-segmented--tabs .kanso-control--on{color:var(--fg);font-weight:500}
 .kanso-metric__cost{font:11.5px var(--mono);color:var(--dim);white-space:nowrap}
 .kanso-segmented--options{display:flex;padding:2px;border-radius:8px;background:var(--w4);gap:var(--k-sp-1);flex:none}
@@ -199,14 +195,8 @@
 .kanso-worktree__details .kanso-worktree__path{font:11.5px var(--mono);color:var(--dim);margin-top:var(--k-sp-1)}
 .kanso-worktree__loss{font-size:12.5px;line-height:1.5;color:var(--blocked);margin-top:var(--k-sp-1)}
 .kanso-worktree__details .kanso-content__actions{display:flex;gap:var(--k-sp-2);align-items:center;margin-top:var(--k-sp-2);flex-wrap:wrap}
-.kanso-dialog--worktree{width:440px;background:var(--popover);border-radius:8px;padding:var(--k-sp-6);box-sizing:border-box;box-shadow:var(--shadow),0 0 0 1px var(--border)}
-.kanso-dialog--worktree>.kanso-actions{margin-top:var(--k-sp-4)}
-.kanso-dialog--worktree .kanso-content__text{font-size:15px;font-weight:600}
 .kanso-review__comment .kanso-field{margin-top:0}
-.kanso-dialog--worktree .kanso-field{margin-top:var(--k-sp-4)}
 .kanso-menu .kanso-field{margin:0 0 var(--k-sp-1)}
-.kanso-dialog--worktree .kanso-segmented--options{margin-top:var(--k-sp-3);width:max-content}
-.kanso-dialog--worktree .kanso-segmented--options span{gap:var(--k-sp-2)}
 .kanso-review__line{display:flex;gap:var(--k-sp-2);font-size:12.5px;line-height:1.5;margin-top:var(--k-sp-hair)}
 .kanso-review__line:first-child{margin-top:0}
 .kanso-review__line .kanso-mark{font:11.5px/1.6 var(--mono);color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:auto;height:auto;display:inline}
@@ -245,46 +235,11 @@
 .kanso-annotation__note{position:absolute;z-index:3;width:168px;min-height:30px;box-sizing:border-box;background:var(--popover);border-radius:6px;box-shadow:var(--shadow),0 0 0 1px var(--accent);padding:4px 8px;font-size:12.5px;line-height:1.5;color:var(--fg);display:flex;align-items:center;gap:var(--k-sp-2)}
 .kanso-simulator__frame{border-radius:30px;box-shadow:inset 0 0 0 1px var(--border);margin:var(--k-sp-4) auto 0;display:grid;place-items:center}
 .kanso-section .kanso-segmented--options{margin-left:auto}
-.kanso-dialog__group{font-size:11.5px;color:var(--dim);height:26px;display:flex;align-items:center;gap:var(--k-sp-2);margin-top:var(--k-sp-2)}
-.kanso-dialog__group .kanso-button--quiet{margin-left:auto}
-.kanso-dialog__list{margin-top:var(--k-sp-2);display:flex;flex-direction:column;gap:var(--k-sp-hair)}
-.kanso-dialog__row{display:flex;align-items:center;gap:var(--k-sp-2);height:32px;padding:0 8px;margin:0 calc(-1 * var(--k-sp-2));border-radius:6px;font-size:12.5px;color:var(--fg);box-sizing:border-box}
-.kanso-dialog__row.kanso-dialog__row--two-lines{height:50px}
-.kanso-dialog__row.kanso-control--hover{background:var(--w7)}
-.kanso-dialog__row.kanso-control--off{color:var(--muted)}
-.kanso-dialog__row .kanso-dialog__text{flex:1;min-width:0}
-.kanso-dialog__row .kanso-dialog__name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kanso-dialog__row .kanso-dialog__detail{font-size:11.5px;color:var(--dim);margin-top:var(--k-sp-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kanso-dialog__row .kanso-dialog__meta{font-size:11.5px;color:var(--dim);white-space:nowrap;flex:none}
-.kanso-dialog__row .kanso-button--quiet{flex:none}
-.kanso-dialog__tile{width:18px;height:17px;border-radius:4px;background:var(--w12);display:grid;place-items:center;font-size:11.5px;font-weight:600;color:var(--fg);flex:none}
-.kanso-dialog__logo{width:17px;height:17px;border-radius:6px;flex:none;display:block}
-.kanso-credit .kanso-dialog__logo{width:28px;height:26px;border-radius:8px}
-.kanso-dialog__missing{border-radius:8px;box-shadow:inset 0 0 0 1px var(--border);background-image:repeating-linear-gradient(135deg,var(--w4) 0 6px,transparent 6px 12px);padding:16px;box-sizing:border-box;font-size:12.5px;color:var(--muted);line-height:1.5}
-.kanso-dialog__missing b{display:block;font-size:12.5px;font-weight:600;color:var(--fg);margin-bottom:var(--k-sp-2)}
-.kanso-dialog__missing div{display:flex;gap:var(--k-sp-2);align-items:baseline}
-.kanso-dialog__mapping{border-radius:8px;background:var(--canvas);padding:16px;box-sizing:border-box;font-size:12.5px;color:var(--muted);line-height:1.5}
-.kanso-dialog__mapping b{display:block;font-size:12.5px;font-weight:600;color:var(--fg);margin-bottom:var(--k-sp-2)}
-.kanso-dialog__mapping div{display:flex;gap:var(--k-sp-2);align-items:baseline}
-.kanso-dialog__mapping div span:first-child{color:var(--dim);min-width:132px;flex:none}
-.kanso-dialog__missing div span:first-child{color:var(--dim);min-width:132px;flex:none}
-.kanso-dialog__arrow{color:var(--dim);font-size:12.5px;align-self:center}
-.kanso-dialog__hint{font-size:11.5px;color:var(--dim);margin-top:var(--k-sp-1)}
-.kanso-dialog__count{font-size:11.5px;color:var(--dim)}
 .kanso-credit{display:flex;align-items:center;gap:var(--k-sp-2);height:50px;margin:0 calc(-1 * var(--k-sp-2));padding:0 8px;border-radius:6px}
 .kanso-credit.kanso-control--hover{background:var(--w7)}
 .kanso-credit .kanso-credit__avatar{width:28px;height:26px;border-radius:8px;background:var(--w7);display:grid;place-items:center;color:var(--muted);font-size:11.5px;font-weight:500;flex:none}
 .kanso-credit .kanso-credit__avatar.kanso-credit__avatar--person{border-radius:50%}
-.kanso-credit .kanso-dialog__text{flex:1;min-width:0}
-.kanso-credit .kanso-dialog__name{font-size:12.5px}
-.kanso-credit .kanso-dialog__detail{font-size:11.5px;color:var(--dim);margin-top:var(--k-sp-2)}
 .kanso-sleep{display:flex;align-items:center;gap:var(--k-sp-2);height:32px;padding:0 8px 0 24px;border-radius:8px;color:var(--dim);font-size:13.5px}
-.kanso-sleep.kanso-dialog__row--two-lines{height:50px;align-items:flex-start;padding-top:8px;box-sizing:border-box}
-.kanso-sleep.kanso-dialog__row--two-lines .kanso-icon{margin-top:var(--k-sp-hair)}
-.kanso-sleep .kanso-dialog__text{flex:1;min-width:0}
-.kanso-sleep .kanso-dialog__name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kanso-sleep .kanso-dialog__detail{font-size:11.5px;margin-top:var(--k-sp-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kanso-sleep .kanso-dialog__meta{display:flex;gap:var(--k-sp-2);align-items:center;flex:none}
 .kanso-sleep.kanso-row--selected{background:var(--w7)}
 .kanso-sleep.kanso-sleep--blocked{background:color-mix(in srgb,var(--blocked) 8%,transparent);color:var(--fg)}
 .kanso-sleep__tab-heading{font-size:11.5px;color:var(--dim);margin-top:var(--k-sp-3);height:26px;display:flex;align-items:center;gap:var(--k-sp-2)}
@@ -410,8 +365,6 @@
 .kanso-simulator__notes .kanso-row:is(:hover,.kanso-control--hover) .kanso-button--icon{visibility:visible}
 .kanso-simulator__notes>.kanso-actions{margin-top:var(--k-sp-3)}
 .kanso-simulator__note-hint{margin:0;font-size:var(--k-fs-meta);color:var(--muted);text-align:center}
-.kanso-dialog--settings .kanso-actions{justify-content:flex-end;margin-top:var(--k-sp-4)}
-.kanso-dialog--settings .kanso-dialog__heading{margin-bottom:var(--k-sp-3)}
 .kanso-control--hover{background-color:var(--hover)}
 :where(button,input,select,textarea)[class*="kanso-"]{appearance:none;border:0;background:none;margin:0;padding:0;font:inherit;color:inherit;text-align:inherit;cursor:pointer}
 a{color:inherit}
@@ -428,9 +381,6 @@ section[data-reference-board^="panels-a-"] .kanso-panel>*,[data-reference-board=
 .kanso-prototype__theme-control td{vertical-align:middle}
 .kanso-button--icon.kanso-prototype__label{width:auto;padding:0 var(--k-sp-2);display:flex;align-items:center;gap:var(--k-sp-1);font-size:var(--k-fs-body)}
 .kanso-control--held{background-color:var(--selected)}
-:is(.kanso-card,.kanso-dialog--settings) .kanso-field{margin-top:var(--k-sp-3)}
-.kanso-dialog--small .kanso-dialog__group{padding:0 8px;margin-top:var(--k-sp-1)}
-.kanso-dialog--small .kanso-dialog__row{margin:0}
 .kanso-review__snippet{margin:var(--k-sp-2) calc(-1 * var(--k-sp-3)) 0}
 .kanso-log{font:var(--k-fs-mono)/var(--k-lh-code) var(--mono);color:var(--muted);white-space:pre;overflow:hidden;margin-top:var(--k-sp-3)}
 :is(.kanso-explain,.kanso-worktree__actions>button){border:0;font-family:inherit}
