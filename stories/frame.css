@@ -1,4 +1,5 @@
 /* The Storybook's own frame around the prototype's drawings. */
+.kanso-story__frame{padding:16px;border-radius:12px;background:var(--canvas);box-shadow:0 0 0 1px var(--border);color:var(--fg);font-size:var(--k-fs-body)}
 .kanso-story__viewport { width: max-content; min-width: 100%; box-sizing: border-box; padding: var(--k-sp-4); -webkit-font-smoothing: antialiased; }
 .kanso-story__viewport.kanso-story--canvas { padding: 2%; }
 .kanso-story__viewport :has(> .kanso-toast) { min-width: min-content; }
