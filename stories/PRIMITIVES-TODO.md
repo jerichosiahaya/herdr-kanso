@@ -2,25 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 1150 elements, 132 distinct
-
-## Panels/Find (15)
-
-- <div> kanso-search__bar is not a primitive
-- <span> kanso-search__input is not a primitive
-- <div> kanso-window--preview is not a primitive
-- <div> kanso-terminal is not a primitive
-- <div> kanso-search is not a primitive
-- <div> raw markup outside a primitive
-- <span> kanso-search__input--placeholder is not a primitive
-- <span> kanso-tab--off is not a primitive
-- <div> kanso-search__results is not a primitive
-- <div> kanso-search__day is not a primitive
-- <div> kanso-search__author is not a primitive
-- <div> kanso-search__excerpt is not a primitive
-- <span> kanso-search__match is not a primitive
-- <div> kanso-search__excerpt--full is not a primitive
-- <span> kanso-notification__code is not a primitive
+Total: 1084 elements, 122 distinct
 
 ## Compositions/Tab bar (12)
 
@@ -117,6 +99,14 @@ Total: 1150 elements, 132 distinct
 - <div> kanso-share__footer is not a primitive
 - <div> kanso-menu__item--busy is not a primitive
 - <div> raw markup outside a primitive
+
+## Panels/Find (5)
+
+- <div> kanso-window--preview is not a primitive
+- <div> kanso-terminal is not a primitive
+- <div> raw markup outside a primitive
+- <span> kanso-tab--off is not a primitive
+- <span> kanso-notification__code is not a primitive
 
 ## Compositions/Notifications (4)
 
