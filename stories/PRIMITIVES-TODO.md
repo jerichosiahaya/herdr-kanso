@@ -2,18 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 837 elements, 79 distinct
-
-## Panels/PR (8)
-
-- <span> kanso-code__text is not a primitive
-- <div> kanso-metadata__row is not a primitive
-- <span> kanso-metadata__person is not a primitive
-- <span> kanso-metadata__label is not a primitive
-- <div> kanso-diff is not a primitive
-- <div> kanso-card--hover is not a primitive
-- <div> raw markup outside a primitive
-- <div> kanso-code__conflict is not a primitive
+Total: 828 elements, 76 distinct
 
 ## Compositions/Edges (7)
 
@@ -25,11 +14,20 @@ Total: 837 elements, 79 distinct
 - <span> kanso-edge__column is not a primitive
 - <span> kanso-edge__more is not a primitive
 
-## Panels/Preview (6)
+## Panels/PR (7)
+
+- <span> kanso-code__text is not a primitive
+- <div> kanso-metadata__row is not a primitive
+- <span> kanso-metadata__person is not a primitive
+- <span> kanso-metadata__label is not a primitive
+- <div> kanso-diff is not a primitive
+- <div> kanso-card--hover is not a primitive
+- <div> raw markup outside a primitive
+
+## Panels/Preview (5)
 
 - <div> kanso-annotation__region is not a primitive
 - <div> kanso-annotation__note is not a primitive
-- <div> kanso-code__conflict is not a primitive
 - <div> raw markup outside a primitive
 - <div> kanso-card--hover is not a primitive
 - <i> kanso-heatmap__cell--empty is not a primitive
@@ -105,11 +103,6 @@ Total: 837 elements, 79 distinct
 - <div> kanso-annotation__note is not a primitive
 - <i> kanso-brand__wordmark is not a primitive
 
-## Panels/Markdown (2)
-
-- <div> raw markup outside a primitive
-- <div> kanso-code__conflict is not a primitive
-
 ## Panels/Pins (2)
 
 - <span> kanso-annotation__region is not a primitive
@@ -166,6 +159,10 @@ Total: 837 elements, 79 distinct
 - <i> kanso-brand__wordmark is not a primitive
 
 ## Panels/Files (1)
+
+- <div> raw markup outside a primitive
+
+## Panels/Markdown (1)
 
 - <div> raw markup outside a primitive
 

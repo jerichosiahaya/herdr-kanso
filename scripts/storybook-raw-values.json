@@ -314,8 +314,6 @@
   {"source":"stories/proto.css","value":"raw padding:16px"},
   {"source":"stories/proto.css","value":"raw border-radius:12px"},
   {"source":"stories/proto.css","value":"raw box-shadow:0 0 0 1px var(--border)"},
-  {"source":"stories/proto.css","value":"raw padding:8px 16px"},
-  {"source":"stories/proto.css","value":"raw font-size:12.5px"},
   {"source":"stories/proto.css","value":"raw min-height:32px"},
   {"source":"stories/proto.css","value":"raw padding:4px 8px"},
   {"source":"stories/proto.css","value":"raw border-radius:6px"},

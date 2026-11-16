@@ -5,6 +5,10 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Code */
+.kanso-code__conflict{display:flex;align-items:center;gap:var(--k-sp-2);margin:var(--k-sp-3) calc(-1 * var(--k-sp-4)) 0;padding:var(--k-sp-2) var(--k-sp-4);background:color-mix(in srgb,var(--blocked) 10%,transparent);font-size:var(--k-fs-body);flex-wrap:wrap}
+.kanso-code__conflict .kanso-content__text{flex:1 1 100%;min-width:0}
+
 /* Tab bar */
 .kanso-tab-bar{height:var(--k-h-tab-bar);flex:none;display:flex;align-items:center;gap:var(--k-sp-1);padding:0 var(--k-sp-1) 0 var(--k-sp-2)}
 .kanso-tab-bar__insertion{width:2px;height:var(--k-h-badge);border-radius:var(--k-r-sm);background:var(--accent);flex:none;display:block;margin:0 calc(-1 * var(--k-sp-1)) 0 calc(-1 * var(--k-sp-hair))}
