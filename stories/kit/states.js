@@ -1,7 +1,7 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
 import { addComputer, channelSettings, agentMenu, asleepMenu, paneMenu, computerMenu, projectMenu, settingsMenu, newInMenu, openWithMenu, copyMenu, moveMenu, snoozeMenu, arrangements, saveArrangement, newProject, newWorktree, promptDialog, sendDialog, sleepDialog, computerItem, computerRow, edge, header, asleep, section, pieceMenu, sidebarFooter, tabMenu, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, paneHeader, pickedKey, shortcutRow, statusBar, stepperMenu, tabBar, views } from './compositions.js';
 import { avatar, button, card, chip, code, dawn, delta, dialog, dragHandle, markdown, keyHint, mark, emptyState, escape, glyph, menu, phrase, failureBlock, input, keycap, list, metric, needsItem, row, skeletonOf, stack, toggle, statusItem, stepper, tabs, terminal, thumbnail, toast, tooltip, windowControls, picture, pin, note, device, deviceScreen, bars, meter, heatmap, excerpt, band, sentence, well, shareCard, dojoGrid, dojoText, dojoProgress, dojoLevel } from './pieces.js';
-import { atWidth, besideStrip, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice } from './frames.js';
+import { atWidth, besideStrip, captioned, inBar, inPane, inRail, inSettings, inSidebar, inSlice, withMenuRoom } from './frames.js';
 import { panelPages } from './panel-states.js';
 import { sampleDojo, sampleFind, sampleShare, sampleShipped } from './panel-samples.js';
 import { keyLayer, keyLayerMods, sampleShot, sampleScreens, samplePanel, samplePanelHeader, sampleAddMenu, sampleAgent, sampleApps, sampleChoices, sampleLabels, sampleProjectRun, sampleArrangements, sampleAsleep, sampleAsleepRow, footerUpdates, sampleRefusedUpdate, sampleCapture, sampleWorktrees, sampleCopy, sampleEditors, sampleInstalled, sampleMove, sampleSnooze, sampleTargetsOpened, sampleHosts, sampleMessage, sampleSortMenus, sampleSidebar, sampleTargets, sampleWindow, statusMenus, statusPanels } from './samples.js';
@@ -1028,7 +1028,7 @@ export const statedPages = {
     markup: ({ width, value, tab, folded, overflow, menu: right, ...args }) => {
       const menu = tabMenus[right]?.(tabItems(value)[0].label) ?? null;
       const bar = atWidth(width, tabBar({ ...args, value, overflow, menu, items: tabActs[tab](tabItems(value)), folded: foldedTabs.slice(0, folded).map((label) => ({ label })) }));
-      return (overflow && folded) || menu ? `<div class="kanso-story__menu-room">${bar}</div>` : bar;
+      return (overflow && folded) || menu ? withMenuRoom(bar) : bar;
     },
     states: [
       { label: 'At rest', args: {}, caption: 'Only a tab out of view whose session waits carries a mark; none for working or finished. Closed doors paint nothing.' },
@@ -1055,7 +1055,8 @@ export const statedPages = {
       const edges = side === 'both'
         ? edge({ side: 'left', columns: [[first]], drop }) + edge({ columns: edgeColumns(rest, stacked), drop, overflow })
         : edge({ side, columns: edgeColumns(list, stacked), drop, overflow });
-      return besideStrip(side, edges);
+      const strip = besideStrip(side, edges);
+      return overflow ? withMenuRoom(strip) : strip;
     },
     states: [
       { label: 'One left, three right', args: { side: 'both', panes: 4 }, caption: 'A tile per pane past each side; a click goes there, the name is its tooltip. No state dots.' },
