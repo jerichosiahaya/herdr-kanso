@@ -5,6 +5,12 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Credit */
+.kanso-credit{display:flex;align-items:center;gap:var(--k-sp-2);height:50px;margin:0 calc(-1 * var(--k-sp-2));padding:0 var(--k-sp-2);border-radius:var(--k-r-control)}
+.kanso-credit.kanso-control--hover{background:var(--w7)}
+.kanso-credit .kanso-credit__avatar{width:28px;height:26px;border-radius:var(--k-r-card);background:var(--w7);display:grid;place-items:center;color:var(--muted);font-size:var(--k-fs-meta);font-weight:500;flex:none}
+.kanso-credit .kanso-credit__avatar.kanso-credit__avatar--person{border-radius:50%}
+
 /* Notification */
 .kanso-notification{width:344px;display:flex;gap:var(--k-sp-2);padding:var(--k-sp-3);border-radius:var(--k-r-card);background:var(--raised);box-shadow:var(--shadow),0 0 0 var(--k-w-line) var(--border);box-sizing:border-box;flex:none}
 .kanso-notification__icon{width:32px;height:var(--k-h-row);border-radius:var(--k-r-card);background:var(--w12);display:grid;place-items:center;color:var(--muted);flex:none}

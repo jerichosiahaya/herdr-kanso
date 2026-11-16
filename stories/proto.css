@@ -122,10 +122,6 @@
 .kanso-annotation__region .kanso-annotation{left:0;top:0}
 .kanso-annotation__note{position:absolute;z-index:3;width:168px;min-height:30px;box-sizing:border-box;background:var(--popover);border-radius:6px;box-shadow:var(--shadow),0 0 0 1px var(--accent);padding:4px 8px;font-size:12.5px;line-height:1.5;color:var(--fg);display:flex;align-items:center;gap:var(--k-sp-2)}
 .kanso-section .kanso-segmented--options{margin-left:auto}
-.kanso-credit{display:flex;align-items:center;gap:var(--k-sp-2);height:50px;margin:0 calc(-1 * var(--k-sp-2));padding:0 8px;border-radius:6px}
-.kanso-credit.kanso-control--hover{background:var(--w7)}
-.kanso-credit .kanso-credit__avatar{width:28px;height:26px;border-radius:8px;background:var(--w7);display:grid;place-items:center;color:var(--muted);font-size:11.5px;font-weight:500;flex:none}
-.kanso-credit .kanso-credit__avatar.kanso-credit__avatar--person{border-radius:50%}
 .kanso-sleep{display:flex;align-items:center;gap:var(--k-sp-2);height:32px;padding:0 8px 0 24px;border-radius:8px;color:var(--dim);font-size:13.5px}
 .kanso-sleep.kanso-row--selected{background:var(--w7)}
 .kanso-sleep.kanso-sleep--blocked{background:color-mix(in srgb,var(--blocked) 8%,transparent);color:var(--fg)}
