@@ -204,12 +204,12 @@
 :is(.kanso-button--solid,.kanso-button--tonal,.kanso-menu__item,.kanso-button--quiet).kanso-action--armed:is(:active,.kanso-control--active){background:color-mix(in srgb,var(--accent) 76%,var(--bg))!important}
 
 .kanso-prose{margin-top:var(--k-sp-3);font-size:var(--k-fs-body);line-height:var(--k-lh-body);color:var(--fg)}
-.kanso-card{padding:var(--k-sp-3);margin-top:var(--k-sp-3);border-radius:var(--k-r-card);background:var(--canvas)}
+.kanso-card{padding:var(--k-sp-3);margin-top:var(--k-sp-4);border-radius:var(--k-r-card);background:var(--canvas)}
 .kanso-card .kanso-card__header{display:flex;align-items:center;gap:var(--k-sp-2);white-space:nowrap;font-size:var(--k-fs-body)}
 .kanso-card .kanso-card__header b{font-size:var(--k-fs-name);font-weight:var(--k-fw-medium)}
 :where(.kanso-card) .kanso-prose{margin-top:var(--k-sp-1)}
 
-.kanso-metric{display:flex;align-items:baseline;gap:var(--k-sp-2);margin-top:var(--k-sp-3)}
+.kanso-metric{display:flex;align-items:baseline;gap:var(--k-sp-2);margin-top:var(--k-sp-6)}
 .kanso-metric__value{font-size:var(--k-fs-display);font-weight:var(--k-fw-regular);line-height:1;letter-spacing:-.03em;color:var(--fg)}
 .kanso-metric .kanso-metric__unit{font-size:var(--k-fs-meta);color:var(--dim)}
 .kanso-panel__facts{display:flex;flex-wrap:wrap;gap:var(--k-sp-2);margin-top:var(--k-sp-2);font-size:var(--k-fs-body);color:var(--muted)}
