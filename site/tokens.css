@@ -16,6 +16,7 @@
   --k-fw-medium: 500;
   --k-fw-strong: 600;
   --k-ls-tight: -.01em;
+  --k-lh-mono: 16px;
   --k-sp-hair: 2px;
   --k-sp-1: 4px;
   --k-sp-2: 8px;
@@ -41,6 +42,7 @@
   --k-ic-row: 14px;
   --k-ic-control: 15px;
   --k-ic-chrome: 17px;
+  --k-ic-empty: 20px;
   --k-sw-w: 28px;
   --k-sw-h: 16px;
   --k-sw-knob: 12px;
@@ -83,6 +85,19 @@
   --k-room-menu: 192px;
   --k-room-pane-menu: 320px;
   --k-room-tools-menu: 320px;
+  --k-w-line: 1px;
+  --k-w-panel-inline: 368px;
+  --k-w-panel-narrow: 300px;
+  --k-w-window-panel: 560px;
+  --k-w-row-actions: 176px;
+  --k-w-metric-value: 84px;
+  --k-w-key-label: 64px;
+  --k-w-port: 44px;
+  --k-w-toolbar-gap: 6px;
+  --k-w-empty-text: 30ch;
+  --k-panel-tooltip-y: 34px;
+  --k-panel-menu-x: 14px;
+  --k-panel-menu-y: 52px;
   --dawn-top: light-dark(#aeb0d6, #262339);
   --dawn-mid: light-dark(#dfb2c4, #5e4160);
   --dawn-low: light-dark(#f1c3a2, #b8735f);
