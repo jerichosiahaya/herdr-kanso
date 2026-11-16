@@ -5,6 +5,13 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Annotation */
+.kanso-annotation{width:16px;height:16px;border-radius:50%;background:var(--accent);color:var(--accentfg);font-size:var(--k-fs-meta);font-weight:600;display:grid;place-items:center;flex:none}
+.kanso-annotation.kanso-annotation--inactive{background:var(--input);color:var(--fg)}
+.kanso-annotation__region{position:absolute;border:1.5px solid var(--accent);border-radius:var(--k-r-sm);background:color-mix(in srgb,var(--accent) 10%,transparent);box-sizing:border-box}
+.kanso-annotation__region .kanso-annotation{left:0;top:0}
+.kanso-annotation__note{position:absolute;z-index:3;width:168px;min-height:var(--k-h-control);box-sizing:border-box;background:var(--popover);border-radius:var(--k-r-control);box-shadow:var(--shadow),0 0 0 var(--k-w-line) var(--accent);padding:var(--k-sp-1) var(--k-sp-2);font-size:var(--k-fs-body);line-height:1.5;color:var(--fg);display:flex;align-items:center;gap:var(--k-sp-2)}
+
 /* Minimap */
 .kanso-minimap{display:flex;align-items:center;gap:var(--k-sp-hair)}
 .kanso-minimap i{height:4px;border-radius:2px;background:var(--muted);display:block}
