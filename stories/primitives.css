@@ -5,6 +5,17 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Brand */
+.kanso-brand{display:flex;align-items:center;gap:var(--k-sp-2);font-size:var(--k-fs-name);font-weight:600}
+.kanso-brand__mark{width:var(--k-h-badge);height:var(--k-h-badge);border-radius:var(--k-r-control);background:var(--w12);display:grid;place-items:center;color:var(--muted)}
+.kanso-brand--inline{display:flex;align-items:center;gap:var(--k-sp-2);margin-left:auto;font-size:var(--k-fs-meta);color:var(--dim);white-space:nowrap}
+.kanso-brand--inline .kanso-mark{color:var(--muted)}
+.kanso-brand--large{display:flex;align-items:center;gap:var(--k-sp-2);padding:6px var(--k-sp-1) var(--k-sp-hair)}
+.kanso-brand--large svg{width:72px;height:72px;color:var(--fg);flex:none}
+.kanso-brand--large .kanso-brand__wordmark{font-size:28px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.kanso-brand--large .kanso-brand__subtitle{font-size:13px;color:var(--muted);margin-top:var(--k-sp-1)}
+.kanso-thumbnail i.kanso-brand__wordmark{height:6px;background:color-mix(in srgb,var(--working) 45%,var(--raised))}
+
 /* Metadata */
 .kanso-metadata__row{display:flex;align-items:flex-start;gap:var(--k-sp-2);min-height:var(--k-h-row);padding:var(--k-sp-1) var(--k-sp-2);margin:0 calc(-1 * var(--k-sp-2));border-radius:var(--k-r-control);font-size:var(--k-fs-body);box-sizing:border-box}
 .kanso-metadata__row .kanso-story__theme{width:72px;flex:none;color:var(--dim);font-size:var(--k-fs-body);padding-top:var(--k-sp-hair)}
