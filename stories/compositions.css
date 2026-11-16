@@ -1,21 +1,11 @@
 /* One rule set per composition, smallest first: each one is built from primitives and the compositions above it. */
 
 /* Toolbar: icon buttons in a row; collapsed, a column where a caret holds Sort and Search; Sort is dim at its default. */
-.kanso-toolbar{display:flex;flex:none;align-items:center;gap:var(--k-sp-1);color:var(--muted)}
-.kanso-toolbar.kanso-toolbar--column{flex-direction:column;gap:var(--k-sp-2)}
-.kanso-toolbar__add,.kanso-toolbar__sort{position:relative;display:flex}
-.kanso-toolbar__sort:not(.kanso-toolbar__sort--sorted)>.kanso-button:not(.kanso-button--active){color:var(--dim)}
-.kanso-toolbar__menu{position:absolute;top:calc(100% + var(--k-sp-1));left:0;z-index:1}
-.kanso-toolbar--column .kanso-toolbar__menu{top:0;left:calc(100% + var(--k-sp-1))}
-.kanso-toolbar__group{display:flex;flex-direction:column;align-items:center;gap:var(--k-sp-1);border-radius:var(--k-r-card)}
-.kanso-toolbar__group.kanso-toolbar__group--open{background:var(--w4)}
 
 /* Header: the window's lights and the sidebar's tools; Dawn Mode draws its sky behind them. */
 .kanso-header{position:relative;display:flex;flex-direction:column;flex:none;overflow:hidden;padding:0 var(--k-sp-2) var(--k-sp-1);background:var(--chrome)}
 .kanso-header__title{display:flex;align-items:center;height:48px;padding-left:var(--k-sp-1)}
 .kanso-header__title>.kanso-badge--pill{position:relative;margin-left:auto}
-.kanso-header>.kanso-toolbar{height:var(--k-h-header)}
-.kanso-header.kanso-header--collapsed>.kanso-toolbar{height:auto;padding-top:var(--k-sp-hair)}
 
 /* Sidebar: the header, the view switch, the rows of the chosen view and the footer; collapsed, the rail with tiles. */
 .kanso-rail{anchor-name:--kanso-rail}

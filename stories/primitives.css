@@ -5,6 +5,18 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Toolbar */
+.kanso-toolbar{display:flex;flex:none;align-items:center;gap:var(--k-sp-1);color:var(--muted)}
+.kanso-toolbar.kanso-toolbar--column{flex-direction:column;gap:var(--k-sp-2)}
+.kanso-toolbar__add,.kanso-toolbar__sort{position:relative;display:flex}
+.kanso-toolbar__sort:not(.kanso-toolbar__sort--sorted)>.kanso-button:not(.kanso-button--active){color:var(--dim)}
+.kanso-toolbar__menu{position:absolute;top:calc(100% + var(--k-sp-1));left:0;z-index:1}
+.kanso-toolbar--column .kanso-toolbar__menu{top:0;left:calc(100% + var(--k-sp-1))}
+.kanso-toolbar__group{display:flex;flex-direction:column;align-items:center;gap:var(--k-sp-1);border-radius:var(--k-r-card)}
+.kanso-toolbar__group.kanso-toolbar__group--open{background:var(--w4)}
+.kanso-header>.kanso-toolbar{height:var(--k-h-header)}
+.kanso-header.kanso-header--collapsed>.kanso-toolbar{height:auto;padding-top:var(--k-sp-hair)}
+
 /* Dialog */
 .kanso-dialog--settings{width:860px;background:var(--popover);border-radius:var(--k-r-card);padding:var(--k-sp-6);box-sizing:border-box;box-shadow:var(--shadow),0 0 0 var(--k-w-line) var(--border)}
 .kanso-dialog__heading{display:flex;align-items:center;gap:var(--k-sp-6)}
