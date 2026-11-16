@@ -81,8 +81,6 @@ export function panelStateRecords(records) {
     const one = swap(swap(pinned, '<span class="kanso-annotation" style="left:30%;top:88%">2</span>', ''), elements(pinned, 'kanso-panel__annotation')[1], '');
     put('Panels/Images', 'Images', 'One pin, no session to send to', swap(one, '<div class="kanso-actions"><span class="kanso-button kanso-button--solid">Send to checkout</span><span class="kanso-button kanso-button--quiet">Open</span><span class="kanso-button kanso-button--quiet">Clear 2 pins</span></div>', refused('No agent to send to') + actions(primary('Send'), button('Open'), button('Clear the pin'))), 'Send with no session in focus says so and keeps the pin; Clear the pin removes it.', 'The panel: picture, pin list, the note line and the action row.');
   }
-  const dojo = find('proto/layouts-hjkl-dojo/HjklDojo/Default');
-  if (dojo) put('Panels/Dojo', 'Practice Feedback', 'sqlite3 missing', swap(dojo, 'Make a move to start: 10 targets, in as few moves as you can.', 'Install sqlite3 to keep your rounds.'), 'Without sqlite3 the dōjō plays, and the line under Hachi says rounds are not kept.', 'The dōjō: path, board, feedback line and keyboard.');
   const shipped = find('panels/shipped/ShippedGitHubCLINotInstalled/Default');
   if (shipped) put('Panels/Shipped', 'Shipped', 'sqlite3 missing', swap(shipped, elements(shipped, 'kanso-state-empty')[0], blocked('Adding up stopped', "Install sqlite3 to keep Shipped's statistics.")), 'Without sqlite3 nothing is added up; the tool’s words say what to install.', 'The panel: header, scope and the failure block.');
   const pr = find('panels/pr/PRDetailsDetailsOpen/Default');

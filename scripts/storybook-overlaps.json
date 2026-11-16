@@ -698,5 +698,44 @@
     "states": {
       "Shipped days": "panels/shipped/HistoryChartShipped daysShippeddays/Default"
     }
+  },
+  "dojo/Practice": {
+    "page": "Panels/Dojo",
+    "states": {
+      "1 · h l": "kit/Panels/Dojo/First open",
+      "3 · h j k l": "kit/Panels/Dojo/In a round",
+      "4 · 0 $ gg G": "kit/Panels/Dojo/Level cleared",
+      "6 · w b e": "kit/Panels/Dojo/Picking a level",
+      "7 · f t": "kit/Panels/Dojo/A text level",
+      "9 · All of it": "kit/Panels/Dojo/All cleared"
+    }
+  },
+  "dojo/PracticeFeedback": {
+    "page": "Panels/Dojo",
+    "states": {
+      "Exit armed": "kit/Panels/Dojo/Esc once",
+      "Extra moves": "kit/Panels/Dojo/A miss",
+      "Find pending": "kit/Panels/Dojo/A text level",
+      "First move": "kit/Panels/Dojo/First open",
+      "Sleeping": "kit/Panels/Dojo/Asleep",
+      "Streak": "kit/Panels/Dojo/A perfect move"
+    }
+  },
+  "dojo/PracticePet": {
+    "page": "Panels/Dojo",
+    "states": {
+      "Calm": "kit/Panels/Dojo/First open",
+      "Glad": "kit/Panels/Dojo/A perfect move",
+      "Sleep": "kit/Panels/Dojo/Asleep",
+      "Sweat": "kit/Panels/Dojo/A miss"
+    }
+  },
+  "dojo/PracticeResult": {
+    "page": "Panels/Dojo",
+    "states": {
+      "Completed": "kit/Panels/Dojo/Level cleared",
+      "New best": "kit/Panels/Dojo/A new best",
+      "Stopped": "kit/Panels/Dojo/Stopped"
+    }
   }
 }

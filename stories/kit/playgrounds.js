@@ -4,7 +4,7 @@ import { activity, activityMenu, asleep, paneFolds, paneHeader, panelHeaderForms
 import { avatar, avatarSizes, button, card, chip, code, dawn, dialog, emptyState, escape, failureBlock, input, keycapStates, keyHint, kinds, levels, mark, markdown, marks, markSizes, menu, metric, row, rowDepths, sides, skeletonOf, skeletonShapes, stack, statePatterns, tabs, thumbnail, toast, toggle, tooltip, windowControls } from './pieces.js';
 import { barWidths, inBar } from './frames.js';
 import { edgeSides, layerDefaults, memoryShown, needsShown, panelContents, panelReads, panelRowLooks, statedPages, stepperShown, tabActs } from './states.js';
-import { appNotices, keyLayer, keyLayerMods, sampleNotices, samplePanelHeader, sampleSidebar, statusMenus } from './samples.js';
+import { appNotices, keyLayer, keyLayerMods, sampleDojo, sampleNotices, samplePanelHeader, sampleSidebar, statusMenus } from './samples.js';
 
 const icons = ['none', ...[...sprite.matchAll(/id="(lu-[^"]+)"/g)].map(([, id]) => id).sort()];
 const frame = (markup) => `<div class="kanso-story"><div class="kanso-story__theme kanso-story__frame kanso-story--free">${markup}</div></div>`;
@@ -585,6 +585,34 @@ export const playgrounds = {
       loading: { name: 'Loading', control: { type: 'boolean' } },
     },
     markup: (args) => `<div class="kanso-panel">${card(args)}</div>`,
+  },
+  'Panels/Dojo': {
+    ...statedPages['Panels/Dojo'],
+    argTypes: {
+      level: { name: 'level', control: { type: 'range', min: 1, max: sampleDojo.levels.length, step: 1 } },
+      bests: { name: 'bests', control: { type: 'text' } },
+      picking: { name: 'picking a level', control: { type: 'boolean' } },
+      phase: { name: 'phase', control: { type: 'inline-radio' }, options: sampleDojo.phases },
+      score: { name: 'score', control: { type: 'number' } },
+      time: { name: 'time', control: { type: 'text' } },
+      streak: { name: 'streak', control: { type: 'number' } },
+      moves: { name: 'moves', control: { type: 'number' } },
+      need: { name: 'fewest moves', control: { type: 'number' } },
+      reached: { name: 'targets reached', control: { type: 'range', min: 0, max: sampleDojo.targets, step: 1 } },
+      x: { name: 'x', control: { type: 'number' } },
+      y: { name: 'y', control: { type: 'number' } },
+      goalX: { name: 'goal x', control: { type: 'number' } },
+      goalY: { name: 'goal y', control: { type: 'number' } },
+      path: { name: 'best path', control: { type: 'text' } },
+      pressed: { name: 'pressed key', control: { type: 'text' } },
+      mood: { name: 'Hachi', control: { type: 'inline-radio' }, options: sampleDojo.moods },
+      feedback: { name: 'line', control: { type: 'text' } },
+      tone: { name: 'tone', control: { type: 'inline-radio' }, options: sampleDojo.tones },
+      points: { name: 'points', control: { type: 'number' } },
+      record: { name: 'record', control: { type: 'text' } },
+      summary: { name: 'summary', control: { type: 'text' } },
+      share: { name: 'share menu', control: { type: 'boolean' } },
+    },
   },
 };
 

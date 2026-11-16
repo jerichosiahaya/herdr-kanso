@@ -3,7 +3,7 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { normalizeComponent } from './storybook-components.mjs';
 import { normalizeCss } from './storybook-css.mjs';
-import { kitRecords, tokenRecords } from './storybook-kit.mjs';
+import { kitRecords, statedRecords, tokenRecords } from './storybook-kit.mjs';
 import { gapDocument, mergeCoverage } from './storybook-coverage.mjs';
 import { referenceText, sampleText } from './storybook-markup.mjs';
 import { panelStateRecords } from './storybook-panel-states.mjs';
@@ -160,7 +160,7 @@ export function generate(root = '.') {
   const file = join(root, 'stories/catalog.json');
   const retained = expand(read(file)).filter((record) => !['kit', 'tokens'].includes(record.source));
   const drawings = panelStateRecords(retained), regenerated = new Set(drawings.map((record) => record.id));
-  const originals = mergeCoverage([...retained.filter((record) => !regenerated.has(record.id)), ...drawings].map((record) => record.html === undefined ? record : normalizeComponent(record)));
+  const originals = mergeCoverage([...retained.filter((record) => !regenerated.has(record.id)), ...drawings, ...statedRecords()].map((record) => record.html === undefined ? record : normalizeComponent(record)));
   const tokenFile = join(root, 'kanso/tokens.json');
   const tokens = existsSync(tokenFile) ? read(tokenFile) : null;
   const catalog = pack([...originals, ...kitRecords(originals).map(normalizeComponent), ...(tokens ? tokenRecords(tokens) : [])]);

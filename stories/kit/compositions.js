@@ -1,5 +1,5 @@
 // The kit's compositions: each one only calls pieces with its own props and draws no markup.
-import { avatar, button, chip, chord, dawn, diffText, facts, headerSegment, input, paneName, setting, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './kit.js';
+import { avatar, button, chip, chord, dawn, diffText, dojoCell, dojoCharacter, dojoFeedback, dojoKey, dojoLevel, dojoProgress, dojoRecord, dojoStatistics, dojoSummary, dojoTitle, facts, headerSegment, input, keyLegend, paneName, setting, sleepLabel, toggle, failureBlock, failureLine, glyph, grow, keycap, keyPicked, list, mark, mascot, menu, phrase, pieceLines, plus, row, stack, statusItem, tabSkeleton, tabs, toast, windowControls } from './kit.js';
 
 const tool = (icon, label) => button({ label, kind: 'icon', size: 'lg', icon });
 // + names what it adds in the view on show.
@@ -281,3 +281,20 @@ export const paneMenu = ({ name, state = 'none', focused = false, pinned = false
   ...(shown(fold, 'tools into ⋯') ? [] : [{ icon: 'lu-columns-2', label: 'Split right' }, { icon: 'lu-move-horizontal', label: 'Wider or narrower' }]),
   ...(shown(fold, 'close into ⋯') ? [] : [{ icon: 'lu-x', label: 'Close' }]),
   ...pieceLines] });
+
+// The dōjō: the path of levels, the board or the result, Hachi and his line, then the keyboard with the level's keys.
+const dojoHeader = ({ title, level, name, share, shared, end, leave }) => stack({ variant: 'dojo header' }, dojoTitle({ title, level, name }), grow(),
+  share ? button({ label: 'Share', kind: 'icon', icon: 'lu-share', active: shared }) : null, end ? button(end) : null, button(leave));
+const dojoPath = ({ levels, keys }) => stack({ variant: 'dojo path' }, levels.map(dojoLevel), stack({ variant: 'dojo path keys' }, keyLegend({ items: keys })));
+const dojoWorld = ({ cells, lines }) => cells
+  ? stack({ variant: 'dojo grid' }, cells.map(dojoCell))
+  : stack({ variant: 'dojo text' }, lines.map((line) => stack({ variant: 'dojo line' }, line.map(dojoCharacter))));
+const dojoPlay = ({ statistics, progress, world }) => stack({ variant: 'dojo board' }, dojoStatistics(statistics), dojoProgress(progress), dojoWorld(world));
+const dojoResult = ({ record, summary, keys }) => stack({ variant: 'dojo board', result: true }, dojoRecord(record), dojoSummary({ text: summary }), stack({ variant: 'dojo result keys' }, keyLegend({ items: keys })));
+export const dojo = ({ header, path, play, result, pixels, sleep, feedback, keys, share }) => stack({ variant: 'dojo' },
+  dojoHeader(header),
+  stack({ variant: 'dojo body' }, dojoPath(path), stack({ variant: 'dojo main' },
+    result ? dojoResult(result) : dojoPlay(play),
+    stack({ variant: 'dojo conversation' }, mascot({ pixels }), sleep ? sleepLabel({ text: sleep }) : null, dojoFeedback(feedback)),
+    stack({ variant: 'dojo keyboard' }, keys.map((keyRow) => stack({ variant: 'dojo key row' }, keyRow.map(dojoKey)))))),
+  share ? stack({ variant: 'dojo menu' }, menu(share)) : null);

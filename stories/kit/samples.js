@@ -4,6 +4,8 @@ import { button, glyph, menu, stack, statusItem } from './pieces.js';
 import keyFile from '../../kanso/keys.json' with { type: 'json' };
 import windowsKeyFile from '../../kanso/keys.windows.json' with { type: 'json' };
 import { LIST_LAYER, describe, layer } from '../../kanso/mods/kanso-help/keymap.js';
+import { GRID, LEVELS, SNIPPETS, gridWorld, move } from '../../kanso/mods/kanso-dojo/dojo.js';
+import { hachiPixels } from '../../kanso/mods/kanso-dojo/mascot-pixels.js';
 
 const group = (...rows) => stack({ variant: 'row group' }, ...rows);
 export const sampleRows = {
@@ -134,4 +136,38 @@ export const sampleSortMenus = {
   spaces: () => sortMenu('Agents, pinned first, then by', ['Last update', 'Needs you first', 'By kind', 'As on screen', 'Your order (drag)'], 'Last update'),
   agents: () => sortMenu('In each section, by', ['Latest change first', 'Longest in its state', 'Project'], 'Latest change first'),
   threads: () => sortMenu('Threads, pinned first, then by', ['Your last message', 'When it started'], 'Your last message', [ticked('Grouped by project', false)]),
+};
+
+// The dōjō: its levels, worlds and Hachi come from the mod; the keyboard shows the level's keys.
+const fingers = { h: 'index', j: 'index', k: 'middle', l: 'ring' };
+const arrows = { h: '←', j: '↓', k: '↑', l: '→' };
+const shifted = { 4: '$', 6: '^', g: 'G', f: 'F', t: 'T' };
+const keyRows = ['1234567890', 'qwertyuiop', 'asdfghjkl;', 'zxcvbnm,./'];
+const keyOf = (motions, key) => {
+  const own = motions.some((motion) => motion[0] === key);
+  const other = motions.includes(shifted[key]) ? shifted[key] : '';
+  if (!own) return other ? { label: other, on: true } : { label: key };
+  return { label: key, on: true, small: arrows[key] ?? other, finger: fingers[key] ?? '' };
+};
+const trailOf = (at, path) => path.reduce((cells, motion) => [...cells, move(gridWorld(), cells.at(-1) ?? at, motion)], []).slice(0, -1);
+export const sampleDojo = {
+  title: 'hjkl dōjō',
+  moods: ['calm', 'glad', 'sweat', 'sleep'],
+  tones: ['none', 'success', 'missed', 'armed'],
+  phases: ['start', 'round', 'result'],
+  grid: GRID,
+  targets: 10,
+  sleep: 'z z',
+  levels: LEVELS,
+  lines: SNIPPETS[1],
+  tip: (level) => LEVELS[level - 1].tip,
+  pixels: hachiPixels,
+  keyRows: (level, lit, hint) => keyRows.map((row) => [...row].map((key) => ({ ...keyOf(LEVELS[level - 1].motions, key), lit: key === lit, hint: key === hint }))),
+  trail: (at, path) => trailOf(at, path.split(' ').filter(Boolean)),
+  bests: (text) => text.split(',').map((best) => best.trim()).filter(Boolean),
+  pathKeys: [{ keys: ['[', ']'], label: 'level' }, { keys: ['p'], label: 'pet' }],
+  resultKeys: (level, last) => [{ keys: ['↩'], label: 'play again' }, ...(last ? [] : [{ keys: ['n'], label: `next level: ${LEVELS[level].name}` }])],
+  share: { title: 'Scores and practice days only', items: [{ label: 'Post to X', hover: true }, { label: 'Post to LinkedIn' }, { label: 'Post to Bluesky' }, { separator: true }, { label: 'Save image' }] },
+  leave: { label: 'Leave', kind: 'quiet', key: 'esc' },
+  end: { label: 'End round', kind: 'quiet' },
 };

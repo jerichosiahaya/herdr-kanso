@@ -15,12 +15,12 @@ export const grow = (inner = '') => `<span class="kanso-layout__grow">${inner}</
 // Atoms
 
 export const kinds = { solid: 'kanso-button--solid', tonal: 'kanso-button--tonal', quiet: 'kanso-button--quiet kanso-text--fg', icon: 'kanso-button--icon' };
-export const button = ({ label, kind = 'solid', size = 'md', icon = 'none', disabled = false, verb = '', armed = false, active = false, spin = false }) => {
+export const button = ({ label, kind = 'solid', size = 'md', icon = 'none', disabled = false, verb = '', armed = false, active = false, spin = false, key = '' }) => {
   const classes = ['kanso-button', kinds[kind], size === 'md' ? '' : `kanso-button--${size}`, disabled ? 'kanso-control--off' : '', armed ? 'kanso-action kanso-action--armed' : '', active ? 'kanso-button--active' : '', spin ? 'kanso-button--spinning' : ''].filter(Boolean).join(' ');
   const lead = icon === 'none' ? (spin ? mark({ status: 'working', size: 'sm' }) : '') : iconSvg(icon, 'control');
   const text = kind === 'icon' ? '' : escape(label);
   const again = `Press again to ${escape(verb || label.toLowerCase())}`;
-  const inner = armed && kind !== 'icon' ? `<span>${text}</span><span>${again}</span>` : `${lead}${text}`;
+  const inner = armed && kind !== 'icon' ? `<span>${text}</span><span>${again}</span>` : `${lead}${text}${key ? ` ${keyHint({ text: key })}` : ''}`;
   return `<span class="${classes}" tabindex="0" title="${armed && kind === 'icon' ? again : escape(label)}"${disabled ? ' aria-disabled="true"' : ''}${spin ? ' aria-busy="true"' : ''}>${inner}</span>`;
 };
 
@@ -106,7 +106,7 @@ export const menu = ({ title, items }) => {
     if (item.separator) return '<div class="kanso-menu__separator"></div>';
     if (item.heading) return `<div class="kanso-menu__heading">${escape(item.heading)}</div>`;
     const lead = item.icon ? glyph(item.icon) : '<span class="kanso-menu__spacer"></span>';
-    const classes = `kanso-menu__item${item.armed ? ' kanso-action--armed' : item.selected ? ' kanso-control--selected' : ''}`;
+    const classes = `kanso-menu__item${item.armed ? ' kanso-action--armed' : item.selected ? ' kanso-control--selected' : item.hover ? ' kanso-control--hover' : ''}`;
     const label = item.armed ? `Press again to ${escape(item.verb || String(item.label ?? '').toLowerCase())}` : escape(item.label ?? '');
     return `<div class="${classes}" role="menuitem" tabindex="0">${lead}${grow(label)}`
       + (item.badge ? `<span class="kanso-menu__badge">${escape(item.badge)}</span>` : '')
@@ -253,6 +253,29 @@ export const stepper = ({ value = 2, open = false, hover = false } = {}) => `<sp
 
 export const tabSkeleton = () => '<span class="kanso-skeleton kanso-skeleton--breathing kanso-tab-bar__skeleton"></span>';
 
+// The dōjō's pieces: the title, a level on the path, the round's numbers, a cell, a character, Hachi, the line under him and a key.
+export const dojoTitle = ({ title, level, name }) => `<span class="kanso-content__text">${escape(title)}</span><span class="kanso-level__label">level ${Number(level)} · ${escape(name)}</span>`;
+export const dojoLevel = ({ number, name, best = '', done = false, current = false, focus = false }) => `<div class="kanso-dojo__level${done ? ' kanso-row--done' : ''}${current ? ' kanso-control--current' : ''}${focus ? ' kanso-control--focus' : ''}">`
+  + `<span class="kanso-level__node"></span><span class="kanso-dojo__name"><span class="kanso-annotation--inactive">${Number(number)}</span>${escape(name)}</span><span class="kanso-content__secondary">${escape(best)}</span></div>`;
+// Keys and what they do, one group per action.
+export const keyLegend = ({ items }) => items.map(({ keys, label }) => `<span class="kanso-dojo__legend">${keys.map((text) => keyHint({ text })).join('')}<span>${escape(label)}</span></span>`).join('');
+export const dojoStatistics = ({ score, time, streak, moves = null, need = 0 }) => `<div class="kanso-dojo__statistics"><span>score <b>${Number(score)}</b></span><span>${escape(time)}</span><span>streak <b>${Number(streak)}</b></span>${grow()}`
+  + `${moves === null ? '' : `<span class="kanso-section__count"><b${moves > need ? ' class="kanso-text--working"' : ''}>${Number(moves)}</b> ${moves === 1 ? 'move' : 'moves'} · this one takes ${Number(need)} at best</span>`}</div>`;
+export const dojoProgress = ({ reached, total }) => `<div class="kanso-dojo__progress-strip">${Array.from({ length: total }, (_, index) => `<i class="${index < reached ? 'kanso-content__description' : index === reached ? 'kanso-row__name' : ''}"></i>`).join('')}</div>`;
+// A spot on the board: where you are, the goal, the best path with its first key.
+const spot = ({ current, goal, trail }) => `${current ? ' kanso-cell--current' : ''}${goal ? ' kanso-cell--goal' : ''}${trail ? ' kanso-text--truncate' : ''}`;
+export const dojoCell = ({ hint = '', goal, ...look }) => `<i class="kanso-dojo__cell${spot({ goal, ...look })}">${goal ? '<b></b>' : hint ? `<em>${escape(hint)}</em>` : ''}</i>`;
+export const dojoCharacter = ({ character, ...look }) => `<i class="kanso-dojo__character${spot(look)}">${character === ' ' ? '&nbsp;' : escape(character)}</i>`;
+const inks = { O: 'outline', F: 'fur', C: 'cream', D: 'light', K: 'eye', N: 'nose', T: 'accent', B: 'blue' };
+export const mascot = ({ pixels }) => `<div class="kanso-dojo__mascot">${pixels.flat().map((ink) => `<i class="${inks[ink] ? `kanso-mascot__pixel--${inks[ink]}` : ''}"></i>`).join('')}</div>`;
+export const dojoTones = { none: '', success: ' kanso-feedback--success', missed: ' kanso-feedback--missed', armed: ' kanso-button kanso-button--quiet kanso-action--armed' };
+export const dojoFeedback = ({ text, tone = 'none' }) => `<div class="kanso-dojo__feedback${dojoTones[tone]}">${escape(text)}</div>`;
+export const dojoKey = ({ label, on = false, lit = false, hint = false, small = '', finger = '' }) => `<span class="kanso-dojo__key${on ? ' kanso-control--on' : ''}${lit ? ' kanso-key--lit' : ''}${hint ? ' kanso-key--hint' : ''}">`
+  + `${escape(label)}${small ? `<small>${escape(small)}</small>` : ''}${finger ? `<span class="kanso-content__summary">${escape(finger)}</span>` : ''}</span>`;
+export const dojoRecord = ({ value, unit, record = '' }) => `<div class="kanso-dojo__result-heading">${metric({ value, unit })}${record ? `<span class="kanso-dojo__record">${escape(record)}</span>` : ''}</div>`;
+export const dojoSummary = ({ text }) => `<div class="kanso-dojo__result-label">${escape(text)}</div>`;
+export const sleepLabel = ({ text }) => `<span class="kanso-dojo__sleep-label">${escape(text)}</span>`;
+
 // One layout piece for the wrappers that only place other pieces; each variant keeps its own class and states.
 export const stacks = {
   toolbar: { block: 'kanso-toolbar', states: ['column'] },
@@ -299,6 +322,21 @@ export const stacks = {
   'pane menu': { block: 'kanso-pane-header__menu', tag: 'span' },
   panel: { block: 'kanso-panel', states: ['narrow', 'window', 'stale'] },
   'panel header': { block: 'kanso-panel-header', states: ['bar'] },
+  dojo: { block: 'kanso-dojo' },
+  'dojo header': { block: 'kanso-dojo__header' },
+  'dojo body': { block: 'kanso-dojo__body' },
+  'dojo path': { block: 'kanso-dojo__path' },
+  'dojo path keys': { block: 'kanso-dojo__path-keys' },
+  'dojo main': { block: 'kanso-dojo__main' },
+  'dojo board': { block: 'kanso-dojo__board', states: ['result'] },
+  'dojo grid': { block: 'kanso-dojo__grid' },
+  'dojo text': { block: 'kanso-dojo__text' },
+  'dojo line': { block: 'kanso-dojo__line' },
+  'dojo conversation': { block: 'kanso-dojo__conversation' },
+  'dojo keyboard': { block: 'kanso-dojo__keyboard' },
+  'dojo key row': { block: 'kanso-dojo__key-row' },
+  'dojo result keys': { block: 'kanso-dojo__result-keys' },
+  'dojo menu': { block: 'kanso-dojo__menu' },
 };
 export const stack = ({ variant, on = false, ...flags }, ...children) => {
   if (!Object.hasOwn(stacks, variant)) throw new Error(`stack: unknown variant "${variant}"`);
