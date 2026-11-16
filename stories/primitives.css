@@ -5,6 +5,17 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Agent */
+.kanso-agent__text{flex:1;min-width:0}
+.kanso-agent__name{font-size:var(--k-fs-name);font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kanso-agent__meta{font-size:var(--k-fs-meta);color:var(--muted);margin-top:var(--k-sp-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kanso-agent__meta .kanso-agent__project{font-weight:500}
+.kanso-agent.kanso-agent--idle .kanso-agent__name{color:var(--dim)}
+.kanso-agent__time{font-size:var(--k-fs-meta);color:var(--dim);width:28px;text-align:right;flex:none}
+.kanso-agent__name{font-size:var(--k-fs-name);font-weight:var(--k-fw-medium)}
+.kanso-contrast__sidebar .kanso-agent{padding-left:var(--k-sp-2)}
+.kanso-agent{display:flex;align-items:center;gap:var(--k-sp-2);height:var(--k-h-row2);padding:0 var(--k-sp-2) 0 var(--k-sp-6);border-radius:var(--k-r-card);margin:0}
+
 /* Tooltip */
 .kanso-tooltip__anchor{position:absolute;white-space:nowrap;z-index:2}
 .kanso-tooltip__anchor .kanso-tooltip{margin:0}
