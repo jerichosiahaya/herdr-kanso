@@ -56,7 +56,7 @@
 .kanso-window__workspace{flex:1;min-width:0;display:flex;flex-direction:column;padding:0 8px 0 0}
 .kanso-tab-bar{height:48px;flex:none;display:flex;align-items:center;gap:var(--k-sp-1);padding:0 4px 0 8px}
 .kanso-tab.kanso-control--on{background:var(--w12);color:var(--fg)}
-.kanso-tab--panel.kanso-control--on{background:var(--w12);color:var(--fg);padding:0 8px}
+.kanso-tab--panel.kanso-control--on{background:var(--w12);color:var(--fg)}
 .kanso-window__panes{flex:1;min-height:0;display:flex;gap:var(--k-sp-2)}
 .kanso-pane{flex:1;min-width:0;background:var(--bg);border-radius:8px;display:flex;flex-direction:column;overflow:hidden}
 .kanso-pane.kanso-control--focus{outline:1px solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:-1px}
@@ -862,7 +862,7 @@
 .kanso-segmented--sidebar{gap:var(--k-sp-hair);flex:none;display:flex;height:var(--k-h-control);padding:var(--k-sp-hair);border-radius:var(--k-r-card);background:var(--w4);margin:var(--k-sp-hair) 0 var(--k-sp-3);box-sizing:border-box}
 .kanso-status-bar{height:var(--k-h-icon);flex:none;display:flex;align-items:center;gap:var(--k-sp-4);padding:0 var(--k-sp-3);font-size:var(--k-fs-meta);color:var(--muted);white-space:nowrap}
 .kanso-tab{height:var(--k-h-icon);padding:0 var(--k-sp-3);border-radius:var(--k-r-control);display:flex;gap:var(--k-sp-2);align-items:center;font-size:var(--k-fs-body);color:var(--muted)}
-.kanso-tab--panel{height:var(--k-h-icon);min-width:var(--k-h-icon);display:grid;place-items:center;color:var(--muted);border-radius:var(--k-r-control);font-size:var(--k-fs-body)}
+.kanso-tab--panel{height:var(--k-h-icon);min-width:var(--k-h-icon);box-sizing:border-box;display:grid;place-items:center;color:var(--muted);border-radius:var(--k-r-control);font-size:var(--k-fs-body)}
 .kanso-tab--panel.kanso-tab__name{display:flex;align-items:center;gap:var(--k-sp-1)}
 .kanso-icon--program{width:var(--k-ic-control);height:var(--k-ic-control);flex:none;display:block}
 .kanso-sidebar--slice{width:256px;background:var(--chrome);border-radius:var(--k-r-card);padding:var(--k-sp-2);box-sizing:border-box;box-shadow:0 0 0 1px var(--border)}
