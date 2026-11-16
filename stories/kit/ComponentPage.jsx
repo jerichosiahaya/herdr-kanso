@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Canvas, Controls, Markdown, Source } from '@storybook/addon-docs/blocks';
+import { Canvas, Controls, Markdown } from '@storybook/addon-docs/blocks';
 import { content, featuresFor, statesFor } from './catalog.js';
 import { descriptions } from './descriptions.js';
 import { guidelines, sections } from './guidelines.js';
@@ -29,7 +29,7 @@ export function ComponentPage({ of, page }) {
     {rules[page] && <><h2>Guidelines</h2><ul className="kanso-docs__guidelines">{rules[page].map((rule) => <li key={rule}><Markdown options={{ forceInline: true }}>{rule}</Markdown></li>)}</ul></>}
     <h2>Prompt for agents</h2>
     <button className="kanso-button kanso-button--solid" type="button" onClick={async () => { await navigator.clipboard.writeText(prompt); setCopied(true); }}>{copied ? 'Copied' : 'Copy prompt'}</button>
-    <Source code={prompt} language="text" />
+    <pre className="kanso-docs__prompt">{prompt}</pre>
     {gaps.length > 0 && <><h3>{FEATURE_LABEL}</h3><p>{FEATURE_NOTE}</p><ul>{gaps.map((feature) => <Feature key={feature.id} {...feature} />)}</ul></>}
   </article>;
 }

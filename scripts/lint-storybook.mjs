@@ -75,7 +75,7 @@ export function structureErrors(files, catalog, template) {
   }
   const ids = new Set();
   const byId = new Map(records.map((record) => [record.id, record]));
-  if (records.some((record) => record.gap) && (!template.includes('<h3>{FEATURE_LABEL}</h3>') || template.indexOf('<h3>{FEATURE_LABEL}</h3>') < template.indexOf('<Source code={prompt}'))) errors.push('component page: missing plain feature list under Prompt for agents');
+  if (records.some((record) => record.gap) && (!template.includes('<h3>{FEATURE_LABEL}</h3>') || template.indexOf('<h3>{FEATURE_LABEL}</h3>') < template.indexOf('<pre className="kanso-docs__prompt">'))) errors.push('component page: missing plain feature list under Prompt for agents');
   for (const record of records) {
     if (ids.has(record.id)) errors.push(`catalog: duplicate state ${record.id}`);
     ids.add(record.id);
