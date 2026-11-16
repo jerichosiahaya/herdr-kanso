@@ -7,11 +7,7 @@
 .kanso-icon{width:15px;height:15px;flex:none;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .kanso-icon--narrow{width:13px;height:14px}
 @keyframes br{from{opacity:.45}to{opacity:1}}
-@keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
-.kanso-text--shimmer{background:linear-gradient(90deg,var(--muted) 0 34%,var(--fg) 44%,var(--fg) 50%,var(--muted) 62% 100%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:shim 2.6s linear infinite alternate}
 .kanso-dot{width:6px;height:6px;border-radius:50%;flex:none;display:inline-block}
-.kanso-layout__grow{flex:1}
-.kanso-text--truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .kanso-window{display:flex;width:1300px;height:780px;background:var(--chrome);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);outline:1px solid var(--border)}
 .kanso-sidebar{width:256px;flex:none;display:flex;flex-direction:column;background:var(--chrome);padding:0 8px;box-sizing:border-box;position:relative;height:100%}
 .kanso-sidebar__header{height:48px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 4px}
@@ -161,15 +157,8 @@
 :is(.kanso-prose,.kanso-menu__item,.kanso-settings__piece-choice .kanso-row__label){font-weight:var(--k-fw-regular)}
 :is(.kanso-menu__heading,.kanso-section .kanso-row__name,.kanso-agent__meta,.kanso-content__age,.kanso-metric__cost,.kanso-settings__reset){font-size:var(--k-fs-meta);font-weight:var(--k-fw-regular)}
 :is(.kanso-menu__heading,.kanso-section .kanso-row__name){color:var(--dim)}
-.kanso-text--glint{color:transparent;-webkit-background-clip:text;background-clip:text;background-repeat:no-repeat;animation:kit-glint 2200ms linear infinite;
-  background-image:linear-gradient(color-mix(in srgb,var(--fg) 35%,var(--muted)),color-mix(in srgb,var(--fg) 35%,var(--muted))),
-    linear-gradient(color-mix(in srgb,var(--fg) 60%,var(--muted)),color-mix(in srgb,var(--fg) 60%,var(--muted))),
-    linear-gradient(var(--fg),var(--fg)),linear-gradient(var(--muted),var(--muted));
-  background-size:44px 100%,26px 100%,12px 100%,100% 100%}
-@keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 .kanso-status-bar .kanso-state-line{flex:none}
 .kanso-status-bar .kanso-state-line>.kanso-button--tonal{margin-left:var(--k-sp-1)}
-@media (prefers-reduced-motion:reduce){.kanso-text--glint{animation:none;color:var(--muted);background:none}}
 .kanso-state-line>.kanso-mark{width:var(--k-ic-inline);height:var(--k-ic-inline);flex:none}
 .kanso-sidebar__project .kanso-project__name{flex:1}
 .kanso-sidebar__branch{font-size:11.5px;font-weight:400;color:var(--dim);margin-left:var(--k-sp-2)}
@@ -202,12 +191,6 @@
 .kanso-sidebar__logo.kanso-brand--small{width:17px;height:17px;border-radius:4px}
 .kanso-sidebar__toolbar{padding:0 2px;gap:var(--k-sp-2)}
 .kanso-sidebar__navigation{display:flex;flex-direction:column;gap:var(--k-sp-hair);padding:8px 0 12px}
-.kanso-text--host-teal{color:color-mix(in srgb,var(--blue) 50%,var(--done))!important}
-.kanso-text--host-yellow{color:var(--working)!important}
-.kanso-text--host-blue{color:var(--blue)!important}
-.kanso-text--host-violet{color:var(--violet)!important}
-.kanso-text--host-green{color:var(--done)!important}
-.kanso-text--host-red{color:var(--blocked)!important}
 .kanso-sidebar--pressed{background:var(--w12)}
 .kanso-sidebar--dim{color:var(--muted)}
 .kanso-sidebar--flush{padding-left:8px}
@@ -853,7 +836,6 @@
 .kanso-story__swatch{min-width:64px;height:40px;padding:0 10px;border-radius:6px;display:grid;place-items:center;font-size:var(--k-fs-meta)}
 .kanso-story__icon{width:26px;height:26px;display:grid;place-items:center}
 .kanso-story__icon svg{color:var(--muted)}
-.kanso-text--dimmed{color:var(--muted)}
 :is(.kanso-text--dimmed,.kanso-update--stale,.kanso-tab--dim,.kanso-sidebar--dim,.kanso-sidebar__row--removed,.kanso-toast--removed,.kanso-dialog__row.kanso-control--off) :not(svg,svg *){color:var(--muted)!important}
 .kanso-story__caption{font-size:12px;color:#8a867d;margin:0 0 var(--k-sp-2);font-weight:500}
 .kanso-sidebar__header,.kanso-sidebar__tools,.kanso-segmented{position:relative;z-index:1}

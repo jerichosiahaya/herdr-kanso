@@ -2,6 +2,28 @@
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes ghost{from{opacity:.5}to{opacity:1}}
 @keyframes dgx-blink{50%{opacity:0}}
+@keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
+@keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
+
+/* Layout: a slot that takes the free space. */
+.kanso-layout__grow{flex:1}
+
+/* Text: one line that truncates, glints, shimmers, dims, or takes a computer colour. */
+.kanso-text--shimmer{background:linear-gradient(90deg,var(--muted) 0 34%,var(--fg) 44%,var(--fg) 50%,var(--muted) 62% 100%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:shim 2.6s linear infinite alternate}
+.kanso-text--truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.kanso-text--glint{color:transparent;-webkit-background-clip:text;background-clip:text;background-repeat:no-repeat;animation:kit-glint 2200ms linear infinite;
+  background-image:linear-gradient(color-mix(in srgb,var(--fg) 35%,var(--muted)),color-mix(in srgb,var(--fg) 35%,var(--muted))),
+    linear-gradient(color-mix(in srgb,var(--fg) 60%,var(--muted)),color-mix(in srgb,var(--fg) 60%,var(--muted))),
+    linear-gradient(var(--fg),var(--fg)),linear-gradient(var(--muted),var(--muted));
+  background-size:44px 100%,26px 100%,12px 100%,100% 100%}
+@media (prefers-reduced-motion:reduce){.kanso-text--glint{animation:none;color:var(--muted);background:none}}
+.kanso-text--host-teal{color:color-mix(in srgb,var(--blue) 50%,var(--done))!important}
+.kanso-text--host-yellow{color:var(--working)!important}
+.kanso-text--host-blue{color:var(--blue)!important}
+.kanso-text--host-violet{color:var(--violet)!important}
+.kanso-text--host-green{color:var(--done)!important}
+.kanso-text--host-red{color:var(--blocked)!important}
+.kanso-text--dimmed{color:var(--muted)}
 
 .kanso-panel__number+.kanso-panel__hero{margin-top:var(--k-sp-1)}
 .kanso-panel__verdict .kanso-dot{width:var(--k-sp-2);height:var(--k-sp-2)}

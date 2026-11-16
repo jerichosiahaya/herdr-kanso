@@ -1,4 +1,7 @@
 [
+  {"source":"stories/primitives.css","value":"raw background-position:-44px 0,-26px 0,-12px 0,0 0"},
+  {"source":"stories/primitives.css","value":"raw background-position:240px 0,240px 0,240px 0,0 0"},
+  {"source":"stories/primitives.css","value":"raw background-size:44px 100%,26px 100%,12px 100%,100% 100%"},
   {"source":"stories/primitives.css","value":"raw width:1px"},
   {"source":"stories/primitives.css","value":"raw height:14px"},
   {"source":"stories/primitives.css","value":"raw vertical-align:-2px"},
@@ -199,9 +202,6 @@
   {"source":"stories/proto.css","value":"raw box-shadow:inset 0 0 0 1px var(--border)"},
   {"source":"stories/proto.css","value":"raw outline:2px solid var(--accent)"},
   {"source":"stories/proto.css","value":"raw outline-offset:1px"},
-  {"source":"stories/proto.css","value":"raw background-size:44px 100%,26px 100%,12px 100%,100% 100%"},
-  {"source":"stories/proto.css","value":"raw background-position:-44px 0,-26px 0,-12px 0,0 0"},
-  {"source":"stories/proto.css","value":"raw background-position:240px 0,240px 0,240px 0,0 0"},
   {"source":"stories/proto.css","value":"raw font-size:11.5px"},
   {"source":"stories/proto.css","value":"raw height:32px"},
   {"source":"stories/proto.css","value":"raw padding:0 8px"},
