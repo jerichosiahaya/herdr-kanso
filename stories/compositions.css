@@ -19,11 +19,6 @@
 /* Tab bar: the project's tabs, + and Arrange, then the panel doors; 48 tall, nothing filled at rest. */
 
 /* Edges: the panes past each side of the strip, grouped by column. */
-.kanso-edge__column{display:flex;flex-direction:column;align-items:center;gap:var(--k-sp-hair)}
-.kanso-edge__more{position:relative}
-.kanso-edge__menu{position:absolute;top:0;z-index:1}
-.kanso-edge__menu--right{right:calc(100% + var(--k-sp-1))}
-.kanso-edge__menu--left{left:calc(100% + var(--k-sp-1))}
 
 /* State patterns: the bar's fix sits 4 after our words. */
 .kanso-state-line>.kanso-button{margin-left:var(--k-sp-1)}

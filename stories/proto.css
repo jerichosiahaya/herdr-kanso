@@ -84,8 +84,6 @@
 .kanso-story__bars-anchor{position:relative}
 .kanso-tooltip__anchor{position:absolute;white-space:nowrap;z-index:2}
 .kanso-tooltip__anchor .kanso-tooltip{margin:0}
-.kanso-edge{width:28px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--k-sp-1);border-radius:var(--k-r-control);color:var(--muted);font-size:var(--k-fs-name);position:relative}
-.kanso-edge.kanso-edge--target{background:color-mix(in srgb,var(--accent) 25%,transparent);color:var(--fg)}
 .kanso-story__toast-grid{display:grid;grid-template-columns:repeat(2,max-content);gap:var(--k-sp-4)}
 .kanso-story__toast-grid>div{display:flex;flex-direction:column;gap:var(--k-sp-1)}
 .kanso-story__bars-stage{position:relative;padding:16px;border-radius:12px;background:var(--chrome);box-shadow:0 0 0 1px var(--border);box-sizing:border-box}
