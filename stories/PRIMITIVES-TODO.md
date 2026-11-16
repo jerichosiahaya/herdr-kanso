@@ -2,12 +2,11 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 18226 elements, 1075 distinct
+Total: 14021 elements, 793 distinct
 
-## Primitives/Dialog (84)
+## Primitives/Dialog (77)
 
 - <div> raw markup outside a primitive
-- <div> kanso-dialog__heading is not a primitive
 - <div> kanso-dialog__list is not a primitive
 - <span> raw markup outside a primitive
 - <div> kanso-sleep__tab-heading is not a primitive
@@ -40,11 +39,8 @@ Total: 18226 elements, 1075 distinct
 - <span> kanso-keyboard__meaning is not a primitive
 - <span> kanso-keyboard__layer is not a primitive
 - <div> kanso-keyboard__shortcuts is not a primitive
-- <div> kanso-keyboard__shortcut is not a primitive
-- <span> kanso-row__label is not a primitive
 - <div> kanso-update__fold is not a primitive
 - <span> kanso-update__timeline-date is not a primitive
-- <div> kanso-update__controls is not a primitive
 - <div> kanso-update__status is not a primitive
 - <div> kanso-update__timeline is not a primitive
 - <div> kanso-update__timeline-release is not a primitive
@@ -77,9 +73,6 @@ Total: 18226 elements, 1075 distinct
 - <span> kanso-sidebar__placeholder is not a primitive
 - <span> kanso-sidebar__code is not a primitive
 - <div> kanso-sidebar__state-line is not a primitive
-- <div> kanso-sidebar--slice is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-project is not a primitive
 - <div> kanso-sidebar__dialog is not a primitive
 - <div> kanso-sidebar__dialog-title is not a primitive
 - <div> kanso-sidebar__dialog-actions is not a primitive
@@ -91,103 +84,22 @@ Total: 18226 elements, 1075 distinct
 - <div> kanso-arrangement is not a primitive
 - <div> kanso-arrangement__column is not a primitive
 
-## Layouts/Sidebar (71)
-
-- <div> kanso-sidebar--slice is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-project is not a primitive
-- <div> kanso-sidebar__row--drop-before is not a primitive
-- <i> kanso-content__gap is not a primitive
-- <div> kanso-control--held is not a primitive
-- <div> kanso-row--machine is not a primitive
-- <svg> kanso-row__leading-icon is not a primitive
-- <div> kanso-agent is not a primitive
-- <div> kanso-row--depth-one is not a primitive
-- <div> kanso-sidebar__row--drop-after is not a primitive
-- <svg> kanso-row__chevron is not a primitive
-- <div> kanso-sidebar__header is not a primitive
-- <div> kanso-sidebar__title-bar is not a primitive
-- <div> kanso-sidebar__tools is not a primitive
-- <div> kanso-sidebar__toolbar is not a primitive
-- <span> kanso-button--inline-icon is not a primitive
-- <div> kanso-sidebar__view-switch is not a primitive
-- <span> kanso-project__name is not a primitive
-- <span> kanso-project__counts is not a primitive
-- <svg> kanso-icon--narrow is not a primitive
-- <span> kanso-sidebar__fold is not a primitive
-- <div> kanso-row--single-line is not a primitive
-- <div> kanso-row--current is not a primitive
-- <div> kanso-agent__text is not a primitive
-- <div> kanso-agent__name is not a primitive
-- <span> kanso-sidebar__branch is not a primitive
-- <div> kanso-row--blocked is not a primitive
-- <div> kanso-sidebar__title is not a primitive
-- <div> kanso-sidebar__actions is not a primitive
-- <span> kanso-sidebar__placeholder is not a primitive
-- <div> kanso-row--live is not a primitive
-- <div> kanso-row--depth-two is not a primitive
-- <div> kanso-row--child is not a primitive
-- <div> kanso-control--ring is not a primitive
-- <span> kanso-sidebar__emphasis is not a primitive
-- <div> kanso-row--asleep is not a primitive
-- <div> kanso-row--double-line is not a primitive
-- <span> kanso-sidebar__row-text is not a primitive
-- <span> kanso-row__activity is not a primitive
-- <span> kanso-content__time is not a primitive
-- <div> kanso-rail is not a primitive
-- <div> kanso-rail__brand is not a primitive
-- <div> kanso-rail__top is not a primitive
-- <div> kanso-rail__list is not a primitive
-- <div> kanso-rail__row is not a primitive
-- <span> kanso-content__line is not a primitive
-- <div> kanso-text--strong is not a primitive
-- <div> kanso-rail__separator is not a primitive
-- <div> kanso-rail__footer is not a primitive
-- <svg> kanso-dawn is not a primitive
-- <svg> kanso-dawn--rising is not a primitive
-- <rect> kanso-dawn__night is not a primitive
-- <rect> kanso-dawn__glow is not a primitive
-- <g> kanso-dawn__stars is not a primitive
-- <g> kanso-dawn__clouds is not a primitive
-- <g> kanso-dawn__sun is not a primitive
-- <circle> kanso-dawn__circle is not a primitive
-- <path> kanso-dawn__horizon is not a primitive
-- <div> kanso-rail__views is not a primitive
-- <div> kanso-sidebar--standalone is not a primitive
-- <div> kanso-window--rest is not a primitive
-- <aside> kanso-sidebar is not a primitive
-- <div> kanso-sidebar__rows is not a primitive
-- <div> kanso-sidebar__row-group is not a primitive
-- <span> kanso-row__directory is not a primitive
-- <div> kanso-sidebar__bottom is not a primitive
-- <div> kanso-row--interactive is not a primitive
-- <div> kanso-segmented--sidebar is not a primitive
-- <div> kanso-sidebar--focus is not a primitive
-- <div> kanso-sidebar--hover is not a primitive
-
-## Panels/Settings (69)
+## Panels/Settings (61)
 
 - <div> kanso-settings is not a primitive
-- <div> kanso-dialog__heading is not a primitive
-- <div> kanso-segmented--tabs is not a primitive
-- <div> kanso-row--interactive is not a primitive
 - <a> kanso-credit is not a primitive
 - <span> kanso-credit__avatar is not a primitive
 - <span> kanso-dialog__text is not a primitive
 - <span> kanso-dialog__name is not a primitive
 - <span> kanso-dialog__detail is not a primitive
 - <span> kanso-credit__avatar--person is not a primitive
-- <div> kanso-settings__piece-choice is not a primitive
-- <span> kanso-row__label is not a primitive
 - <div> kanso-settings__piece is not a primitive
 - <span> kanso-settings__piece-label is not a primitive
 - <span> kanso-settings__piece-scope is not a primitive
 - <div> raw markup outside a primitive
 - <div> kanso-sidebar--footer-preview is not a primitive
 - <div> kanso-sidebar__footer is not a primitive
-- <div> kanso-sidebar__row is not a primitive
 - <div> kanso-dialog__mapping is not a primitive
-- <div> kanso-update__controls is not a primitive
 - <div> kanso-update__timeline is not a primitive
 - <div> kanso-update__timeline-release is not a primitive
 - <span> kanso-update__timeline-dot is not a primitive
@@ -235,17 +147,14 @@ Total: 18226 elements, 1075 distinct
 - <div> kanso-credit is not a primitive
 - <span> kanso-dialog__tile is not a primitive
 - <span> kanso-keyboard__key--held is not a primitive
-- <span> kanso-segmented--tabs is not a primitive
 
-## Panels/Dojo (53)
+## Panels/Dojo (48)
 
 - <div> kanso-dojo is not a primitive
 - <div> kanso-dojo__header is not a primitive
 - <span> kanso-level__label is not a primitive
 - <div> kanso-dojo__body is not a primitive
 - <div> kanso-dojo__path is not a primitive
-- <div> kanso-dojo__level is not a primitive
-- <span> kanso-level__node is not a primitive
 - <span> kanso-dojo__name is not a primitive
 - <span> kanso-annotation--inactive is not a primitive
 - <div> kanso-dojo__path-keys is not a primitive
@@ -253,7 +162,6 @@ Total: 18226 elements, 1075 distinct
 - <div> kanso-dojo__main is not a primitive
 - <div> kanso-dojo__board is not a primitive
 - <div> kanso-dojo__statistics is not a primitive
-- <div> kanso-dojo__progress-strip is not a primitive
 - <div> kanso-dojo__grid is not a primitive
 - <i> kanso-dojo__cell is not a primitive
 - <i> kanso-cell--current is not a primitive
@@ -273,12 +181,10 @@ Total: 18226 elements, 1075 distinct
 - <span> kanso-keyboard__key--bound is not a primitive
 - <span> kanso-keyboard__corner is not a primitive
 - <span> kanso-keyboard__finger is not a primitive
-- <div> kanso-row--done is not a primitive
 - <div> kanso-dojo__text is not a primitive
 - <div> kanso-dojo__line is not a primitive
 - <i> kanso-dojo__character is not a primitive
 - <span> kanso-section__count is not a primitive
-- <i> kanso-content__description is not a primitive
 - <span> kanso-keyboard__key--lit is not a primitive
 - <i> kanso-mascot__pixel--blue is not a primitive
 - <div> kanso-feedback--missed is not a primitive
@@ -293,34 +199,60 @@ Total: 18226 elements, 1075 distinct
 - <div> kanso-dojo__menu is not a primitive
 - <span> kanso-dojo__sleep-label is not a primitive
 
-## Compositions/Sidebar (50)
+## Layouts/Sidebar (42)
 
-- <div> kanso-sidebar--slice is not a primitive
+- <div> kanso-sidebar__row--drop-before is not a primitive
+- <div> kanso-control--held is not a primitive
+- <div> kanso-sidebar__row--drop-after is not a primitive
+- <div> kanso-sidebar__header is not a primitive
+- <div> kanso-sidebar__title-bar is not a primitive
+- <div> kanso-sidebar__tools is not a primitive
+- <div> kanso-sidebar__toolbar is not a primitive
+- <div> kanso-sidebar__view-switch is not a primitive
+- <span> kanso-project__name is not a primitive
+- <span> kanso-project__counts is not a primitive
+- <svg> kanso-icon--narrow is not a primitive
+- <span> kanso-sidebar__fold is not a primitive
+- <div> kanso-agent__text is not a primitive
+- <span> kanso-sidebar__branch is not a primitive
+- <div> kanso-sidebar__title is not a primitive
+- <div> kanso-sidebar__actions is not a primitive
+- <span> kanso-sidebar__placeholder is not a primitive
+- <span> kanso-sidebar__emphasis is not a primitive
+- <div> kanso-rail is not a primitive
+- <div> kanso-rail__brand is not a primitive
+- <div> kanso-rail__top is not a primitive
+- <div> kanso-rail__list is not a primitive
+- <div> kanso-rail__row is not a primitive
+- <div> kanso-rail__separator is not a primitive
+- <div> kanso-rail__footer is not a primitive
+- <svg> kanso-dawn is not a primitive
+- <svg> kanso-dawn--rising is not a primitive
+- <rect> kanso-dawn__night is not a primitive
+- <rect> kanso-dawn__glow is not a primitive
+- <g> kanso-dawn__stars is not a primitive
+- <g> kanso-dawn__clouds is not a primitive
+- <g> kanso-dawn__sun is not a primitive
+- <circle> kanso-dawn__circle is not a primitive
+- <path> kanso-dawn__horizon is not a primitive
+- <div> kanso-rail__views is not a primitive
+- <div> kanso-sidebar--standalone is not a primitive
+- <div> kanso-window--rest is not a primitive
+- <aside> kanso-sidebar is not a primitive
+- <div> kanso-sidebar__rows is not a primitive
+- <div> kanso-sidebar__row-group is not a primitive
+- <div> kanso-sidebar__bottom is not a primitive
+- <div> kanso-sidebar--hover is not a primitive
+
+## Compositions/Sidebar (31)
+
 - <div> kanso-sidebar__view-switch is not a primitive
 - <div> kanso-sidebar__section is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-agent is not a primitive
-- <div> kanso-row--double-line is not a primitive
-- <div> kanso-row--live is not a primitive
-- <div> kanso-row--blocked is not a primitive
-- <svg> kanso-row__leading-icon is not a primitive
-- <span> kanso-sidebar__row-text is not a primitive
-- <span> kanso-row__activity is not a primitive
-- <span> kanso-content__time is not a primitive
-- <span> kanso-row__directory is not a primitive
-- <div> kanso-row--current is not a primitive
 - <span> kanso-section__count is not a primitive
-- <div> kanso-control--ring is not a primitive
-- <div> kanso-project is not a primitive
-- <i> kanso-content__gap is not a primitive
 - <span> kanso-sidebar__tooltip is not a primitive
 - <div> kanso-sidebar__title is not a primitive
 - <div> kanso-sidebar__actions is not a primitive
-- <div> kanso-row--machine is not a primitive
 - <div> kanso-rail__list is not a primitive
-- <div> kanso-segmented--sidebar is not a primitive
-- <div> kanso-row--single-line is not a primitive
-- <div> kanso-row--asleep is not a primitive
 - <aside> kanso-sidebar is not a primitive
 - <div> kanso-header is not a primitive
 - <div> kanso-header__title is not a primitive
@@ -346,101 +278,20 @@ Total: 18226 elements, 1075 distinct
 - <path> kanso-dawn__horizon is not a primitive
 - <div> kanso-sidebar__view-menu is not a primitive
 
-## Layouts/Window (39)
-
-- <div> kanso-window is not a primitive
-- <div> kanso-window--rest is not a primitive
-- <aside> kanso-sidebar is not a primitive
-- <div> kanso-sidebar__title is not a primitive
-- <div> kanso-sidebar__actions is not a primitive
-- <div> kanso-sidebar__rows is not a primitive
-- <div> kanso-sidebar__row-group is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-row--machine is not a primitive
-- <svg> kanso-row__leading-icon is not a primitive
-- <div> kanso-project is not a primitive
-- <div> kanso-agent is not a primitive
-- <div> kanso-row--depth-one is not a primitive
-- <div> kanso-row--double-line is not a primitive
-- <div> kanso-row--live is not a primitive
-- <div> kanso-row--blocked is not a primitive
-- <span> kanso-sidebar__row-text is not a primitive
-- <span> kanso-row__activity is not a primitive
-- <span> kanso-content__time is not a primitive
-- <i> kanso-content__gap is not a primitive
-- <div> kanso-row--depth-two is not a primitive
-- <div> kanso-row--child is not a primitive
-- <div> kanso-row--current is not a primitive
-- <div> kanso-sidebar__bottom is not a primitive
-- <div> kanso-row--interactive is not a primitive
-- <div> kanso-window__workspace is not a primitive
-- <div> kanso-tab-bar--rest is not a primitive
-- <span> kanso-tab--rest is not a primitive
-- <div> kanso-window__panes is not a primitive
-- <div> kanso-pane is not a primitive
-- <div> kanso-pane-header is not a primitive
-- <span> kanso-pane-header__name is not a primitive
-- <div> kanso-terminal is not a primitive
-- <div> kanso-status-bar--rest is not a primitive
-- <span> kanso-minimap is not a primitive
-- <span> kanso-status-bar__counts is not a primitive
-- <div> kanso-row--single-line is not a primitive
-- <span> kanso-sidebar__row-name--working is not a primitive
-- <span> kanso-minimap--rest is not a primitive
-
-## Panels/Preview (33)
-
-- <svg> kanso-picture is not a primitive
-- <div> kanso-picture--annotated is not a primitive
-- <div> kanso-simulator__overlay is not a primitive
-- <span> kanso-annotation is not a primitive
-- <div> kanso-annotation__region is not a primitive
-- <div> kanso-annotation__note is not a primitive
-- <span> kanso-annotation--inactive is not a primitive
-- <div> kanso-picture__loading is not a primitive
-- <div> kanso-code__conflict is not a primitive
-- <div> raw markup outside a primitive
-- <span> kanso-file__status is not a primitive
-- <span> kanso-row__filename is not a primitive
-- <span> kanso-row__directory-path is not a primitive
-- <span> kanso-file__spacer is not a primitive
-- <div> kanso-log is not a primitive
-- <span> kanso-content__entry is not a primitive
-- <button> kanso-explain is not a primitive
-- <div> kanso-review__snippet is not a primitive
-- <div> kanso-review__reply is not a primitive
-- <div> kanso-section--collapsible is not a primitive
-- <div> kanso-card--hover is not a primitive
-- <div> kanso-heatmap is not a primitive
-- <i> kanso-content__description is not a primitive
-- <i> kanso-heatmap__cell--empty is not a primitive
-- <span> kanso-row__value is not a primitive
-- <div> kanso-chart__bars is not a primitive
-- <i> kanso-control__outline is not a primitive
-- <i> kanso-chart__bar--peak is not a primitive
-- <div> kanso-chart__ticks is not a primitive
-- <div> kanso-chart__range is not a primitive
-- <div> kanso-markdown__document is not a primitive
-- <div> kanso-markdown__section is not a primitive
-- <div> kanso-markdown__editor is not a primitive
-
-## Layouts/Practice (31)
+## Layouts/Practice (28)
 
 - <div> kanso-dojo is not a primitive
 - <div> kanso-dojo__header is not a primitive
 - <span> kanso-level__label is not a primitive
 - <div> kanso-dojo__body is not a primitive
 - <div> kanso-dojo__path is not a primitive
-- <div> kanso-dojo__level is not a primitive
 - <div> kanso-prototype--new is not a primitive
-- <span> kanso-level__node is not a primitive
 - <span> kanso-dojo__name is not a primitive
 - <span> kanso-annotation--inactive is not a primitive
 - <div> kanso-dojo__path-keys is not a primitive
 - <div> kanso-dojo__main is not a primitive
 - <div> kanso-dojo__board is not a primitive
 - <div> kanso-dojo__statistics is not a primitive
-- <div> kanso-dojo__progress-strip is not a primitive
 - <div> kanso-dojo__grid is not a primitive
 - <i> kanso-dojo__cell is not a primitive
 - <i> kanso-cell--current is not a primitive
@@ -458,7 +309,35 @@ Total: 18226 elements, 1075 distinct
 - <div> kanso-dojo__key-row is not a primitive
 - <span> kanso-dojo__key is not a primitive
 
-## Primitives/Row (30)
+## Panels/Preview (25)
+
+- <svg> kanso-picture is not a primitive
+- <div> kanso-picture--annotated is not a primitive
+- <div> kanso-simulator__overlay is not a primitive
+- <span> kanso-annotation is not a primitive
+- <div> kanso-annotation__region is not a primitive
+- <div> kanso-annotation__note is not a primitive
+- <span> kanso-annotation--inactive is not a primitive
+- <div> kanso-picture__loading is not a primitive
+- <div> kanso-code__conflict is not a primitive
+- <div> raw markup outside a primitive
+- <span> kanso-file__status is not a primitive
+- <span> kanso-file__spacer is not a primitive
+- <button> kanso-explain is not a primitive
+- <div> kanso-review__snippet is not a primitive
+- <div> kanso-review__reply is not a primitive
+- <div> kanso-card--hover is not a primitive
+- <i> kanso-heatmap__cell--empty is not a primitive
+- <div> kanso-chart__bars is not a primitive
+- <i> kanso-control__outline is not a primitive
+- <i> kanso-chart__bar--peak is not a primitive
+- <div> kanso-chart__ticks is not a primitive
+- <div> kanso-chart__range is not a primitive
+- <div> kanso-markdown__document is not a primitive
+- <div> kanso-markdown__section is not a primitive
+- <div> kanso-markdown__editor is not a primitive
+
+## Primitives/Row (24)
 
 - <div> kanso-settings is not a primitive
 - <div> kanso-dialog__list is not a primitive
@@ -482,28 +361,17 @@ Total: 18226 elements, 1075 distinct
 - <div> kanso-worktree__path is not a primitive
 - <div> kanso-worktree__actions is not a primitive
 - <button> kanso-explain is not a primitive
-- <div> kanso-segmented--tabs is not a primitive
 - <span> kanso-file__status is not a primitive
-- <span> kanso-row__filename is not a primitive
-- <span> kanso-row__directory-path is not a primitive
 - <svg> kanso-icon--narrow is not a primitive
-- <span> kanso-row__command is not a primitive
-- <div> kanso-row--interactive is not a primitive
-- <span> kanso-row__value is not a primitive
 
-## Panels/PR (28)
+## Panels/PR (23)
 
-- <div> kanso-log is not a primitive
-- <span> kanso-content__entry is not a primitive
 - <button> kanso-explain is not a primitive
 - <div> kanso-review__line is not a primitive
-- <div> kanso-section--collapsible is not a primitive
 - <div> kanso-review__snippet is not a primitive
 - <span> kanso-code__text is not a primitive
 - <div> kanso-review__reply is not a primitive
 - <span> kanso-file__spacer is not a primitive
-- <span> kanso-row__filename is not a primitive
-- <span> kanso-row__directory-path is not a primitive
 - <span> kanso-file__status is not a primitive
 - <div> kanso-review__event is not a primitive
 - <div> kanso-metadata__row is not a primitive
@@ -522,38 +390,9 @@ Total: 18226 elements, 1075 distinct
 - <div> raw markup outside a primitive
 - <div> kanso-code__conflict is not a primitive
 
-## Compositions/Activity (25)
-
-- <div> kanso-sidebar--slice is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-project is not a primitive
-- <div> kanso-agent is not a primitive
-- <div> kanso-row--depth-one is not a primitive
-- <div> kanso-row--live is not a primitive
-- <svg> kanso-row__leading-icon is not a primitive
-- <div> kanso-row--depth-two is not a primitive
-- <div> kanso-row--child is not a primitive
-- <div> kanso-row--current is not a primitive
-- <div> kanso-activity--rest is not a primitive
-- <div> kanso-content__heading is not a primitive
-- <div> kanso-content__entry is not a primitive
-- <span> kanso-content__age is not a primitive
-- <div> kanso-row--double-line is not a primitive
-- <div> kanso-content__description is not a primitive
-- <div> kanso-sidebar__bottom is not a primitive
-- <div> kanso-row--interactive is not a primitive
-- <div> kanso-activity__more is not a primitive
-- <div> kanso-control--ring is not a primitive
-- <div> kanso-activity__row is not a primitive
-- <div> kanso-segmented--sidebar is not a primitive
-- <div> kanso-sidebar__view-switch is not a primitive
-- <span> kanso-sidebar__row-text is not a primitive
-- <span> kanso-row__activity is not a primitive
-
-## Compositions/Keyboard (25)
+## Compositions/Keyboard (22)
 
 - <div> kanso-settings is not a primitive
-- <div> kanso-dialog__heading is not a primitive
 - <svg> kanso-icon--narrow is not a primitive
 - <div> kanso-keyboard__layout is not a primitive
 - <div> kanso-keyboard is not a primitive
@@ -569,8 +408,6 @@ Total: 18226 elements, 1075 distinct
 - <div> raw markup outside a primitive
 - <span> raw markup outside a primitive
 - <span> kanso-keyboard__layer is not a primitive
-- <div> kanso-keyboard__shortcut is not a primitive
-- <span> kanso-row__label is not a primitive
 - <button> kanso-explain is not a primitive
 - <div> kanso-dialog__missing is not a primitive
 - <span> kanso-keyboard__corner is not a primitive
@@ -578,87 +415,7 @@ Total: 18226 elements, 1075 distinct
 - <span> kanso-keyboard__key--lit is not a primitive
 - <span> kanso-keyboard__key--hint is not a primitive
 
-## Compositions/Dawn Mode (24)
-
-- <div> kanso-dawn--preview is not a primitive
-- <svg> kanso-dawn is not a primitive
-- <svg> kanso-dawn--rising is not a primitive
-- <rect> kanso-dawn__night is not a primitive
-- <rect> kanso-dawn__glow is not a primitive
-- <g> kanso-dawn__stars is not a primitive
-- <g> kanso-dawn__clouds is not a primitive
-- <g> kanso-dawn__sun is not a primitive
-- <circle> kanso-dawn__circle is not a primitive
-- <path> kanso-dawn__horizon is not a primitive
-- <div> kanso-update is not a primitive
-- <div> kanso-settings__piece-choice is not a primitive
-- <span> kanso-row__label is not a primitive
-- <div> kanso-update__version is not a primitive
-- <div> kanso-content__note is not a primitive
-- <div> kanso-sidebar--header-preview is not a primitive
-- <div> kanso-sidebar__title is not a primitive
-- <div> kanso-sidebar__actions is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-row--machine is not a primitive
-- <svg> kanso-row__leading-icon is not a primitive
-- <div> kanso-sidebar--slice is not a primitive
-- <div> kanso-sidebar__top is not a primitive
-- <button> kanso-dawn__replay is not a primitive
-
-## Panels/Containers (24)
-
-- <span> kanso-row__value is not a primitive
-- <button> kanso-explain is not a primitive
-- <div> kanso-section--collapsible is not a primitive
-- <div> kanso-chart is not a primitive
-- <div> kanso-row--interactive is not a primitive
-- <span> kanso-row--interactive is not a primitive
-- <div> kanso-picture--annotated is not a primitive
-- <div> kanso-picture__content is not a primitive
-- <div> kanso-content__heading is not a primitive
-- <div> kanso-picture__banner is not a primitive
-- <div> kanso-picture__line is not a primitive
-- <div> kanso-picture__total is not a primitive
-- <div> kanso-picture__action is not a primitive
-- <span> kanso-annotation is not a primitive
-- <div> kanso-picture__thumbnails is not a primitive
-- <span> kanso-button--inline-icon is not a primitive
-- <i> kanso-brand__wordmark is not a primitive
-- <div> kanso-simulator is not a primitive
-- <div> kanso-simulator__screen is not a primitive
-- <div> kanso-simulator__app is not a primitive
-- <div> kanso-content__time is not a primitive
-- <div> kanso-simulator__line is not a primitive
-- <div> kanso-simulator__payment is not a primitive
-- <span> kanso-row__command is not a primitive
-
-## Compositions/Sidebar/Asleep (23)
-
-- <div> kanso-sidebar--slice is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-project is not a primitive
-- <span> kanso-row__directory is not a primitive
-- <div> kanso-row--depth-one is not a primitive
-- <div> kanso-row--asleep is not a primitive
-- <div> kanso-control--ring is not a primitive
-- <div> kanso-agent is not a primitive
-- <svg> kanso-row__leading-icon is not a primitive
-- <div> kanso-row--double-line is not a primitive
-- <span> kanso-sidebar__row-text is not a primitive
-- <span> kanso-row__activity is not a primitive
-- <span> kanso-content__time is not a primitive
-- <div> kanso-row--live is not a primitive
-- <div> kanso-segmented--sidebar is not a primitive
-- <div> kanso-sidebar__view-switch is not a primitive
-- <div> kanso-sidebar__section is not a primitive
-- <span> kanso-section__count is not a primitive
-- <div> kanso-row--single-line is not a primitive
-- <div> kanso-row--current is not a primitive
-- <div> kanso-rail__list is not a primitive
-- <div> kanso-sidebar--focus is not a primitive
-- <div> kanso-sidebar is not a primitive
-
-## Panels/Find (23)
+## Panels/Find (22)
 
 - <div> kanso-search__bar is not a primitive
 - <span> kanso-search__input is not a primitive
@@ -676,7 +433,6 @@ Total: 18226 elements, 1075 distinct
 - <span> kanso-tab--off is not a primitive
 - <div> kanso-search__results is not a primitive
 - <div> kanso-search__day is not a primitive
-- <div> kanso-row--interactive is not a primitive
 - <div> kanso-search__hit is not a primitive
 - <div> kanso-search__author is not a primitive
 - <div> kanso-search__excerpt is not a primitive
@@ -684,15 +440,35 @@ Total: 18226 elements, 1075 distinct
 - <div> kanso-search__excerpt--full is not a primitive
 - <span> kanso-notification__code is not a primitive
 
-## Compositions/Status bar (21)
+## Layouts/Window (20)
+
+- <div> kanso-window is not a primitive
+- <div> kanso-window--rest is not a primitive
+- <aside> kanso-sidebar is not a primitive
+- <div> kanso-sidebar__title is not a primitive
+- <div> kanso-sidebar__actions is not a primitive
+- <div> kanso-sidebar__rows is not a primitive
+- <div> kanso-sidebar__row-group is not a primitive
+- <div> kanso-sidebar__bottom is not a primitive
+- <div> kanso-window__workspace is not a primitive
+- <div> kanso-tab-bar--rest is not a primitive
+- <div> kanso-window__panes is not a primitive
+- <div> kanso-pane is not a primitive
+- <div> kanso-pane-header is not a primitive
+- <span> kanso-pane-header__name is not a primitive
+- <div> kanso-terminal is not a primitive
+- <div> kanso-status-bar--rest is not a primitive
+- <span> kanso-minimap is not a primitive
+- <span> kanso-status-bar__counts is not a primitive
+- <span> kanso-sidebar__row-name--working is not a primitive
+- <span> kanso-minimap--rest is not a primitive
+
+## Compositions/Status bar (18)
 
 - <div> kanso-status-bar--rest is not a primitive
 - <span> kanso-minimap is not a primitive
-- <span> kanso-status-bar__item is not a primitive
 - <svg> kanso-icon--narrow is not a primitive
-- <span> kanso-content__note is not a primitive
 - <span> kanso-tooltip__anchor is not a primitive
-- <div> kanso-status-bar--grid is not a primitive
 - <div> kanso-status-bar__left is not a primitive
 - <div> kanso-status-bar__middle is not a primitive
 - <div> kanso-status-bar__right is not a primitive
@@ -707,115 +483,6 @@ Total: 18226 elements, 1075 distinct
 - <span> kanso-status-bar__name is not a primitive
 - <span> kanso-status-bar__question is not a primitive
 - <span> kanso-status-bar__more is not a primitive
-
-## Compositions/State patterns (20)
-
-- <div> kanso-settings__piece-choice is not a primitive
-- <span> kanso-row__label is not a primitive
-- <span> kanso-metric__cost is not a primitive
-- <div> kanso-sidebar--slice is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-row--machine is not a primitive
-- <svg> kanso-row__leading-icon is not a primitive
-- <div> kanso-status-bar is not a primitive
-- <div> kanso-window--preview is not a primitive
-- <div> kanso-pane-header is not a primitive
-- <span> kanso-pane-header__name is not a primitive
-- <div> kanso-sidebar__view-switch is not a primitive
-- <div> kanso-project is not a primitive
-- <i> kanso-content__gap is not a primitive
-- <button> kanso-explain is not a primitive
-- <div> kanso-sidebar__host is not a primitive
-- <span> kanso-host__name is not a primitive
-- <svg> kanso-icon--narrow is not a primitive
-- <div> raw markup outside a primitive
-- <div> kanso-segmented--sidebar is not a primitive
-
-## Panels/Pins (20)
-
-- <div> kanso-simulator is not a primitive
-- <div> kanso-simulator--frozen is not a primitive
-- <div> kanso-simulator__screen is not a primitive
-- <div> kanso-simulator__app is not a primitive
-- <div> kanso-content__time is not a primitive
-- <div> kanso-simulator__line is not a primitive
-- <div> kanso-simulator__payment is not a primitive
-- <div> kanso-simulator__overlay is not a primitive
-- <span> kanso-annotation__region is not a primitive
-- <span> kanso-annotation is not a primitive
-- <span> kanso-annotation--inactive is not a primitive
-- <div> kanso-annotation__note is not a primitive
-- <div> kanso-row--interactive is not a primitive
-- <div> kanso-picture--annotated is not a primitive
-- <div> kanso-picture__content is not a primitive
-- <div> kanso-content__heading is not a primitive
-- <div> kanso-picture__banner is not a primitive
-- <div> kanso-picture__line is not a primitive
-- <div> kanso-picture__total is not a primitive
-- <div> kanso-picture__action is not a primitive
-
-## Compositions/Sidebar/Project row (19)
-
-- <div> kanso-sidebar--slice is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-project is not a primitive
-- <i> kanso-content__gap is not a primitive
-- <span> kanso-sidebar__tooltip is not a primitive
-- <span> kanso-row__directory is not a primitive
-- <div> kanso-control--ring is not a primitive
-- <div> kanso-agent is not a primitive
-- <div> kanso-row--depth-one is not a primitive
-- <div> kanso-row--live is not a primitive
-- <svg> kanso-row__leading-icon is not a primitive
-- <div> kanso-row--current is not a primitive
-- <span> kanso-sidebar__branch is not a primitive
-- <span> kanso-sidebar__count is not a primitive
-- <div> kanso-segmented--sidebar is not a primitive
-- <div> kanso-sidebar__view-switch is not a primitive
-- <div> kanso-sidebar--pressed is not a primitive
-- <div> kanso-sidebar--focus is not a primitive
-- <div> kanso-sidebar is not a primitive
-
-## Compositions/Pane header (18)
-
-- <span> kanso-content__line is not a primitive
-- <div> kanso-window--preview is not a primitive
-- <div> kanso-pane-header is not a primitive
-- <span> kanso-pane-header__name is not a primitive
-- <span> kanso-pane-header__digest is not a primitive
-- <span> kanso-pane-header__segment is not a primitive
-- <span> kanso-toolbar is not a primitive
-- <div> kanso-pane--focus is not a primitive
-- <span> kanso-tooltip__anchor is not a primitive
-- <div> kanso-control--held is not a primitive
-- <span> kanso-pane__drop-zone is not a primitive
-- <div> raw markup outside a primitive
-- <div> kanso-pane is not a primitive
-- <div> kanso-pane--drop-preview is not a primitive
-- <div> kanso-pane__body is not a primitive
-- <div> kanso-pane__placeholder is not a primitive
-- <div> kanso-pane__drop-ruler is not a primitive
-- <div> kanso-pane--ghost is not a primitive
-
-## Compositions/Edges (17)
-
-- <div> kanso-pane-strip is not a primitive
-- <div> kanso-edge is not a primitive
-- <span> kanso-minimap__tile is not a primitive
-- <span> kanso-button--inline-icon is not a primitive
-- <div> kanso-pane is not a primitive
-- <div> kanso-pane--focus is not a primitive
-- <div> kanso-pane-header is not a primitive
-- <span> kanso-pane-header__name is not a primitive
-- <span> kanso-toolbar is not a primitive
-- <span> kanso-tooltip__anchor is not a primitive
-- <div> raw markup outside a primitive
-- <div> kanso-edge--target is not a primitive
-- <span> kanso-content__line is not a primitive
-- <div> kanso-status-bar__slot is not a primitive
-- <span> kanso-minimap is not a primitive
-- <span> kanso-edge__column is not a primitive
-- <span> kanso-edge__more is not a primitive
 
 ## Compositions/Header (17)
 
@@ -837,32 +504,119 @@ Total: 18226 elements, 1075 distinct
 - <circle> kanso-dawn__circle is not a primitive
 - <path> kanso-dawn__horizon is not a primitive
 
-## Compositions/Sidebar/Section (17)
+## Compositions/Pane header (17)
 
-- <div> kanso-sidebar--slice is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-agent is not a primitive
-- <div> kanso-row--double-line is not a primitive
-- <div> kanso-row--depth-one is not a primitive
-- <div> kanso-row--live is not a primitive
-- <div> kanso-row--blocked is not a primitive
-- <svg> kanso-row__leading-icon is not a primitive
-- <span> kanso-sidebar__row-text is not a primitive
-- <span> kanso-row__activity is not a primitive
-- <span> kanso-content__time is not a primitive
-- <div> kanso-status-bar--rest is not a primitive
-- <span> kanso-status-bar__item is not a primitive
-- <div> kanso-sidebar__section is not a primitive
-- <span> kanso-row__directory is not a primitive
-- <div> kanso-row--current is not a primitive
-- <div> kanso-sidebar is not a primitive
+- <div> kanso-window--preview is not a primitive
+- <div> kanso-pane-header is not a primitive
+- <span> kanso-pane-header__name is not a primitive
+- <span> kanso-pane-header__digest is not a primitive
+- <span> kanso-pane-header__segment is not a primitive
+- <span> kanso-toolbar is not a primitive
+- <div> kanso-pane--focus is not a primitive
+- <span> kanso-tooltip__anchor is not a primitive
+- <div> kanso-control--held is not a primitive
+- <span> kanso-pane__drop-zone is not a primitive
+- <div> raw markup outside a primitive
+- <div> kanso-pane is not a primitive
+- <div> kanso-pane--drop-preview is not a primitive
+- <div> kanso-pane__body is not a primitive
+- <div> kanso-pane__placeholder is not a primitive
+- <div> kanso-pane__drop-ruler is not a primitive
+- <div> kanso-pane--ghost is not a primitive
 
-## Panels/Simulator (17)
+## Compositions/Dawn Mode (16)
+
+- <div> kanso-dawn--preview is not a primitive
+- <svg> kanso-dawn is not a primitive
+- <svg> kanso-dawn--rising is not a primitive
+- <rect> kanso-dawn__night is not a primitive
+- <rect> kanso-dawn__glow is not a primitive
+- <g> kanso-dawn__stars is not a primitive
+- <g> kanso-dawn__clouds is not a primitive
+- <g> kanso-dawn__sun is not a primitive
+- <circle> kanso-dawn__circle is not a primitive
+- <path> kanso-dawn__horizon is not a primitive
+- <div> kanso-update__version is not a primitive
+- <div> kanso-sidebar--header-preview is not a primitive
+- <div> kanso-sidebar__title is not a primitive
+- <div> kanso-sidebar__actions is not a primitive
+- <div> kanso-sidebar__top is not a primitive
+- <button> kanso-dawn__replay is not a primitive
+
+## Compositions/Edges (15)
+
+- <div> kanso-pane-strip is not a primitive
+- <div> kanso-edge is not a primitive
+- <span> kanso-minimap__tile is not a primitive
+- <div> kanso-pane is not a primitive
+- <div> kanso-pane--focus is not a primitive
+- <div> kanso-pane-header is not a primitive
+- <span> kanso-pane-header__name is not a primitive
+- <span> kanso-toolbar is not a primitive
+- <span> kanso-tooltip__anchor is not a primitive
+- <div> raw markup outside a primitive
+- <div> kanso-edge--target is not a primitive
+- <div> kanso-status-bar__slot is not a primitive
+- <span> kanso-minimap is not a primitive
+- <span> kanso-edge__column is not a primitive
+- <span> kanso-edge__more is not a primitive
+
+## Panels/Pins (15)
+
+- <div> kanso-simulator is not a primitive
+- <div> kanso-simulator--frozen is not a primitive
+- <div> kanso-simulator__screen is not a primitive
+- <div> kanso-simulator__line is not a primitive
+- <div> kanso-simulator__payment is not a primitive
+- <div> kanso-simulator__overlay is not a primitive
+- <span> kanso-annotation__region is not a primitive
+- <span> kanso-annotation is not a primitive
+- <span> kanso-annotation--inactive is not a primitive
+- <div> kanso-annotation__note is not a primitive
+- <div> kanso-picture--annotated is not a primitive
+- <div> kanso-picture__banner is not a primitive
+- <div> kanso-picture__line is not a primitive
+- <div> kanso-picture__total is not a primitive
+- <div> kanso-picture__action is not a primitive
+
+## Compositions/Tab bar (14)
+
+- <span> kanso-tooltip__anchor is not a primitive
+- <i> kanso-tab-bar__insertion is not a primitive
+- <span> kanso-control--held is not a primitive
+- <div> kanso-menu__item--dim is not a primitive
+- <div> kanso-tab-bar is not a primitive
+- <span> kanso-prototype__label is not a primitive
+- <span> kanso-tab__name is not a primitive
+- <span> kanso-tab--dim is not a primitive
+- <div> kanso-tab-bar--rest is not a primitive
+- <div> kanso-tabs--md is not a primitive
+- <span> kanso-tab-bar__doors is not a primitive
+- <span> kanso-tab-bar__more is not a primitive
+- <span> kanso-tab-bar__menu is not a primitive
+- <span> kanso-tab-bar__skeleton is not a primitive
+
+## Panels/Containers (14)
+
+- <button> kanso-explain is not a primitive
+- <div> kanso-chart is not a primitive
+- <div> kanso-picture--annotated is not a primitive
+- <div> kanso-picture__banner is not a primitive
+- <div> kanso-picture__line is not a primitive
+- <div> kanso-picture__total is not a primitive
+- <div> kanso-picture__action is not a primitive
+- <span> kanso-annotation is not a primitive
+- <div> kanso-picture__thumbnails is not a primitive
+- <i> kanso-brand__wordmark is not a primitive
+- <div> kanso-simulator is not a primitive
+- <div> kanso-simulator__screen is not a primitive
+- <div> kanso-simulator__line is not a primitive
+- <div> kanso-simulator__payment is not a primitive
+
+## Panels/Simulator (14)
 
 - <div> kanso-simulator is not a primitive
 - <div> kanso-simulator__screen is not a primitive
-- <div> kanso-simulator__app is not a primitive
-- <div> kanso-content__time is not a primitive
 - <div> kanso-simulator__line is not a primitive
 - <div> kanso-simulator__payment is not a primitive
 - <span> kanso-annotation is not a primitive
@@ -875,81 +629,8 @@ Total: 18226 elements, 1075 distinct
 - <button> kanso-explain is not a primitive
 - <div> kanso-simulator__note-editor is not a primitive
 - <p> kanso-simulator__note-hint is not a primitive
-- <span> kanso-row__value is not a primitive
 
-## Compositions/Tab bar (16)
-
-- <span> kanso-content__line is not a primitive
-- <span> kanso-tooltip__anchor is not a primitive
-- <i> kanso-tab-bar__insertion is not a primitive
-- <span> kanso-control--held is not a primitive
-- <div> kanso-menu__item--dim is not a primitive
-- <div> kanso-tab-bar is not a primitive
-- <span> kanso-tab--rest is not a primitive
-- <span> kanso-prototype__label is not a primitive
-- <span> kanso-tab__name is not a primitive
-- <span> kanso-tab--dim is not a primitive
-- <div> kanso-tab-bar--rest is not a primitive
-- <div> kanso-tabs--md is not a primitive
-- <span> kanso-tab-bar__doors is not a primitive
-- <span> kanso-tab-bar__more is not a primitive
-- <span> kanso-tab-bar__menu is not a primitive
-- <span> kanso-tab-bar__skeleton is not a primitive
-
-## Panels/Images (15)
-
-- <div> kanso-picture--annotated is not a primitive
-- <div> kanso-picture__content is not a primitive
-- <div> kanso-content__heading is not a primitive
-- <div> kanso-picture__banner is not a primitive
-- <div> kanso-picture__line is not a primitive
-- <div> kanso-picture__total is not a primitive
-- <div> kanso-picture__action is not a primitive
-- <span> kanso-annotation is not a primitive
-- <span> kanso-annotation--inactive is not a primitive
-- <div> kanso-annotation__note is not a primitive
-- <div> kanso-picture__thumbnails is not a primitive
-- <span> kanso-button--inline-icon is not a primitive
-- <i> kanso-brand__wordmark is not a primitive
-- <div> kanso-row--interactive is not a primitive
-- <button> kanso-explain is not a primitive
-
-## Panels/Worktrees (15)
-
-- <div> kanso-row--open is not a primitive
-- <span> kanso-row__value is not a primitive
-- <div> kanso-worktree__details is not a primitive
-- <button> kanso-explain is not a primitive
-- <div> kanso-worktree__reason is not a primitive
-- <div> kanso-worktree__path is not a primitive
-- <div> kanso-chart__bars is not a primitive
-- <i> kanso-control__outline is not a primitive
-- <i> kanso-chart__bar--peak is not a primitive
-- <div> kanso-chart__ticks is not a primitive
-- <div> kanso-dialog__heading is not a primitive
-- <div> kanso-worktree__loss is not a primitive
-- <div> raw markup outside a primitive
-- <div> kanso-chart is not a primitive
-- <div> kanso-chart__axis is not a primitive
-
-## Panels/Shipped (14)
-
-- <div> kanso-heatmap is not a primitive
-- <i> kanso-content__description is not a primitive
-- <div> kanso-chart__bars is not a primitive
-- <i> kanso-chart__bar--peak is not a primitive
-- <div> kanso-chart__ticks is not a primitive
-- <span> kanso-row__value is not a primitive
-- <i> kanso-heatmap__cell--empty is not a primitive
-- <i> kanso-control__outline is not a primitive
-- <div> kanso-chart__range is not a primitive
-- <div> kanso-share is not a primitive
-- <div> kanso-share__header is not a primitive
-- <div> kanso-share__footer is not a primitive
-- <div> kanso-menu__item--busy is not a primitive
-- <div> raw markup outside a primitive
-
-## Layouts/Context menus (13)
+## Layouts/Context menus (12)
 
 - <div> raw markup outside a primitive
 - <button> kanso-explain is not a primitive
@@ -963,56 +644,66 @@ Total: 18226 elements, 1075 distinct
 - <use> raw markup outside a primitive
 - <div> kanso-prototype__toolbar is not a primitive
 - <span> kanso-prototype__label is not a primitive
-- <span> kanso-tab--panel is not a primitive
 
-## Compositions/Sidebar/Footer (12)
+## Panels/Worktrees (12)
 
-- <div> kanso-sidebar--footer-preview is not a primitive
-- <div> kanso-sidebar__footer is not a primitive
-- <div> kanso-sidebar__navigation is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-row--interactive is not a primitive
-- <div> kanso-rail is not a primitive
-- <div> kanso-rail__footer is not a primitive
-- <div> raw markup outside a primitive
+- <div> kanso-worktree__details is not a primitive
 - <button> kanso-explain is not a primitive
-- <div> kanso-sidebar--slice is not a primitive
-- <div> kanso-sidebar__bottom is not a primitive
-- <div> kanso-sidebar is not a primitive
+- <div> kanso-worktree__reason is not a primitive
+- <div> kanso-worktree__path is not a primitive
+- <div> kanso-chart__bars is not a primitive
+- <i> kanso-control__outline is not a primitive
+- <i> kanso-chart__bar--peak is not a primitive
+- <div> kanso-chart__ticks is not a primitive
+- <div> kanso-worktree__loss is not a primitive
+- <div> raw markup outside a primitive
+- <div> kanso-chart is not a primitive
+- <div> kanso-chart__axis is not a primitive
 
-## Panels/Share (12)
+## Panels/Images (11)
 
-- <div> kanso-notification is not a primitive
-- <div> kanso-notification__icon is not a primitive
-- <div> kanso-share is not a primitive
-- <div> kanso-share__header is not a primitive
-- <div> kanso-heatmap is not a primitive
-- <i> kanso-content__description is not a primitive
-- <span> kanso-row__value is not a primitive
-- <div> kanso-share__footer is not a primitive
+- <div> kanso-picture--annotated is not a primitive
+- <div> kanso-picture__banner is not a primitive
+- <div> kanso-picture__line is not a primitive
+- <div> kanso-picture__total is not a primitive
+- <div> kanso-picture__action is not a primitive
+- <span> kanso-annotation is not a primitive
+- <span> kanso-annotation--inactive is not a primitive
+- <div> kanso-annotation__note is not a primitive
+- <div> kanso-picture__thumbnails is not a primitive
+- <i> kanso-brand__wordmark is not a primitive
+- <button> kanso-explain is not a primitive
+
+## Panels/Shipped (11)
+
 - <div> kanso-chart__bars is not a primitive
 - <i> kanso-chart__bar--peak is not a primitive
 - <div> kanso-chart__ticks is not a primitive
+- <i> kanso-heatmap__cell--empty is not a primitive
+- <i> kanso-control__outline is not a primitive
+- <div> kanso-chart__range is not a primitive
+- <div> kanso-share is not a primitive
+- <div> kanso-share__header is not a primitive
+- <div> kanso-share__footer is not a primitive
+- <div> kanso-menu__item--busy is not a primitive
 - <div> raw markup outside a primitive
 
-## Compositions/Sidebar/Computer row (11)
+## Compositions/State patterns (10)
 
-- <div> kanso-sidebar--slice is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <div> kanso-row--machine is not a primitive
-- <svg> kanso-row__leading-icon is not a primitive
-- <div> kanso-project is not a primitive
+- <div> kanso-status-bar is not a primitive
+- <div> kanso-window--preview is not a primitive
+- <div> kanso-pane-header is not a primitive
+- <span> kanso-pane-header__name is not a primitive
+- <div> kanso-sidebar__view-switch is not a primitive
 - <button> kanso-explain is not a primitive
-- <span> kanso-row__directory is not a primitive
-- <span> kanso-sidebar__tooltip is not a primitive
-- <span> kanso-sidebar__count is not a primitive
-- <div> kanso-sidebar--focus is not a primitive
-- <div> kanso-sidebar is not a primitive
+- <div> kanso-sidebar__host is not a primitive
+- <span> kanso-host__name is not a primitive
+- <svg> kanso-icon--narrow is not a primitive
+- <div> raw markup outside a primitive
 
-## Panels/Arrangements (11)
+## Panels/Arrangements (10)
 
 - <div> raw markup outside a primitive
-- <div> kanso-dialog__heading is not a primitive
 - <div> kanso-dialog__list is not a primitive
 - <div> kanso-arrangement is not a primitive
 - <div> kanso-arrangement__column is not a primitive
@@ -1023,72 +714,53 @@ Total: 18226 elements, 1075 distinct
 - <button> kanso-explain is not a primitive
 - <div> kanso-dialog__group is not a primitive
 
-## Panels/Memory (11)
+## Compositions/Sidebar/Footer (9)
+
+- <div> kanso-sidebar--footer-preview is not a primitive
+- <div> kanso-sidebar__footer is not a primitive
+- <div> kanso-sidebar__navigation is not a primitive
+- <div> kanso-rail is not a primitive
+- <div> kanso-rail__footer is not a primitive
+- <div> raw markup outside a primitive
+- <button> kanso-explain is not a primitive
+- <div> kanso-sidebar__bottom is not a primitive
+- <div> kanso-sidebar is not a primitive
+
+## Panels/Memory (9)
 
 - <div> kanso-chart is not a primitive
-- <div> kanso-section--collapsible is not a primitive
 - <div> kanso-chart__axis is not a primitive
 - <span> kanso-chart is not a primitive
 - <i> kanso-chart__bar--low is not a primitive
 - <i> kanso-chart__bar--peak is not a primitive
-- <div> kanso-row--interactive is not a primitive
 - <button> kanso-explain is not a primitive
 - <div> kanso-notification is not a primitive
 - <svg> kanso-notification__icon is not a primitive
 - <div> kanso-notification__code is not a primitive
 
-## Panels/Ports (11)
+## Panels/Share (9)
 
-- <span> kanso-row__value is not a primitive
+- <div> kanso-notification is not a primitive
+- <div> kanso-notification__icon is not a primitive
+- <div> kanso-share is not a primitive
+- <div> kanso-share__header is not a primitive
+- <div> kanso-share__footer is not a primitive
 - <div> kanso-chart__bars is not a primitive
-- <div> kanso-chart__ticks is not a primitive
-- <button> kanso-explain is not a primitive
-- <div> kanso-chart is not a primitive
-- <div> kanso-section--collapsible is not a primitive
-- <div> kanso-status-bar is not a primitive
-- <span> kanso-status-bar__item is not a primitive
 - <i> kanso-chart__bar--peak is not a primitive
-- <div> kanso-chart__axis is not a primitive
-- <span> kanso-row__command is not a primitive
+- <div> kanso-chart__ticks is not a primitive
+- <div> raw markup outside a primitive
 
-## Panels/Spend (11)
+## Panels/Spend (9)
 
-- <div> kanso-row--interactive is not a primitive
 - <button> kanso-explain is not a primitive
 - <div> kanso-chart is not a primitive
 - <span> kanso-menu__description is not a primitive
-- <span> kanso-row--interactive is not a primitive
 - <div> kanso-chart__bars is not a primitive
 - <div> kanso-chart--spend is not a primitive
 - <i> kanso-chart__bar--empty is not a primitive
 - <i> kanso-chart__bar--peak is not a primitive
 - <span> kanso-chart__value is not a primitive
 - <div> kanso-chart__ticks is not a primitive
-
-## Compositions/Status bar/Needs you item (10)
-
-- <div> kanso-status-bar is not a primitive
-- <div> kanso-status-bar--grid is not a primitive
-- <div> kanso-status-bar__left is not a primitive
-- <div> kanso-status-bar__middle is not a primitive
-- <div> kanso-status-bar__right is not a primitive
-- <span> kanso-status-bar__item is not a primitive
-- <span> kanso-status-bar__needs is not a primitive
-- <span> kanso-status-bar__name is not a primitive
-- <span> kanso-status-bar__question is not a primitive
-- <span> kanso-status-bar__more is not a primitive
-
-## Panels/Markdown (9)
-
-- <div> raw markup outside a primitive
-- <div> kanso-markdown__document is not a primitive
-- <div> kanso-markdown__section is not a primitive
-- <div> kanso-markdown__editor is not a primitive
-- <div> kanso-markdown__grid is not a primitive
-- <span> kanso-markdown__grid-heading is not a primitive
-- <div> kanso-code__conflict is not a primitive
-- <button> kanso-explain is not a primitive
-- <span> kanso-row__value is not a primitive
 
 ## Primitives/Dawn (9)
 
@@ -1113,6 +785,17 @@ Total: 18226 elements, 1075 distinct
 - <span> kanso-keyboard__corner is not a primitive
 - <span> kanso-keyboard__finger is not a primitive
 
+## Compositions/Status bar/Needs you item (8)
+
+- <div> kanso-status-bar is not a primitive
+- <div> kanso-status-bar__left is not a primitive
+- <div> kanso-status-bar__middle is not a primitive
+- <div> kanso-status-bar__right is not a primitive
+- <span> kanso-status-bar__needs is not a primitive
+- <span> kanso-status-bar__name is not a primitive
+- <span> kanso-status-bar__question is not a primitive
+- <span> kanso-status-bar__more is not a primitive
+
 ## Compositions/Toolbar (8)
 
 - <div> kanso-toolbar is not a primitive
@@ -1135,44 +818,52 @@ Total: 18226 elements, 1075 distinct
 - <div> kanso-pane__placeholder is not a primitive
 - <div> kanso-pane__drop-ruler is not a primitive
 
-## Primitives/Menu (8)
+## Panels/Markdown (8)
+
+- <div> raw markup outside a primitive
+- <div> kanso-markdown__document is not a primitive
+- <div> kanso-markdown__section is not a primitive
+- <div> kanso-markdown__editor is not a primitive
+- <div> kanso-markdown__grid is not a primitive
+- <span> kanso-markdown__grid-heading is not a primitive
+- <div> kanso-code__conflict is not a primitive
+- <button> kanso-explain is not a primitive
+
+## Panels/Ports (7)
+
+- <div> kanso-chart__bars is not a primitive
+- <div> kanso-chart__ticks is not a primitive
+- <button> kanso-explain is not a primitive
+- <div> kanso-chart is not a primitive
+- <div> kanso-status-bar is not a primitive
+- <i> kanso-chart__bar--peak is not a primitive
+- <div> kanso-chart__axis is not a primitive
+
+## Compositions/Sidebar/Project row (6)
+
+- <span> kanso-sidebar__tooltip is not a primitive
+- <span> kanso-sidebar__branch is not a primitive
+- <span> kanso-sidebar__count is not a primitive
+- <div> kanso-sidebar__view-switch is not a primitive
+- <div> kanso-sidebar--pressed is not a primitive
+- <div> kanso-sidebar is not a primitive
+
+## Primitives/Menu (6)
 
 - <div> raw markup outside a primitive
 - <div> kanso-menu__item--dim is not a primitive
 - <div> kanso-tab-bar is not a primitive
-- <span> kanso-tab is not a primitive
-- <span> kanso-tab--panel is not a primitive
 - <span> kanso-tab__name is not a primitive
 - <span> kanso-status-bar__item--offset is not a primitive
 - <svg> kanso-icon--narrow is not a primitive
 
-## Panels/Files (7)
+## Compositions/Sidebar/Asleep (5)
 
-- <span> kanso-file__spacer is not a primitive
-- <span> kanso-file__status is not a primitive
-- <span> kanso-row__filename is not a primitive
-- <span> kanso-row__directory-path is not a primitive
-- <button> kanso-explain is not a primitive
-- <span> kanso-row__value is not a primitive
-- <div> raw markup outside a primitive
-
-## Compositions/Status bar/Computer item (6)
-
-- <div> kanso-status-bar is not a primitive
-- <div> kanso-status-bar--grid is not a primitive
-- <div> kanso-status-bar__left is not a primitive
-- <span> kanso-status-bar__item is not a primitive
-- <div> kanso-status-bar__middle is not a primitive
-- <div> kanso-status-bar__right is not a primitive
-
-## Compositions/Status bar/Item (6)
-
-- <div> kanso-status-bar is not a primitive
-- <div> kanso-status-bar--grid is not a primitive
-- <div> kanso-status-bar__left is not a primitive
-- <div> kanso-status-bar__middle is not a primitive
-- <div> kanso-status-bar__right is not a primitive
-- <span> kanso-status-bar__item is not a primitive
+- <div> kanso-sidebar__view-switch is not a primitive
+- <div> kanso-sidebar__section is not a primitive
+- <span> kanso-section__count is not a primitive
+- <div> kanso-rail__list is not a primitive
+- <div> kanso-sidebar is not a primitive
 
 ## Layouts/Sidebar header (5)
 
@@ -1181,22 +872,6 @@ Total: 18226 elements, 1075 distinct
 - <div> kanso-header__title is not a primitive
 - <div> kanso-toolbar is not a primitive
 - <span> kanso-sidebar__tooltip is not a primitive
-
-## Primitives/Code (5)
-
-- <div> kanso-diff is not a primitive
-- <span> kanso-review__add is not a primitive
-- <div> kanso-log is not a primitive
-- <span> kanso-content__entry is not a primitive
-- <div> kanso-review__snippet is not a primitive
-
-## Primitives/Tab (5)
-
-- <div> kanso-tab-bar--rest is not a primitive
-- <span> kanso-tab--rest is not a primitive
-- <span> kanso-tooltip__anchor is not a primitive
-- <span> kanso-tab__tip is not a primitive
-- <span> kanso-tab is not a primitive
 
 ## Compositions/Keyboard/Picked key (4)
 
@@ -1212,32 +887,45 @@ Total: 18226 elements, 1075 distinct
 - <span> kanso-notification__icon is not a primitive
 - <div> kanso-notification__code is not a primitive
 
-## Compositions/Sidebar/Tile (4)
-
-- <div> kanso-rail__list is not a primitive
-- <span> kanso-content__line is not a primitive
-- <div> kanso-text--strong is not a primitive
-- <div> kanso-rail is not a primitive
-
-## Primitives/Button (4)
+## Compositions/Sidebar/Computer row (4)
 
 - <button> kanso-explain is not a primitive
-- <div> kanso-sidebar__row is not a primitive
-- <span> kanso-sidebar--focus is not a primitive
-- <div> kanso-sidebar--focus is not a primitive
+- <span> kanso-sidebar__tooltip is not a primitive
+- <span> kanso-sidebar__count is not a primitive
+- <div> kanso-sidebar is not a primitive
 
-## Primitives/Thumbnail (4)
+## Compositions/Status bar/Computer item (4)
 
-- <svg> kanso-picture is not a primitive
-- <div> kanso-picture__loading is not a primitive
-- <div> kanso-picture__thumbnails is not a primitive
-- <span> kanso-button--inline-icon is not a primitive
+- <div> kanso-status-bar is not a primitive
+- <div> kanso-status-bar__left is not a primitive
+- <div> kanso-status-bar__middle is not a primitive
+- <div> kanso-status-bar__right is not a primitive
 
-## Compositions/Panel (3)
+## Compositions/Status bar/Item (4)
 
+- <div> kanso-status-bar is not a primitive
+- <div> kanso-status-bar__left is not a primitive
+- <div> kanso-status-bar__middle is not a primitive
+- <div> kanso-status-bar__right is not a primitive
+
+## Panels/Files (4)
+
+- <span> kanso-file__spacer is not a primitive
+- <span> kanso-file__status is not a primitive
 - <button> kanso-explain is not a primitive
-- <div> kanso-section--collapsible is not a primitive
-- <span> kanso-row__command is not a primitive
+- <div> raw markup outside a primitive
+
+## Compositions/Activity (3)
+
+- <div> kanso-sidebar__bottom is not a primitive
+- <div> kanso-activity__more is not a primitive
+- <div> kanso-sidebar__view-switch is not a primitive
+
+## Compositions/Sidebar/Section (3)
+
+- <div> kanso-status-bar--rest is not a primitive
+- <div> kanso-sidebar__section is not a primitive
+- <div> kanso-sidebar is not a primitive
 
 ## Compositions/Sidebar/View switch (3)
 
@@ -1245,18 +933,45 @@ Total: 18226 elements, 1075 distinct
 - <div> kanso-sidebar__view-switch is not a primitive
 - <div> kanso-rail is not a primitive
 
+## Primitives/Code (3)
+
+- <div> kanso-diff is not a primitive
+- <span> kanso-review__add is not a primitive
+- <div> kanso-review__snippet is not a primitive
+
+## Primitives/Tab (3)
+
+- <div> kanso-tab-bar--rest is not a primitive
+- <span> kanso-tooltip__anchor is not a primitive
+- <span> kanso-tab__tip is not a primitive
+
+## Primitives/Thumbnail (3)
+
+- <svg> kanso-picture is not a primitive
+- <div> kanso-picture__loading is not a primitive
+- <div> kanso-picture__thumbnails is not a primitive
+
+## Compositions/Sidebar/Tile (2)
+
+- <div> kanso-rail__list is not a primitive
+- <div> kanso-rail is not a primitive
+
 ## Primitives/Markdown (2)
 
 - <div> kanso-review__reply is not a primitive
 - <div> kanso-review__comment is not a primitive
 
+## Compositions/Panel (1)
+
+- <button> kanso-explain is not a primitive
+
 ## Compositions/Sidebar/Session row (1)
 
 - <div> kanso-sidebar is not a primitive
 
-## Primitives/Field (1)
+## Primitives/Button (1)
 
-- <div> kanso-sidebar--focus is not a primitive
+- <button> kanso-explain is not a primitive
 
 ## Tokens/Type (1)
 
