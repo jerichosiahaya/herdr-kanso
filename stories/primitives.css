@@ -5,6 +5,9 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Card */
+.kanso-card.kanso-card--hover{box-shadow:inset 0 0 0 var(--k-w-line) var(--border)}
+
 /* Sleep */
 .kanso-sleep{display:flex;align-items:center;gap:var(--k-sp-2);height:var(--k-h-row);padding:0 var(--k-sp-2) 0 var(--k-sp-6);border-radius:var(--k-r-card);color:var(--dim);font-size:var(--k-fs-name)}
 .kanso-sleep.kanso-row--selected{background:var(--w7)}

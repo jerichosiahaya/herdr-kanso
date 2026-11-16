@@ -318,7 +318,6 @@
   {"source":"stories/proto.css","value":"raw padding:16px"},
   {"source":"stories/proto.css","value":"raw border-radius:12px"},
   {"source":"stories/proto.css","value":"raw box-shadow:0 0 0 1px var(--border)"},
-  {"source":"stories/proto.css","value":"raw box-shadow:inset 0 0 0 1px var(--border)"},
   {"source":"stories/proto.css","value":"raw grid-template-columns:repeat(2,600px)"},
   {"source":"stories/proto.css","value":"raw border-radius:12px"},
   {"source":"stories/proto.css","value":"raw padding:16px 16px 16px"},
