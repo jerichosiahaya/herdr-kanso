@@ -2,9 +2,9 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 4170 elements, 398 distinct
+Total: 3475 elements, 374 distinct
 
-## Primitives/Dialog (42)
+## Primitives/Dialog (31)
 
 - <div> raw markup outside a primitive
 - <div> kanso-dialog__list is not a primitive
@@ -16,17 +16,6 @@ Total: 4170 elements, 398 distinct
 - <span> kanso-dialog__tile is not a primitive
 - <div> kanso-markdown__document is not a primitive
 - <div> kanso-markdown__section is not a primitive
-- <div> kanso-settings__map-layout is not a primitive
-- <div> kanso-settings__window-map is not a primitive
-- <span> kanso-settings__area is not a primitive
-- <span> kanso-settings__area--body is not a primitive
-- <div> kanso-settings__area-list is not a primitive
-- <div> kanso-settings__area-chip is not a primitive
-- <div> kanso-settings__area-header is not a primitive
-- <div> kanso-settings__pieces is not a primitive
-- <div> kanso-settings__piece is not a primitive
-- <span> kanso-settings__piece-label is not a primitive
-- <span> kanso-settings__piece-scope is not a primitive
 - <div> kanso-credit is not a primitive
 - <span> kanso-credit__avatar is not a primitive
 - <img> kanso-dialog__logo is not a primitive
@@ -48,33 +37,6 @@ Total: 4170 elements, 398 distinct
 - <div> kanso-arrangement__meta is not a primitive
 - <div> kanso-arrangement is not a primitive
 - <div> kanso-arrangement__column is not a primitive
-
-## Panels/Settings (24)
-
-- <a> kanso-credit is not a primitive
-- <span> kanso-credit__avatar is not a primitive
-- <span> kanso-dialog__text is not a primitive
-- <span> kanso-dialog__name is not a primitive
-- <span> kanso-dialog__detail is not a primitive
-- <span> kanso-credit__avatar--person is not a primitive
-- <div> kanso-settings__piece is not a primitive
-- <span> kanso-settings__piece-label is not a primitive
-- <span> kanso-settings__piece-scope is not a primitive
-- <div> raw markup outside a primitive
-- <div> kanso-dialog__mapping is not a primitive
-- <svg> kanso-icon--narrow is not a primitive
-- <div> kanso-settings__area-header is not a primitive
-- <div> kanso-settings__pieces is not a primitive
-- <div> kanso-settings__map-layout is not a primitive
-- <div> kanso-settings__window-map is not a primitive
-- <span> kanso-settings__area is not a primitive
-- <span> kanso-settings__area--body is not a primitive
-- <div> kanso-settings__area-list is not a primitive
-- <div> kanso-settings__area-chip is not a primitive
-- <div> kanso-settings__area-summary is not a primitive
-- <div> kanso-prototype--highlight is not a primitive
-- <div> kanso-credit is not a primitive
-- <span> kanso-dialog__tile is not a primitive
 
 ## Panels/PR (23)
 
@@ -285,6 +247,20 @@ Total: 4170 elements, 398 distinct
 - <use> raw markup outside a primitive
 - <div> kanso-prototype__toolbar is not a primitive
 - <span> kanso-prototype__label is not a primitive
+
+## Panels/Settings (11)
+
+- <a> kanso-credit is not a primitive
+- <span> kanso-credit__avatar is not a primitive
+- <span> kanso-dialog__text is not a primitive
+- <span> kanso-dialog__name is not a primitive
+- <span> kanso-dialog__detail is not a primitive
+- <span> kanso-credit__avatar--person is not a primitive
+- <div> raw markup outside a primitive
+- <div> kanso-dialog__mapping is not a primitive
+- <svg> kanso-icon--narrow is not a primitive
+- <div> kanso-credit is not a primitive
+- <span> kanso-dialog__tile is not a primitive
 
 ## Layouts/Sidebar (10)
 
