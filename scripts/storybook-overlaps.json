@@ -733,7 +733,7 @@
   "dojo/PracticeResult": {
     "page": "Panels/Dojo",
     "states": {
-      "Completed": "kit/Panels/Dojo/Level cleared",
+      "Completed": "kit/Panels/Dojo/Round over",
       "New best": "kit/Panels/Dojo/A new best",
       "Stopped": "kit/Panels/Dojo/Stopped"
     }

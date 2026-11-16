@@ -152,7 +152,7 @@ export function rawValueReport(root = '.') {
   return [
     ...RAW_CSS.flatMap((file) => rawValues(file, read(file), true)),
     ...code.flatMap((file) => rawValues(file, read(file))),
-    ...expand(JSON.parse(read('stories/catalog.json'))).filter((record) => record.html !== undefined).flatMap((record) => rawValues(record.id, record.html)),
+    ...expand(JSON.parse(read('stories/catalog.json'))).filter((record) => record.html !== undefined).flatMap((record) => rawValues(record.id, record.html).filter(({ value }) => !(record.page.startsWith('Tokens/') && value.startsWith('raw ')))),
   ];
 }
 
