@@ -12,7 +12,6 @@
 
 /* Header: the window's lights and the sidebar's tools; Dawn Mode draws its sky behind them. */
 .kanso-header{position:relative;display:flex;flex-direction:column;flex:none;overflow:hidden;padding:0 var(--k-sp-2) var(--k-sp-1);background:var(--chrome)}
-.kanso-header>:not(.kanso-dawn){position:relative;z-index:1}
 .kanso-header__title{display:flex;align-items:center;height:48px;padding-left:var(--k-sp-1)}
 .kanso-header__title>.kanso-badge--pill{position:relative;margin-left:auto}
 .kanso-header>.kanso-toolbar{height:var(--k-h-header)}
@@ -44,22 +43,8 @@
 .kanso-pane-header--held{opacity:var(--k-op-held);cursor:grabbing}
 
 /* Status bar: two halves around the fixed minimap slot; items 16 apart, icons and marks 14 with 8 to their words. */
-.kanso-status-bar.kanso-status-bar--grid{position:relative;display:grid;width:auto;height:var(--k-h-bar);gap:0;padding:0}
-.kanso-status-bar--grid .kanso-status-bar__item{transition:opacity var(--k-hover-ms) var(--k-ease-in)}
 @starting-style{.kanso-status-bar--grid .kanso-status-bar__item{opacity:0}}
-@media (prefers-reduced-motion:reduce){.kanso-status-bar--grid .kanso-status-bar__item{transition:none}}
-.kanso-status-bar__item.kanso-status-bar__needs{flex:0 1 auto;min-width:0}
-.kanso-status-bar__name{flex:none;font-weight:var(--k-fw-medium);color:var(--fg)}
-.kanso-status-bar__question{min-width:0;max-width:var(--k-w-question);overflow:hidden;text-overflow:ellipsis}
-.kanso-status-bar__more{flex:none;color:var(--dim)}
-.kanso-status-bar--grid .kanso-status-bar__middle{gap:var(--k-sp-3)}
-.kanso-status-bar__item.kanso-status-bar__stepper{gap:var(--k-sp-hair)}
-.kanso-status-bar__stepper>.kanso-button{display:none;transition:opacity var(--k-hover-ms) var(--k-hover-ease) var(--k-hover-delay),display 0s allow-discrete var(--k-hover-delay)}
-.kanso-status-bar__stepper:is(:hover,:focus-within,.kanso-control--hover,.kanso-status-bar__item--open)>.kanso-button{display:grid}
 @starting-style{.kanso-status-bar__stepper:is(:hover,:focus-within,.kanso-control--hover)>.kanso-button{opacity:0}}
-.kanso-status-bar__value{min-width:1ch;text-align:center;color:var(--fg)}
-.kanso-status-bar__item.kanso-status-bar__item--open{anchor-name:--kanso-status-item;margin:0 calc(-1 * var(--k-sp-1));padding:var(--k-sp-hair) var(--k-sp-1);border-radius:var(--k-r-sm);background:var(--w12)}
-.kanso-status-bar__popup{position:absolute;bottom:calc(anchor(--kanso-status-item top) + var(--k-sp-1));right:anchor(--kanso-status-item right);z-index:1}
 
 /* Tab bar: the project's tabs, + and Arrange, then the panel doors; 48 tall, nothing filled at rest. */
 .kanso-tab-bar{position:relative;display:flex;align-items:center;gap:var(--k-sp-2);height:var(--k-h-tab-bar);padding:0 var(--k-sp-3);box-sizing:border-box}

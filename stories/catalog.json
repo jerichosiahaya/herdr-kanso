@@ -13954,7 +13954,7 @@
   "<rect class=\"kanso-dawn__night\" width=\"256\" height=\"44\" style=\"fill:var(--dawn-top)\"/>",
   "<g clip-path=\"url(#dw3c)\">",
   "<rect class=\"kanso-dawn__glow\" width=\"256\" height=\"44\" fill=\"url(#dw3g)\"/>",
-  "<g class=\"kanso-dawn__stars\" style=\"fill:var(--dawn-star)\">",
+  "<g class=\"kanso-dawn__stars\">",
   "<circle cx=\"14\" cy=\"7\" r=\".7\" opacity=\".8\"/>",
   "<circle cx=\"44\" cy=\"13\" r=\".5\" opacity=\".55\"/>",
   "<circle cx=\"212\" cy=\"6\" r=\".6\" opacity=\".7\"/>",
