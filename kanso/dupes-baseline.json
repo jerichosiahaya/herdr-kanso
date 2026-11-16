@@ -2874,9 +2874,6 @@
  "a6c649c24f27": {
   "tests/status.test.mjs": 2
  },
- "408660f3dc89": {
-  "tests/storybook.test.mjs": 2
- },
  "0e0398500e8d": {
   "tests/sync.test.mjs": 2
  },
