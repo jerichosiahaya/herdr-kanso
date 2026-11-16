@@ -5,6 +5,14 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Heatmap */
+.kanso-heatmap{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,8px);grid-auto-columns:8px;gap:var(--k-sp-1);margin-top:var(--k-sp-3)}
+.kanso-heatmap i{border-radius:2px;background:var(--w7);display:block}
+.kanso-heatmap .kanso-content__primary{background:color-mix(in srgb,var(--fg) 25%,transparent)}
+.kanso-heatmap .kanso-content__secondary{background:color-mix(in srgb,var(--fg) 45%,transparent)}
+.kanso-heatmap .kanso-content__actions{background:color-mix(in srgb,var(--fg) 68%,transparent)}
+.kanso-heatmap .kanso-heatmap__cell--empty{background:transparent}
+
 /* Annotation */
 .kanso-annotation{width:16px;height:16px;border-radius:50%;background:var(--accent);color:var(--accentfg);font-size:var(--k-fs-meta);font-weight:600;display:grid;place-items:center;flex:none}
 .kanso-annotation.kanso-annotation--inactive{background:var(--input);color:var(--fg)}
