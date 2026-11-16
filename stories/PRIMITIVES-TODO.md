@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 1874 elements, 209 distinct
+Total: 1818 elements, 196 distinct
 
 ## Panels/PR (22)
 
@@ -97,20 +97,6 @@ Total: 1874 elements, 209 distinct
 - <span> kanso-tab-bar__menu is not a primitive
 - <span> kanso-tab-bar__skeleton is not a primitive
 
-## Primitives/Row (11)
-
-- <div> kanso-worktree is not a primitive
-- <div> kanso-worktree--open is not a primitive
-- <div> kanso-worktree__heading is not a primitive
-- <span> kanso-worktree__size is not a primitive
-- <div> kanso-worktree__body is not a primitive
-- <div> kanso-worktree__summary is not a primitive
-- <span> kanso-worktree__meta is not a primitive
-- <div> kanso-worktree__reason is not a primitive
-- <div> kanso-worktree__path is not a primitive
-- <span> kanso-file__status is not a primitive
-- <svg> kanso-icon--narrow is not a primitive
-
 ## Layouts/Sidebar (10)
 
 - <span> kanso-project__counts is not a primitive
@@ -190,14 +176,6 @@ Total: 1874 elements, 209 distinct
 - <div> kanso-share__header is not a primitive
 - <div> kanso-share__footer is not a primitive
 - <div> kanso-menu__item--busy is not a primitive
-- <div> raw markup outside a primitive
-
-## Panels/Worktrees (5)
-
-- <div> kanso-worktree__details is not a primitive
-- <div> kanso-worktree__reason is not a primitive
-- <div> kanso-worktree__path is not a primitive
-- <div> kanso-worktree__loss is not a primitive
 - <div> raw markup outside a primitive
 
 ## Primitives/Menu (5)
@@ -297,6 +275,11 @@ Total: 1874 elements, 209 distinct
 - <div> kanso-review__reply is not a primitive
 - <div> kanso-review__comment is not a primitive
 
+## Primitives/Row (2)
+
+- <span> kanso-file__status is not a primitive
+- <svg> kanso-icon--narrow is not a primitive
+
 ## Compositions/Header (1)
 
 - <div> kanso-header__title is not a primitive
@@ -328,6 +311,10 @@ Total: 1874 elements, 209 distinct
 ## Panels/Spend (1)
 
 - <span> kanso-menu__description is not a primitive
+
+## Panels/Worktrees (1)
+
+- <div> raw markup outside a primitive
 
 ## Tokens/Type (1)
 

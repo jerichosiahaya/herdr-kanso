@@ -5,6 +5,22 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Worktree */
+.kanso-worktree__details{padding:0 var(--k-sp-2) var(--k-sp-3);margin:0 calc(-1 * var(--k-sp-2));background:var(--selected);border-radius:0 0 var(--k-r-control) var(--k-r-control)}
+.kanso-worktree__details .kanso-worktree__reason{font-size:var(--k-fs-body);line-height:1.5}
+.kanso-worktree__details .kanso-worktree__path{font:var(--k-fs-mono) var(--mono);color:var(--dim);margin-top:var(--k-sp-1)}
+.kanso-worktree__loss{font-size:var(--k-fs-body);line-height:1.5;color:var(--blocked);margin-top:var(--k-sp-1)}
+.kanso-worktree__details .kanso-content__actions{display:flex;gap:var(--k-sp-2);align-items:center;margin-top:var(--k-sp-2);flex-wrap:wrap}
+.kanso-worktree.kanso-worktree--open{padding:var(--k-sp-3);background:var(--selected);border-radius:var(--k-r-control);max-width:72ch;box-sizing:border-box}
+.kanso-worktree__heading{display:flex;align-items:baseline;gap:var(--k-sp-2)}
+.kanso-worktree--open .kanso-worktree__name{font-size:var(--k-fs-name);font-weight:var(--k-fw-medium)}
+.kanso-worktree__size{margin-left:auto}
+.kanso-worktree__body{display:flex;flex-direction:column;gap:var(--k-sp-1);margin-top:var(--k-sp-1);font-size:var(--k-fs-body);line-height:var(--k-lh-body)}
+.kanso-worktree--open:is(.kanso-worktree__meta,.kanso-worktree__size,.kanso-worktree__path){font-size:var(--k-fs-meta);color:var(--dim)}
+.kanso-worktree__summary{font-size:var(--k-fs-meta)}
+.kanso-worktree--open .kanso-worktree__path{font-family:var(--mono)}
+.kanso-worktree__actions>.kanso-button--quiet{background:transparent}
+
 /* Pane */
 .kanso-pane{flex:1;min-width:0;background:var(--bg);border-radius:var(--k-r-card);display:flex;flex-direction:column;overflow:hidden}
 .kanso-pane.kanso-control--focus{outline:var(--k-w-line) solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:calc(-1 * var(--k-w-line))}
