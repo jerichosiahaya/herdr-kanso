@@ -165,7 +165,7 @@ export const skeletonOf = ({ shape, count }) => `<div class="kanso-skeleton__lis
 
 export const tabNameLimit = 64;
 const choose = "if (this.closest('.kanso-control--off')) return; for (const tab of this.parentNode.children) { tab.classList.toggle('kanso-tabs__tab--on', tab === this); tab.setAttribute('aria-selected', tab === this); }";
-export const tabs = ({ items, value, size, track, disabled, icon, label: named }) => `<div class="kanso-tabs kanso-tabs--${size}${track ? ' kanso-tabs--track' : ''}${disabled ? ' kanso-control--off' : ''}" role="tablist"${disabled ? ' aria-disabled="true"' : ''}>${(Array.isArray(items) ? items : []).map((item) => {
+export const tabs = ({ items, value, size, track, disabled, icon, label: named }) => `<div class="kanso-tabs${size === 'md' ? '' : ` kanso-tabs--${size}`}${track ? ' kanso-tabs--track' : ''}${disabled ? ' kanso-control--off' : ''}" role="tablist"${disabled ? ' aria-disabled="true"' : ''}>${(Array.isArray(items) ? items : []).map((item) => {
   const on = item.key === value;
   const label = escape(item.label ?? '');
   const square = icon && !named;

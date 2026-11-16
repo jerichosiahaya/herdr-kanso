@@ -35,6 +35,7 @@ const SIZES = {
   "k-fs-": (n) => [`kanso-type--${n}`, `font-size:var(--k-fs-${n})${n === "mono" ? ";font-family:var(--mono)" : ""}`],
   "k-lh-": (n) => [`kanso-leading--${n}`, `line-height:var(--k-lh-${n})`],
   "k-fw-": (n) => [`kanso-weight--${n}`, `font-weight:var(--k-fw-${n})`],
+  "k-ls-": (n) => [`kanso-tracking--${n}`, `letter-spacing:var(--k-ls-${n})`],
   "k-sp-": (n) => [`kanso-gap--${n}`, `gap:var(--k-sp-${n})`],
   "k-r-": (n) => [`kanso-radius--${n}`, `border-radius:var(--k-r-${n})`],
   "k-h-": (n) => [`kanso-height--${n}`, `block-size:var(--k-h-${n})`],

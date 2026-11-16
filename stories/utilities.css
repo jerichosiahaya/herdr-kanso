@@ -128,6 +128,7 @@
 .kanso-weight--regular{font-weight:var(--k-fw-regular)}
 .kanso-weight--medium{font-weight:var(--k-fw-medium)}
 .kanso-weight--strong{font-weight:var(--k-fw-strong)}
+.kanso-tracking--tight{letter-spacing:var(--k-ls-tight)}
 .kanso-leading--mono{line-height:var(--k-lh-mono)}
 .kanso-gap--hair{gap:var(--k-sp-hair)}
 .kanso-gap--1{gap:var(--k-sp-1)}

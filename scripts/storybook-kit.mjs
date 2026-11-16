@@ -137,6 +137,9 @@ const contrastRecord = (tokens) => {
   return { id: 'tokens/Contrast', source: 'tokens', page: 'Tokens/Contrast, light and dark', label: 'Reference', caption: 'Ratios from kanso/tokens.json.', html: frame(html) };
 };
 
+// The utility family that shows a type token: weights and tracking have their own, sizes use type.
+const SAMPLE_CLASS = { fw: 'weight', ls: 'tracking' };
+
 export function tokenRecords(tokens) {
   const groups = { Colour: ['colour'], Type: ['type'], Spacing: ['space', 'height', 'switch'], Radius: ['radius'], Motion: ['motion'], Icons: ['icon'] };
   return Object.entries(groups).map(([name, keys]) => {
@@ -149,7 +152,7 @@ export function tokenRecords(tokens) {
     const rows = keys.flatMap((key) => tokens[key].map((row) => ({ ...row, group: key })));
     const sample = ({ group, name: n }) => {
       const [, kind, step] = /^k-(\w+)-(.+)$/.exec(n);
-      if (group === 'type') return kind === 'lh' ? `<span class="kanso-tokens__lines kanso-leading--${step}">Two lines<br>of text</span>` : `<span class="kanso-${kind === 'fw' ? 'weight' : 'type'}--${step}">Aa Quiet sessions</span>`;
+      if (group === 'type') return kind === 'lh' ? `<span class="kanso-tokens__lines kanso-leading--${step}">Two lines<br>of text</span>` : `<span class="kanso-${SAMPLE_CLASS[kind] ?? 'type'}--${step}">Aa Quiet sessions</span>`;
       if (group === 'space') return `<span class="kanso-tokens__space kanso-gap--${step}"><i></i><i></i></span>`;
       if (group === 'radius') return `<span class="kanso-tokens__radius kanso-radius--${step}"></span>`;
       if (group === 'height') return `<span class="kanso-tokens__height kanso-height--${step}"></span>`;
