@@ -2,9 +2,9 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 4666 elements, 428 distinct
+Total: 4170 elements, 398 distinct
 
-## Primitives/Dialog (54)
+## Primitives/Dialog (42)
 
 - <div> raw markup outside a primitive
 - <div> kanso-dialog__list is not a primitive
@@ -27,18 +27,6 @@ Total: 4666 elements, 428 distinct
 - <div> kanso-settings__piece is not a primitive
 - <span> kanso-settings__piece-label is not a primitive
 - <span> kanso-settings__piece-scope is not a primitive
-- <div> kanso-update__fold is not a primitive
-- <span> kanso-update__timeline-date is not a primitive
-- <div> kanso-update__status is not a primitive
-- <div> kanso-update__timeline is not a primitive
-- <div> kanso-update__timeline-release is not a primitive
-- <span> kanso-update__timeline-dot is not a primitive
-- <div> kanso-update__timeline-heading is not a primitive
-- <span> kanso-update__version-name is not a primitive
-- <div> kanso-update__change is not a primitive
-- <span> kanso-update__timeline-dot--current is not a primitive
-- <span> kanso-update__installed is not a primitive
-- <span> kanso-update__timeline-dot--small is not a primitive
 - <div> kanso-credit is not a primitive
 - <span> kanso-credit__avatar is not a primitive
 - <img> kanso-dialog__logo is not a primitive
@@ -61,7 +49,7 @@ Total: 4666 elements, 428 distinct
 - <div> kanso-arrangement is not a primitive
 - <div> kanso-arrangement__column is not a primitive
 
-## Panels/Settings (39)
+## Panels/Settings (24)
 
 - <a> kanso-credit is not a primitive
 - <span> kanso-credit__avatar is not a primitive
@@ -74,21 +62,6 @@ Total: 4666 elements, 428 distinct
 - <span> kanso-settings__piece-scope is not a primitive
 - <div> raw markup outside a primitive
 - <div> kanso-dialog__mapping is not a primitive
-- <div> kanso-update__timeline is not a primitive
-- <div> kanso-update__timeline-release is not a primitive
-- <span> kanso-update__timeline-dot is not a primitive
-- <div> kanso-update__timeline-heading is not a primitive
-- <span> kanso-update__version-name is not a primitive
-- <span> kanso-update__timeline-date is not a primitive
-- <div> kanso-update__change is not a primitive
-- <span> kanso-update__timeline-dot--current is not a primitive
-- <span> kanso-update__installed is not a primitive
-- <span> kanso-update__timeline-dot--small is not a primitive
-- <div> kanso-update__fold is not a primitive
-- <div> kanso-update__description is not a primitive
-- <span> kanso-update__timeline-dot--dawn is not a primitive
-- <span> kanso-update__timeline-dot--past is not a primitive
-- <div> kanso-update__status is not a primitive
 - <svg> kanso-icon--narrow is not a primitive
 - <div> kanso-settings__area-header is not a primitive
 - <div> kanso-settings__pieces is not a primitive
@@ -419,16 +392,6 @@ Total: 4666 elements, 428 distinct
 - <div> kanso-toolbar--column is not a primitive
 - <div> kanso-toolbar__group is not a primitive
 
-## Compositions/Keyboard (7)
-
-- <svg> kanso-icon--narrow is not a primitive
-- <div> kanso-update__fold is not a primitive
-- <span> kanso-update__timeline-date is not a primitive
-- <div> raw markup outside a primitive
-- <span> raw markup outside a primitive
-- <button> kanso-explain is not a primitive
-- <div> kanso-dialog__missing is not a primitive
-
 ## Compositions/State patterns (6)
 
 - <div> kanso-window--preview is not a primitive
@@ -464,6 +427,14 @@ Total: 4666 elements, 428 distinct
 - <div> kanso-worktree__path is not a primitive
 - <div> kanso-worktree__loss is not a primitive
 - <div> raw markup outside a primitive
+
+## Compositions/Keyboard (5)
+
+- <svg> kanso-icon--narrow is not a primitive
+- <div> raw markup outside a primitive
+- <span> raw markup outside a primitive
+- <button> kanso-explain is not a primitive
+- <div> kanso-dialog__missing is not a primitive
 
 ## Primitives/Menu (5)
 
@@ -539,10 +510,6 @@ Total: 4666 elements, 428 distinct
 
 - <div> kanso-review__reply is not a primitive
 - <div> kanso-review__comment is not a primitive
-
-## Compositions/Dawn Mode (1)
-
-- <div> kanso-update__version is not a primitive
 
 ## Compositions/Panel (1)
 
