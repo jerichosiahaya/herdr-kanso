@@ -737,5 +737,56 @@
       "New best": "kit/Panels/Dojo/A new best",
       "Stopped": "kit/Panels/Dojo/Stopped"
     }
+  },
+  "strip/StripNavigation": {
+    "page": "Compositions/Edges",
+    "states": {
+      "Offscreen edge": "proto/approved-bars-edges/Reference/1",
+      "Several offscreen": "proto/approved-bars-edges/Reference/1",
+      "Dragging": "proto/approved-bars-edges/Reference/1"
+    }
+  },
+  "status/StatusStandIn": {
+    "page": "Compositions/Status bar",
+    "states": {
+      "Quiet": "proto/approved-bars-status/Reference/1",
+      "Offscreen waiting": "proto/approved-bars-status/Reference/1"
+    }
+  },
+  "tabs/PanelToolbar": {
+    "page": "Compositions/Tab bar",
+    "states": {
+      "Available": "proto/approved-bars-panels/Reference/1",
+      "Opened": "proto/approved-bars-panels/Reference/1"
+    }
+  },
+  "chrome/RuntimeNotice": {
+    "page": "Compositions/Notifications",
+    "states": {
+      "Out of memory": "proto/approved-bars-toasts/Reference/1"
+    }
+  },
+  "chrome/UpdateNotice": {
+    "page": "Compositions/Notifications",
+    "states": {
+      "Available": "proto/approved-bars-toasts/Reference/1",
+      "Already updating": "proto/approved-bars-toasts/Reference/1",
+      "Installed": "panels/notifications/FeatureUpdateNotice/Installed, kept your keys",
+      "Install failed": "panels/notifications/FeatureUpdateNotice/Install failed, Windows tool missing"
+    }
+  },
+  "panel/ActionNotice": {
+    "page": "Compositions/Notifications",
+    "states": {
+      "1 · Merged #142": "proto/approved-bars-toasts/Reference/1",
+      "2 · Review requested from reviewer": "proto/approved-bars-toasts/Reference/1"
+    }
+  },
+  "spaces/ActionNotice": {
+    "page": "Compositions/Notifications",
+    "states": {
+      "1 · acme is already one of your projects": "proto/approved-bars-toasts/Reference/1",
+      "3 · feat/checkout already had a worktree": "proto/approved-bars-toasts/Reference/1"
+    }
   }
 }

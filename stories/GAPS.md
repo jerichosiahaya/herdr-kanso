@@ -2,29 +2,30 @@
 
 These features exist in the app and stay available; they await a design.
 
-182 feature states await design. Each page lists its own under Not designed yet.
+166 feature states await design. Each page lists its own under Not designed yet.
 
 | Module | State | Source |
 | --- | --- | --- |
 | Compositions/Edges | Strip Navigation · Column controls | kanso/mods/kanso-strip/main.js:259 |
-| Compositions/Edges | Strip Navigation · Dragging | kanso/mods/kanso-strip/main.js:259 |
 | Compositions/Edges | Strip Navigation · Layout paused | kanso/mods/kanso-strip/main.js:259 |
 | Compositions/Edges | Strip Navigation · Narrow | kanso/mods/kanso-strip/main.js:259 |
-| Compositions/Edges | Strip Navigation · Offscreen edge | kanso/mods/kanso-strip/main.js:259 |
-| Compositions/Edges | Strip Navigation · Several offscreen | kanso/mods/kanso-strip/main.js:259 |
 | Compositions/Keyboard | Keyboard Explorer · Combined modifiers | kanso/mods/kanso-help/main.js:109 |
 | Compositions/Keyboard | Keyboard Explorer · Lists | kanso/mods/kanso-help/main.js:109 |
 | Compositions/Keyboard | Keyboard Explorer · Modifier layer | kanso/mods/kanso-help/main.js:109 |
 | Compositions/Keyboard | Keyboard Explorer · Physical press | kanso/mods/kanso-help/main.js:109 |
 | Compositions/Keyboard | Keyboard Explorer · Picked key | kanso/mods/kanso-help/main.js:109 |
 | Compositions/Keyboard | Keyboard Explorer · Unbound | kanso/mods/kanso-help/main.js:109 |
-| Compositions/Notifications | Runtime Notice · Out of memory | kanso/mods/kanso-chrome/main.js:76 |
-| Compositions/Notifications | Update Notice · Already updating | kanso/mods/kanso-chrome/update.js:350 |
-| Compositions/Notifications | Update Notice · Available | kanso/mods/kanso-chrome/update.js:350 |
 | Compositions/Notifications | Update Notice · Check failed | kanso/mods/kanso-chrome/update.js:350 |
 | Compositions/Notifications | Update Notice · Current | kanso/mods/kanso-chrome/update.js:350 |
-| Compositions/Notifications | Update Notice · Install failed | kanso/mods/kanso-chrome/update.js:350 |
-| Compositions/Notifications | Update Notice · Installed | kanso/mods/kanso-chrome/update.js:350 |
+| Compositions/Notifications | Action Notice · 3 · Could not ask reviewer for a review | kanso/mods/kanso-panel/pr.js:680 |
+| Compositions/Notifications | Action Notice · 4 · New record: commits in a day | kanso/mods/kanso-panel/shipped.js:382 |
+| Compositions/Notifications | Action Notice · 5 · Repaired feat/checkout | kanso/mods/kanso-panel/worktrees.js:451 |
+| Compositions/Notifications | Action Notice · 6 · Freed 824 MB | kanso/mods/kanso-panel/worktrees.js:519 |
+| Compositions/Notifications | Action Notice · 7 · Freed 824 MB | kanso/mods/kanso-panel/worktrees.js:581 |
+| Compositions/Notifications | Action Notice · 8 · Could not start the session | kanso/mods/kanso-panel/worktrees.js:755 |
+| Compositions/Notifications | Action Notice · 2 · The folder was not changed | kanso/mods/kanso-spaces/main.js:1454 |
+| Compositions/Notifications | Action Notice · 4 · Sync devbox was not changed | kanso/mods/kanso-spaces/main.js:1818 |
+| Compositions/Notifications | Action Notice · 5 · fatal: Not possible to fast-forward, aborting. | kanso/mods/kanso-spaces/sidebar-rows.js:51 |
 | Compositions/Pane header | Pane Tools · Close armed | kanso/mods/kanso-strip/main.js:420 |
 | Compositions/Pane header | Pane Tools · Hover | kanso/mods/kanso-strip/main.js:420 |
 | Compositions/Pane header | Pane Tools · Keyboard | kanso/mods/kanso-strip/main.js:420 |
@@ -33,14 +34,10 @@ These features exist in the app and stay available; they await a design.
 | Compositions/Pane header | Pane Tools · Terminal | kanso/mods/kanso-strip/main.js:420 |
 | Compositions/Pane header | Pane Tools · Working | kanso/mods/kanso-strip/main.js:420 |
 | Compositions/Status bar | Status Stand In · Low memory | kanso/mods/kanso-status/main.js:73 |
-| Compositions/Status bar | Status Stand In · Offscreen waiting | kanso/mods/kanso-status/main.js:73 |
-| Compositions/Status bar | Status Stand In · Quiet | kanso/mods/kanso-status/main.js:73 |
 | Compositions/Status bar | Status Stand In · Several waiting | kanso/mods/kanso-status/main.js:73 |
 | Compositions/Status bar | Status Stand In · Visible home | kanso/mods/kanso-status/main.js:73 |
-| Compositions/Tab bar | Panel Toolbar · Available | kanso/mods/kanso-tabs/main.js:385 |
 | Compositions/Tab bar | Panel Toolbar · Capability absent | kanso/mods/kanso-tabs/main.js:385 |
 | Compositions/Tab bar | Panel Toolbar · Custom panel | kanso/mods/kanso-tabs/main.js:385 |
-| Compositions/Tab bar | Panel Toolbar · Opened | kanso/mods/kanso-tabs/main.js:385 |
 | Compositions/Tab bar | Panel Toolbar · Reordering | kanso/mods/kanso-tabs/main.js:385 |
 | Compositions/Tab bar | Panel Toolbar · Settings | kanso/mods/kanso-tabs/main.js:385 |
 | Layouts/Context menus | Settings Menu · Host update | kanso/mods/kanso-chrome/main.js:115 |
@@ -165,19 +162,6 @@ These features exist in the app and stay available; they await a design.
 | Primitives/Tab | Tabs · Selected | kanso/mods/kanso-tabs/main.js:339 |
 | Primitives/Tab | Tabs · Unmeasured | kanso/mods/kanso-tabs/main.js:339 |
 | Primitives/Tab | Tabs · Zoomed | kanso/mods/kanso-tabs/main.js:339 |
-| Primitives/Toast | Action Notice · 1 · Merged #142 | kanso/mods/kanso-panel/pr.js:595 |
-| Primitives/Toast | Action Notice · 2 · Review requested from reviewer | kanso/mods/kanso-panel/pr.js:679 |
-| Primitives/Toast | Action Notice · 3 · Could not ask reviewer for a review | kanso/mods/kanso-panel/pr.js:680 |
-| Primitives/Toast | Action Notice · 4 · New record: commits in a day | kanso/mods/kanso-panel/shipped.js:382 |
-| Primitives/Toast | Action Notice · 5 · Repaired feat/checkout | kanso/mods/kanso-panel/worktrees.js:451 |
-| Primitives/Toast | Action Notice · 6 · Freed 824 MB | kanso/mods/kanso-panel/worktrees.js:519 |
-| Primitives/Toast | Action Notice · 7 · Freed 824 MB | kanso/mods/kanso-panel/worktrees.js:581 |
-| Primitives/Toast | Action Notice · 8 · Could not start the session | kanso/mods/kanso-panel/worktrees.js:755 |
-| Primitives/Toast | Action Notice · 1 · acme is already one of your projects | kanso/mods/kanso-spaces/main.js:358 |
-| Primitives/Toast | Action Notice · 2 · The folder was not changed | kanso/mods/kanso-spaces/main.js:1454 |
-| Primitives/Toast | Action Notice · 3 · feat/checkout already had a worktree | kanso/mods/kanso-spaces/main.js:1495 |
-| Primitives/Toast | Action Notice · 4 · Sync devbox was not changed | kanso/mods/kanso-spaces/main.js:1818 |
-| Primitives/Toast | Action Notice · 5 · fatal: Not possible to fast-forward, aborting. | kanso/mods/kanso-spaces/sidebar-rows.js:51 |
 | Primitives/Toast | Notice · Failure | kanso/mods/kanso-toast/main.js:33 |
 | Primitives/Toast | Notice · Information | kanso/mods/kanso-toast/main.js:33 |
 | Primitives/Toast | Notice · Long source | kanso/mods/kanso-toast/main.js:33 |
