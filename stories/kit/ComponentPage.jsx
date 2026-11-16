@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { ReferenceDrawings } from './ReferencePage.jsx';
-import { referenceFor } from './references.js';
 import { Canvas, Controls, Markdown, Source } from '@storybook/addon-docs/blocks';
 import { content, featuresFor, statesFor } from './catalog.js';
 import { descriptions } from './descriptions.js';
@@ -28,7 +26,6 @@ export function ComponentPage({ of, page }) {
     <h1>{name}</h1>
     <PageStatus page={page} />
     <p>{description}</p>
-    {referenceFor(page)?.approvedRecords?.length > 0 && <><h2>Approved reference</h2><ReferenceDrawings page={page} /></>}
     {contexts.length > 0 && !playgrounds[page] && <><h2>Usage details</h2>{contexts.map((id) => <p key={id}>{content(id)}</p>)}</>}
     {stated && <h2>States</h2>}
     <Canvas of={of.Variants} />
