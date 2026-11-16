@@ -60,11 +60,23 @@ export function kitRecords(records) {
     ['kit/Header/Dawn collapsed', 'Collapsed, Dawn Mode', header({ collapsed: true, dawn: true }), 'The dawn behind the lights, centred on the rail.'],
   ]) if (html) results.push({ id, source: 'kit', page: 'Compositions/Header', label, html: frame(html), caption });
   const inSidebar = (html) => stack({ variant: 'sidebar frame' }, html), inRail = (html) => stack({ variant: 'rail frame' }, html);
+  const atlas = { name: 'Atlas', activity: 'Reviewing step 01', time: '3m' }, juno = { name: 'Juno', status: 'idle', depth: 2 }, iris = { program: 'p-codex', name: 'Iris', status: 'done', depth: 2 };
   for (const [page, label, html, caption, id] of [
-    ['Session row', 'Working', inSidebar(sessionRow({ name: 'Atlas', activity: 'Reviewing step 01', time: '3m' })), 'What it is on and for how long.'],
-    ['Session row', 'Needs you', inSidebar(sessionRow({ program: 'lu-terminal', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' })), 'The question, in foreground.'],
+    ['Session row', 'Working', inSidebar(sessionRow(atlas)), 'What it is on and for how long.', 'proto/compositions-sidebar-rows/AgentTwoLines/Default'],
+    ['Session row', 'Working, under the pointer', inSidebar(sessionRow({ ...atlas, hover: true })), 'Pin and ⋯ in the time\'s place.'],
+    ['Session row', 'Needs you', inSidebar(sessionRow({ program: 'p-codex', name: 'Nova', activity: 'Run npm publish?', time: '2m', status: 'blocked' })), 'The question, in foreground.'],
     ['Session row', 'Finished', inSidebar(sessionRow({ program: 'p-codex', name: 'Iris', status: 'done', current: true })), 'One line, the mark.'],
-    ['Session row', 'Sub-session', inSidebar(sessionRow({ program: 'p-codex', name: 'Juno', status: 'idle', depth: 2 })), 'Under its parent.'],
+    ['Session row', 'Finished, a command still runs', inSidebar(sessionRow({ program: 'p-codex', name: 'tests', status: 'done', commands: 1 })), 'The count; the command in its tooltip.'],
+    ['Session row', 'Idle', inSidebar(sessionRow({ name: 'Orion', status: 'idle' })), 'Its name, muted.', 'proto/compositions-sidebar-rows/AgentOneLine/Default'],
+    ['Session row', 'Terminal', inSidebar(sessionRow({ program: 'lu-terminal', name: 'shell', status: 'none' })), 'A name, no ensō.'],
+    ['Session row', 'Pinned', inSidebar(sessionRow({ ...atlas, pinned: true })), 'The pin stays before the mark.'],
+    ['Session row', 'Keyboard ring', inSidebar(sessionRow({ name: 'Orion', status: 'idle', focus: true })), 'Where the keyboard is.'],
+    ['Session row', 'Sent a message', inSidebar(sessionRow({ name: 'Iris', activity: 'Message from Atlas', time: '1m', status: 'done' })), 'Not opened yet: the message and its time.'],
+    ['Session row', 'What it is on', inSidebar([sessionRow(atlas), sessionRow({ ...juno, activity: 'Waiting for you', time: '12m' }), sessionRow({ ...iris, activity: 'Boards 01 to 04 done', time: '6m' })].join('')), 'The user\'s choice: every row says what it is on.'],
+    ['Session row', 'Sub-session', inSidebar([sessionRow(atlas), sessionRow(juno), sessionRow(iris)].join('')), 'Under its parent.', 'proto/compositions-sidebar-rows/SubAgent/Default'],
+    ['Session row', 'Sub-session needs you', inSidebar([sessionRow(atlas), sessionRow({ ...juno, activity: 'Allow network access?', time: '1m', status: 'blocked' }), sessionRow(iris)].join('')), 'Its own mark and line.'],
+    ['Session row', 'Status and Threads', inSidebar([sessionRow({ name: 'Atlas', place: 'kansō', depth: 0 }), sessionRow({ name: 'Nova', place: 'amtelser · dark', status: 'idle', depth: 0 })].join('')), 'The project after the name, the computer when not this one.'],
+    ['Session row', 'Computer unreachable', inSidebar(sessionRow({ name: 'ops', status: 'idle', dimmed: true })), 'Dim, the ensō idle; its computer row says why.'],
     ['Project row', 'At rest', inSidebar(projectRow({ name: 'kansō', folder: 'herdr-kanso', branch: 'main', sync: '↓12' })), 'Name, folder, branch and sync.'],
     ['Project row', 'Folded', inSidebar(projectRow({ name: 'kansō', folder: 'herdr-kanso', branch: 'main', count: 3 })), 'The most urgent mark and how many.'],
     ['Computer row', 'This computer', inSidebar(computerRow({ name: 'light', remote: false })), 'This computer first.'],

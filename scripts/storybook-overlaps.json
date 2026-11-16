@@ -605,7 +605,7 @@
     }
   },
   "spaces/SidebarStatus": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar",
     "states": {
       "Groups": "proto/compositions-sidebar-features/SidebarStatus/Groups",
       "Empty": "proto/compositions-sidebar-features/SidebarStatus/Empty",
@@ -613,7 +613,7 @@
     }
   },
   "spaces/SidebarThreads": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar",
     "states": {
       "Active": "proto/compositions-sidebar-features/SidebarThreads/Active",
       "Asleep": "proto/compositions-sidebar-features/SidebarThreads/Asleep",
@@ -625,15 +625,15 @@
     }
   },
   "spaces/SidebarSort": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar",
     "states": {
       "Projects": "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default",
-      "Status": "proto/compositions-sidebar-rows/StatusViewTile/Default",
+      "Status": "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default",
       "Threads": "proto/compositions-sidebar-rows/ProjectsStatusThreads/Default"
     }
   },
   "spaces/ProjectGit": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar/Project row",
     "states": {
       "Ahead": "proto/compositions-sidebar-features/ProjectGit/Ahead",
       "Behind": "proto/compositions-sidebar-features/ProjectGit/Behind",
@@ -642,7 +642,7 @@
     }
   },
   "spaces/Asleep": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar/Asleep",
     "states": {
       "Asleep menu": "proto/compositions-sidebar-features/Asleep/Asleep menu",
       "Forget armed": "proto/compositions-sidebar-features/Asleep/Forget armed",
@@ -653,7 +653,7 @@
     }
   },
   "spaces/NeedsQueue": {
-    "page": "Layouts/Sidebar",
+    "page": "Compositions/Sidebar/Section",
     "states": {
       "Empty": "proto/compositions-sidebar-features/NeedsQueue/Empty",
       "Loading": "proto/compositions-sidebar-features/NeedsQueue/Loading",
