@@ -1510,18 +1510,6 @@
  "109a3876ea0b": {
   "stories/kit/playgrounds.js": 2
  },
- "fed18ae74a8f": {
-  "stories/primitives.css": 1,
-  "stories/proto.css": 1
- },
- "00710b9a4b6e": {
-  "stories/primitives.css": 1,
-  "stories/proto.css": 1
- },
- "fabde12a70bf": {
-  "stories/primitives.css": 1,
-  "stories/proto.css": 1
- },
  "679c30885262": {
   "tests/agent-nav.test.mjs": 1,
   "tests/machines.test.mjs": 1

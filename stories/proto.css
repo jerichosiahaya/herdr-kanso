@@ -706,13 +706,6 @@
 .kanso-sidebar__row .kanso-button--icon.kanso-button--sm svg{width:var(--k-ic-inline);height:var(--k-ic-inline)}
 .kanso-sidebar__row-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--k-sp-2)}
 .kanso-sidebar__row-text .kanso-row__name{flex:none}
-.kanso-sidebar__row-name--working{color:transparent;-webkit-background-clip:text;background-clip:text;background-repeat:no-repeat;
-  background-image:linear-gradient(color-mix(in srgb,var(--fg) 35%,var(--muted)),color-mix(in srgb,var(--fg) 35%,var(--muted))),
-    linear-gradient(color-mix(in srgb,var(--fg) 60%,var(--muted)),color-mix(in srgb,var(--fg) 60%,var(--muted))),
-    linear-gradient(var(--fg),var(--fg)),linear-gradient(var(--muted),var(--muted));
-  background-size:44px 100%,26px 100%,12px 100%,100% 100%;animation:w1-gl 2200ms linear infinite}
-@keyframes w1-gl{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
-@media (prefers-reduced-motion:reduce){.kanso-sidebar__row-name--working{animation:none}}
 .kanso-sidebar__bottom{flex:none;padding:var(--k-sp-2) 0 var(--k-sp-3);display:flex;flex-direction:column}
 .kanso-activity--rest{background:var(--raised);border-radius:var(--k-r-card);box-shadow:0 0 0 1px var(--border);padding:var(--k-sp-1);margin-top:var(--k-sp-3)}
 .kanso-activity--rest .kanso-activity__more{height:var(--k-h-row);display:flex;align-items:center;padding-left:calc(var(--k-sp-2) + var(--k-ic-control) + var(--k-sp-2));font-size:var(--k-fs-body);color:var(--muted)}
