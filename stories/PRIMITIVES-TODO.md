@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 10816 elements, 624 distinct
+Total: 5414 elements, 559 distinct
 
 ## Primitives/Dialog (55)
 
@@ -112,78 +112,7 @@ Total: 10816 elements, 624 distinct
 - <div> kanso-credit is not a primitive
 - <span> kanso-dialog__tile is not a primitive
 
-## Panels/Dojo (38)
-
-- <div> kanso-dojo is not a primitive
-- <div> kanso-dojo__header is not a primitive
-- <span> kanso-level__label is not a primitive
-- <div> kanso-dojo__body is not a primitive
-- <div> kanso-dojo__path is not a primitive
-- <span> kanso-dojo__name is not a primitive
-- <span> kanso-annotation--inactive is not a primitive
-- <div> kanso-dojo__path-keys is not a primitive
-- <span> kanso-dojo__legend is not a primitive
-- <div> kanso-dojo__board is not a primitive
-- <div> kanso-dojo__statistics is not a primitive
-- <div> kanso-dojo__grid is not a primitive
-- <i> kanso-dojo__cell is not a primitive
-- <i> kanso-cell--current is not a primitive
-- <i> kanso-cell--goal is not a primitive
-- <div> kanso-dojo__conversation is not a primitive
-- <div> kanso-dojo__mascot is not a primitive
-- <i> kanso-mascot__pixel--outline is not a primitive
-- <i> kanso-mascot__pixel--fur is not a primitive
-- <i> kanso-mascot__pixel--cream is not a primitive
-- <i> kanso-mascot__pixel--light is not a primitive
-- <i> kanso-mascot__pixel--eye is not a primitive
-- <i> kanso-mascot__pixel--nose is not a primitive
-- <div> kanso-dojo__feedback is not a primitive
-- <div> kanso-dojo__text is not a primitive
-- <div> kanso-dojo__line is not a primitive
-- <i> kanso-dojo__character is not a primitive
-- <i> kanso-mascot__pixel--blue is not a primitive
-- <div> kanso-feedback--missed is not a primitive
-- <i> kanso-mascot__pixel--accent is not a primitive
-- <div> kanso-feedback--success is not a primitive
-- <div> kanso-dojo__board--result is not a primitive
-- <div> kanso-dojo__result-heading is not a primitive
-- <div> kanso-dojo__result-label is not a primitive
-- <div> kanso-dojo__result-keys is not a primitive
-- <span> kanso-dojo__record is not a primitive
-- <div> kanso-dojo__menu is not a primitive
-- <span> kanso-dojo__sleep-label is not a primitive
-
-## Layouts/Practice (27)
-
-- <div> kanso-dojo is not a primitive
-- <div> kanso-dojo__header is not a primitive
-- <span> kanso-level__label is not a primitive
-- <div> kanso-dojo__body is not a primitive
-- <div> kanso-dojo__path is not a primitive
-- <div> kanso-prototype--new is not a primitive
-- <span> kanso-dojo__name is not a primitive
-- <span> kanso-annotation--inactive is not a primitive
-- <div> kanso-dojo__path-keys is not a primitive
-- <div> kanso-dojo__board is not a primitive
-- <div> kanso-dojo__statistics is not a primitive
-- <div> kanso-dojo__grid is not a primitive
-- <i> kanso-dojo__cell is not a primitive
-- <i> kanso-cell--current is not a primitive
-- <i> kanso-cell--goal is not a primitive
-- <div> kanso-dojo__conversation is not a primitive
-- <div> kanso-dojo__mascot is not a primitive
-- <i> kanso-mascot__pixel--outline is not a primitive
-- <i> kanso-mascot__pixel--fur is not a primitive
-- <i> kanso-mascot__pixel--cream is not a primitive
-- <i> kanso-mascot__pixel--light is not a primitive
-- <i> kanso-mascot__pixel--eye is not a primitive
-- <i> kanso-mascot__pixel--nose is not a primitive
-- <div> kanso-dojo__feedback is not a primitive
-- <div> kanso-dojo__keyboard is not a primitive
-- <div> kanso-dojo__key-row is not a primitive
-- <span> kanso-dojo__key is not a primitive
-
-## Panels/Preview (25)
+## Panels/Preview (24)
 
 - <svg> kanso-picture is not a primitive
 - <div> kanso-picture--annotated is not a primitive
@@ -191,7 +120,6 @@ Total: 10816 elements, 624 distinct
 - <span> kanso-annotation is not a primitive
 - <div> kanso-annotation__region is not a primitive
 - <div> kanso-annotation__note is not a primitive
-- <span> kanso-annotation--inactive is not a primitive
 - <div> kanso-picture__loading is not a primitive
 - <div> kanso-code__conflict is not a primitive
 - <div> raw markup outside a primitive
@@ -403,24 +331,6 @@ Total: 10816 elements, 624 distinct
 - <circle> kanso-dawn__circle is not a primitive
 - <path> kanso-dawn__horizon is not a primitive
 
-## Panels/Pins (15)
-
-- <div> kanso-simulator is not a primitive
-- <div> kanso-simulator--frozen is not a primitive
-- <div> kanso-simulator__screen is not a primitive
-- <div> kanso-simulator__line is not a primitive
-- <div> kanso-simulator__payment is not a primitive
-- <div> kanso-simulator__overlay is not a primitive
-- <span> kanso-annotation__region is not a primitive
-- <span> kanso-annotation is not a primitive
-- <span> kanso-annotation--inactive is not a primitive
-- <div> kanso-annotation__note is not a primitive
-- <div> kanso-picture--annotated is not a primitive
-- <div> kanso-picture__banner is not a primitive
-- <div> kanso-picture__line is not a primitive
-- <div> kanso-picture__total is not a primitive
-- <div> kanso-picture__action is not a primitive
-
 ## Panels/Containers (14)
 
 - <button> kanso-explain is not a primitive
@@ -438,14 +348,30 @@ Total: 10816 elements, 624 distinct
 - <div> kanso-simulator__line is not a primitive
 - <div> kanso-simulator__payment is not a primitive
 
-## Panels/Simulator (14)
+## Panels/Pins (14)
+
+- <div> kanso-simulator is not a primitive
+- <div> kanso-simulator--frozen is not a primitive
+- <div> kanso-simulator__screen is not a primitive
+- <div> kanso-simulator__line is not a primitive
+- <div> kanso-simulator__payment is not a primitive
+- <div> kanso-simulator__overlay is not a primitive
+- <span> kanso-annotation__region is not a primitive
+- <span> kanso-annotation is not a primitive
+- <div> kanso-annotation__note is not a primitive
+- <div> kanso-picture--annotated is not a primitive
+- <div> kanso-picture__banner is not a primitive
+- <div> kanso-picture__line is not a primitive
+- <div> kanso-picture__total is not a primitive
+- <div> kanso-picture__action is not a primitive
+
+## Panels/Simulator (13)
 
 - <div> kanso-simulator is not a primitive
 - <div> kanso-simulator__screen is not a primitive
 - <div> kanso-simulator__line is not a primitive
 - <div> kanso-simulator__payment is not a primitive
 - <span> kanso-annotation is not a primitive
-- <span> kanso-annotation--inactive is not a primitive
 - <div> kanso-simulator__screen--annotating is not a primitive
 - <div> kanso-simulator__note-layer is not a primitive
 - <span> kanso-simulator__note-point is not a primitive
@@ -528,20 +454,6 @@ Total: 10816 elements, 624 distinct
 - <span> kanso-status-bar__counts is not a primitive
 - <span> kanso-minimap--rest is not a primitive
 
-## Panels/Images (11)
-
-- <div> kanso-picture--annotated is not a primitive
-- <div> kanso-picture__banner is not a primitive
-- <div> kanso-picture__line is not a primitive
-- <div> kanso-picture__total is not a primitive
-- <div> kanso-picture__action is not a primitive
-- <span> kanso-annotation is not a primitive
-- <span> kanso-annotation--inactive is not a primitive
-- <div> kanso-annotation__note is not a primitive
-- <div> kanso-picture__thumbnails is not a primitive
-- <i> kanso-brand__wordmark is not a primitive
-- <button> kanso-explain is not a primitive
-
 ## Panels/Shipped (11)
 
 - <div> kanso-chart__bars is not a primitive
@@ -568,6 +480,19 @@ Total: 10816 elements, 624 distinct
 - <div> kanso-arrangement__meta is not a primitive
 - <button> kanso-explain is not a primitive
 - <div> kanso-dialog__group is not a primitive
+
+## Panels/Images (10)
+
+- <div> kanso-picture--annotated is not a primitive
+- <div> kanso-picture__banner is not a primitive
+- <div> kanso-picture__line is not a primitive
+- <div> kanso-picture__total is not a primitive
+- <div> kanso-picture__action is not a primitive
+- <span> kanso-annotation is not a primitive
+- <div> kanso-annotation__note is not a primitive
+- <div> kanso-picture__thumbnails is not a primitive
+- <i> kanso-brand__wordmark is not a primitive
+- <button> kanso-explain is not a primitive
 
 ## Panels/Memory (9)
 
@@ -720,6 +645,13 @@ Total: 10816 elements, 624 distinct
 - <div> kanso-status-bar__left is not a primitive
 - <div> kanso-status-bar__middle is not a primitive
 - <div> kanso-status-bar__right is not a primitive
+
+## Layouts/Practice (4)
+
+- <div> kanso-prototype--new is not a primitive
+- <div> kanso-dojo__keyboard is not a primitive
+- <div> kanso-dojo__key-row is not a primitive
+- <span> kanso-dojo__key is not a primitive
 
 ## Panels/Files (4)
 
