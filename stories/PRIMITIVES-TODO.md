@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 1299 elements, 156 distinct
+Total: 1223 elements, 144 distinct
 
 ## Panels/Find (15)
 
@@ -21,22 +21,6 @@ Total: 1299 elements, 156 distinct
 - <span> kanso-search__match is not a primitive
 - <div> kanso-search__excerpt--full is not a primitive
 - <span> kanso-notification__code is not a primitive
-
-## Primitives/Dialog (13)
-
-- <div> raw markup outside a primitive
-- <span> raw markup outside a primitive
-- <div> kanso-sleep__tab-heading is not a primitive
-- <span> kanso-credit__avatar is not a primitive
-- <span> kanso-credit__avatar--person is not a primitive
-- <div> kanso-window--preview is not a primitive
-- <div> kanso-window__stub is not a primitive
-- <div> kanso-arrangement__pane is not a primitive
-- <div> kanso-arrangement__agent is not a primitive
-- <div> kanso-arrangement__command is not a primitive
-- <div> kanso-arrangement__meta is not a primitive
-- <div> kanso-arrangement is not a primitive
-- <div> kanso-arrangement__column is not a primitive
 
 ## Compositions/Tab bar (12)
 
@@ -100,15 +84,15 @@ Total: 1299 elements, 156 distinct
 - <div> kanso-prototype__toolbar is not a primitive
 - <span> kanso-prototype__label is not a primitive
 
-## Panels/Arrangements (7)
+## Primitives/Dialog (7)
 
 - <div> raw markup outside a primitive
-- <div> kanso-arrangement is not a primitive
-- <div> kanso-arrangement__column is not a primitive
-- <div> kanso-arrangement__pane is not a primitive
-- <div> kanso-arrangement__agent is not a primitive
-- <div> kanso-arrangement__command is not a primitive
-- <div> kanso-arrangement__meta is not a primitive
+- <span> raw markup outside a primitive
+- <div> kanso-sleep__tab-heading is not a primitive
+- <span> kanso-credit__avatar is not a primitive
+- <span> kanso-credit__avatar--person is not a primitive
+- <div> kanso-window--preview is not a primitive
+- <div> kanso-window__stub is not a primitive
 
 ## Layouts/Window (6)
 
@@ -249,6 +233,10 @@ Total: 1299 elements, 156 distinct
 ## Layouts/Sidebar header (1)
 
 - <div> kanso-header__title is not a primitive
+
+## Panels/Arrangements (1)
+
+- <div> raw markup outside a primitive
 
 ## Panels/Containers (1)
 

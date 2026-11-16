@@ -5,6 +5,15 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Arrangement */
+.kanso-arrangement{display:flex;gap:var(--k-sp-1);height:96px;margin-top:var(--k-sp-3);padding:var(--k-sp-1);border-radius:var(--k-r-card);background:var(--canvas)}
+.kanso-arrangement__column{display:flex;flex-direction:column;gap:var(--k-sp-1);min-width:0}
+.kanso-arrangement__pane{flex:1;background:var(--bg);border-radius:var(--k-r-control);padding:var(--k-sp-1) var(--k-sp-2);box-shadow:0 0 0 var(--k-w-line) var(--border);display:flex;flex-direction:column;gap:var(--k-sp-1);min-width:0;box-sizing:border-box}
+.kanso-arrangement__pane .kanso-arrangement__agent{font-size:var(--k-fs-meta);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kanso-arrangement__agent svg{display:inline-block;vertical-align:-3px;margin-right:var(--k-sp-2)}
+.kanso-arrangement__pane .kanso-arrangement__command{font:var(--k-fs-mono) var(--mono);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kanso-arrangement__pane .kanso-arrangement__meta{font-size:var(--k-fs-meta);color:var(--dim)}
+
 /* Icon */
 .kanso-icon{width:var(--k-ic-control);height:var(--k-ic-control);flex:none;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .kanso-icon--narrow{width:13px;height:14px}
