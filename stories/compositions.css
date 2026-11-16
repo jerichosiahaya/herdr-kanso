@@ -117,9 +117,7 @@
 .kanso-keyboard__corner{position:absolute;right:var(--k-sp-1);top:var(--k-sp-hair);font-size:var(--k-fs-meta);color:var(--muted)}
 .kanso-keyboard__key--lit .kanso-keyboard__corner{color:var(--solidfg)}
 .kanso-keyboard__finger{position:absolute;top:calc(100% + var(--k-sp-1));left:50%;translate:-50% 0;font-size:var(--k-fs-meta);color:var(--dim)}
-.kanso-keyboard--staggered .kanso-keyboard__row:nth-child(2){padding-inline-start:calc(var(--k-h-row) * .5)}
-.kanso-keyboard--staggered .kanso-keyboard__row:nth-child(3){padding-inline-start:calc(var(--k-h-row) * .75);margin-bottom:var(--k-sp-4)}
-.kanso-keyboard--staggered .kanso-keyboard__row:nth-child(4){padding-inline-start:calc(var(--k-h-row) * 1.25)}
+.kanso-keyboard__row:has(.kanso-keyboard__finger)+.kanso-keyboard__row{margin-top:var(--k-sp-4)}
 .kanso-keyboard__selection{display:flex;flex-direction:column;gap:var(--k-sp-1);min-width:0}
 .kanso-keyboard__chord{font-size:var(--k-fs-title);font-weight:var(--k-fw-medium);letter-spacing:var(--k-ls-tight)}
 .kanso-keyboard__meaning{font-size:var(--k-fs-body);color:var(--fg);line-height:var(--k-lh-tight)}

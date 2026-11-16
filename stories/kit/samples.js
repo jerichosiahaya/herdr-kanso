@@ -142,12 +142,11 @@ export const sampleSortMenus = {
 const fingers = { h: 'index', j: 'index', k: 'middle', l: 'ring' };
 const arrows = { h: '←', j: '↓', k: '↑', l: '→' };
 const shifted = { 4: '$', 6: '^', g: 'G', f: 'F', t: 'T' };
-const keyRows = ['1234567890', 'qwertyuiop', 'asdfghjkl;', 'zxcvbnm,./'];
-const keyOf = (motions, key) => {
+const practiceKeys = [...'1234567890qwertyuiopasdfghjkl;zxcvbnm,./'];
+const markOf = (motions, key, lit, hint) => {
   const own = motions.some((motion) => motion[0] === key);
   const other = motions.includes(shifted[key]) ? shifted[key] : '';
-  if (!own) return other ? { label: other, on: true } : { label: key };
-  return { label: key, on: true, small: arrows[key] ?? other, finger: fingers[key] ?? '' };
+  return { state: key === lit ? 'lit' : own || other ? 'kanso' : 'free', hint: key === hint, ...(own ? { corner: arrows[key] ?? other, finger: fingers[key] ?? '' } : other ? { label: other } : {}) };
 };
 const trailOf = (at, path) => path.reduce((cells, motion) => [...cells, move(gridWorld(), cells.at(-1) ?? at, motion)], []).slice(0, -1);
 export const sampleDojo = {
@@ -162,7 +161,8 @@ export const sampleDojo = {
   lines: SNIPPETS[1],
   tip: (level) => LEVELS[level - 1].tip,
   pixels: hachiPixels,
-  keyRows: (level, lit, hint) => keyRows.map((row) => [...row].map((key) => ({ ...keyOf(LEVELS[level - 1].motions, key), lit: key === lit, hint: key === hint }))),
+  keys: practiceKeys,
+  marks: (level, lit, hint) => Object.fromEntries(practiceKeys.map((key) => [key, markOf(LEVELS[level - 1].motions, key, lit, hint)])),
   trail: (at, path) => trailOf(at, path.split(' ').filter(Boolean)),
   bests: (text) => text.split(',').map((best) => best.trim()).filter(Boolean),
   pathKeys: [{ keys: ['[', ']'], label: 'level' }, { keys: ['p'], label: 'pet' }],

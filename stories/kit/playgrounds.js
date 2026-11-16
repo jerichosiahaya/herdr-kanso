@@ -254,9 +254,12 @@ export const playgrounds = {
     },
   },
   'Compositions/Keyboard': {
-    args: { os: 'mac', ...layerDefaults, key: 'h', hover: 'none' },
-    argTypes: { os: osArg, ...layerArgs, key: select('picked', pickable), hover: select('hover', ['none', ...keyNames()]) },
-    markup: ({ os, key, hover, ...args }) => keyboardExplorer({ os, layer: keyLayer(os, args[`${os}Layer`]), picked: key, hover }),
+    ...statedPages['Compositions/Keyboard'],
+    argTypes: {
+      os: osArg, ...layerArgs, key: select('picked', pickable), hover: select('hover', ['none', ...keyNames()]),
+      level: { name: 'dōjō level', control: { type: 'range', min: 0, max: sampleDojo.levels.length, step: 1 } },
+      pressed: select('pressed key', ['none', ...sampleDojo.keys]), next: select('next key', ['none', ...sampleDojo.keys]),
+    },
   },
   'Compositions/Sidebar/Session row': {
     args: { program: 'p-claude', name: 'Atlas', activity: 'Reviewing step 01', time: '3m', place: '', status: 'working', depth: 1, current: false, pinned: false, commands: 0, hover: false, focus: false, dimmed: false },

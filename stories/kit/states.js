@@ -1,10 +1,11 @@
 // The pages drawn from named states: each state is a preset of its page's playground, and the catalog draws its record from that preset.
-import { computerItem, dojo, edge, toolbar, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
+import { computerItem, dojo, edge, toolbar, keyboard, keyboardExplorer, keyboardSystems, layoutPaused, paletteDoor, panel, panelBack, panelHeader, panelRefresh, pickedKey, shortcutRow, stepperMenu, tabBar } from './compositions.js';
 import { emptyState, phrase, failureBlock, keycap, metric, needsItem, row, skeletonOf, stack, statusItem, stepper, tabs } from './pieces.js';
 import { atWidth, inBar } from './frames.js';
 import { keyLayer, keyLayerMods, sampleDojo, samplePanel, samplePanelHeader, sampleAddMenu, sampleSortMenus, statusMenus, statusPanels } from './samples.js';
 
 export const layerDefaults = Object.fromEntries(keyboardSystems.map((os) => [`${os}Layer`, keyLayerMods[os][0]]));
+const practiceKey = (key) => key === 'none' ? '' : key;
 const settingsSlice = (markup) => `<div class="kanso-story__slice kanso-story__settings">${markup}</div>`;
 
 const question = 'Run pnpm add react-countdown@2.3?';
@@ -77,7 +78,7 @@ const dojoProps = ({ level, bests: written, picking, phase, score, time, streak,
     play: { statistics: { score, time, streak, moves: phase === 'round' ? moves : null, need }, progress: { reached, total: sampleDojo.targets }, world: dojoWorld({ level, x, y, goalX, goalY, path, hint }) },
     result: phase === 'result' ? { record: { value: points, unit: 'points', record }, summary, keys: sampleDojo.resultKeys(level, level === sampleDojo.levels.length) } : null,
     pixels: sampleDojo.pixels(mood), sleep: mood === 'sleep' ? sampleDojo.sleep : null, feedback: { text: feedback, tone },
-    keys: sampleDojo.keyRows(level, pressed, tone === 'missed' ? hint : ''), share: share ? sampleDojo.share : null,
+    marks: sampleDojo.marks(level, pressed, tone === 'missed' ? hint : ''), share: share ? sampleDojo.share : null,
   };
 };
 const round3 = { level: 3, bests: '88, 104', phase: 'round', score: 45, time: '38s', streak: 2, moves: 2, need: 5, reached: 4, x: 11, y: 3, goalX: 14, goalY: 6, pressed: 'j', feedback: 'This one takes 5 at best.' };
@@ -218,6 +219,18 @@ export const statedPages = {
       { label: 'A stacked column', args: { stacked: true }, caption: 'The panes of one column stay together.' },
       { label: 'Dragging past the edge', args: { panes: 1, drop: true }, caption: 'A pane dragged over an edge washes it in accent.' },
       { label: 'Ten beyond', args: { panes: 10 }, caption: 'Every pane keeps its tile.' },
+    ],
+  },
+  'Compositions/Keyboard': {
+    args: { os: 'mac', ...layerDefaults, key: 'h', hover: 'none', level: 0, pressed: 'none', next: 'none' },
+    markup: ({ os, key, hover, level, pressed, next, ...args }) => level
+      ? keyboard({ os, marks: sampleDojo.marks(level, practiceKey(pressed), practiceKey(next)), inert: true })
+      : keyboardExplorer({ os, layer: keyLayer(os, args[`${os}Layer`]), picked: key, hover }),
+    states: [
+      { label: 'Shortcuts', args: {}, caption: 'The keys of the held modifiers; the picked key is solid.' },
+      { label: 'Practice, level keys', args: { level: 3 }, caption: 'The dōjō draws this keyboard: the level\'s keys in ink, each with its arrow and finger.' },
+      { label: 'Practice, pressed key', args: { level: 3, pressed: 'j' }, caption: 'The key just pressed, in solid ink.' },
+      { label: 'Practice, next key', args: { level: 3, next: 'l' }, caption: 'An accent ring marks the key to press next.' },
     ],
   },
   'Compositions/Keyboard/Key': {

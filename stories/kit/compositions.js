@@ -189,11 +189,13 @@ export const keyNames = (os = 'mac') => [...new Set(keyboards[os].rows.flat().ma
 export const heldChord = ({ os = 'mac', held = [], key = null }) => chord(keyboards[os].join, ...modifierKeys.filter((mod) => held.includes(mod)).map((mod) => capOf(os, mod)), ...(key ? [capOf(os, key)] : []));
 
 // Keyboard: the map of one layer. Holding or clicking a modifier picks the layer; a kansō key has ink, a Herdr key is quieter.
+// marks sets a key by name over its layer look: state, next-key hint, corner glyph, finger or label (the dōjō); inert keys take no focus.
 const keyState = { kanso: 'kanso', list: 'kanso', herdr: 'herdr', free: 'free' };
 const keyAct = { kanso: 'Change', herdr: 'Herdr settings', free: 'Give it an action' };
-export const keyboard = ({ os = 'mac', layer, picked = null, hover = null }) => stack({ variant: 'keyboard' },
-  keyboards[os].rows.map((line) => stack({ variant: 'keyboard row' }, line.map(([key, units = 1]) => keycap({ label: capOf(os, key), units, hover: key === hover,
-    state: layer.held.includes(key) ? 'held' : key === picked ? 'picked' : keyState[layer.keys[key]?.kind] ?? 'free' })))));
+const noLayer = { held: [], keys: {} };
+export const keyboard = ({ os = 'mac', layer = noLayer, picked = null, hover = null, marks = {}, inert = false }) => stack({ variant: 'keyboard' },
+  keyboards[os].rows.map((line) => stack({ variant: 'keyboard row' }, line.map(([key, units = 1]) => keycap({ label: capOf(os, key), units, hover: key === hover, inert,
+    state: layer.held.includes(key) ? 'held' : key === picked ? 'picked' : keyState[layer.keys[key]?.kind] ?? 'free', ...marks[key] })))));
 // The picked key: what it does here, or Nothing, with its one act; Lists opens the layer of every list and menu.
 const pickedChord = ({ os, layer, picked }) => layer.keys[picked]?.chord
   ? phrase(...layer.keys[picked].chord.map((part) => named(os, part) ? keyboards[os].caps[part] : part))
@@ -282,10 +284,7 @@ export const paneMenu = ({ name, state = 'none', focused = false, pinned = false
   ...(shown(fold, 'close into ⋯') ? [] : [{ icon: 'lu-x', label: 'Close' }]),
   ...pieceLines] });
 
-// A key of the dōjō: lit while pressed, hinted when next, bound when the level uses it.
-const dojoKey = ({ label, on, lit, hint, small, finger }) => keycap({ label, state: lit ? 'lit' : on ? 'kanso' : 'free', hint, corner: small, finger, inert: true });
-
-// The dōjō: the path of levels, the board or the result, Hachi and his line, then the keyboard with the level's keys.
+// The dōjō: the path of levels, the board or the result, Hachi and his line, then the Keyboard with the level's keys marked.
 const dojoHeader = ({ title, level, name, share, shared, end, leave }) => stack({ variant: 'dojo header' }, dojoTitle({ title, level, name }), grow(),
   share ? button({ label: 'Share', kind: 'icon', icon: 'lu-share', active: shared }) : null, end ? button(end) : null, button(leave));
 const dojoPath = ({ levels, keys }) => stack({ variant: 'dojo path' }, levels.map(dojoLevel), stack({ variant: 'dojo path keys' }, keyLegend({ items: keys })));
@@ -294,10 +293,10 @@ const dojoWorld = ({ cells, lines }) => cells
   : stack({ variant: 'dojo text' }, lines.map((line) => stack({ variant: 'dojo line' }, line.map(dojoCharacter))));
 const dojoPlay = ({ statistics, progress, world }) => stack({ variant: 'dojo board' }, dojoStatistics(statistics), dojoProgress(progress), dojoWorld(world));
 const dojoResult = ({ record, summary, keys }) => stack({ variant: 'dojo board', result: true }, dojoRecord(record), dojoSummary({ text: summary }), stack({ variant: 'dojo result keys' }, keyLegend({ items: keys })));
-export const dojo = ({ header, path, play, result, pixels, sleep, feedback, keys, share }) => stack({ variant: 'dojo' },
+export const dojo = ({ header, path, play, result, pixels, sleep, feedback, marks, share }) => stack({ variant: 'dojo' },
   dojoHeader(header),
   stack({ variant: 'dojo body' }, dojoPath(path), stack({ variant: 'dojo main' },
     result ? dojoResult(result) : dojoPlay(play),
     stack({ variant: 'dojo conversation' }, mascot({ pixels }), sleep ? sleepLabel({ text: sleep }) : null, dojoFeedback(feedback)),
-    stack({ variant: 'keyboard', staggered: true }, keys.map((keyRow) => stack({ variant: 'keyboard row' }, keyRow.map(dojoKey)))))),
+    keyboard({ marks, inert: true }))),
   share ? stack({ variant: 'dojo menu' }, menu(share)) : null);

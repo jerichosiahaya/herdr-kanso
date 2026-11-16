@@ -843,7 +843,7 @@
 .kanso-dojo__feedback{flex:1;min-height:40px;box-sizing:border-box;display:flex;align-items:center;padding:10px 14px;border-radius:8px;background:var(--raised);box-shadow:0 0 0 1px var(--border);font-size:13.5px;line-height:1.45;color:var(--fg)}
 .kanso-dojo__feedback.kanso-feedback--success{box-shadow:0 0 0 1px color-mix(in srgb,var(--done) 60%,transparent)}
 .kanso-dojo__feedback.kanso-feedback--missed{box-shadow:0 0 0 1px color-mix(in srgb,var(--working) 60%,transparent)}
-.kanso-dojo__main>.kanso-keyboard{margin-top:var(--k-sp-4);align-self:center;padding:0;background:none}
+.kanso-dojo__main>.kanso-keyboard{margin-top:var(--k-sp-4)}
 .kanso-dojo__legend{display:flex;align-items:center;gap:var(--k-sp-2)}
 .kanso-dojo__legend+.kanso-dojo__legend{margin-left:var(--k-sp-2)}
 .kanso-dojo__board--result{display:flex;flex-direction:column;gap:var(--k-sp-3);padding:26px 28px}

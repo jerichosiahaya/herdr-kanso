@@ -310,7 +310,7 @@ export const stacks = {
   'tab bar menu': { block: 'kanso-tab-bar__menu', tag: 'span' },
   'tab bar doors': { block: 'kanso-tab-bar__doors', tag: 'span' },
   away: { block: 'kanso-away', tag: 'section' },
-  keyboard: { block: 'kanso-keyboard', states: ['staggered'] },
+  keyboard: { block: 'kanso-keyboard' },
   'keyboard row': { block: 'kanso-keyboard__row' },
   'keyboard layout': { block: 'kanso-keyboard__layout' },
   toasts: { block: 'kanso-toasts' },
