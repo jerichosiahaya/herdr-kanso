@@ -5,6 +5,26 @@
 @keyframes shim{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes kit-glint{from{background-position:-44px 0,-26px 0,-12px 0,0 0}to{background-position:240px 0,240px 0,240px 0,0 0}}
 
+/* Review */
+.kanso-review__comment .kanso-field{margin-top:0}
+.kanso-review__line{display:flex;gap:var(--k-sp-2);font-size:var(--k-fs-body);line-height:1.5;margin-top:var(--k-sp-hair)}
+.kanso-review__line:first-child{margin-top:0}
+.kanso-review__line .kanso-mark{font:11.5px/1.6 var(--mono);color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:auto;height:auto;display:inline}
+.kanso-review__reply{margin-top:var(--k-sp-3);padding-left:var(--k-sp-6)}
+.kanso-review__reply .kanso-card__header{display:flex;align-items:center;gap:var(--k-sp-2);font-size:var(--k-fs-body);white-space:nowrap}
+.kanso-review__reply .kanso-prose{margin-top:var(--k-sp-1)}
+.kanso-review__event{display:flex;align-items:center;gap:var(--k-sp-2);font-size:var(--k-fs-body);color:var(--muted);margin-top:var(--k-sp-3)}
+.kanso-review__comment{padding:var(--k-sp-2) var(--k-sp-4) var(--k-sp-2) calc(var(--k-sp-8) + var(--k-sp-4));background:var(--canvas);white-space:normal;font:12.5px/1.5 var(--ui)}
+.kanso-review__comment .kanso-card__header{display:flex;align-items:center;gap:var(--k-sp-2);font-size:var(--k-fs-body);white-space:nowrap}
+.kanso-review__comment .kanso-card__header b{font-weight:500}
+.kanso-review__comment .kanso-prose{margin-top:var(--k-sp-1)}
+.kanso-review__add{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:var(--k-r-sm);background:var(--solid);color:var(--solidfg);font:600 11.5px/1 var(--ui);vertical-align:middle}
+.kanso-review__reply .kanso-card__header b{font-weight:var(--k-fw-medium)}
+.kanso-review__snippet{margin:var(--k-sp-2) calc(-1 * var(--k-sp-3)) 0}
+.kanso-review__line+.kanso-review__line{margin-top:var(--k-sp-1)}
+.kanso-review__line .kanso-review__key{color:var(--dim);flex:none;min-width:0}
+.kanso-review__snippet+.kanso-prose{margin-top:var(--k-sp-3)}
+
 /* Worktree */
 .kanso-worktree__details{padding:0 var(--k-sp-2) var(--k-sp-3);margin:0 calc(-1 * var(--k-sp-2));background:var(--selected);border-radius:0 0 var(--k-r-control) var(--k-r-control)}
 .kanso-worktree__details .kanso-worktree__reason{font-size:var(--k-fs-body);line-height:1.5}

@@ -2,32 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 1818 elements, 196 distinct
-
-## Panels/PR (22)
-
-- <div> kanso-review__line is not a primitive
-- <div> kanso-review__snippet is not a primitive
-- <span> kanso-code__text is not a primitive
-- <div> kanso-review__reply is not a primitive
-- <span> kanso-file__spacer is not a primitive
-- <span> kanso-file__status is not a primitive
-- <div> kanso-review__event is not a primitive
-- <div> kanso-metadata__row is not a primitive
-- <span> kanso-metadata__person is not a primitive
-- <span> kanso-metadata__label is not a primitive
-- <svg> kanso-menu__check is not a primitive
-- <span> kanso-menu__description is not a primitive
-- <span> kanso-menu__check is not a primitive
-- <div> kanso-menu__note is not a primitive
-- <div> kanso-diff is not a primitive
-- <div> kanso-review__comment is not a primitive
-- <span> kanso-review__add is not a primitive
-- <div> kanso-card--hover is not a primitive
-- <span> kanso-review__key is not a primitive
-- <span> kanso-review__line is not a primitive
-- <div> raw markup outside a primitive
-- <div> kanso-code__conflict is not a primitive
+Total: 1662 elements, 182 distinct
 
 ## Primitives/Dialog (16)
 
@@ -66,21 +41,22 @@ Total: 1818 elements, 196 distinct
 - <div> kanso-search__excerpt--full is not a primitive
 - <span> kanso-notification__code is not a primitive
 
-## Panels/Preview (13)
+## Panels/PR (14)
 
-- <div> kanso-annotation__region is not a primitive
-- <div> kanso-annotation__note is not a primitive
-- <div> kanso-code__conflict is not a primitive
-- <div> raw markup outside a primitive
-- <span> kanso-file__status is not a primitive
+- <span> kanso-code__text is not a primitive
 - <span> kanso-file__spacer is not a primitive
-- <div> kanso-review__snippet is not a primitive
-- <div> kanso-review__reply is not a primitive
+- <span> kanso-file__status is not a primitive
+- <div> kanso-metadata__row is not a primitive
+- <span> kanso-metadata__person is not a primitive
+- <span> kanso-metadata__label is not a primitive
+- <svg> kanso-menu__check is not a primitive
+- <span> kanso-menu__description is not a primitive
+- <span> kanso-menu__check is not a primitive
+- <div> kanso-menu__note is not a primitive
+- <div> kanso-diff is not a primitive
 - <div> kanso-card--hover is not a primitive
-- <i> kanso-heatmap__cell--empty is not a primitive
-- <div> kanso-markdown__document is not a primitive
-- <div> kanso-markdown__section is not a primitive
-- <div> kanso-markdown__editor is not a primitive
+- <div> raw markup outside a primitive
+- <div> kanso-code__conflict is not a primitive
 
 ## Compositions/Tab bar (12)
 
@@ -96,6 +72,20 @@ Total: 1818 elements, 196 distinct
 - <span> kanso-tab-bar__more is not a primitive
 - <span> kanso-tab-bar__menu is not a primitive
 - <span> kanso-tab-bar__skeleton is not a primitive
+
+## Panels/Preview (11)
+
+- <div> kanso-annotation__region is not a primitive
+- <div> kanso-annotation__note is not a primitive
+- <div> kanso-code__conflict is not a primitive
+- <div> raw markup outside a primitive
+- <span> kanso-file__status is not a primitive
+- <span> kanso-file__spacer is not a primitive
+- <div> kanso-card--hover is not a primitive
+- <i> kanso-heatmap__cell--empty is not a primitive
+- <div> kanso-markdown__document is not a primitive
+- <div> kanso-markdown__section is not a primitive
+- <div> kanso-markdown__editor is not a primitive
 
 ## Layouts/Sidebar (10)
 
@@ -243,12 +233,6 @@ Total: 1818 elements, 196 distinct
 - <svg> kanso-notification__icon is not a primitive
 - <div> kanso-notification__code is not a primitive
 
-## Primitives/Code (3)
-
-- <div> kanso-diff is not a primitive
-- <span> kanso-review__add is not a primitive
-- <div> kanso-review__snippet is not a primitive
-
 ## Primitives/Tab (3)
 
 - <div> kanso-tab-bar--rest is not a primitive
@@ -269,11 +253,6 @@ Total: 1818 elements, 196 distinct
 
 - <span> kanso-annotation__region is not a primitive
 - <div> kanso-annotation__note is not a primitive
-
-## Primitives/Markdown (2)
-
-- <div> kanso-review__reply is not a primitive
-- <div> kanso-review__comment is not a primitive
 
 ## Primitives/Row (2)
 
@@ -315,6 +294,10 @@ Total: 1818 elements, 196 distinct
 ## Panels/Worktrees (1)
 
 - <div> raw markup outside a primitive
+
+## Primitives/Code (1)
+
+- <div> kanso-diff is not a primitive
 
 ## Tokens/Type (1)
 
