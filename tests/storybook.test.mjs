@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { expand } from "../scripts/storybook-catalog.mjs";
-import { compositionErrors, lint, primitiveErrors, storyFiles, structureErrors } from "../scripts/lint-storybook.mjs";
+import { compositionErrors, lint, primitiveErrors, rawValueErrors, rawValues, storyFiles, structureErrors } from "../scripts/lint-storybook.mjs";
 import { statusOf, statusTags } from "../stories/kit/status.js";
 import { rules } from "../stories/kit/rules.js";
 
@@ -26,25 +26,45 @@ test("An element drawn outside a primitive is listed with its page, element and 
   ]);
 });
 
-test("A composition that draws its own markup fails the lint", () => {
-  const source = read("stories/kit/compositions.js");
-  const added = (line) => compositionErrors(`${source}${line}\n`);
-  assert.deepEqual(compositionErrors(source), []);
-  assert.deepEqual(added("export const extra = () => stack({ variant: 'rows' }).replace('div', '<div>');"), ["stories/kit/compositions.js: markup tag in a composition"]);
-  assert.deepEqual(added("export const extra = () => stack({ variant: 'rows' }).replace('div', 'div class=x');"), ["stories/kit/compositions.js: class attribute in a composition"]);
-  assert.deepEqual(added("export const extra = () => 'kanso-row';"), ["stories/kit/compositions.js: class string in a composition"]);
+test("An element is counted once per node, so the same miss on two nodes counts twice", () => {
+  const html = '<div class="kanso-story"><p>one</p><p>two</p></div>';
+  assert.equal(primitiveErrors([{ page: "Panels/Dojo", html }], new Set(), new Set()).length, 2);
+});
+
+// The lint's errors for one file after that file changes, in a copy of the Storybook.
+const lintChanged = (file, text) => {
   const root = mkdtempSync(join(tmpdir(), "kanso-lint-"));
   try {
-    for (const dir of ["stories", ".storybook"]) cpSync(dir, join(root, dir), { recursive: true });
-    writeFileSync(join(root, "stories/kit/compositions.js"), `${source}export const extra = () => '<span class="kanso-row">';\n`);
-    assert.deepEqual(lint(root).filter((error) => error.startsWith("stories/kit/compositions.js")), [
-      "stories/kit/compositions.js: markup tag in a composition",
-      "stories/kit/compositions.js: class attribute in a composition",
-      "stories/kit/compositions.js: class string in a composition",
-    ]);
+    for (const dir of ["stories", ".storybook", "scripts/storybook-raw-values.json"]) cpSync(dir, join(root, dir), { recursive: true });
+    writeFileSync(join(root, file), text);
+    return lint(root).filter((error) => error.startsWith(file));
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+};
+
+test("A primitive given an inline style or a raw px or colour fails the lint", () => {
+  const css = "stories/primitives.css";
+  const raw = [`${css}: raw width:937px is not a token or a primitive`, `${css}: raw color:#123456 is not a token or a primitive`];
+  const html = '<div class="kanso-row" style="width:937px;color:#123456">x</div>';
+  assert.deepEqual(rawValueErrors(rawValues("Panels/Dojo", html), []), ['Panels/Dojo: inline style="width:937px;color:#123456" is not a token or a primitive']);
+  assert.deepEqual(rawValueErrors(rawValues(css, ".kanso-row{width:937px;color:#123456;gap:var(--k-sp-2)}", true), []), raw);
+  assert.deepEqual(lintChanged(css, `${read(css)}.kanso-row{width:937px;color:#123456}\n`), raw);
+});
+
+test("A composition that draws its own markup fails the lint", () => {
+  const file = "stories/kit/compositions.js";
+  const source = read(file);
+  const added = (line) => compositionErrors(`${source}${line}\n`);
+  assert.deepEqual(compositionErrors(source), []);
+  assert.deepEqual(added("export const extra = () => stack({ variant: 'rows' }).replace('div', '<div>');"), [`${file}: markup tag in a composition`]);
+  assert.deepEqual(added("export const extra = () => stack({ variant: 'rows' }).replace('div', 'div class=x');"), [`${file}: class attribute in a composition`]);
+  assert.deepEqual(added("export const extra = () => 'kanso-row';"), [`${file}: class string in a composition`]);
+  assert.deepEqual(lintChanged(file, `${source}export const extra = () => '<span class="kanso-row">';\n`), [
+    `${file}: markup tag in a composition`,
+    `${file}: class attribute in a composition`,
+    `${file}: class string in a composition`,
+  ]);
 });
 
 test("A composition that treats pieces as strings fails the lint", () => {

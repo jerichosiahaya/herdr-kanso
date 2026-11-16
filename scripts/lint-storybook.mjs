@@ -13,9 +13,14 @@ import { STATUSES, statusTags } from '../stories/kit/status.js';
 const STORY_FILE = /\.stories\.(?:js|jsx|mjs|ts|tsx)$/;
 const BEM = /^kanso-[a-z0-9]+(?:-[a-z0-9]+)*(__[a-z0-9-]+)?(--[a-z0-9-]+)?$/;
 const CODE = /\b(?:[SBPQDI]\d{1,2}[a-e]?)\b|proto\/|approved-/;
-// Report mode: primitive violations are listed in stories/PRIMITIVES-TODO.md (`--todo` rewrites it); true once it lists none, so each one fails.
+// Report mode for the node count only: primitive violations are listed in stories/PRIMITIVES-TODO.md (`--todo` rewrites it); true once it lists none. Raw values always fail.
 export const PRIMITIVES_ENFORCED = false;
 const PRIMITIVES_TODO = 'stories/PRIMITIVES-TODO.md';
+const RAW_VALUES = 'scripts/storybook-raw-values.json';
+const RAW_CSS = ['stories/primitives.css', 'stories/compositions.css', 'stories/proto.css', 'stories/frame.css'];
+const RAW_CODE = ['stories/kit', 'stories/components', 'stories/start'];
+const RAW = /(?<![\w&.#-])(?:-?\d*\.?\d+px\b|#[0-9a-f]{3,8}\b|(?:rgb|hsl)a?\()/i;
+const INLINE = /\bstyle\s*=\s*(?:"[^"]*"|'[^']*'|\{\{[^}]*\}\})|\.style\.\w+\s*=/g;
 const FRAME = /^kanso-(?:story|docs)(?:__|--|$)/;
 const SWATCH = /^kanso-(?:tokens(?:__|--|$)|icon__)/;
 
@@ -127,14 +132,50 @@ export function primitiveErrors(records, owned, tokens) {
       return drawn(node).length || inside(node) || node.classes.some((name) => FRAME.test(name)) ? foreign : [`<${node.tag}> raw markup outside a primitive`];
     }).map((error) => `${page}: ${error}`);
   };
-  return [...new Set(records.filter((record) => record.html !== undefined && !record.fragment).flatMap(pageErrors))];
+  return records.filter((record) => record.html !== undefined && !record.fragment).flatMap(pageErrors);
 }
 
+// Values a story writes itself instead of taking a token or a primitive: inline styles, and raw px or colours outside them.
+export function rawValues(source, text, css = false) {
+  const code = text.replace(/\/\*[\s\S]*?\*\//g, '');
+  const inline = [...code.matchAll(INLINE)].map(([found]) => `inline ${found}`);
+  const rest = code.replace(INLINE, '');
+  const raw = css
+    ? [...rest.matchAll(/([-\w]+)\s*:\s*([^;{}]+)/g)].map(([found]) => found.trim()).filter((found) => RAW.test(found))
+    : [...rest.matchAll(new RegExp(RAW, 'gi'))].map(([found]) => found);
+  return [...inline, ...raw.map((found) => `raw ${found}`)].map((value) => ({ source, value }));
+}
+
+export function rawValueReport(root = '.') {
+  const read = (file) => readFileSync(join(root, file), 'utf8');
+  const code = RAW_CODE.flatMap((dir) => readdirSync(join(root, dir)).filter((name) => /\.(?:m?js|jsx|mdx)$/.test(name)).sort().map((name) => `${dir}/${name}`));
+  return [
+    ...RAW_CSS.flatMap((file) => rawValues(file, read(file), true)),
+    ...code.flatMap((file) => rawValues(file, read(file))),
+    ...expand(JSON.parse(read('stories/catalog.json'))).filter((record) => record.html !== undefined).flatMap((record) => rawValues(record.id, record.html)),
+  ];
+}
+
+// The baseline holds the raw values found when the check began; a new one fails, and so does one listed after it is gone.
+export function rawValueErrors(found, baseline) {
+  const key = ({ source, value }) => JSON.stringify([source, value]);
+  const count = (list) => list.reduce((counts, entry) => counts.set(key(entry), (counts.get(key(entry)) ?? 0) + 1), new Map());
+  const [now, then] = [count(found), count(baseline)];
+  const over = (a, b) => [...a].filter(([entry, n]) => n > (b.get(entry) ?? 0)).map(([entry]) => JSON.parse(entry));
+  return [
+    ...over(now, then).map(([source, value]) => `${source}: ${value} is not a token or a primitive`),
+    ...over(then, now).map(([source, value]) => `${RAW_VALUES} lists ${source}: ${value}, which is gone: run npm run lint:storybook -- --write`),
+  ];
+}
+
+const renderRaw = (found) => `[\n${found.map((entry) => `  ${JSON.stringify(entry)}`).join(',\n')}\n]\n`;
+
 export function primitivesDocument(errors) {
-  const pages = Map.groupBy(errors, (error) => error.slice(0, error.indexOf(': ')));
+  const unique = [...new Set(errors)];
+  const pages = Map.groupBy(unique, (error) => error.slice(0, error.indexOf(': ')));
   const sections = [...pages].sort(([a, left], [b, right]) => right.length - left.length || a.localeCompare(b))
     .map(([page, list]) => [`## ${page} (${list.length})`, '', ...list.map((error) => `- ${error.slice(page.length + 2)}`), ''].join('\n'));
-  return ['# Primitives to do', '', 'Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.', '', `Total: ${errors.length}`, '', ...sections].join('\n');
+  return ['# Primitives to do', '', 'Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.', '', `Total: ${errors.length} elements, ${unique.length} distinct`, '', ...sections].join('\n');
 }
 
 const sheetClasses = (css) => new Set(cssSelectors(css).flatMap(selectorClasses));
@@ -158,6 +199,7 @@ export function lint(root = '.') {
   ];
   for (const [source, names] of classes) for (const name of names) if (!BEM.test(name) && !STORYBOOK_CLASSES.has(name)) errors.push(`${source}: ${name} is not kanso BEM`);
   if (!canvas) errors.push('.storybook/preview.js: frame classes not found');
+  errors.push(...rawValueErrors(rawValueReport(root), JSON.parse(read(RAW_VALUES))));
   if (PRIMITIVES_ENFORCED) errors.push(...primitiveReport(root));
   return errors;
 }
@@ -165,7 +207,8 @@ export function lint(root = '.') {
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const primitives = primitiveReport();
   if (process.argv.includes('--todo')) writeFileSync(PRIMITIVES_TODO, primitivesDocument(primitives));
-  if (!PRIMITIVES_ENFORCED) console.log(`${primitives.length} elements outside a primitive, listed in ${PRIMITIVES_TODO}`);
+  if (process.argv.includes('--write')) writeFileSync(RAW_VALUES, renderRaw(rawValueReport()));
+  if (!PRIMITIVES_ENFORCED) console.log(`${primitives.length} elements (${new Set(primitives).size} distinct) outside a primitive, listed in ${PRIMITIVES_TODO}`);
   const errors = lint();
   if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
   else console.log('Storybook structure passed');

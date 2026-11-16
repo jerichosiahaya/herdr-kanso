@@ -2,7 +2,7 @@
 
 Elements a page draws outside a primitive (stories/primitives.css) or a token (stories/utilities.css). `npm run lint:storybook -- --todo` rewrites this list.
 
-Total: 1179
+Total: 19975 elements, 1179 distinct
 
 ## Primitives/Dialog (86)
 
